@@ -31,7 +31,7 @@ export function Navbar() {
         </div>
         <div className="flex items-center gap-2">
           <a
-            href="#pricing"
+            href="/auth"
             className="hidden rounded-xl border border-border bg-card px-4 py-2 text-sm font-semibold text-ink shadow-sm transition-colors hover:bg-secondary md:inline-flex"
           >
             Sign In
@@ -59,7 +59,7 @@ export function Navbar() {
               </a>
             ))}
             <a
-              href="#pricing"
+              href="/auth"
               onClick={() => setOpen(false)}
               className="mt-2 rounded-xl bg-ink px-4 py-2.5 text-center text-sm font-semibold text-background"
             >
