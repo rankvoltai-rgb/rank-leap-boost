@@ -170,7 +170,7 @@ export function PrimaryButton({
 }) {
   return (
     <a
-      href="#pricing"
+      href="/auth"
       className={cn(
         "inline-flex items-center justify-center gap-2 rounded-xl bg-ink px-6 py-3.5 text-sm font-semibold text-background shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md",
         className,
