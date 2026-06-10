@@ -14,7 +14,231 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      blogs: {
+        Row: {
+          ai_signal: number
+          body: string
+          competition: string | null
+          created_at: string
+          description: string
+          id: string
+          keyword: string | null
+          notes: string
+          queue_position: number | null
+          scheduled_date: string | null
+          seo_score: number
+          status: Database["public"]["Enums"]["blog_status"]
+          tags: string[]
+          title: string
+          traffic_estimate: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          ai_signal?: number
+          body?: string
+          competition?: string | null
+          created_at?: string
+          description?: string
+          id?: string
+          keyword?: string | null
+          notes?: string
+          queue_position?: number | null
+          scheduled_date?: string | null
+          seo_score?: number
+          status?: Database["public"]["Enums"]["blog_status"]
+          tags?: string[]
+          title: string
+          traffic_estimate?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          ai_signal?: number
+          body?: string
+          competition?: string | null
+          created_at?: string
+          description?: string
+          id?: string
+          keyword?: string | null
+          notes?: string
+          queue_position?: number | null
+          scheduled_date?: string | null
+          seo_score?: number
+          status?: Database["public"]["Enums"]["blog_status"]
+          tags?: string[]
+          title?: string
+          traffic_estimate?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      content_settings: {
+        Row: {
+          audience: string
+          brand_voice: string
+          created_at: string
+          id: string
+          status_online: boolean
+          tone: string
+          updated_at: string
+          user_id: string
+          writing_style: string
+        }
+        Insert: {
+          audience?: string
+          brand_voice?: string
+          created_at?: string
+          id?: string
+          status_online?: boolean
+          tone?: string
+          updated_at?: string
+          user_id: string
+          writing_style?: string
+        }
+        Update: {
+          audience?: string
+          brand_voice?: string
+          created_at?: string
+          id?: string
+          status_online?: boolean
+          tone?: string
+          updated_at?: string
+          user_id?: string
+          writing_style?: string
+        }
+        Relationships: []
+      }
+      credit_accounts: {
+        Row: {
+          created_at: string
+          credits_total: number
+          credits_used: number
+          id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          credits_total?: number
+          credits_used?: number
+          id?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          credits_total?: number
+          credits_used?: number
+          id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      credit_transactions: {
+        Row: {
+          amount_cents: number
+          created_at: string
+          credits: number
+          id: string
+          package: string
+          status: string
+          user_id: string
+        }
+        Insert: {
+          amount_cents: number
+          created_at?: string
+          credits: number
+          id?: string
+          package: string
+          status?: string
+          user_id: string
+        }
+        Update: {
+          amount_cents?: number
+          created_at?: string
+          credits?: number
+          id?: string
+          package?: string
+          status?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      keywords: {
+        Row: {
+          created_at: string
+          id: string
+          intent: string | null
+          name: string
+          search_volume: number
+          source: Database["public"]["Enums"]["keyword_source"]
+          tag: string | null
+          traffic_estimate: number
+          trend: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          intent?: string | null
+          name: string
+          search_volume?: number
+          source?: Database["public"]["Enums"]["keyword_source"]
+          tag?: string | null
+          traffic_estimate?: number
+          trend?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          intent?: string | null
+          name?: string
+          search_volume?: number
+          source?: Database["public"]["Enums"]["keyword_source"]
+          tag?: string | null
+          traffic_estimate?: number
+          trend?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          brand_name: string | null
+          created_at: string
+          id: string
+          product_description: string | null
+          updated_at: string
+          user_id: string
+          website_url: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          brand_name?: string | null
+          created_at?: string
+          id?: string
+          product_description?: string | null
+          updated_at?: string
+          user_id: string
+          website_url?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          brand_name?: string | null
+          created_at?: string
+          id?: string
+          product_description?: string | null
+          updated_at?: string
+          user_id?: string
+          website_url?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +247,8 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      blog_status: "opportunity" | "scheduled" | "generating" | "finished"
+      keyword_source: "library" | "discovered"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +375,9 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      blog_status: ["opportunity", "scheduled", "generating", "finished"],
+      keyword_source: ["library", "discovered"],
+    },
   },
 } as const
