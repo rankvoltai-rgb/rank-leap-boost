@@ -1,85 +1,84 @@
-## Goal
+# OmniRank Dashboard — Full Build Plan
 
-Add two new visual-only screens — `/auth` and `/onboarding` — built in React + Tailwind, reusing the existing RankPill design tokens, fonts, and shared components (`Logo`, `Reveal`, `Stars`, `Avatar`). No backend, no real authentication; buttons and inputs are presentational and CTAs navigate forward, matching the rest of the visual-only landing page.
+A fully functional, light-mode SEO blog engine dashboard. Backend on Lovable Cloud, AI blog generation/editing via Lovable AI, and real credit purchases via Stripe. Design language stays Notion / Linear / Stripe: clean, monochrome, subtle borders, low radius, no gradients, no shadows — built on the existing light design tokens in `src/styles.css`.
 
-## Screen 1 — `/auth` (Split Column)
+## Prerequisites (one-time setup)
 
-```text
-┌───────────────────────────┬───────────────────────────┐
-│  FORM PANEL               │  BRAND / VISUAL PANEL      │
-│                           │  (dark ink background)     │
-│  RankPill logo            │                            │
-│  H1: Start getting        │  "Sign in → connect site   │
-│  Google & ChatGPT traffic │   → done" 3-step visual    │
-│  [in the next 7 days]     │                            │
-│  Paragraph copy           │  ① Sign in                 │
-│                           │  ② Connect site            │
-│  [ Google ][ GitHub ]     │  ③ Done                    │
-│  [ Apple ]  social btns   │                            │
-│  — or —                   │  mini dashboard / stars    │
-│  Full Name                │  social proof row          │
-│  Business Email           │                            │
-│  Password                 │                            │
-│  [ Start my traffic       │                            │
-│    engine ]  (→/onboarding)│                           │
-│  Already have an account? │                            │
-└───────────────────────────┴───────────────────────────┘
-```
+1. **Lovable Cloud** — enabled for auth + data persistence (blogs, keywords, credits, settings).
+2. **Lovable AI** — `LOVABLE_API_KEY` for generation and AI edits.
+3. **Stripe payments** — required for real credit purchases. Needs a Pro plan. If you'd rather not enable Stripe now, I'll stub the purchase flow (UI + simulated success that still updates the credit balance) and you can swap in real checkout later.
 
-- **Left form panel** (on `--background`):
-  - RankPill `Logo`
-  - Headline: "Start getting Google & ChatGPT traffic" with "in the next 7 days" emphasized (accent/highlight styling)
-  - Paragraph: "Automatically research, write, and publish SEO-optimized articles that rank on Google and get cited by AI so you grow traffic without lifting a finger."
-  - Three social auth buttons with inline SVG brand marks: **Google, GitHub, Apple** (visual only, no OAuth)
-  - "or continue with email" divider
-  - Inputs: **Full Name**, **Business Email**, **Password** (styled with existing input tokens)
-  - Primary CTA: **Start my traffic engine** → navigates to `/onboarding`
-  - Small "Already have an account? Sign in" link
-- **Right brand panel** (dark `ink` background, like landing footer/CTA):
-  - "Sign in → connect site → done" rendered as a 3-step vertical/numbered visual
-  - Star rating + social-proof avatars ("3,000+ happy customers") reusing `Stars`/`Avatar`
-  - On mobile this panel stacks below or is hidden; form stays full-width
+## Phase 0 — Auth & Account Foundation
 
-## Screen 2 — `/onboarding` (Clean, 2 steps)
+- Wire the existing `/auth` screen to real signup/login (email/password + Google). Keep all current copy and the split-column layout.
+- `profiles` table (brand name, website URL, product description, avatar) auto-created on signup via trigger; populated by the existing `/onboarding` flow, which becomes a real persisted step.
+- Integration-managed `_authenticated` route gate; dashboard lives under it. Sign-out hygiene wired in.
+- After onboarding → redirect into `/dashboard`.
 
-A centered, minimal card with a 2-step progress indicator at top.
+## Phase 1 — Dashboard Shell
 
-**Step 1 — About your brand**
-- Brand Name (input)
-- Website URL (input)
-- Describe your product (optional textarea)
-- "Continue" button → advances to Step 2 (local component state, no persistence)
+- Persistent left sidebar: System Console, Blog Engine, Calendar, Keyword Planner, Settings (Settings expands to its 3 sub-pages). Active-route highlighting via TanStack `Link`.
+- Top bar: account avatar (dropdown: profile, sign out) + live credit-balance indicator.
+- Main content area renders the active page. Collapsible sidebar.
+- Shared dashboard primitives (StatCard, Panel, Pill, ghost/solid buttons, OverlayModal) matching the minimal aesthetic.
 
-**Step 2 — Keywords & hosting**
-- Editable keyword chips/list (pre-filled sample keywords, each removable; an "add keyword" input). Purely client-side state.
-- "Select Website Hosting" — selectable cards/options (e.g. WordPress, Shopify, Webflow, Wix, Framer) reusing `BrandMark` styling
-- CTA: **Start my free trial** → navigates to `/` (landing) for now
-- "Back" link to Step 1
+## Phase 2 — Database Schema
 
-Progress is tracked with `useState` (current step 1 or 2); a slim progress bar / "Step 1 of 2" label sits above the card.
+Tables (all RLS-scoped to `auth.uid()`, with grants):
+- `blogs` — title, description, body (rich text/markdown), status (`opportunity` | `scheduled` | `generating` | `finished`), tags[], seo_score, traffic_estimate, keyword, competition, ai_signal, scheduled_date, queue_position, notes.
+- `keywords` — name, tag, search_volume, traffic_estimate, intent, trend, source (`library` | `discovered`).
+- `credit_accounts` — credits_used, credits_total.
+- `credit_transactions` — package, amount, status (for purchase history).
+- `content_settings` — tone, writing_style, audience, brand_voice.
+- Seed each new account with realistic demo data (opportunities, blogs, keywords, 320/1000 credits).
 
-## Routing & wiring
+## Phase 3 — System Console (Home)
 
-- New route files: `src/routes/auth.tsx` (`/auth`) and `src/routes/onboarding.tsx` (`/onboarding`), each with its own `head()` metadata (title, description, og tags).
-- Update the landing page CTAs to point at the new flow: `PrimaryButton` / "Sign In" in `Navbar` and hero/pricing CTAs link to `/auth` (via TanStack `Link`). Keep existing in-page anchors where appropriate.
-- `routeTree.gen.ts` is auto-generated — not hand-edited.
+- Stats bar: Estimated Traffic (large primary), Keyword Score, AI Algorithm Signals ("secret sauce"), Status toggle pill (Online/Offline).
+- Content Radar grid of opportunity cards: Keyword, Est. Traffic, Competition, AI Signal Score, "Add to Queue" CTA.
+- "Add to Queue" persists the opportunity as a scheduled blog AND increments the Estimated Traffic stat with an animated counter (the dopamine micro-interaction).
 
-## Components (new, under `src/components/auth/`)
+## Phase 4 — Blog Engine + Editor + AI
 
-- `AuthSplit.tsx` — the split-column auth screen
-- `SocialButtons.tsx` — Google/GitHub/Apple buttons with inline SVG logos
-- `Onboarding.tsx` — the 2-step wizard
-- `KeywordEditor.tsx` — editable keyword chip list
-- `HostingPicker.tsx` — hosting option selector
-- Reuse `shared.tsx` helpers; add brand SVGs as needed.
+- Stats bar: Blogs Scheduled, Blogs Finished, Traffic Estimate, Total.
+- **Generated Blogs**: 8 most recent + "Show All". Cards: title, description, tags, actions Details / Edit / Delete.
+- **Scheduled Blogs**: 15 default + Show All. Cards: title, description, tags, actions Prioritize / Generate / Reschedule / Delete.
+  - Prioritize → set queue_position to #1, displace others.
+  - Generate → open editor, show generating indicator, stream AI-generated blog, then activate right sidebar.
+  - Reschedule → navigate to Calendar with this blog pre-selected.
+- **Google-Docs-style editor** (shared route, reused by Calendar):
+  - Read mode by default, white document canvas, hover-revealed "Edit" button.
+  - Edit mode: inline editing; floating toolbar on text selection with Rewrite / Expand / Shorten / Improve SEO / Change Tone / AI Suggest Edits (each calls Lovable AI on the selection). Autosave with "Saved" indicator.
+  - Right sidebar: read mode → SEO Score, Est. Traffic, Tags, Regenerate, Leave Note; edit mode → the AI section actions.
+- **Delete** (both sections): 2-phase — confirmation modal "This action cannot be undone" requiring the user to type "Delete", then hard-delete from backend.
 
-## Technical notes
+## Phase 5 — Calendar
 
-- React + Tailwind v4 only; all styling via existing semantic tokens (`ink`, `background`, `muted-foreground`, `border`, `card`, etc.) — no hard-coded colors.
-- Inputs/forms are presentational (no validation, no submit handlers beyond navigation); social buttons are decorative since this is a visual-only build.
-- `motion` reveals via existing `Reveal` for subtle entrance animation.
-- Fully responsive: split column collapses to single column on mobile; onboarding card is width-constrained and centered.
+- Toggle tabs: Monthly (default) / Weekly / Today.
+- Monthly grid: blog titles as stacked line items per date; overflow → "+N more" pill expanding into a scrollable day view.
+- Weekly: 7-column blocks. Today: single-day list with status indicators.
+- Click a blog → opens the shared Docs-style editor. Supports the "pre-selected blog" deep-link from Reschedule.
 
-## Out of scope (can add later if you want it functional)
+## Phase 6 — Keyword Planner
 
-Real account creation, Google/Apple/GitHub OAuth, persisting onboarding data, and a post-onboarding dashboard would require enabling Lovable Cloud. Note: GitHub isn't natively supported by the managed auth (Google & Apple are), so it would stay decorative even in a functional build.
+- Dominant full-width keyword search input + "AI Keyword Discovery" button (Lovable AI generates related keyword clusters from the account's business context, written into the results grid).
+- "Discovered Keywords" results grid: 30 per page (toggle 100). Card: keyword, tag, search volume, traffic estimate, actions Add / Research / Delete.
+- Click card → Keyword Detail Overlay: large keyword title, tag row (intent/volume/competition), trend indicator (High/Med/Low with arrow), close.
+
+## Phase 7 — Settings (3 sub-pages)
+
+- **/settings/keywords** — keyword library table (1 per row, Remove action), search + "Add Keyword" overlay (text input submit-on-Enter OR CSV upload).
+- **/settings/credit-usage** — Credits Used / Remaining / "Add Credits"; progress bar color by usage (green <60%, yellow 60–85%, red >85%). Add Credits overlay with usage snapshot and 4 packages (Starter $99, Growth $185 ✦Recommended, Scale $370, Power $720) → Stripe checkout (or stubbed success) that updates the balance.
+- **/settings/llm-style** — pill selectors (Tone, Writing Style w/ Balanced default, Audience), Brand Voice textarea, locked core-rules block ("Managed by OmniRank — cannot be overridden"), "Save Settings". Saved settings are injected into every generation/regeneration/AI-edit prompt.
+
+## Technical Notes
+
+- Routes under `src/routes/_authenticated/dashboard.*` (flat dot convention); editor as a shared route with a `blogId` param.
+- AI calls via `createServerFn` (one-shot: generate, keyword discovery, section edits) using the Lovable AI gateway provider helper; streaming generation through a server route if needed. `content_settings` + profile context appended to all prompts server-side.
+- Stripe credit packages created via the payments product flow; checkout + webhook updates `credit_accounts`.
+- All data reads via `createServerFn` + TanStack Query (`ensureQueryData` / `useSuspenseQuery`); mutations invalidate queries.
+- Light-mode only; reuse existing tokens, add minimal dashboard-specific component styles. No gradients/shadows on dashboard surfaces.
+
+## Suggested order of delivery
+
+Phase 0–2 first (auth, shell, schema) so there's a working signed-in dashboard, then build pages 3→7. Given the size, this will span several iterations.
