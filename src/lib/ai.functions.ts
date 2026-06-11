@@ -12,7 +12,7 @@ const MODEL = "google/gemini-3-flash-preview";
 // The gateway provider and the `ai` package can resolve to different provider
 // spec versions during build; normalize the model type at one boundary.
 function model(gateway: ReturnType<typeof createLovableAiGatewayProvider>) {
-  return gateway(MODEL) as Parameters<typeof generateText>[0]["model"];
+  return gateway(MODEL) as unknown as Parameters<typeof generateText>[0]["model"];
 }
 
 async function loadStyleContext(supabase: any, userId: string) {
