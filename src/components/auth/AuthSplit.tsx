@@ -1,6 +1,9 @@
 import { useState } from "react";
-import { ArrowRight, Check } from "lucide-react";
+import { ArrowRight, Check, Loader2 } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
+import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+import { getProfile } from "@/lib/api";
 import { Logo, Reveal, Stars, Avatar } from "@/components/landing/shared";
 import { SocialButtons } from "./SocialButtons";
 
@@ -17,11 +20,15 @@ function Field({
   type,
   placeholder,
   autoComplete,
+  value,
+  onChange,
 }: {
   label: string;
   type: string;
   placeholder: string;
   autoComplete?: string;
+  value: string;
+  onChange: (v: string) => void;
 }) {
   return (
     <label className="block">
@@ -30,6 +37,8 @@ function Field({
         type={type}
         placeholder={placeholder}
         autoComplete={autoComplete}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
         className="h-11 w-full rounded-xl border border-border bg-card px-3.5 text-sm text-ink shadow-sm outline-none transition-colors placeholder:text-muted-foreground focus:border-ink focus:ring-2 focus:ring-ink/10"
       />
     </label>
@@ -39,11 +48,36 @@ function Field({
 export function AuthSplit() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [mode, setMode] = useState<"signup" | "login">("signup");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
-    navigate({ to: "/onboarding" });
+    try {
+      if (mode === "signup") {
+        const { error } = await supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            emailRedirectTo: `${window.location.origin}/onboarding`,
+            data: { full_name: name },
+          },
+        });
+        if (error) throw error;
+        navigate({ to: "/onboarding" });
+        return;
+      }
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) throw error;
+      const profile = await getProfile();
+      navigate({ to: profile ? "/dashboard" : "/onboarding" });
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Authentication failed.");
+      setLoading(false);
+    }
   }
 
   return (
