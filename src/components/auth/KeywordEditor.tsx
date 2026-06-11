@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Plus, X } from "lucide-react";
 
-const SEED = [
+export const SEED_KEYWORDS = [
   "ai seo tools",
   "automated content writing",
   "rank on chatgpt",
@@ -10,19 +10,24 @@ const SEED = [
   "get cited by ai",
 ];
 
-export function KeywordEditor() {
-  const [keywords, setKeywords] = useState<string[]>(SEED);
+export function KeywordEditor({
+  keywords,
+  onChange,
+}: {
+  keywords: string[];
+  onChange: (next: string[]) => void;
+}) {
   const [draft, setDraft] = useState("");
 
   function add() {
     const value = draft.trim().toLowerCase();
     if (!value || keywords.includes(value)) return;
-    setKeywords((k) => [...k, value]);
+    onChange([...keywords, value]);
     setDraft("");
   }
 
   function remove(word: string) {
-    setKeywords((k) => k.filter((w) => w !== word));
+    onChange(keywords.filter((w) => w !== word));
   }
 
   return (
