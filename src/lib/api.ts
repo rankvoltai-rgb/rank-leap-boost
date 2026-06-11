@@ -1,4 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
+import type { TablesInsert } from "@/integrations/supabase/types";
 
 export type BlogStatus = "opportunity" | "scheduled" | "generating" | "finished";
 
@@ -124,7 +125,7 @@ export async function createBlog(blog: Partial<Blog>): Promise<Blog> {
   const user_id = await uid();
   const { data, error } = await supabase
     .from("blogs")
-    .insert({ ...blog, user_id })
+    .insert({ ...blog, user_id } as TablesInsert<"blogs">)
     .select()
     .single();
   if (error) throw error;
@@ -245,7 +246,9 @@ export async function seedAccount(profileInput: {
     scheduled_date: nextDate(i + 1),
   }));
   const finished = SEED_FINISHED.map((f) => ({ ...f, user_id, status: "finished" as const }));
-  await supabase.from("blogs").insert([...opportunities, ...scheduled, ...finished]);
+  await supabase
+    .from("blogs")
+    .insert([...opportunities, ...scheduled, ...finished] as TablesInsert<"blogs">[]);
 }
 
 const SEED_KEYWORDS = [

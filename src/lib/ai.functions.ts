@@ -9,6 +9,12 @@ import {
 
 const MODEL = "google/gemini-3-flash-preview";
 
+// The gateway provider and the `ai` package can resolve to different provider
+// spec versions during build; normalize the model type at one boundary.
+function model(gateway: ReturnType<typeof createLovableAiGatewayProvider>) {
+  return gateway(MODEL) as unknown as Parameters<typeof generateText>[0]["model"];
+}
+
 async function loadStyleContext(supabase: any, userId: string) {
   const [{ data: settings }, { data: profile }] = await Promise.all([
     supabase.from("content_settings").select("*").eq("user_id", userId).maybeSingle(),
@@ -38,7 +44,7 @@ export const generateBlogContent = createServerFn({ method: "POST" })
     const gateway = createLovableAiGatewayProvider(requireLovableApiKey());
     const style = await loadStyleContext(context.supabase, context.userId);
     const { object } = await generateObject({
-      model: gateway(MODEL),
+      model: model(gateway),
       schema: blogSchema,
       prompt: `${style}\n\nWrite a complete, SEO-optimized blog post.\nTitle: ${data.title}\nPrimary keyword: ${data.keyword ?? data.title}\nBrief: ${data.description ?? ""}\n\nReturn a polished article (700-1100 words) in markdown, a meta description, an SEO score (realistic 70-95), a monthly organic traffic estimate (200-5000), and up to 4 short tags.`,
     });
@@ -62,7 +68,7 @@ export const editBlogSection = createServerFn({ method: "POST" })
     const style = await loadStyleContext(context.supabase, context.userId);
     const instruction = ACTIONS[data.action] ?? ACTIONS.ai_suggest;
     const { text } = await generateText({
-      model: gateway(MODEL),
+      model: model(gateway),
       prompt: `${style}\n\n${instruction}\nReturn ONLY the revised text with no preamble or quotes.\n\nPassage:\n"""${data.selection}"""`,
     });
     return { result: text.trim() };
@@ -91,7 +97,7 @@ export const discoverKeywords = createServerFn({ method: "POST" })
     const gateway = createLovableAiGatewayProvider(requireLovableApiKey());
     const style = await loadStyleContext(context.supabase, context.userId);
     const { object } = await generateObject({
-      model: gateway(MODEL),
+      model: model(gateway),
       schema: keywordsSchema,
       prompt: `${style}\n\nGenerate a cluster of related SEO keyword opportunities${data.seed ? ` around "${data.seed}"` : " based on the brand and product context"}. Provide realistic monthly search volumes and traffic estimates.`,
     });
