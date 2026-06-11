@@ -1,20 +1,26 @@
 import { useState } from "react";
-import { ArrowLeft, ArrowRight, Rocket } from "lucide-react";
+import { ArrowLeft, ArrowRight, Loader2, Rocket } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
+import { toast } from "sonner";
 import { Logo, Reveal } from "@/components/landing/shared";
-import { KeywordEditor } from "./KeywordEditor";
+import { KeywordEditor, SEED_KEYWORDS } from "./KeywordEditor";
 import { HostingPicker } from "./HostingPicker";
+import { seedAccount } from "@/lib/api";
 
 function Field({
   label,
   type = "text",
   placeholder,
   optional,
+  value,
+  onChange,
 }: {
   label: string;
   type?: string;
   placeholder: string;
   optional?: boolean;
+  value: string;
+  onChange: (v: string) => void;
 }) {
   return (
     <label className="block">
@@ -27,6 +33,8 @@ function Field({
       <input
         type={type}
         placeholder={placeholder}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
         className="h-11 w-full rounded-xl border border-border bg-card px-3.5 text-sm text-ink shadow-sm outline-none transition-colors placeholder:text-muted-foreground focus:border-ink focus:ring-2 focus:ring-ink/10"
       />
     </label>
@@ -37,6 +45,32 @@ export function Onboarding() {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const total = 2;
+  const [brand, setBrand] = useState("");
+  const [url, setUrl] = useState("");
+  const [description, setDescription] = useState("");
+  const [keywords, setKeywords] = useState<string[]>(SEED_KEYWORDS);
+  const [saving, setSaving] = useState(false);
+
+  async function finish() {
+    if (!brand.trim() || !url.trim()) {
+      toast.error("Please add your brand name and website URL.");
+      return;
+    }
+    setSaving(true);
+    try {
+      await seedAccount({
+        brand_name: brand.trim(),
+        website_url: url.trim(),
+        product_description: description.trim(),
+        keywords,
+      });
+      toast.success("Your traffic engine is ready.");
+      navigate({ to: "/dashboard" });
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Something went wrong.");
+      setSaving(false);
+    }
+  }
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
@@ -76,8 +110,19 @@ export function Onboarding() {
                   We use this to research keywords and match your voice.
                 </p>
                 <div className="mt-6 space-y-4">
-                  <Field label="Brand Name" placeholder="RankPill" />
-                  <Field label="Website URL" type="url" placeholder="https://yoursite.com" />
+                  <Field
+                    label="Brand Name"
+                    placeholder="RankPill"
+                    value={brand}
+                    onChange={setBrand}
+                  />
+                  <Field
+                    label="Website URL"
+                    type="url"
+                    placeholder="https://yoursite.com"
+                    value={url}
+                    onChange={setUrl}
+                  />
                   <label className="block">
                     <span className="mb-1.5 flex items-center gap-2 text-sm font-medium text-ink">
                       Describe your product
@@ -86,6 +131,8 @@ export function Onboarding() {
                     <textarea
                       rows={3}
                       placeholder="What do you offer and who is it for?"
+                      value={description}
+                      onChange={(e) => setDescription(e.target.value)}
                       className="w-full resize-none rounded-xl border border-border bg-card px-3.5 py-2.5 text-sm text-ink shadow-sm outline-none transition-colors placeholder:text-muted-foreground focus:border-ink focus:ring-2 focus:ring-ink/10"
                     />
                   </label>
@@ -107,7 +154,7 @@ export function Onboarding() {
                   We found these for you — add or remove any before we start.
                 </p>
                 <div className="mt-6">
-                  <KeywordEditor />
+                  <KeywordEditor keywords={keywords} onChange={setKeywords} />
                 </div>
 
                 <div className="mt-8">
@@ -130,10 +177,16 @@ export function Onboarding() {
                   </button>
                   <button
                     type="button"
-                    onClick={() => navigate({ to: "/" })}
-                    className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-ink px-6 py-3.5 text-sm font-semibold text-background shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
+                    onClick={finish}
+                    disabled={saving}
+                    className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-ink px-6 py-3.5 text-sm font-semibold text-background shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md disabled:opacity-70"
                   >
-                    <Rocket className="h-4 w-4" /> Start my free trial
+                    {saving ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <Rocket className="h-4 w-4" />
+                    )}
+                    Start my free trial
                   </button>
                 </div>
               </Reveal>

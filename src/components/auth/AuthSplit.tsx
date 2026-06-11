@@ -1,6 +1,9 @@
 import { useState } from "react";
-import { ArrowRight, Check } from "lucide-react";
+import { ArrowRight, Check, Loader2 } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
+import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+import { getProfile } from "@/lib/api";
 import { Logo, Reveal, Stars, Avatar } from "@/components/landing/shared";
 import { SocialButtons } from "./SocialButtons";
 
@@ -17,11 +20,15 @@ function Field({
   type,
   placeholder,
   autoComplete,
+  value,
+  onChange,
 }: {
   label: string;
   type: string;
   placeholder: string;
   autoComplete?: string;
+  value: string;
+  onChange: (v: string) => void;
 }) {
   return (
     <label className="block">
@@ -30,6 +37,8 @@ function Field({
         type={type}
         placeholder={placeholder}
         autoComplete={autoComplete}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
         className="h-11 w-full rounded-xl border border-border bg-card px-3.5 text-sm text-ink shadow-sm outline-none transition-colors placeholder:text-muted-foreground focus:border-ink focus:ring-2 focus:ring-ink/10"
       />
     </label>
@@ -39,11 +48,36 @@ function Field({
 export function AuthSplit() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [mode, setMode] = useState<"signup" | "login">("signup");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
-    navigate({ to: "/onboarding" });
+    try {
+      if (mode === "signup") {
+        const { error } = await supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            emailRedirectTo: `${window.location.origin}/onboarding`,
+            data: { full_name: name },
+          },
+        });
+        if (error) throw error;
+        navigate({ to: "/onboarding" });
+        return;
+      }
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) throw error;
+      const profile = await getProfile();
+      navigate({ to: profile ? "/dashboard" : "/onboarding" });
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Authentication failed.");
+      setLoading(false);
+    }
   }
 
   return (
@@ -89,35 +123,59 @@ export function AuthSplit() {
 
             <Reveal delay={0.2}>
               <form onSubmit={handleSubmit} className="space-y-4">
-                <Field label="Full Name" type="text" placeholder="Jane Doe" autoComplete="name" />
+                {mode === "signup" && (
+                  <Field
+                    label="Full Name"
+                    type="text"
+                    placeholder="Jane Doe"
+                    autoComplete="name"
+                    value={name}
+                    onChange={setName}
+                  />
+                )}
                 <Field
                   label="Business Email"
                   type="email"
                   placeholder="you@company.com"
                   autoComplete="email"
+                  value={email}
+                  onChange={setEmail}
                 />
                 <Field
                   label="Password"
                   type="password"
-                  placeholder="Create a password"
-                  autoComplete="new-password"
+                  placeholder={mode === "signup" ? "Create a password" : "Your password"}
+                  autoComplete={mode === "signup" ? "new-password" : "current-password"}
+                  value={password}
+                  onChange={setPassword}
                 />
                 <button
                   type="submit"
                   disabled={loading}
                   className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-ink px-6 py-3.5 text-sm font-semibold text-background shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md disabled:opacity-70"
                 >
-                  Start my traffic engine <ArrowRight className="h-4 w-4" />
+                  {loading ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <>
+                      {mode === "signup" ? "Start my traffic engine" : "Sign in"}
+                      <ArrowRight className="h-4 w-4" />
+                    </>
+                  )}
                 </button>
               </form>
             </Reveal>
 
             <Reveal delay={0.24}>
               <p className="mt-6 text-center text-sm text-muted-foreground">
-                Already have an account?{" "}
-                <a href="/auth" className="font-semibold text-ink hover:underline">
-                  Sign in
-                </a>
+                {mode === "signup" ? "Already have an account? " : "New to RankPill? "}
+                <button
+                  type="button"
+                  onClick={() => setMode(mode === "signup" ? "login" : "signup")}
+                  className="font-semibold text-ink hover:underline"
+                >
+                  {mode === "signup" ? "Sign in" : "Create one"}
+                </button>
               </p>
             </Reveal>
           </div>
