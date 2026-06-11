@@ -1,4 +1,6 @@
 import type { ReactNode } from "react";
+import { toast } from "sonner";
+import { lovable } from "@/integrations/lovable";
 
 function GoogleIcon() {
   return (
@@ -39,10 +41,17 @@ function AppleIcon() {
   );
 }
 
-function SocialButton({ children }: { children: ReactNode }) {
+function SocialButton({
+  children,
+  onClick,
+}: {
+  children: ReactNode;
+  onClick: () => void;
+}) {
   return (
     <button
       type="button"
+      onClick={onClick}
       className="inline-flex w-full items-center justify-center gap-2.5 rounded-xl border border-border bg-card px-4 py-3 text-sm font-semibold text-ink shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
     >
       {children}
@@ -51,15 +60,28 @@ function SocialButton({ children }: { children: ReactNode }) {
 }
 
 export function SocialButtons() {
+  async function google() {
+    const result = await lovable.auth.signInWithOAuth("google", {
+      redirect_uri: window.location.origin + "/onboarding",
+    });
+    if (result?.error) {
+      toast.error("Could not sign in with Google. Please try again.");
+    }
+  }
+
+  function comingSoon(name: string) {
+    toast(`${name} sign-in is coming soon — use Google or email for now.`);
+  }
+
   return (
     <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-      <SocialButton>
+      <SocialButton onClick={google}>
         <GoogleIcon /> Google
       </SocialButton>
-      <SocialButton>
+      <SocialButton onClick={() => comingSoon("GitHub")}>
         <GithubIcon /> GitHub
       </SocialButton>
-      <SocialButton>
+      <SocialButton onClick={() => comingSoon("Apple")}>
         <AppleIcon /> Apple
       </SocialButton>
     </div>
