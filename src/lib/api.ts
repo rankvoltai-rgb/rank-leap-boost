@@ -246,7 +246,9 @@ export async function seedAccount(profileInput: {
     scheduled_date: nextDate(i + 1),
   }));
   const finished = SEED_FINISHED.map((f) => ({ ...f, user_id, status: "finished" as const }));
-  await supabase.from("blogs").insert([...opportunities, ...scheduled, ...finished]);
+  await supabase
+    .from("blogs")
+    .insert([...opportunities, ...scheduled, ...finished] as TablesInsert<"blogs">[]);
 }
 
 const SEED_KEYWORDS = [
