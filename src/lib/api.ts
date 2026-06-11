@@ -125,7 +125,7 @@ export async function createBlog(blog: Partial<Blog>): Promise<Blog> {
   const user_id = await uid();
   const { data, error } = await supabase
     .from("blogs")
-    .insert({ ...blog, user_id })
+    .insert({ ...blog, user_id } as TablesInsert<"blogs">)
     .select()
     .single();
   if (error) throw error;
