@@ -123,35 +123,59 @@ export function AuthSplit() {
 
             <Reveal delay={0.2}>
               <form onSubmit={handleSubmit} className="space-y-4">
-                <Field label="Full Name" type="text" placeholder="Jane Doe" autoComplete="name" />
+                {mode === "signup" && (
+                  <Field
+                    label="Full Name"
+                    type="text"
+                    placeholder="Jane Doe"
+                    autoComplete="name"
+                    value={name}
+                    onChange={setName}
+                  />
+                )}
                 <Field
                   label="Business Email"
                   type="email"
                   placeholder="you@company.com"
                   autoComplete="email"
+                  value={email}
+                  onChange={setEmail}
                 />
                 <Field
                   label="Password"
                   type="password"
-                  placeholder="Create a password"
-                  autoComplete="new-password"
+                  placeholder={mode === "signup" ? "Create a password" : "Your password"}
+                  autoComplete={mode === "signup" ? "new-password" : "current-password"}
+                  value={password}
+                  onChange={setPassword}
                 />
                 <button
                   type="submit"
                   disabled={loading}
                   className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-ink px-6 py-3.5 text-sm font-semibold text-background shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md disabled:opacity-70"
                 >
-                  Start my traffic engine <ArrowRight className="h-4 w-4" />
+                  {loading ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <>
+                      {mode === "signup" ? "Start my traffic engine" : "Sign in"}
+                      <ArrowRight className="h-4 w-4" />
+                    </>
+                  )}
                 </button>
               </form>
             </Reveal>
 
             <Reveal delay={0.24}>
               <p className="mt-6 text-center text-sm text-muted-foreground">
-                Already have an account?{" "}
-                <a href="/auth" className="font-semibold text-ink hover:underline">
-                  Sign in
-                </a>
+                {mode === "signup" ? "Already have an account? " : "New to RankPill? "}
+                <button
+                  type="button"
+                  onClick={() => setMode(mode === "signup" ? "login" : "signup")}
+                  className="font-semibold text-ink hover:underline"
+                >
+                  {mode === "signup" ? "Sign in" : "Create one"}
+                </button>
               </p>
             </Reveal>
           </div>
