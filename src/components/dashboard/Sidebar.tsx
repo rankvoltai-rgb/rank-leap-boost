@@ -10,12 +10,12 @@ import { Logo } from "@/components/landing/shared";
 import { cn } from "@/lib/utils";
 
 const NAV = [
-  { title: "System Console", to: "/dashboard", icon: Radar, exact: true },
-  { title: "Blog Engine", to: "/dashboard/blogs", icon: FileText },
-  { title: "Calendar", to: "/dashboard/calendar", icon: CalendarDays },
-  { title: "Keyword Planner", to: "/dashboard/keywords", icon: Search },
-  { title: "Settings", to: "/dashboard/settings", icon: Settings },
-] as const;
+  { title: "System Console", icon: Radar, ready: true },
+  { title: "Blog Engine", icon: FileText, ready: false },
+  { title: "Calendar", icon: CalendarDays, ready: false },
+  { title: "Keyword Planner", icon: Search, ready: false },
+  { title: "Settings", icon: Settings, ready: false },
+];
 
 export function Sidebar() {
   const path = useRouterState({ select: (s) => s.location.pathname });
@@ -25,17 +25,14 @@ export function Sidebar() {
         <Logo />
       </div>
       <nav className="flex-1 space-y-1 p-3">
-        {NAV.map((item) => {
-          const active = item.exact
-            ? path === item.to
-            : path.startsWith(item.to);
-          return (
+        {NAV.map((item) =>
+          item.ready ? (
             <Link
-              key={item.to}
-              to={item.to}
+              key={item.title}
+              to="/dashboard"
               className={cn(
                 "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
-                active
+                path === "/dashboard"
                   ? "bg-ink text-background"
                   : "text-muted-foreground hover:bg-secondary hover:text-ink",
               )}
@@ -43,8 +40,19 @@ export function Sidebar() {
               <item.icon className="h-4 w-4" />
               {item.title}
             </Link>
-          );
-        })}
+          ) : (
+            <button
+              key={item.title}
+              type="button"
+              disabled
+              className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground/50"
+            >
+              <item.icon className="h-4 w-4" />
+              {item.title}
+              <span className="ml-auto text-[10px] uppercase tracking-wide">soon</span>
+            </button>
+          ),
+        )}
       </nav>
     </aside>
   );
