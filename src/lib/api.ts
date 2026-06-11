@@ -1,4 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
+import type { TablesInsert } from "@/integrations/supabase/types";
 
 export type BlogStatus = "opportunity" | "scheduled" | "generating" | "finished";
 
