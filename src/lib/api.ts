@@ -1,7 +1,33 @@
 import { supabase } from "@/integrations/supabase/client";
 import type { TablesInsert } from "@/integrations/supabase/types";
+import { generateBlogContent } from "@/lib/ai.functions";
 
 export type BlogStatus = "opportunity" | "scheduled" | "generating" | "finished";
+
+export interface OpportunityInput {
+  title: string;
+  description: string;
+  keyword: string;
+  traffic_estimate: number;
+  competition: string;
+  ai_signal: number;
+}
+
+export interface WebsiteAnalysis {
+  niche: string;
+  services: string[];
+  audience: string;
+  geo: string;
+  brand_tone: string;
+  competitors: string[];
+  existing_content: string;
+  internal_linking: string;
+  missing_opportunities: string[];
+  semantic_clusters: string[];
+  ai_visibility: string[];
+  keywords: { name: string; search_volume: number; intent: string; trend: string }[];
+  opportunities: OpportunityInput[];
+}
 
 export interface Blog {
   id: string;
