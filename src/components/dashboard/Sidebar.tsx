@@ -10,11 +10,11 @@ import { Logo } from "@/components/landing/shared";
 import { cn } from "@/lib/utils";
 
 const NAV = [
-  { title: "System Console", icon: Radar, ready: true },
-  { title: "Blog Engine", icon: FileText, ready: false },
-  { title: "Calendar", icon: CalendarDays, ready: false },
-  { title: "Keyword Planner", icon: Search, ready: false },
-  { title: "Settings", icon: Settings, ready: false },
+  { title: "System Console", icon: Radar, to: "/dashboard", ready: true },
+  { title: "Blog Engine", icon: FileText, to: "/dashboard/blog-engine", ready: true },
+  { title: "Calendar", icon: CalendarDays, to: "/dashboard", ready: false },
+  { title: "Keyword Planner", icon: Search, to: "/dashboard", ready: false },
+  { title: "Settings", icon: Settings, to: "/dashboard", ready: false },
 ];
 
 export function Sidebar() {
@@ -29,10 +29,10 @@ export function Sidebar() {
           item.ready ? (
             <Link
               key={item.title}
-              to="/dashboard"
+              to={item.to}
               className={cn(
                 "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
-                path === "/dashboard"
+                path === item.to
                   ? "bg-ink text-background"
                   : "text-muted-foreground hover:bg-secondary hover:text-ink",
               )}

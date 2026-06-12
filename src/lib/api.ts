@@ -1,7 +1,33 @@
 import { supabase } from "@/integrations/supabase/client";
 import type { TablesInsert } from "@/integrations/supabase/types";
+import { generateBlogContent } from "@/lib/ai.functions";
 
 export type BlogStatus = "opportunity" | "scheduled" | "generating" | "finished";
+
+export interface OpportunityInput {
+  title: string;
+  description: string;
+  keyword: string;
+  traffic_estimate: number;
+  competition: string;
+  ai_signal: number;
+}
+
+export interface WebsiteAnalysis {
+  niche: string;
+  services: string[];
+  audience: string;
+  geo: string;
+  brand_tone: string;
+  competitors: string[];
+  existing_content: string;
+  internal_linking: string;
+  missing_opportunities: string[];
+  semantic_clusters: string[];
+  ai_visibility: string[];
+  keywords: { name: string; search_volume: number; intent: string; trend: string }[];
+  opportunities: OpportunityInput[];
+}
 
 export interface Blog {
   id: string;
@@ -195,6 +221,141 @@ function nextDate(offsetDays = 1): string {
   const d = new Date();
   d.setDate(d.getDate() + offsetDays);
   return d.toISOString().slice(0, 10);
+}
+
+/* ---------------- Onboarding (Rankvolt flow) ---------------- */
+
+async function ensureAccountBase(
+  user_id: string,
+  profileInput: { brand_name: string; website_url: string; product_description: string },
+  settingsInput: { tone: string; audience: string; brand_voice: string },
+) {
+  const existingProfile = await supabase
+    .from("profiles")
+    .select("id")
+    .eq("user_id", user_id)
+    .maybeSingle();
+  if (existingProfile.data) {
+    await supabase.from("profiles").update(profileInput).eq("user_id", user_id);
+  } else {
+    await supabase.from("profiles").insert({ user_id, ...profileInput });
+  }
+
+  const existingSettings = await supabase
+    .from("content_settings")
+    .select("id")
+    .eq("user_id", user_id)
+    .maybeSingle();
+  if (existingSettings.data) {
+    await supabase.from("content_settings").update(settingsInput).eq("user_id", user_id);
+  } else {
+    await supabase.from("content_settings").insert({ user_id, ...settingsInput });
+  }
+
+  const existingCredits = await supabase
+    .from("credit_accounts")
+    .select("id")
+    .eq("user_id", user_id)
+    .maybeSingle();
+  if (!existingCredits.data) {
+    await supabase.from("credit_accounts").insert({ user_id, credits_used: 0, credits_total: 200 });
+  }
+}
+
+function oppToBlogRow(o: OpportunityInput, user_id: string): TablesInsert<"blogs"> {
+  return {
+    user_id,
+    title: o.title,
+    description: o.description,
+    keyword: o.keyword,
+    traffic_estimate: Math.round(o.traffic_estimate),
+    competition: o.competition,
+    ai_signal: Math.round(o.ai_signal),
+    status: "opportunity",
+    tags: [],
+  };
+}
+
+/** Step 2-4: persist the AI analysis and the inferred blog opportunities. */
+export async function persistOnboarding(input: {
+  full_name: string;
+  business_name: string;
+  website_url: string;
+  analysis: WebsiteAnalysis;
+}): Promise<Blog[]> {
+  const user_id = await uid();
+  const a = input.analysis;
+
+  if (input.full_name.trim()) {
+    await supabase.auth.updateUser({ data: { full_name: input.full_name.trim() } });
+  }
+
+  const productDescription = `${a.niche}. Services: ${a.services.join(", ")}. Audience: ${a.audience}.`;
+  await ensureAccountBase(
+    user_id,
+    {
+      brand_name: input.business_name.trim(),
+      website_url: input.website_url.trim(),
+      product_description: productDescription,
+    },
+    { tone: a.brand_tone, audience: a.audience, brand_voice: `Niche: ${a.niche}. Geo: ${a.geo}.` },
+  );
+
+  // Replace any prior discovered keywords / opportunity blogs for a clean slate.
+  await supabase.from("keywords").delete().eq("user_id", user_id).eq("source", "discovered");
+  if (a.keywords.length) {
+    await supabase.from("keywords").insert(
+      a.keywords.map((k) => ({
+        user_id,
+        name: k.name,
+        source: "discovered" as const,
+        tag: k.intent,
+        search_volume: Math.round(k.search_volume),
+        intent: k.intent,
+        trend: k.trend,
+      })),
+    );
+  }
+
+  await supabase.from("blogs").delete().eq("user_id", user_id).eq("status", "opportunity");
+  const rows = a.opportunities.map((o) => oppToBlogRow(o, user_id));
+  const { data, error } = await supabase.from("blogs").insert(rows).select();
+  if (error) throw error;
+  return (data ?? []) as Blog[];
+}
+
+/** Step 5: trial activation — generate 30 strategic opportunities into the queue. */
+export async function activateTrial(opportunities: OpportunityInput[]): Promise<void> {
+  const user_id = await uid();
+  if (!opportunities.length) return;
+  const rows = opportunities.map((o) => oppToBlogRow(o, user_id));
+  const { error } = await supabase.from("blogs").insert(rows);
+  if (error) throw error;
+}
+
+/* ---------------- Blog engine ---------------- */
+
+/** Generate full article content for a blog and mark it finished. */
+export async function generateBlogArticle(blog: Blog): Promise<Blog> {
+  await updateBlog(blog.id, { status: "generating" });
+  try {
+    const result = await generateBlogContent({
+      data: { title: blog.title, keyword: blog.keyword ?? undefined, description: blog.description },
+    });
+    const patch: Partial<Blog> = {
+      body: result.body,
+      description: result.description || blog.description,
+      seo_score: result.seo_score,
+      traffic_estimate: result.traffic_estimate || blog.traffic_estimate,
+      tags: result.tags ?? [],
+      status: "finished",
+    };
+    await updateBlog(blog.id, patch);
+    return { ...blog, ...patch } as Blog;
+  } catch (err) {
+    await updateBlog(blog.id, { status: blog.status });
+    throw err;
+  }
 }
 
 /* ---------------- Seeding ---------------- */
