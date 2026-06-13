@@ -467,7 +467,6 @@ export const editBlogSection = createServerFn({ method: "POST" })
     return { result: text.trim() };
   });
 
-
 export const discoverKeywords = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: { seed?: string }) => d)
@@ -503,6 +502,7 @@ export const discoverKeywords = createServerFn({ method: "POST" })
           traffic_estimate: Math.round(k.search_volume * 0.18),
         }));
   });
+
 
 /* -------------------- Website intelligence scan -------------------- */
 
