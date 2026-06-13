@@ -362,9 +362,13 @@ function normalizeAnalysis(
       };
     });
   const fallbackOpps = fallbackOpportunities(niche, input.business_name, 10);
-  const opportunities = (asArray(record.opportunities).length ? asArray(record.opportunities) : fallbackOpps)
+  const opportunities = (
+    asArray(record.opportunities).length ? asArray(record.opportunities) : fallbackOpps
+  )
     .slice(0, 10)
-    .map((item, index) => normalizeOpportunity(item, fallbackOpps[index % fallbackOpps.length], index));
+    .map((item, index) =>
+      normalizeOpportunity(item, fallbackOpps[index % fallbackOpps.length], index),
+    );
 
   while (opportunities.length < 6) {
     const index = opportunities.length;
@@ -378,8 +382,16 @@ function normalizeAnalysis(
     geo: cleanString(record.geo, "Target markets served by the website"),
     brand_tone: cleanString(record.brand_tone, "Professional, helpful, and authoritative"),
     competitors,
-    existing_content: cleanString(record.existing_content, websiteBrief ? "Website content was scanned and mapped into SEO opportunities." : "Website content was inferred from available business signals."),
-    internal_linking: cleanString(record.internal_linking, "Create hub pages and link each blog opportunity back to relevant service pages."),
+    existing_content: cleanString(
+      record.existing_content,
+      websiteBrief
+        ? "Website content was scanned and mapped into SEO opportunities."
+        : "Website content was inferred from available business signals.",
+    ),
+    internal_linking: cleanString(
+      record.internal_linking,
+      "Create hub pages and link each blog opportunity back to relevant service pages.",
+    ),
     missing_opportunities: missing,
     semantic_clusters: clusters,
     ai_visibility: visibility,
@@ -388,16 +400,24 @@ function normalizeAnalysis(
   };
 }
 
-function normalizeBlogContent(value: unknown, input: z.infer<typeof BlogInput>, rawText = ""): BlogContent {
+function normalizeBlogContent(
+  value: unknown,
+  input: z.infer<typeof BlogInput>,
+  rawText = "",
+): BlogContent {
   const record = asRecord(value);
   const title = input.title;
   const body = cleanString(
     record.body,
-    rawText.trim() || `## ${title}\n\n${input.description ?? "This article covers the core search intent behind the topic."}\n\n## Key Takeaways\n\n- Explain the problem clearly.\n- Answer the buyer's next question.\n- Link readers to the most relevant service or product page.`,
+    rawText.trim() ||
+      `## ${title}\n\n${input.description ?? "This article covers the core search intent behind the topic."}\n\n## Key Takeaways\n\n- Explain the problem clearly.\n- Answer the buyer's next question.\n- Link readers to the most relevant service or product page.`,
   );
   return {
     body,
-    description: cleanString(record.description, input.description ?? `${title} — a practical SEO guide for qualified buyers.`).slice(0, 160),
+    description: cleanString(
+      record.description,
+      input.description ?? `${title} — a practical SEO guide for qualified buyers.`,
+    ).slice(0, 160),
     seo_score: toNumber(record.seo_score, 86, 0, 100),
     traffic_estimate: toNumber(record.traffic_estimate, 900, 0, 1000000),
     tags: stringArray(record.tags, ["SEO", "Strategy"], 4),
