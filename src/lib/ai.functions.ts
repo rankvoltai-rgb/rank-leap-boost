@@ -503,7 +503,6 @@ export const discoverKeywords = createServerFn({ method: "POST" })
         }));
   });
 
-
 /* -------------------- Website intelligence scan -------------------- */
 
 export const analyzeWebsite = createServerFn({ method: "POST" })
@@ -516,6 +515,7 @@ export const analyzeWebsite = createServerFn({ method: "POST" })
     const json = await generateJson(gateway, prompt);
     return normalizeAnalysis(json, data, websiteBrief);
   });
+
 
 export const generateBlogStrategy = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
