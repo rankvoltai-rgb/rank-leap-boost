@@ -476,7 +476,7 @@ export const discoverKeywords = createServerFn({ method: "POST" })
     const json = await generateJson(
       gateway,
       `${style}\n\nGenerate SEO keyword opportunities${data.seed ? ` around "${data.seed}"` : " based on the brand and product context"}. Return JSON: {"keywords":[{"name":"keyword","tag":"High Intent","search_volume":1200,"traffic_estimate":300,"intent":"Transactional","trend":"High"}]}`,
-    );
+    ).catch(() => ({ keywords: [] }));
     const keywords = asArray(asRecord(json).keywords)
       .slice(0, 24)
       .map((item, index): KeywordOutput => {
@@ -512,7 +512,7 @@ export const analyzeWebsite = createServerFn({ method: "POST" })
     const gateway = createLovableAiGatewayProvider(requireLovableApiKey());
     const websiteBrief = await fetchWebsiteBrief(data.website_url);
     const prompt = `You are Rankvolt, an AI SEO intelligence engine. Analyze the business and website text below.\n\nBusiness name: ${data.business_name}\nWebsite: ${data.website_url}\nDomain: ${domainFromUrl(data.website_url)}\nWebsite text excerpt:\n"""${websiteBrief}"""\n\nReturn this exact JSON shape, with no missing keys:\n{"niche":"business niche","services":["service"],"audience":"target audience","geo":"geographic target","brand_tone":"brand tone","competitors":["competitor"],"existing_content":"one sentence","internal_linking":"one sentence","missing_opportunities":["opportunity"],"semantic_clusters":["cluster"],"ai_visibility":["AI citation opportunity"],"keywords":[{"name":"keyword","search_volume":1200,"intent":"Transactional","trend":"High"}],"opportunities":[{"title":"Specific blog title","description":"article angle","keyword":"primary keyword","traffic_estimate":1000,"competition":"Low","ai_signal":88}]}\n\nProduce 6-10 concrete blog opportunities tailored to this exact business.`;
-    const json = await generateJson(gateway, prompt);
+    const json = await generateJson(gateway, prompt).catch(() => ({}));
     return normalizeAnalysis(json, data, websiteBrief);
   });
 
@@ -528,7 +528,7 @@ export const generateBlogStrategy = createServerFn({ method: "POST" })
     const json = await generateJson(
       gateway,
       `${style}\n\nBuild a strategic content plan of 30 distinct, high-impact blog article opportunities for this brand. Return JSON: {"opportunities":[{"title":"Specific blog title","description":"article angle","keyword":"primary keyword","traffic_estimate":1000,"competition":"Low","ai_signal":88}]}. Cover high-intent, informational, comparison, and AI-citation-friendly topics.${avoid}`,
-    );
+    ).catch(() => ({ opportunities: [] }));
     const fallback = fallbackOpportunities("SEO growth", "Rankvolt", 30);
     const opportunities = asArray(asRecord(json).opportunities)
       .slice(0, 30)
