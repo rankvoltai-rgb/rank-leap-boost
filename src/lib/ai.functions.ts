@@ -55,7 +55,7 @@ type SupabaseClientLike = {
   from: (table: string) => {
     select: (columns: string) => {
       eq: (column: string, value: string) => {
-        maybeSingle: () => Promise<{ data: JsonRecord | null }>;
+        maybeSingle: () => PromiseLike<{ data: JsonRecord | null }>;
       };
     };
   };
@@ -79,10 +79,11 @@ const BlogInput = z.object({
   description: z.string().optional(),
 });
 
-async function loadStyleContext(supabase: SupabaseClientLike, userId: string) {
+async function loadStyleContext(supabase: unknown, userId: string) {
+  const client = supabase as SupabaseClientLike;
   const [{ data: settings }, { data: profile }] = await Promise.all([
-    supabase.from("content_settings").select("*").eq("user_id", userId).maybeSingle(),
-    supabase.from("profiles").select("*").eq("user_id", userId).maybeSingle(),
+    client.from("content_settings").select("*").eq("user_id", userId).maybeSingle(),
+    client.from("profiles").select("*").eq("user_id", userId).maybeSingle(),
   ]);
   const tone = settings?.tone ?? "Professional";
   const style = settings?.writing_style ?? "Balanced";
@@ -313,15 +314,35 @@ async function fetchWebsiteBrief(rawUrl: string): Promise<string> {
   }
 }
 
-function normalizeAnalysis(value: unknown, input: z.infer<typeof AnalyzeInput>, websiteBrief: string): WebsiteAnalysis {
+function normalizeAnalysis(
+  value: unknown,
+  input: z.infer<typeof AnalyzeInput>,
+  websiteBrief: string,
+): WebsiteAnalysis {
   const record = asRecord(value);
   const niche = cleanString(record.niche, inferNiche(input.business_name, input.website_url));
   const serviceFallback = [niche, `${niche} consulting`, `${niche} support`];
   const services = stringArray(record.services, serviceFallback, 8);
-  const competitors = stringArray(record.competitors, [`Top ${niche} providers`, `${niche} marketplaces`, "Established local competitors"], 6);
-  const missing = stringArray(record.missing_opportunities, ["Comparison content", "Pricing content", "FAQ content", "Buying guides"], 8);
-  const clusters = stringArray(record.semantic_clusters, ["Commercial intent", "Educational guides", "Local discovery", "Comparison pages"], 8);
-  const visibility = stringArray(record.ai_visibility, ["Answer-engine citations", "Expert FAQ snippets", "Comparison mentions"], 6);
+  const competitors = stringArray(
+    record.competitors,
+    [`Top ${niche} providers`, `${niche} marketplaces`, "Established local competitors"],
+    6,
+  );
+  const missing = stringArray(
+    record.missing_opportunities,
+    ["Comparison content", "Pricing content", "FAQ content", "Buying guides"],
+    8,
+  );
+  const clusters = stringArray(
+    record.semantic_clusters,
+    ["Commercial intent", "Educational guides", "Local discovery", "Comparison pages"],
+    8,
+  );
+  const visibility = stringArray(
+    record.ai_visibility,
+    ["Answer-engine citations", "Expert FAQ snippets", "Comparison mentions"],
+    6,
+  );
   const fallbackKws = fallbackKeywords(niche);
   const keywords = (asArray(record.keywords).length ? asArray(record.keywords) : fallbackKws).slice(0, 16).map((item, index) => {
     const keyword = asRecord(item);
