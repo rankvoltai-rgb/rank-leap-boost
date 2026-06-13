@@ -431,7 +431,10 @@ export const generateBlogContent = createServerFn({ method: "POST" })
     const gateway = createLovableAiGatewayProvider(requireLovableApiKey());
     const style = await loadStyleContext(context.supabase, context.userId);
     const prompt = `${style}\n\nWrite a complete, SEO-optimized blog post.\nTitle: ${data.title}\nPrimary keyword: ${data.keyword ?? data.title}\nBrief: ${data.description ?? ""}\n\nReturn this exact JSON shape:\n{"body":"Full markdown article with ## headings, paragraphs, and lists","description":"Meta description under 160 characters","seo_score":86,"traffic_estimate":1200,"tags":["Tag"]}`;
-    const { text } = await generateText({ model: model(gateway), prompt });
+    const { text } = await generateText({
+      model: model(gateway),
+      prompt,
+    });
     try {
       return normalizeBlogContent(extractJson(text), data);
     } catch {
@@ -472,19 +475,30 @@ export const discoverKeywords = createServerFn({ method: "POST" })
       gateway,
       `${style}\n\nGenerate SEO keyword opportunities${data.seed ? ` around "${data.seed}"` : " based on the brand and product context"}. Return JSON: {"keywords":[{"name":"keyword","tag":"High Intent","search_volume":1200,"traffic_estimate":300,"intent":"Transactional","trend":"High"}]}`,
     );
-    const keywords = asArray(asRecord(json).keywords).slice(0, 24).map((item, index): KeywordOutput => {
-      const record = asRecord(item);
-      const name = cleanString(record.name, data.seed ? `${data.seed} keyword ${index + 1}` : `seo keyword ${index + 1}`);
-      return {
-        name,
-        tag: cleanString(record.tag, cleanString(record.intent, "Discovered")),
-        search_volume: toNumber(record.search_volume, 500 + index * 120, 0, 1000000),
-        traffic_estimate: toNumber(record.traffic_estimate, 120 + index * 40, 0, 1000000),
-        intent: cleanString(record.intent, "Informational"),
-        trend: normalizeTrend(record.trend, index),
-      };
-    });
-    return keywords.length ? keywords : fallbackKeywords(data.seed ?? "SEO").map((k) => ({ ...k, tag: k.intent, traffic_estimate: Math.round(k.search_volume * 0.18) }));
+    const keywords = asArray(asRecord(json).keywords)
+      .slice(0, 24)
+      .map((item, index): KeywordOutput => {
+        const record = asRecord(item);
+        const name = cleanString(
+          record.name,
+          data.seed ? `${data.seed} keyword ${index + 1}` : `seo keyword ${index + 1}`,
+        );
+        return {
+          name,
+          tag: cleanString(record.tag, cleanString(record.intent, "Discovered")),
+          search_volume: toNumber(record.search_volume, 500 + index * 120, 0, 1000000),
+          traffic_estimate: toNumber(record.traffic_estimate, 120 + index * 40, 0, 1000000),
+          intent: cleanString(record.intent, "Informational"),
+          trend: normalizeTrend(record.trend, index),
+        };
+      });
+    return keywords.length
+      ? keywords
+      : fallbackKeywords(data.seed ?? "SEO").map((k) => ({
+          ...k,
+          tag: k.intent,
+          traffic_estimate: Math.round(k.search_volume * 0.18),
+        }));
   });
 
 /* -------------------- Website intelligence scan -------------------- */
@@ -495,7 +509,7 @@ export const analyzeWebsite = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     const gateway = createLovableAiGatewayProvider(requireLovableApiKey());
     const websiteBrief = await fetchWebsiteBrief(data.website_url);
-    const prompt = `You are Rankvolt, an AI SEO intelligence engine. Analyze the business and website text below.\n\nBusiness name: ${data.business_name}\nWebsite: ${data.website_url}\nDomain: ${domainFromUrl(data.website_url)}\nWebsite text excerpt:\n"""${websiteBrief}"""\n\nReturn this exact JSON shape, with no missing keys:\n{"niche":"business niche","services":["service"],"audience":"target audience","geo":"geographic target","brand_tone":"brand tone","competitors":["competitor"],"existing_content":"one sentence","internal_linking":"one sentence","missing_opportunities":["opportunity"],"semantic_clusters":["cluster"],"ai_visibility":["AI citation opportunity"],"keywords":[{"name":"keyword","search_volume":1200,"intent":"Transactional","trend":"High"}],"opportunities":[{"title":"Specific blog title","description":"article angle","keyword":"primary keyword","traffic_estimate":1000,"competition":"Low","ai_signal":88}]}\n\nProduce 6-10 concrete blog opportunities tailored to this exact business.`; 
+    const prompt = `You are Rankvolt, an AI SEO intelligence engine. Analyze the business and website text below.\n\nBusiness name: ${data.business_name}\nWebsite: ${data.website_url}\nDomain: ${domainFromUrl(data.website_url)}\nWebsite text excerpt:\n"""${websiteBrief}"""\n\nReturn this exact JSON shape, with no missing keys:\n{"niche":"business niche","services":["service"],"audience":"target audience","geo":"geographic target","brand_tone":"brand tone","competitors":["competitor"],"existing_content":"one sentence","internal_linking":"one sentence","missing_opportunities":["opportunity"],"semantic_clusters":["cluster"],"ai_visibility":["AI citation opportunity"],"keywords":[{"name":"keyword","search_volume":1200,"intent":"Transactional","trend":"High"}],"opportunities":[{"title":"Specific blog title","description":"article angle","keyword":"primary keyword","traffic_estimate":1000,"competition":"Low","ai_signal":88}]}\n\nProduce 6-10 concrete blog opportunities tailored to this exact business.`;
     const json = await generateJson(gateway, prompt);
     return normalizeAnalysis(json, data, websiteBrief);
   });
