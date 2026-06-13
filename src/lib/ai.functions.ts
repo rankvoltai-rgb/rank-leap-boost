@@ -54,7 +54,10 @@ type KeywordOutput = {
 type SupabaseClientLike = {
   from: (table: string) => {
     select: (columns: string) => {
-      eq: (column: string, value: string) => {
+      eq: (
+        column: string,
+        value: string,
+      ) => {
         maybeSingle: () => PromiseLike<{ data: JsonRecord | null }>;
       };
     };
@@ -292,7 +295,9 @@ async function fetchWebsiteBrief(rawUrl: string): Promise<string> {
         Accept: "text/html,text/plain;q=0.9,*/*;q=0.5",
       },
     });
-    if (!response.ok) return `Website returned HTTP ${response.status}. Use the domain and business name for inference.`;
+    if (!response.ok) {
+      return `Website returned HTTP ${response.status}. Use the domain and business name for inference.`;
+    }
     const contentType = response.headers.get("content-type") ?? "";
     if (!/text\/html|text\/plain|application\/xhtml\+xml/i.test(contentType)) {
       return `Website content type was ${contentType || "unknown"}. Use the domain and business name for inference.`;
@@ -344,16 +349,18 @@ function normalizeAnalysis(
     6,
   );
   const fallbackKws = fallbackKeywords(niche);
-  const keywords = (asArray(record.keywords).length ? asArray(record.keywords) : fallbackKws).slice(0, 16).map((item, index) => {
-    const keyword = asRecord(item);
-    const fb = fallbackKws[index % fallbackKws.length];
-    return {
-      name: cleanString(keyword.name, fb.name),
-      search_volume: toNumber(keyword.search_volume, fb.search_volume, 0, 1000000),
-      intent: cleanString(keyword.intent, fb.intent),
-      trend: normalizeTrend(keyword.trend, index),
-    };
-  });
+  const keywords = (asArray(record.keywords).length ? asArray(record.keywords) : fallbackKws)
+    .slice(0, 16)
+    .map((item, index) => {
+      const keyword = asRecord(item);
+      const fb = fallbackKws[index % fallbackKws.length];
+      return {
+        name: cleanString(keyword.name, fb.name),
+        search_volume: toNumber(keyword.search_volume, fb.search_volume, 0, 1000000),
+        intent: cleanString(keyword.intent, fb.intent),
+        trend: normalizeTrend(keyword.trend, index),
+      };
+    });
   const fallbackOpps = fallbackOpportunities(niche, input.business_name, 10);
   const opportunities = (asArray(record.opportunities).length ? asArray(record.opportunities) : fallbackOpps)
     .slice(0, 10)
