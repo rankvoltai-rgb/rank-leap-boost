@@ -32,9 +32,9 @@ async function loadStyleContext(supabase: any, userId: string) {
 const blogSchema = z.object({
   body: z.string().describe("Full blog article in markdown with ## headings, paragraphs, and lists."),
   description: z.string().describe("A one-sentence meta description under 160 chars."),
-  seo_score: z.number().min(0).max(100),
-  traffic_estimate: z.number().min(0),
-  tags: z.array(z.string()).max(4),
+  seo_score: z.number().describe("Realistic SEO score 0-100"),
+  traffic_estimate: z.number().describe("Monthly organic traffic estimate"),
+  tags: z.array(z.string()).describe("Up to 4 short tags"),
 });
 
 export const generateBlogContent = createServerFn({ method: "POST" })
@@ -80,14 +80,13 @@ const keywordsSchema = z.object({
       z.object({
         name: z.string(),
         tag: z.string().describe("e.g. High Competition, Low Competition, High Intent"),
-        search_volume: z.number().min(0),
-        traffic_estimate: z.number().min(0),
+        search_volume: z.number(),
+        traffic_estimate: z.number(),
         intent: z.string().describe("e.g. High Intent, Informational, Transactional"),
-        trend: z.enum(["High", "Medium", "Low"]),
+        trend: z.string().describe("High, Medium, or Low"),
       }),
     )
-    .min(8)
-    .max(24),
+    .describe("8-24 keyword opportunities"),
 });
 
 export const discoverKeywords = createServerFn({ method: "POST" })
@@ -110,35 +109,34 @@ const opportunitySchema = z.object({
   title: z.string().describe("A compelling, specific blog title"),
   description: z.string().describe("One sentence on the angle of the article"),
   keyword: z.string().describe("Primary target keyword"),
-  traffic_estimate: z.number().min(100).max(8000).describe("Realistic monthly organic traffic"),
-  competition: z.enum(["Low", "Medium", "High"]),
-  ai_signal: z.number().min(60).max(99).describe("AI visibility / citation potential score"),
+  traffic_estimate: z.number().describe("Realistic monthly organic traffic, 100-8000"),
+  competition: z.string().describe("Competition level: Low, Medium, or High"),
+  ai_signal: z.number().describe("AI visibility / citation potential score, 60-99"),
 });
 
 const analysisSchema = z.object({
   niche: z.string().describe("The business niche / industry in a few words"),
-  services: z.array(z.string()).min(2).max(8).describe("Core products or services offered"),
+  services: z.array(z.string()).describe("Core products or services offered (2-8)"),
   audience: z.string().describe("Primary target audience"),
   geo: z.string().describe("Geographic targeting, e.g. 'United States' or 'Global'"),
   brand_tone: z.string().describe("Inferred brand tone, e.g. 'Professional & authoritative'"),
-  competitors: z.array(z.string()).min(2).max(6).describe("Likely competitor brands or sites"),
+  competitors: z.array(z.string()).describe("Likely competitor brands or sites (2-6)"),
   existing_content: z.string().describe("One sentence assessment of existing content"),
   internal_linking: z.string().describe("One sentence on internal linking structure"),
-  missing_opportunities: z.array(z.string()).min(3).max(8).describe("Missing content opportunities"),
-  semantic_clusters: z.array(z.string()).min(3).max(8).describe("Semantic keyword cluster names"),
-  ai_visibility: z.array(z.string()).min(2).max(6).describe("AI visibility opportunities (ChatGPT, Perplexity, etc.)"),
+  missing_opportunities: z.array(z.string()).describe("Missing content opportunities (3-8)"),
+  semantic_clusters: z.array(z.string()).describe("Semantic keyword cluster names (3-8)"),
+  ai_visibility: z.array(z.string()).describe("AI visibility opportunities, e.g. ChatGPT, Perplexity (2-6)"),
   keywords: z
     .array(
       z.object({
         name: z.string(),
-        search_volume: z.number().min(0),
+        search_volume: z.number(),
         intent: z.string(),
-        trend: z.enum(["High", "Medium", "Low"]),
+        trend: z.string().describe("High, Medium, or Low"),
       }),
     )
-    .min(6)
-    .max(16),
-  opportunities: z.array(opportunitySchema).min(6).max(10),
+    .describe("6-16 SEO keyword opportunities"),
+  opportunities: z.array(opportunitySchema).describe("6-10 blog article opportunities"),
 });
 
 export const analyzeWebsite = createServerFn({ method: "POST" })
@@ -155,7 +153,7 @@ export const analyzeWebsite = createServerFn({ method: "POST" })
   });
 
 const strategySchema = z.object({
-  opportunities: z.array(opportunitySchema).min(20).max(30),
+  opportunities: z.array(opportunitySchema).describe("20-30 blog article opportunities"),
 });
 
 export const generateBlogStrategy = createServerFn({ method: "POST" })
