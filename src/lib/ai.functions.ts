@@ -516,7 +516,6 @@ export const analyzeWebsite = createServerFn({ method: "POST" })
     return normalizeAnalysis(json, data, websiteBrief);
   });
 
-
 export const generateBlogStrategy = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: { existingTitles?: string[] }) => d)
