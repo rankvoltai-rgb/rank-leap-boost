@@ -32,9 +32,9 @@ async function loadStyleContext(supabase: any, userId: string) {
 const blogSchema = z.object({
   body: z.string().describe("Full blog article in markdown with ## headings, paragraphs, and lists."),
   description: z.string().describe("A one-sentence meta description under 160 chars."),
-  seo_score: z.number().min(0).max(100),
-  traffic_estimate: z.number().min(0),
-  tags: z.array(z.string()).max(4),
+  seo_score: z.number().describe("Realistic SEO score 0-100"),
+  traffic_estimate: z.number().describe("Monthly organic traffic estimate"),
+  tags: z.array(z.string()).describe("Up to 4 short tags"),
 });
 
 export const generateBlogContent = createServerFn({ method: "POST" })
@@ -80,14 +80,13 @@ const keywordsSchema = z.object({
       z.object({
         name: z.string(),
         tag: z.string().describe("e.g. High Competition, Low Competition, High Intent"),
-        search_volume: z.number().min(0),
-        traffic_estimate: z.number().min(0),
+        search_volume: z.number(),
+        traffic_estimate: z.number(),
         intent: z.string().describe("e.g. High Intent, Informational, Transactional"),
-        trend: z.enum(["High", "Medium", "Low"]),
+        trend: z.string().describe("High, Medium, or Low"),
       }),
     )
-    .min(8)
-    .max(24),
+    .describe("8-24 keyword opportunities"),
 });
 
 export const discoverKeywords = createServerFn({ method: "POST" })
