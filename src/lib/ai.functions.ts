@@ -443,10 +443,12 @@ export const generateBlogContent = createServerFn({ method: "POST" })
   });
 
 const ACTIONS: Record<string, string> = {
-  rewrite: "Rewrite the following passage to be clearer and more engaging while keeping the meaning.",
+  rewrite:
+    "Rewrite the following passage to be clearer and more engaging while keeping the meaning.",
   expand: "Expand the following passage with more detail, examples, and depth.",
   shorten: "Shorten the following passage, keeping only the most important points.",
-  improve_seo: "Rewrite the following passage to improve SEO: add relevant keywords naturally and improve scannability.",
+  improve_seo:
+    "Rewrite the following passage to improve SEO: add relevant keywords naturally and improve scannability.",
   change_tone: "Rewrite the following passage applying the configured brand tone and voice.",
   ai_suggest: "Improve the following passage in any way that makes it stronger writing.",
 };
@@ -464,6 +466,7 @@ export const editBlogSection = createServerFn({ method: "POST" })
     });
     return { result: text.trim() };
   });
+
 
 export const discoverKeywords = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
