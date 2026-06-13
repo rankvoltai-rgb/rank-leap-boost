@@ -2,10 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { generateText } from "ai";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import {
-  createLovableAiGatewayProvider,
-  requireLovableApiKey,
-} from "./ai-gateway.server";
+import { createLovableAiGatewayProvider, requireLovableApiKey } from "./ai-gateway.server";
 
 const MODEL = "google/gemini-3-flash-preview";
 
@@ -54,6 +51,16 @@ type KeywordOutput = {
   trend: string;
 };
 
+type SupabaseClientLike = {
+  from: (table: string) => {
+    select: (columns: string) => {
+      eq: (column: string, value: string) => {
+        maybeSingle: () => Promise<{ data: JsonRecord | null }>;
+      };
+    };
+  };
+};
+
 // The gateway provider and the `ai` package can resolve to different provider
 // spec versions during build; normalize the model type at one boundary.
 function model(gateway: Gateway) {
@@ -72,7 +79,7 @@ const BlogInput = z.object({
   description: z.string().optional(),
 });
 
-async function loadStyleContext(supabase: any, userId: string) {
+async function loadStyleContext(supabase: SupabaseClientLike, userId: string) {
   const [{ data: settings }, { data: profile }] = await Promise.all([
     supabase.from("content_settings").select("*").eq("user_id", userId).maybeSingle(),
     supabase.from("profiles").select("*").eq("user_id", userId).maybeSingle(),
@@ -107,7 +114,12 @@ function stringArray(value: unknown, fallback: string[], limit = 10): string[] {
   return list.length ? list : fallback;
 }
 
-function toNumber(value: unknown, fallback: number, min = 0, max = Number.MAX_SAFE_INTEGER): number {
+function toNumber(
+  value: unknown,
+  fallback: number,
+  min = 0,
+  max = Number.MAX_SAFE_INTEGER,
+): number {
   const parsed = typeof value === "number" ? value : Number.parseFloat(String(value ?? ""));
   const n = Number.isFinite(parsed) ? parsed : fallback;
   return Math.round(Math.min(max, Math.max(min, n)));
@@ -132,7 +144,12 @@ function domainFromUrl(rawUrl: string): string {
     const withProtocol = /^https?:\/\//i.test(rawUrl) ? rawUrl : `https://${rawUrl}`;
     return new URL(withProtocol).hostname.replace(/^www\./, "");
   } catch {
-    return rawUrl.replace(/^https?:\/\//i, "").replace(/^www\./, "").split("/")[0] || "website";
+    return (
+      rawUrl
+        .replace(/^https?:\/\//i, "")
+        .replace(/^www\./, "")
+        .split("/")[0] || "website"
+    );
   }
 }
 
@@ -146,7 +163,9 @@ function humanize(input: string): string {
 
 function inferNiche(businessName: string, websiteUrl: string): string {
   const source = `${businessName} ${domainFromUrl(websiteUrl)}`.toLowerCase();
-  if (/roof|plumb|hvac|landscap|contract|remodel|construction/.test(source)) return "Local home services";
+  if (/roof|plumb|hvac|landscap|contract|remodel|construction/.test(source)) {
+    return "Local home services";
+  }
   if (/law|legal|attorney|solicitor/.test(source)) return "Legal services";
   if (/clinic|dental|med|health|therapy|wellness/.test(source)) return "Healthcare and wellness";
   if (/realty|real estate|property|realtor/.test(source)) return "Real estate services";
@@ -185,7 +204,12 @@ function fallbackOpportunities(niche: string, businessName: string, count = 8): 
   return titles.slice(0, count).map((title, index) => ({
     title,
     description: `A high-intent article designed to educate buyers and capture ${topic} search demand.`,
-    keyword: title.toLowerCase().replace(/[^a-z0-9 ]/g, "").split(" ").slice(0, 5).join(" "),
+    keyword: title
+      .toLowerCase()
+      .replace(/[^a-z0-9 ]/g, "")
+      .split(" ")
+      .slice(0, 5)
+      .join(" "),
     traffic_estimate: 650 + index * 185,
     competition: normalizeCompetition(undefined, index),
     ai_signal: 76 + (index % 18),
@@ -207,14 +231,20 @@ function normalizeOpportunity(value: unknown, fallback: Opportunity, index = 0):
 }
 
 function extractJson(text: string): unknown {
-  const trimmed = text.trim().replace(/^```(?:json)?/i, "").replace(/```$/i, "").trim();
+  const trimmed = text
+    .trim()
+    .replace(/^```(?:json)?/i, "")
+    .replace(/```$/i, "")
+    .trim();
   try {
     return JSON.parse(trimmed);
   } catch {
     // Continue to balanced-object extraction below.
   }
 
-  const start = trimmed.search(/[\[{]/);
+  const start = Math.min(
+    ...[trimmed.indexOf("{"), trimmed.indexOf("[")].filter((index) => index >= 0),
+  );
   if (start < 0) throw new Error("AI response did not include JSON.");
   const opener = trimmed[start];
   const closer = opener === "{" ? "}" : "]";
