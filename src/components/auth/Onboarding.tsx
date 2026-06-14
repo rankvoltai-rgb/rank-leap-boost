@@ -14,6 +14,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { toast } from "sonner";
 import { Logo } from "@/components/landing/shared";
 import { cn } from "@/lib/utils";
+import { CountUp } from "@/components/ui/count-up";
 import { analyzeWebsite, generateBlogStrategy } from "@/lib/ai.functions";
 import {
   persistOnboarding,
