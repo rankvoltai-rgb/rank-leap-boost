@@ -10,6 +10,7 @@ import {
   type Blog,
 } from "@/lib/api";
 import { Panel, StatCard, Pill, Button, PageHeader } from "@/components/dashboard/primitives";
+import { CountUp } from "@/components/ui/count-up";
 
 export const Route = createFileRoute("/_authenticated/dashboard/")({
   component: SystemConsole,
@@ -56,7 +57,7 @@ function SystemConsole() {
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
         <StatCard
           label="Estimated Traffic"
-          value={(baseTraffic + bonus).toLocaleString()}
+          value={<CountUp value={baseTraffic + bonus} className="text-gradient-traffic" />}
           hint="Monthly organic visitors"
           emphasis
         />
