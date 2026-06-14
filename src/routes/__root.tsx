@@ -88,8 +88,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:site", content: "@Lovable" },
       { name: "twitter:title", content: "Rankvolt | Get Google & ChatGPT Traffic on Autopilot" },
       { name: "twitter:description", content: "Turn your website into a traffic-generating machine with AI-powered content engineered for Google, ChatGPT, and modern search engines." },
-      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/02b190d0-0744-42a0-9d3f-f44b60e39c29" },
-      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/02b190d0-0744-42a0-9d3f-f44b60e39c29" },
+      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/d61d7f68-2bf1-42f3-a7de-5537241a3bae" },
+      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/d61d7f68-2bf1-42f3-a7de-5537241a3bae" },
     ],
     links: [
       {
