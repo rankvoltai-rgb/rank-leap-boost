@@ -36,6 +36,43 @@ const SCAN_STEPS = [
   "Generating article opportunities…",
 ];
 
+function reducedMotion() {
+  if (typeof window === "undefined") return false;
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
+/** A short celebratory particle burst anchored to its parent. */
+function Burst() {
+  if (reducedMotion()) return null;
+  const particles = Array.from({ length: 10 });
+  return (
+    <span className="pointer-events-none absolute inset-0 flex items-center justify-center">
+      {particles.map((_, i) => {
+        const angle = (i / particles.length) * Math.PI * 2;
+        const dist = 22 + (i % 3) * 8;
+        const tones = ["bg-success", "bg-info", "bg-ink"];
+        return (
+          <motion.span
+            key={i}
+            initial={{ opacity: 1, x: 0, y: 0, scale: 1 }}
+            animate={{
+              opacity: 0,
+              x: Math.cos(angle) * dist,
+              y: Math.sin(angle) * dist,
+              scale: 0.4,
+            }}
+            transition={{ duration: 0.55, ease: "easeOut" }}
+            className={cn(
+              "absolute h-1.5 w-1.5 rounded-full",
+              tones[i % tones.length],
+            )}
+          />
+        );
+      })}
+    </span>
+  );
+}
+
 function Field({
   label,
   type = "text",
