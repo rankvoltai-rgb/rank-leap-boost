@@ -185,3 +185,22 @@
 @utility text-balance {
   text-wrap: balance;
 }
+
+@utility bg-gradient-accent {
+  background-image: var(--gradient-accent);
+}
+
+@utility bg-gradient-success {
+  background-image: var(--gradient-success);
+}
+
+@utility bg-gradient-surface {
+  background-image: var(--gradient-surface);
+}
+
+@utility text-gradient-traffic {
+  background-image: var(--gradient-traffic);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
