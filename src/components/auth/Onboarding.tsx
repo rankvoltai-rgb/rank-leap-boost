@@ -297,75 +297,124 @@ export function Onboarding() {
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.35 }}
-              className="w-full max-w-2xl"
+              className="flex max-h-[calc(100vh-7rem)] w-full max-w-2xl flex-col"
             >
-              <div className="mb-2 inline-flex items-center gap-1.5 rounded-full border border-success/20 bg-success/10 px-3 py-1 text-xs font-medium text-success">
-                <Check className="h-3.5 w-3.5" /> Analysis complete
-              </div>
-              <h1 className="text-3xl font-extrabold tracking-tight text-ink">
-                Here's your growth opportunity
-              </h1>
-              <p className="mt-2 text-sm text-muted-foreground">
-                We detected <span className="font-semibold text-ink">{analysis.niche}</span> targeting{" "}
-                <span className="font-semibold text-ink">{analysis.audience}</span> in {analysis.geo}. Add the
-                articles you want — we'll prioritize them first.
-              </p>
+              {/* Compact header — stays visible, no scroll needed to see the value */}
+              <div className="shrink-0">
+                <div className="mb-2 inline-flex items-center gap-1.5 rounded-full border border-success/20 bg-success/10 px-3 py-1 text-xs font-medium text-success">
+                  <Check className="h-3.5 w-3.5" /> Analysis complete
+                </div>
+                <h1 className="text-2xl font-extrabold tracking-tight text-ink sm:text-3xl">
+                  Here's your growth opportunity
+                </h1>
 
-              <div className="mt-6 grid gap-3">
-                {blogs.map((b) => {
+                {/* Hero dopamine metric */}
+                <div className="mt-3 overflow-hidden rounded-2xl border border-border bg-gradient-surface p-5">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                        Total opportunity
+                      </p>
+                      <CountUp
+                        value={totalTraffic}
+                        suffix="/mo"
+                        className="mt-1 block text-3xl font-extrabold tracking-tight text-gradient-traffic tabular-nums sm:text-4xl"
+                      />
+                    </div>
+                    <div>
+                      <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                        Secured in queue
+                      </p>
+                      <CountUp
+                        value={queuedTraffic}
+                        suffix="/mo"
+                        className="mt-1 block text-3xl font-extrabold tracking-tight text-ink tabular-nums sm:text-4xl"
+                      />
+                    </div>
+                  </div>
+                  <p className="mt-3 text-xs text-muted-foreground">
+                    {analysis.niche} · {analysis.audience} · {analysis.geo} — add the articles you want, we'll
+                    prioritize them first.
+                  </p>
+                </div>
+              </div>
+
+              {/* Scrollable card region */}
+              <div className="-mr-2 mt-4 grid flex-1 gap-3 overflow-y-auto pr-2">
+                {blogs.map((b, i) => {
                   const isAdded = added.has(b.id);
                   return (
-                    <div
+                    <motion.div
                       key={b.id}
-                      className="flex items-center justify-between gap-4 rounded-xl border border-border bg-card p-4"
+                      initial={{ opacity: 0, y: 12 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.3, delay: Math.min(i * 0.05, 0.4) }}
+                      className={cn(
+                        "flex items-center justify-between gap-4 rounded-xl border bg-card p-3.5 transition-colors",
+                        isAdded ? "border-success/40 bg-success/5" : "border-border",
+                      )}
                     >
                       <div className="min-w-0">
                         <p className="truncate text-sm font-semibold text-ink">{b.title}</p>
                         <div className="mt-1.5 flex flex-wrap items-center gap-2 text-xs">
                           <span className="inline-flex items-center gap-1 rounded-full border border-success/20 bg-success/10 px-2 py-0.5 font-medium text-success">
                             <TrendingUp className="h-3 w-3" />
-                            {b.traffic_estimate.toLocaleString()}/mo
+                            <CountUp value={b.traffic_estimate} suffix="/mo" className="tabular-nums" />
                           </span>
                           <span className="inline-flex items-center gap-1 rounded-full border border-info/20 bg-info/10 px-2 py-0.5 font-medium text-info">
                             {b.ai_signal} AI signal
                           </span>
-                          <span className="text-muted-foreground">{b.competition} competition</span>
+                          <span className="hidden text-muted-foreground sm:inline">
+                            {b.competition} competition
+                          </span>
                         </div>
                       </div>
-                      <button
+                      <motion.button
                         type="button"
                         onClick={() => addToQueue(b)}
                         disabled={isAdded}
+                        whileTap={isAdded ? undefined : { scale: 0.92 }}
+                        animate={isAdded ? { scale: [1, 1.12, 1] } : { scale: 1 }}
+                        transition={{ duration: 0.4, ease: "easeOut" }}
                         className={cn(
-                          "inline-flex shrink-0 items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-semibold transition-colors",
+                          "relative inline-flex shrink-0 items-center gap-1.5 overflow-visible rounded-lg px-3 py-2 text-sm font-semibold transition-colors",
                           isAdded
                             ? "border border-success/30 bg-success/10 text-success"
-                            : "bg-ink text-background hover:bg-ink/90",
+                            : "bg-gradient-accent text-background hover:opacity-90",
                         )}
                       >
+                        {isAdded && <Burst />}
                         {isAdded ? <Check className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
                         {isAdded ? "Added" : "Add to Queue"}
-                      </button>
-                    </div>
+                      </motion.button>
+                    </motion.div>
                   );
                 })}
               </div>
 
-              <div className="mt-7 rounded-2xl border border-border bg-card p-6 shadow-sm">
-                <p className="text-sm font-semibold text-ink">
-                  {added.size > 0
-                    ? `${added.size} article${added.size > 1 ? "s" : ""} queued`
-                    : "Ready when you are"}
-                </p>
-                <p className="mt-1 text-sm text-muted-foreground">
-                  Start your free trial and we'll generate 30 strategic blog opportunities — your selected
-                  articles get prioritized first.
-                </p>
+              {/* Sticky CTA footer */}
+              <div className="mt-4 shrink-0 rounded-2xl border border-border bg-card p-4">
+                <div className="flex items-center justify-between gap-3">
+                  <motion.p
+                    key={added.size}
+                    initial={{ scale: added.size > 0 ? 1.15 : 1 }}
+                    animate={{ scale: 1 }}
+                    transition={{ type: "spring", stiffness: 500, damping: 18 }}
+                    className="text-sm font-semibold text-ink"
+                  >
+                    {added.size > 0
+                      ? `${added.size} article${added.size > 1 ? "s" : ""} queued`
+                      : "Ready when you are"}
+                  </motion.p>
+                  <span className="hidden text-xs text-muted-foreground sm:inline">
+                    30 more generated on activation
+                  </span>
+                </div>
                 <button
                   type="button"
                   onClick={startTrial}
                   disabled={activating}
-                  className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-ink px-6 py-3.5 text-sm font-semibold text-background shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md disabled:opacity-70"
+                  className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-accent px-6 py-3.5 text-sm font-semibold text-background shadow-sm transition-all hover:-translate-y-0.5 hover:opacity-90 disabled:opacity-70"
                 >
                   {activating ? (
                     <>
