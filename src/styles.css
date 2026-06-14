@@ -109,6 +109,30 @@
   --sidebar-ring: oklch(0.704 0.04 256.788);
 }
 
+:root {
+  /* Tasteful accent gradients — built from existing brand tokens. */
+  --gradient-accent: linear-gradient(
+    135deg,
+    var(--ink) 0%,
+    color-mix(in oklab, var(--ink) 78%, var(--info) 22%) 100%
+  );
+  --gradient-success: linear-gradient(
+    135deg,
+    var(--success) 0%,
+    color-mix(in oklab, var(--success) 70%, var(--info) 30%) 100%
+  );
+  --gradient-traffic: linear-gradient(
+    100deg,
+    var(--info) 0%,
+    var(--success) 100%
+  );
+  --gradient-surface: linear-gradient(
+    180deg,
+    color-mix(in oklab, var(--info) 7%, var(--card)) 0%,
+    var(--card) 70%
+  );
+}
+
 .dark {
   --background: oklch(0.129 0.042 264.695);
   --foreground: oklch(0.984 0.003 247.858);
@@ -160,4 +184,23 @@
 
 @utility text-balance {
   text-wrap: balance;
+}
+
+@utility bg-gradient-accent {
+  background-image: var(--gradient-accent);
+}
+
+@utility bg-gradient-success {
+  background-image: var(--gradient-success);
+}
+
+@utility bg-gradient-surface {
+  background-image: var(--gradient-surface);
+}
+
+@utility text-gradient-traffic {
+  background-image: var(--gradient-traffic);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
