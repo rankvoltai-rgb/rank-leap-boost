@@ -117,6 +117,12 @@ export function Onboarding() {
   const [activating, setActivating] = useState(false);
   const scanDone = useRef(false);
 
+  const totalTraffic = blogs.reduce((sum, b) => sum + (b.traffic_estimate ?? 0), 0);
+  const queuedTraffic = blogs.reduce(
+    (sum, b) => (added.has(b.id) ? sum + (b.traffic_estimate ?? 0) : sum),
+    0,
+  );
+
   // Advance the live processing labels while the scan runs.
   useEffect(() => {
     if (stage !== "scanning") return;
