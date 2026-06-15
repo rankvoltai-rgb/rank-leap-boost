@@ -1,6 +1,7 @@
 import { supabase } from "@/integrations/supabase/client";
 import type { TablesInsert } from "@/integrations/supabase/types";
 import { generateBlogContent } from "@/lib/ai.functions";
+import { getStripeEnvironment } from "@/lib/stripe";
 
 export type BlogStatus = "opportunity" | "scheduled" | "generating" | "finished";
 
@@ -88,6 +89,18 @@ export interface CreditAccount {
   credits_total: number;
 }
 
+export interface Subscription {
+  id: string;
+  user_id: string;
+  status: string;
+  price_id: string;
+  product_id: string;
+  current_period_end: string | null;
+  cancel_at_period_end: boolean;
+  environment: string;
+  created_at: string;
+}
+
 async function uid(): Promise<string> {
   const { data } = await supabase.auth.getUser();
   if (!data.user) throw new Error("Not authenticated");
@@ -111,6 +124,19 @@ export async function getCredits(): Promise<CreditAccount | null> {
   const user_id = await uid();
   const { data } = await supabase.from("credit_accounts").select("*").eq("user_id", user_id).maybeSingle();
   return data as CreditAccount | null;
+}
+
+export async function getSubscription(): Promise<Subscription | null> {
+  const user_id = await uid();
+  const { data } = await supabase
+    .from("subscriptions")
+    .select("*")
+    .eq("user_id", user_id)
+    .eq("environment", getStripeEnvironment())
+    .order("created_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  return data as Subscription | null;
 }
 
 export async function listBlogs(status?: BlogStatus): Promise<Blog[]> {
