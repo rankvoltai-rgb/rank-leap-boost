@@ -117,6 +117,7 @@ export function Onboarding() {
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [added, setAdded] = useState<Set<string>>(new Set());
   const [activating, setActivating] = useState(false);
+  const [checkout, setCheckout] = useState<{ email?: string; userId?: string } | null>(null);
   const scanDone = useRef(false);
 
   const totalTraffic = blogs.reduce((sum, b) => sum + (b.traffic_estimate ?? 0), 0);
@@ -192,8 +193,9 @@ export function Onboarding() {
         data: { existingTitles: blogs.map((b) => b.title) },
       });
       await activateTrial(strategy);
-      toast.success("Trial activated — your content engine is live.");
-      navigate({ to: "/dashboard" });
+      const { data } = await supabase.auth.getUser();
+      setCheckout({ email: data.user?.email, userId: data.user?.id });
+      setStage("checkout");
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Couldn't activate your trial.");
       setActivating(false);
