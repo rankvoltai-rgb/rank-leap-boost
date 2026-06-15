@@ -28,7 +28,7 @@ export function TopBar() {
         <Coins className="h-3.5 w-3.5 text-muted-foreground" />
         {remaining === null ? "—" : remaining.toLocaleString()} credits
       </span>
-      <Avatar name={profile?.brand_name ?? "RankPill"} className="h-8 w-8" />
+      <Avatar name={profile?.brand_name ?? "Rankvolt"} className="h-8 w-8" />
       <button
         type="button"
         onClick={signOut}

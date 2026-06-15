@@ -168,7 +168,7 @@ export function AuthSplit() {
 
             <Reveal delay={0.24}>
               <p className="mt-6 text-center text-sm text-muted-foreground">
-                {mode === "signup" ? "Already have an account? " : "New to RankPill? "}
+                {mode === "signup" ? "Already have an account? " : "New to Rankvolt? "}
                 <button
                   type="button"
                   onClick={() => setMode(mode === "signup" ? "login" : "signup")}

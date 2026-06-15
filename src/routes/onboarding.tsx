@@ -4,13 +4,13 @@ import { Onboarding } from "@/components/auth/Onboarding";
 export const Route = createFileRoute("/onboarding")({
   head: () => ({
     meta: [
-      { title: "Get Started — RankPill" },
+      { title: "Get Started — Rankvolt" },
       {
         name: "description",
         content:
-          "Set up your brand, review your keywords, and choose your hosting to start your free RankPill trial.",
+          "Set up your brand, review your keywords, and choose your hosting to start your free Rankvolt trial.",
       },
-      { property: "og:title", content: "Get Started — RankPill" },
+      { property: "og:title", content: "Get Started — Rankvolt" },
       {
         property: "og:description",
         content:

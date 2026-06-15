@@ -12,7 +12,7 @@ export function FinalCTA() {
               Unlock Traffic on Autopilot
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-balance text-base text-background/70">
-              Grow organic traffic on autopilot. RankPill will research, write, optimize, and
+              Grow organic traffic on autopilot. Rankvolt will research, write, optimize, and
               publish articles to your website daily.
             </p>
             <a

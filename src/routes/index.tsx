@@ -16,13 +16,13 @@ import { Footer } from "@/components/landing/Footer";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "RankPill — Get Google & ChatGPT Traffic on Autopilot" },
+      { title: "Rankvolt — Get Google & ChatGPT Traffic on Autopilot" },
       {
         name: "description",
         content:
           "Grow organic traffic on autopilot. AI researches keywords, writes daily SEO articles, publishes to your site, and builds backlinks while you sleep.",
       },
-      { property: "og:title", content: "RankPill — Get Google & ChatGPT Traffic on Autopilot" },
+      { property: "og:title", content: "Rankvolt — Get Google & ChatGPT Traffic on Autopilot" },
       {
         property: "og:description",
         content:

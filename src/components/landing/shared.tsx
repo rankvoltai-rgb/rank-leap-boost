@@ -27,14 +27,14 @@ export function Reveal({
   );
 }
 
-/* ---------- RankPill logo ---------- */
+/* ---------- Rankvolt logo ---------- */
 export function Logo({ className }: { className?: string }) {
   return (
     <div className={cn("flex items-center gap-2", className)}>
       <span className="flex h-7 w-7 items-center justify-center rounded-[9px] bg-ink">
         <span className="block h-3 w-3 rounded-full border-[3px] border-background" />
       </span>
-      <span className="text-[1.15rem] font-bold tracking-tight text-ink">RankPill</span>
+      <span className="text-[1.15rem] font-bold tracking-tight text-ink">Rankvolt</span>
     </div>
   );
 }

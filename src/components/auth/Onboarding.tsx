@@ -16,6 +16,8 @@ import { Logo } from "@/components/landing/shared";
 import { cn } from "@/lib/utils";
 import { CountUp } from "@/components/ui/count-up";
 import { analyzeWebsite, generateBlogStrategy } from "@/lib/ai.functions";
+import { supabase } from "@/integrations/supabase/client";
+import { StripeEmbeddedCheckout } from "@/components/StripeEmbeddedCheckout";
 import {
   persistOnboarding,
   activateTrial,
@@ -24,7 +26,7 @@ import {
   type Blog,
 } from "@/lib/api";
 
-type Stage = "form" | "scanning" | "results";
+type Stage = "form" | "scanning" | "results" | "checkout";
 
 const SCAN_STEPS = [
   "Analyzing website structure…",
@@ -115,6 +117,7 @@ export function Onboarding() {
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [added, setAdded] = useState<Set<string>>(new Set());
   const [activating, setActivating] = useState(false);
+  const [checkout, setCheckout] = useState<{ email?: string; userId?: string } | null>(null);
   const scanDone = useRef(false);
 
   const totalTraffic = blogs.reduce((sum, b) => sum + (b.traffic_estimate ?? 0), 0);
@@ -190,8 +193,9 @@ export function Onboarding() {
         data: { existingTitles: blogs.map((b) => b.title) },
       });
       await activateTrial(strategy);
-      toast.success("Trial activated — your content engine is live.");
-      navigate({ to: "/dashboard" });
+      const { data } = await supabase.auth.getUser();
+      setCheckout({ email: data.user?.email, userId: data.user?.id });
+      setStage("checkout");
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Couldn't activate your trial.");
       setActivating(false);
@@ -428,10 +432,44 @@ export function Onboarding() {
                     </>
                   ) : (
                     <>
-                      <Zap className="h-4 w-4" /> Start 2-Day Free Trial
+                      <Zap className="h-4 w-4" /> Start 48-Hour Free Trial
                     </>
                   )}
                 </button>
+              </div>
+            </motion.div>
+          )}
+
+          {stage === "checkout" && (
+            <motion.div
+              key="checkout"
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.35 }}
+              className="w-full max-w-xl"
+            >
+              <div className="mb-2 inline-flex items-center gap-1.5 rounded-full border border-success/20 bg-success/10 px-3 py-1 text-xs font-medium text-success">
+                <Check className="h-3.5 w-3.5" /> Queue secured
+              </div>
+              <h1 className="text-2xl font-extrabold tracking-tight text-ink sm:text-3xl">
+                Activate your 48-hour free trial
+              </h1>
+              <p className="mt-2 text-sm text-muted-foreground">
+                No charge for 48 hours. Add your card to unlock your dashboard —
+                cancel anytime before the trial ends and you won't be billed.
+              </p>
+              <div className="mt-6 overflow-hidden rounded-2xl border border-border bg-card p-4">
+                <StripeEmbeddedCheckout
+                  priceId="business_monthly"
+                  trialDays={2}
+                  customerEmail={checkout?.email}
+                  userId={checkout?.userId}
+                  returnUrl={
+                    typeof window !== "undefined"
+                      ? `${window.location.origin}/dashboard?checkout=success&session_id={CHECKOUT_SESSION_ID}`
+                      : undefined
+                  }
+                />
               </div>
             </motion.div>
           )}
