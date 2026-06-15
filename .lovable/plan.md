@@ -1,47 +1,57 @@
-# Onboarding Polish & Dopamine Loops
+# Rankvolt — Stripe + Onboarding/Dashboard Polish
 
-Goal: make the `/onboarding` results step feel alive and rewarding without breaking the clean light aesthetic. All work stays in frontend/presentation code — no backend or AI logic changes.
+Four pieces: Stripe payments, onboarding redesign + 48h-trial checkout, dashboard visual polish, and a Billing page. Existing design tokens in `src/styles.css` stay the source of truth (monochrome ink, subtle borders, low radius). No data-model rewrites.
 
-## 1. Fix the "above the fold" problem
+## 1. Stripe payments
 
-The results step (`stage === "results"`) currently stacks a header, a long list of opportunity cards, and a CTA panel vertically, forcing a scroll before the user sees the value.
+Use Lovable's built-in Stripe payments (no API keys, test mode immediately). This requires a **Pro plan**. Once enabled:
 
-Changes in `src/components/auth/Onboarding.tsx`:
-- Convert the results view into a tighter, two-region layout that fits in the viewport on common laptop sizes:
-  - Compact header (badge + headline + one-line summary) with reduced top/bottom margins.
-  - A scrollable inner list region (`max-h` with overflow) for the opportunity cards so the **header and the sticky CTA stay visible** while the cards scroll inside.
-  - Make the "Start 2-Day Free Trial" CTA a sticky/pinned footer bar within the card column instead of a separate panel pushed far down.
-- Tighten card density (smaller padding, condensed meta row) so 3–4 cards are visible at once.
+- Create one product from the landing page pricing — **Business**, $49.50/month (recurring). Tax handling set to full compliance handling (digital SaaS).
+- The "Start 48-Hour Free Trial" CTA opens Stripe Checkout for the Business subscription with a **2-day (48h) free trial, card required upfront**. When the trial ends Stripe auto-charges $49.50/mo.
+- After successful checkout, Stripe redirects back; a webhook (`/api/public/stripe-webhook`, signature-verified) records the subscription and flips the user to "active/trialing". Trial activation logic (generating the 30 opportunities) runs on return so the dashboard is populated.
 
-## 2. Dopamine reward loop on "Add to Queue"
+```text
+Onboarding results → "Start 48-Hour Free Trial"
+   → activate trial in-app (queue + 30 blogs) → Stripe Checkout (48h trial, card upfront)
+   → success return → /dashboard (subscription = trialing)
+```
 
-When `addToQueue` fires:
-- Button morphs Plus → Check with a spring pop (scale bounce) via `motion/react`.
-- A short burst micro-confetti / sparkle ping anchored on the clicked button (lightweight CSS/`motion` particles — no new heavy library).
-- The queued card gets a brief success highlight (ring/tint flash) then settles into an "Added" state.
-- A live "queued counter" near the CTA increments with a quick bounce, reinforcing progress ("2 articles queued").
-- Optional subtle haptic-style scale nudge on the CTA each time the count grows.
+A `subscriptions` table (user_id, stripe ids, status, current_period_end, plan, trial_end) stores state, with RLS scoped to `auth.uid()` and the standard GRANTs. Webhook writes via the admin client.
 
-## 3. Animated count-up traffic numbers
+## 2. Onboarding redesign (cleaner, Stripe-like; keep dopamine)
 
-- Add a small reusable `CountUp` component (using `motion/react` `animate`/`useMotionValue` + `useTransform`, or a simple rAF tween) — no new dependency.
-- Apply it to each card's `traffic_estimate` (`/mo`) so numbers roll up when results appear.
-- Add an aggregate "total opportunity traffic" stat at the top of the results step that count-ups as cards mount and increments further each time one is added to the queue — the core dopamine metric.
-- Reuse the same `CountUp` in the dashboard `StatCard` "Estimated Traffic" (`dashboard.index.tsx`) for consistency.
+Rework `src/components/auth/Onboarding.tsx` visuals only — same 3 stages (form → scanning → results) and same server calls.
 
-## 4. Gradient & visual polish
+- **Cleaner surface:** flatter cards, hairline borders, more whitespace, tighter type scale, restrained use of the existing gradients (reserve the gradient for the hero traffic number and primary CTA only — Stripe-style restraint).
+- **Form & scanning:** centered single column, refined inputs, calmer step list.
+- **Results (keep dopamine):** keep the count-up traffic hero, the "Add to Queue" burst/pop animation, queued counter, and staggered card entrance — just lighter styling and better above-the-fold balance.
+- **CTA copy:** change "Start 2-Day Free Trial" → **"Start 48-Hour Free Trial"**, and on click run the trial activation then redirect into Stripe Checkout (per section 1).
+- Fix the brand-name inconsistency (Logo renders "RankPill" on server vs "Rankvolt" elsewhere) that is causing a hydration mismatch on `/onboarding` — standardize to **Rankvolt**.
 
-Note: the original build spec was strictly monochrome/no-gradient. This request explicitly overrides that for accent moments only — kept tasteful and subtle, not the purple-on-white AI look.
+## 3. Dashboard visual polish (no structural change)
 
-- Add 2–3 gradient tokens to `src/styles.css` (e.g. `--gradient-accent`, `--gradient-success`, `--gradient-surface`) built from existing `--ink` / `--success` / `--info` so they stay on-brand.
-- Apply gradients selectively:
-  - The aggregate traffic stat number / its container.
-  - The primary CTA button (subtle ink gradient + hover sheen).
-  - Success pills and the "Added" state.
-- Add soft entrance stagger to opportunity cards (fade + rise) and a gentle scanning-complete celebration when transitioning from `scanning` → `results`.
+Restyle existing pages and chrome; keep current nav/IA.
+
+- `Sidebar.tsx` / `TopBar.tsx`: refined spacing, clearer active state, subtle Stripe-like section grouping; add the new **Billing** nav item (active).
+- `primitives.tsx` (StatCard, Panel, Pill, Button, PageHeader): tighten radii/borders/typography for a more polished, consistent look.
+- `dashboard.index.tsx` (System Console) and `dashboard.blog-engine.tsx`: apply the refreshed primitives; keep the count-up metric and reward feel on "Add to Queue".
+
+## 4. Billing page
+
+New route `src/routes/_authenticated/dashboard.billing.tsx`:
+
+- Current plan & subscription status (trialing / active / canceled, trial end / next renewal date) from the `subscriptions` table.
+- "Manage subscription" → Stripe Billing Portal (cancel/update card).
+- Credits overview reusing `credit_accounts`, plus existing `purchaseCredits` surfaced as buy-credit options (kept as-is unless you want those on Stripe too).
 
 ## Technical notes
-- Files touched: `src/components/auth/Onboarding.tsx` (primary), `src/styles.css` (gradient tokens + helper utility classes), `src/routes/_authenticated/dashboard.index.tsx` (reuse CountUp), and a new small `src/components/ui/count-up.tsx`.
-- Animations use the already-installed `motion/react`; confetti is hand-rolled with motion particles to avoid adding dependencies.
-- Respects `prefers-reduced-motion`: count-ups snap to final value and particle bursts are skipped.
-- No changes to server functions, schema, or `api.ts` logic.
+
+- Stripe enablement + product creation done via Lovable's built-in payments tooling.
+- Checkout session + portal session created in server functions (`createServerFn`), called from the client with `useServerFn`; webhook is a public server route with signature verification, using the admin client only inside the handler.
+- New `subscriptions` table migration with GRANTs + RLS.
+- All onboarding/dashboard changes are presentation-layer except the new checkout wiring; AI functions and existing `api.ts` reads are untouched aside from adding subscription helpers.
+
+## Prerequisites / confirmations
+
+- Payments require a **Pro plan** — if not active, Stripe enable will prompt for it.
+- Card-upfront trials mean users must enter a card before reaching the dashboard. Confirm that's intended (you selected "Card upfront, auto-converts").
