@@ -16,6 +16,8 @@ import { Logo } from "@/components/landing/shared";
 import { cn } from "@/lib/utils";
 import { CountUp } from "@/components/ui/count-up";
 import { analyzeWebsite, generateBlogStrategy } from "@/lib/ai.functions";
+import { supabase } from "@/integrations/supabase/client";
+import { StripeEmbeddedCheckout } from "@/components/StripeEmbeddedCheckout";
 import {
   persistOnboarding,
   activateTrial,
@@ -24,7 +26,7 @@ import {
   type Blog,
 } from "@/lib/api";
 
-type Stage = "form" | "scanning" | "results";
+type Stage = "form" | "scanning" | "results" | "checkout";
 
 const SCAN_STEPS = [
   "Analyzing website structure…",
