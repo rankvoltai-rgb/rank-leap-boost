@@ -292,10 +292,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      has_active_subscription: {
-        Args: { check_env?: string; user_uuid: string }
-        Returns: boolean
-      }
+      [_ in never]: never
     }
     Enums: {
       blog_status: "opportunity" | "scheduled" | "generating" | "finished"
