@@ -140,7 +140,7 @@ export function GrowTraffic() {
           <Reveal delay={0.06}>
             <Card
               title="Fully Autonomous"
-              body="From keyword research to writing, publishing, and building backlinks. RankPill does everything on autopilot."
+              body="From keyword research to writing, publishing, and building backlinks. Rankvolt does everything on autopilot."
               className="h-full"
             >
               <Panel className="space-y-2">

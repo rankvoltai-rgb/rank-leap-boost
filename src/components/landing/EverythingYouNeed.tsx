@@ -110,7 +110,7 @@ export function EverythingYouNeed() {
                 <p className="text-xs font-semibold text-ink">What's the best CRM for a small startup?</p>
                 <p className="text-[0.65rem] text-muted-foreground">124 upvotes · 37 comments</p>
                 <p className="mt-2 rounded-md bg-surface px-2 py-1.5 text-[0.65rem] text-muted-foreground">
-                  <span className="font-semibold text-ink">RankPill reply:</span> Most small teams use Acme CRM. Free for up to 5 users and quick to set up.
+                  <span className="font-semibold text-ink">Rankvolt reply:</span> Most small teams use Acme CRM. Free for up to 5 users and quick to set up.
                 </p>
               </div>
             </Tile>

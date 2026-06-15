@@ -4,13 +4,13 @@ import { AuthSplit } from "@/components/auth/AuthSplit";
 export const Route = createFileRoute("/auth")({
   head: () => ({
     meta: [
-      { title: "Sign Up — RankPill" },
+      { title: "Sign Up — Rankvolt" },
       {
         name: "description",
         content:
-          "Start getting Google & ChatGPT traffic in the next 7 days. Sign in, connect your site, and let RankPill publish SEO-optimized articles on autopilot.",
+          "Start getting Google & ChatGPT traffic in the next 7 days. Sign in, connect your site, and let Rankvolt publish SEO-optimized articles on autopilot.",
       },
-      { property: "og:title", content: "Sign Up — RankPill" },
+      { property: "og:title", content: "Sign Up — Rankvolt" },
       {
         property: "og:description",
         content:

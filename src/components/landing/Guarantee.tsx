@@ -13,7 +13,7 @@ export function Guarantee() {
           </span>
           <h2 className="text-3xl font-bold tracking-tight text-ink sm:text-4xl">Satisfaction Guarantee</h2>
           <p className="mt-4 text-lg text-muted-foreground">
-            Try RankPill risk-free. Grow your traffic and cancel anytime, no hidden fees or
+            Try Rankvolt risk-free. Grow your traffic and cancel anytime, no hidden fees or
             long-term contracts. Access continues until the end of your billing period.
           </p>
         </Reveal>

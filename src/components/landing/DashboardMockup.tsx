@@ -1,7 +1,7 @@
 import { Logo, BrandMark } from "./shared";
 
 const NAV_GENERAL = ["Dashboard", "Articles", "Backlinks", "Settings"];
-const NAV_SUPPORT = ["Ask RankPill", "Help Center"];
+const NAV_SUPPORT = ["Ask Rankvolt", "Help Center"];
 const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
 const QUEUED = [
