@@ -10,7 +10,6 @@ import {
   TrendingUp,
   Zap,
 } from "lucide-react";
-import { useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { motion, AnimatePresence } from "motion/react";
 import { toast } from "sonner";
@@ -154,7 +153,6 @@ function ProgressHeader({ activeIndex }: { activeIndex: number }) {
 }
 
 export function Onboarding() {
-  const navigate = useNavigate();
   const runAnalyze = useServerFn(analyzeWebsite);
   const runStrategy = useServerFn(generateBlogStrategy);
 
