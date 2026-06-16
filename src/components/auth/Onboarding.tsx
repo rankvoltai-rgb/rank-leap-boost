@@ -1,14 +1,15 @@
 import { useEffect, useRef, useState } from "react";
 import {
   ArrowRight,
+  Bot,
   Check,
+  Gauge,
   Loader2,
-  Plus,
+  Lock,
   Sparkles,
   TrendingUp,
   Zap,
 } from "lucide-react";
-import { useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { motion, AnimatePresence } from "motion/react";
 import { toast } from "sonner";
@@ -27,6 +28,13 @@ import {
 } from "@/lib/api";
 
 type Stage = "form" | "scanning" | "results" | "checkout";
+
+const STEPS: { id: Stage; label: string }[] = [
+  { id: "form", label: "Details" },
+  { id: "scanning", label: "Analysis" },
+  { id: "results", label: "Growth plan" },
+  { id: "checkout", label: "Activate" },
+];
 
 const SCAN_STEPS = [
   "Analyzing website structure…",
@@ -102,8 +110,49 @@ function Field({
   );
 }
 
+/** Stripe-style segmented progress header. */
+function ProgressHeader({ activeIndex }: { activeIndex: number }) {
+  return (
+    <div className="border-b border-border px-6 py-5 sm:px-8">
+      <div className="flex items-center justify-between">
+        <Logo />
+        <span className="text-xs font-medium text-muted-foreground">
+          Step {Math.min(activeIndex + 1, STEPS.length)} of {STEPS.length}
+        </span>
+      </div>
+      <div className="mt-4 flex items-center gap-1.5">
+        {STEPS.map((s, i) => (
+          <div
+            key={s.id}
+            className="h-1.5 flex-1 overflow-hidden rounded-full bg-secondary"
+          >
+            <motion.span
+              className="block h-full rounded-full bg-ink"
+              initial={false}
+              animate={{ width: i <= activeIndex ? "100%" : "0%" }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+            />
+          </div>
+        ))}
+      </div>
+      <div className="mt-2 flex items-center gap-1.5">
+        {STEPS.map((s, i) => (
+          <span
+            key={s.id}
+            className={cn(
+              "flex-1 truncate text-[11px] font-medium",
+              i <= activeIndex ? "text-ink" : "text-muted-foreground",
+            )}
+          >
+            {s.label}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export function Onboarding() {
-  const navigate = useNavigate();
   const runAnalyze = useServerFn(analyzeWebsite);
   const runStrategy = useServerFn(generateBlogStrategy);
 
@@ -115,16 +164,15 @@ export function Onboarding() {
   const [scanStep, setScanStep] = useState(0);
   const [analysis, setAnalysis] = useState<WebsiteAnalysis | null>(null);
   const [blogs, setBlogs] = useState<Blog[]>([]);
-  const [added, setAdded] = useState<Set<string>>(new Set());
   const [activating, setActivating] = useState(false);
   const [checkout, setCheckout] = useState<{ email?: string; userId?: string } | null>(null);
   const scanDone = useRef(false);
 
   const totalTraffic = blogs.reduce((sum, b) => sum + (b.traffic_estimate ?? 0), 0);
-  const queuedTraffic = blogs.reduce(
-    (sum, b) => (added.has(b.id) ? sum + (b.traffic_estimate ?? 0) : sum),
-    0,
-  );
+  const avgSignal = blogs.length
+    ? Math.round(blogs.reduce((s, b) => s + (b.ai_signal ?? 0), 0) / blogs.length)
+    : 0;
+  const activeIndex = STEPS.findIndex((s) => s.id === stage);
 
   // Advance the live processing labels while the scan runs.
   useEffect(() => {
@@ -171,24 +219,11 @@ export function Onboarding() {
     }
   }
 
-  async function addToQueue(blog: Blog) {
-    if (added.has(blog.id)) return;
-    setAdded((prev) => new Set(prev).add(blog.id));
-    try {
-      await addOpportunityToQueue(blog);
-    } catch {
-      setAdded((prev) => {
-        const next = new Set(prev);
-        next.delete(blog.id);
-        return next;
-      });
-      toast.error("Couldn't add to queue.");
-    }
-  }
-
   async function startTrial() {
     setActivating(true);
     try {
+      // Auto-queue every discovered opportunity — no manual selection needed.
+      await Promise.all(blogs.map((b) => addOpportunityToQueue(b)));
       const strategy = await runStrategy({
         data: { existingTitles: blogs.map((b) => b.title) },
       });
@@ -203,70 +238,71 @@ export function Onboarding() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-background">
-      <header className="px-5 py-6 sm:px-8">
-        <a href="/">
-          <Logo />
-        </a>
-      </header>
+    <div className="flex min-h-screen items-center justify-center bg-background px-4 py-10">
+      <motion.div
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, ease: [0.21, 0.47, 0.32, 0.98] }}
+        className="w-full max-w-lg overflow-hidden rounded-3xl border border-border bg-card shadow-[0_1px_2px_rgba(15,23,42,0.04),0_18px_50px_-20px_rgba(15,23,42,0.18)]"
+      >
+        <ProgressHeader activeIndex={activeIndex} />
 
-      <main className="flex flex-1 items-start justify-center px-5 pb-16 pt-4 sm:items-center">
-        <AnimatePresence mode="wait">
-          {stage === "form" && (
-            <motion.div
-              key="form"
-              initial={{ opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.35 }}
-              className="w-full max-w-md"
-            >
-              <div className="mb-2 inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1 text-xs font-medium text-muted-foreground">
-                <Sparkles className="h-3.5 w-3.5" /> Welcome to Rankvolt
-              </div>
-              <h1 className="text-3xl font-extrabold tracking-tight text-ink">
-                Let's analyze your website
-              </h1>
-              <p className="mt-2 text-sm text-muted-foreground">
-                Drop in your details and our AI will instantly map your SEO opportunity — no manual setup.
-              </p>
-              <form onSubmit={analyze} className="mt-7 space-y-4">
-                <Field label="Full Name" placeholder="Jane Doe" value={fullName} onChange={setFullName} />
-                <Field label="Business Name" placeholder="Acme Roofing Co." value={business} onChange={setBusiness} />
-                <Field
-                  label="Website URL"
-                  type="url"
-                  placeholder="https://yoursite.com"
-                  value={url}
-                  onChange={setUrl}
-                />
-                <button
-                  type="submit"
-                  className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-ink px-6 py-3.5 text-sm font-semibold text-background shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
-                >
-                  Analyze My Website <ArrowRight className="h-4 w-4" />
-                </button>
-              </form>
-            </motion.div>
-          )}
+        <div className="px-6 py-7 sm:px-8">
+          <AnimatePresence mode="wait">
+            {stage === "form" && (
+              <motion.div
+                key="form"
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.3 }}
+              >
+                <div className="mb-3 inline-flex items-center gap-1.5 rounded-full border border-border bg-secondary px-3 py-1 text-xs font-medium text-muted-foreground">
+                  <Sparkles className="h-3.5 w-3.5" /> 48-hour free trial
+                </div>
+                <h1 className="text-2xl font-bold tracking-tight text-ink">
+                  Let's analyze your website
+                </h1>
+                <p className="mt-1.5 text-sm text-muted-foreground">
+                  Add your details and our AI maps your entire SEO growth plan — fully automated, no manual setup.
+                </p>
+                <form onSubmit={analyze} className="mt-6 space-y-4">
+                  <Field label="Full name" placeholder="Jane Doe" value={fullName} onChange={setFullName} />
+                  <Field label="Business name" placeholder="Acme Roofing Co." value={business} onChange={setBusiness} />
+                  <Field
+                    label="Website URL"
+                    type="url"
+                    placeholder="https://yoursite.com"
+                    value={url}
+                    onChange={setUrl}
+                  />
+                  <button
+                    type="submit"
+                    className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-ink px-6 py-3.5 text-sm font-semibold text-background shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
+                  >
+                    Build my growth plan <ArrowRight className="h-4 w-4" />
+                  </button>
+                </form>
+              </motion.div>
+            )}
 
-          {stage === "scanning" && (
-            <motion.div
-              key="scanning"
-              initial={{ opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.35 }}
-              className="w-full max-w-md"
-            >
-              <div className="rounded-2xl border border-border bg-card p-7 shadow-sm">
+            {stage === "scanning" && (
+              <motion.div
+                key="scanning"
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.3 }}
+              >
                 <div className="flex items-center gap-3">
                   <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-ink">
                     <Loader2 className="h-5 w-5 animate-spin text-background" />
                   </span>
-                  <div>
-                    <p className="text-sm font-semibold text-ink">Rankvolt AI is scanning {business || "your site"}</p>
-                    <p className="text-xs text-muted-foreground">{url}</p>
+                  <div className="min-w-0">
+                    <p className="text-sm font-semibold text-ink">
+                      Analyzing {business || "your site"}
+                    </p>
+                    <p className="truncate text-xs text-muted-foreground">{url}</p>
                   </div>
                 </div>
                 <ul className="mt-6 space-y-3">
@@ -297,134 +333,99 @@ export function Onboarding() {
                     );
                   })}
                 </ul>
-              </div>
-            </motion.div>
-          )}
+              </motion.div>
+            )}
 
-          {stage === "results" && analysis && (
-            <motion.div
-              key="results"
-              initial={{ opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.35 }}
-              className="flex max-h-[calc(100vh-7rem)] w-full max-w-2xl flex-col"
-            >
-              {/* Compact header — stays visible, no scroll needed to see the value */}
-              <div className="shrink-0">
-                <div className="mb-2 inline-flex items-center gap-1.5 rounded-full border border-success/20 bg-success/10 px-3 py-1 text-xs font-medium text-success">
-                  <Check className="h-3.5 w-3.5" /> Analysis complete
+            {stage === "results" && analysis && (
+              <motion.div
+                key="results"
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.3 }}
+              >
+                <div className="mb-3 inline-flex items-center gap-1.5 rounded-full border border-success/20 bg-success/10 px-3 py-1 text-xs font-medium text-success">
+                  <Check className="h-3.5 w-3.5" /> Plan ready
                 </div>
-                <h1 className="text-2xl font-extrabold tracking-tight text-ink sm:text-3xl">
-                  Here's your growth opportunity
+                <h1 className="text-2xl font-bold tracking-tight text-ink">
+                  Your automated growth plan
                 </h1>
+                <p className="mt-1.5 text-sm text-muted-foreground">
+                  Rankvolt mapped {blogs.length} high-intent articles for {business || "your site"} and will write
+                  &amp; publish them for you — completely hands-off.
+                </p>
 
-                {/* Hero dopamine metric */}
-                <div className="mt-3 overflow-hidden rounded-2xl border border-border bg-gradient-surface p-5">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                        Total opportunity
-                      </p>
-                      <CountUp
-                        value={totalTraffic}
-                        suffix="/mo"
-                        className="mt-1 block text-3xl font-extrabold tracking-tight text-gradient-traffic tabular-nums sm:text-4xl"
-                      />
-                    </div>
-                    <div>
-                      <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                        Secured in queue
-                      </p>
-                      <CountUp
-                        value={queuedTraffic}
-                        suffix="/mo"
-                        className="mt-1 block text-3xl font-extrabold tracking-tight text-ink tabular-nums sm:text-4xl"
-                      />
-                    </div>
-                  </div>
-                  <p className="mt-3 text-xs text-muted-foreground">
-                    {analysis.niche} · {analysis.audience} · {analysis.geo} — add the articles you want, we'll
-                    prioritize them first.
+                {/* Hero metric */}
+                <div className="relative mt-5 overflow-hidden rounded-2xl border border-border bg-gradient-surface p-6 text-center">
+                  {!reducedMotion() && <Burst />}
+                  <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                    Projected monthly traffic
                   </p>
-                </div>
-              </div>
-
-              {/* Scrollable card region */}
-              <div className="-mr-2 mt-4 grid flex-1 gap-3 overflow-y-auto pr-2">
-                {blogs.map((b, i) => {
-                  const isAdded = added.has(b.id);
-                  return (
-                    <motion.div
-                      key={b.id}
-                      initial={{ opacity: 0, y: 12 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.3, delay: Math.min(i * 0.05, 0.4) }}
-                      className={cn(
-                        "flex items-center justify-between gap-4 rounded-xl border bg-card p-3.5 transition-colors",
-                        isAdded ? "border-success/40 bg-success/5" : "border-border",
-                      )}
-                    >
-                      <div className="min-w-0">
-                        <p className="truncate text-sm font-semibold text-ink">{b.title}</p>
-                        <div className="mt-1.5 flex flex-wrap items-center gap-2 text-xs">
-                          <span className="inline-flex items-center gap-1 rounded-full border border-success/20 bg-success/10 px-2 py-0.5 font-medium text-success">
-                            <TrendingUp className="h-3 w-3" />
-                            <CountUp value={b.traffic_estimate} suffix="/mo" className="tabular-nums" />
-                          </span>
-                          <span className="inline-flex items-center gap-1 rounded-full border border-info/20 bg-info/10 px-2 py-0.5 font-medium text-info">
-                            {b.ai_signal} AI signal
-                          </span>
-                          <span className="hidden text-muted-foreground sm:inline">
-                            {b.competition} competition
-                          </span>
-                        </div>
-                      </div>
-                      <motion.button
-                        type="button"
-                        onClick={() => addToQueue(b)}
-                        disabled={isAdded}
-                        whileTap={isAdded ? undefined : { scale: 0.92 }}
-                        animate={isAdded ? { scale: [1, 1.12, 1] } : { scale: 1 }}
-                        transition={{ duration: 0.4, ease: "easeOut" }}
-                        className={cn(
-                          "relative inline-flex shrink-0 items-center gap-1.5 overflow-visible rounded-lg px-3 py-2 text-sm font-semibold transition-colors",
-                          isAdded
-                            ? "border border-success/30 bg-success/10 text-success"
-                            : "bg-gradient-accent text-background hover:opacity-90",
-                        )}
+                  <CountUp
+                    value={totalTraffic}
+                    suffix="/mo"
+                    className="mt-1 block text-4xl font-extrabold tracking-tight text-gradient-traffic tabular-nums sm:text-5xl"
+                  />
+                  <div className="mt-5 grid grid-cols-3 gap-3">
+                    {[
+                      { icon: Bot, label: "Articles", value: `${blogs.length}` },
+                      { icon: Gauge, label: "Avg AI signal", value: `${avgSignal}` },
+                      { icon: Zap, label: "Setup", value: "Auto" },
+                    ].map((s) => (
+                      <div
+                        key={s.label}
+                        className="rounded-xl border border-border bg-card/70 p-2.5"
                       >
-                        {isAdded && <Burst />}
-                        {isAdded ? <Check className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
-                        {isAdded ? "Added" : "Add to Queue"}
-                      </motion.button>
-                    </motion.div>
-                  );
-                })}
-              </div>
-
-              {/* Sticky CTA footer */}
-              <div className="mt-4 shrink-0 rounded-2xl border border-border bg-card p-4">
-                <div className="flex items-center justify-between gap-3">
-                  <motion.p
-                    key={added.size}
-                    initial={{ scale: added.size > 0 ? 1.15 : 1 }}
-                    animate={{ scale: 1 }}
-                    transition={{ type: "spring", stiffness: 500, damping: 18 }}
-                    className="text-sm font-semibold text-ink"
-                  >
-                    {added.size > 0
-                      ? `${added.size} article${added.size > 1 ? "s" : ""} queued`
-                      : "Ready when you are"}
-                  </motion.p>
-                  <span className="hidden text-xs text-muted-foreground sm:inline">
-                    30 more generated on activation
-                  </span>
+                        <s.icon className="mx-auto h-4 w-4 text-ink" />
+                        <p className="mt-1 text-base font-bold text-ink tabular-nums">{s.value}</p>
+                        <p className="text-[11px] text-muted-foreground">{s.label}</p>
+                      </div>
+                    ))}
+                  </div>
                 </div>
+
+                {/* Auto-included article plan */}
+                <div className="mt-5">
+                  <div className="mb-2 flex items-center justify-between">
+                    <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                      Included in your plan
+                    </p>
+                    <span className="inline-flex items-center gap-1 text-[11px] font-medium text-success">
+                      <Check className="h-3 w-3" /> Auto-queued
+                    </span>
+                  </div>
+                  <div className="-mr-2 max-h-[34vh] space-y-2 overflow-y-auto pr-2">
+                    {blogs.map((b, i) => (
+                      <motion.div
+                        key={b.id}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.3, delay: Math.min(i * 0.05, 0.4) }}
+                        className="flex items-center gap-3 rounded-xl border border-border bg-card p-3"
+                      >
+                        <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-success/12 text-success">
+                          <Check className="h-3.5 w-3.5" />
+                        </span>
+                        <div className="min-w-0 flex-1">
+                          <p className="truncate text-sm font-medium text-ink">{b.title}</p>
+                          <p className="mt-0.5 text-[11px] text-muted-foreground">
+                            {b.keyword ?? b.competition} · {b.ai_signal} AI signal
+                          </p>
+                        </div>
+                        <span className="inline-flex shrink-0 items-center gap-1 rounded-full border border-success/20 bg-success/10 px-2 py-0.5 text-xs font-medium text-success">
+                          <TrendingUp className="h-3 w-3" />
+                          <CountUp value={b.traffic_estimate} suffix="/mo" className="tabular-nums" />
+                        </span>
+                      </motion.div>
+                    ))}
+                  </div>
+                </div>
+
                 <button
                   type="button"
                   onClick={startTrial}
                   disabled={activating}
-                  className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-accent px-6 py-3.5 text-sm font-semibold text-background shadow-sm transition-all hover:-translate-y-0.5 hover:opacity-90 disabled:opacity-70"
+                  className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-ink px-6 py-3.5 text-sm font-semibold text-background shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md disabled:opacity-70"
                 >
                   {activating ? (
                     <>
@@ -432,49 +433,55 @@ export function Onboarding() {
                     </>
                   ) : (
                     <>
-                      <Zap className="h-4 w-4" /> Start 48-Hour Free Trial
+                      <Zap className="h-4 w-4" /> Start 48-hour free trial
                     </>
                   )}
                 </button>
-              </div>
-            </motion.div>
-          )}
+                <p className="mt-2.5 text-center text-xs text-muted-foreground">
+                  30+ more articles auto-generated on activation. No charge for 48 hours.
+                </p>
+              </motion.div>
+            )}
 
-          {stage === "checkout" && (
-            <motion.div
-              key="checkout"
-              initial={{ opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.35 }}
-              className="w-full max-w-xl"
-            >
-              <div className="mb-2 inline-flex items-center gap-1.5 rounded-full border border-success/20 bg-success/10 px-3 py-1 text-xs font-medium text-success">
-                <Check className="h-3.5 w-3.5" /> Queue secured
-              </div>
-              <h1 className="text-2xl font-extrabold tracking-tight text-ink sm:text-3xl">
-                Activate your 48-hour free trial
-              </h1>
-              <p className="mt-2 text-sm text-muted-foreground">
-                No charge for 48 hours. Add your card to unlock your dashboard —
-                cancel anytime before the trial ends and you won't be billed.
-              </p>
-              <div className="mt-6 overflow-hidden rounded-2xl border border-border bg-card p-4">
-                <StripeEmbeddedCheckout
-                  priceId="business_monthly"
-                  trialDays={2}
-                  customerEmail={checkout?.email}
-                  userId={checkout?.userId}
-                  returnUrl={
-                    typeof window !== "undefined"
-                      ? `${window.location.origin}/dashboard?checkout=success&session_id={CHECKOUT_SESSION_ID}`
-                      : undefined
-                  }
-                />
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </main>
+            {stage === "checkout" && (
+              <motion.div
+                key="checkout"
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.3 }}
+              >
+                <div className="mb-3 inline-flex items-center gap-1.5 rounded-full border border-success/20 bg-success/10 px-3 py-1 text-xs font-medium text-success">
+                  <Check className="h-3.5 w-3.5" /> Plan secured
+                </div>
+                <h1 className="text-2xl font-bold tracking-tight text-ink">
+                  Activate your free trial
+                </h1>
+                <p className="mt-1.5 text-sm text-muted-foreground">
+                  No charge for 48 hours. Add your card to unlock your dashboard — cancel anytime before the trial
+                  ends and you won't be billed.
+                </p>
+                <div className="mt-5 overflow-hidden rounded-2xl border border-border bg-card p-4">
+                  <StripeEmbeddedCheckout
+                    priceId="business_monthly"
+                    trialDays={2}
+                    customerEmail={checkout?.email}
+                    userId={checkout?.userId}
+                    returnUrl={
+                      typeof window !== "undefined"
+                        ? `${window.location.origin}/dashboard?checkout=success&session_id={CHECKOUT_SESSION_ID}`
+                        : undefined
+                    }
+                  />
+                </div>
+                <p className="mt-3 flex items-center justify-center gap-1.5 text-center text-xs text-muted-foreground">
+                  <Lock className="h-3 w-3" /> Secured by Stripe · Cancel anytime
+                </p>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      </motion.div>
     </div>
   );
 }
