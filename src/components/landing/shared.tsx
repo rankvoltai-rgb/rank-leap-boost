@@ -97,9 +97,11 @@ const GRADIENTS = [
 export function Avatar({
   name,
   className,
+  src,
 }: {
   name: string;
   className?: string;
+  src?: string;
 }) {
   const initials = name
     .split(" ")
@@ -110,6 +112,19 @@ export function Avatar({
     .toUpperCase();
   const idx =
     name.split("").reduce((a, c) => a + c.charCodeAt(0), 0) % GRADIENTS.length;
+  if (src) {
+    return (
+      <img
+        src={src}
+        alt={name}
+        loading="lazy"
+        className={cn(
+          "rounded-full object-cover ring-2 ring-background",
+          className,
+        )}
+      />
+    );
+  }
   return (
     <span
       className={cn(
