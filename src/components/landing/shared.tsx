@@ -1,6 +1,7 @@
 import { motion } from "motion/react";
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
+import rankvoltMark from "@/assets/rankvolt-mark.png.asset.json";
 
 /* ---------- Animated reveal wrapper ---------- */
 export function Reveal({
@@ -30,11 +31,11 @@ export function Reveal({
 /* ---------- Rankvolt logo ---------- */
 export function Logo({ className }: { className?: string }) {
   return (
-    <div className={cn("flex items-center gap-2", className)}>
-      <span className="flex h-7 w-7 items-center justify-center rounded-[9px] bg-ink">
-        <span className="block h-3 w-3 rounded-full border-[3px] border-background" />
+    <div className={cn("flex items-center gap-2.5", className)}>
+      <span className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-[10px] border border-border bg-card shadow-sm">
+        <img src={rankvoltMark.url} alt="Rankvolt" className="h-5 w-5 object-contain" />
       </span>
-      <span className="text-[1.15rem] font-bold tracking-tight text-ink">Rankvolt</span>
+      <span className="text-[1.2rem] font-bold tracking-tight text-ink">Rankvolt</span>
     </div>
   );
 }
@@ -96,9 +97,11 @@ const GRADIENTS = [
 export function Avatar({
   name,
   className,
+  src,
 }: {
   name: string;
   className?: string;
+  src?: string;
 }) {
   const initials = name
     .split(" ")
@@ -109,6 +112,19 @@ export function Avatar({
     .toUpperCase();
   const idx =
     name.split("").reduce((a, c) => a + c.charCodeAt(0), 0) % GRADIENTS.length;
+  if (src) {
+    return (
+      <img
+        src={src}
+        alt={name}
+        loading="lazy"
+        className={cn(
+          "rounded-full object-cover ring-2 ring-background",
+          className,
+        )}
+      />
+    );
+  }
   return (
     <span
       className={cn(
@@ -198,5 +214,65 @@ export function SecondaryButton({
     >
       {children}
     </a>
+  );
+}
+
+/* ---------- Premium pill badge ---------- */
+export function Badge({
+  children,
+  className,
+  dot = true,
+}: {
+  children: ReactNode;
+  className?: string;
+  dot?: boolean;
+}) {
+  return (
+    <span
+      className={cn(
+        "inline-flex items-center gap-2 rounded-full border border-border bg-card/80 px-3.5 py-1.5 text-xs font-medium text-muted-foreground shadow-sm backdrop-blur",
+        className,
+      )}
+    >
+      {dot && (
+        <span className="relative flex h-1.5 w-1.5">
+          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-success/70" />
+          <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-success" />
+        </span>
+      )}
+      {children}
+    </span>
+  );
+}
+
+/* ---------- Statistic card ---------- */
+export function StatCard({
+  value,
+  label,
+  className,
+}: {
+  value: string;
+  label: string;
+  className?: string;
+}) {
+  return (
+    <div
+      className={cn(
+        "rounded-2xl border border-border bg-card p-5 text-center shadow-elevation",
+        className,
+      )}
+    >
+      <p className="text-2xl font-extrabold tracking-tight text-ink sm:text-3xl">{value}</p>
+      <p className="mt-1 text-xs font-medium text-muted-foreground sm:text-sm">{label}</p>
+    </div>
+  );
+}
+
+/* ---------- Section divider ---------- */
+export function SectionDivider({ className }: { className?: string }) {
+  return (
+    <div className={cn("mx-auto h-px max-w-6xl px-5", className)}>
+      <div className="h-px w-full bg-gradient-to-r from-transparent via-border to-transparent" />
+    </div>
   );
 }

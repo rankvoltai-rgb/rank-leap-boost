@@ -1,31 +1,101 @@
-import { ArrowRight, Play } from "lucide-react";
-import { Reveal, Stars, Avatar, PrimaryButton, SecondaryButton } from "./shared";
+import { useState } from "react";
+import { ArrowRight, Play, Sparkles } from "lucide-react";
+import { Reveal, Stars, Avatar, SecondaryButton, Badge } from "./shared";
 import { DashboardMockup } from "./DashboardMockup";
+import { AI_MARKS } from "./ai-logos";
+import nikAsset from "@/assets/nik.png.asset.json";
+import johnAsset from "@/assets/john-logan.png.asset.json";
+import denisAsset from "@/assets/denis.png.asset.json";
+import demoAsset from "@/assets/demo.png.asset.json";
 
-const FACES = ["Mark Eckert", "Nik Zechner", "Denis Yurchak", "Ray Joe", "John Logan"];
+const FACES = [
+  { name: "Nik Zechner", src: nikAsset.url },
+  { name: "Denis Yurchak", src: denisAsset.url },
+  { name: "John Logan", src: johnAsset.url },
+  { name: "Adam Myrick", src: demoAsset.url },
+  { name: "Mark Eckert", src: undefined },
+];
+
+function UrlForm() {
+  const [url, setUrl] = useState("");
+  const go = () => {
+    const q = url.trim() ? `?url=${encodeURIComponent(url.trim())}` : "";
+    window.location.href = `/auth${q}`;
+  };
+  return (
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        go();
+      }}
+      className="group flex w-full max-w-xl flex-col gap-2 rounded-2xl border border-border bg-card p-2 shadow-elevation transition-all focus-within:shadow-elevation-lg sm:flex-row sm:items-center sm:rounded-full"
+    >
+      <div className="flex flex-1 items-center gap-2.5 px-3">
+        <Sparkles className="h-4 w-4 shrink-0 text-muted-foreground" />
+        <input
+          type="text"
+          inputMode="url"
+          value={url}
+          onChange={(e) => setUrl(e.target.value)}
+          placeholder="Enter your website URL"
+          className="w-full bg-transparent py-2.5 text-sm text-ink outline-none placeholder:text-muted-foreground"
+          aria-label="Website URL"
+        />
+      </div>
+      <button
+        type="submit"
+        className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-ink px-6 py-3 text-sm font-semibold text-background shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 sm:rounded-full"
+      >
+        Get Started Free
+        <ArrowRight className="h-4 w-4 transition-transform group-focus-within:translate-x-0.5" />
+      </button>
+    </form>
+  );
+}
 
 export function Hero() {
   return (
     <section id="top" className="relative overflow-hidden">
-      <div className="mx-auto max-w-6xl px-5 pb-10 pt-16 sm:pt-20 md:pt-24">
-        <div className="max-w-3xl">
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-[520px] bg-hero-glow" />
+      <div className="relative mx-auto max-w-6xl px-5 pb-10 pt-14 sm:pt-20 md:pt-24">
+        <div className="mx-auto max-w-3xl text-center">
           <Reveal>
-            <h1 className="text-balance text-4xl font-extrabold leading-[1.05] tracking-tight text-ink sm:text-5xl md:text-[4.2rem]">
+            <Badge className="mb-6">Get found across Google &amp; every AI search engine</Badge>
+          </Reveal>
+
+          <Reveal delay={0.04}>
+            <div className="mx-auto mb-6 flex w-fit items-center gap-3 rounded-2xl border border-border bg-card/70 px-4 py-2.5 shadow-elevation backdrop-blur">
+              <span className="text-xs font-medium text-muted-foreground">Optimized for</span>
+              <div className="flex items-center gap-2.5">
+                {AI_MARKS.map(({ name, Mark }) => (
+                  <span
+                    key={name}
+                    title={name}
+                    className="flex h-7 w-7 items-center justify-center rounded-lg border border-border bg-background transition-transform hover:-translate-y-0.5"
+                  >
+                    <Mark className="h-4 w-4" />
+                  </span>
+                ))}
+              </div>
+            </div>
+          </Reveal>
+
+          <Reveal delay={0.08}>
+            <h1 className="text-balance text-4xl font-extrabold leading-[1.05] tracking-tight text-ink sm:text-5xl md:text-[4rem]">
               Get Google, ChatGPT Traffic on Autopilot
             </h1>
           </Reveal>
-          <Reveal delay={0.08}>
-            <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground">
+          <Reveal delay={0.16}>
+            <p className="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground">
               Grow organic traffic on autopilot. Daily published articles to your
               website and backlink building even while you sleep.
             </p>
           </Reveal>
-          <Reveal delay={0.16}>
-            <div className="mt-8 flex flex-wrap items-center gap-3">
-              <PrimaryButton>
-                Get Traffic on Autopilot <ArrowRight className="h-4 w-4" />
-              </PrimaryButton>
-              <SecondaryButton>
+
+          <Reveal delay={0.22}>
+            <div className="mt-8 flex flex-col items-center gap-3">
+              <UrlForm />
+              <SecondaryButton className="mt-1">
                 <span className="flex h-6 w-6 items-center justify-center rounded-full bg-ink text-background">
                   <Play className="h-3 w-3 fill-current" />
                 </span>
@@ -33,14 +103,15 @@ export function Hero() {
               </SecondaryButton>
             </div>
           </Reveal>
-          <Reveal delay={0.24}>
-            <div className="mt-7 flex items-center gap-3">
+
+          <Reveal delay={0.3}>
+            <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
               <div className="flex -space-x-2">
                 {FACES.map((f) => (
-                  <Avatar key={f} name={f} className="h-9 w-9" />
+                  <Avatar key={f.name} name={f.name} src={f.src} className="h-9 w-9" />
                 ))}
               </div>
-              <div className="flex flex-col">
+              <div className="flex flex-col items-center sm:items-start">
                 <Stars />
                 <p className="text-sm text-muted-foreground">
                   <span className="font-semibold text-ink">3,000+</span> happy customers
@@ -50,7 +121,7 @@ export function Hero() {
           </Reveal>
         </div>
 
-        <Reveal delay={0.3} className="mt-14">
+        <Reveal delay={0.36} className="mt-14">
           <DashboardMockup />
         </Reveal>
       </div>

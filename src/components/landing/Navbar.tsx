@@ -36,6 +36,12 @@ export function Navbar() {
           >
             Sign In
           </a>
+          <a
+            href="/auth"
+            className="hidden rounded-xl bg-ink px-4 py-2 text-sm font-semibold text-background shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md md:inline-flex"
+          >
+            Get Started Free
+          </a>
           <button
             onClick={() => setOpen((v) => !v)}
             className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-card text-ink md:hidden"
@@ -62,6 +68,13 @@ export function Navbar() {
               href="/auth"
               onClick={() => setOpen(false)}
               className="mt-2 rounded-xl bg-ink px-4 py-2.5 text-center text-sm font-semibold text-background"
+            >
+              Get Started Free
+            </a>
+            <a
+              href="/auth"
+              onClick={() => setOpen(false)}
+              className="rounded-xl border border-border bg-card px-4 py-2.5 text-center text-sm font-semibold text-ink"
             >
               Sign In
             </a>
