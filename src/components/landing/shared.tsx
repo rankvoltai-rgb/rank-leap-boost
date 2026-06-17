@@ -216,3 +216,63 @@ export function SecondaryButton({
     </a>
   );
 }
+
+/* ---------- Premium pill badge ---------- */
+export function Badge({
+  children,
+  className,
+  dot = true,
+}: {
+  children: ReactNode;
+  className?: string;
+  dot?: boolean;
+}) {
+  return (
+    <span
+      className={cn(
+        "inline-flex items-center gap-2 rounded-full border border-border bg-card/80 px-3.5 py-1.5 text-xs font-medium text-muted-foreground shadow-sm backdrop-blur",
+        className,
+      )}
+    >
+      {dot && (
+        <span className="relative flex h-1.5 w-1.5">
+          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-success/70" />
+          <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-success" />
+        </span>
+      )}
+      {children}
+    </span>
+  );
+}
+
+/* ---------- Statistic card ---------- */
+export function StatCard({
+  value,
+  label,
+  className,
+}: {
+  value: string;
+  label: string;
+  className?: string;
+}) {
+  return (
+    <div
+      className={cn(
+        "rounded-2xl border border-border bg-card p-5 text-center shadow-elevation",
+        className,
+      )}
+    >
+      <p className="text-2xl font-extrabold tracking-tight text-ink sm:text-3xl">{value}</p>
+      <p className="mt-1 text-xs font-medium text-muted-foreground sm:text-sm">{label}</p>
+    </div>
+  );
+}
+
+/* ---------- Section divider ---------- */
+export function SectionDivider({ className }: { className?: string }) {
+  return (
+    <div className={cn("mx-auto h-px max-w-6xl px-5", className)}>
+      <div className="h-px w-full bg-gradient-to-r from-transparent via-border to-transparent" />
+    </div>
+  );
+}
