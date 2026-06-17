@@ -219,3 +219,21 @@
   background-clip: text;
   color: transparent;
 }
+
+@utility glass {
+  background-color: var(--glass-bg);
+  backdrop-filter: blur(16px) saturate(140%);
+  border: 1px solid var(--glass-border);
+}
+
+@utility shadow-elevation {
+  box-shadow: var(--shadow-elevation);
+}
+
+@utility shadow-elevation-lg {
+  box-shadow: var(--shadow-elevation-lg);
+}
+
+@utility bg-hero-glow {
+  background-image: var(--hero-glow);
+}
