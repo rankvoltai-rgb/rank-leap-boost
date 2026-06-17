@@ -1,6 +1,7 @@
 import { motion } from "motion/react";
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
+import rankvoltMark from "@/assets/rankvolt-mark.png.asset.json";
 
 /* ---------- Animated reveal wrapper ---------- */
 export function Reveal({
@@ -30,11 +31,11 @@ export function Reveal({
 /* ---------- Rankvolt logo ---------- */
 export function Logo({ className }: { className?: string }) {
   return (
-    <div className={cn("flex items-center gap-2", className)}>
-      <span className="flex h-7 w-7 items-center justify-center rounded-[9px] bg-ink">
-        <span className="block h-3 w-3 rounded-full border-[3px] border-background" />
+    <div className={cn("flex items-center gap-2.5", className)}>
+      <span className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-[10px] border border-border bg-card shadow-sm">
+        <img src={rankvoltMark.url} alt="Rankvolt" className="h-5 w-5 object-contain" />
       </span>
-      <span className="text-[1.15rem] font-bold tracking-tight text-ink">Rankvolt</span>
+      <span className="text-[1.2rem] font-bold tracking-tight text-ink">Rankvolt</span>
     </div>
   );
 }
