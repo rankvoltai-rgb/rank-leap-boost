@@ -44,7 +44,7 @@ export function PersonalAgent() {
         <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {FEATURES.map((f, i) => (
             <Reveal key={f.title} delay={i * 0.06}>
-              <div className="h-full rounded-2xl border border-border bg-card p-6 transition-shadow hover:shadow-md">
+              <div className="h-full rounded-2xl border border-border bg-card p-6 shadow-elevation transition-all hover:-translate-y-1 hover:shadow-elevation-lg">
                 <span className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-ink text-background">
                   <f.icon className="h-5 w-5" />
                 </span>

@@ -10,7 +10,7 @@ const TAGS = [
 
 function Tile({ title, body, children }: { title: string; body: string; children: React.ReactNode }) {
   return (
-    <div className="flex flex-col rounded-2xl border border-border bg-card p-6 transition-shadow hover:shadow-md">
+    <div className="flex flex-col rounded-2xl border border-border bg-card p-6 shadow-elevation transition-all hover:-translate-y-1 hover:shadow-elevation-lg">
       <h3 className="text-base font-semibold text-ink">{title}</h3>
       <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{body}</p>
       <div className="mt-5 flex-1 rounded-xl border border-border bg-surface/60 p-3">{children}</div>

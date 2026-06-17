@@ -69,7 +69,7 @@ export function SuccessStories() {
         <div className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {STORIES.map((s, i) => (
             <Reveal key={s.name} delay={(i % 3) * 0.06}>
-              <article className="flex h-full flex-col rounded-2xl border border-border bg-card p-6 transition-shadow hover:shadow-md">
+              <article className="flex h-full flex-col rounded-2xl border border-border bg-card p-6 shadow-elevation transition-all hover:-translate-y-1 hover:shadow-elevation-lg">
                 <span className="text-xs font-medium text-muted-foreground">{s.niche}</span>
                 <p className="mt-1 text-2xl font-bold tracking-tight text-ink">{s.stat}</p>
                 <p className="text-xs text-muted-foreground">{s.period}</p>
