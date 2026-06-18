@@ -10,7 +10,7 @@ import { Pricing } from "@/components/landing/Pricing";
 import { Guarantee } from "@/components/landing/Guarantee";
 import { Testimonials } from "@/components/landing/Testimonials";
 import { FinalCTA } from "@/components/landing/FinalCTA";
-import { FAQ } from "@/components/landing/FAQ";
+import { FAQ, FAQS } from "@/components/landing/FAQ";
 import { Footer } from "@/components/landing/Footer";
 
 export const Route = createFileRoute("/")({
@@ -30,6 +30,51 @@ export const Route = createFileRoute("/")({
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+    ],
+    links: [{ rel: "canonical", href: "https://rankvolt.top/" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "Organization",
+              "@id": "https://rankvolt.top/#organization",
+              name: "Rankvolt",
+              url: "https://rankvolt.top/",
+            },
+            {
+              "@type": "WebSite",
+              "@id": "https://rankvolt.top/#website",
+              name: "Rankvolt",
+              url: "https://rankvolt.top/",
+              publisher: { "@id": "https://rankvolt.top/#organization" },
+            },
+            {
+              "@type": "Product",
+              name: "Rankvolt",
+              description:
+                "AI-powered SEO automation that researches keywords, writes daily SEO articles, publishes to your site, and builds backlinks to grow organic traffic on Google and AI search engines.",
+              brand: { "@id": "https://rankvolt.top/#organization" },
+              offers: {
+                "@type": "Offer",
+                price: "99",
+                priceCurrency: "USD",
+                url: "https://rankvolt.top/",
+              },
+            },
+            {
+              "@type": "FAQPage",
+              mainEntity: FAQS.map((f) => ({
+                "@type": "Question",
+                name: f.q,
+                acceptedAnswer: { "@type": "Answer", text: f.a },
+              })),
+            },
+          ],
+        }),
+      },
     ],
   }),
   component: Index,
