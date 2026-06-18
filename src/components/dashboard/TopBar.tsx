@@ -23,12 +23,13 @@ export function TopBar() {
   }
 
   return (
-    <header className="flex h-14 shrink-0 items-center justify-end gap-3 border-b border-border bg-card px-5">
-      <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-secondary px-3 py-1 text-xs font-medium text-ink tabular-nums">
-        <Coins className="h-3.5 w-3.5 text-muted-foreground" />
+    <header className="flex h-14 shrink-0 items-center justify-end gap-3 border-b border-border bg-card/80 px-5 backdrop-blur">
+      <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-secondary px-3 py-1 text-xs font-semibold text-ink tabular-nums">
+        <Coins className="h-3.5 w-3.5 text-warning" />
         {remaining === null ? "—" : remaining.toLocaleString()} credits
       </span>
-      <Avatar name={profile?.brand_name ?? "Rankvolt"} className="h-8 w-8" />
+      <span className="h-6 w-px bg-border" />
+      <Avatar name={profile?.brand_name ?? "Rankvolt"} className="h-8 w-8 ring-2 ring-border" />
       <button
         type="button"
         onClick={signOut}

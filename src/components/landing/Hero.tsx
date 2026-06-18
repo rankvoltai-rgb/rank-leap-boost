@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { ArrowRight, Play, Sparkles } from "lucide-react";
-import { Reveal, Stars, Avatar, SecondaryButton, Badge } from "./shared";
+import { ArrowRight, Sparkles } from "lucide-react";
+import { Reveal, Stars, Avatar, Badge } from "./shared";
 import { DashboardMockup } from "./DashboardMockup";
 import { AI_MARKS } from "./ai-logos";
 import nikAsset from "@/assets/nik.png.asset.json";
@@ -95,12 +95,9 @@ export function Hero() {
           <Reveal delay={0.22}>
             <div className="mt-8 flex flex-col items-center gap-3">
               <UrlForm />
-              <SecondaryButton className="mt-1">
-                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-ink text-background">
-                  <Play className="h-3 w-3 fill-current" />
-                </span>
-                View Demo
-              </SecondaryButton>
+              <p className="text-xs text-muted-foreground">
+                No credit card required &middot; Free 7-day trial
+              </p>
             </div>
           </Reveal>
 

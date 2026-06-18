@@ -21,23 +21,26 @@ export function Sidebar() {
   const path = useRouterState({ select: (s) => s.location.pathname });
   return (
     <aside className="hidden w-60 shrink-0 flex-col border-r border-border bg-card md:flex">
-      <div className="flex h-14 items-center border-b border-border px-5">
+      <div className="flex h-14 shrink-0 items-center border-b border-border px-5">
         <Logo />
       </div>
-      <nav className="flex-1 space-y-1 p-3">
+      <p className="px-5 pb-1 pt-4 text-[0.65rem] font-semibold uppercase tracking-wider text-muted-foreground">
+        Workspace
+      </p>
+      <nav className="flex-1 space-y-1 p-3 pt-1">
         {NAV.map((item) =>
           item.ready ? (
             <Link
               key={item.title}
               to={item.to}
               className={cn(
-                "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+                "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all",
                 path === item.to
-                  ? "bg-ink text-background"
+                  ? "bg-ink text-background shadow-sm"
                   : "text-muted-foreground hover:bg-secondary hover:text-ink",
               )}
             >
-              <item.icon className="h-4 w-4" />
+              <item.icon className="h-4 w-4 shrink-0" />
               {item.title}
             </Link>
           ) : (
@@ -47,9 +50,11 @@ export function Sidebar() {
               disabled
               className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground/50"
             >
-              <item.icon className="h-4 w-4" />
+              <item.icon className="h-4 w-4 shrink-0" />
               {item.title}
-              <span className="ml-auto text-[10px] uppercase tracking-wide">soon</span>
+              <span className="ml-auto rounded-full border border-border px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-muted-foreground/60">
+                soon
+              </span>
             </button>
           ),
         )}
