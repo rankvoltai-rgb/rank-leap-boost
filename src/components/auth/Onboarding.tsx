@@ -110,14 +110,15 @@ function Field({
   );
 }
 
-/** Stripe-style segmented progress header. */
+/** Stripe-style segmented progress header with momentum cues. */
 function ProgressHeader({ activeIndex }: { activeIndex: number }) {
+  const pct = Math.round(((activeIndex + 1) / STEPS.length) * 100);
   return (
-    <div className="border-b border-border px-6 py-5 sm:px-8">
+    <div className="border-b border-border px-7 py-5 sm:px-9">
       <div className="flex items-center justify-between">
         <Logo />
-        <span className="text-xs font-medium text-muted-foreground">
-          Step {Math.min(activeIndex + 1, STEPS.length)} of {STEPS.length}
+        <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary px-2.5 py-1 text-[11px] font-semibold text-ink tabular-nums">
+          {pct}% complete
         </span>
       </div>
       <div className="mt-4 flex items-center gap-1.5">
@@ -127,7 +128,10 @@ function ProgressHeader({ activeIndex }: { activeIndex: number }) {
             className="h-1.5 flex-1 overflow-hidden rounded-full bg-secondary"
           >
             <motion.span
-              className="block h-full rounded-full bg-ink"
+              className={cn(
+                "block h-full rounded-full",
+                i === activeIndex ? "bg-gradient-traffic" : "bg-ink",
+              )}
               initial={false}
               animate={{ width: i <= activeIndex ? "100%" : "0%" }}
               transition={{ duration: 0.5, ease: "easeOut" }}
@@ -135,18 +139,23 @@ function ProgressHeader({ activeIndex }: { activeIndex: number }) {
           </div>
         ))}
       </div>
-      <div className="mt-2 flex items-center gap-1.5">
-        {STEPS.map((s, i) => (
-          <span
-            key={s.id}
-            className={cn(
-              "flex-1 truncate text-[11px] font-medium",
-              i <= activeIndex ? "text-ink" : "text-muted-foreground",
-            )}
-          >
-            {s.label}
-          </span>
-        ))}
+      <div className="mt-2.5 flex items-center gap-1.5">
+        {STEPS.map((s, i) => {
+          const done = i < activeIndex;
+          const active = i === activeIndex;
+          return (
+            <span
+              key={s.id}
+              className={cn(
+                "flex flex-1 items-center gap-1 truncate text-[11px] font-medium",
+                i <= activeIndex ? "text-ink" : "text-muted-foreground",
+              )}
+            >
+              {done && <Check className="h-3 w-3 shrink-0 text-success" />}
+              <span className={cn("truncate", active && "font-semibold")}>{s.label}</span>
+            </span>
+          );
+        })}
       </div>
     </div>
   );
