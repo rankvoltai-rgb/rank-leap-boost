@@ -6,7 +6,7 @@ import {
 } from "@/components/ui/accordion";
 import { Reveal, SectionHeading } from "./shared";
 
-const FAQS = [
+export const FAQS = [
   { q: "How quickly will I see results?", a: "Most users see their first articles getting views within two to three weeks. Rankvolt publishes daily using proven SEO practices, so your traffic builds faster than manual blogging alone. Stay consistent and you should see steady growth over the first few months." },
   { q: "How much does this actually cost?", a: "Rankvolt is $99 per month, or $990 per year on annual billing. You get 30 articles per month, keyword research, and full automation on every plan. That beats agency SEO at $5,000+ per month while saving you 20+ hours weekly." },
   { q: "Is AI content as good as human?", a: "Yes, and often better at scale for growing teams. Our AI researches top ranking articles, analyzes what works, and writes fresh content optimized to rank well. You get consistent 3,000+ word articles in minutes instead of days, with no writer burnout." },
