@@ -1,34 +1,55 @@
-# Onboarding Polish — Bigger Card, No Scroll Friction, 2026 Reward-Loop UX
+## Goal
 
-The onboarding (`src/components/auth/Onboarding.tsx`) is a single 4-stage card (Details → Analysis → Growth plan → Activate). The card is cramped (`max-w-lg`), and on the "Growth plan" (results) and "Activate" (checkout) stages the user is forced to scroll to see all content. We'll widen and re-balance the card, remove scroll friction, and layer in 2026-style motion, momentum and reward cues.
+Turn the subscription step of onboarding into a polished split-screen, keep the existing CTA → subscribe → dashboard flow, and harden the logic so payment reliably lands the user in the dashboard.
 
-## 1. Larger, more breathing-room card
+## Current behavior
 
-- Widen the shell from `max-w-lg` to a responsive `max-w-xl` on form/scanning/checkout and `max-w-3xl` on the dense results stage (width adapts per stage so simple steps stay focused and the plan step gets room).
-- Increase internal padding (header + body) and vertical rhythm between elements so content no longer feels crowded.
-- Soften/upgrade the card shadow and corner treatment for a more premium 2026 feel.
+The onboarding component (`src/components/auth/Onboarding.tsx`) has four stages: `form → scanning → results → checkout`. All four render inside one narrow centered card (`max-w-xl`/`max-w-3xl`) with a progress header.
 
-## 2. Kill the scroll friction
+- On the `results` stage, the **"Start 48-hour free trial"** button (`startTrial`) queues articles, generates the strategy, activates the trial, fetches the user, then switches to the `checkout` stage.
+- The `checkout` stage renders `<StripeEmbeddedCheckout priceId="business_monthly" trialDays={2} .../>` squeezed inside the small card.
+- Stripe `return_url` is already `/dashboard?checkout=success&session_id={CHECKOUT_SESSION_ID}`. The `/dashboard` route is under `_authenticated`, which redirects to `/auth` if not logged in (the user is logged in here, so it resolves).
 
-**Results ("Growth plan") stage**
-- Replace the current stacked layout (hero metric block on top, then a separately-scrolling `max-h-[34vh]` article list, then CTA) with a **two-column layout on desktop**: left = hero metric + stats + CTA (sticky, always visible), right = the article plan list.
-- Make only the article list scroll inside its own bounded panel with a fade mask at the edges, so the headline, hero traffic number, and the primary CTA are always on screen without page scrolling.
-- On mobile it gracefully stacks (single column) with a sensibly capped list height.
+So the CTA → subscribe → dashboard chain already exists — the work is the **split-screen redesign** plus tightening the logic.
 
-**Checkout ("Activate") stage**
-- Give the Stripe embedded checkout enough width/height within the wider card and place trust signals (Stripe lock, "cancel anytime", 48h free) in a compact reassurance row so the embed isn't pushed below the fold.
+## What I'll build
 
-## 3. 2026 dopamine / reward-loop polish
+### 1. Split-screen checkout layout
+When `stage === "checkout"`, break out of the narrow onboarding card and render a full-height two-column layout (single column stacked on mobile):
 
-- **Momentum in the progress header**: animated gradient fill on the active segment, a subtle pulse when a step completes, and a small "X of Y" with a checkmark on completed steps.
-- **Anticipation → payoff on scan**: keep the live step list but add a slim animated progress bar and a "building your plan" shimmer so the wait feels productive, then a satisfying transition into results.
-- **Reward moment on results**: keep/enhance the particle `Burst`, animate the projected-traffic `CountUp` with a spring, stagger the stat tiles in, and add a brief glow pulse on the hero metric when it lands. Add a small "unlocked" micro-label to reinforce achievement.
-- **Tactile CTA**: primary buttons get a refined hover lift, subtle gradient/sheen, and a satisfying press state. Loading states keep their spinner copy.
-- Respect `prefers-reduced-motion` everywhere (the existing `reducedMotion()` guard is extended to new animations).
+```text
++---------------------------+----------------------------+
+|  PLAN / VALUE PANEL       |  STRIPE CHECKOUT PANEL     |
+|  - Logo                   |  - "Activate your trial"   |
+|  - "Business" plan        |  - trust badges            |
+|  - $49.5/mo (was $99)     |  - <StripeEmbeddedCheckout>|
+|  - included features list |    (embedded Stripe form)  |
+|  - trust badges + social  |                            |
+|    proof (stars, faces)   |                            |
++---------------------------+----------------------------+
+```
+
+- **Left panel:** dark `bg-ink` brand panel (consistent with the existing `AuthSplit` brand side) showing the plan name, price with strikethrough, the included-features checklist (reuse the list already in `Pricing.tsx`), trust badges (Secured by Stripe / Cancel anytime / 48h free), and social proof (avatars + stars). This is original creative material inspired by — not copied from — the reference screenshot.
+- **Right panel:** clean `bg-card`/`bg-background` panel with the heading + the existing `StripeEmbeddedCheckout` component mounted in a roomy container so the Stripe form has full width.
+- Other stages (`form`, `scanning`, `results`) keep the current centered-card layout and progress header unchanged.
+
+All colors use existing semantic tokens (`ink`, `card`, `success`, `muted-foreground`, etc.) — no hardcoded colors, dark-mode safe.
+
+### 2. Subscribe CTA → subscribe flow
+Keep the `results` "Start 48-hour free trial" button as the subscribe CTA. No change to its async logic; it transitions into the new split-screen checkout. (Optionally relabel to "Continue to checkout" — I'll keep the current copy unless you prefer otherwise.)
+
+### 3. Post-subscribe → dashboard redirect (make it 100% reliable)
+- Keep Stripe `return_url = ${origin}/dashboard?checkout=success&session_id={CHECKOUT_SESSION_ID}`. With `ui_mode: "embedded_page"`, Stripe performs a full-page redirect there after successful payment — this is the canonical post-payment redirect and needs no extra client logic.
+- Verify the `_authenticated` guard resolves the session before rendering `/dashboard` (it does: `beforeLoad` calls `supabase.auth.getUser()`), so the authenticated user lands on the dashboard cleanly.
+- Add a small success toast on `/dashboard` when `?checkout=success` is present (and strip the query params from the URL afterward) so the return feels finished.
 
 ## Technical notes
 
-- All changes are confined to `src/components/auth/Onboarding.tsx` (presentation only) plus, if needed, small semantic token additions in `src/styles.css` (e.g. a soft glow/shadow token). No data, server-function, or business-logic changes — `analyze`, `startTrial`, Stripe checkout, and persistence stay exactly as they are.
-- Layout uses Tailwind responsive utilities and existing semantic tokens (`ink`, `border`, `card`, `success`, `gradient-surface`, `text-gradient-traffic`); no hardcoded colors.
-- Animations use the already-installed `motion/react`.
-- Verify visually at desktop and mobile widths after implementation to confirm no scroll is needed on results/checkout above the fold.
+- File touched primarily: `src/components/auth/Onboarding.tsx` (extract the checkout stage into a full-screen split layout; the early `return` for the checkout stage renders the split screen instead of the card).
+- Reuse `StripeEmbeddedCheckout`, `Logo`, `Avatar`, `Stars` (from `shared`) — no new dependencies.
+- Light edit to `src/routes/_authenticated/dashboard.index.tsx` (or the dashboard layout) to read `checkout=success` and show a one-time success toast, then clean the URL via `router.navigate`.
+- No changes to `payments.functions.ts`, the Stripe server utility, or pricing/products — the `business_monthly` price and 2-day trial stay as configured.
+
+## Out of scope
+- No new payment provider, products, or price changes.
+- No change to the analysis/scanning/results logic.
