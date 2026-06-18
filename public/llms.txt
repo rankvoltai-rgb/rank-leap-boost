@@ -1,0 +1,7 @@
+# Rankvolt
+
+> Rankvolt grows your organic traffic on autopilot — AI researches keywords, writes daily SEO articles, publishes to your site, and builds backlinks, engineered to rank on Google and AI search engines like ChatGPT.
+
+## Pages
+
+- [Home](/): What Rankvolt does, features, pricing, testimonials, and FAQ.
