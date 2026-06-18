@@ -246,17 +246,22 @@ export function Onboarding() {
     }
   }
 
+  const wide = stage === "results";
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4 py-10">
+    <div className="flex min-h-screen items-center justify-center bg-background px-4 py-8 sm:py-12">
       <motion.div
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, ease: [0.21, 0.47, 0.32, 0.98] }}
-        className="w-full max-w-lg overflow-hidden rounded-3xl border border-border bg-card shadow-[0_1px_2px_rgba(15,23,42,0.04),0_18px_50px_-20px_rgba(15,23,42,0.18)]"
+        layout
+        className={cn(
+          "w-full overflow-hidden rounded-[28px] border border-border bg-card shadow-elevation-lg transition-[max-width] duration-500",
+          wide ? "max-w-3xl" : "max-w-xl",
+        )}
       >
         <ProgressHeader activeIndex={activeIndex} />
 
-        <div className="px-6 py-7 sm:px-8">
+        <div className="px-7 py-8 sm:px-9">
           <AnimatePresence mode="wait">
             {stage === "form" && (
               <motion.div
