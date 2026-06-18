@@ -79,7 +79,7 @@ function SystemConsole() {
         ) : (
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             {opportunities.map((opp) => (
-              <Panel key={opp.id} className="flex flex-col gap-3 p-5">
+              <Panel key={opp.id} hover className="flex flex-col gap-3 p-5">
                 <div className="flex items-start justify-between gap-2">
                   <h3 className="text-sm font-semibold leading-snug text-ink">{opp.title}</h3>
                   <Pill tone="info">{opp.ai_signal} AI</Pill>
