@@ -379,91 +379,104 @@ export function Onboarding() {
                   &amp; publish them for you — completely hands-off.
                 </p>
 
-                {/* Hero metric */}
-                <div className="relative mt-5 overflow-hidden rounded-2xl border border-border bg-gradient-surface p-6 text-center">
-                  {!reducedMotion() && <Burst />}
-                  <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                    Projected monthly traffic
-                  </p>
-                  <CountUp
-                    value={totalTraffic}
-                    suffix="/mo"
-                    className="mt-1 block text-4xl font-extrabold tracking-tight text-gradient-traffic tabular-nums sm:text-5xl"
-                  />
-                  <div className="mt-5 grid grid-cols-3 gap-3">
-                    {[
-                      { icon: Bot, label: "Articles", value: `${blogs.length}` },
-                      { icon: Gauge, label: "Avg AI signal", value: `${avgSignal}` },
-                      { icon: Zap, label: "Setup", value: "Auto" },
-                    ].map((s) => (
-                      <div
-                        key={s.label}
-                        className="rounded-xl border border-border bg-card/70 p-2.5"
-                      >
-                        <s.icon className="mx-auto h-4 w-4 text-ink" />
-                        <p className="mt-1 text-base font-bold text-ink tabular-nums">{s.value}</p>
-                        <p className="text-[11px] text-muted-foreground">{s.label}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Auto-included article plan */}
-                <div className="mt-5">
-                  <div className="mb-2 flex items-center justify-between">
-                    <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                      Included in your plan
-                    </p>
-                    <span className="inline-flex items-center gap-1 text-[11px] font-medium text-success">
-                      <Check className="h-3 w-3" /> Auto-queued
-                    </span>
-                  </div>
-                  <div className="-mr-2 max-h-[34vh] space-y-2 overflow-y-auto pr-2">
-                    {blogs.map((b, i) => (
+                <div className="mt-6 grid gap-6 md:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)]">
+                  {/* Left column — hero metric + stats + CTA (always visible) */}
+                  <div className="md:sticky md:top-2 md:self-start">
+                    <div className="relative overflow-hidden rounded-2xl border border-border bg-gradient-surface p-6 text-center">
+                      {!reducedMotion() && <Burst />}
+                      <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                        Projected monthly traffic
+                      </p>
                       <motion.div
-                        key={b.id}
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.3, delay: Math.min(i * 0.05, 0.4) }}
-                        className="flex items-center gap-3 rounded-xl border border-border bg-card p-3"
+                        initial={reducedMotion() ? false : { scale: 0.9, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        transition={{ type: "spring", stiffness: 260, damping: 18, delay: 0.1 }}
                       >
-                        <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-success/12 text-success">
-                          <Check className="h-3.5 w-3.5" />
-                        </span>
-                        <div className="min-w-0 flex-1">
-                          <p className="truncate text-sm font-medium text-ink">{b.title}</p>
-                          <p className="mt-0.5 text-[11px] text-muted-foreground">
-                            {b.keyword ?? b.competition} · {b.ai_signal} AI signal
-                          </p>
-                        </div>
-                        <span className="inline-flex shrink-0 items-center gap-1 rounded-full border border-success/20 bg-success/10 px-2 py-0.5 text-xs font-medium text-success">
-                          <TrendingUp className="h-3 w-3" />
-                          <CountUp value={b.traffic_estimate} suffix="/mo" className="tabular-nums" />
-                        </span>
+                        <CountUp
+                          value={totalTraffic}
+                          suffix="/mo"
+                          className="mt-1 block text-4xl font-extrabold tracking-tight text-gradient-traffic tabular-nums sm:text-5xl"
+                        />
                       </motion.div>
-                    ))}
+                      <div className="mt-5 grid grid-cols-3 gap-3">
+                        {[
+                          { icon: Bot, label: "Articles", value: `${blogs.length}` },
+                          { icon: Gauge, label: "Avg AI signal", value: `${avgSignal}` },
+                          { icon: Zap, label: "Setup", value: "Auto" },
+                        ].map((s, i) => (
+                          <motion.div
+                            key={s.label}
+                            initial={reducedMotion() ? false : { opacity: 0, y: 8 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.3, delay: 0.2 + i * 0.08 }}
+                            className="rounded-xl border border-border bg-card/70 p-2.5"
+                          >
+                            <s.icon className="mx-auto h-4 w-4 text-ink" />
+                            <p className="mt-1 text-base font-bold text-ink tabular-nums">{s.value}</p>
+                            <p className="text-[11px] text-muted-foreground">{s.label}</p>
+                          </motion.div>
+                        ))}
+                      </div>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={startTrial}
+                      disabled={activating}
+                      className="group mt-5 inline-flex w-full items-center justify-center gap-2 overflow-hidden rounded-xl bg-ink px-6 py-3.5 text-sm font-semibold text-background shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 disabled:opacity-70"
+                    >
+                      {activating ? (
+                        <>
+                          <Loader2 className="h-4 w-4 animate-spin" /> Building your content engine…
+                        </>
+                      ) : (
+                        <>
+                          <Zap className="h-4 w-4 transition-transform group-hover:scale-110" /> Start 48-hour free trial
+                        </>
+                      )}
+                    </button>
+                    <p className="mt-2.5 text-center text-xs text-muted-foreground">
+                      30+ more articles auto-generated on activation. No charge for 48 hours.
+                    </p>
+                  </div>
+
+                  {/* Right column — auto-included article plan */}
+                  <div className="flex min-h-0 flex-col">
+                    <div className="mb-2 flex items-center justify-between">
+                      <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                        Included in your plan
+                      </p>
+                      <span className="inline-flex items-center gap-1 text-[11px] font-medium text-success">
+                        <Check className="h-3 w-3" /> Auto-queued
+                      </span>
+                    </div>
+                    <div className="onboarding-fade-mask -mr-2 max-h-[42vh] space-y-2 overflow-y-auto pr-2 md:max-h-[52vh]">
+                      {blogs.map((b, i) => (
+                        <motion.div
+                          key={b.id}
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.3, delay: Math.min(i * 0.05, 0.4) }}
+                          className="flex items-center gap-3 rounded-xl border border-border bg-card p-3 transition-colors hover:border-ink/20"
+                        >
+                          <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-success/12 text-success">
+                            <Check className="h-3.5 w-3.5" />
+                          </span>
+                          <div className="min-w-0 flex-1">
+                            <p className="truncate text-sm font-medium text-ink">{b.title}</p>
+                            <p className="mt-0.5 text-[11px] text-muted-foreground">
+                              {b.keyword ?? b.competition} · {b.ai_signal} AI signal
+                            </p>
+                          </div>
+                          <span className="inline-flex shrink-0 items-center gap-1 rounded-full border border-success/20 bg-success/10 px-2 py-0.5 text-xs font-medium text-success">
+                            <TrendingUp className="h-3 w-3" />
+                            <CountUp value={b.traffic_estimate} suffix="/mo" className="tabular-nums" />
+                          </span>
+                        </motion.div>
+                      ))}
+                    </div>
                   </div>
                 </div>
-
-                <button
-                  type="button"
-                  onClick={startTrial}
-                  disabled={activating}
-                  className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-ink px-6 py-3.5 text-sm font-semibold text-background shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md disabled:opacity-70"
-                >
-                  {activating ? (
-                    <>
-                      <Loader2 className="h-4 w-4 animate-spin" /> Building your content engine…
-                    </>
-                  ) : (
-                    <>
-                      <Zap className="h-4 w-4" /> Start 48-hour free trial
-                    </>
-                  )}
-                </button>
-                <p className="mt-2.5 text-center text-xs text-muted-foreground">
-                  30+ more articles auto-generated on activation. No charge for 48 hours.
-                </p>
               </motion.div>
             )}
 
