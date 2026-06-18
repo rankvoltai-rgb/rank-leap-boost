@@ -607,54 +607,6 @@ export function Onboarding() {
                 </div>
               </motion.div>
             )}
-
-            {stage === "checkout" && (
-              <motion.div
-                key="checkout"
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -8 }}
-                transition={{ duration: 0.3 }}
-              >
-                <div className="mb-3 inline-flex items-center gap-1.5 rounded-full border border-success/20 bg-success/10 px-3 py-1 text-xs font-medium text-success">
-                  <Check className="h-3.5 w-3.5" /> Plan secured
-                </div>
-                <h1 className="text-2xl font-bold tracking-tight text-ink">
-                  Activate your free trial
-                </h1>
-                <p className="mt-1.5 text-sm text-muted-foreground">
-                  No charge for 48 hours. Add your card to unlock your dashboard — cancel anytime before the trial
-                  ends and you won't be billed.
-                </p>
-                <div className="mt-4 flex flex-wrap items-center gap-2">
-                  {[
-                    { icon: Lock, label: "Secured by Stripe" },
-                    { icon: Check, label: "Cancel anytime" },
-                    { icon: Sparkles, label: "48h free" },
-                  ].map((t) => (
-                    <span
-                      key={t.label}
-                      className="inline-flex items-center gap-1.5 rounded-full border border-border bg-secondary px-3 py-1 text-[11px] font-medium text-ink"
-                    >
-                      <t.icon className="h-3 w-3 text-success" /> {t.label}
-                    </span>
-                  ))}
-                </div>
-                <div className="mt-4 overflow-hidden rounded-2xl border border-border bg-card p-4">
-                  <StripeEmbeddedCheckout
-                    priceId="business_monthly"
-                    trialDays={2}
-                    customerEmail={checkout?.email}
-                    userId={checkout?.userId}
-                    returnUrl={
-                      typeof window !== "undefined"
-                        ? `${window.location.origin}/dashboard?checkout=success&session_id={CHECKOUT_SESSION_ID}`
-                        : undefined
-                    }
-                  />
-                </div>
-              </motion.div>
-            )}
           </AnimatePresence>
         </div>
       </motion.div>
