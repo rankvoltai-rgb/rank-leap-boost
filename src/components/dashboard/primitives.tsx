@@ -4,12 +4,21 @@ import { cn } from "@/lib/utils";
 export function Panel({
   children,
   className,
+  hover,
 }: {
   children: ReactNode;
   className?: string;
+  hover?: boolean;
 }) {
   return (
-    <div className={cn("rounded-xl border border-border bg-card", className)}>
+    <div
+      className={cn(
+        "rounded-xl border border-border bg-card shadow-sm ring-1 ring-ink/[0.02]",
+        hover &&
+          "transition-all hover:-translate-y-0.5 hover:border-ink/15 hover:shadow-elevation",
+        className,
+      )}
+    >
       {children}
     </div>
   );
@@ -27,8 +36,16 @@ export function StatCard({
   emphasis?: boolean;
 }) {
   return (
-    <Panel className="p-5">
-      <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+    <Panel
+      className={cn(
+        "flex min-h-[118px] flex-col p-5",
+        emphasis && "relative overflow-hidden",
+      )}
+    >
+      {emphasis && (
+        <span className="absolute inset-x-0 top-0 h-0.5 bg-gradient-traffic" />
+      )}
+      <p className="text-[0.7rem] font-semibold uppercase tracking-wide text-muted-foreground">
         {label}
       </p>
       <p
@@ -39,7 +56,7 @@ export function StatCard({
       >
         {value}
       </p>
-      {hint && <p className="mt-1 text-xs text-muted-foreground">{hint}</p>}
+      {hint && <p className="mt-auto pt-1 text-xs text-muted-foreground">{hint}</p>}
     </Panel>
   );
 }
@@ -85,14 +102,15 @@ export function Button({
   variant?: "solid" | "ghost" | "danger";
 } & React.ButtonHTMLAttributes<HTMLButtonElement>) {
   const variants = {
-    solid: "bg-ink text-background hover:bg-ink/90",
+    solid:
+      "bg-ink text-background shadow-sm hover:-translate-y-0.5 hover:bg-ink/90 hover:shadow-md active:translate-y-0",
     ghost: "border border-border bg-card text-ink hover:bg-secondary",
     danger: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
   };
   return (
     <button
       className={cn(
-        "inline-flex items-center justify-center gap-1.5 rounded-lg px-3.5 py-2 text-sm font-medium transition-colors disabled:opacity-60",
+        "inline-flex items-center justify-center gap-1.5 rounded-lg px-3.5 py-2 text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-60",
         variants[variant],
         className,
       )}
@@ -113,7 +131,7 @@ export function PageHeader({
   action?: ReactNode;
 }) {
   return (
-    <div className="flex flex-wrap items-start justify-between gap-3">
+    <div className="flex flex-wrap items-start justify-between gap-3 border-b border-border pb-5">
       <div>
         <h1 className="text-2xl font-bold tracking-tight text-ink">{title}</h1>
         {description && (
