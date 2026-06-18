@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { Plus, TrendingUp } from "lucide-react";
@@ -19,6 +19,17 @@ export const Route = createFileRoute("/_authenticated/dashboard/")({
 function SystemConsole() {
   const queryClient = useQueryClient();
   const [bonus, setBonus] = useState(0);
+
+  // Welcome users arriving from a completed checkout, then clean the URL.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("checkout") === "success") {
+      toast.success("You're all set — your free trial is active!");
+      window.history.replaceState({}, "", window.location.pathname);
+    }
+  }, []);
+
   const { data: opportunities = [] } = useQuery({
     queryKey: ["blogs", "opportunity"],
     queryFn: () => listBlogs("opportunity"),
