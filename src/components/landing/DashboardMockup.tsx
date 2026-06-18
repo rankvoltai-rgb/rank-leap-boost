@@ -141,7 +141,7 @@ export function DashboardMockup() {
             {Array.from({ length: 14 }).map((_, i) => (
               <div
                 key={`e${i}`}
-                className="min-h-[112px] rounded-lg border border-dashed border-border/60 p-1.5 text-[0.55rem] text-muted-foreground/60"
+                className="min-h-[112px] rounded-lg border border-dashed border-border/60 p-1.5 text-[0.55rem] text-muted-foreground"
               >
                 {i + 8}
               </div>
