@@ -14,6 +14,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { motion, AnimatePresence } from "motion/react";
 import { toast } from "sonner";
 import { Logo } from "@/components/landing/shared";
+import { Avatar, Stars } from "@/components/landing/shared";
 import { cn } from "@/lib/utils";
 import { CountUp } from "@/components/ui/count-up";
 import { analyzeWebsite, generateBlogStrategy } from "@/lib/ai.functions";
@@ -45,6 +46,18 @@ const SCAN_STEPS = [
   "Predicting traffic potential…",
   "Generating article opportunities…",
 ];
+
+const PLAN_FEATURES = [
+  "Personalized growth plan",
+  "30 SEO/GEO articles (1 daily)",
+  "3,000+ word long-form articles",
+  "Auto-publish to your website",
+  "30 backlink credits monthly",
+  "Auto images, links & promotion",
+  "Unlimited rewrites & team members",
+];
+
+const PROOF_FACES = ["Mark Eckert", "Nik Zechner", "Denis Yurchak", "Ray Joe", "Adam Miles"];
 
 function reducedMotion() {
   if (typeof window === "undefined") return false;
