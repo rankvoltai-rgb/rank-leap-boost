@@ -100,16 +100,16 @@ function BlogEngine() {
         description="Turn opportunities into published, SEO-optimized articles with one click."
       />
 
-      <div className="flex gap-1 rounded-lg border border-border bg-card p-1">
+      <div className="flex gap-1 rounded-lg border border-border bg-card p-1 shadow-sm">
         {TABS.map((t) => (
           <button
             key={t.id}
             type="button"
             onClick={() => setTab(t.id)}
             className={
-              "flex-1 rounded-md px-3 py-1.5 text-sm font-medium transition-colors " +
+              "flex-1 rounded-md px-3 py-1.5 text-sm font-medium transition-all " +
               (tab === t.id
-                ? "bg-ink text-background"
+                ? "bg-ink text-background shadow-sm"
                 : "text-muted-foreground hover:text-ink")
             }
           >
@@ -129,7 +129,7 @@ function BlogEngine() {
       ) : (
         <div className="grid gap-3">
           {blogs.map((b) => (
-            <Panel key={b.id} className="flex items-center justify-between gap-4 p-4">
+            <Panel key={b.id} hover className="flex items-center justify-between gap-4 p-4">
               <div className="min-w-0">
                 <p className="truncate text-sm font-semibold text-ink">{b.title}</p>
                 <p className="mt-0.5 truncate text-xs text-muted-foreground">{b.description}</p>
