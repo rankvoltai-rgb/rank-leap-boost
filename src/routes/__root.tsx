@@ -80,6 +80,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "Rankvolt | Get Google & ChatGPT Traffic on Autopilot" },
+      { name: "google-site-verification", content: "fG4neVF-dPj7kLMIjpCUpXjX2XhTPhoZvyyiGL-xs40" },
       { name: "description", content: "Turn your website into a traffic-generating machine with AI-powered content engineered for Google, ChatGPT, and modern search engines." },
       { name: "author", content: "Lovable" },
       { property: "og:title", content: "Rankvolt | Get Google & ChatGPT Traffic on Autopilot" },
