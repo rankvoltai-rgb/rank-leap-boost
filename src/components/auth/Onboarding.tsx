@@ -309,7 +309,7 @@ export function Onboarding() {
                 transition={{ duration: 0.3 }}
               >
                 <div className="flex items-center gap-3">
-                  <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-ink">
+                  <span className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-ink">
                     <Loader2 className="h-5 w-5 animate-spin text-background" />
                   </span>
                   <div className="min-w-0">
@@ -318,6 +318,16 @@ export function Onboarding() {
                     </p>
                     <p className="truncate text-xs text-muted-foreground">{url}</p>
                   </div>
+                </div>
+                <div className="mt-5 h-1.5 w-full overflow-hidden rounded-full bg-secondary">
+                  <motion.span
+                    className="block h-full rounded-full bg-gradient-traffic"
+                    initial={false}
+                    animate={{
+                      width: `${Math.round(((scanStep + 1) / SCAN_STEPS.length) * 100)}%`,
+                    }}
+                    transition={{ duration: 0.6, ease: "easeOut" }}
+                  />
                 </div>
                 <ul className="mt-6 space-y-3">
                   {SCAN_STEPS.map((label, i) => {
