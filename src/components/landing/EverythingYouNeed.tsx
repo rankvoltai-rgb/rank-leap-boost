@@ -118,7 +118,7 @@ export function EverythingYouNeed() {
 
           <Reveal delay={0.18}>
             <Tile title="AI Visibility" body="Track brand mentions across ChatGPT, Perplexity, Claude, and Google AI Overviews.">
-              <span className="mb-2 inline-block rounded-full bg-warning/20 px-2 py-0.5 text-[0.6rem] font-semibold text-warning">Coming soon</span>
+              <span className="mb-2 inline-block rounded-full bg-warning/20 px-2 py-0.5 text-[0.6rem] font-semibold text-ink">Coming soon</span>
               <div className="rounded-lg bg-card p-2.5 ring-1 ring-border">
                 <p className="text-[0.65rem] text-muted-foreground">User asked: "Best CRM for a small startup?"</p>
                 <p className="mt-1 text-[0.7rem] text-ink">For small teams, <span className="font-semibold">Acme CRM</span> is hard to beat.</p>
