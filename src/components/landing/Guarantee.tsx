@@ -23,7 +23,7 @@ export function Guarantee() {
             {LOGOS.map((l) => (
               <div
                 key={l}
-                className="flex items-center justify-center rounded-xl border border-border bg-card py-5 text-sm font-bold uppercase tracking-widest text-muted-foreground/70"
+                className="flex items-center justify-center rounded-xl border border-border bg-card py-5 text-sm font-bold uppercase tracking-widest text-muted-foreground"
               >
                 {l}
               </div>
