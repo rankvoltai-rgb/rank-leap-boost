@@ -1,49 +1,34 @@
-# Landing + Dashboard UI Polish
+# Onboarding Polish — Bigger Card, No Scroll Friction, 2026 Reward-Loop UX
 
-Three scoped, frontend-only changes. No backend, data, or logic touched.
+The onboarding (`src/components/auth/Onboarding.tsx`) is a single 4-stage card (Details → Analysis → Growth plan → Activate). The card is cramped (`max-w-lg`), and on the "Growth plan" (results) and "Activate" (checkout) stages the user is forced to scroll to see all content. We'll widen and re-balance the card, remove scroll friction, and layer in 2026-style motion, momentum and reward cues.
 
-## 1. Hero — remove "View Demo"
+## 1. Larger, more breathing-room card
 
-`src/components/landing/Hero.tsx`
-- Delete the `SecondaryButton` "View Demo" block (the Play-icon button under the URL form).
-- Remove now-unused `Play` and `SecondaryButton` imports.
-- Tighten the CTA wrapper spacing so the URL form sits cleanly without the secondary action.
+- Widen the shell from `max-w-lg` to a responsive `max-w-xl` on form/scanning/checkout and `max-w-3xl` on the dense results stage (width adapts per stage so simple steps stay focused and the plan step gets room).
+- Increase internal padding (header + body) and vertical rhythm between elements so content no longer feels crowded.
+- Soften/upgrade the card shadow and corner treatment for a more premium 2026 feel.
 
-## 2. Hero dashboard mockup — polish + de-emoji
+## 2. Kill the scroll friction
 
-`src/components/landing/DashboardMockup.tsx`
+**Results ("Growth plan") stage**
+- Replace the current stacked layout (hero metric block on top, then a separately-scrolling `max-h-[34vh]` article list, then CTA) with a **two-column layout on desktop**: left = hero metric + stats + CTA (sticky, always visible), right = the article plan list.
+- Make only the article list scroll inside its own bounded panel with a fade mask at the edges, so the headline, hero traffic number, and the primary CTA are always on screen without page scrolling.
+- On mobile it gracefully stacks (single column) with a sensibly capped list height.
 
-Currently the mockup uses raw emoji (⚡ 📄 🔗 📈 📊 ●) and has a flat look.
-- Replace every emoji with crisp `lucide-react` icons:
-  - Footer stats `⚡ 27 / 📄 120 / 🔗 3` → `Zap`, `FileText`, `Link2` icons with labels.
-  - `📈 Domain Rating` → `TrendingUp` icon.
-  - `📊 {v}/mo` traffic line → `BarChart3` icon.
-  - The bare `●` status dots → small rounded color dots already styled via spans (keep, they aren't emoji).
-- Visual polish to read as a premium product shot:
-  - Add subtle gradient header bar / window chrome (three dots) at the top of the card frame.
-  - Soften card with layered border + ring, refine the active sidebar item and queued-card hover states.
-  - Improve typographic hierarchy and spacing in the calendar cards (status pill, title, keyword, traffic).
-- Keep all copy and structure; this is a styling pass only.
+**Checkout ("Activate") stage**
+- Give the Stripe embedded checkout enough width/height within the wider card and place trust signals (Stripe lock, "cancel anytime", 48h free) in a compact reassurance row so the embed isn't pushed below the fold.
 
-## 3. Dashboard app pages — UI elevation
+## 3. 2026 dopamine / reward-loop polish
 
-Shared primitives `src/components/dashboard/primitives.tsx`
-- `Panel`: add soft elevation shadow + hover lift option, subtle ring.
-- `StatCard`: refine to a more premium card — uppercase label, larger value, optional accent top-border for `emphasis`, consistent min-height.
-- `Button`: add focus-visible ring and slight hover elevation for the solid variant.
-- `PageHeader`: tighten spacing, add a thin divider option.
-
-Layout & chrome
-- `src/routes/_authenticated/dashboard.tsx`: give `<main>` a max-width container and a faint page background (surface tint) for depth.
-- `src/components/dashboard/Sidebar.tsx`: refine active/hover states, add an icon accent and section grouping spacing; polish the "soon" badge.
-- `src/components/dashboard/TopBar.tsx`: refine the credits pill and avatar/sign-out grouping; add subtle separation.
-
-Pages (styling only — queries and handlers untouched)
-- `dashboard.index.tsx` (System Console): polish StatCard grid, Content Radar card hover, pills, and the Add-to-Queue button.
-- `dashboard.blog-engine.tsx`: refine the tab switcher, list rows, and the article modal spacing/typography.
-- `dashboard.billing.tsx`: polish the status panel and stat grid.
+- **Momentum in the progress header**: animated gradient fill on the active segment, a subtle pulse when a step completes, and a small "X of Y" with a checkmark on completed steps.
+- **Anticipation → payoff on scan**: keep the live step list but add a slim animated progress bar and a "building your plan" shimmer so the wait feels productive, then a satisfying transition into results.
+- **Reward moment on results**: keep/enhance the particle `Burst`, animate the projected-traffic `CountUp` with a spring, stagger the stat tiles in, and add a brief glow pulse on the hero metric when it lands. Add a small "unlocked" micro-label to reinforce achievement.
+- **Tactile CTA**: primary buttons get a refined hover lift, subtle gradient/sheen, and a satisfying press state. Loading states keep their spinner copy.
+- Respect `prefers-reduced-motion` everywhere (the existing `reducedMotion()` guard is extended to new animations).
 
 ## Technical notes
-- All changes are presentation-only: JSX/className edits plus new `lucide-react` icon imports (already a dependency).
-- No new packages, no token changes required, but I may add 1–2 design tokens to `src/styles.css` (e.g. a dashboard surface tint / elevation shadow) if needed for consistency, derived from existing `--ink`/`--border` tokens.
-- No data, server functions, routes, or business logic modified.
+
+- All changes are confined to `src/components/auth/Onboarding.tsx` (presentation only) plus, if needed, small semantic token additions in `src/styles.css` (e.g. a soft glow/shadow token). No data, server-function, or business-logic changes — `analyze`, `startTrial`, Stripe checkout, and persistence stay exactly as they are.
+- Layout uses Tailwind responsive utilities and existing semantic tokens (`ink`, `border`, `card`, `success`, `gradient-surface`, `text-gradient-traffic`); no hardcoded colors.
+- Animations use the already-installed `motion/react`.
+- Verify visually at desktop and mobile widths after implementation to confirm no scroll is needed on results/checkout above the fold.

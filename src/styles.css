@@ -237,3 +237,13 @@
 @utility bg-hero-glow {
   background-image: var(--hero-glow);
 }
+
+@utility onboarding-fade-mask {
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0,
+    black 14px,
+    black calc(100% - 14px),
+    transparent 100%
+  );
+}
