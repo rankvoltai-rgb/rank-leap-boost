@@ -260,6 +260,121 @@ export function Onboarding() {
   }
 
   const wide = stage === "results";
+
+  // The subscription step breaks out of the narrow onboarding card into a
+  // full-screen split layout: plan value on the left, Stripe checkout on the right.
+  if (stage === "checkout") {
+    return (
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.4, ease: [0.21, 0.47, 0.32, 0.98] }}
+        className="grid min-h-screen bg-background lg:grid-cols-2"
+      >
+        {/* Left — plan value & social proof */}
+        <div className="relative hidden flex-col justify-between overflow-hidden bg-ink px-10 py-12 text-background lg:flex xl:px-14">
+          <div
+            className="pointer-events-none absolute inset-0 opacity-[0.07]"
+            style={{
+              backgroundImage:
+                "radial-gradient(circle at 1px 1px, currentColor 1px, transparent 0)",
+              backgroundSize: "22px 22px",
+            }}
+          />
+          <div className="relative">
+            <Logo className="[&_span:last-child]:text-background" />
+            <span className="mt-8 inline-flex items-center gap-1.5 rounded-full border border-background/20 bg-background/10 px-3 py-1 text-xs font-medium text-background/80">
+              <Sparkles className="h-3.5 w-3.5" /> 48-hour free trial · cancel anytime
+            </span>
+            <h2 className="mt-5 text-3xl font-extrabold tracking-tight">Business</h2>
+            <p className="mt-1 text-sm text-background/70">All-in-one growth package</p>
+            <div className="mt-5 flex items-end gap-2.5">
+              <span className="text-xl text-background/50 line-through">$99</span>
+              <span className="text-5xl font-extrabold tracking-tight">$49.5</span>
+              <span className="mb-1.5 text-sm text-background/70">/month</span>
+            </div>
+            <p className="mt-1 text-xs text-background/60">
+              Free for 48 hours, then 50% off your first month.
+            </p>
+
+            <ul className="mt-7 space-y-2.5">
+              {PLAN_FEATURES.map((f) => (
+                <li key={f} className="flex items-start gap-2.5 text-sm text-background/90">
+                  <span className="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-background/15 text-background">
+                    <Check className="h-3 w-3" />
+                  </span>
+                  {f}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="relative flex items-center gap-3">
+            <div className="flex -space-x-2">
+              {PROOF_FACES.map((f) => (
+                <Avatar key={f} name={f} className="h-9 w-9 ring-2 ring-ink" />
+              ))}
+            </div>
+            <div className="flex flex-col">
+              <Stars />
+              <p className="text-sm text-background/70">
+                <span className="font-semibold text-background">3,000+</span> happy customers
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Right — Stripe checkout */}
+        <div className="flex flex-col px-5 py-8 sm:px-10 lg:px-12 xl:px-16">
+          <div className="lg:hidden">
+            <Logo />
+          </div>
+          <div className="flex flex-1 items-center justify-center py-8">
+            <div className="w-full max-w-md">
+              <div className="mb-3 inline-flex items-center gap-1.5 rounded-full border border-success/20 bg-success/10 px-3 py-1 text-xs font-medium text-success">
+                <Check className="h-3.5 w-3.5" /> Plan secured
+              </div>
+              <h1 className="text-2xl font-bold tracking-tight text-ink">
+                Activate your free trial
+              </h1>
+              <p className="mt-1.5 text-sm text-muted-foreground">
+                No charge for 48 hours. Add your card to unlock your dashboard — cancel anytime
+                before the trial ends and you won't be billed.
+              </p>
+              <div className="mt-4 flex flex-wrap items-center gap-2">
+                {[
+                  { icon: Lock, label: "Secured by Stripe" },
+                  { icon: Check, label: "Cancel anytime" },
+                  { icon: Sparkles, label: "48h free" },
+                ].map((t) => (
+                  <span
+                    key={t.label}
+                    className="inline-flex items-center gap-1.5 rounded-full border border-border bg-secondary px-3 py-1 text-[11px] font-medium text-ink"
+                  >
+                    <t.icon className="h-3 w-3 text-success" /> {t.label}
+                  </span>
+                ))}
+              </div>
+              <div className="mt-5 overflow-hidden rounded-2xl border border-border bg-card p-4">
+                <StripeEmbeddedCheckout
+                  priceId="business_monthly"
+                  trialDays={2}
+                  customerEmail={checkout?.email}
+                  userId={checkout?.userId}
+                  returnUrl={
+                    typeof window !== "undefined"
+                      ? `${window.location.origin}/dashboard?checkout=success&session_id={CHECKOUT_SESSION_ID}`
+                      : undefined
+                  }
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </motion.div>
+    );
+  }
+
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4 py-8 sm:py-12">
       <motion.div
