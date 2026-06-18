@@ -498,7 +498,21 @@ export function Onboarding() {
                   No charge for 48 hours. Add your card to unlock your dashboard — cancel anytime before the trial
                   ends and you won't be billed.
                 </p>
-                <div className="mt-5 overflow-hidden rounded-2xl border border-border bg-card p-4">
+                <div className="mt-4 flex flex-wrap items-center gap-2">
+                  {[
+                    { icon: Lock, label: "Secured by Stripe" },
+                    { icon: Check, label: "Cancel anytime" },
+                    { icon: Sparkles, label: "48h free" },
+                  ].map((t) => (
+                    <span
+                      key={t.label}
+                      className="inline-flex items-center gap-1.5 rounded-full border border-border bg-secondary px-3 py-1 text-[11px] font-medium text-ink"
+                    >
+                      <t.icon className="h-3 w-3 text-success" /> {t.label}
+                    </span>
+                  ))}
+                </div>
+                <div className="mt-4 overflow-hidden rounded-2xl border border-border bg-card p-4">
                   <StripeEmbeddedCheckout
                     priceId="business_monthly"
                     trialDays={2}
@@ -511,9 +525,6 @@ export function Onboarding() {
                     }
                   />
                 </div>
-                <p className="mt-3 flex items-center justify-center gap-1.5 text-center text-xs text-muted-foreground">
-                  <Lock className="h-3 w-3" /> Secured by Stripe · Cancel anytime
-                </p>
               </motion.div>
             )}
           </AnimatePresence>
