@@ -1,4 +1,11 @@
 import { Logo, BrandMark } from "./shared";
+import {
+  Zap,
+  FileText,
+  Link2,
+  TrendingUp,
+  BarChart3,
+} from "lucide-react";
 
 const NAV_GENERAL = ["Dashboard", "Articles", "Backlinks", "Settings"];
 const NAV_SUPPORT = ["Ask Rankvolt", "Help Center"];
@@ -16,7 +23,18 @@ const QUEUED = [
 
 export function DashboardMockup() {
   return (
-    <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-[0_30px_80px_-40px_rgba(0,0,0,0.35)]">
+    <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-elevation-lg ring-1 ring-ink/5">
+      {/* Window chrome */}
+      <div className="flex items-center gap-2 border-b border-border bg-surface/70 px-4 py-2.5">
+        <span className="flex gap-1.5">
+          <span className="h-2.5 w-2.5 rounded-full bg-border" />
+          <span className="h-2.5 w-2.5 rounded-full bg-border" />
+          <span className="h-2.5 w-2.5 rounded-full bg-border" />
+        </span>
+        <span className="mx-auto flex items-center gap-1.5 rounded-md border border-border bg-card px-2.5 py-0.5 text-[0.6rem] font-medium text-muted-foreground">
+          app.rankvolt.com/dashboard
+        </span>
+      </div>
       <div className="flex">
         {/* Sidebar */}
         <aside className="hidden w-52 shrink-0 flex-col border-r border-border bg-surface/60 p-4 md:flex">
@@ -28,8 +46,10 @@ export function DashboardMockup() {
             {NAV_GENERAL.map((n, i) => (
               <span
                 key={n}
-                className={`rounded-lg px-2.5 py-2 text-sm font-medium ${
-                  i === 0 ? "bg-ink text-background" : "text-muted-foreground"
+                className={`rounded-lg px-2.5 py-2 text-sm font-medium transition-colors ${
+                  i === 0
+                    ? "bg-ink text-background shadow-sm"
+                    : "text-muted-foreground"
                 }`}
               >
                 {n}
@@ -46,10 +66,16 @@ export function DashboardMockup() {
               </span>
             ))}
           </div>
-          <div className="mt-auto flex gap-3 pt-6 text-xs text-muted-foreground">
-            <span>⚡ 27</span>
-            <span>📄 120</span>
-            <span>🔗 3</span>
+          <div className="mt-auto flex items-center gap-3 pt-6 text-xs font-medium text-muted-foreground">
+            <span className="flex items-center gap-1">
+              <Zap className="h-3.5 w-3.5 text-warning" /> 27
+            </span>
+            <span className="flex items-center gap-1">
+              <FileText className="h-3.5 w-3.5 text-info" /> 120
+            </span>
+            <span className="flex items-center gap-1">
+              <Link2 className="h-3.5 w-3.5 text-success" /> 3
+            </span>
           </div>
         </aside>
 
@@ -74,8 +100,9 @@ export function DashboardMockup() {
             <span className="flex items-center gap-1.5 rounded-md border border-border bg-surface px-2 py-1 text-muted-foreground">
               <BrandMark name="WordPress" className="h-4 w-4 text-[0.6rem]" /> WordPress
             </span>
-            <span className="rounded-md border border-border bg-surface px-2 py-1 text-muted-foreground">
-              📈 Domain Rating: <span className="font-semibold text-ink">42</span>
+            <span className="flex items-center gap-1.5 rounded-md border border-border bg-surface px-2 py-1 text-muted-foreground">
+              <TrendingUp className="h-3.5 w-3.5 text-success" /> Domain Rating:{" "}
+              <span className="font-semibold text-ink">42</span>
             </span>
             <span className="ml-auto hidden gap-2 sm:flex">
               <span className="rounded-md border border-border px-2 py-1 text-muted-foreground">7 queued</span>
@@ -94,7 +121,7 @@ export function DashboardMockup() {
             {QUEUED.map((a, i) => (
               <div
                 key={i}
-                className="flex min-h-[112px] flex-col rounded-lg border border-border bg-surface/50 p-1.5"
+                className="flex min-h-[112px] flex-col rounded-lg border border-border bg-surface/50 p-1.5 transition-all hover:-translate-y-0.5 hover:border-ink/20 hover:shadow-sm"
               >
                 <div className="mb-1 flex items-center justify-between">
                   <span className="flex h-4 w-4 items-center justify-center rounded-full bg-ink text-[0.55rem] font-semibold text-background">
@@ -106,7 +133,9 @@ export function DashboardMockup() {
                 </span>
                 <p className="line-clamp-2 text-[0.6rem] font-semibold leading-tight text-ink">{a.t}</p>
                 <p className="mt-0.5 line-clamp-1 text-[0.55rem] text-muted-foreground">{a.k}</p>
-                <p className="mt-auto pt-1 text-[0.55rem] font-medium text-muted-foreground">📊 {a.v}/mo</p>
+                <p className="mt-auto flex items-center gap-1 pt-1 text-[0.55rem] font-medium text-muted-foreground">
+                  <BarChart3 className="h-3 w-3 text-info" /> {a.v}/mo
+                </p>
               </div>
             ))}
             {Array.from({ length: 14 }).map((_, i) => (
