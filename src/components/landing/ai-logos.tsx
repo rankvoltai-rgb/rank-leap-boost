@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
 import geminiAsset from "@/assets/gemini.png.asset.json";
+import boundlessAsset from "@/assets/boundless.png.asset.json";
 
 /* Brand AI marks used in the hero "found everywhere" card. */
 
@@ -51,10 +52,26 @@ export function PerplexityMark({ className }: { className?: string }) {
   );
 }
 
+export function BoundlessMark({ className }: { className?: string }) {
+  return (
+    <img src={boundlessAsset.url} alt="" aria-hidden className={cn("object-contain", className)} />
+  );
+}
+
 export const AI_MARKS = [
   { name: "ChatGPT", Mark: ChatGPTMark },
   { name: "Google", Mark: GoogleMark },
   { name: "Gemini", Mark: GeminiMark },
   { name: "Claude", Mark: ClaudeMark },
   { name: "Perplexity", Mark: PerplexityMark },
+] as const;
+
+/* AI answer engines that the content engine optimizes citations for. */
+export const AI_ALGORITHM_MARKS = [
+  { name: "ChatGPT", Mark: ChatGPTMark },
+  { name: "Claude", Mark: ClaudeMark },
+  { name: "Gemini", Mark: GeminiMark },
+  { name: "Google", Mark: GoogleMark },
+  { name: "Perplexity", Mark: PerplexityMark },
+  { name: "Boundless", Mark: BoundlessMark },
 ] as const;
