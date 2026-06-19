@@ -13,9 +13,9 @@ export function Panel({
   return (
     <div
       className={cn(
-        "rounded-xl border border-border bg-card shadow-sm ring-1 ring-ink/[0.02]",
+        "rounded-2xl border border-border bg-card shadow-elevation",
         hover &&
-          "transition-all hover:-translate-y-0.5 hover:border-ink/15 hover:shadow-elevation",
+          "transition-all duration-200 hover:-translate-y-0.5 hover:border-ink/15 hover:shadow-elevation-lg",
         className,
       )}
     >
@@ -29,33 +29,48 @@ export function StatCard({
   value,
   hint,
   emphasis,
+  media,
+  icon,
 }: {
   label: string;
-  value: ReactNode;
+  value?: ReactNode;
   hint?: string;
   emphasis?: boolean;
+  media?: ReactNode;
+  icon?: ReactNode;
 }) {
   return (
     <Panel
       className={cn(
-        "flex min-h-[118px] flex-col p-5",
+        "flex min-h-[128px] flex-col p-5",
         emphasis && "relative overflow-hidden",
       )}
     >
       {emphasis && (
-        <span className="absolute inset-x-0 top-0 h-0.5 bg-gradient-traffic" />
+        <span className="absolute inset-x-0 top-0 h-1 bg-gradient-traffic" />
       )}
-      <p className="text-[0.7rem] font-semibold uppercase tracking-wide text-muted-foreground">
-        {label}
-      </p>
-      <p
-        className={cn(
-          "mt-2 font-bold tracking-tight text-ink tabular-nums",
-          emphasis ? "text-3xl" : "text-2xl",
+      <div className="flex items-center justify-between gap-2">
+        <p className="text-[0.68rem] font-semibold uppercase tracking-[0.08em] text-muted-foreground">
+          {label}
+        </p>
+        {icon && (
+          <span className="grid h-7 w-7 shrink-0 place-items-center rounded-lg border border-border bg-secondary text-muted-foreground">
+            {icon}
+          </span>
         )}
-      >
-        {value}
-      </p>
+      </div>
+      {media ? (
+        <div className="mt-3">{media}</div>
+      ) : (
+        <p
+          className={cn(
+            "mt-2 font-bold tracking-tight text-ink tabular-nums",
+            emphasis ? "text-[2rem] leading-none" : "text-2xl",
+          )}
+        >
+          {value}
+        </p>
+      )}
       {hint && <p className="mt-auto pt-1 text-xs text-muted-foreground">{hint}</p>}
     </Panel>
   );
@@ -110,7 +125,7 @@ export function Button({
   return (
     <button
       className={cn(
-        "inline-flex items-center justify-center gap-1.5 rounded-lg px-3.5 py-2 text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-60",
+        "inline-flex items-center justify-center gap-1.5 rounded-xl px-3.5 py-2 text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-60",
         variants[variant],
         className,
       )}
@@ -131,11 +146,11 @@ export function PageHeader({
   action?: ReactNode;
 }) {
   return (
-    <div className="flex flex-wrap items-start justify-between gap-3 border-b border-border pb-5">
+    <div className="flex flex-wrap items-start justify-between gap-3 border-b border-border pb-6">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight text-ink">{title}</h1>
+        <h1 className="text-[1.7rem] font-bold tracking-tight text-ink">{title}</h1>
         {description && (
-          <p className="mt-1 text-sm text-muted-foreground">{description}</p>
+          <p className="mt-1.5 text-sm text-muted-foreground">{description}</p>
         )}
       </div>
       {action}
