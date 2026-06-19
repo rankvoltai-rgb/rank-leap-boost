@@ -137,35 +137,35 @@ function SystemConsole() {
   return (
     <div className="space-y-6">
       <PageHeader
-        title="System Console"
+        title="Your SEO Overview"
         description="Your live SEO engine — opportunities, signals, and traffic at a glance."
       />
 
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
         <StatCard
-          label="Estimated Traffic"
+          label="Projected Monthly Traffic"
           value={<CountUp value={estimatedTraffic} className="text-gradient-traffic" />}
           hint="Monthly organic visitors"
           emphasis
         />
-        <StatCard label="Keyword Score" value={`${avgSignal || 84}/100`} hint="Avg opportunity strength" />
+        <StatCard label="Opportunity Strength" value={`${avgSignal || 84}/100`} hint="Avg opportunity strength" />
         <StatCard
           label="AI Algorithms"
           media={<AlgorithmLogos />}
           hint="Optimized for citation across leading AI engines"
         />
         <StatCard
-          label="Credits"
+          label="Article Credits"
           value={credits ? (credits.credits_total - credits.credits_used).toLocaleString() : "—"}
           hint="Remaining this cycle"
         />
       </div>
 
       <div className="space-y-5">
-        <h2 className="text-sm font-semibold text-ink">Content Radar</h2>
+        <h2 className="text-sm font-semibold text-ink">Content Opportunities</h2>
 
         <RadarSection
-          label="Selected"
+          label="In Your Queue"
           count={selected.length}
           empty="Nothing queued yet — add an opportunity below."
         >
@@ -179,7 +179,7 @@ function SystemConsole() {
         </RadarSection>
 
         <RadarSection
-          label="Add to Queue"
+          label="Recommended for You"
           count={opportunities.length}
           empty="No new opportunities right now — check back soon."
         >
