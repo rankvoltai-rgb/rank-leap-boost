@@ -515,7 +515,7 @@ function BlogEditor() {
               setKeyword(v);
               markDirty();
             }}
-            meta={(v) => v}
+            meta={meta}
             setMeta={(v) => {
               setMeta(v);
               markDirty();
@@ -526,8 +526,3 @@ function BlogEditor() {
     </div>
   );
 }
-
-// removed: placeholder kept editor lint-free
-const _unused: React.ReactNode = null;
-void _unused;
-void X;
