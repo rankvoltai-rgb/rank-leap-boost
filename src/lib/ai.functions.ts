@@ -430,9 +430,32 @@ export const generateBlogContent = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     const gateway = createLovableAiGatewayProvider(requireLovableApiKey());
     const style = await loadStyleContext(context.supabase, context.userId);
-    const prompt = `${style}\n\nWrite a complete, SEO-optimized blog post.\nTitle: ${data.title}\nPrimary keyword: ${data.keyword ?? data.title}\nBrief: ${data.description ?? ""}\n\nReturn this exact JSON shape:\n{"body":"Full markdown article with ## headings, paragraphs, and lists","description":"Meta description under 160 characters","seo_score":86,"traffic_estimate":1200,"tags":["Tag"]}`;
+    const primaryKeyword = data.keyword ?? data.title;
+    const prompt = `${style}
+
+You are an expert SEO writer producing a flagship, in-depth article engineered to RANK on Google AND be cited by AI answer engines (ChatGPT, Gemini, Claude, Perplexity, Google AI Overviews).
+
+Title: ${data.title}
+Primary keyword: ${primaryKeyword}
+Brief: ${data.description ?? ""}
+
+Write the full article in markdown following ALL of these rules:
+- Length: 2,500–3,500+ words of genuinely useful, specific content. Do not pad with fluff.
+- Open with a direct, quotable 2–3 sentence answer to the core question (answer-engine friendly), naturally including the primary keyword.
+- Immediately after the intro, add a "## Key Takeaways" section with 4–6 concise bullet points.
+- Use a clear hierarchy: 6–10 "##" H2 sections, with "###" H3 sub-sections where helpful.
+- Include at least two bulleted or numbered lists and, where relevant, a comparison or step-by-step section.
+- Use the primary keyword and closely related entities/synonyms naturally throughout (no keyword stuffing). Cover the topic semantically and comprehensively.
+- Keep paragraphs short (2–4 sentences) and scannable.
+- Where a link would help, add internal-link suggestions inline using this exact format: [anchor text](#internal: descriptive target page).
+- End with a "## Frequently Asked Questions" section containing 4–6 real Q&A pairs. Format each question as a "###" heading ending in "?", followed by a 2–4 sentence answer.
+- Close with a short, action-oriented conclusion.
+
+Return ONLY this exact JSON shape (escape all newlines inside "body"):
+{"body":"Full markdown article","description":"Compelling meta description, 120–160 characters, includes the keyword","seo_score":88,"traffic_estimate":1200,"tags":["Tag","Tag"]}`;
     const { text } = await generateText({
       model: model(gateway),
+      maxOutputTokens: 16000,
       prompt,
     });
     try {
