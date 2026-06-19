@@ -1,55 +1,88 @@
-# Dashboard refinement + modern redesign
+# Natural-language copy + a real Blog Editor (Google-Docs style)
 
-## 1. Estimated Traffic never shows 0 after onboarding
+## 1. Apply natural-language naming across the app
 
-Today the stat only sums `finished` blogs, so a fresh account (everything is `opportunity` / `scheduled`) reads **0**. Fix by summing `traffic_estimate` across **all** of the user's blogs.
+Replace the "machine/console" jargon with human, benefit-led section names. Proposed map (tell me to tweak any — easy to adjust):
 
-- In `dashboard.index.tsx`, replace the `finished`-only query with a single `listBlogs()` (no status filter) query keyed `["blogs","all"]`.
-- `estimatedTraffic = allBlogs.reduce((s,b) => s + (b.traffic_estimate ?? 0), 0)`.
-- Remove the now-unused `bonus` state and the `+bonus` math (the total is status-independent, so queuing an item no longer changes it). `addOpportunityToQueue` still invalidates `["blogs"]`, which refreshes everything.
+| Location | Current | New |
+| --- | --- | --- |
+| Sidebar group | Workspace | Your Workspace |
+| Nav | System Console | Overview |
+| Nav | Blog Engine | Content Studio |
+| Nav | Keyword Planner | Keyword Research |
+| Nav | Billing | Plan & Billing |
+| Console page title | System Console | Your SEO Overview |
+| Console section | Content Radar | Content Opportunities |
+| Console sub | Selected | In Your Queue |
+| Console sub | Add to Queue | Recommended for You |
+| Stat | Estimated Traffic | Projected Monthly Traffic |
+| Stat | Keyword Score | Opportunity Strength |
+| Stat | Credits | Article Credits |
+| Studio tabs | Opportunities / In Queue / Published | Ideas / Scheduled / Published |
 
-## 2. Content Radar → single-column list with Selected + Add to Queue
+Calendar, Settings, AI Algorithms stay. Only display copy changes — routes/keys/logic untouched.
 
-Convert the radar from a multi-column card grid into **one card per row, stacked vertically**, split into two labeled sections:
+## 2. Make generated articles longer, better, and AI-engine-optimized
+
+Upgrade the `generateBlogContent` server function prompt (`src/lib/ai.functions.ts`) so every article is built to be cited by AI answer engines and to rank:
+
+- Target **2,500–3,500+ words**, raise `maxOutputTokens` so long bodies aren't truncated.
+- Enforced structure: a one-paragraph **direct answer** up top (answer-engine friendly), a **TL;DR / Key Takeaways** block, logical `##`/`###` hierarchy, bullet & numbered lists, a comparison or steps section where relevant, and a **FAQ** section of 4–6 real Q&A pairs (schema-friendly phrasing).
+- Strong semantic coverage of the primary keyword + related entities, natural keyword usage (no stuffing), scannable short paragraphs, and inline **internal-link suggestion** cues.
+- Return a realistic computed `seo_score`, tags, and a <160-char meta description (already in the JSON shape; keep robust JSON extraction + fallbacks intact).
+
+## 3. Content Studio list → opens the new editor
+
+Rework `dashboard.blog-engine.tsx`:
+- Keep tabs (renamed) and the generate action.
+- Replace the read-only "View" modal with an **Open** button that navigates to the full editor for any article (finished or draft). Generate-then-open flow for unwritten ones.
+- Apply the modernized card styling already used on Overview.
+
+## 4. New Google-Docs-style editor (left content / right analytics)
+
+New route `src/routes/_authenticated/dashboard.editor.$blogId.tsx` → `/dashboard/editor/:blogId`, rendered inside the existing dashboard shell.
 
 ```text
-Content Radar
-  ── Selected ─────────────────────  (already queued)
-   [ card row ]  [ card row ]  ...
-  ── Add to Queue ─────────────────  (opportunities)
-   [ card row + "Add to Queue" btn ]
+┌───────────────────────────────┬───────────────────────┐
+│  Title (editable)             │  SEO Score  87 / 100  │
+│  ── formatting toolbar ──     │  ◐ circular gauge     │
+│                               │                       │
+│  Rich document editor         │  Optimization checks  │
+│  (WYSIWYG, Google-Docs feel)  │   ✓ Keyword in title  │
+│  H1/H2/H3, bold, lists, links │   ✓ 2,800 words       │
+│  AI bubble menu on selection  │   ⚠ Add 1 more H2     │
+│                               │                       │
+│                               │  Analytics            │
+│                               │   Words · Read time   │
+│                               │   Keyword density     │
+│                               │   Headings · Links    │
+│                               │   Readability grade   │
+│  [Autosaving…]   [Publish]    │  Target keyword ____  │
+└───────────────────────────────┴───────────────────────┘
 ```
 
-- **Selected** = `listBlogs("scheduled")` + `listBlogs("generating")` (already added to the queue). Cards are read-only (show a "Queued" pill instead of the button).
-- **Add to Queue** = `listBlogs("opportunity")`. Cards keep the `Add to Queue` action wired to `addOpportunityToQueue`.
-- Each section renders its own count and an empty state ("Nothing queued yet" / "No new opportunities right now").
-- Row layout: title + keyword on the left, traffic/competition/AI-signal pills and the action on the right, using the responsive `grid-cols-[minmax(0,1fr)_auto]` → `sm:flex` pattern so it survives mobile.
+**Left — editor**
+- TipTap WYSIWYG (StarterKit + Link + Placeholder) styled to look like a clean Google-Docs page (paper card, generous margins, document typography).
+- Editable **title**, plus body. Existing markdown bodies load into the editor; saves convert back to markdown so storage stays consistent with AI output and seeds.
+- **AI assist** bubble menu on text selection: Rewrite / Expand / Shorten / Improve SEO — wired to the existing `editBlogSection` server function, replacing the selection in place.
+- Debounced **autosave** to `updateBlog` (body, title, description, keyword, tags, seo_score) + a Publish button that sets `status: "finished"`. Toasts + query invalidation.
 
-## 3. "AI Signals" → "AI Algorithms" with engine logos
-
-- Rename the stat card label `AI Signals` to **AI Algorithms**.
-- Instead of a bare count, this card displays a **row of AI engine logos** (the algorithms the content is optimized to be cited by) with a short caption ("Optimized for citation across leading AI engines").
-- Logos shown: ChatGPT, Claude, Gemini, Google, Perplexity (already in `ai-logos.tsx`) plus the provided geometric "Boundless" mark, which I'll add as a new `BoundlessMark` component (inline SVG from the uploaded file, using `currentColor`/ink). Each logo gets an accessible label.
-
-## 4. Modernize the whole dashboard UI (Stripe / Notion clean-modern)
-
-Refresh the shared dashboard chrome and primitives so every page (Console, Blog Engine, Calendar, Keywords, Billing, Settings) inherits the new look. All changes use existing semantic tokens — no hardcoded colors.
-
-- **Sidebar**: lighter surface, refined spacing, grouped nav with a subtle muted section label. Active item becomes a soft `secondary` fill with bold `ink` text and a slim left accent bar (Notion-style) rather than a heavy solid-black pill. Add a compact workspace/brand row at top and push Settings/Billing visually distinct at the bottom.
-- **TopBar**: thinner, calmer hairline border, credits shown as a quiet chip, cleaner avatar + sign-out grouping.
-- **Primitives** (`primitives.tsx`):
-  - `Panel`: softer hairline border, refined `shadow-elevation`, slightly larger radius for the Stripe/Notion feel.
-  - `StatCard`: tighter uppercase label, larger tabular number, optional logo-row body (for the AI Algorithms card), restrained accent line only on the emphasis card.
-  - `Pill` / `Button`: keep variants, tune padding/weight for a crisper, more refined rhythm.
-  - `PageHeader`: more generous spacing and clearer hierarchy.
-- Apply consistent vertical rhythm/spacing across the route pages so the redesign reads as one unified system.
+**Right — SEO score & analytics (real, computed live)**
+- New deterministic client util `src/lib/seo-analysis.ts` computing from the live document + target keyword:
+  - **SEO score 0–100** (gauge) from weighted checks.
+  - **Checklist** (pass/warn/fail): keyword in title, keyword in first paragraph, keyword density in range, word count ≥ target, ≥3 H2s, has lists, has FAQ, meta description length, internal/external links present, readability.
+  - **Analytics**: word count, reading time, keyword density %, H2/H3 counts, link count, Flesch readability grade.
+- Editable **target keyword** and **meta description** fields feed the analysis and persist.
+- Score writes back to `seo_score` on save, so the list/cards reflect the real edited score.
 
 ## Technical notes
 
-- Files: `src/routes/_authenticated/dashboard.index.tsx` (traffic calc, radar restructure, AI Algorithms card), `src/components/dashboard/primitives.tsx` (StatCard logo support + visual polish), `src/components/dashboard/Sidebar.tsx`, `src/components/dashboard/TopBar.tsx`, `src/components/landing/ai-logos.tsx` (add `BoundlessMark`).
-- No DB/schema or server-function changes; all reads use existing `listBlogs` / `getCredits`. Data stays 100% real.
-- Reuse `useQuery` + `queryClient.invalidateQueries(["blogs"])` patterns already in place.
+- Add deps: `@tiptap/react @tiptap/starter-kit @tiptap/extension-link @tiptap/extension-placeholder`, plus `marked` (md→html on load) and `turndown` (html→md on save) — all Worker/SSR-safe pure JS.
+- TipTap touches `window`, so the editor mounts **client-only** (render after mount / guarded) to avoid SSR crashes; the route shell SSRs fine.
+- Editor route uses TanStack Query: `getBlog(blogId)` to load, `useServerFn(editBlogSection)` for AI edits, `updateBlog` for saves. New `getBlog` already exists in `api.ts`.
+- Two-column layout via existing `react-resizable-panels` (already installed) for the draggable splitter.
+- No database/schema changes — all fields (`body`, `description`, `keyword`, `tags`, `seo_score`, `status`) already exist. Data stays 100% real.
+- Naming changes are display-only; query keys, route paths, and status enums are unchanged to avoid regressions.
 
-## Open item
-
-The 4th uploaded logo ("Boundless Book") had no engine name provided — I'll render it labeled "Boundless"; tell me the correct name if it should read differently.
+## Out of scope
+No changes to onboarding, payments, calendar logic, or DB schema. The SEO score is computed in-app (no external SEO API) unless you want SEMrush wired in later.
