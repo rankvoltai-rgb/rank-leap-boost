@@ -232,7 +232,7 @@ function BlogEditor() {
   const editor = useEditor({
     immediatelyRender: false,
     extensions: [
-      StarterKit.configure({ heading: { levels: [1, 2, 3] } }),
+      StarterKit.configure({ heading: { levels: [1, 2, 3] }, link: false }),
       LinkExtension.configure({ openOnClick: false, autolink: true }),
       Placeholder.configure({ placeholder: "Start writing your article…" }),
     ],
