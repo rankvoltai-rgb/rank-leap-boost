@@ -51,10 +51,31 @@ export function PerplexityMark({ className }: { className?: string }) {
   );
 }
 
+export function BoundlessMark({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 100 100" className={cn("text-ink", className)} aria-hidden>
+      <path
+        fill="currentColor"
+        d="M88.4 36.6H73.6L84.1 26.1l-10.2-10.2L63.4 26.4V11.6h-14.4v14.8L38.5 15.9 28.3 26.1 38.8 36.6H24v14.4h14.8L28.3 61.5l10.2 10.2L49 61.2v14.8h14.4V61.2l10.5 10.5 10.2-10.2L73.6 51H88.4V36.6ZM49 51 38.5 40.5 49 30v21Zm14.4 0V30L73.9 40.5 63.4 51Z"
+      />
+    </svg>
+  );
+}
+
 export const AI_MARKS = [
   { name: "ChatGPT", Mark: ChatGPTMark },
   { name: "Google", Mark: GoogleMark },
   { name: "Gemini", Mark: GeminiMark },
   { name: "Claude", Mark: ClaudeMark },
   { name: "Perplexity", Mark: PerplexityMark },
+] as const;
+
+/* AI answer engines that the content engine optimizes citations for. */
+export const AI_ALGORITHM_MARKS = [
+  { name: "ChatGPT", Mark: ChatGPTMark },
+  { name: "Claude", Mark: ClaudeMark },
+  { name: "Gemini", Mark: GeminiMark },
+  { name: "Google", Mark: GoogleMark },
+  { name: "Perplexity", Mark: PerplexityMark },
+  { name: "Boundless", Mark: BoundlessMark },
 ] as const;

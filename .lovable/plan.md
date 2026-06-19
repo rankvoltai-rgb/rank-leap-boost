@@ -1,54 +1,55 @@
-# Build out the rest of the dashboard
+# Dashboard refinement + modern redesign
 
-Complete the four outstanding areas of the Rankvolt dashboard using real data from the backend. No mock/seed fallbacks — each page reads live from the database and shows a clean empty state when there's nothing.
+## 1. Estimated Traffic never shows 0 after onboarding
 
-## What exists today
-- Working pages: **System Console** (`/dashboard`), **Blog Engine** (`/dashboard/blog-engine`), **Billing** (`/dashboard/billing`, not linked in the sidebar).
-- Sidebar lists Calendar, Keyword Planner, Settings as disabled "soon" buttons.
-- The data layer (`src/lib/api.ts`) already exposes almost everything needed: `listBlogs`, `updateBlog`, `prioritizeBlog`, `deleteBlog`, `listKeywords`, `addKeyword`, `deleteKeyword`, `getProfile`, `getSettings`, `updateSettings`, `getCredits`, `purchaseCredits`.
-- Reusable UI primitives: `Panel`, `StatCard`, `Pill`, `Button`, `PageHeader` (`src/components/dashboard/primitives.tsx`).
+Today the stat only sums `finished` blogs, so a fresh account (everything is `opportunity` / `scheduled`) reads **0**. Fix by summing `traffic_estimate` across **all** of the user's blogs.
 
-## 1. Sidebar nav (`src/components/dashboard/Sidebar.tsx`)
-Replace the placeholder NAV with real, ready routes and correct active-state matching:
-- System Console → `/dashboard`
-- Blog Engine → `/dashboard/blog-engine`
-- Calendar → `/dashboard/calendar`
-- Keyword Planner → `/dashboard/keywords`
-- Billing → `/dashboard/billing` (CreditCard icon)
-- Settings → `/dashboard/settings`
+- In `dashboard.index.tsx`, replace the `finished`-only query with a single `listBlogs()` (no status filter) query keyed `["blogs","all"]`.
+- `estimatedTraffic = allBlogs.reduce((s,b) => s + (b.traffic_estimate ?? 0), 0)`.
+- Remove the now-unused `bonus` state and the `+bonus` math (the total is status-independent, so queuing an item no longer changes it). `addOpportunityToQueue` still invalidates `["blogs"]`, which refreshes everything.
 
-Fix active highlighting so child routes (e.g. `/dashboard/blog-engine`) match correctly rather than only exact `===` on `/dashboard`.
+## 2. Content Radar → single-column list with Selected + Add to Queue
 
-## 2. Calendar (`src/routes/_authenticated/dashboard.calendar.tsx`)
-A publishing schedule for queued content.
-- Loads scheduled/generating blogs via `listBlogs("scheduled")` + `listBlogs("generating")`, grouped by `scheduled_date`.
-- Header stat row: items in queue, next publish date, total estimated traffic in queue.
-- A simple ordered timeline/agenda grouped by date (upcoming dates as sections, each showing the blogs with title, keyword pill, traffic pill).
-- Per-item actions: **Prioritize** (calls `prioritizeBlog`, moves to top) and **Reschedule** date via a date picker (shadcn `Calendar` in a popover, writes `scheduled_date` through `updateBlog`).
-- Empty state when nothing is queued, with a link to the Blog Engine opportunities.
+Convert the radar from a multi-column card grid into **one card per row, stacked vertically**, split into two labeled sections:
 
-## 3. Keyword Planner (`src/routes/_authenticated/dashboard.keywords.tsx`)
-Manage the keyword library and review AI-discovered keywords.
-- Two tabs: **Library** (`listKeywords("library")`) and **Discovered** (`listKeywords("discovered")`).
-- Add-keyword input (adds to library via `addKeyword`), remove per row via `deleteKeyword`.
-- Table/cards showing name, search volume, intent, trend (as pills), source.
-- Stat row: total keywords, total tracked search volume, count of high-intent keywords.
-- Empty states per tab.
+```text
+Content Radar
+  ── Selected ─────────────────────  (already queued)
+   [ card row ]  [ card row ]  ...
+  ── Add to Queue ─────────────────  (opportunities)
+   [ card row + "Add to Queue" btn ]
+```
 
-## 4. Settings (`src/routes/_authenticated/dashboard.settings.tsx`)
-- **Brand profile** form: brand name, website URL, product description — loaded from `getProfile`, saved via a new `updateProfile` helper (added to `api.ts`, upsert by `user_id`).
-- **Content preferences** form: tone, writing style, audience, brand voice — loaded from `getSettings`, saved via existing `updateSettings`.
-- **Credits**: show remaining/used from `getCredits`, plus a small "buy credits" section offering 2–3 packages that call existing `purchaseCredits`. (Note below on payments.)
-- Save buttons with toast feedback and query invalidation.
+- **Selected** = `listBlogs("scheduled")` + `listBlogs("generating")` (already added to the queue). Cards are read-only (show a "Queued" pill instead of the button).
+- **Add to Queue** = `listBlogs("opportunity")`. Cards keep the `Add to Queue` action wired to `addOpportunityToQueue`.
+- Each section renders its own count and an empty state ("Nothing queued yet" / "No new opportunities right now").
+- Row layout: title + keyword on the left, traffic/competition/AI-signal pills and the action on the right, using the responsive `grid-cols-[minmax(0,1fr)_auto]` → `sm:flex` pattern so it survives mobile.
 
-## 5. Small API addition (`src/lib/api.ts`)
-Add `updateProfile(patch)` (upsert profile row by `user_id`) since only an onboarding-time profile writer exists today. No other backend/schema changes — all required tables (`blogs`, `keywords`, `profiles`, `content_settings`, `credit_accounts`, `credit_transactions`) and RLS already exist.
+## 3. "AI Signals" → "AI Algorithms" with engine logos
+
+- Rename the stat card label `AI Signals` to **AI Algorithms**.
+- Instead of a bare count, this card displays a **row of AI engine logos** (the algorithms the content is optimized to be cited by) with a short caption ("Optimized for citation across leading AI engines").
+- Logos shown: ChatGPT, Claude, Gemini, Google, Perplexity (already in `ai-logos.tsx`) plus the provided geometric "Boundless" mark, which I'll add as a new `BoundlessMark` component (inline SVG from the uploaded file, using `currentColor`/ink). Each logo gets an accessible label.
+
+## 4. Modernize the whole dashboard UI (Stripe / Notion clean-modern)
+
+Refresh the shared dashboard chrome and primitives so every page (Console, Blog Engine, Calendar, Keywords, Billing, Settings) inherits the new look. All changes use existing semantic tokens — no hardcoded colors.
+
+- **Sidebar**: lighter surface, refined spacing, grouped nav with a subtle muted section label. Active item becomes a soft `secondary` fill with bold `ink` text and a slim left accent bar (Notion-style) rather than a heavy solid-black pill. Add a compact workspace/brand row at top and push Settings/Billing visually distinct at the bottom.
+- **TopBar**: thinner, calmer hairline border, credits shown as a quiet chip, cleaner avatar + sign-out grouping.
+- **Primitives** (`primitives.tsx`):
+  - `Panel`: softer hairline border, refined `shadow-elevation`, slightly larger radius for the Stripe/Notion feel.
+  - `StatCard`: tighter uppercase label, larger tabular number, optional logo-row body (for the AI Algorithms card), restrained accent line only on the emphasis card.
+  - `Pill` / `Button`: keep variants, tune padding/weight for a crisper, more refined rhythm.
+  - `PageHeader`: more generous spacing and clearer hierarchy.
+- Apply consistent vertical rhythm/spacing across the route pages so the redesign reads as one unified system.
 
 ## Technical notes
-- Each route follows the existing pattern: `createFileRoute` + `useQuery`/`useQueryClient`, `useServerFn` only where needed (none of these need new server functions). Reuse `PageHeader`, `Panel`, `StatCard`, `Pill`, `Button`.
-- Date picker uses the existing shadcn `Calendar` + `Popover` with `pointer-events-auto`.
-- `purchaseCredits` currently writes a credit transaction and bumps the balance directly (no Stripe charge). This is the existing behavior; I'll wire the Settings "buy credits" UI to it as-is. If you want real Stripe-charged credit top-ups instead, tell me and I'll add a checkout flow — otherwise it stays as the current in-app grant.
-- All new `<Link to="...">` targets correspond to the new route files, created in the same pass so the router type-checks.
 
-## Out of scope
-No changes to onboarding, landing pages, payments server functions, or database schema (beyond using existing tables).
+- Files: `src/routes/_authenticated/dashboard.index.tsx` (traffic calc, radar restructure, AI Algorithms card), `src/components/dashboard/primitives.tsx` (StatCard logo support + visual polish), `src/components/dashboard/Sidebar.tsx`, `src/components/dashboard/TopBar.tsx`, `src/components/landing/ai-logos.tsx` (add `BoundlessMark`).
+- No DB/schema or server-function changes; all reads use existing `listBlogs` / `getCredits`. Data stays 100% real.
+- Reuse `useQuery` + `queryClient.invalidateQueries(["blogs"])` patterns already in place.
+
+## Open item
+
+The 4th uploaded logo ("Boundless Book") had no engine name provided — I'll render it labeled "Boundless"; tell me the correct name if it should read differently.
