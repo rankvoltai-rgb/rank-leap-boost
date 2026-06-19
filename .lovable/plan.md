@@ -1,55 +1,54 @@
-## Goal
+# Build out the rest of the dashboard
 
-Turn the subscription step of onboarding into a polished split-screen, keep the existing CTA → subscribe → dashboard flow, and harden the logic so payment reliably lands the user in the dashboard.
+Complete the four outstanding areas of the Rankvolt dashboard using real data from the backend. No mock/seed fallbacks — each page reads live from the database and shows a clean empty state when there's nothing.
 
-## Current behavior
+## What exists today
+- Working pages: **System Console** (`/dashboard`), **Blog Engine** (`/dashboard/blog-engine`), **Billing** (`/dashboard/billing`, not linked in the sidebar).
+- Sidebar lists Calendar, Keyword Planner, Settings as disabled "soon" buttons.
+- The data layer (`src/lib/api.ts`) already exposes almost everything needed: `listBlogs`, `updateBlog`, `prioritizeBlog`, `deleteBlog`, `listKeywords`, `addKeyword`, `deleteKeyword`, `getProfile`, `getSettings`, `updateSettings`, `getCredits`, `purchaseCredits`.
+- Reusable UI primitives: `Panel`, `StatCard`, `Pill`, `Button`, `PageHeader` (`src/components/dashboard/primitives.tsx`).
 
-The onboarding component (`src/components/auth/Onboarding.tsx`) has four stages: `form → scanning → results → checkout`. All four render inside one narrow centered card (`max-w-xl`/`max-w-3xl`) with a progress header.
+## 1. Sidebar nav (`src/components/dashboard/Sidebar.tsx`)
+Replace the placeholder NAV with real, ready routes and correct active-state matching:
+- System Console → `/dashboard`
+- Blog Engine → `/dashboard/blog-engine`
+- Calendar → `/dashboard/calendar`
+- Keyword Planner → `/dashboard/keywords`
+- Billing → `/dashboard/billing` (CreditCard icon)
+- Settings → `/dashboard/settings`
 
-- On the `results` stage, the **"Start 48-hour free trial"** button (`startTrial`) queues articles, generates the strategy, activates the trial, fetches the user, then switches to the `checkout` stage.
-- The `checkout` stage renders `<StripeEmbeddedCheckout priceId="business_monthly" trialDays={2} .../>` squeezed inside the small card.
-- Stripe `return_url` is already `/dashboard?checkout=success&session_id={CHECKOUT_SESSION_ID}`. The `/dashboard` route is under `_authenticated`, which redirects to `/auth` if not logged in (the user is logged in here, so it resolves).
+Fix active highlighting so child routes (e.g. `/dashboard/blog-engine`) match correctly rather than only exact `===` on `/dashboard`.
 
-So the CTA → subscribe → dashboard chain already exists — the work is the **split-screen redesign** plus tightening the logic.
+## 2. Calendar (`src/routes/_authenticated/dashboard.calendar.tsx`)
+A publishing schedule for queued content.
+- Loads scheduled/generating blogs via `listBlogs("scheduled")` + `listBlogs("generating")`, grouped by `scheduled_date`.
+- Header stat row: items in queue, next publish date, total estimated traffic in queue.
+- A simple ordered timeline/agenda grouped by date (upcoming dates as sections, each showing the blogs with title, keyword pill, traffic pill).
+- Per-item actions: **Prioritize** (calls `prioritizeBlog`, moves to top) and **Reschedule** date via a date picker (shadcn `Calendar` in a popover, writes `scheduled_date` through `updateBlog`).
+- Empty state when nothing is queued, with a link to the Blog Engine opportunities.
 
-## What I'll build
+## 3. Keyword Planner (`src/routes/_authenticated/dashboard.keywords.tsx`)
+Manage the keyword library and review AI-discovered keywords.
+- Two tabs: **Library** (`listKeywords("library")`) and **Discovered** (`listKeywords("discovered")`).
+- Add-keyword input (adds to library via `addKeyword`), remove per row via `deleteKeyword`.
+- Table/cards showing name, search volume, intent, trend (as pills), source.
+- Stat row: total keywords, total tracked search volume, count of high-intent keywords.
+- Empty states per tab.
 
-### 1. Split-screen checkout layout
-When `stage === "checkout"`, break out of the narrow onboarding card and render a full-height two-column layout (single column stacked on mobile):
+## 4. Settings (`src/routes/_authenticated/dashboard.settings.tsx`)
+- **Brand profile** form: brand name, website URL, product description — loaded from `getProfile`, saved via a new `updateProfile` helper (added to `api.ts`, upsert by `user_id`).
+- **Content preferences** form: tone, writing style, audience, brand voice — loaded from `getSettings`, saved via existing `updateSettings`.
+- **Credits**: show remaining/used from `getCredits`, plus a small "buy credits" section offering 2–3 packages that call existing `purchaseCredits`. (Note below on payments.)
+- Save buttons with toast feedback and query invalidation.
 
-```text
-+---------------------------+----------------------------+
-|  PLAN / VALUE PANEL       |  STRIPE CHECKOUT PANEL     |
-|  - Logo                   |  - "Activate your trial"   |
-|  - "Business" plan        |  - trust badges            |
-|  - $49.5/mo (was $99)     |  - <StripeEmbeddedCheckout>|
-|  - included features list |    (embedded Stripe form)  |
-|  - trust badges + social  |                            |
-|    proof (stars, faces)   |                            |
-+---------------------------+----------------------------+
-```
-
-- **Left panel:** dark `bg-ink` brand panel (consistent with the existing `AuthSplit` brand side) showing the plan name, price with strikethrough, the included-features checklist (reuse the list already in `Pricing.tsx`), trust badges (Secured by Stripe / Cancel anytime / 48h free), and social proof (avatars + stars). This is original creative material inspired by — not copied from — the reference screenshot.
-- **Right panel:** clean `bg-card`/`bg-background` panel with the heading + the existing `StripeEmbeddedCheckout` component mounted in a roomy container so the Stripe form has full width.
-- Other stages (`form`, `scanning`, `results`) keep the current centered-card layout and progress header unchanged.
-
-All colors use existing semantic tokens (`ink`, `card`, `success`, `muted-foreground`, etc.) — no hardcoded colors, dark-mode safe.
-
-### 2. Subscribe CTA → subscribe flow
-Keep the `results` "Start 48-hour free trial" button as the subscribe CTA. No change to its async logic; it transitions into the new split-screen checkout. (Optionally relabel to "Continue to checkout" — I'll keep the current copy unless you prefer otherwise.)
-
-### 3. Post-subscribe → dashboard redirect (make it 100% reliable)
-- Keep Stripe `return_url = ${origin}/dashboard?checkout=success&session_id={CHECKOUT_SESSION_ID}`. With `ui_mode: "embedded_page"`, Stripe performs a full-page redirect there after successful payment — this is the canonical post-payment redirect and needs no extra client logic.
-- Verify the `_authenticated` guard resolves the session before rendering `/dashboard` (it does: `beforeLoad` calls `supabase.auth.getUser()`), so the authenticated user lands on the dashboard cleanly.
-- Add a small success toast on `/dashboard` when `?checkout=success` is present (and strip the query params from the URL afterward) so the return feels finished.
+## 5. Small API addition (`src/lib/api.ts`)
+Add `updateProfile(patch)` (upsert profile row by `user_id`) since only an onboarding-time profile writer exists today. No other backend/schema changes — all required tables (`blogs`, `keywords`, `profiles`, `content_settings`, `credit_accounts`, `credit_transactions`) and RLS already exist.
 
 ## Technical notes
-
-- File touched primarily: `src/components/auth/Onboarding.tsx` (extract the checkout stage into a full-screen split layout; the early `return` for the checkout stage renders the split screen instead of the card).
-- Reuse `StripeEmbeddedCheckout`, `Logo`, `Avatar`, `Stars` (from `shared`) — no new dependencies.
-- Light edit to `src/routes/_authenticated/dashboard.index.tsx` (or the dashboard layout) to read `checkout=success` and show a one-time success toast, then clean the URL via `router.navigate`.
-- No changes to `payments.functions.ts`, the Stripe server utility, or pricing/products — the `business_monthly` price and 2-day trial stay as configured.
+- Each route follows the existing pattern: `createFileRoute` + `useQuery`/`useQueryClient`, `useServerFn` only where needed (none of these need new server functions). Reuse `PageHeader`, `Panel`, `StatCard`, `Pill`, `Button`.
+- Date picker uses the existing shadcn `Calendar` + `Popover` with `pointer-events-auto`.
+- `purchaseCredits` currently writes a credit transaction and bumps the balance directly (no Stripe charge). This is the existing behavior; I'll wire the Settings "buy credits" UI to it as-is. If you want real Stripe-charged credit top-ups instead, tell me and I'll add a checkout flow — otherwise it stays as the current in-app grant.
+- All new `<Link to="...">` targets correspond to the new route files, created in the same pass so the router type-checks.
 
 ## Out of scope
-- No new payment provider, products, or price changes.
-- No change to the analysis/scanning/results logic.
+No changes to onboarding, landing pages, payments server functions, or database schema (beyond using existing tables).
