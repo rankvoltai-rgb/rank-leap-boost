@@ -233,6 +233,22 @@ export async function updateSettings(patch: Partial<ContentSettings>): Promise<v
   if (error) throw error;
 }
 
+export async function updateProfile(patch: Partial<Profile>): Promise<void> {
+  const user_id = await uid();
+  const existing = await supabase
+    .from("profiles")
+    .select("id")
+    .eq("user_id", user_id)
+    .maybeSingle();
+  if (existing.data) {
+    const { error } = await supabase.from("profiles").update(patch).eq("user_id", user_id);
+    if (error) throw error;
+  } else {
+    const { error } = await supabase.from("profiles").insert({ ...patch, user_id });
+    if (error) throw error;
+  }
+}
+
 export async function purchaseCredits(pkg: string, credits: number, amountCents: number): Promise<void> {
   const user_id = await uid();
   const current = await getCredits();
