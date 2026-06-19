@@ -16,6 +16,7 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedDashboardIndexRouteImport } from './routes/_authenticated/dashboard.index'
+import { Route as AuthenticatedDashboardCalendarRouteImport } from './routes/_authenticated/dashboard.calendar'
 import { Route as AuthenticatedDashboardBlogEngineRouteImport } from './routes/_authenticated/dashboard.blog-engine'
 import { Route as AuthenticatedDashboardBillingRouteImport } from './routes/_authenticated/dashboard.billing'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
@@ -55,6 +56,12 @@ const AuthenticatedDashboardIndexRoute =
     path: '/',
     getParentRoute: () => AuthenticatedDashboardRoute,
   } as any)
+const AuthenticatedDashboardCalendarRoute =
+  AuthenticatedDashboardCalendarRouteImport.update({
+    id: '/calendar',
+    path: '/calendar',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
 const AuthenticatedDashboardBlogEngineRoute =
   AuthenticatedDashboardBlogEngineRouteImport.update({
     id: '/blog-engine',
@@ -82,6 +89,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof AuthenticatedDashboardRouteWithChildren
   '/dashboard/billing': typeof AuthenticatedDashboardBillingRoute
   '/dashboard/blog-engine': typeof AuthenticatedDashboardBlogEngineRoute
+  '/dashboard/calendar': typeof AuthenticatedDashboardCalendarRoute
   '/dashboard/': typeof AuthenticatedDashboardIndexRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
@@ -92,6 +100,7 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/dashboard/billing': typeof AuthenticatedDashboardBillingRoute
   '/dashboard/blog-engine': typeof AuthenticatedDashboardBlogEngineRoute
+  '/dashboard/calendar': typeof AuthenticatedDashboardCalendarRoute
   '/dashboard': typeof AuthenticatedDashboardIndexRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
@@ -105,6 +114,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRouteWithChildren
   '/_authenticated/dashboard/billing': typeof AuthenticatedDashboardBillingRoute
   '/_authenticated/dashboard/blog-engine': typeof AuthenticatedDashboardBlogEngineRoute
+  '/_authenticated/dashboard/calendar': typeof AuthenticatedDashboardCalendarRoute
   '/_authenticated/dashboard/': typeof AuthenticatedDashboardIndexRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
@@ -118,6 +128,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/dashboard/billing'
     | '/dashboard/blog-engine'
+    | '/dashboard/calendar'
     | '/dashboard/'
     | '/api/public/payments/webhook'
   fileRoutesByTo: FileRoutesByTo
@@ -128,6 +139,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/dashboard/billing'
     | '/dashboard/blog-engine'
+    | '/dashboard/calendar'
     | '/dashboard'
     | '/api/public/payments/webhook'
   id:
@@ -140,6 +152,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard'
     | '/_authenticated/dashboard/billing'
     | '/_authenticated/dashboard/blog-engine'
+    | '/_authenticated/dashboard/calendar'
     | '/_authenticated/dashboard/'
     | '/api/public/payments/webhook'
   fileRoutesById: FileRoutesById
@@ -204,6 +217,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardIndexRouteImport
       parentRoute: typeof AuthenticatedDashboardRoute
     }
+    '/_authenticated/dashboard/calendar': {
+      id: '/_authenticated/dashboard/calendar'
+      path: '/calendar'
+      fullPath: '/dashboard/calendar'
+      preLoaderRoute: typeof AuthenticatedDashboardCalendarRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
     '/_authenticated/dashboard/blog-engine': {
       id: '/_authenticated/dashboard/blog-engine'
       path: '/blog-engine'
@@ -231,6 +251,7 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedDashboardRouteChildren {
   AuthenticatedDashboardBillingRoute: typeof AuthenticatedDashboardBillingRoute
   AuthenticatedDashboardBlogEngineRoute: typeof AuthenticatedDashboardBlogEngineRoute
+  AuthenticatedDashboardCalendarRoute: typeof AuthenticatedDashboardCalendarRoute
   AuthenticatedDashboardIndexRoute: typeof AuthenticatedDashboardIndexRoute
 }
 
@@ -239,6 +260,7 @@ const AuthenticatedDashboardRouteChildren: AuthenticatedDashboardRouteChildren =
     AuthenticatedDashboardBillingRoute: AuthenticatedDashboardBillingRoute,
     AuthenticatedDashboardBlogEngineRoute:
       AuthenticatedDashboardBlogEngineRoute,
+    AuthenticatedDashboardCalendarRoute: AuthenticatedDashboardCalendarRoute,
     AuthenticatedDashboardIndexRoute: AuthenticatedDashboardIndexRoute,
   }
 
