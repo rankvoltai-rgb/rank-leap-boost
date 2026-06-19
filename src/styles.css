@@ -249,3 +249,87 @@
     transparent 100%
   );
 }
+
+/* ---------------- Document editor (TipTap / Google-Docs style) ---------------- */
+.doc-editor .tiptap {
+  outline: none;
+  color: var(--foreground);
+  font-size: 1.0625rem;
+  line-height: 1.85;
+}
+.doc-editor .tiptap > * + * {
+  margin-top: 1.1em;
+}
+.doc-editor .tiptap h1 {
+  font-size: 1.85rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin-top: 1.6em;
+}
+.doc-editor .tiptap h2 {
+  font-size: 1.45rem;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  line-height: 1.25;
+  margin-top: 1.6em;
+}
+.doc-editor .tiptap h3 {
+  font-size: 1.15rem;
+  font-weight: 600;
+  line-height: 1.3;
+  margin-top: 1.3em;
+}
+.doc-editor .tiptap p {
+  color: oklch(from var(--foreground) calc(l + 0.06) c h);
+}
+.doc-editor .tiptap ul,
+.doc-editor .tiptap ol {
+  padding-left: 1.5rem;
+}
+.doc-editor .tiptap ul {
+  list-style: disc;
+}
+.doc-editor .tiptap ol {
+  list-style: decimal;
+}
+.doc-editor .tiptap li {
+  margin-top: 0.35em;
+}
+.doc-editor .tiptap li p {
+  margin: 0;
+}
+.doc-editor .tiptap a {
+  color: var(--info, var(--primary));
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.doc-editor .tiptap blockquote {
+  border-left: 3px solid var(--border);
+  padding-left: 1rem;
+  color: var(--muted-foreground);
+  font-style: italic;
+}
+.doc-editor .tiptap code {
+  background: var(--secondary);
+  border-radius: 0.35rem;
+  padding: 0.1em 0.35em;
+  font-size: 0.9em;
+}
+.doc-editor .tiptap pre {
+  background: var(--secondary);
+  border-radius: 0.6rem;
+  padding: 0.9rem 1rem;
+  overflow-x: auto;
+}
+.doc-editor .tiptap pre code {
+  background: transparent;
+  padding: 0;
+}
+.doc-editor .tiptap p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  color: var(--muted-foreground);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
