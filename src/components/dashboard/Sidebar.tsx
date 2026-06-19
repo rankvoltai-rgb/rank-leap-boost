@@ -11,14 +11,14 @@ import { Logo } from "@/components/landing/shared";
 import { cn } from "@/lib/utils";
 
 const NAV = [
-  { title: "System Console", icon: Radar, to: "/dashboard", exact: true },
-  { title: "Blog Engine", icon: FileText, to: "/dashboard/blog-engine" },
+  { title: "Overview", icon: Radar, to: "/dashboard", exact: true },
+  { title: "Content Studio", icon: FileText, to: "/dashboard/blog-engine" },
   { title: "Calendar", icon: CalendarDays, to: "/dashboard/calendar" },
-  { title: "Keyword Planner", icon: Search, to: "/dashboard/keywords" },
+  { title: "Keyword Research", icon: Search, to: "/dashboard/keywords" },
 ];
 
 const NAV_FOOTER = [
-  { title: "Billing", icon: CreditCard, to: "/dashboard/billing" },
+  { title: "Plan & Billing", icon: CreditCard, to: "/dashboard/billing" },
   { title: "Settings", icon: Settings, to: "/dashboard/settings" },
 ];
 
@@ -60,7 +60,7 @@ export function Sidebar() {
         <Logo />
       </div>
       <p className="px-5 pb-1.5 pt-5 text-[0.62rem] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
-        Workspace
+        Your Workspace
       </p>
       <nav className="flex-1 space-y-0.5 px-3 pt-1">{NAV.map(renderItem)}</nav>
       <div className="border-t border-border px-3 py-3">
