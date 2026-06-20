@@ -3,6 +3,7 @@ import { generateText } from "ai";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { createLovableAiGatewayProvider, requireLovableApiKey } from "./ai-gateway.server";
+import { gatherResearch, scoreArticle, type ResearchBrief } from "./research.server";
 
 const MODEL = "google/gemini-3-flash-preview";
 
@@ -35,6 +36,7 @@ type WebsiteAnalysis = {
 };
 
 type BlogContent = {
+  title: string;
   body: string;
   description: string;
   seo_score: number;
