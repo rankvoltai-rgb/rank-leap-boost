@@ -82,6 +82,7 @@ const BlogInput = z.object({
   title: z.string().trim().min(1),
   keyword: z.string().optional(),
   description: z.string().optional(),
+  wordCount: z.number().int().min(800).max(6000).optional(),
 });
 
 async function loadStyleContext(supabase: unknown, userId: string) {
