@@ -409,13 +409,14 @@ function normalizeBlogContent(
   rawText = "",
 ): BlogContent {
   const record = asRecord(value);
-  const title = input.title;
+  const title = cleanString(record.title, input.title).slice(0, 70);
   const body = cleanString(
     record.body,
     rawText.trim() ||
       `## ${title}\n\n${input.description ?? "This article covers the core search intent behind the topic."}\n\n## Key Takeaways\n\n- Explain the problem clearly.\n- Answer the buyer's next question.\n- Link readers to the most relevant service or product page.`,
   );
   return {
+    title,
     body,
     description: cleanString(
       record.description,
