@@ -3,6 +3,7 @@ import { generateText } from "ai";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { createLovableAiGatewayProvider, requireLovableApiKey } from "./ai-gateway.server";
+import { gatherResearch, scoreArticle, type ResearchBrief } from "./research.server";
 
 const MODEL = "google/gemini-3-flash-preview";
 
@@ -35,6 +36,7 @@ type WebsiteAnalysis = {
 };
 
 type BlogContent = {
+  title: string;
   body: string;
   description: string;
   seo_score: number;
@@ -80,6 +82,7 @@ const BlogInput = z.object({
   title: z.string().trim().min(1),
   keyword: z.string().optional(),
   description: z.string().optional(),
+  wordCount: z.number().int().min(800).max(6000).optional(),
 });
 
 async function loadStyleContext(supabase: unknown, userId: string) {
@@ -406,13 +409,14 @@ function normalizeBlogContent(
   rawText = "",
 ): BlogContent {
   const record = asRecord(value);
-  const title = input.title;
+  const title = cleanString(record.title, input.title).slice(0, 70);
   const body = cleanString(
     record.body,
     rawText.trim() ||
       `## ${title}\n\n${input.description ?? "This article covers the core search intent behind the topic."}\n\n## Key Takeaways\n\n- Explain the problem clearly.\n- Answer the buyer's next question.\n- Link readers to the most relevant service or product page.`,
   );
   return {
+    title,
     body,
     description: cleanString(
       record.description,
@@ -424,6 +428,148 @@ function normalizeBlogContent(
   };
 }
 
+function buildResearchBlock(keyword: string, research: ResearchBrief): string {
+  if (!research.ok) {
+    return `LIVE WEB RESEARCH: unavailable for this run. Infer the competitive landscape from expertise, and cite 3–5 reputable, real, well-known authoritative sources using accurate URLs you are confident exist (official docs, major publications, research bodies).`;
+  }
+  const top = research.topResults
+    .map((r, i) => `${i + 1}. ${r.title} — ${r.url}`)
+    .join("\n");
+  const headings = research.competitorHeadings.map((h) => `- ${h}`).join("\n");
+  const sources = research.sources.map((s) => `- ${s.title}: ${s.url}`).join("\n");
+  return `LIVE WEB RESEARCH — the top ranking pages for "${keyword}":
+Top 10 results:
+${top}
+
+Headings/subtopics competitors cover (cover these comprehensively and find the GAPS they miss):
+${headings || "- (no headings extracted)"}
+
+Use ONLY these REAL sources for in-text citations and the "## References" section (cite with [text](url)):
+${sources}
+
+Key points distilled from the results:
+${research.notes}`;
+}
+
+function buildBlueprint(opts: {
+  title: string;
+  keyword: string;
+  description: string;
+  wordCount: number;
+}): string {
+  const { title, keyword, description, wordCount } = opts;
+  return `You are a world-class SEO content strategist and writer. Produce a flagship, in-depth article engineered to RANK #1 on Google AND be cited by AI answer engines (ChatGPT, Gemini, Claude, Perplexity, Google AI Overviews).
+
+TOPIC: ${title}
+PRIMARY KEYWORD: ${keyword}
+BRIEF: ${description || "(none)"}
+TARGET WORD COUNT: ${wordCount} (meet or exceed it with genuinely useful, specific content — no fluff)
+
+Follow this exact blueprint:
+1. Analyze the top-ranking competitor pages above: their structure, headings, and key points. Beat them on depth and clarity.
+2. Build a comprehensive structure with AT LEAST 15 headings/subheadings (a single H1, then ## H2, ### H3, and #### H4 where useful) with a logical flow that fully satisfies user intent.
+3. Naturally weave in 10–15 related long-tail keywords and LSI/semantic terms throughout.
+4. H1 title: SEO-optimized, UNDER 60 characters, includes the PRIMARY KEYWORD, appeals to the target audience.
+5. Introduction: 150–200 words that hook the reader, introduce the topic, and naturally include the primary keyword. Lead with a direct, quotable 2–3 sentence answer (answer-engine friendly).
+6. Each ## H2 section: 300–500 words of in-depth content, with concrete examples/data/mini case studies, 1–2 long-tail/LSI terms, a conversational tone speaking directly to the audience, and at least one unique insight competitors miss.
+7. Add a "## Key Takeaways" (or "Quick Takeaways") section with 5–7 concise bullet points.
+8. Describe 2–3 image/infographic concepts inline using this exact format: **[Image: <description>] (alt: "<keyword-optimized alt text>")**.
+9. Include at least two bulleted or numbered lists and, where relevant, a comparison or step-by-step section.
+10. Conclusion: 200–250 words that summarize key points, reinforce the message, and end with a clear call-to-action for the audience.
+11. "## Frequently Asked Questions": exactly 5 Q&A pairs. Each question is a ### heading ending in "?", followed by a concise 2–4 sentence answer that includes a long-tail keyword.
+12. Add one short reader-engagement line inviting feedback and social shares, ending with a question.
+13. In-text citations to the real sources, plus a final "## References" section listing them as markdown links [title](url).
+14. Keyword density for the primary keyword: aim for 1–2% (no stuffing). Keep paragraphs short (2–4 sentences) and scannable; vary sentence length for natural rhythm.
+15. Where an internal link would help, add suggestions inline using: [anchor text](#internal: descriptive target page).
+16. Format everything in clean Markdown: bold key phrases, italics for emphasis.`;
+}
+
+const BLOG_JSON_SHAPE = `Return ONLY this exact JSON shape (escape all newlines inside "body"):
+{"title":"SEO H1 under 60 chars including the keyword","body":"Full markdown article","description":"Compelling meta description, 120–160 characters, includes the keyword","seo_score":92,"traffic_estimate":1200,"tags":["Tag","Tag"]}`;
+
+/** Re-run the model on the exact failing SEO checks until the article scores 100. */
+async function optimizeToHundred(
+  gateway: Gateway,
+  style: string,
+  content: BlogContent,
+  primaryKeyword: string,
+  input: z.infer<typeof BlogInput>,
+): Promise<BlogContent> {
+  let current = content;
+  for (let pass = 0; pass < 3; pass += 1) {
+    const analysis = scoreArticle({
+      title: current.title,
+      keyword: primaryKeyword,
+      metaDescription: current.description,
+      body: current.body,
+    });
+    if (analysis.score >= 100) {
+      return { ...current, seo_score: 100 };
+    }
+    const gaps = analysis.checks
+      .filter((c) => c.status !== "pass")
+      .map((c) => `- ${c.label}: ${c.detail}`)
+      .join("\n");
+    if (!gaps) return { ...current, seo_score: analysis.score };
+
+    const fixPrompt = `${style}
+
+You are optimizing an existing SEO article to a PERFECT 100/100 score. Keep everything that already works; fix ONLY the issues below while preserving the article's depth, structure, citations, and meaning.
+
+PRIMARY KEYWORD: ${primaryKeyword}
+ISSUES TO FIX (current score ${analysis.score}/100):
+${gaps}
+
+How to fix common issues:
+- Keyword in title: include the exact primary keyword in the H1 (keep it under 60 characters).
+- Keyword in introduction: mention the primary keyword in the first 100 words.
+- Keyword density: adjust usage to land between 1% and 2% (no stuffing).
+- Content length: expand thin sections with specific, useful detail.
+- Section structure: ensure at least 3 ## H2 sections and helpful ### H3s.
+- Scannable lists: add bulleted/numbered lists.
+- FAQ: include a "## Frequently Asked Questions" section with 5 ### question headings ending in "?".
+- Meta description: rewrite to 120–160 characters including the keyword.
+- Links: include at least 2 markdown links [text](url) (citations / internal-link suggestions).
+- Readability: shorten long sentences, use simpler words and shorter paragraphs to raise readability.
+
+Current title: ${current.title}
+Current meta description: ${current.description}
+Current article (markdown):
+"""
+${current.body}
+"""
+
+Return ONLY this exact JSON shape (escape all newlines inside "body"):
+{"title":"optimized H1","body":"full improved markdown article","description":"120–160 char meta with keyword"}`;
+
+    const { text } = await generateText({
+      model: model(gateway),
+      maxOutputTokens: 24000,
+      prompt: fixPrompt,
+    });
+    try {
+      const record = asRecord(extractJson(text));
+      const next = normalizeBlogContent(record, { ...input, title: current.title }, current.body);
+      current = {
+        ...current,
+        title: next.title,
+        body: next.body,
+        description: next.description,
+      };
+    } catch {
+      // Keep the best version we have if a pass fails to parse.
+      break;
+    }
+  }
+  const finalScore = scoreArticle({
+    title: current.title,
+    keyword: primaryKeyword,
+    metaDescription: current.description,
+    body: current.body,
+  }).score;
+  return { ...current, seo_score: finalScore };
+}
+
 export const generateBlogContent = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => BlogInput.parse(d))
@@ -431,38 +577,29 @@ export const generateBlogContent = createServerFn({ method: "POST" })
     const gateway = createLovableAiGatewayProvider(requireLovableApiKey());
     const style = await loadStyleContext(context.supabase, context.userId);
     const primaryKeyword = data.keyword ?? data.title;
+    const wordCount = data.wordCount ?? 2750;
+
+    const research = await gatherResearch(primaryKeyword);
     const prompt = `${style}
 
-You are an expert SEO writer producing a flagship, in-depth article engineered to RANK on Google AND be cited by AI answer engines (ChatGPT, Gemini, Claude, Perplexity, Google AI Overviews).
+${buildBlueprint({ title: data.title, keyword: primaryKeyword, description: data.description ?? "", wordCount })}
 
-Title: ${data.title}
-Primary keyword: ${primaryKeyword}
-Brief: ${data.description ?? ""}
+${buildResearchBlock(primaryKeyword, research)}
 
-Write the full article in markdown following ALL of these rules:
-- Length: 2,500–3,500+ words of genuinely useful, specific content. Do not pad with fluff.
-- Open with a direct, quotable 2–3 sentence answer to the core question (answer-engine friendly), naturally including the primary keyword.
-- Immediately after the intro, add a "## Key Takeaways" section with 4–6 concise bullet points.
-- Use a clear hierarchy: 6–10 "##" H2 sections, with "###" H3 sub-sections where helpful.
-- Include at least two bulleted or numbered lists and, where relevant, a comparison or step-by-step section.
-- Use the primary keyword and closely related entities/synonyms naturally throughout (no keyword stuffing). Cover the topic semantically and comprehensively.
-- Keep paragraphs short (2–4 sentences) and scannable.
-- Where a link would help, add internal-link suggestions inline using this exact format: [anchor text](#internal: descriptive target page).
-- End with a "## Frequently Asked Questions" section containing 4–6 real Q&A pairs. Format each question as a "###" heading ending in "?", followed by a 2–4 sentence answer.
-- Close with a short, action-oriented conclusion.
+${BLOG_JSON_SHAPE}`;
 
-Return ONLY this exact JSON shape (escape all newlines inside "body"):
-{"body":"Full markdown article","description":"Compelling meta description, 120–160 characters, includes the keyword","seo_score":88,"traffic_estimate":1200,"tags":["Tag","Tag"]}`;
     const { text } = await generateText({
       model: model(gateway),
-      maxOutputTokens: 16000,
+      maxOutputTokens: 24000,
       prompt,
     });
+    let content: BlogContent;
     try {
-      return normalizeBlogContent(extractJson(text), data);
+      content = normalizeBlogContent(extractJson(text), data);
     } catch {
-      return normalizeBlogContent({}, data, text);
+      content = normalizeBlogContent({}, data, text);
     }
+    return optimizeToHundred(gateway, style, content, primaryKeyword, data);
   });
 
 const ACTIONS: Record<string, string> = {
