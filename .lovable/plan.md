@@ -1,88 +1,56 @@
-# Natural-language copy + a real Blog Editor (Google-Docs style)
+# 100% SEO, AI-citable article engine
 
-## 1. Apply natural-language naming across the app
+Rebuild `generateBlogContent` into a research-grounded, multi-step pipeline that mirrors your blueprint and self-corrects until every article hits a verified 100 SEO score. Generation stays inside the existing flow (Content Studio "Generate" + the editor), so nothing in the UI breaks.
 
-Replace the "machine/console" jargon with human, benefit-led section names. Proposed map (tell me to tweak any — easy to adjust):
+## 1. Live web research (Firecrawl)
 
-| Location | Current | New |
-| --- | --- | --- |
-| Sidebar group | Workspace | Your Workspace |
-| Nav | System Console | Overview |
-| Nav | Blog Engine | Content Studio |
-| Nav | Keyword Planner | Keyword Research |
-| Nav | Billing | Plan & Billing |
-| Console page title | System Console | Your SEO Overview |
-| Console section | Content Radar | Content Opportunities |
-| Console sub | Selected | In Your Queue |
-| Console sub | Add to Queue | Recommended for You |
-| Stat | Estimated Traffic | Projected Monthly Traffic |
-| Stat | Keyword Score | Opportunity Strength |
-| Stat | Credits | Article Credits |
-| Studio tabs | Opportunities / In Queue / Published | Ideas / Scheduled / Published |
+- Link the **Firecrawl** connector to this project (already in your workspace; uses Firecrawl credits per article).
+- New server helper `src/lib/research.server.ts`:
+  - `firecrawl.search(keyword, { limit: 10, scrapeOptions: { formats: ['markdown'] } })` to pull the **top 10 ranking pages** for the focus keyword.
+  - Scrape the top 3–5 results to extract their **heading structure, sub-topics, and gaps**, plus 3–5 **authoritative source URLs** for a real References section.
+  - Returns a compact research brief (competitor headings, common subtopics, content gaps, citable sources). If Firecrawl is unavailable or out of credits, it degrades gracefully to model-only research so generation never hard-fails.
 
-Calendar, Settings, AI Algorithms stay. Only display copy changes — routes/keys/logic untouched.
+## 2. Multi-step generation prompt (your blueprint)
 
-## 2. Make generated articles longer, better, and AI-engine-optimized
+Rework the `generateBlogContent` handler in `src/lib/ai.functions.ts` to run as a structured pipeline using the research brief + your brand/style context. The prompt enforces, in order:
 
-Upgrade the `generateBlogContent` server function prompt (`src/lib/ai.functions.ts`) so every article is built to be cited by AI answer engines and to rank:
+1. Analyze the top-10 competitor structure & key points (from research brief).
+2. Build a detailed outline: **15+ headings/subheadings** (H1–H4), logical flow, full intent coverage.
+3. Research **10–15 long-tail / LSI terms** and weave them in naturally.
+4. SEO **H1 under 60 chars** that includes the keyword and speaks to the audience.
+5. Intro **150–200 words**, hooks + keyword.
+6. Each H2 = **300–500 words**, with examples/data, 1–2 long-tails, conversational tone for the audience, plus a unique insight.
+7. **2–3 image/infographic concepts** described inline with keyword-optimized alt text.
+8. **Quick Takeaways** (5–7 bullets).
+9. **Conclusion 200–250 words** with audience-relevant CTA.
+10. **5 FAQs** (schema-friendly `###` questions + concise answers with long-tails).
+11. Reader-feedback / social-share engagement line with a question.
+12. **In-text citations + a References section** from the real sources gathered.
+13. Keyword density **1–2%**, proper heading use, high perplexity/burstiness.
+14. Clean **Markdown** (bold key phrases, italics for emphasis).
+15. Meet/exceed the target word count (default **2,750**, configurable).
 
-- Target **2,500–3,500+ words**, raise `maxOutputTokens` so long bodies aren't truncated.
-- Enforced structure: a one-paragraph **direct answer** up top (answer-engine friendly), a **TL;DR / Key Takeaways** block, logical `##`/`###` hierarchy, bullet & numbered lists, a comparison or steps section where relevant, and a **FAQ** section of 4–6 real Q&A pairs (schema-friendly phrasing).
-- Strong semantic coverage of the primary keyword + related entities, natural keyword usage (no stuffing), scannable short paragraphs, and inline **internal-link suggestion** cues.
-- Return a realistic computed `seo_score`, tags, and a <160-char meta description (already in the JSON shape; keep robust JSON extraction + fallbacks intact).
+Inputs: topic = blog title, keyword = focus keyword, audience pulled from `content_settings`, wordcount default 2,750. `maxOutputTokens` raised to fit full-length output; robust JSON extraction + fallbacks stay intact.
 
-## 3. Content Studio list → opens the new editor
+## 3. Guaranteed 100 SEO score (self-correcting loop)
 
-Rework `dashboard.blog-engine.tsx`:
-- Keep tabs (renamed) and the generate action.
-- Replace the read-only "View" modal with an **Open** button that navigates to the full editor for any article (finished or draft). Generate-then-open flow for unwritten ones.
-- Apply the modernized card styling already used on Overview.
+- Move the scoring logic so the server can reuse it: `src/lib/seo-analysis.ts` stays the single source of truth, imported by both the editor and the generator. Markdown→text/HTML conversion uses the existing `markdown.ts` (`marked`), which is Worker-safe.
+- After generation, the server runs `analyzeContent` on the produced article. If score < 100, it sends the **exact failing/warning checks** back to the model with targeted fix instructions (e.g. "add keyword to title", "add another H2", "tighten meta description to 120–160 chars", "add 2 reference links", "raise readability"), then re-scores. Loop up to **3 passes**.
+- The generator may **rewrite the title** into the SEO H1 (you approved this) — required to pass keyword-in-title and reach 100. The new title is saved back to the blog.
+- The **verified** computed score (not a model-claimed number) is written to `seo_score`, so the editor's gauge and Content Studio cards reflect the true score.
 
-## 4. New Google-Docs-style editor (left content / right analytics)
+## 4. Wiring & persistence
 
-New route `src/routes/_authenticated/dashboard.editor.$blogId.tsx` → `/dashboard/editor/:blogId`, rendered inside the existing dashboard shell.
-
-```text
-┌───────────────────────────────┬───────────────────────┐
-│  Title (editable)             │  SEO Score  87 / 100  │
-│  ── formatting toolbar ──     │  ◐ circular gauge     │
-│                               │                       │
-│  Rich document editor         │  Optimization checks  │
-│  (WYSIWYG, Google-Docs feel)  │   ✓ Keyword in title  │
-│  H1/H2/H3, bold, lists, links │   ✓ 2,800 words       │
-│  AI bubble menu on selection  │   ⚠ Add 1 more H2     │
-│                               │                       │
-│                               │  Analytics            │
-│                               │   Words · Read time   │
-│                               │   Keyword density     │
-│                               │   Headings · Links    │
-│                               │   Readability grade   │
-│  [Autosaving…]   [Publish]    │  Target keyword ____  │
-└───────────────────────────────┴───────────────────────┘
-```
-
-**Left — editor**
-- TipTap WYSIWYG (StarterKit + Link + Placeholder) styled to look like a clean Google-Docs page (paper card, generous margins, document typography).
-- Editable **title**, plus body. Existing markdown bodies load into the editor; saves convert back to markdown so storage stays consistent with AI output and seeds.
-- **AI assist** bubble menu on text selection: Rewrite / Expand / Shorten / Improve SEO — wired to the existing `editBlogSection` server function, replacing the selection in place.
-- Debounced **autosave** to `updateBlog` (body, title, description, keyword, tags, seo_score) + a Publish button that sets `status: "finished"`. Toasts + query invalidation.
-
-**Right — SEO score & analytics (real, computed live)**
-- New deterministic client util `src/lib/seo-analysis.ts` computing from the live document + target keyword:
-  - **SEO score 0–100** (gauge) from weighted checks.
-  - **Checklist** (pass/warn/fail): keyword in title, keyword in first paragraph, keyword density in range, word count ≥ target, ≥3 H2s, has lists, has FAQ, meta description length, internal/external links present, readability.
-  - **Analytics**: word count, reading time, keyword density %, H2/H3 counts, link count, Flesch readability grade.
-- Editable **target keyword** and **meta description** fields feed the analysis and persist.
-- Score writes back to `seo_score` on save, so the list/cards reflect the real edited score.
+- `generateBlogArticle` in `src/lib/api.ts` saves the optimized `title`, `body`, `description` (120–160 char meta), verified `seo_score`, `traffic_estimate`, and `tags`, then marks the blog `finished` — same call sites in Content Studio and the editor, no route changes.
+- Surface AI gateway / Firecrawl errors clearly (rate limit, credits) via existing toasts.
 
 ## Technical notes
 
-- Add deps: `@tiptap/react @tiptap/starter-kit @tiptap/extension-link @tiptap/extension-placeholder`, plus `marked` (md→html on load) and `turndown` (html→md on save) — all Worker/SSR-safe pure JS.
-- TipTap touches `window`, so the editor mounts **client-only** (render after mount / guarded) to avoid SSR crashes; the route shell SSRs fine.
-- Editor route uses TanStack Query: `getBlog(blogId)` to load, `useServerFn(editBlogSection)` for AI edits, `updateBlog` for saves. New `getBlog` already exists in `api.ts`.
-- Two-column layout via existing `react-resizable-panels` (already installed) for the draggable splitter.
-- No database/schema changes — all fields (`body`, `description`, `keyword`, `tags`, `seo_score`, `status`) already exist. Data stays 100% real.
-- Naming changes are display-only; query keys, route paths, and status enums are unchanged to avoid regressions.
+- Firecrawl runs server-side only (`FIRECRAWL_API_KEY` from `process.env`), inside the `createServerFn` handler — never client-side.
+- No DB/schema changes: `title`, `body`, `description`, `keyword`, `seo_score`, `traffic_estimate`, `tags`, `status` all already exist.
+- Generation is slower (research + scrape + up to 3 optimization passes) — the existing "Writing…" state covers it; expect ~30–90s per article.
+- Reaching a literal 100 every time depends on the readability check; the loop explicitly targets it, and the score writeback is always the real measured value.
 
 ## Out of scope
-No changes to onboarding, payments, calendar logic, or DB schema. The SEO score is computed in-app (no external SEO API) unless you want SEMrush wired in later.
+
+No changes to onboarding, payments, calendar, the editor UI, or DB schema. Bulk/scheduled auto-generation continues to use the same upgraded function.
