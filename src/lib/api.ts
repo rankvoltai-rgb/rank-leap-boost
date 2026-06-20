@@ -385,6 +385,7 @@ export async function generateBlogArticle(blog: Blog): Promise<Blog> {
       data: { title: blog.title, keyword: blog.keyword ?? undefined, description: blog.description },
     });
     const patch: Partial<Blog> = {
+      title: result.title || blog.title,
       body: result.body,
       description: result.description || blog.description,
       seo_score: result.seo_score,
