@@ -28,14 +28,14 @@ export function Testimonials() {
           </p>
         </Reveal>
 
-        <div className="mx-auto mt-10 grid max-w-4xl grid-cols-2 gap-4 sm:grid-cols-4">
+        <div className="mx-auto mt-12 grid max-w-4xl grid-cols-2 gap-4 sm:grid-cols-4">
           <StatCard value="400+" label="Active founders" />
           <StatCard value="4.8/5" label="Average rating" />
           <StatCard value="60K+" label="Articles published" />
           <StatCard value="Daily" label="Auto-published content" />
         </div>
 
-        <div className="mt-12 columns-1 gap-5 sm:columns-2 lg:columns-3 [&>*]:mb-5">
+        <div className="mt-16 columns-1 gap-6 sm:columns-2 lg:columns-3 [&>*]:mb-6">
           {QUOTES.map((t, i) => (
             <Reveal key={t.n} delay={(i % 3) * 0.05}>
               <figure className="break-inside-avoid rounded-2xl border border-border bg-card p-6 transition-all hover:-translate-y-1 hover:shadow-elevation-lg">
