@@ -71,7 +71,7 @@ export function FeatureBenefits({ feature }: { feature: Feature }) {
       <div className="mx-auto max-w-6xl px-5">
         <Reveal className="mx-auto max-w-2xl text-center">
           <Eyebrow className="mb-4">Why it matters</Eyebrow>
-          <h2 className="font-display text-balance text-3xl font-bold tracking-tight text-ink sm:text-4xl">
+          <h2 className="font-display text-balance text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
             Built to get your brand cited
           </h2>
         </Reveal>
@@ -96,7 +96,7 @@ export function FeatureHowItWorks({ feature }: { feature: Feature }) {
       <div className="mx-auto max-w-5xl px-5">
         <Reveal className="mx-auto max-w-2xl text-center">
           <Eyebrow className="mb-4">How it works</Eyebrow>
-          <h2 className="font-display text-balance text-3xl font-bold tracking-tight text-ink sm:text-4xl">
+          <h2 className="font-display text-balance text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
             From setup to cited in three steps
           </h2>
         </Reveal>
@@ -104,7 +104,7 @@ export function FeatureHowItWorks({ feature }: { feature: Feature }) {
           {feature.steps.map((s, i) => (
             <Reveal key={s.title} delay={i * 0.06}>
               <div className="relative h-full rounded-2xl border border-border bg-card p-6 shadow-elevation sm:p-7">
-                <span className="font-display text-4xl font-bold text-volt/30">
+                <span className="font-display text-4xl font-semibold text-volt/30">
                   {String(i + 1).padStart(2, "0")}
                 </span>
                 <h3 className="mt-3 text-base font-semibold text-ink">{s.title}</h3>
@@ -140,7 +140,7 @@ export function FeatureFAQ({ feature }: { feature: Feature }) {
       <div className="mx-auto max-w-3xl px-5">
         <Reveal className="mx-auto max-w-2xl text-center">
           <Eyebrow className="mb-4">FAQ</Eyebrow>
-          <h2 className="font-display text-balance text-3xl font-bold tracking-tight text-ink sm:text-4xl">
+          <h2 className="font-display text-balance text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
             {feature.name} questions
           </h2>
         </Reveal>
@@ -169,7 +169,7 @@ export function FeatureCTA({ feature }: { feature: Feature }) {
       <div className="mx-auto max-w-4xl px-5">
         <Reveal>
           <div className="relative overflow-hidden rounded-3xl border border-border bg-ink px-8 py-14 text-center shadow-elevation-lg sm:px-12">
-            <h2 className="font-display text-balance text-3xl font-bold tracking-tight text-background sm:text-4xl">
+            <h2 className="font-display text-balance text-3xl font-semibold tracking-tight text-background sm:text-4xl">
               {feature.ctaTitle}
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-balance text-base leading-relaxed text-background/70">

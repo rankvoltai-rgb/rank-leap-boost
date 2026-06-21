@@ -91,7 +91,7 @@ export function SuccessStories() {
       <div className="mx-auto max-w-6xl px-5">
         <Reveal className="mx-auto max-w-2xl text-center">
           <Eyebrow className="mb-4">Real answers, real brands</Eyebrow>
-          <h2 className="font-display text-balance text-3xl font-bold tracking-tight text-ink sm:text-4xl">
+          <h2 className="font-display text-balance text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
             Founders already getting cited
           </h2>
           <p className="mt-4 text-balance text-lg text-muted-foreground">

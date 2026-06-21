@@ -99,7 +99,7 @@ function ScoreGauge({ score }: { score: number }) {
         />
       </svg>
       <div className="absolute text-center">
-        <span className="block text-2xl font-bold tabular-nums text-ink">{score}</span>
+        <span className="block text-2xl font-semibold tabular-nums text-ink">{score}</span>
         <span className="block text-[0.6rem] uppercase tracking-wide text-muted-foreground">/ 100</span>
       </div>
     </div>
@@ -115,7 +115,7 @@ const CHECK_ICON: Record<CheckStatus, React.ReactNode> = {
 function Metric({ label, value }: { label: string; value: string }) {
   return (
     <div className="rounded-xl border border-border bg-secondary/40 p-3">
-      <p className="text-base font-bold tabular-nums text-ink">{value}</p>
+      <p className="text-base font-semibold tabular-nums text-ink">{value}</p>
       <p className="mt-0.5 text-[0.68rem] uppercase tracking-wide text-muted-foreground">{label}</p>
     </div>
   );
@@ -474,7 +474,7 @@ function BlogEditor() {
                 markDirty();
               }}
               placeholder="Article title"
-              className="mb-6 w-full border-none bg-transparent text-3xl font-bold tracking-tight text-ink outline-none placeholder:text-muted-foreground/50"
+              className="mb-6 w-full border-none bg-transparent text-3xl font-semibold tracking-tight text-ink outline-none placeholder:text-muted-foreground/50"
             />
             {editor && (
               <BubbleMenu

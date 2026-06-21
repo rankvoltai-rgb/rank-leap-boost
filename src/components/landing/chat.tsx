@@ -24,7 +24,7 @@ export function CitationChip({ children }: { children: ReactNode }) {
 function SourcePill({ domain }: { domain: string }) {
   return (
     <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-2 py-0.5 text-[0.7rem] font-medium text-muted-foreground transition-colors hover:border-ink/20 hover:text-ink">
-      <span className="flex h-3.5 w-3.5 items-center justify-center rounded-full bg-secondary text-[0.55rem] font-bold uppercase text-muted-foreground">
+      <span className="flex h-3.5 w-3.5 items-center justify-center rounded-full bg-secondary text-[0.55rem] font-semibold uppercase text-muted-foreground">
         {domain.charAt(0)}
       </span>
       {domain}

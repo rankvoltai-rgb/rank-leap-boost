@@ -90,7 +90,7 @@ export function AuthSplit() {
         <div className="flex flex-1 items-center justify-center py-10">
           <div className="w-full max-w-md">
             <Reveal>
-              <h1 className="text-balance text-3xl font-extrabold leading-[1.1] tracking-tight text-ink sm:text-4xl">
+              <h1 className="text-balance text-3xl font-semibold leading-[1.1] tracking-tight text-ink sm:text-4xl">
                 Start getting Google &amp; ChatGPT traffic{" "}
                 <span className="rounded-lg bg-warning/25 px-1.5 decoration-clone box-decoration-clone">
                   in the next 7 days
@@ -196,7 +196,7 @@ export function AuthSplit() {
           <span className="inline-flex items-center rounded-full border border-background/20 bg-background/10 px-3 py-1 text-xs font-medium text-background/80">
             Sign in → connect site → done
           </span>
-          <h2 className="mt-6 max-w-sm text-2xl font-bold leading-tight">
+          <h2 className="mt-6 max-w-sm text-2xl font-semibold leading-tight">
             Your personal SEO agent, working while you sleep.
           </h2>
 

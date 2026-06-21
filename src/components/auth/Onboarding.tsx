@@ -286,11 +286,11 @@ export function Onboarding() {
             <span className="mt-8 inline-flex items-center gap-1.5 rounded-full border border-background/20 bg-background/10 px-3 py-1 text-xs font-medium text-background/80">
               <Sparkles className="h-3.5 w-3.5" /> 48-hour free trial · cancel anytime
             </span>
-            <h2 className="mt-5 text-3xl font-extrabold tracking-tight">Business</h2>
+            <h2 className="mt-5 text-3xl font-semibold tracking-tight">Business</h2>
             <p className="mt-1 text-sm text-background/70">All-in-one growth package</p>
             <div className="mt-5 flex items-end gap-2.5">
               <span className="text-xl text-background/50 line-through">$99</span>
-              <span className="text-5xl font-extrabold tracking-tight">$49.5</span>
+              <span className="text-5xl font-semibold tracking-tight">$49.5</span>
               <span className="mb-1.5 text-sm text-background/70">/month</span>
             </div>
             <p className="mt-1 text-xs text-background/60">
@@ -334,7 +334,7 @@ export function Onboarding() {
               <div className="mb-3 inline-flex items-center gap-1.5 rounded-full border border-success/20 bg-success/10 px-3 py-1 text-xs font-medium text-success">
                 <Check className="h-3.5 w-3.5" /> Plan secured
               </div>
-              <h1 className="text-2xl font-bold tracking-tight text-ink">
+              <h1 className="text-2xl font-semibold tracking-tight text-ink">
                 Activate your free trial
               </h1>
               <p className="mt-1.5 text-sm text-muted-foreground">
@@ -402,7 +402,7 @@ export function Onboarding() {
                 <div className="mb-3 inline-flex items-center gap-1.5 rounded-full border border-border bg-secondary px-3 py-1 text-xs font-medium text-muted-foreground">
                   <Sparkles className="h-3.5 w-3.5" /> 48-hour free trial
                 </div>
-                <h1 className="text-2xl font-bold tracking-tight text-ink">
+                <h1 className="text-2xl font-semibold tracking-tight text-ink">
                   Let's analyze your website
                 </h1>
                 <p className="mt-1.5 text-sm text-muted-foreground">
@@ -499,7 +499,7 @@ export function Onboarding() {
                 <div className="mb-3 inline-flex items-center gap-1.5 rounded-full border border-success/20 bg-success/10 px-3 py-1 text-xs font-medium text-success">
                   <Check className="h-3.5 w-3.5" /> Plan ready
                 </div>
-                <h1 className="text-2xl font-bold tracking-tight text-ink">
+                <h1 className="text-2xl font-semibold tracking-tight text-ink">
                   Your automated growth plan
                 </h1>
                 <p className="mt-1.5 text-sm text-muted-foreground">
@@ -523,7 +523,7 @@ export function Onboarding() {
                         <CountUp
                           value={totalTraffic}
                           suffix="/mo"
-                          className="mt-1 block text-4xl font-extrabold tracking-tight text-gradient-traffic tabular-nums sm:text-5xl"
+                          className="mt-1 block text-4xl font-semibold tracking-tight text-gradient-traffic tabular-nums sm:text-5xl"
                         />
                       </motion.div>
                       <div className="mt-5 grid grid-cols-3 gap-3">
@@ -540,7 +540,7 @@ export function Onboarding() {
                             className="rounded-xl border border-border bg-card/70 p-2.5"
                           >
                             <s.icon className="mx-auto h-4 w-4 text-ink" />
-                            <p className="mt-1 text-base font-bold text-ink tabular-nums">{s.value}</p>
+                            <p className="mt-1 text-base font-semibold text-ink tabular-nums">{s.value}</p>
                             <p className="text-[11px] text-muted-foreground">{s.label}</p>
                           </motion.div>
                         ))}

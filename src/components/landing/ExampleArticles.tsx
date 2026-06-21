@@ -40,7 +40,7 @@ export function ExampleArticles() {
       <div className="mx-auto max-w-6xl px-5">
         <Reveal className="mx-auto max-w-2xl text-center">
           <Eyebrow className="mb-4">Sample output</Eyebrow>
-          <h2 className="font-display text-balance text-3xl font-bold tracking-tight text-ink sm:text-4xl">
+          <h2 className="font-display text-balance text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
             AI articles that get cited
           </h2>
           <p className="mt-4 text-balance text-lg text-muted-foreground">
@@ -54,7 +54,7 @@ export function ExampleArticles() {
               <article className="group flex h-full flex-col rounded-2xl border border-border bg-card p-6 shadow-elevation transition-all hover:-translate-y-1 hover:shadow-elevation-lg">
                 <div className="mb-4 flex items-center justify-between gap-3">
                   <span className="flex items-center gap-2 text-xs font-medium text-muted-foreground">
-                    <span className="flex h-6 w-6 items-center justify-center rounded-md border border-border bg-surface text-[0.65rem] font-bold uppercase text-ink">
+                    <span className="flex h-6 w-6 items-center justify-center rounded-md border border-border bg-surface text-[0.65rem] font-semibold uppercase text-ink">
                       {a.domain[0]}
                     </span>
                     {a.domain}

@@ -35,7 +35,7 @@ export function Logo({ className }: { className?: string }) {
       <span className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-[10px] border border-border bg-card shadow-sm">
         <img src={rankvoltMark.url} alt="Rankvolt" className="h-5 w-5 object-contain" />
       </span>
-      <span className="text-[1.2rem] font-bold tracking-tight text-ink">Rankvolt</span>
+      <span className="text-[1.2rem] font-semibold tracking-tight text-ink">Rankvolt</span>
     </div>
   );
 }
@@ -59,7 +59,7 @@ export function SectionHeading({
           {eyebrow}
         </span>
       )}
-      <h2 className="font-display text-balance text-3xl font-bold tracking-tight text-ink sm:text-4xl md:text-[2.75rem] md:leading-[1.08]">
+      <h2 className="font-display text-balance text-3xl font-semibold tracking-tight text-ink sm:text-4xl md:text-[2.75rem] md:leading-[1.08]">
         {title}
       </h2>
       {subtitle && (
@@ -166,7 +166,7 @@ export function BrandMark({
   return (
     <span
       className={cn(
-        "flex items-center justify-center rounded-lg text-[0.8rem] font-bold text-white",
+        "flex items-center justify-center rounded-lg text-[0.8rem] font-semibold text-white",
         BRAND_COLORS[name] ?? "bg-ink",
         className,
       )}
@@ -262,7 +262,7 @@ export function StatCard({
         className,
       )}
     >
-      <p className="text-2xl font-extrabold tracking-tight text-ink sm:text-3xl">{value}</p>
+      <p className="text-2xl font-semibold tracking-tight text-ink sm:text-3xl">{value}</p>
       <p className="mt-1 text-xs font-medium text-muted-foreground sm:text-sm">{label}</p>
     </div>
   );

@@ -13,7 +13,7 @@ export function Guarantee() {
               <span className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl border border-volt/30 bg-volt/10 text-ink">
                 <ShieldCheck className="h-7 w-7" />
               </span>
-              <h2 className="font-display text-3xl font-bold tracking-tight text-ink sm:text-4xl">
+              <h2 className="font-display text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
                 Try it with zero risk
               </h2>
               <p className="mt-4 text-lg text-muted-foreground">
@@ -26,7 +26,7 @@ export function Guarantee() {
               {LOGOS.map((l) => (
                 <div
                   key={l}
-                  className="flex items-center justify-center rounded-xl border border-border bg-surface/60 py-5 text-sm font-bold uppercase tracking-widest text-muted-foreground"
+                  className="flex items-center justify-center rounded-xl border border-border bg-surface/60 py-5 text-sm font-semibold uppercase tracking-widest text-muted-foreground"
                 >
                   {l}
                 </div>
@@ -36,7 +36,7 @@ export function Guarantee() {
             <div className="mt-10 flex flex-col items-center justify-center gap-2 border-t border-border pt-8 text-center">
               <div className="flex items-center gap-2">
                 <Stars />
-                <span className="text-lg font-bold text-ink">4.8/5</span>
+                <span className="text-lg font-semibold text-ink">4.8/5</span>
               </div>
               <p className="text-sm text-muted-foreground">
                 60,000+ articles published for 400+ founders

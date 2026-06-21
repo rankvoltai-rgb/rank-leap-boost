@@ -64,7 +64,7 @@ export function StatCard({
       ) : (
         <p
           className={cn(
-            "mt-2 font-bold tracking-tight text-ink tabular-nums",
+            "mt-2 font-semibold tracking-tight text-ink tabular-nums",
             emphasis ? "text-[2rem] leading-none" : "text-2xl",
           )}
         >
@@ -148,7 +148,7 @@ export function PageHeader({
   return (
     <div className="flex flex-wrap items-start justify-between gap-3 border-b border-border pb-6">
       <div>
-        <h1 className="text-[1.7rem] font-bold tracking-tight text-ink">{title}</h1>
+        <h1 className="text-[1.7rem] font-semibold tracking-tight text-ink">{title}</h1>
         {description && (
           <p className="mt-1.5 text-sm text-muted-foreground">{description}</p>
         )}

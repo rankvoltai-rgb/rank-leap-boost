@@ -10,7 +10,7 @@ export function FinalCTA() {
           <div className="relative overflow-hidden rounded-3xl border border-border bg-ink px-6 py-14 text-center sm:px-12">
             <div className="pointer-events-none absolute inset-0 bg-gridlines opacity-[0.07]" />
             <div className="relative">
-              <h2 className="font-display mx-auto max-w-2xl text-balance text-3xl font-bold tracking-tight text-background sm:text-4xl">
+              <h2 className="font-display mx-auto max-w-2xl text-balance text-3xl font-semibold tracking-tight text-background sm:text-4xl">
                 Become the answer AI recommends
               </h2>
               <p className="mx-auto mt-4 max-w-xl text-balance text-base text-background/70">
