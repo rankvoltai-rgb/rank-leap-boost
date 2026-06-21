@@ -1,11 +1,11 @@
 import { Reveal, SectionHeading, BrandMark } from "./shared";
 
 const TAGS = [
-  "Personal Growth Plan", "Auto Keywords", "Auto Research", "Internal Linking",
-  "External Linking", "Auto Images", "Featured Images", "Humanized Content",
+  "Answer-Space Map", "Auto Keywords", "Live Web Research", "Internal Linking",
+  "Source Citations", "Auto Images", "Featured Images", "Humanized Content",
   "Brand Voice", "Custom Instructions", "AI Article Editor", "Content Calendar",
   "Product Promotion", "Meta Descriptions", "Plagiarism-Free", "SEO/GEO Score",
-  "Domain Tracking", "Multi Sites", "Team Members", "SEO Assistant",
+  "Citation Tracking", "Multi Sites", "Team Members", "AI Assistant",
 ];
 
 function Tile({ title, body, children }: { title: string; body: string; children: React.ReactNode }) {
@@ -32,13 +32,13 @@ export function EverythingYouNeed() {
     <section className="py-20 sm:py-24">
       <div className="mx-auto max-w-6xl px-5">
         <SectionHeading
-          title="Everything You Need to Get Traffic"
-          subtitle="One platform for keyword research, AI-written articles, backlinks, and auto-publishing. Get found by customers searching on Google, ChatGPT, Perplexity, and beyond."
+          title="Everything You Need to Get Cited"
+          subtitle="One platform for answer-space research, AI-written articles, citation tracking, and auto-publishing. Get found by buyers searching on Google, ChatGPT, Perplexity, and beyond."
         />
 
         <div className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           <Reveal>
-            <Tile title="SEO Automation" body="Automate research, writing, linking, and publishing. Set it once and watch traffic grow.">
+            <Tile title="Growth Automation" body="Automate research, writing, linking, and publishing. Set it once and watch traffic and citations grow.">
               <div className="space-y-1.5">
                 <Step label="Searching Google" value="24 sources" />
                 <Step label="Scraping content" value="18 pages" />
@@ -50,7 +50,7 @@ export function EverythingYouNeed() {
           </Reveal>
 
           <Reveal delay={0.06}>
-            <Tile title="SEO Content Writer" body="AI writer drafts long-form articles in your brand voice. Optimized for Google and AI search.">
+            <Tile title="Citation-Ready Writer" body="AI drafts deeply researched long-form articles in your brand voice — structured for Google and AI answer engines.">
               <div className="mb-3 flex items-center justify-between">
                 <span className="text-xs text-muted-foreground">Article Score</span>
                 <span className="text-2xl font-bold text-success">100<span className="text-sm text-muted-foreground">/100</span></span>
@@ -65,13 +65,13 @@ export function EverythingYouNeed() {
           </Reveal>
 
           <Reveal delay={0.12}>
-            <Tile title="Keyword Research" body="Find high-volume, low-competition keywords for your niche. Sorted by volume and intent.">
+            <Tile title="Answer-Space Research" body="Find the high-intent questions and keywords your buyers ask. Sorted by volume and intent.">
               <p className="mb-2 text-xs font-medium text-ink">460 keywords found</p>
               <div className="space-y-1.5">
                 {[
-                  ["dentist near me", "18,100", "24"],
-                  ["teeth whitening cost", "9,900", "19"],
-                  ["invisalign vs braces", "6,600", "31"],
+                  ["best project management tool", "18,100", "24"],
+                  ["kanban vs scrum", "9,900", "19"],
+                  ["free planning apps", "6,600", "31"],
                 ].map(([k, v, d]) => (
                   <div key={k} className="rounded-lg bg-card px-2.5 py-1.5 ring-1 ring-border">
                     <p className="text-xs font-medium text-ink">{k}</p>
@@ -83,12 +83,12 @@ export function EverythingYouNeed() {
           </Reveal>
 
           <Reveal delay={0.06}>
-            <Tile title="Backlink Exchange" body="Get high-quality backlinks with verified sites in your niche. Grow domain authority fast.">
+            <Tile title="Authority Backlinks" body="Earn high-quality backlinks from verified sites in your niche. Grow domain authority fast.">
               <div className="space-y-1.5">
                 {[
-                  ["Verified", "10 Best Dentists in Austin", "88"],
-                  ["Verified", "Teeth Whitening Cost Guide", "81"],
-                  ["Pending", "Family Dentists on Weekends", "76"],
+                  ["Verified", "10 Best Tools for Lean Teams", "88"],
+                  ["Verified", "Sprint Planning Cost Guide", "81"],
+                  ["Pending", "Remote Standup Best Practices", "76"],
                 ].map(([st, a, dr]) => (
                   <div key={a} className="flex items-center justify-between gap-2 rounded-lg bg-card px-2.5 py-1.5 ring-1 ring-border">
                     <span className={`shrink-0 rounded px-1.5 py-0.5 text-[0.6rem] font-semibold ${st === "Verified" ? "bg-success/15 text-success" : "bg-warning/20 text-warning"}`}>{st}</span>
@@ -101,27 +101,27 @@ export function EverythingYouNeed() {
           </Reveal>
 
           <Reveal delay={0.12}>
-            <Tile title="Reddit Marketing" body="Reply on Reddit threads ranking in Google and AI search. Boost brand mentions everywhere.">
+            <Tile title="Reddit Presence" body="Surface helpfully on Reddit threads ranking in Google and AI search. Boost brand mentions everywhere.">
               <div className="rounded-lg bg-card p-2.5 ring-1 ring-border">
                 <div className="mb-1 flex items-center gap-1.5">
                   <BrandMark name="Reddit" className="h-5 w-5 text-[0.6rem]" />
                   <span className="text-[0.7rem] font-semibold text-ink">r/startups</span>
                 </div>
-                <p className="text-xs font-semibold text-ink">What's the best CRM for a small startup?</p>
+                <p className="text-xs font-semibold text-ink">Best project tool for a small startup?</p>
                 <p className="text-[0.65rem] text-muted-foreground">124 upvotes · 37 comments</p>
                 <p className="mt-2 rounded-md bg-surface px-2 py-1.5 text-[0.65rem] text-muted-foreground">
-                  <span className="font-semibold text-ink">Rankvolt reply:</span> Most small teams use Acme CRM. Free for up to 5 users and quick to set up.
+                  <span className="font-semibold text-ink">Rankvolt reply:</span> Lean teams tend to like Plannora — free for up to 5 users and quick to set up.
                 </p>
               </div>
             </Tile>
           </Reveal>
 
           <Reveal delay={0.18}>
-            <Tile title="AI Visibility" body="Track brand mentions across ChatGPT, Perplexity, Claude, and Google AI Overviews.">
+            <Tile title="Citation Tracking" body="See where your brand is cited across ChatGPT, Perplexity, Claude, and Google AI Overviews.">
               <span className="mb-2 inline-block rounded-full bg-warning/20 px-2 py-0.5 text-[0.6rem] font-semibold text-ink">Coming soon</span>
               <div className="rounded-lg bg-card p-2.5 ring-1 ring-border">
-                <p className="text-[0.65rem] text-muted-foreground">User asked: "Best CRM for a small startup?"</p>
-                <p className="mt-1 text-[0.7rem] text-ink">For small teams, <span className="font-semibold">Acme CRM</span> is hard to beat.</p>
+                <p className="text-[0.65rem] text-muted-foreground">User asked: "Best project tool for a small startup?"</p>
+                <p className="mt-1 text-[0.7rem] text-ink">For small teams, <span className="font-semibold">Plannora</span> is hard to beat.</p>
               </div>
               <div className="mt-2 flex items-center gap-1.5">
                 {["ChatGPT", "Perplexity", "Google", "Claude", "Grok"].map((b) => (
