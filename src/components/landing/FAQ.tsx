@@ -31,7 +31,7 @@ export function FAQ() {
             Google and AI search engines.
           </p>
         </Reveal>
-        <Reveal delay={0.08} className="mt-12">
+        <Reveal delay={0.08} className="mt-14">
           <Accordion type="single" collapsible className="divide-y divide-border rounded-2xl border border-border bg-card px-5">
             {FAQS.map((f, i) => (
               <AccordionItem
