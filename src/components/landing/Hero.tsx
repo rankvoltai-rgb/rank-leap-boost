@@ -3,17 +3,14 @@ import { ArrowRight, Sparkles } from "lucide-react";
 import { Reveal, Stars, Avatar, Badge } from "./shared";
 import { DashboardMockup } from "./DashboardMockup";
 import { AI_MARKS } from "./ai-logos";
-import nikAsset from "@/assets/nik.png.asset.json";
-import johnAsset from "@/assets/john-logan.png.asset.json";
-import denisAsset from "@/assets/denis.png.asset.json";
-import demoAsset from "@/assets/demo.png.asset.json";
+import { AVATARS } from "./avatars";
 
 const FACES = [
-  { name: "Nik Zechner", src: nikAsset.url },
-  { name: "Denis Yurchak", src: denisAsset.url },
-  { name: "John Logan", src: johnAsset.url },
-  { name: "Adam Myrick", src: demoAsset.url },
-  { name: "Mark Eckert", src: undefined },
+  { name: "Priya Raman", src: AVATARS[3] },
+  { name: "Marco Silva", src: AVATARS[4] },
+  { name: "Hannah Whitfield", src: AVATARS[5] },
+  { name: "Daniel Okafor", src: AVATARS[6] },
+  { name: "Lena Brandt", src: AVATARS[1] },
 ];
 
 function UrlForm() {
@@ -60,12 +57,12 @@ export function Hero() {
       <div className="relative mx-auto max-w-6xl px-5 pb-10 pt-14 sm:pt-20 md:pt-24">
         <div className="mx-auto max-w-3xl text-center">
           <Reveal>
-            <Badge className="mb-6">Get found across Google &amp; every AI search engine</Badge>
+            <Badge className="mb-6">The AI search growth engine for founders</Badge>
           </Reveal>
 
           <Reveal delay={0.04}>
             <div className="mx-auto mb-6 flex w-fit items-center gap-3 rounded-2xl border border-border bg-card/70 px-4 py-2.5 shadow-elevation backdrop-blur">
-              <span className="text-xs font-medium text-muted-foreground">Optimized for</span>
+              <span className="text-xs font-medium text-muted-foreground">Cited across</span>
               <div className="flex items-center gap-2.5">
                 {AI_MARKS.map(({ name, Mark }) => (
                   <span
@@ -81,14 +78,15 @@ export function Hero() {
           </Reveal>
 
           <Reveal delay={0.08}>
-            <h1 className="text-balance text-4xl font-extrabold leading-[1.05] tracking-tight text-ink sm:text-5xl md:text-[4rem]">
-              Get Google, ChatGPT Traffic on Autopilot
+            <h1 className="font-display text-balance text-4xl font-extrabold leading-[1.05] tracking-tight text-ink sm:text-5xl md:text-[4rem]">
+              Become the Answer AI Recommends
             </h1>
           </Reveal>
           <Reveal delay={0.16}>
             <p className="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground">
-              Grow organic traffic on autopilot. Daily published articles to your
-              website and backlink building even while you sleep.
+              Rankvolt researches, writes, and publishes a daily article to your site —
+              engineered so ChatGPT, Perplexity, and Google AI Overviews quote your brand
+              as the answer, and Google ranks you on page one.
             </p>
           </Reveal>
 
@@ -111,7 +109,7 @@ export function Hero() {
               <div className="flex flex-col items-center sm:items-start">
                 <Stars />
                 <p className="text-sm text-muted-foreground">
-                  <span className="font-semibold text-ink">3,000+</span> happy customers
+                  <span className="font-semibold text-ink">400+</span> founders growing with Rankvolt
                 </p>
               </div>
             </div>
