@@ -26,7 +26,7 @@ export function RotatingEngine({ className }: { className?: string }) {
     <span
       aria-hidden
       className={
-        "relative inline-flex h-[1.05em] w-[1.05em] shrink-0 translate-y-[0.12em] items-center justify-center rounded-xl glass shadow-elevation ring-1 ring-ink/5 " +
+        "relative inline-flex h-[1em] w-[1em] shrink-0 -translate-y-[0.08em] items-center justify-center rounded-xl align-middle glass shadow-elevation ring-1 ring-ink/5 " +
         (className ?? "")
       }
     >
