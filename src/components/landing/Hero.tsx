@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { Reveal, Stars, Avatar } from "./shared";
-import { ChatAnswerCard, CitationChip } from "./chat";
+import { ChatAnswerCard } from "./chat";
 import { AI_MARKS } from "./ai-logos";
 import { RotatingEngine } from "./RotatingEngine";
 import { AVATARS } from "./avatars";
