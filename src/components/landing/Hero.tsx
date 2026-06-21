@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { Reveal, Stars, Avatar } from "./shared";
-import { ChatAnswerCard, CitationChip } from "./chat";
+import { ChatAnswerCard } from "./chat";
 import { AI_MARKS } from "./ai-logos";
 import { RotatingEngine } from "./RotatingEngine";
 import { AVATARS } from "./avatars";
@@ -147,9 +147,6 @@ export function Hero() {
                   }
                   sources={["plannora.io", "loopcraft.ai", "yardstick.team"]}
                 />
-              </div>
-              <div className="mt-4 flex justify-center lg:justify-start">
-                <CitationChip>Your brand, cited as the answer</CitationChip>
               </div>
             </div>
           </Reveal>
