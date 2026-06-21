@@ -93,7 +93,7 @@ export function Hero() {
 
             <Reveal delay={0.16}>
               <p className="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground lg:mx-0">
-                Rankvolt publishes daily articles engineered to get your brand cited when buyers ask
+                Publishes daily articles engineered to get your brand cited when buyers ask
                 ChatGPT, Claude, Perplexity, and Google AI Overviews — fully on autopilot.
               </p>
             </Reveal>
