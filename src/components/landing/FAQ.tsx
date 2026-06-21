@@ -4,7 +4,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Reveal, SectionHeading } from "./shared";
+import { Reveal, Eyebrow } from "./shared";
 
 export const FAQS = [
   { q: "How fast will I see results?", a: "Most founders watch their first articles pick up views within two to three weeks. Because Rankvolt publishes a fresh, well-researched piece every day, momentum builds faster than manual blogging — and citations in AI answers tend to follow once the content base is in place." },
@@ -21,19 +21,25 @@ export function FAQ() {
   return (
     <section id="faq" className="border-t border-border bg-surface/40 py-20 sm:py-24">
       <div className="mx-auto max-w-3xl px-5">
-        <SectionHeading
-          title="Frequently Asked Questions"
-          subtitle="Everything you need to know about pricing, features, and how Rankvolt helps you rank on Google and AI search engines."
-        />
+        <Reveal className="mx-auto max-w-2xl text-center">
+          <Eyebrow className="mb-4">FAQ</Eyebrow>
+          <h2 className="font-display text-balance text-3xl font-bold tracking-tight text-ink sm:text-4xl">
+            Frequently asked questions
+          </h2>
+          <p className="mt-4 text-balance text-lg text-muted-foreground">
+            Everything you need to know about pricing, features, and how Rankvolt helps you rank on
+            Google and AI search engines.
+          </p>
+        </Reveal>
         <Reveal delay={0.08} className="mt-12">
-          <Accordion type="single" collapsible className="space-y-3">
+          <Accordion type="single" collapsible className="divide-y divide-border rounded-2xl border border-border bg-card px-5">
             {FAQS.map((f, i) => (
               <AccordionItem
                 key={f.q}
                 value={`item-${i}`}
-                className="rounded-2xl border border-border bg-card px-5 data-[state=open]:shadow-sm"
+                className="border-b-0"
               >
-                <AccordionTrigger className="text-left text-base font-semibold text-ink hover:no-underline">
+                <AccordionTrigger className="py-5 text-left text-base font-semibold text-ink hover:no-underline">
                   {f.q}
                 </AccordionTrigger>
                 <AccordionContent className="text-sm leading-relaxed text-muted-foreground">
