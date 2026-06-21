@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { Reveal, Stars, Avatar, Badge } from "./shared";
-import { DashboardMockup } from "./DashboardMockup";
+import { ChatAnswerCard, CitationChip } from "./chat";
 import { AI_MARKS } from "./ai-logos";
 import { AVATARS } from "./avatars";
 
@@ -53,6 +53,7 @@ function UrlForm() {
 export function Hero() {
   return (
     <section id="top" className="relative overflow-hidden">
+      <div className="pointer-events-none absolute inset-0 bg-dotgrid opacity-60 [mask-image:radial-gradient(60%_50%_at_50%_0%,black,transparent)]" />
       <div className="pointer-events-none absolute inset-x-0 top-0 h-[520px] bg-hero-glow" />
       <div className="relative mx-auto max-w-6xl px-5 pb-10 pt-14 sm:pt-20 md:pt-24">
         <div className="mx-auto max-w-3xl text-center">
@@ -79,14 +80,14 @@ export function Hero() {
 
           <Reveal delay={0.08}>
             <h1 className="font-display text-balance text-4xl font-extrabold leading-[1.05] tracking-tight text-ink sm:text-5xl md:text-[4rem]">
-              Become the Answer AI Recommends
+              Get <span className="text-volt">found</span> by ChatGPT, Gemini, Claude &amp; AI search
             </h1>
           </Reveal>
           <Reveal delay={0.16}>
             <p className="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground">
-              Rankvolt researches, writes, and publishes a daily article to your site —
-              engineered so ChatGPT, Perplexity, and Google AI Overviews quote your brand
-              as the answer, and Google ranks you on page one.
+              Rankvolt researches, writes, and publishes a daily article to your site — so when
+              buyers ask ChatGPT, Perplexity, or Google AI Overviews, your brand is the answer
+              they get cited.
             </p>
           </Reveal>
 
@@ -116,8 +117,26 @@ export function Hero() {
           </Reveal>
         </div>
 
-        <Reveal delay={0.36} className="mt-14">
-          <DashboardMockup />
+        <Reveal delay={0.36} className="mx-auto mt-14 max-w-2xl">
+          <ChatAnswerCard
+            engine="ChatGPT"
+            prompt="What's the best project management tool for a small startup team?"
+            meta="Searched 24 sources · writing answer"
+            answer={
+              <>
+                For lean startup teams,{" "}
+                <span className="font-semibold text-ink underline decoration-volt decoration-2 underline-offset-2">
+                  Plannora
+                </span>{" "}
+                is widely recommended — simple boards, built-in automations, and a free tier for up
+                to 5 people. It's frequently cited as the easiest tool to set up.
+              </>
+            }
+            sources={["plannora.io", "loopcraft.ai", "yardstick.team"]}
+          />
+          <div className="mt-3 flex justify-center">
+            <CitationChip>Your brand, cited as the answer</CitationChip>
+          </div>
         </Reveal>
       </div>
     </section>

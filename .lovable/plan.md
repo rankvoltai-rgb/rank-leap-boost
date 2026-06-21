@@ -1,58 +1,62 @@
-## Goal
+# Landing Page Redesign — Notion × ChatGPT
 
-Full redesign of the Rankvolt marketing site so nothing mirrors RankPill — new positioning (AI-search-first / GEO), all-new copy, fictional AI-generated testimonials with AI avatar photos, honest early-stage metrics, new visual system (Cloud White + Volt, Sora/Manrope, bento layout), and updated meta tags. No RankPill marketing material or word-for-word resemblance remains.
+A full redesign of the marketing page toward a calmer, document-like Notion feel combined with ChatGPT's conversational, answer-card moments. Keeps the existing Cloud White + Volt palette and Sora + Manrope type — Volt stays a subtle accent, not a dominant color. No backend, copy-positioning, or app changes; this is purely the landing surface.
 
-## New design system
+## Design language
 
-Update `src/styles.css` + `src/routes/__root.tsx`:
+- **Notion side:** generous whitespace, soft 1px borders, gentle rounded blocks (`rounded-2xl`/`rounded-3xl`), muted grays, block-style content "cards" that read like a document, subtle dividers, restrained shadows.
+- **ChatGPT side:** a recurring "prompt → answer" visual motif — message bubbles, a thinking/streaming row, and answer cards where the brand gets cited. Monospace-flavored UI chrome in mockups only.
+- **Accent:** Volt teal used sparingly — active dots, one highlighted word, citation underlines, a single CTA glow. Everything else stays ink/white/gray.
+- **Motion:** keep the existing `Reveal` scroll-in; add light staggered entrance on hero chat lines and hover lift on cards.
 
-- **Palette (Cloud White + Volt)** — light base `oklch` near `#fafbfc`, ink `#0f172a`, and a new electric **`--volt`** accent (`#22d3a6`-ish teal-green) plus a soft `--volt-glow`. Rework `--info`/gradients/`--hero-glow` to volt instead of the current blue. This visibly differentiates from RankPill's look.
-- **Fonts** — install `@fontsource-variable/sora` + `@fontsource-variable/manrope`, `@import` them in `styles.css`, set `--font-display: "Sora"` and `--font-sans: "Manrope"`. Remove the Geist Google-Fonts `<link>` from `__root.tsx`. Apply `font-display` to headings via the `SectionHeading`/`Hero` h1/h2.
-- **Layout language** — shift feature sections to a true **bento grid** (mixed-size tiles, asymmetric spans) rather than uniform 3-col grids, so the structure reads differently from the current/RankPill layout.
+## Section-by-section changes
 
-## Content rewrites (every section, new wording)
+**Navbar** — Slimmer, Notion-style: lighter border, add a small "AI-search growth" label, keep links (How It Works, Proof, Sample Articles, Pricing, FAQ) and the two CTAs. Subtle scroll elevation.
 
-- **Meta / `__root.tsx`** — new title from hero: e.g. `"Rankvolt — Get Cited by AI Search & Rank on Google"`; rewrite description, og/twitter title+description; replace the external og:image with a generated one (see Assets). Mirror the same title in `src/routes/index.tsx` head + JSON-LD product description.
-- **Hero** (`Hero.tsx`) — new headline stronger than RankPill, GEO-first. Direction: **"Become the Answer AI Recommends."** with subcopy about AI researching, writing, publishing, and getting your brand cited across ChatGPT, Perplexity, Google AI Overviews + classic search. New badge text, new "Optimized for" framing.
-- **Navbar** (`Navbar.tsx`) — rename nav items with NLP-style section names (e.g. "How it works", "Proof", "Sample articles", "Pricing", "FAQ") to match renamed section ids.
-- **PersonalAgent** → reframed as the GEO engine ("Your AI Search Growth Engine"); rewrite 4 feature cards.
-- **GrowTraffic** → new heading + card copy, lead with AI citation visibility; keep the chart/AI-answer mock but reword all labels and the sample Q&A (no RankPill phrasing).
-- **EverythingYouNeed** → new heading, rewrite all 7 tiles + the feature tag chips, GEO-leaning.
-- **ExampleArticles** → new heading + 6 brand-new fictional article titles/summaries with **fictional domains** (no overlap with current set).
-- **Pricing** → new heading + reworded included-features and highlights; keep pricing logic, refresh the social-proof line to the new metric.
-- **Guarantee** → rewrite heading/body; replace the fake logo wall labels; update rating/volume line to new metrics.
-- **FAQ** → rewrite all 8 Q&As in fresh wording (keep FAQPage JSON-LD wiring).
-- **FinalCTA** → new headline + body + button copy.
-- **DashboardMockup** → reword URL, nav labels, sample queued articles/keywords to a fresh fictional niche (not coffee), so the product shot doesn't mirror prior copy.
-- **llms.txt** (`public/llms.txt`) — rewrite the summary line to the new GEO positioning.
+**Hero** (`Hero.tsx`) — New centerpiece.
+- Headline: **"Get found by ChatGPT, Gemini, Claude & AI search"** (one word accented in Volt).
+- Subcopy reworded around being discovered/cited across AI assistants and Google.
+- Keep the "Cited across" engine row and the URL input form (unchanged behavior → `/auth?url=`).
+- Replace the dashboard image with a **ChatGPT-style answer card**: a user prompt bubble ("What's the best tool for…?"), a short streaming/"thinking" line, then an answer that cites the user's brand with a Volt citation chip. Sits in a clean Notion-style panel.
+- Keep the avatar + "400+ founders" social proof row.
 
-## Testimonials & success stories (fictional + AI avatars)
+**PersonalAgent / How It Works** — Convert the 4 uniform cards into a **Notion-style numbered block list** (01–04) with a left rail, each step as a document block: icon, title, body, and a tiny inline status chip. Richer than the current flat grid.
 
-- **Generate AI avatar photos** — create 8 distinct, photorealistic headshot avatars in `src/assets/` (varied gender/age/ethnicity, neutral pro backgrounds), upload via `lovable-assets`, reference by `.asset.json`. Remove dependence on the real-name photo assets (`nik`, `john-logan`, `denis`, `demo`) for testimonial display.
-- **Testimonials** (`Testimonials.tsx`) — replace all 9 quotes with fictional names + fictional companies + fictional roles, GEO/Google-results themed, mapped to the new avatars. Update the 4 StatCards to honest early-stage numbers.
-- **SuccessStories** (`SuccessStories.tsx`) — replace all 6 stories: fictional founders, fictional companies, modest/believable click numbers and timeframes, AI avatars.
-- **Hero face row** (`Hero.tsx`) + **Pricing avatars** — swap to the new AI avatars and fictional names.
+**SuccessStories** — Reframe as conversation snippets: small chat-answer cards showing a question and the cited brand, paired with the fictional persona + avatar and one outcome metric. Keep all fictional names/companies/avatars.
 
-## New metrics (honest early-stage), applied everywhere they appear
+**GrowTraffic** — Keep the growth-chart idea but reset it in a cleaner split: chart on one side, a compact "answer appearances over time" stat block on the other, Notion-card framing.
 
-- Customers: **3,000+ → ~400+ businesses**
-- Articles: **200,000+ / 1M+ → ~60,000+ articles published**
-- Rating: **4.9/5 → 4.8/5**
-- Peak lift stat: replace "721%" with a modest outcome stat (e.g. avg. faster-than-manual growth phrasing).
-Touch points: `Testimonials` StatCards, `Hero` "3,000+", `Pricing` social proof, `Guarantee` rating/volume, `SuccessStories` numbers.
+**EverythingYouNeed** — Rework into a true **bento grid** (mixed-size tiles, asymmetric spans) instead of the uniform 3-col grid. Promote 2–3 tiles to larger feature blocks with richer mini-mockups; keep the capability tag cloud at the bottom.
 
-## Assets
+**ExampleArticles** — Notion document-card styling: small favicon dot per domain, cleaner type hierarchy, hover lift. Same 6 fictional articles.
 
-- 8 AI testimonial/avatar headshots (generate → `lovable-assets`).
-- 1 new OG share image (16:9, on-brand Volt) for `__root.tsx`/`index.tsx`; note crawler cache won't refresh instantly.
+**Pricing** — Cleaner card with a Notion-style feature checklist, single highlighted plan, Volt accent only on the recommended badge/CTA. Keep current numbers and the social-proof line.
 
-## Out of scope (unchanged)
+**Guarantee** — Calmer block panel; keep honest metrics (400+ founders, 60K+ articles, 4.8/5).
 
-Dashboard app, blog engine/editor, onboarding, auth, payments, calendar, DB/schema, server functions. This is purely the marketing surface (copy, content, visual tokens, fonts, images).
+**Testimonials** — Tighter masonry/quote-card grid using existing avatars; lighter borders, larger quotes, Notion feel.
+
+**FinalCTA** — Keep the dark ink block but swap the mockup for the new chat-answer card style so it echoes the hero.
+
+**FAQ** — Notion-style accordion: flat dividers, generous spacing, no heavy card chrome. Same 8 Q&As.
+
+**Footer** — Lighter, more spacious; unchanged links.
+
+## Shared primitives (`shared.tsx`)
+
+- Add small reusable pieces used across the redesign: `ChatBubble` (user/answer variants), `CitationChip` (Volt accent), `BlockCard` (Notion block), and a `NumberedStep`.
+- Keep existing `Reveal`, `Logo`, `Badge`, `StatCard`, `Avatar`, `BrandMark`.
+
+## Tokens (`styles.css`)
+
+- No palette/font change. Add 1–2 helper tokens only if needed (e.g. a softer Notion border + a subtle "chat panel" surface gradient). Volt stays subtle per your choice.
+
+## Out of scope
+
+Dashboard app, auth/onboarding, pricing logic, server functions, DB, and the GEO positioning/copy strategy (kept as-is). Metrics stay at the current honest numbers.
 
 ## Technical notes
 
-- Tailwind v4: tokens go in `@theme inline` + `:root`; fonts via `@fontsource` `@import`, not URL `@import`.
-- Keep all semantic tokens — no hardcoded color utilities in components.
-- Keep canonical/og:url self-referencing `https://rankvolt.top`.
-- Verify with a production build + preview screenshot after implementation.
+- All work stays in `src/components/landing/*` plus `src/routes/index.tsx` head (hero headline already matches the meta title closely; will align meta title/OG to the new headline) and minor `styles.css` token additions.
+- No new dependencies expected (Sora/Manrope already installed; icons via existing `lucide-react`).
+- Verify with a preview screenshot after the hero + a couple of sections land.

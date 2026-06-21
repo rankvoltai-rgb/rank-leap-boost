@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Check, ArrowRight } from "lucide-react";
-import { Reveal, SectionHeading, BrandMark, Avatar, Stars } from "./shared";
+import { Reveal, Eyebrow, BrandMark, Avatar, Stars } from "./shared";
 import { AVATARS } from "./avatars";
 
 const INCLUDED = [
@@ -28,10 +28,16 @@ export function Pricing() {
   return (
     <section id="pricing" className="py-20 sm:py-24">
       <div className="mx-auto max-w-6xl px-5">
-        <SectionHeading
-          title="One Plan, Your Whole Growth Loop"
-          subtitle="Answer-space research, daily articles, auto-publishing, and authority backlinks in one simple plan — for less than you'd pay for a single freelance article."
-        />
+        <Reveal className="mx-auto max-w-2xl text-center">
+          <Eyebrow className="mb-4">Simple pricing</Eyebrow>
+          <h2 className="font-display text-balance text-3xl font-bold tracking-tight text-ink sm:text-4xl">
+            One plan, your whole growth loop
+          </h2>
+          <p className="mt-4 text-balance text-lg text-muted-foreground">
+            Answer-space research, daily articles, auto-publishing, and authority backlinks in one
+            simple plan — for less than you'd pay for a single freelance article.
+          </p>
+        </Reveal>
 
         <Reveal className="mt-8 flex items-center justify-center gap-3">
           <span className={`text-sm font-medium ${!yearly ? "text-ink" : "text-muted-foreground"}`}>Monthly</span>
@@ -49,8 +55,8 @@ export function Pricing() {
         <div className="mt-10 grid items-start gap-6 lg:grid-cols-2">
           {/* Plan card */}
           <Reveal>
-            <div className="relative overflow-hidden rounded-3xl border border-border bg-card p-8 shadow-[0_30px_80px_-50px_rgba(0,0,0,0.45)]">
-              <span className="absolute right-6 top-6 rounded-full bg-ink px-3 py-1 text-xs font-semibold text-background">
+            <div className="relative overflow-hidden rounded-3xl border border-volt/40 bg-card p-8 shadow-[0_30px_80px_-50px_rgba(0,0,0,0.45)] ring-1 ring-volt/20">
+              <span className="absolute right-6 top-6 rounded-full border border-volt/40 bg-volt/15 px-3 py-1 text-xs font-semibold text-ink">
                 50% OFF
               </span>
               <p className="text-xs font-medium text-muted-foreground">1 website</p>

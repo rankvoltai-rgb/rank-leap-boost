@@ -1,4 +1,4 @@
-import { Reveal, SectionHeading, Avatar, Stars, StatCard } from "./shared";
+import { Reveal, Eyebrow, Avatar, Stars, StatCard } from "./shared";
 import { AVATARS } from "./avatars";
 
 const QUOTES = [
@@ -17,15 +17,16 @@ export function Testimonials() {
   return (
     <section className="py-20 sm:py-24">
       <div className="mx-auto max-w-6xl px-5">
-        <div className="mx-auto mb-4 flex justify-center">
-          <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3.5 py-1.5 text-xs font-medium text-muted-foreground shadow-sm">
-            <Stars className="scale-90" /> Trusted by growing businesses
-          </span>
-        </div>
-        <SectionHeading
-          title="Loved by Growth-Minded Founders"
-          subtitle="See how teams across SaaS, e-commerce, and agencies use Rankvolt to grow organic traffic and get their brand cited by AI assistants."
-        />
+        <Reveal className="mx-auto max-w-2xl text-center">
+          <Eyebrow className="mb-4">Loved by founders</Eyebrow>
+          <h2 className="font-display text-balance text-3xl font-bold tracking-tight text-ink sm:text-4xl">
+            Growth-minded teams, real results
+          </h2>
+          <p className="mt-4 text-balance text-lg text-muted-foreground">
+            See how teams across SaaS, e-commerce, and agencies use Rankvolt to grow organic
+            traffic and get their brand cited by AI assistants.
+          </p>
+        </Reveal>
 
         <div className="mx-auto mt-10 grid max-w-4xl grid-cols-2 gap-4 sm:grid-cols-4">
           <StatCard value="400+" label="Active founders" />
@@ -37,9 +38,9 @@ export function Testimonials() {
         <div className="mt-12 columns-1 gap-5 sm:columns-2 lg:columns-3 [&>*]:mb-5">
           {QUOTES.map((t, i) => (
             <Reveal key={t.n} delay={(i % 3) * 0.05}>
-              <figure className="break-inside-avoid rounded-2xl border border-border bg-card p-6 shadow-elevation transition-all hover:-translate-y-1 hover:shadow-elevation-lg">
+              <figure className="break-inside-avoid rounded-2xl border border-border bg-card p-6 transition-all hover:-translate-y-1 hover:shadow-elevation-lg">
                 <Stars className="mb-3" />
-                <blockquote className="text-sm leading-relaxed text-ink">"{t.q}"</blockquote>
+                <blockquote className="text-[0.95rem] leading-relaxed text-ink">"{t.q}"</blockquote>
                 <figcaption className="mt-5 flex items-center gap-3 border-t border-border pt-4">
                   <Avatar name={t.n} src={t.a} className="h-10 w-10" />
                   <div>

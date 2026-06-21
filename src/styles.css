@@ -245,6 +245,21 @@
   background-image: var(--hero-glow);
 }
 
+@utility bg-dotgrid {
+  background-image: radial-gradient(
+    color-mix(in oklab, var(--ink) 7%, transparent) 1px,
+    transparent 1px
+  );
+  background-size: 22px 22px;
+}
+
+@utility bg-gridlines {
+  background-image:
+    linear-gradient(to right, color-mix(in oklab, var(--ink) 5%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in oklab, var(--ink) 5%, transparent) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+
 @utility onboarding-fade-mask {
   mask-image: linear-gradient(
     to bottom,

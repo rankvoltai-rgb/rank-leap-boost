@@ -16,13 +16,13 @@ import { Footer } from "@/components/landing/Footer";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Rankvolt — Become the Answer AI Recommends" },
+      { title: "Rankvolt — Get Found by ChatGPT, Gemini & AI Search" },
       {
         name: "description",
         content:
           "Rankvolt is the AI growth engine that researches, writes, and publishes daily articles engineered to get your brand cited by ChatGPT, Perplexity, and Google AI Overviews — and ranked on Google.",
       },
-      { property: "og:title", content: "Rankvolt — Become the Answer AI Recommends" },
+      { property: "og:title", content: "Rankvolt — Get Found by ChatGPT, Gemini & AI Search" },
       {
         property: "og:description",
         content:
