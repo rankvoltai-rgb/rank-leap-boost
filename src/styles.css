@@ -186,7 +186,8 @@
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.551 0.027 264.364);
   --success: oklch(0.72 0.15 150);
-  --info: oklch(0.7 0.16 245);
+  --info: oklch(0.74 0.13 178);
+  --volt: oklch(0.78 0.14 178);
 }
 
 @layer base {
