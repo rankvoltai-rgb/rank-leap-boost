@@ -31,7 +31,7 @@ const STEPS = [
 export function PersonalAgent() {
   return (
     <section id="how-it-works" className="border-t border-border bg-surface/40 py-24 sm:py-32">
-      <div className="mx-auto max-w-5xl px-5">
+      <div className="mx-auto max-w-6xl px-5">
         <Reveal className="mx-auto max-w-2xl text-center">
           <Eyebrow className="mb-4">Your GEO + SEO engine</Eyebrow>
           <h2 className="font-display text-balance text-3xl font-bold tracking-tight text-ink sm:text-4xl">
@@ -43,31 +43,32 @@ export function PersonalAgent() {
           </p>
         </Reveal>
 
-        <div className="relative mt-16">
-          <div className="absolute left-[27px] top-2 bottom-2 hidden w-px bg-border sm:block" />
-          <div className="space-y-5">
-            {STEPS.map((s, i) => (
-              <Reveal key={s.title} delay={i * 0.06}>
-                <div className="group relative flex flex-col gap-4 rounded-2xl border border-border bg-card p-5 shadow-elevation transition-all hover:shadow-elevation-lg sm:flex-row sm:items-center sm:gap-6 sm:p-6">
-                  <div className="flex items-center gap-4 sm:gap-6">
-                    <span className="font-display text-sm font-bold tabular-nums text-muted-foreground">
-                      0{i + 1}
-                    </span>
-                    <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-ink text-background ring-4 ring-surface/40">
-                      <s.icon className="h-5 w-5" />
-                    </span>
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <h3 className="text-base font-semibold text-ink">{s.title}</h3>
-                    <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{s.body}</p>
-                  </div>
-                  <span className="w-fit shrink-0 rounded-lg border border-volt/30 bg-volt/10 px-3 py-1.5 text-xs font-medium text-ink">
-                    {s.chip}
+        <div className="mt-16 grid gap-5 sm:grid-cols-2 lg:gap-6">
+          {STEPS.map((s, i) => (
+            <Reveal key={s.title} delay={i * 0.06}>
+              <div className="group relative h-full overflow-hidden rounded-3xl border border-border bg-card p-7 shadow-elevation transition-all duration-300 hover:-translate-y-1 hover:border-volt/40 hover:shadow-elevation-lg sm:p-8">
+                {/* Volt glow on hover */}
+                <div className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-volt/10 opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-100" />
+
+                <div className="relative flex items-start justify-between gap-4">
+                  <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-ink text-background shadow-sm transition-transform duration-300 group-hover:scale-105">
+                    <s.icon className="h-5 w-5" />
+                  </span>
+                  <span className="font-display text-4xl font-bold tabular-nums text-border transition-colors duration-300 group-hover:text-volt/50">
+                    0{i + 1}
                   </span>
                 </div>
-              </Reveal>
-            ))}
-          </div>
+
+                <h3 className="relative mt-6 text-lg font-semibold text-ink">{s.title}</h3>
+                <p className="relative mt-2 text-sm leading-relaxed text-muted-foreground">{s.body}</p>
+
+                <div className="relative mt-6 flex items-center gap-2 border-t border-border pt-5">
+                  <span className="h-1.5 w-1.5 rounded-full bg-volt" />
+                  <span className="text-xs font-semibold tracking-tight text-ink">{s.chip}</span>
+                </div>
+              </div>
+            </Reveal>
+          ))}
         </div>
       </div>
     </section>
