@@ -1,43 +1,43 @@
-import { Sparkles, PenLine, Send, Link2 } from "lucide-react";
+import { Radar, PenLine, Send, Quote } from "lucide-react";
 import { Reveal } from "./shared";
 
 const FEATURES = [
   {
-    icon: Sparkles,
-    title: "Personalized SEO plan",
-    body: "AI analyzes your business and competitors to find your highest-potential keywords automatically.",
+    icon: Radar,
+    title: "Maps your answer space",
+    body: "Rankvolt studies what your buyers ask AI assistants and search engines, then builds a topic map you can actually win.",
   },
   {
     icon: PenLine,
-    title: "Writes articles daily",
-    body: "Traffic-optimized content with images, internal links, and citations in your brand voice.",
+    title: "Writes citation-ready articles",
+    body: "Deeply researched, structured, and source-backed content in your brand voice — the kind AI models love to quote.",
   },
   {
     icon: Send,
-    title: "Publishes to your site",
-    body: "Direct to WordPress, Webflow, Shopify, Framer, Wix, or any platform via webhooks.",
+    title: "Publishes on autopilot",
+    body: "Goes live daily on WordPress, Webflow, Shopify, Framer, Wix, or anywhere via webhooks — zero manual steps.",
   },
   {
-    icon: Link2,
-    title: "Builds backlinks for you",
-    body: "Verified site exchanges in your niche grow your domain authority on autopilot.",
+    icon: Quote,
+    title: "Earns the citation",
+    body: "Tracks where you surface across AI answers and search, then doubles down on what gets you quoted and ranked.",
   },
 ];
 
 export function PersonalAgent() {
   return (
-    <section id="whats-inside" className="border-t border-border bg-surface/40 py-20 sm:py-24">
+    <section id="how-it-works" className="border-t border-border bg-surface/40 py-20 sm:py-24">
       <div className="mx-auto max-w-6xl px-5">
         <Reveal className="mx-auto max-w-2xl text-center">
           <span className="mb-4 inline-block rounded-full border border-border bg-card px-3 py-1 text-xs font-medium text-muted-foreground">
-            SEO/GEO Expert
+            Your GEO + SEO Engine
           </span>
-          <h2 className="text-balance text-3xl font-bold tracking-tight text-ink sm:text-4xl">
-            Your Personal Agent
+          <h2 className="font-display text-balance text-3xl font-bold tracking-tight text-ink sm:text-4xl">
+            One Agent, Built to Get You Cited
           </h2>
           <p className="mt-4 text-balance text-lg text-muted-foreground">
-            Researches keywords, writes daily articles, finds ranking opportunities,
-            and builds backlinks for you.
+            From answer-space research to writing, publishing, and tracking citations —
+            Rankvolt runs your entire AI-search growth loop.
           </p>
         </Reveal>
 
