@@ -61,14 +61,14 @@ export function Hero() {
           {/* LEFT — copy */}
           <div className="mx-auto max-w-2xl text-center lg:mx-0 lg:max-w-xl lg:text-left">
             <Reveal delay={0.04}>
-              <div className="mx-auto mb-6 flex w-fit items-center gap-3 rounded-2xl border border-border bg-card/70 px-4 py-2.5 shadow-elevation backdrop-blur lg:mx-0">
+              <div className="mx-auto mb-6 flex w-fit items-center gap-3 rounded-xl border border-border bg-card/70 px-4 py-2.5 shadow-elevation backdrop-blur lg:mx-0">
                 <span className="text-xs font-medium text-muted-foreground">Cited across</span>
                 <div className="flex items-center gap-2.5">
                   {AI_MARKS.map(({ name, Mark }) => (
                     <span
                       key={name}
                       title={name}
-                      className="flex h-7 w-7 items-center justify-center rounded-lg border border-border bg-background transition-transform hover:-translate-y-0.5"
+                      className="flex h-7 w-7 items-center justify-center rounded-md border border-border bg-background transition-transform hover:-translate-y-0.5"
                     >
                       <Mark className="h-4 w-4" />
                     </span>
