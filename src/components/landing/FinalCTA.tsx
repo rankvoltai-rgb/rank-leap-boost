@@ -4,7 +4,7 @@ import { ChatAnswerCard } from "./chat";
 
 export function FinalCTA() {
   return (
-    <section className="py-20 sm:py-24">
+    <section className="py-24 sm:py-32">
       <div className="mx-auto max-w-6xl px-5">
         <Reveal>
           <div className="relative overflow-hidden rounded-3xl border border-border bg-ink px-6 py-14 text-center sm:px-12">

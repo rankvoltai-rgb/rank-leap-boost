@@ -39,7 +39,7 @@ function Panel({ children, className = "" }: { children: React.ReactNode; classN
 
 export function GrowTraffic() {
   return (
-    <section className="border-t border-border bg-surface/40 py-20 sm:py-24">
+    <section className="border-t border-border bg-surface/40 py-24 sm:py-32">
       <div className="mx-auto max-w-6xl px-5">
         <Reveal className="mx-auto max-w-2xl text-center">
           <Eyebrow className="mb-4">Two search boxes, one engine</Eyebrow>

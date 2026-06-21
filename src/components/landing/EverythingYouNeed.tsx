@@ -41,7 +41,7 @@ function Step({ label, value }: { label: string; value: string }) {
 
 export function EverythingYouNeed() {
   return (
-    <section className="py-20 sm:py-24">
+    <section className="py-24 sm:py-32">
       <div className="mx-auto max-w-6xl px-5">
         <Reveal className="mx-auto max-w-2xl text-center">
           <Eyebrow className="mb-4">One platform, end to end</Eyebrow>

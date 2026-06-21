@@ -26,7 +26,7 @@ const PLATFORMS = ["Google", "ChatGPT", "Claude", "Gemini", "Perplexity", "Bing"
 export function Pricing() {
   const [yearly, setYearly] = useState(false);
   return (
-    <section id="pricing" className="py-20 sm:py-24">
+    <section id="pricing" className="py-24 sm:py-32">
       <div className="mx-auto max-w-6xl px-5">
         <Reveal className="mx-auto max-w-2xl text-center">
           <Eyebrow className="mb-4">Simple pricing</Eyebrow>

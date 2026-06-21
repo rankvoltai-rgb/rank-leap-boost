@@ -19,7 +19,7 @@ export const FAQS = [
 
 export function FAQ() {
   return (
-    <section id="faq" className="border-t border-border bg-surface/40 py-20 sm:py-24">
+    <section id="faq" className="border-t border-border bg-surface/40 py-24 sm:py-32">
       <div className="mx-auto max-w-3xl px-5">
         <Reveal className="mx-auto max-w-2xl text-center">
           <Eyebrow className="mb-4">FAQ</Eyebrow>

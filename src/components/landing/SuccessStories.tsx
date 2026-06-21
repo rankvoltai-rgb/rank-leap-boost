@@ -87,7 +87,7 @@ function EngineBadge({ name }: { name: string }) {
 
 export function SuccessStories() {
   return (
-    <section id="proof" className="py-20 sm:py-24">
+    <section id="proof" className="py-24 sm:py-32">
       <div className="mx-auto max-w-6xl px-5">
         <Reveal className="mx-auto max-w-2xl text-center">
           <Eyebrow className="mb-4">Real answers, real brands</Eyebrow>

@@ -15,7 +15,7 @@ const QUOTES = [
 
 export function Testimonials() {
   return (
-    <section className="py-20 sm:py-24">
+    <section className="py-24 sm:py-32">
       <div className="mx-auto max-w-6xl px-5">
         <Reveal className="mx-auto max-w-2xl text-center">
           <Eyebrow className="mb-4">Loved by founders</Eyebrow>
