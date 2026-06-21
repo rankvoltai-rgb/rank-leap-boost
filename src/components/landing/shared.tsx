@@ -276,3 +276,41 @@ export function SectionDivider({ className }: { className?: string }) {
     </div>
   );
 }
+
+/* ---------- Notion-style block card ---------- */
+export function BlockCard({
+  children,
+  className,
+  hover = false,
+}: {
+  children: ReactNode;
+  className?: string;
+  hover?: boolean;
+}) {
+  return (
+    <div
+      className={cn(
+        "rounded-2xl border border-border bg-card",
+        hover && "transition-all hover:-translate-y-1 hover:shadow-elevation-lg",
+        className,
+      )}
+    >
+      {children}
+    </div>
+  );
+}
+
+/* ---------- Notion-style eyebrow label ---------- */
+export function Eyebrow({ children, className }: { children: ReactNode; className?: string }) {
+  return (
+    <span
+      className={cn(
+        "inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-xs font-medium text-muted-foreground",
+        className,
+      )}
+    >
+      <span className="h-1.5 w-1.5 rounded-full bg-volt" />
+      {children}
+    </span>
+  );
+}
