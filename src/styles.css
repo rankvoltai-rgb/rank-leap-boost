@@ -298,6 +298,26 @@
   animation: engine-swap-in 0.45s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+@keyframes hero-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@utility animate-hero-float {
+  animation: hero-float 6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-hero-float {
+    animation: none;
+  }
+}
+
 @utility onboarding-fade-mask {
   mask-image: linear-gradient(
     to bottom,
