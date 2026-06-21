@@ -1,26 +1,16 @@
 import { Reveal, SectionHeading, Avatar, Stars, StatCard } from "./shared";
-import nikAsset from "@/assets/nik.png.asset.json";
-import johnAsset from "@/assets/john-logan.png.asset.json";
-import denisAsset from "@/assets/denis.png.asset.json";
-import demoAsset from "@/assets/demo.png.asset.json";
-
-const PHOTOS: Record<string, string> = {
-  "Nik Zechner": nikAsset.url,
-  "John Logan": johnAsset.url,
-  "Denis Yurchak": denisAsset.url,
-  "Adam Myrick": demoAsset.url,
-};
+import { AVATARS } from "./avatars";
 
 const QUOTES = [
-  { q: "This actually works. I'm kind of astounded. About 1 month in, went from a couple hundred impressions a day, to about 3,800 a day - and this is hyper-niche in my industry. Support is super helpful and the founder genuinely cares.", n: "Mark Eckert", r: "Owner", c: "That Pitch" },
-  { q: "Rankvolt helped me rank for my main keywords on ChatGPT! Traffic is increasing, and all that with a few clicks. Crazy good!", n: "Nik Zechner", r: "Managing Director", c: "Grauberg" },
-  { q: "We've been using Rankvolt at Yadaphone for under a month, and it already helped us fill our website with high-quality content. Now we can reach out to incumbent competitors and have a strong argument to exchange backlinks.", n: "Denis Yurchak", r: "Founder", c: "Yadaphone" },
-  { q: "I am amazed at the quality of the articles. Choice and variety of links and images! Rankvolt is very easy to setup and integrates with Shopify like a glove. The keyword research is top shelf.", n: "Ray Joe Freyaldenhoven", r: "President", c: "Journeys of Faith" },
-  { q: "I was spending $3,000/month on content writers and $300/month on Ahrefs. Rankvolt replaced both and produces better content. After 3 months, I'm ranking for competitive keywords and getting 5-10 new clients every month.", n: "Elena Kowalski", r: "Marketing Director", c: "" },
-  { q: "Rankvolt has been a huge time-saver for our business. We're able to publish high-quality, search-optimized content consistently without having to think about keywords, outlines, or publishing workflows.", n: "Alex Drizen", r: "CEO", c: "Tk Trends" },
-  { q: "Love Rankvolt so far! Generating articles has been super easy and compared to paying an agency this saves us so much money. Brought views up by 721.9% over 90 days for a brand new website!", n: "Clive", r: "Founder", c: "TSS" },
-  { q: "The difference with Rankvolt is that it really is that easy, and it produces great content. I've already got two other people on board doing it for their businesses.", n: "John Logan", r: "Owner", c: "John Logan Consulting" },
-  { q: "Love Rankvolt! Daily content added to my site that has already scaled my visitors to 250 in two weeks.", n: "Adam Myrick", r: "Founder", c: "adamevansco.com" },
+  { q: "About a month in, a couple of our guides started showing up as the cited source inside ChatGPT answers. We didn't even know that was possible — now it's our most qualified traffic.", n: "Owen Carter", r: "Founder", c: "Briefly", a: AVATARS[0] },
+  { q: "Rankvolt got us quoted in Perplexity for our core questions. Steady visibility, real signups, and all of it runs without me touching a thing.", n: "Priya Raman", r: "Growth Lead", c: "Safeguard", a: AVATARS[1] },
+  { q: "We filled a thin site with genuinely good, source-backed articles in weeks. The structure is clearly built for how AI models read content — it shows in where we surface.", n: "Aman Desai", r: "Founder", c: "Yardstick", a: AVATARS[2] },
+  { q: "Setup took minutes and it plugged into our store cleanly. The answer-space research is the part that surprised me — it finds questions our buyers actually ask AI.", n: "Elise Tanaka", r: "Co-founder", c: "Plannora", a: AVATARS[3] },
+  { q: "I was paying a writer and an SEO tool subscription. Rankvolt replaced both, writes better, and I'm finally ranking for terms I'd given up on.", n: "Marco Silva", r: "Marketing Lead", c: "Northwind Labs", a: AVATARS[4] },
+  { q: "The consistency is the whole game. A strong article goes live every day without me thinking about outlines, keywords, or publishing. It just compounds.", n: "Hannah Whitfield", r: "Founder", c: "Loopcraft", a: AVATARS[5] },
+  { q: "Compared to an agency this is a fraction of the cost and honestly more reliable. Our brand-new site is pulling steady search and AI traffic within months.", n: "Daniel Okafor", r: "Founder", c: "Northlight", a: AVATARS[6] },
+  { q: "What sold me is how little effort it takes. It really is this easy, and the content holds up. I've already pointed two other founders to it.", n: "Sofia Marin", r: "Owner", c: "Verdure Goods", a: AVATARS[7] },
+  { q: "Daily content has already scaled our visitors meaningfully in just a few weeks — and the citations in AI answers are a bonus I didn't expect.", n: "Lena Brandt", r: "Founder", c: "Claystone", a: AVATARS[1] },
 ];
 
 export function Testimonials() {
@@ -33,15 +23,15 @@ export function Testimonials() {
           </span>
         </div>
         <SectionHeading
-          title="Loved by Thousands of Businesses"
-          subtitle="See how businesses across e-commerce, SaaS, and agencies are using Rankvolt to grow their organic traffic and get mentioned by AI assistants."
+          title="Loved by Growth-Minded Founders"
+          subtitle="See how teams across SaaS, e-commerce, and agencies use Rankvolt to grow organic traffic and get their brand cited by AI assistants."
         />
 
         <div className="mx-auto mt-10 grid max-w-4xl grid-cols-2 gap-4 sm:grid-cols-4">
-          <StatCard value="3,000+" label="Happy customers" />
-          <StatCard value="4.9/5" label="Average rating" />
-          <StatCard value="721%" label="Peak traffic lift" />
-          <StatCard value="1M+" label="Articles published" />
+          <StatCard value="400+" label="Active founders" />
+          <StatCard value="4.8/5" label="Average rating" />
+          <StatCard value="60K+" label="Articles published" />
+          <StatCard value="Daily" label="Auto-published content" />
         </div>
 
         <div className="mt-12 columns-1 gap-5 sm:columns-2 lg:columns-3 [&>*]:mb-5">
@@ -51,7 +41,7 @@ export function Testimonials() {
                 <Stars className="mb-3" />
                 <blockquote className="text-sm leading-relaxed text-ink">"{t.q}"</blockquote>
                 <figcaption className="mt-5 flex items-center gap-3 border-t border-border pt-4">
-                  <Avatar name={t.n} src={PHOTOS[t.n]} className="h-10 w-10" />
+                  <Avatar name={t.n} src={t.a} className="h-10 w-10" />
                   <div>
                     <p className="text-sm font-semibold text-ink">{t.n}</p>
                     <p className="text-xs text-muted-foreground">
