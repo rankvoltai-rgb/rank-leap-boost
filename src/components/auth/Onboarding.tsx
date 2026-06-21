@@ -269,10 +269,10 @@ export function Onboarding() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.4, ease: [0.21, 0.47, 0.32, 0.98] }}
-        className="grid min-h-screen bg-background lg:grid-cols-2"
+        className="grid min-h-screen bg-background lg:grid-cols-2 lg:items-start"
       >
         {/* Left — plan value & social proof */}
-        <div className="relative hidden flex-col justify-between overflow-hidden bg-ink px-10 py-12 text-background lg:flex xl:px-14">
+        <div className="relative hidden flex-col justify-between overflow-hidden bg-ink px-10 py-12 text-background lg:flex lg:sticky lg:top-0 lg:h-screen lg:max-h-screen lg:overflow-y-auto xl:px-14">
           <div
             className="pointer-events-none absolute inset-0 opacity-[0.07]"
             style={{
@@ -329,7 +329,7 @@ export function Onboarding() {
           <div className="lg:hidden">
             <Logo />
           </div>
-          <div className="flex flex-1 items-center justify-center py-8">
+          <div className="flex flex-1 items-start justify-center py-4 lg:py-10">
             <div className="w-full max-w-md">
               <div className="mb-3 inline-flex items-center gap-1.5 rounded-full border border-success/20 bg-success/10 px-3 py-1 text-xs font-medium text-success">
                 <Check className="h-3.5 w-3.5" /> Plan secured
