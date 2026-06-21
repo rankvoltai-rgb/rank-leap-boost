@@ -7,7 +7,7 @@ import { getProfile } from "@/lib/api";
 import { Logo, Reveal, Stars, Avatar } from "@/components/landing/shared";
 import { SocialButtons } from "./SocialButtons";
 
-const FACES = ["Mark Eckert", "Nik Zechner", "Denis Yurchak", "Ray Joe", "John Logan"];
+const FACES = ["Owen Carter", "Priya Raman", "Hannah Whitfield", "Marco Silva", "Elise Tanaka"];
 
 const STEPS = [
   { title: "Sign in", desc: "Create your account in seconds." },
