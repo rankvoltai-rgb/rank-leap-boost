@@ -3,6 +3,7 @@ import { Menu, X } from "lucide-react";
 import { Logo } from "./shared";
 
 const LINKS = [
+  { label: "Features", href: "/features" },
   { label: "Proof", href: "#proof" },
   { label: "Sample Articles", href: "#examples" },
   { label: "Pricing", href: "#pricing" },
