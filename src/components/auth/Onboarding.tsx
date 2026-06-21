@@ -329,7 +329,7 @@ export function Onboarding() {
           <div className="lg:hidden">
             <Logo />
           </div>
-          <div className="flex flex-1 items-center justify-center py-8">
+          <div className="flex flex-1 items-start justify-center py-4 lg:py-10">
             <div className="w-full max-w-md">
               <div className="mb-3 inline-flex items-center gap-1.5 rounded-full border border-success/20 bg-success/10 px-3 py-1 text-xs font-medium text-success">
                 <Check className="h-3.5 w-3.5" /> Plan secured
