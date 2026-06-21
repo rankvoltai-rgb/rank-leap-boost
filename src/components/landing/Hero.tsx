@@ -148,9 +148,6 @@ export function Hero() {
                   sources={["plannora.io", "loopcraft.ai", "yardstick.team"]}
                 />
               </div>
-              <div className="mt-4 flex justify-center lg:justify-start">
-                <CitationChip>Your brand, cited as the answer</CitationChip>
-              </div>
             </div>
           </Reveal>
         </div>
