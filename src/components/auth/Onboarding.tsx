@@ -318,7 +318,7 @@ export function Onboarding() {
             <div className="flex flex-col">
               <Stars />
               <p className="text-sm text-background/70">
-                <span className="font-semibold text-background">3,000+</span> happy customers
+                <span className="font-semibold text-background">400+</span> founders growing with Rankvolt
               </p>
             </div>
           </div>
