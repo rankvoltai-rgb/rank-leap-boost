@@ -13,21 +13,20 @@ import { getFeature } from "@/data/features";
 
 export const Route = createFileRoute("/features/$slug")({
   loader: ({ params }) => {
-    const feature = getFeature(params.slug);
-    if (!feature) throw notFound();
-    return feature;
+    if (!getFeature(params.slug)) throw notFound();
   },
-  head: ({ params, loaderData }) => {
+  head: ({ params }) => {
     const url = `https://rankvolt.top/features/${params.slug}`;
-    if (!loaderData) {
+    const feature = getFeature(params.slug);
+    if (!feature) {
       return { meta: [{ title: "Feature not found — Rankvolt" }] };
     }
     return {
       meta: [
-        { title: loaderData.metaTitle },
-        { name: "description", content: loaderData.metaDescription },
-        { property: "og:title", content: loaderData.metaTitle },
-        { property: "og:description", content: loaderData.metaDescription },
+        { title: feature.metaTitle },
+        { name: "description", content: feature.metaDescription },
+        { property: "og:title", content: feature.metaTitle },
+        { property: "og:description", content: feature.metaDescription },
         { property: "og:type", content: "website" },
         { property: "og:url", content: url },
         { name: "twitter:card", content: "summary_large_image" },
@@ -41,7 +40,7 @@ export const Route = createFileRoute("/features/$slug")({
             "@graph": [
               {
                 "@type": "FAQPage",
-                mainEntity: loaderData.faqs.map((f) => ({
+                mainEntity: feature.faqs.map((f) => ({
                   "@type": "Question",
                   name: f.q,
                   acceptedAnswer: { "@type": "Answer", text: f.a },
@@ -52,7 +51,7 @@ export const Route = createFileRoute("/features/$slug")({
                 itemListElement: [
                   { "@type": "ListItem", position: 1, name: "Home", item: "https://rankvolt.top/" },
                   { "@type": "ListItem", position: 2, name: "Features", item: "https://rankvolt.top/features" },
-                  { "@type": "ListItem", position: 3, name: loaderData.name, item: url },
+                  { "@type": "ListItem", position: 3, name: feature.name, item: url },
                 ],
               },
             ],
@@ -67,7 +66,8 @@ export const Route = createFileRoute("/features/$slug")({
 });
 
 function FeaturePage() {
-  const feature = Route.useLoaderData();
+  const { slug } = Route.useParams();
+  const feature = getFeature(slug)!;
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
