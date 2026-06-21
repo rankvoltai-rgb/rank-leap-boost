@@ -29,7 +29,8 @@ import {
 } from "lucide-react";
 import { getBlog, updateBlog, type Blog } from "@/lib/api";
 import { editBlogSection } from "@/lib/ai.functions";
-import { markdownToHtml, htmlToMarkdown } from "@/lib/markdown";
+import { markdownToHtml } from "@/lib/markdown";
+import { htmlToMarkdown } from "@/lib/editor-markdown";
 import { analyzeContent, type SeoAnalysis, type CheckStatus } from "@/lib/seo-analysis";
 import { Button } from "@/components/dashboard/primitives";
 import { cn } from "@/lib/utils";
