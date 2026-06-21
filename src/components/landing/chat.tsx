@@ -13,7 +13,7 @@ function EngineIcon({ name, className }: { name: EngineName; className?: string 
 /* ---------- Volt-accented citation chip ---------- */
 export function CitationChip({ children }: { children: ReactNode }) {
   return (
-    <span className="inline-flex items-center gap-1.5 rounded-full border border-volt/40 bg-volt/10 px-2.5 py-0.5 text-[0.7rem] font-medium text-ink">
+    <span className="inline-flex items-center gap-1.5 rounded-md border border-volt/40 bg-volt/10 px-2.5 py-0.5 text-[0.7rem] font-medium text-ink">
       <span className="h-1.5 w-1.5 rounded-full bg-volt" />
       {children}
     </span>
@@ -23,7 +23,7 @@ export function CitationChip({ children }: { children: ReactNode }) {
 /* ---------- Source pill with a favicon-style dot ---------- */
 function SourcePill({ domain }: { domain: string }) {
   return (
-    <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-2 py-0.5 text-[0.7rem] font-medium text-muted-foreground transition-colors hover:border-ink/20 hover:text-ink">
+    <span className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2 py-0.5 text-[0.7rem] font-medium text-muted-foreground transition-colors hover:border-ink/20 hover:text-ink">
       <span className="flex h-3.5 w-3.5 items-center justify-center rounded-full bg-secondary text-[0.55rem] font-semibold uppercase text-muted-foreground">
         {domain.charAt(0)}
       </span>
@@ -42,7 +42,7 @@ export function EngineTabs({ active = "ChatGPT" }: { active?: EngineName }) {
           <span
             key={name}
             className={cn(
-              "flex shrink-0 items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-medium transition-all",
+              "flex shrink-0 items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-medium transition-all",
               isActive
                 ? "-translate-y-px bg-card text-ink shadow-sm ring-1 ring-border"
                 : "text-muted-foreground/70 hover:text-muted-foreground",
@@ -78,7 +78,7 @@ export function ChatAnswerCard({
   return (
     <div
       className={cn(
-        "overflow-hidden rounded-3xl border border-border bg-card shadow-elevation-lg ring-1 ring-ink/5",
+        "overflow-hidden rounded-xl border border-border bg-card shadow-elevation-lg ring-1 ring-ink/5",
         className,
       )}
     >
@@ -101,7 +101,7 @@ export function ChatAnswerCard({
       {tabs && <EngineTabs active={engine} />}
       <div className="space-y-4 p-5 sm:p-6">
         <div className="flex justify-end">
-          <div className="max-w-[88%] rounded-2xl rounded-br-md bg-ink px-4 py-2.5 text-sm leading-relaxed text-background">
+          <div className="max-w-[88%] rounded-lg rounded-br-sm bg-ink px-4 py-2.5 text-sm leading-relaxed text-background">
             {prompt}
           </div>
         </div>
@@ -137,7 +137,7 @@ export function ChatAnswerCard({
       </div>
       {/* Composer bar (visual only) */}
       <div className="border-t border-border bg-surface/50 px-4 py-3">
-        <div className="flex items-center gap-2 rounded-full border border-border bg-card px-4 py-2 shadow-sm">
+        <div className="flex items-center gap-2 rounded-lg border border-border bg-card px-4 py-2 shadow-sm">
           <span className="flex-1 truncate text-sm text-muted-foreground">
             Ask a follow-up…
           </span>
