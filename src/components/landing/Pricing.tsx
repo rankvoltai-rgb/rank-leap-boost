@@ -1,23 +1,24 @@
 import { useState } from "react";
 import { Check, ArrowRight } from "lucide-react";
 import { Reveal, SectionHeading, BrandMark, Avatar, Stars } from "./shared";
+import { AVATARS } from "./avatars";
 
 const INCLUDED = [
-  "Personalized growth plan",
-  "30 SEO/GEO articles (1 daily)",
-  "3,000+ word long-form articles",
+  "Answer-space research plan",
+  "30 GEO/SEO articles (1 daily)",
+  "2,500+ word, source-backed articles",
   "Auto-publish to your website",
-  "30 backlink credits monthly",
+  "30 authority backlink credits monthly",
   "Auto images, links & promotion",
   "Unlimited rewrites & team members",
 ];
 
 const HIGHLIGHTS = [
-  ["Custom Keywords", "Tailored to your niche"],
+  ["Answer-Space Research", "Tailored to your buyers"],
   ["Daily Articles", "30 articles every month"],
-  ["Built-in Backlinks", "Verified dofollow links"],
+  ["Authority Backlinks", "Verified dofollow links"],
   ["Auto-Publishing", "Zero manual work"],
-  ["SEO/AI Optimized", "Built to rank #1"],
+  ["Cited by AI", "Built to be the answer"],
 ];
 
 const PLATFORMS = ["Google", "ChatGPT", "Claude", "Gemini", "Perplexity", "Bing"];
@@ -28,8 +29,8 @@ export function Pricing() {
     <section id="pricing" className="py-20 sm:py-24">
       <div className="mx-auto max-w-6xl px-5">
         <SectionHeading
-          title="Unlock Traffic on Autopilot"
-          subtitle="Keyword research, daily articles, auto-publishing, and backlinks included in one simple plan. For less than you would pay for a single freelance article."
+          title="One Plan, Your Whole Growth Loop"
+          subtitle="Answer-space research, daily articles, auto-publishing, and authority backlinks in one simple plan — for less than you'd pay for a single freelance article."
         />
 
         <Reveal className="mt-8 flex items-center justify-center gap-3">
@@ -109,14 +110,20 @@ export function Pricing() {
             ))}
             <div className="mt-1 flex items-center gap-3 rounded-2xl border border-border bg-surface/50 p-5">
               <div className="flex -space-x-2">
-                {["Mark E", "Nik Z", "Denis Y", "Ray F", "Adam M"].map((n) => (
-                  <Avatar key={n} name={n} className="h-9 w-9" />
+                {[
+                  ["Owen C", AVATARS[0]],
+                  ["Priya R", AVATARS[1]],
+                  ["Aman D", AVATARS[2]],
+                  ["Elise T", AVATARS[3]],
+                  ["Marco S", AVATARS[4]],
+                ].map(([n, src]) => (
+                  <Avatar key={n} name={n} src={src} className="h-9 w-9" />
                 ))}
               </div>
               <div>
                 <Stars />
                 <p className="text-sm text-muted-foreground">
-                  <span className="font-semibold text-ink">3,000+</span> happy customers
+                  <span className="font-semibold text-ink">400+</span> founders growing with Rankvolt
                 </p>
               </div>
             </div>
