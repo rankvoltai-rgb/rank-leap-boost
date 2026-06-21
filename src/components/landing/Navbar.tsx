@@ -18,9 +18,6 @@ export function Navbar() {
           <a href="#top">
             <Logo />
           </a>
-          <span className="hidden rounded-full border border-border bg-surface/60 px-2.5 py-0.5 text-[0.7rem] font-medium text-muted-foreground lg:inline-flex">
-            AI-search growth engine
-          </span>
         </div>
         <div className="hidden items-center gap-6 md:flex lg:gap-7">
           {LINKS.map((l) => (
