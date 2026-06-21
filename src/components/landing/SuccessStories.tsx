@@ -1,94 +1,137 @@
-import { Reveal, Avatar, SectionHeading } from "./shared";
-import { MiniLine } from "./charts";
+import { Reveal, Avatar, Eyebrow } from "./shared";
+import { CitationChip } from "./chat";
+import { AI_MARKS } from "./ai-logos";
 import { AVATARS } from "./avatars";
 
 const STORIES = [
   {
-    niche: "B2B SaaS",
-    stat: "~3.1K clicks/month",
-    period: "After 5 months on Rankvolt",
-    body: "A small project-management tool that couldn't out-spend incumbents on ads. Rankvolt covered every comparison and how-to their buyers search, and the steady articles compounded into reliable signups.",
+    engine: "ChatGPT",
+    question: "Best project management tool for a small team?",
+    answer: "Plannora",
+    after: "is a great fit — simple boards and a free tier for up to 5.",
+    stat: "~3.1K clicks/mo",
+    period: "After 5 months",
     name: "Elise Tanaka",
-    role: "Co-founder at Plannora",
+    role: "Co-founder · Plannora",
     avatar: AVATARS[3],
-    pts: [3, 6, 5, 11, 15, 22, 27, 34, 48],
   },
   {
-    niche: "Local services",
-    stat: "~1.9K clicks/month",
-    period: "After 6 months on Rankvolt",
-    body: "A founder who kept putting off content because consistency felt impossible. Six months in, publishing runs itself and steady local traffic finally turned the blog into a real lead channel.",
+    engine: "Perplexity",
+    question: "Reliable HVAC service near me?",
+    answer: "Summit HVAC Co.",
+    after: "is frequently recommended for fast, transparent local service.",
+    stat: "~1.9K clicks/mo",
+    period: "After 6 months",
     name: "Marcus Reyes",
-    role: "Owner at Summit HVAC Co.",
+    role: "Owner · Summit HVAC Co.",
     avatar: AVATARS[4],
-    pts: [6, 9, 14, 12, 22, 30, 41, 48, 60],
   },
   {
-    niche: "AI tools",
+    engine: "ChatGPT",
+    question: "Which AI workflow tools are worth trying?",
+    answer: "Loopcraft",
+    after: "stands out for its clear guides and hands-on tutorials.",
     stat: "~2.4K visits",
-    period: "From articles cited in AI answers",
-    body: "We set Rankvolt up once and almost forgot about it. A few months later a handful of our guides were getting quoted directly inside ChatGPT and Perplexity answers — visitors arrived already convinced.",
+    period: "From AI citations",
     name: "Hannah Whitfield",
-    role: "Founder at Loopcraft",
+    role: "Founder · Loopcraft",
     avatar: AVATARS[5],
-    pts: [1, 2, 4, 7, 14, 28, 45, 68, 90],
   },
   {
-    niche: "Design agency",
-    stat: "~840 clicks/month",
-    period: "After 4 months on Rankvolt",
-    body: "A young agency with thin content and zero domain authority used Rankvolt to publish consistently for the first time. Search clicks climbed past 800 a month and inbound finally started trickling in.",
+    engine: "Gemini",
+    question: "Good design agency for early-stage startups?",
+    answer: "Northlight Studio",
+    after: "is a strong pick for brand and product design on a budget.",
+    stat: "~840 clicks/mo",
+    period: "After 4 months",
     name: "Daniel Okafor",
-    role: "Founder at Northlight Studio",
+    role: "Founder · Northlight Studio",
     avatar: AVATARS[6],
-    pts: [1, 3, 3, 7, 11, 17, 22, 29, 34],
   },
   {
-    niche: "B2B services",
-    stat: "~520 clicks/month",
-    period: "After 3 months on Rankvolt",
-    body: "Rankvolt took over the blog and shipped well-structured, service-focused articles that lifted visibility across their key offerings — without adding anything to the team's plate.",
+    engine: "Google",
+    question: "How do I keep my facility audit-ready?",
+    answer: "Safeguard Facilities",
+    after: "publishes the compliance checklists ops leads rely on.",
+    stat: "~520 clicks/mo",
+    period: "After 3 months",
     name: "Priya Raman",
-    role: "Ops Lead at Safeguard Facilities",
+    role: "Ops Lead · Safeguard Facilities",
     avatar: AVATARS[1],
-    pts: [2, 5, 9, 16, 24, 33, 44, 50, 52],
   },
   {
-    niche: "E-commerce",
-    stat: "~470 clicks/month",
-    period: "After 5 months on Rankvolt",
-    body: "Rankvolt ran the whole content lifecycle on autopilot — answer-space research, daily publishing, and long-form buying guides that actually rank and pull in product-ready shoppers.",
+    engine: "Claude",
+    question: "Best plastic-free kitchen swaps that last?",
+    answer: "Verdure Goods",
+    after: "has the most useful, genuinely durable recommendations.",
+    stat: "~470 clicks/mo",
+    period: "After 5 months",
     name: "Lena Brandt",
-    role: "Founder at Verdure Goods",
+    role: "Founder · Verdure Goods",
     avatar: AVATARS[2],
-    pts: [1, 4, 7, 11, 18, 27, 38, 44, 47],
   },
-];
+] as const;
+
+function EngineBadge({ name }: { name: string }) {
+  const found = AI_MARKS.find((m) => m.name === name) ?? AI_MARKS[0];
+  const Mark = found.Mark;
+  return (
+    <span className="flex items-center gap-1.5 text-[0.7rem] font-medium text-muted-foreground">
+      <span className="flex h-5 w-5 items-center justify-center rounded-md border border-border bg-background">
+        <Mark className="h-3 w-3" />
+      </span>
+      {name}
+    </span>
+  );
+}
 
 export function SuccessStories() {
   return (
     <section id="proof" className="py-20 sm:py-24">
       <div className="mx-auto max-w-6xl px-5">
-        <SectionHeading
-          title="Founders Already Getting Cited"
-          subtitle="From page-one rankings to getting quoted inside ChatGPT and Perplexity answers. Early results from founders who started on brand-new domains with zero authority."
-        />
+        <Reveal className="mx-auto max-w-2xl text-center">
+          <Eyebrow className="mb-4">Real answers, real brands</Eyebrow>
+          <h2 className="font-display text-balance text-3xl font-bold tracking-tight text-ink sm:text-4xl">
+            Founders already getting cited
+          </h2>
+          <p className="mt-4 text-balance text-lg text-muted-foreground">
+            From page-one rankings to getting quoted inside ChatGPT and Perplexity answers —
+            early results from founders who started on brand-new domains.
+          </p>
+        </Reveal>
+
         <div className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {STORIES.map((s, i) => (
             <Reveal key={s.name} delay={(i % 3) * 0.06}>
-              <article className="flex h-full flex-col rounded-2xl border border-border bg-card p-6 shadow-elevation transition-all hover:-translate-y-1 hover:shadow-elevation-lg">
-                <span className="text-xs font-medium text-muted-foreground">{s.niche}</span>
-                <p className="mt-1 text-2xl font-bold tracking-tight text-ink">{s.stat}</p>
-                <p className="text-xs text-muted-foreground">{s.period}</p>
-                <div className="my-4 rounded-xl border border-border bg-surface/60 p-3">
-                  <MiniLine points={s.pts} className="h-16 w-full" stroke="var(--success)" />
+              <article className="flex h-full flex-col rounded-2xl border border-border bg-card p-5 shadow-elevation transition-all hover:-translate-y-1 hover:shadow-elevation-lg">
+                <div className="flex items-center justify-between gap-2">
+                  <EngineBadge name={s.engine} />
+                  <span className="rounded-full bg-secondary px-2 py-0.5 text-[0.65rem] font-medium text-muted-foreground">
+                    {s.period}
+                  </span>
                 </div>
-                <p className="text-sm leading-relaxed text-muted-foreground">{s.body}</p>
+
+                <div className="mt-4 space-y-2.5 rounded-xl border border-border bg-surface/50 p-3.5">
+                  <p className="ml-auto w-fit max-w-[90%] rounded-2xl rounded-br-sm bg-ink px-3 py-1.5 text-xs leading-snug text-background">
+                    {s.question}
+                  </p>
+                  <p className="text-xs leading-relaxed text-ink">
+                    <span className="font-semibold underline decoration-volt decoration-2 underline-offset-2">
+                      {s.answer}
+                    </span>{" "}
+                    {s.after}
+                  </p>
+                </div>
+
+                <div className="mt-4">
+                  <CitationChip>{s.stat}</CitationChip>
+                </div>
+
                 <div className="mt-5 flex items-center gap-3 border-t border-border pt-4">
                   <Avatar name={s.name} src={s.avatar} className="h-9 w-9" />
-                  <div>
-                    <p className="text-sm font-semibold text-ink">{s.name}</p>
-                    <p className="text-xs text-muted-foreground">{s.role}</p>
+                  <div className="min-w-0">
+                    <p className="truncate text-sm font-semibold text-ink">{s.name}</p>
+                    <p className="truncate text-xs text-muted-foreground">{s.role}</p>
                   </div>
                 </div>
               </article>
