@@ -82,14 +82,14 @@ export function Hero() {
             </Reveal>
 
             <Reveal delay={0.08}>
-              <h1 className="font-display text-balance text-4xl font-extrabold leading-[1.08] tracking-tight text-ink sm:text-5xl lg:text-[3.5rem] xl:text-[3.85rem]">
+              <h1 className="font-display text-balance text-4xl font-semibold leading-[1.08] tracking-tight text-ink sm:text-5xl lg:text-[3.5rem] xl:text-[3.85rem]">
                 {/* Visually-hidden, crawler + screen-reader friendly full sentence */}
                 <span className="sr-only">
                   Get AI Traffic from ChatGPT, Claude, Gemini and other AI on Autopilot
                 </span>
                 {/* Visual headline: the rotating glass logo stands in for the engine names */}
                 <span aria-hidden className="inline">
-                  Get <span className="text-volt">AI Traffic</span> from{" "}
+                  Get <span className="text-ink">AI Traffic</span> from{" "}
                   <RotatingEngine className="mx-0.5" /> on Autopilot
                 </span>
               </h1>
