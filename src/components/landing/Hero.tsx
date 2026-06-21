@@ -3,6 +3,7 @@ import { ArrowRight, Sparkles } from "lucide-react";
 import { Reveal, Stars, Avatar, Badge } from "./shared";
 import { ChatAnswerCard, CitationChip } from "./chat";
 import { AI_MARKS } from "./ai-logos";
+import { RotatingEngine } from "./RotatingEngine";
 import { AVATARS } from "./avatars";
 
 const FACES = [
@@ -79,15 +80,22 @@ export function Hero() {
           </Reveal>
 
           <Reveal delay={0.08}>
-            <h1 className="font-display text-balance text-4xl font-extrabold leading-[1.05] tracking-tight text-ink sm:text-5xl md:text-[4rem]">
-              Get <span className="text-volt">found</span> by ChatGPT, Gemini, Claude &amp; AI search
+            <h1 className="font-display text-balance text-4xl font-extrabold leading-[1.08] tracking-tight text-ink sm:text-5xl md:text-[4.25rem]">
+              {/* Visually-hidden, crawler + screen-reader friendly full sentence */}
+              <span className="sr-only">
+                Get AI Traffic from ChatGPT, Claude, Gemini and other AI on Autopilot
+              </span>
+              {/* Visual headline: the rotating glass logo stands in for the engine names */}
+              <span aria-hidden className="inline">
+                Get <span className="text-volt">AI Traffic</span> from{" "}
+                <RotatingEngine className="mx-0.5" /> on Autopilot
+              </span>
             </h1>
           </Reveal>
           <Reveal delay={0.16}>
             <p className="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground">
-              Rankvolt researches, writes, and publishes a daily article to your site — so when
-              buyers ask ChatGPT, Perplexity, or Google AI Overviews, your brand is the answer
-              they get cited.
+              Rankvolt publishes daily articles engineered to get your brand cited when buyers ask
+              ChatGPT, Claude, Perplexity, and Google AI Overviews — fully on autopilot.
             </p>
           </Reveal>
 
