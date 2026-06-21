@@ -1,50 +1,35 @@
-# Two-column hero + page-wide breathing room
+# Smoother, sleeker White / Blue / Grey palette
 
-## 1. Hero → two-column layout
+## Goal
+Keep the light base but make it feel calmer and more premium: cooler blue-grey neutrals and a single refined blue accent (replacing the teal-green "Volt"). Accent shows up at a moderate level (3/5) — used for highlights, links, key CTAs and small status dots, not everywhere.
 
-Restructure `Hero.tsx` from one centered column into a 2-column grid on desktop, stacking on mobile/tablet.
+## Approach
+Almost all color comes from semantic tokens in `src/styles.css`. Retuning those tokens recolors the whole site at once, so this stays a focused, low-risk change with no per-component rewrites. The `--volt` token name stays (it's referenced across components) — only its *value* changes to blue, so nothing breaks.
 
-```text
-┌─────────────────────────┬──────────────────────────┐
-│  LEFT (text, left-align) │  RIGHT                    │
-│  • Badge                  │  ChatGPT answer card      │
-│  • "Cited across" row     │  (vertically centered,    │
-│  • H1 (rotating logo)     │   slightly larger,        │
-│  • Subhead                │   polished)               │
-│  • URL form               │                           │
-│  • social proof row       │                           │
-└─────────────────────────┴──────────────────────────┘
-```
+## Changes
 
-- Desktop (`lg:`): `grid-cols-2`, left column text left-aligned, right column holds the `ChatAnswerCard`, vertically centered.
-- Below `lg`: single column, content center-aligned (current look), card stacked under the text.
-- Headline scales down slightly so it fits a half-width column cleanly; rotating glass logo stays inline.
-- Social proof (avatars + "400+ founders") and the URL form left-align on desktop, stay centered on mobile.
-- Widen the hero container to `max-w-7xl` so two columns have room.
+### 1. `src/styles.css` — retune `:root` tokens (light theme)
+- **Accent → blue:** set `--volt` to a refined electric blue (around `oklch(0.58 0.17 255)`), and `--info` to the same family so charts, glows and gradients follow.
+- **Neutrals → cool blue-grey:** add a subtle blue tint to `--background`, `--surface`, `--secondary`, `--muted`, `--accent`, `--border`, `--input` (shift hue toward ~255 and trim warm chroma) so whites and greys read crisp and cool instead of warm/cream.
+- **Ink/foreground:** keep near-black but nudge hue cooler (slate, ~`oklch(0.18 0.02 255)`) for a sleeker contrast against the blue accent.
+- **Muted text:** cool grey (`--muted-foreground` toward a balanced slate) for calmer body copy.
+- Leave `--success` green (used for genuine "Published/positive" status) and `--warning` as-is so status colors stay meaningful; the gradients (`--gradient-accent`, `--gradient-traffic`, `--hero-glow`) automatically pick up the new blue via the tokens they reference.
 
-## 2. Polish the ChatGPT card (right side)
+### 2. Accent intensity tuning (level 3)
+- Keep blue for: links/underlines (`decoration-volt`), the Pricing highlighted card ring, hero "AI Traffic" highlight, small status dots, traffic chart line.
+- Soften the large ambient blue glows (e.g. hero `-inset-6` blur, Personal Agent hover glow) by reducing opacity so the accent feels controlled rather than loud. These are minor className opacity tweaks in `Hero.tsx` and a couple of section cards.
 
-Refine `ChatAnswerCard` / `chat.tsx` so it reads cleanly in the narrower right column:
+### 3. Leave intentional brand/product colors untouched
+- AI/platform logo colors (ChatGPT `#10a37f`, Shopify, Webflow, Reddit, etc. in `shared.tsx` and `ai-logos.tsx`) stay accurate to those brands.
 
-- Add a soft layered backdrop behind the card (subtle Volt glow + faint offset card) so it feels like a floating, premium product shot rather than a flat block.
-- Tighten internal spacing and ensure the engine tabs row scrolls/condenses gracefully at column width.
-- Keep the streaming caret, shimmer line, source pills, and composer bar; just balance padding and font sizes for the smaller width.
-- Add a gentle entrance/float so the card has presence.
+## Files
+- `src/styles.css` (primary — token values)
+- Light opacity tweaks only if needed: `src/components/landing/Hero.tsx`, `PersonalAgent.tsx`
 
-## 3. Page-wide "less crowded" polish
+## Out of scope
+- Font stays Poppins. No layout, copy, or component-structure changes. Dark theme tokens left as-is (site is used in light mode).
 
-A consistent rhythm + whitespace pass across sections (visual/spacing only, no copy or logic changes):
+## Note
+This replaces the previous teal-green "Volt" accent with blue per your request; I'll update the saved brand/design memory to reflect the new white/blue/grey direction.
 
-- **Consistent section padding**: standardize vertical spacing (e.g. `py-24 sm:py-28`) and consistent max-widths so sections breathe evenly.
-- **EverythingYouNeed (bento)**: this is the most crowded — increase grid gaps (`gap-5`/`gap-6`), add more internal tile padding, increase spacing between the bento grid and the "plus everything else" tag cloud, and calm the tag cloud (more gap, lighter chips).
-- **PersonalAgent (how it works)**: more space between the heading and the step list, slightly larger gaps between step cards, softer borders.
-- **SuccessStories / GrowTraffic / Pricing / Testimonials / FAQ**: increase heading-to-content spacing, card gaps, and internal padding; soften borders/shadows for a calmer, more Notion-like feel.
-- Lighten heavy 1px borders to softer tones where they stack densely, and lean on whitespace over dividers.
-
-## Scope / files
-- `src/components/landing/Hero.tsx` — 2-column grid, alignment, container width.
-- `src/components/landing/chat.tsx` — card backdrop/glow, spacing balance for narrow column.
-- `src/components/landing/EverythingYouNeed.tsx`, `PersonalAgent.tsx`, `SuccessStories.tsx`, `GrowTraffic.tsx`, `Pricing.tsx`, `Testimonials.tsx`, `FAQ.tsx`, `Guarantee.tsx`, `shared.tsx` — spacing/padding/gap refinements.
-- Possibly a small token/utility in `src/styles.css` for the card backdrop glow.
-
-No copy strategy, metrics, backend, pricing logic, or routing changes. Volt stays a subtle accent; Poppins font and Cloud White + Volt palette unchanged.
+After applying I'll screenshot the hero and a couple of sections to confirm the new palette reads clean and sleek.
