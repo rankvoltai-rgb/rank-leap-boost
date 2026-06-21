@@ -269,10 +269,10 @@ export function Onboarding() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.4, ease: [0.21, 0.47, 0.32, 0.98] }}
-        className="grid min-h-screen bg-background lg:grid-cols-2"
+        className="grid min-h-screen bg-background lg:grid-cols-2 lg:items-start"
       >
         {/* Left — plan value & social proof */}
-        <div className="relative hidden flex-col justify-between overflow-hidden bg-ink px-10 py-12 text-background lg:flex xl:px-14">
+        <div className="relative hidden flex-col justify-between overflow-hidden bg-ink px-10 py-12 text-background lg:flex lg:sticky lg:top-0 lg:h-screen lg:max-h-screen lg:overflow-y-auto xl:px-14">
           <div
             className="pointer-events-none absolute inset-0 opacity-[0.07]"
             style={{
