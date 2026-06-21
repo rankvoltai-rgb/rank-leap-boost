@@ -39,8 +39,8 @@ export function GrowTraffic() {
     <section className="border-t border-border bg-surface/40 py-20 sm:py-24">
       <div className="mx-auto max-w-6xl px-5">
         <SectionHeading
-          title="Grow Traffic While You Sleep"
-          subtitle="Stop spending hours writing, paying agencies, or juggling expensive SEO tools. Our AI agent handles everything, bringing traffic and sales while you sleep."
+          title="Win Both Search Boxes at Once"
+          subtitle="Stop choosing between ranking on Google and showing up in AI answers. Rankvolt's agent researches, writes, and publishes for both — so traffic and citations grow while you sleep."
         />
 
         <div className="mt-12 grid gap-5 lg:grid-cols-3">
@@ -48,7 +48,7 @@ export function GrowTraffic() {
           <Reveal className="lg:col-span-2">
             <Card
               title="Rank High on Google"
-              body="Publish SEO-optimized articles daily that climb to page one. Target high-intent keywords your customers actually search for."
+              body="Publish optimized articles daily that climb to page one. Target the high-intent questions your buyers actually search."
               className="h-full"
             >
               <Panel>
@@ -82,8 +82,8 @@ export function GrowTraffic() {
           {/* Get mentioned by AI */}
           <Reveal delay={0.06}>
             <Card
-              title="Get Mentioned by AI"
-              body="AI assistants discover your articles and recommend your business."
+              title="Get Cited by AI"
+              body="AI assistants discover your articles and quote your brand as the answer."
               className="h-full"
             >
               <Panel>
@@ -92,10 +92,10 @@ export function GrowTraffic() {
                   <span className="text-sm font-semibold text-ink">ChatGPT</span>
                 </div>
                 <p className="ml-auto w-fit rounded-2xl rounded-br-sm bg-ink px-3 py-2 text-xs text-background">
-                  What's the best CRM for small businesses?
+                  Which tool is best for small-team project planning?
                 </p>
                 <p className="mt-3 rounded-2xl rounded-bl-sm bg-card px-3 py-2 text-xs leading-relaxed text-muted-foreground ring-1 ring-border">
-                  I'd recommend <span className="font-semibold text-ink">Acme CRM</span>. Built for small teams with simple pipelines, email automation, and a free plan for up to 5 users. Trusted by 10,000+ small businesses.
+                  For small teams, <span className="font-semibold text-ink">Plannora</span> is a great fit — simple boards, built-in automations, and a free tier for up to 5 people. Widely recommended for lean startups.
                 </p>
               </Panel>
             </Card>
@@ -105,7 +105,7 @@ export function GrowTraffic() {
           <Reveal delay={0.06}>
             <Card
               title="Fully Customizable"
-              body="Tone of voice, images, offerings. Make every article yours."
+              body="Tone of voice, images, and offerings — make every article unmistakably yours."
               className="h-full"
             >
               <div className="space-y-2.5">
@@ -140,15 +140,15 @@ export function GrowTraffic() {
           <Reveal delay={0.06}>
             <Card
               title="Fully Autonomous"
-              body="From keyword research to writing, publishing, and building backlinks. Rankvolt does everything on autopilot."
+              body="From answer-space research to writing, publishing, and citation tracking — Rankvolt runs the whole loop on autopilot."
               className="h-full"
             >
               <Panel className="space-y-2">
                 {[
-                  ["Best Espresso Machines for Cafes", "Published", "var(--success)"],
-                  ["How to Choose Coffee Beans", "Published", "var(--success)"],
-                  ["Why Single Origin Is Worth It", "Generating", "var(--info)"],
-                  ["Coffee Shop Interior on a Budget", "Queued", "var(--muted-foreground)"],
+                  ["Best Project Tools for Small Teams", "Published", "var(--success)"],
+                  ["Kanban vs Scrum: Which to Pick", "Published", "var(--success)"],
+                  ["How to Run a Sprint Without Chaos", "Generating", "var(--info)"],
+                  ["Free Planning Apps Worth Trying", "Queued", "var(--muted-foreground)"],
                 ].map(([t, st, c]) => (
                   <div key={t} className="flex items-center justify-between rounded-lg bg-card px-2.5 py-1.5 ring-1 ring-border">
                     <span className="truncate pr-2 text-[0.7rem] font-medium text-ink">{t}</span>
