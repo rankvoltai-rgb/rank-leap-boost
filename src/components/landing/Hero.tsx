@@ -128,8 +128,8 @@ export function Hero() {
           <Reveal delay={0.36} y={28} className="mx-auto w-full max-w-xl lg:mx-0">
             <div className="relative">
               {/* layered backdrop */}
-              <div className="pointer-events-none absolute -inset-6 -z-10 rounded-[2rem] bg-volt/10 blur-3xl" />
-              <div className="pointer-events-none absolute inset-x-6 -bottom-4 top-8 -z-10 rounded-3xl border border-border bg-card/60 shadow-elevation" />
+              <div className="pointer-events-none absolute -inset-6 -z-10 rounded-2xl bg-volt/10 blur-3xl" />
+              <div className="pointer-events-none absolute inset-x-6 -bottom-4 top-8 -z-10 rounded-xl border border-border bg-card/60 shadow-elevation" />
               <div className="animate-hero-float">
                 <ChatAnswerCard
                   engine="ChatGPT"
