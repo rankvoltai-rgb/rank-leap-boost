@@ -1,7 +1,7 @@
 # Rankvolt
 
-> Rankvolt grows your organic traffic on autopilot — AI researches keywords, writes daily SEO articles, publishes to your site, and builds backlinks, engineered to rank on Google and AI search engines like ChatGPT.
+> Rankvolt is the AI search growth engine for founders — it researches your buyers' questions, writes daily source-backed articles, publishes to your site, and builds backlinks, engineered to get your brand cited by AI search engines like ChatGPT and Perplexity and ranked on Google.
 
 ## Pages
 
-- [Home](/): What Rankvolt does, features, pricing, testimonials, and FAQ.
+- [Home](/): What Rankvolt does, how it works, proof, sample articles, pricing, and FAQ.
