@@ -15,13 +15,15 @@ export function Navbar() {
   return (
     <header className="sticky top-0 z-50 border-b border-border/60 bg-background/80 backdrop-blur-md">
       <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5">
-        <a href="#top" className="shrink-0">
-          <Logo />
-        </a>
-        <span className="ml-3 hidden rounded-full border border-border bg-surface/60 px-2.5 py-0.5 text-[0.7rem] font-medium text-muted-foreground lg:inline-flex">
-          AI-search growth engine
-        </span>
-        <div className="hidden items-center gap-7 md:ml-auto md:flex">
+        <div className="flex shrink-0 items-center gap-3">
+          <a href="#top">
+            <Logo />
+          </a>
+          <span className="hidden rounded-full border border-border bg-surface/60 px-2.5 py-0.5 text-[0.7rem] font-medium text-muted-foreground lg:inline-flex">
+            AI-search growth engine
+          </span>
+        </div>
+        <div className="hidden items-center gap-6 md:flex lg:gap-7">
           {LINKS.map((l) => (
             <a
               key={l.label}
