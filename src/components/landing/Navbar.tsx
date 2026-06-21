@@ -3,9 +3,9 @@ import { Menu, X } from "lucide-react";
 import { Logo } from "./shared";
 
 const LINKS = [
-  { label: "What's Inside", href: "#whats-inside" },
-  { label: "Success Stories", href: "#success-stories" },
-  { label: "Examples", href: "#examples" },
+  { label: "How It Works", href: "#how-it-works" },
+  { label: "Proof", href: "#proof" },
+  { label: "Sample Articles", href: "#examples" },
   { label: "Pricing", href: "#pricing" },
   { label: "FAQ", href: "#faq" },
 ];
