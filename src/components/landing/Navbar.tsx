@@ -18,7 +18,10 @@ export function Navbar() {
         <a href="#top" className="shrink-0">
           <Logo />
         </a>
-        <div className="hidden items-center gap-7 md:flex">
+        <span className="ml-3 hidden rounded-full border border-border bg-surface/60 px-2.5 py-0.5 text-[0.7rem] font-medium text-muted-foreground lg:inline-flex">
+          AI-search growth engine
+        </span>
+        <div className="hidden items-center gap-7 md:ml-auto md:flex">
           {LINKS.map((l) => (
             <a
               key={l.label}
