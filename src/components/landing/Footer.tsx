@@ -1,8 +1,8 @@
 import { Logo } from "./shared";
 
 const COLS = [
-  { title: "Product", links: ["What's Inside", "Examples", "Pricing", "Success Stories"] },
-  { title: "Features", links: ["SEO Automation", "Content Writer", "Keyword Research", "Backlinks"] },
+  { title: "Product", links: ["How It Works", "Sample Articles", "Pricing", "Proof"] },
+  { title: "Features", links: ["Growth Automation", "Citation-Ready Writer", "Answer-Space Research", "Backlinks"] },
   { title: "Company", links: ["About", "Blog", "Careers", "Contact"] },
   { title: "Legal", links: ["Privacy", "Terms", "Refunds", "Affiliates"] },
 ];
@@ -15,8 +15,8 @@ export function Footer() {
           <div>
             <Logo />
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-muted-foreground">
-              Grow organic traffic on autopilot. Daily published articles and backlink
-              building even while you sleep.
+              The AI search growth engine for founders. Daily published articles engineered
+              to get you cited by AI and ranked on Google.
             </p>
           </div>
           {COLS.map((c) => (
@@ -36,7 +36,7 @@ export function Footer() {
         </div>
         <div className="mt-12 flex flex-col items-center justify-between gap-3 border-t border-border pt-6 sm:flex-row">
           <p className="text-xs text-muted-foreground">© 2026 Rankvolt. All rights reserved.</p>
-          <p className="text-xs text-muted-foreground">Built to rank on Google &amp; AI search.</p>
+          <p className="text-xs text-muted-foreground">Built to be the answer on Google &amp; AI search.</p>
         </div>
       </div>
     </footer>
