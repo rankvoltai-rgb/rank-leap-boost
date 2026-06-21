@@ -19,7 +19,7 @@ export const FAQS = [
 
 export function FAQ() {
   return (
-    <section id="faq" className="border-t border-border bg-surface/40 py-20 sm:py-24">
+    <section id="faq" className="border-t border-border bg-surface/40 py-24 sm:py-32">
       <div className="mx-auto max-w-3xl px-5">
         <Reveal className="mx-auto max-w-2xl text-center">
           <Eyebrow className="mb-4">FAQ</Eyebrow>
@@ -31,7 +31,7 @@ export function FAQ() {
             Google and AI search engines.
           </p>
         </Reveal>
-        <Reveal delay={0.08} className="mt-12">
+        <Reveal delay={0.08} className="mt-14">
           <Accordion type="single" collapsible className="divide-y divide-border rounded-2xl border border-border bg-card px-5">
             {FAQS.map((f, i) => (
               <AccordionItem

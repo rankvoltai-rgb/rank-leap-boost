@@ -21,7 +21,7 @@ function Tile({
 }) {
   return (
     <div
-      className={`flex flex-col rounded-2xl border border-border bg-card p-6 shadow-elevation transition-all hover:-translate-y-1 hover:shadow-elevation-lg ${className}`}
+      className={`flex flex-col rounded-2xl border border-border bg-card p-6 shadow-elevation transition-all hover:-translate-y-1 hover:shadow-elevation-lg sm:p-7 ${className}`}
     >
       <h3 className="text-base font-semibold text-ink">{title}</h3>
       <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{body}</p>
@@ -41,7 +41,7 @@ function Step({ label, value }: { label: string; value: string }) {
 
 export function EverythingYouNeed() {
   return (
-    <section className="py-20 sm:py-24">
+    <section className="py-24 sm:py-32">
       <div className="mx-auto max-w-6xl px-5">
         <Reveal className="mx-auto max-w-2xl text-center">
           <Eyebrow className="mb-4">One platform, end to end</Eyebrow>
@@ -54,7 +54,7 @@ export function EverythingYouNeed() {
           </p>
         </Reveal>
 
-        <div className="mt-12 grid auto-rows-fr gap-4 md:grid-cols-3">
+        <div className="mt-16 grid auto-rows-fr gap-5 md:grid-cols-3 lg:gap-6">
           {/* A — wide */}
           <Reveal className="md:col-span-2">
             <Tile
@@ -191,11 +191,11 @@ export function EverythingYouNeed() {
         </div>
 
         <Reveal delay={0.1}>
-          <div className="mt-6 rounded-2xl border border-border bg-surface/40 p-6">
-            <p className="mb-4 text-center text-sm font-medium text-muted-foreground">
+          <div className="mt-8 rounded-2xl border border-border bg-surface/40 p-8">
+            <p className="mb-5 text-center text-sm font-medium text-muted-foreground">
               Plus everything else you need to scale your content
             </p>
-            <div className="flex flex-wrap justify-center gap-2">
+            <div className="mx-auto flex max-w-3xl flex-wrap justify-center gap-2.5">
               {TAGS.map((t) => (
                 <span key={t} className="rounded-full border border-border bg-card px-3 py-1 text-xs text-muted-foreground">
                   {t}

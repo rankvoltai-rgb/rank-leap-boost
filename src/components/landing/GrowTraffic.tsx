@@ -39,7 +39,7 @@ function Panel({ children, className = "" }: { children: React.ReactNode; classN
 
 export function GrowTraffic() {
   return (
-    <section className="border-t border-border bg-surface/40 py-20 sm:py-24">
+    <section className="border-t border-border bg-surface/40 py-24 sm:py-32">
       <div className="mx-auto max-w-6xl px-5">
         <Reveal className="mx-auto max-w-2xl text-center">
           <Eyebrow className="mb-4">Two search boxes, one engine</Eyebrow>
@@ -53,7 +53,7 @@ export function GrowTraffic() {
         </Reveal>
 
         {/* Featured split */}
-        <div className="mt-12 grid gap-5 lg:grid-cols-5">
+        <div className="mt-16 grid gap-6 lg:grid-cols-5">
           <Reveal className="lg:col-span-3">
             <Card
               title="Rank high on Google"
@@ -116,7 +116,7 @@ export function GrowTraffic() {
         </div>
 
         {/* Supporting capabilities */}
-        <div className="mt-5 grid gap-5 md:grid-cols-3">
+        <div className="mt-6 grid gap-6 md:grid-cols-3">
           <Reveal delay={0.06}>
             <Card
               title="Fully customizable"
@@ -189,7 +189,7 @@ export function GrowTraffic() {
 
         {/* Auto publishing strip */}
         <Reveal delay={0.1}>
-          <div className="mt-5 rounded-2xl border border-border bg-card p-6 shadow-elevation">
+          <div className="mt-6 rounded-2xl border border-border bg-card p-6 shadow-elevation sm:p-8">
             <div className="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
               <div>
                 <h3 className="text-lg font-semibold text-ink">Auto-publishing everywhere</h3>

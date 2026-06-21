@@ -1,42 +1,50 @@
-# Hero headline + AI answer card upgrade
+# Two-column hero + page-wide breathing room
 
-## 1. New hero headline with rotating logo
+## 1. Hero → two-column layout
 
-Replace the long headline with a short, punchy line:
+Restructure `Hero.tsx` from one centered column into a 2-column grid on desktop, stacking on mobile/tablet.
 
 ```text
-Get AI Traffic from [ logo ] on Autopilot
+┌─────────────────────────┬──────────────────────────┐
+│  LEFT (text, left-align) │  RIGHT                    │
+│  • Badge                  │  ChatGPT answer card      │
+│  • "Cited across" row     │  (vertically centered,    │
+│  • H1 (rotating logo)     │   slightly larger,        │
+│  • Subhead                │   polished)               │
+│  • URL form               │                           │
+│  • social proof row       │                           │
+└─────────────────────────┴──────────────────────────┘
 ```
 
-Where `[ logo ]` is a square glass card that cycles through the AI engine logos (ChatGPT → Claude → Gemini → Google → Perplexity) on a timed loop with a smooth fade/slide swap.
+- Desktop (`lg:`): `grid-cols-2`, left column text left-aligned, right column holds the `ChatAnswerCard`, vertically centered.
+- Below `lg`: single column, content center-aligned (current look), card stacked under the text.
+- Headline scales down slightly so it fits a half-width column cleanly; rotating glass logo stays inline.
+- Social proof (avatars + "400+ founders") and the URL form left-align on desktop, stay centered on mobile.
+- Widen the hero container to `max-w-7xl` so two columns have room.
 
-**Crawler-safe text requirement**
-- The `<h1>` always contains real, static text so search/AI crawlers read a clean sentence: `Get AI Traffic from ChatGPT, Claude, Gemini and other AI on Autopilot`.
-- The rotating logo card is layered as a visual element with `aria-hidden`, while the engine names live in a visually-hidden (`sr-only`) span inside the H1. Net result: humans see "Get AI Traffic from [glass logo card] on Autopilot"; crawlers/screen-readers get full natural-language text.
-- Implementation: a small `RotatingEngine` component (client `useState` + `setInterval`, respects `prefers-reduced-motion` by holding on the first logo). Square glass card uses `backdrop-blur`, subtle border, soft shadow, and a faint Volt-tinted glow — sized to sit inline with the text on desktop, wrapping gracefully on mobile.
-- Subhead is shortened to match the tighter headline.
+## 2. Polish the ChatGPT card (right side)
 
-## 2. Improve the ChatGPT answer card (under the hero)
+Refine `ChatAnswerCard` / `chat.tsx` so it reads cleanly in the narrower right column:
 
-Refine `ChatAnswerCard` / `chat.tsx` so the mockup reads as a more polished, modern ChatGPT-style surface:
+- Add a soft layered backdrop behind the card (subtle Volt glow + faint offset card) so it feels like a floating, premium product shot rather than a flat block.
+- Tighten internal spacing and ensure the engine tabs row scrolls/condenses gracefully at column width.
+- Keep the streaming caret, shimmer line, source pills, and composer bar; just balance padding and font sizes for the smaller width.
+- Add a gentle entrance/float so the card has presence.
 
-- Cleaner window chrome: add a faint top toolbar row (engine name + small status), tighter engine-tab styling with the active tab clearly lifted.
-- Streaming feel: animated "writing answer" indicator with a subtle typing/caret cue and a shimmer line for the in-progress state.
-- Better answer typography and spacing; the cited brand keeps the Volt underline treatment.
-- Upgrade the Sources row into proper favicon-dot citation chips with hover states.
-- Add a subtle reply/composer bar at the bottom (visual only) to complete the chat-app illusion.
-- Keep Volt strictly as a subtle accent (active dot, citation underline, one glow), per the established direction.
+## 3. Page-wide "less crowded" polish
+
+A consistent rhythm + whitespace pass across sections (visual/spacing only, no copy or logic changes):
+
+- **Consistent section padding**: standardize vertical spacing (e.g. `py-24 sm:py-28`) and consistent max-widths so sections breathe evenly.
+- **EverythingYouNeed (bento)**: this is the most crowded — increase grid gaps (`gap-5`/`gap-6`), add more internal tile padding, increase spacing between the bento grid and the "plus everything else" tag cloud, and calm the tag cloud (more gap, lighter chips).
+- **PersonalAgent (how it works)**: more space between the heading and the step list, slightly larger gaps between step cards, softer borders.
+- **SuccessStories / GrowTraffic / Pricing / Testimonials / FAQ**: increase heading-to-content spacing, card gaps, and internal padding; soften borders/shadows for a calmer, more Notion-like feel.
+- Lighten heavy 1px borders to softer tones where they stack densely, and lean on whitespace over dividers.
 
 ## Scope / files
+- `src/components/landing/Hero.tsx` — 2-column grid, alignment, container width.
+- `src/components/landing/chat.tsx` — card backdrop/glow, spacing balance for narrow column.
+- `src/components/landing/EverythingYouNeed.tsx`, `PersonalAgent.tsx`, `SuccessStories.tsx`, `GrowTraffic.tsx`, `Pricing.tsx`, `Testimonials.tsx`, `FAQ.tsx`, `Guarantee.tsx`, `shared.tsx` — spacing/padding/gap refinements.
+- Possibly a small token/utility in `src/styles.css` for the card backdrop glow.
 
-- `src/components/landing/Hero.tsx` — new headline markup, sr-only text, mount rotating engine card, trim subhead.
-- New `RotatingEngine` (either inline in `Hero.tsx` or a small `src/components/landing/RotatingEngine.tsx`) — timed logo swap in a glass square.
-- `src/components/landing/chat.tsx` — visual upgrades to `ChatAnswerCard`, `EngineTabs`, citation chips, streaming indicator, composer bar.
-- Possibly minor token/utility additions in `src/styles.css` if a new glass/shimmer helper is needed.
-
-No backend, copy-strategy, pricing, or routing changes. Metrics and GEO positioning stay as-is.
-
-## Technical notes
-- Reuse existing `AI_MARKS` from `ai-logos.tsx` for the rotating logos and tabs.
-- Rotation uses `setInterval` in `useEffect` with cleanup; guard with `matchMedia('(prefers-reduced-motion: reduce)')`.
-- All colors via existing semantic tokens (`--ink`, `--volt`, `--border`, `--card`, etc.) — no hardcoded color classes.
+No copy strategy, metrics, backend, pricing logic, or routing changes. Volt stays a subtle accent; Poppins font and Cloud White + Volt palette unchanged.

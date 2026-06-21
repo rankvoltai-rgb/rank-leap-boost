@@ -5,7 +5,7 @@ const LOGOS = ["Plannora", "Loopcraft", "Yardstick", "Verdure", "Northlight", "C
 
 export function Guarantee() {
   return (
-    <section className="border-t border-border bg-surface/40 py-20 sm:py-24">
+    <section className="border-t border-border bg-surface/40 py-24 sm:py-32">
       <div className="mx-auto max-w-5xl px-5">
         <Reveal>
           <div className="rounded-3xl border border-border bg-card p-8 shadow-elevation sm:p-12">

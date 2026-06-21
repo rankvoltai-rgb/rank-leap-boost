@@ -30,7 +30,7 @@ const STEPS = [
 
 export function PersonalAgent() {
   return (
-    <section id="how-it-works" className="border-t border-border bg-surface/40 py-20 sm:py-24">
+    <section id="how-it-works" className="border-t border-border bg-surface/40 py-24 sm:py-32">
       <div className="mx-auto max-w-5xl px-5">
         <Reveal className="mx-auto max-w-2xl text-center">
           <Eyebrow className="mb-4">Your GEO + SEO engine</Eyebrow>
@@ -43,9 +43,9 @@ export function PersonalAgent() {
           </p>
         </Reveal>
 
-        <div className="relative mt-14">
+        <div className="relative mt-16">
           <div className="absolute left-[27px] top-2 bottom-2 hidden w-px bg-border sm:block" />
-          <div className="space-y-4">
+          <div className="space-y-5">
             {STEPS.map((s, i) => (
               <Reveal key={s.title} delay={i * 0.06}>
                 <div className="group relative flex flex-col gap-4 rounded-2xl border border-border bg-card p-5 shadow-elevation transition-all hover:shadow-elevation-lg sm:flex-row sm:items-center sm:gap-6 sm:p-6">

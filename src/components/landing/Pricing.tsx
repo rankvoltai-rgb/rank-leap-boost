@@ -26,7 +26,7 @@ const PLATFORMS = ["Google", "ChatGPT", "Claude", "Gemini", "Perplexity", "Bing"
 export function Pricing() {
   const [yearly, setYearly] = useState(false);
   return (
-    <section id="pricing" className="py-20 sm:py-24">
+    <section id="pricing" className="py-24 sm:py-32">
       <div className="mx-auto max-w-6xl px-5">
         <Reveal className="mx-auto max-w-2xl text-center">
           <Eyebrow className="mb-4">Simple pricing</Eyebrow>
@@ -52,7 +52,7 @@ export function Pricing() {
           <span className="rounded-full bg-success/15 px-2 py-0.5 text-xs font-semibold text-success">Save 17% OFF</span>
         </Reveal>
 
-        <div className="mt-10 grid items-start gap-6 lg:grid-cols-2">
+        <div className="mt-12 grid items-start gap-8 lg:grid-cols-2">
           {/* Plan card */}
           <Reveal>
             <div className="relative overflow-hidden rounded-3xl border border-volt/40 bg-card p-8 shadow-[0_30px_80px_-50px_rgba(0,0,0,0.45)] ring-1 ring-volt/20">
