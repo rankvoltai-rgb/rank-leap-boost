@@ -85,7 +85,7 @@ export function Hero() {
                 </span>
                 {/* Visual headline: the rotating glass logo stands in for the engine names */}
                 <span aria-hidden className="inline">
-                  Get <span className="text-ink">AI Traffic</span> from{" "}
+                  Get <span className="text-[oklch(0_0_0)]">AI Traffic</span> from{" "}
                   <RotatingEngine className="mx-0.5" /> on Autopilot
                 </span>
               </h1>
