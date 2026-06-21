@@ -100,10 +100,10 @@ export function SuccessStories() {
           </p>
         </Reveal>
 
-        <div className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-16 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {STORIES.map((s, i) => (
             <Reveal key={s.name} delay={(i % 3) * 0.06}>
-              <article className="flex h-full flex-col rounded-2xl border border-border bg-card p-5 shadow-elevation transition-all hover:-translate-y-1 hover:shadow-elevation-lg">
+              <article className="flex h-full flex-col rounded-2xl border border-border bg-card p-6 shadow-elevation transition-all hover:-translate-y-1 hover:shadow-elevation-lg">
                 <div className="flex items-center justify-between gap-2">
                   <EngineBadge name={s.engine} />
                   <span className="rounded-full bg-secondary px-2 py-0.5 text-[0.65rem] font-medium text-muted-foreground">
