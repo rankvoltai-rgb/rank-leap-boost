@@ -45,7 +45,7 @@ export function EverythingYouNeed() {
       <div className="mx-auto max-w-6xl px-5">
         <Reveal className="mx-auto max-w-2xl text-center">
           <Eyebrow className="mb-4">One platform, end to end</Eyebrow>
-          <h2 className="font-display text-balance text-3xl font-bold tracking-tight text-ink sm:text-4xl">
+          <h2 className="font-display text-balance text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
             Everything you need to get cited
           </h2>
           <p className="mt-4 text-balance text-lg text-muted-foreground">
@@ -82,7 +82,7 @@ export function EverythingYouNeed() {
             >
               <div className="mb-3 flex items-center justify-between">
                 <span className="text-xs text-muted-foreground">Article Score</span>
-                <span className="text-2xl font-bold text-success">100<span className="text-sm text-muted-foreground">/100</span></span>
+                <span className="text-2xl font-semibold text-success">100<span className="text-sm text-muted-foreground">/100</span></span>
               </div>
               <div className="space-y-1.5">
                 <Step label="Word count" value="3,247 / 3,000" />

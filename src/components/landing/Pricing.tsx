@@ -30,7 +30,7 @@ export function Pricing() {
       <div className="mx-auto max-w-6xl px-5">
         <Reveal className="mx-auto max-w-2xl text-center">
           <Eyebrow className="mb-4">Simple pricing</Eyebrow>
-          <h2 className="font-display text-balance text-3xl font-bold tracking-tight text-ink sm:text-4xl">
+          <h2 className="font-display text-balance text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
             One plan, your whole growth loop
           </h2>
           <p className="mt-4 text-balance text-lg text-muted-foreground">
@@ -60,11 +60,11 @@ export function Pricing() {
                 50% OFF
               </span>
               <p className="text-xs font-medium text-muted-foreground">1 website</p>
-              <h3 className="mt-1 text-2xl font-bold text-ink">Business</h3>
+              <h3 className="mt-1 text-2xl font-semibold text-ink">Business</h3>
               <p className="text-sm text-muted-foreground">All-in-one growth package</p>
               <div className="mt-5 flex items-end gap-2">
                 <span className="text-lg text-muted-foreground line-through">{yearly ? "$990" : "$99"}</span>
-                <span className="text-5xl font-extrabold tracking-tight text-ink">
+                <span className="text-5xl font-semibold tracking-tight text-ink">
                   {yearly ? "$825" : "$49.5"}
                 </span>
                 <span className="mb-1 text-sm text-muted-foreground">/{yearly ? "year" : "month"}</span>

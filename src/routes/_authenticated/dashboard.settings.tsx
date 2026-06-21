@@ -241,7 +241,7 @@ function SettingsPage() {
                 <Coins className="h-4 w-4 text-warning" />
                 <span className="text-sm font-semibold text-ink">{pkg.label}</span>
               </div>
-              <p className="text-2xl font-bold tracking-tight text-ink tabular-nums">
+              <p className="text-2xl font-semibold tracking-tight text-ink tabular-nums">
                 {pkg.credits.toLocaleString()}
                 <span className="ml-1 text-xs font-medium text-muted-foreground">credits</span>
               </p>

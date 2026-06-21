@@ -87,7 +87,7 @@ function FeaturePage() {
 function FeatureNotFound() {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-background px-5 text-center">
-      <h1 className="font-display text-3xl font-bold text-ink">Feature not found</h1>
+      <h1 className="font-display text-3xl font-semibold text-ink">Feature not found</h1>
       <p className="text-muted-foreground">That feature page doesn't exist.</p>
       <Link to="/features" className="rounded-xl bg-ink px-5 py-3 text-sm font-semibold text-background">
         Browse all features
@@ -99,7 +99,7 @@ function FeatureNotFound() {
 function FeatureError() {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-background px-5 text-center">
-      <h1 className="font-display text-3xl font-bold text-ink">Something went wrong</h1>
+      <h1 className="font-display text-3xl font-semibold text-ink">Something went wrong</h1>
       <Link to="/features" className="rounded-xl bg-ink px-5 py-3 text-sm font-semibold text-background">
         Browse all features
       </Link>

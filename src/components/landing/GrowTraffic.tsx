@@ -43,7 +43,7 @@ export function GrowTraffic() {
       <div className="mx-auto max-w-6xl px-5">
         <Reveal className="mx-auto max-w-2xl text-center">
           <Eyebrow className="mb-4">Two search boxes, one engine</Eyebrow>
-          <h2 className="font-display text-balance text-3xl font-bold tracking-tight text-ink sm:text-4xl">
+          <h2 className="font-display text-balance text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
             Win Google and AI answers at once
           </h2>
           <p className="mt-4 text-balance text-lg text-muted-foreground">
@@ -70,7 +70,7 @@ export function GrowTraffic() {
                   ].map(([l, v]) => (
                     <div key={l}>
                       <p className="text-[0.7rem] text-muted-foreground">{l}</p>
-                      <p className="text-lg font-bold text-ink">{v}</p>
+                      <p className="text-lg font-semibold text-ink">{v}</p>
                     </div>
                   ))}
                 </div>
