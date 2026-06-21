@@ -85,7 +85,6 @@ function Index() {
       <Navbar />
       <main>
         <Hero />
-        <PersonalAgent />
         <SuccessStories />
         <GrowTraffic />
         <EverythingYouNeed />
