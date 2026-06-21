@@ -1,70 +1,77 @@
 import { Reveal, Avatar, SectionHeading } from "./shared";
 import { MiniLine } from "./charts";
+import { AVATARS } from "./avatars";
 
 const STORIES = [
   {
-    niche: "Catholic media / E-commerce",
-    stat: "~12K clicks/month",
+    niche: "B2B SaaS",
+    stat: "~3.1K clicks/month",
+    period: "After 5 months on Rankvolt",
+    body: "A small project-management tool that couldn't out-spend incumbents on ads. Rankvolt covered every comparison and how-to their buyers search, and the steady articles compounded into reliable signups.",
+    name: "Elise Tanaka",
+    role: "Co-founder at Plannora",
+    avatar: AVATARS[3],
+    pts: [3, 6, 5, 11, 15, 22, 27, 34, 48],
+  },
+  {
+    niche: "Local services",
+    stat: "~1.9K clicks/month",
     period: "After 6 months on Rankvolt",
-    body: "A niche Catholic media Shopify store covering Eucharistic Miracles, Marian Apparitions, and the Saints. Rankvolt set up in minutes and started covering every topic their audience searches for.",
-    name: "Raymond Joseph Freyaldenhoven",
-    role: "President at Journeys of Faith",
-    pts: [4, 8, 6, 14, 18, 26, 30, 42, 60],
+    body: "A founder who kept putting off content because consistency felt impossible. Six months in, publishing runs itself and steady local traffic finally turned the blog into a real lead channel.",
+    name: "Marcus Reyes",
+    role: "Owner at Summit HVAC Co.",
+    avatar: AVATARS[4],
+    pts: [6, 9, 14, 12, 22, 30, 41, 48, 60],
   },
   {
-    niche: "Local business",
-    stat: "~6K clicks/month",
-    period: "After 8 months on Rankvolt",
-    body: "A founder who used to procrastinate on content because consistency felt daunting. Eight months on Rankvolt: traffic up roughly 7x and the mental load of publishing gone.",
-    name: "Matt Wentzell",
-    role: "Founder at MountainHP",
-    pts: [10, 14, 22, 18, 40, 60, 120, 160, 200],
-  },
-  {
-    niche: "SaaS / AI tools",
-    stat: "~4.6K clicks",
-    period: "From one article cited by ChatGPT",
-    body: "We set up Rankvolt once, forgot about it, and came back to find one article had pulled in 4.6K visitors from ChatGPT alone — before counting Google and every other AI engine.",
-    name: "Modest Mitkus",
-    role: "Founder at CreateSell",
-    pts: [2, 3, 5, 9, 20, 45, 80, 130, 180],
+    niche: "AI tools",
+    stat: "~2.4K visits",
+    period: "From articles cited in AI answers",
+    body: "We set Rankvolt up once and almost forgot about it. A few months later a handful of our guides were getting quoted directly inside ChatGPT and Perplexity answers — visitors arrived already convinced.",
+    name: "Hannah Whitfield",
+    role: "Founder at Loopcraft",
+    avatar: AVATARS[5],
+    pts: [1, 2, 4, 7, 14, 28, 45, 68, 90],
   },
   {
     niche: "Design agency",
-    stat: "~1K clicks/month",
-    period: "After 6 months on Rankvolt",
-    body: "A startup that couldn't outbid established players on paid keywords used Rankvolt to fix their thin content problem. Search Console clicks climbed to roughly 1,000 a month at peak.",
-    name: "Gethin",
-    role: "Founder at Futur Web",
-    pts: [1, 4, 3, 8, 12, 20, 26, 33, 40],
+    stat: "~840 clicks/month",
+    period: "After 4 months on Rankvolt",
+    body: "A young agency with thin content and zero domain authority used Rankvolt to publish consistently for the first time. Search clicks climbed past 800 a month and inbound finally started trickling in.",
+    name: "Daniel Okafor",
+    role: "Founder at Northlight Studio",
+    avatar: AVATARS[6],
+    pts: [1, 3, 3, 7, 11, 17, 22, 29, 34],
   },
   {
-    niche: "Fire safety / B2B services",
-    stat: "~558 clicks/month",
-    period: "After 2 months on Rankvolt",
-    body: "Rankvolt automated the blog at Firesurv Group Ltd and delivered well-optimised, service-focused content that improved visibility across key services without adding to the team's workload.",
-    name: "Daniel Watson",
-    role: "Operations Director at Firesurv",
-    pts: [3, 6, 10, 18, 28, 40, 52, 55, 56],
+    niche: "B2B services",
+    stat: "~520 clicks/month",
+    period: "After 3 months on Rankvolt",
+    body: "Rankvolt took over the blog and shipped well-structured, service-focused articles that lifted visibility across their key offerings — without adding anything to the team's plate.",
+    name: "Priya Raman",
+    role: "Ops Lead at Safeguard Facilities",
+    avatar: AVATARS[1],
+    pts: [2, 5, 9, 16, 24, 33, 44, 50, 52],
   },
   {
-    niche: "Beauty / Hair salon",
-    stat: "~530 clicks/month",
-    period: "After 7 months on Rankvolt",
-    body: "Rankvolt handled the entire content lifecycle on autopilot. Deep competitor analysis, daily publishing, and 3,000-word articles that actually rank.",
-    name: "MG Hair Studios",
-    role: "Owner",
-    pts: [2, 5, 8, 12, 20, 30, 44, 50, 53],
+    niche: "E-commerce",
+    stat: "~470 clicks/month",
+    period: "After 5 months on Rankvolt",
+    body: "Rankvolt ran the whole content lifecycle on autopilot — answer-space research, daily publishing, and long-form buying guides that actually rank and pull in product-ready shoppers.",
+    name: "Lena Brandt",
+    role: "Founder at Verdure Goods",
+    avatar: AVATARS[2],
+    pts: [1, 4, 7, 11, 18, 27, 38, 44, 47],
   },
 ];
 
 export function SuccessStories() {
   return (
-    <section id="success-stories" className="py-20 sm:py-24">
+    <section id="proof" className="py-20 sm:py-24">
       <div className="mx-auto max-w-6xl px-5">
         <SectionHeading
-          title="Success Stories From Our Customers"
-          subtitle="From ranking on Google to getting cited by ChatGPT. Real numbers from real businesses, many starting from a brand new domain with zero authority."
+          title="Founders Already Getting Cited"
+          subtitle="From page-one rankings to getting quoted inside ChatGPT and Perplexity answers. Early results from founders who started on brand-new domains with zero authority."
         />
         <div className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {STORIES.map((s, i) => (
@@ -78,7 +85,7 @@ export function SuccessStories() {
                 </div>
                 <p className="text-sm leading-relaxed text-muted-foreground">{s.body}</p>
                 <div className="mt-5 flex items-center gap-3 border-t border-border pt-4">
-                  <Avatar name={s.name} className="h-9 w-9" />
+                  <Avatar name={s.name} src={s.avatar} className="h-9 w-9" />
                   <div>
                     <p className="text-sm font-semibold text-ink">{s.name}</p>
                     <p className="text-xs text-muted-foreground">{s.role}</p>

@@ -16,17 +16,17 @@ import { Footer } from "@/components/landing/Footer";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Rankvolt — Get Google & ChatGPT Traffic on Autopilot" },
+      { title: "Rankvolt — Become the Answer AI Recommends" },
       {
         name: "description",
         content:
-          "Grow organic traffic on autopilot. AI researches keywords, writes daily SEO articles, publishes to your site, and builds backlinks while you sleep.",
+          "Rankvolt is the AI growth engine that researches, writes, and publishes daily articles engineered to get your brand cited by ChatGPT, Perplexity, and Google AI Overviews — and ranked on Google.",
       },
-      { property: "og:title", content: "Rankvolt — Get Google & ChatGPT Traffic on Autopilot" },
+      { property: "og:title", content: "Rankvolt — Become the Answer AI Recommends" },
       {
         property: "og:description",
         content:
-          "Daily AI-written, SEO-optimized articles and backlink building, fully on autopilot. Trusted by 3,000+ businesses.",
+          "Daily AI-written articles engineered for AI search citations and Google rankings, fully on autopilot. Built for growth-minded founders.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -55,7 +55,7 @@ export const Route = createFileRoute("/")({
               "@type": "Product",
               name: "Rankvolt",
               description:
-                "AI-powered SEO automation that researches keywords, writes daily SEO articles, publishes to your site, and builds backlinks to grow organic traffic on Google and AI search engines.",
+                "AI-powered growth engine that researches your buyers' questions, writes daily articles, publishes to your site, and builds backlinks to get your brand cited by AI search engines and ranked on Google.",
               brand: { "@id": "https://rankvolt.top/#organization" },
               offers: {
                 "@type": "Offer",

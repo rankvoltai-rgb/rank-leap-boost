@@ -48,16 +48,16 @@ const SCAN_STEPS = [
 ];
 
 const PLAN_FEATURES = [
-  "Personalized growth plan",
-  "30 SEO/GEO articles (1 daily)",
-  "3,000+ word long-form articles",
+  "Answer-space research plan",
+  "30 GEO/SEO articles (1 daily)",
+  "2,500+ word, source-backed articles",
   "Auto-publish to your website",
-  "30 backlink credits monthly",
+  "30 authority backlink credits monthly",
   "Auto images, links & promotion",
   "Unlimited rewrites & team members",
 ];
 
-const PROOF_FACES = ["Mark Eckert", "Nik Zechner", "Denis Yurchak", "Ray Joe", "Adam Miles"];
+const PROOF_FACES = ["Owen Carter", "Priya Raman", "Hannah Whitfield", "Marco Silva", "Daniel Okafor"];
 
 function reducedMotion() {
   if (typeof window === "undefined") return false;
@@ -318,7 +318,7 @@ export function Onboarding() {
             <div className="flex flex-col">
               <Stars />
               <p className="text-sm text-background/70">
-                <span className="font-semibold text-background">3,000+</span> happy customers
+                <span className="font-semibold text-background">400+</span> founders growing with Rankvolt
               </p>
             </div>
           </div>

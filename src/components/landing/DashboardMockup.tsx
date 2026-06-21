@@ -7,18 +7,18 @@ import {
   BarChart3,
 } from "lucide-react";
 
-const NAV_GENERAL = ["Dashboard", "Articles", "Backlinks", "Settings"];
+const NAV_GENERAL = ["Dashboard", "Articles", "Citations", "Settings"];
 const NAV_SUPPORT = ["Ask Rankvolt", "Help Center"];
 const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
 const QUEUED = [
-  { t: "Best Espresso Machines for Small Cafes in 2026", k: "best espresso machines for cafes", v: "12,300" },
-  { t: "How to Choose Coffee Beans: A Complete Guide", k: "how to choose coffee beans", v: "8,100" },
-  { t: "Cold Brew vs Iced Coffee: What's the Difference", k: "cold brew vs iced coffee", v: "5,900" },
-  { t: "Top 10 Latte Art Techniques for Beginners", k: "latte art techniques beginners", v: "3,400" },
-  { t: "Coffee Shop Marketing Ideas That Actually Work", k: "coffee shop marketing ideas", v: "2,900" },
-  { t: "How to Start a Coffee Subscription Service", k: "coffee subscription business", v: "4,200" },
-  { t: "Best Milk Alternatives for Coffee Shops", k: "milk alternatives coffee", v: "6,700" },
+  { t: "Best Project Management Tools for Small Teams in 2026", k: "best project management tools", v: "12,300" },
+  { t: "Kanban vs Scrum: A Complete Guide for Founders", k: "kanban vs scrum", v: "8,100" },
+  { t: "Async vs Live Standups: What's the Difference", k: "async vs live standups", v: "5,900" },
+  { t: "Top 10 Sprint Planning Techniques for Beginners", k: "sprint planning techniques", v: "3,400" },
+  { t: "Startup Onboarding Ideas That Actually Work", k: "startup onboarding ideas", v: "2,900" },
+  { t: "How to Run a Remote-First Team", k: "remote first team", v: "4,200" },
+  { t: "Best Free Planning Apps for Lean Teams", k: "free planning apps", v: "6,700" },
 ];
 
 export function DashboardMockup() {
@@ -32,7 +32,7 @@ export function DashboardMockup() {
           <span className="h-2.5 w-2.5 rounded-full bg-border" />
         </span>
         <span className="mx-auto flex items-center gap-1.5 rounded-md border border-border bg-card px-2.5 py-0.5 text-[0.6rem] font-medium text-muted-foreground">
-          app.rankvolt.com/dashboard
+          app.rankvolt.top/dashboard
         </span>
       </div>
       <div className="flex">

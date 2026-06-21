@@ -7,7 +7,7 @@ import { getProfile } from "@/lib/api";
 import { Logo, Reveal, Stars, Avatar } from "@/components/landing/shared";
 import { SocialButtons } from "./SocialButtons";
 
-const FACES = ["Mark Eckert", "Nik Zechner", "Denis Yurchak", "Ray Joe", "John Logan"];
+const FACES = ["Owen Carter", "Priya Raman", "Hannah Whitfield", "Marco Silva", "Elise Tanaka"];
 
 const STEPS = [
   { title: "Sign in", desc: "Create your account in seconds." },
@@ -224,7 +224,7 @@ export function AuthSplit() {
           <div className="flex flex-col">
             <Stars />
             <p className="text-sm text-background/70">
-              <span className="font-semibold text-background">3,000+</span> happy customers
+              <span className="font-semibold text-background">400+</span> founders growing with Rankvolt
             </p>
           </div>
         </div>

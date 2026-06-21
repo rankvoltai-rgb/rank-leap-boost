@@ -3,34 +3,34 @@ import { Reveal, SectionHeading } from "./shared";
 
 const ARTICLES = [
   {
-    title: "What Does a Mortgage Banker Do? A Seattle Expert Guide",
-    body: "How mortgage bankers differ from brokers, when each makes sense, and how Seattle tech-professional income affects approval.",
-    domain: "themortgagereel.com",
+    title: "Kanban vs Scrum: Which Framework Fits Your Team?",
+    body: "A practical breakdown of when each framework wins, how to switch without chaos, and the signals that tell you it's time to change.",
+    domain: "plannora.io",
   },
   {
-    title: "Flood Damage Cleanup Services: What to Do in 24 Hours",
-    body: "The first 24 hours determine whether you face a manageable cleanup or months of mold remediation. Step-by-step actions before pros arrive.",
-    domain: "clarketon.com",
+    title: "Heat Pump vs Furnace: The Real 2026 Cost Comparison",
+    body: "Upfront price, running costs, and climate factors that decide which system actually saves you money over ten years.",
+    domain: "summithvac.co",
   },
   {
-    title: "How CBD Works for Pain Relief: The Science Explained",
-    body: "Discover how CBD works for pain relief through the endocannabinoid system, inflammation reduction, and nerve signaling — evidence-based.",
-    domain: "reclaimlabs.com",
+    title: "How AI Answer Engines Decide Who to Cite",
+    body: "What ChatGPT and Perplexity actually look for when sourcing answers — structure, clarity, and authority signals you can build.",
+    domain: "loopcraft.ai",
   },
   {
-    title: "PS5 Controller Fix Near Me: Expert Repair Solutions",
-    body: "Stick drift, button failures, charging issues — typical repair costs in 2026, what to expect, and when replacement wins.",
-    domain: "videogame911.com",
+    title: "Remote Standups That Don't Waste Everyone's Time",
+    body: "Async formats, time-boxing, and the templates lean teams use to keep daily standups under ten minutes.",
+    domain: "yardstick.team",
   },
   {
-    title: "Beard Dandruff Shampoo: How to Pick One That Works",
-    body: "Active ingredients that fight Malassezia yeast, the right wash routine, and complementary habits to keep flakes from coming back.",
-    domain: "onesociety.co.uk",
+    title: "Plastic-Free Kitchen Swaps That Actually Last",
+    body: "Durable, genuinely useful alternatives — what's worth buying, what to skip, and how to tell quality from greenwashing.",
+    domain: "verduregoods.com",
   },
   {
-    title: "Commercial Roofing Systems: A Complete 2026 Guide",
-    body: "Explore commercial roofing systems, materials, installation, and maintenance. Learn how to choose the right system for your building.",
-    domain: "texcoreconstruction.com",
+    title: "Facility Compliance Checklists Every Ops Lead Needs",
+    body: "The recurring safety and compliance tasks that keep buildings audit-ready — organized into checklists you can actually run.",
+    domain: "safeguardfm.com",
   },
 ];
 
@@ -39,8 +39,8 @@ export function ExampleArticles() {
     <section id="examples" className="border-t border-border bg-surface/40 py-20 sm:py-24">
       <div className="mx-auto max-w-6xl px-5">
         <SectionHeading
-          title="AI Articles That Get Traffic"
-          subtitle="Nobody will ever tell these were written by AI. Packed with images, internal links, real data, and the depth Google rewards. Scan a few and see for yourself."
+          title="AI Articles That Get Cited"
+          subtitle="Nobody will guess these were written by AI. Packed with images, internal links, real data, and the structure that both Google and AI answer engines reward. Scan a few and see for yourself."
         />
         <div className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {ARTICLES.map((a, i) => (
