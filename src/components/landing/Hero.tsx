@@ -26,7 +26,7 @@ function UrlForm() {
         e.preventDefault();
         go();
       }}
-      className="group flex w-full max-w-xl flex-col gap-2 rounded-2xl border border-border bg-card p-2 shadow-elevation transition-all focus-within:shadow-elevation-lg sm:flex-row sm:items-center sm:rounded-full"
+      className="group flex w-full max-w-xl flex-col gap-2 rounded-xl border border-border bg-card p-2 shadow-elevation transition-all focus-within:shadow-elevation-lg sm:flex-row sm:items-center"
     >
       <div className="flex flex-1 items-center gap-2.5 px-3">
         <Sparkles className="h-4 w-4 shrink-0 text-muted-foreground" />
@@ -42,7 +42,7 @@ function UrlForm() {
       </div>
       <button
         type="submit"
-        className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-ink px-6 py-3 text-sm font-semibold text-background shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 sm:rounded-full"
+        className="inline-flex shrink-0 items-center justify-center gap-2 rounded-lg bg-ink px-6 py-3 text-sm font-semibold text-background shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md active:translate-y-0"
       >
         Get Started Free
         <ArrowRight className="h-4 w-4 transition-transform group-focus-within:translate-x-0.5" />
@@ -61,14 +61,14 @@ export function Hero() {
           {/* LEFT — copy */}
           <div className="mx-auto max-w-2xl text-center lg:mx-0 lg:max-w-xl lg:text-left">
             <Reveal delay={0.04}>
-              <div className="mx-auto mb-6 flex w-fit items-center gap-3 rounded-2xl border border-border bg-card/70 px-4 py-2.5 shadow-elevation backdrop-blur lg:mx-0">
+              <div className="mx-auto mb-6 flex w-fit items-center gap-3 rounded-xl border border-border bg-card/70 px-4 py-2.5 shadow-elevation backdrop-blur lg:mx-0">
                 <span className="text-xs font-medium text-muted-foreground">Cited across</span>
                 <div className="flex items-center gap-2.5">
                   {AI_MARKS.map(({ name, Mark }) => (
                     <span
                       key={name}
                       title={name}
-                      className="flex h-7 w-7 items-center justify-center rounded-lg border border-border bg-background transition-transform hover:-translate-y-0.5"
+                      className="flex h-7 w-7 items-center justify-center rounded-md border border-border bg-background transition-transform hover:-translate-y-0.5"
                     >
                       <Mark className="h-4 w-4" />
                     </span>
