@@ -21,6 +21,7 @@ import { Route as AuthenticatedDashboardIndexRouteImport } from './routes/_authe
 import { Route as AuthenticatedDashboardVisibilityRouteImport } from './routes/_authenticated/dashboard.visibility'
 import { Route as AuthenticatedDashboardSettingsRouteImport } from './routes/_authenticated/dashboard.settings'
 import { Route as AuthenticatedDashboardKeywordsRouteImport } from './routes/_authenticated/dashboard.keywords'
+import { Route as AuthenticatedDashboardInsightsRouteImport } from './routes/_authenticated/dashboard.insights'
 import { Route as AuthenticatedDashboardCalendarRouteImport } from './routes/_authenticated/dashboard.calendar'
 import { Route as AuthenticatedDashboardBlogEngineRouteImport } from './routes/_authenticated/dashboard.blog-engine'
 import { Route as AuthenticatedDashboardBillingRouteImport } from './routes/_authenticated/dashboard.billing'
@@ -91,6 +92,12 @@ const AuthenticatedDashboardKeywordsRoute =
     path: '/keywords',
     getParentRoute: () => AuthenticatedDashboardRoute,
   } as any)
+const AuthenticatedDashboardInsightsRoute =
+  AuthenticatedDashboardInsightsRouteImport.update({
+    id: '/insights',
+    path: '/insights',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
 const AuthenticatedDashboardCalendarRoute =
   AuthenticatedDashboardCalendarRouteImport.update({
     id: '/calendar',
@@ -139,6 +146,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/billing': typeof AuthenticatedDashboardBillingRoute
   '/dashboard/blog-engine': typeof AuthenticatedDashboardBlogEngineRoute
   '/dashboard/calendar': typeof AuthenticatedDashboardCalendarRoute
+  '/dashboard/insights': typeof AuthenticatedDashboardInsightsRoute
   '/dashboard/keywords': typeof AuthenticatedDashboardKeywordsRoute
   '/dashboard/settings': typeof AuthenticatedDashboardSettingsRoute
   '/dashboard/visibility': typeof AuthenticatedDashboardVisibilityRoute
@@ -157,6 +165,7 @@ export interface FileRoutesByTo {
   '/dashboard/billing': typeof AuthenticatedDashboardBillingRoute
   '/dashboard/blog-engine': typeof AuthenticatedDashboardBlogEngineRoute
   '/dashboard/calendar': typeof AuthenticatedDashboardCalendarRoute
+  '/dashboard/insights': typeof AuthenticatedDashboardInsightsRoute
   '/dashboard/keywords': typeof AuthenticatedDashboardKeywordsRoute
   '/dashboard/settings': typeof AuthenticatedDashboardSettingsRoute
   '/dashboard/visibility': typeof AuthenticatedDashboardVisibilityRoute
@@ -178,6 +187,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/billing': typeof AuthenticatedDashboardBillingRoute
   '/_authenticated/dashboard/blog-engine': typeof AuthenticatedDashboardBlogEngineRoute
   '/_authenticated/dashboard/calendar': typeof AuthenticatedDashboardCalendarRoute
+  '/_authenticated/dashboard/insights': typeof AuthenticatedDashboardInsightsRoute
   '/_authenticated/dashboard/keywords': typeof AuthenticatedDashboardKeywordsRoute
   '/_authenticated/dashboard/settings': typeof AuthenticatedDashboardSettingsRoute
   '/_authenticated/dashboard/visibility': typeof AuthenticatedDashboardVisibilityRoute
@@ -199,6 +209,7 @@ export interface FileRouteTypes {
     | '/dashboard/billing'
     | '/dashboard/blog-engine'
     | '/dashboard/calendar'
+    | '/dashboard/insights'
     | '/dashboard/keywords'
     | '/dashboard/settings'
     | '/dashboard/visibility'
@@ -217,6 +228,7 @@ export interface FileRouteTypes {
     | '/dashboard/billing'
     | '/dashboard/blog-engine'
     | '/dashboard/calendar'
+    | '/dashboard/insights'
     | '/dashboard/keywords'
     | '/dashboard/settings'
     | '/dashboard/visibility'
@@ -237,6 +249,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/billing'
     | '/_authenticated/dashboard/blog-engine'
     | '/_authenticated/dashboard/calendar'
+    | '/_authenticated/dashboard/insights'
     | '/_authenticated/dashboard/keywords'
     | '/_authenticated/dashboard/settings'
     | '/_authenticated/dashboard/visibility'
@@ -344,6 +357,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardKeywordsRouteImport
       parentRoute: typeof AuthenticatedDashboardRoute
     }
+    '/_authenticated/dashboard/insights': {
+      id: '/_authenticated/dashboard/insights'
+      path: '/insights'
+      fullPath: '/dashboard/insights'
+      preLoaderRoute: typeof AuthenticatedDashboardInsightsRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
     '/_authenticated/dashboard/calendar': {
       id: '/_authenticated/dashboard/calendar'
       path: '/calendar'
@@ -393,6 +413,7 @@ interface AuthenticatedDashboardRouteChildren {
   AuthenticatedDashboardBillingRoute: typeof AuthenticatedDashboardBillingRoute
   AuthenticatedDashboardBlogEngineRoute: typeof AuthenticatedDashboardBlogEngineRoute
   AuthenticatedDashboardCalendarRoute: typeof AuthenticatedDashboardCalendarRoute
+  AuthenticatedDashboardInsightsRoute: typeof AuthenticatedDashboardInsightsRoute
   AuthenticatedDashboardKeywordsRoute: typeof AuthenticatedDashboardKeywordsRoute
   AuthenticatedDashboardSettingsRoute: typeof AuthenticatedDashboardSettingsRoute
   AuthenticatedDashboardVisibilityRoute: typeof AuthenticatedDashboardVisibilityRoute
@@ -406,6 +427,7 @@ const AuthenticatedDashboardRouteChildren: AuthenticatedDashboardRouteChildren =
     AuthenticatedDashboardBlogEngineRoute:
       AuthenticatedDashboardBlogEngineRoute,
     AuthenticatedDashboardCalendarRoute: AuthenticatedDashboardCalendarRoute,
+    AuthenticatedDashboardInsightsRoute: AuthenticatedDashboardInsightsRoute,
     AuthenticatedDashboardKeywordsRoute: AuthenticatedDashboardKeywordsRoute,
     AuthenticatedDashboardSettingsRoute: AuthenticatedDashboardSettingsRoute,
     AuthenticatedDashboardVisibilityRoute:
