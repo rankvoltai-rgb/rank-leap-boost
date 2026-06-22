@@ -10,7 +10,6 @@ import {
   type Blog,
 } from "@/lib/api";
 import { Panel, StatCard, Pill, Button, PageHeader } from "@/components/dashboard/primitives";
-import { CountUp } from "@/components/ui/count-up";
 import { AI_ALGORITHM_MARKS } from "@/components/landing/ai-logos";
 
 export const Route = createFileRoute("/_authenticated/dashboard/")({
@@ -170,7 +169,7 @@ function SystemConsole() {
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
         <StatCard
           label="Projected Monthly Traffic"
-          value={<CountUp value={estimatedTraffic} className="text-gradient-traffic" />}
+          value={<span className="text-volt">{estimatedTraffic.toLocaleString()}</span>}
           hint="Monthly organic visitors"
           emphasis
         />
