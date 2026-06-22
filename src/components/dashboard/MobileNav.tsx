@@ -43,7 +43,7 @@ export function MobileNav() {
           <Menu className="h-4 w-4" />
         </button>
       </SheetTrigger>
-      <SheetContent side="left" className="w-64 p-0">
+      <SheetContent side="left" className="w-64 overflow-hidden p-0">
         <SheetTitle className="sr-only">Navigation</SheetTitle>
         <div className="flex h-14 items-center border-b border-border px-5">
           <Logo />
