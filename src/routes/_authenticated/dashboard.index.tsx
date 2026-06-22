@@ -11,7 +11,6 @@ import {
   RemoveIcon,
   PublishIcon,
   RocketIcon,
-  AutopilotIcon,
   ArticleIcon,
   ChartIcon,
   TargetIcon,
