@@ -8,7 +8,19 @@ import { Logo, Reveal, Stars, Avatar } from "@/components/landing/shared";
 import { SocialButtons } from "./SocialButtons";
 import { AuthVisual } from "./AuthVisual";
 
-const FACES = ["Owen Carter", "Priya Raman", "Hannah Whitfield", "Marco Silva", "Elise Tanaka"];
+import avatar1 from "@/assets/avatar-1.jpg.asset.json";
+import avatar2 from "@/assets/avatar-2.jpg.asset.json";
+import avatar3 from "@/assets/avatar-3.jpg.asset.json";
+import avatar4 from "@/assets/avatar-4.jpg.asset.json";
+import avatar5 from "@/assets/avatar-5.jpg.asset.json";
+
+const FACES = [
+  { name: "Owen Carter", src: avatar1.url },
+  { name: "Priya Raman", src: avatar2.url },
+  { name: "Hannah Whitfield", src: avatar3.url },
+  { name: "Marco Silva", src: avatar4.url },
+  { name: "Elise Tanaka", src: avatar5.url },
+];
 
 function Field({
   label,
