@@ -33,6 +33,8 @@ import { markdownToHtml } from "@/lib/markdown";
 import { htmlToMarkdown } from "@/lib/editor-markdown";
 import { analyzeContent, type SeoAnalysis, type CheckStatus } from "@/lib/seo-analysis";
 import { Button } from "@/components/dashboard/primitives";
+import { Confetti } from "@/components/dashboard/rewards";
+import { PublishIcon } from "@/components/dashboard/icons";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_authenticated/dashboard/editor/$blogId")({
@@ -226,6 +228,7 @@ function BlogEditor() {
   const [saveState, setSaveState] = useState<SaveState>("idle");
   const [aiBusy, setAiBusy] = useState<string | null>(null);
   const [published, setPublished] = useState(false);
+  const [confettiKey, setConfettiKey] = useState(0);
 
   const loadedRef = useRef(false);
   const dirtyRef = useRef(false);
@@ -307,6 +310,7 @@ function BlogEditor() {
   async function publish() {
     await save({ status: "finished" });
     setPublished(true);
+    setConfettiKey((k) => k + 1);
     toast.success("Article published.");
   }
 
@@ -345,7 +349,7 @@ function BlogEditor() {
         <p className="text-sm text-muted-foreground">This article could not be found.</p>
         <Link to="/dashboard/blog-engine">
           <Button variant="ghost">
-            <ArrowLeft className="h-4 w-4" /> Back to Content Studio
+            <ArrowLeft className="h-4 w-4" /> Back to Articles
           </Button>
         </Link>
       </div>
@@ -354,13 +358,14 @@ function BlogEditor() {
 
   return (
     <div className="space-y-5">
+      <Confetti fireKey={confettiKey} />
       <div className="flex flex-wrap items-center justify-between gap-3">
         <Link to="/dashboard/blog-engine">
           <button
             type="button"
             className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground transition-colors hover:text-ink"
           >
-            <ArrowLeft className="h-4 w-4" /> Content Studio
+            <ArrowLeft className="h-4 w-4" /> Articles
           </button>
         </Link>
         <div className="flex items-center gap-3">
@@ -378,7 +383,7 @@ function BlogEditor() {
             )}
           </span>
           <Button onClick={publish}>
-            <Sparkles className="h-4 w-4" /> {published ? "Update & Publish" : "Publish"}
+            <PublishIcon className="h-4 w-4" /> {published ? "Update & Publish" : "Publish"}
           </Button>
         </div>
       </div>

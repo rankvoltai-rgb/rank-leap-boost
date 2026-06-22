@@ -6,6 +6,8 @@ import {
   BeamIcon,
   CardIcon,
   ControlsIcon,
+  RadarIcon,
+  ChartIcon,
 } from "@/components/dashboard/icons";
 
 type IconComponent = ComponentType<{ className?: string }>;
@@ -22,9 +24,11 @@ export interface NavItem {
 // everywhere in the app.
 export const NAV: NavItem[] = [
   { title: "Overview", icon: PulseIcon, to: "/dashboard", exact: true },
+  { title: "Answer Engine Rank", icon: RadarIcon, to: "/dashboard/visibility" },
   { title: "Articles", icon: ArticleIcon, to: "/dashboard/blog-engine" },
   { title: "Calendar", icon: CalendarIcon, to: "/dashboard/calendar" },
   { title: "Keyword Lab", icon: BeamIcon, to: "/dashboard/keywords" },
+  { title: "Insights", icon: ChartIcon, to: "/dashboard/insights" },
 ];
 
 export const NAV_FOOTER: NavItem[] = [

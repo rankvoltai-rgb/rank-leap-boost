@@ -5,7 +5,6 @@ import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 import {
   CheckIcon,
-  FlameIcon,
   AddIcon,
   TrendIcon,
   VoltMark,
@@ -26,6 +25,7 @@ import {
   type Blog,
 } from "@/lib/api";
 import { Panel, StatCard, Pill, Button, PageHeader } from "@/components/dashboard/primitives";
+import { AiSignalFlames } from "@/components/dashboard/signals";
 import { AI_ALGORITHM_MARKS } from "@/components/landing/ai-logos";
 import { Confetti, ProgressRing, StreakBadge } from "@/components/dashboard/rewards";
 import { Switch } from "@/components/ui/switch";
@@ -53,25 +53,6 @@ function AlgorithmLogos() {
         </span>
       ))}
     </div>
-  );
-}
-
-function AiSignalFlames({ signal }: { signal: number }) {
-  const filled = signal >= 80 ? 3 : signal >= 55 ? 2 : 1;
-  return (
-    <span
-      className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-2.5 py-1"
-      title={`AI opportunity signal: ${signal}/100`}
-      aria-label={`AI opportunity signal ${filled} of 3`}
-    >
-      {[0, 1, 2].map((i) => (
-        <FlameIcon
-          key={i}
-          className={`h-3.5 w-3.5 ${i < filled ? "fill-flame text-flame" : "fill-muted text-muted-foreground/30"}`}
-        />
-      ))}
-      <span className="text-[0.65rem] font-semibold uppercase tracking-wide text-muted-foreground">AI</span>
-    </span>
   );
 }
 
@@ -462,7 +443,7 @@ function SystemConsole() {
         </RadarSection>
 
         <RadarSection
-          label="Recommended for you"
+          label="Content gaps to win"
           count={opportunities.length}
           empty={
             <span>
