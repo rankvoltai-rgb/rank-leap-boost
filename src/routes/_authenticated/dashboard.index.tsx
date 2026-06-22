@@ -12,6 +12,11 @@ import {
   PublishIcon,
   RocketIcon,
   AutopilotIcon,
+  ArticleIcon,
+  ChartIcon,
+  TargetIcon,
+  FlameIcon,
+  CardIcon,
 } from "@/components/dashboard/icons";
 import {
   listBlogs,
@@ -27,10 +32,18 @@ import {
   CreditsExhaustedError,
   type Blog,
 } from "@/lib/api";
-import { Panel, StatCard, Pill, Button, PageHeader } from "@/components/dashboard/primitives";
-import { AiSignalFlames } from "@/components/dashboard/signals";
+import {
+  Panel,
+  StatCard,
+  MetricStat,
+  Pill,
+  Button,
+  PageHeader,
+} from "@/components/dashboard/primitives";
+import { MeterBar, DifficultyBar } from "@/components/dashboard/signals";
+import { DataTable, Tr, Td, TdActions, type Column } from "@/components/dashboard/data-table";
 import { AI_ALGORITHM_MARKS } from "@/components/landing/ai-logos";
-import { Confetti, ProgressRing, StreakBadge } from "@/components/dashboard/rewards";
+import { Confetti } from "@/components/dashboard/rewards";
 import { CreditPaywallDialog } from "@/components/dashboard/CreditPaywallDialog";
 import { Switch } from "@/components/ui/switch";
 import { CountUp } from "@/components/ui/count-up";
