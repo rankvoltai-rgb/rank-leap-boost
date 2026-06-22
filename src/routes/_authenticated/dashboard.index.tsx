@@ -22,12 +22,16 @@ import {
   generateBlogArticle,
   prioritizeBlog,
   deleteBlog,
+  getSubscription,
+  creditsRemaining,
+  CreditsExhaustedError,
   type Blog,
 } from "@/lib/api";
 import { Panel, StatCard, Pill, Button, PageHeader } from "@/components/dashboard/primitives";
 import { AiSignalFlames } from "@/components/dashboard/signals";
 import { AI_ALGORITHM_MARKS } from "@/components/landing/ai-logos";
 import { Confetti, ProgressRing, StreakBadge } from "@/components/dashboard/rewards";
+import { CreditPaywallDialog } from "@/components/dashboard/CreditPaywallDialog";
 import { Switch } from "@/components/ui/switch";
 import { CountUp } from "@/components/ui/count-up";
 import { cn } from "@/lib/utils";
@@ -167,6 +171,8 @@ function SystemConsole() {
   const finished = finishedQuery.data ?? [];
   const { data: credits } = useQuery({ queryKey: ["credits"], queryFn: getCredits });
   const { data: settings } = useQuery({ queryKey: ["settings"], queryFn: getSettings });
+  const { data: subscription } = useQuery({ queryKey: ["subscription"], queryFn: getSubscription });
+  const [paywallOpen, setPaywallOpen] = useState(false);
 
   const autopilotOn = settings?.autopilot_enabled ?? true;
   const cadence = settings?.weekly_cadence ?? 7;
@@ -174,7 +180,8 @@ function SystemConsole() {
   const estimatedTraffic = allBlogs.reduce((sum, b) => sum + (b.traffic_estimate ?? 0), 0);
   const queue = [...generating, ...scheduled];
   const streak = computeStreak(finished);
-  const remainingCredits = credits ? credits.credits_total - credits.credits_used : null;
+  const remainingCredits = credits ? creditsRemaining(credits) : null;
+  const outOfCredits = remainingCredits !== null && remainingCredits <= 0;
 
   // Celebrate every new published article during the session.
   useEffect(() => {
@@ -239,6 +246,10 @@ function SystemConsole() {
   }
 
   async function generateNow(blog: Blog) {
+    if (outOfCredits) {
+      setPaywallOpen(true);
+      return;
+    }
     setBusyId(blog.id);
     try {
       await generateBlogArticle(blog);
@@ -247,6 +258,10 @@ function SystemConsole() {
       queryClient.invalidateQueries({ queryKey: ["credits"] });
       navigate({ to: "/dashboard/editor/$blogId", params: { blogId: blog.id } });
     } catch (err) {
+      if (err instanceof CreditsExhaustedError) {
+        setPaywallOpen(true);
+        return;
+      }
       toast.error(err instanceof Error ? err.message : "Generation failed.");
     } finally {
       setBusyId(null);
@@ -282,10 +297,35 @@ function SystemConsole() {
   return (
     <div className="space-y-6">
       <Confetti fireKey={confettiKey} />
+      <CreditPaywallDialog
+        open={paywallOpen}
+        onOpenChange={setPaywallOpen}
+        credits={credits}
+        subscription={subscription}
+      />
       <PageHeader
         title="Your SEO Overview"
         description="Your autopilot engine — what it's doing now, and the traffic it's building."
       />
+
+      {outOfCredits && (
+        <Panel className="flex flex-wrap items-center justify-between gap-3 border-destructive/30 bg-destructive/5 p-4 sm:p-5">
+          <div className="flex items-start gap-3">
+            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-destructive/10 text-destructive">
+              <RocketIcon className="h-5 w-5" />
+            </span>
+            <div>
+              <h3 className="text-sm font-semibold text-ink">You're out of article credits</h3>
+              <p className="mt-0.5 text-sm text-muted-foreground">
+                You've used all 30 articles this month. Upgrade to keep publishing today.
+              </p>
+            </div>
+          </div>
+          <Button onClick={() => setPaywallOpen(true)}>
+            <RocketIcon className="h-4 w-4" /> Upgrade
+          </Button>
+        </Panel>
+      )}
 
       {/* Autopilot control */}
       <Panel className={cn("relative overflow-hidden p-5 sm:p-6", autopilotOn && "ring-1 ring-volt/20")}>
