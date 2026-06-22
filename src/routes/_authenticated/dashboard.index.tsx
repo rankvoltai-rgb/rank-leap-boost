@@ -65,7 +65,7 @@ function AiSignalFlames({ signal }: { signal: number }) {
       aria-label={`AI opportunity signal ${filled} of 3`}
     >
       {[0, 1, 2].map((i) => (
-        <Flame
+        <FlameIcon
           key={i}
           className={`h-3.5 w-3.5 ${i < filled ? "fill-flame text-flame" : "fill-muted text-muted-foreground/30"}`}
         />
@@ -83,7 +83,7 @@ function RadarRow({ opp, action }: { opp: Blog; action?: React.ReactNode }) {
         <div className="mt-2 flex flex-wrap items-center gap-2">
           <Pill tone="neutral">{opp.keyword}</Pill>
           <Pill tone="success">
-            <TrendingUp className="h-3 w-3" />
+            <TrendIcon className="h-3 w-3" />
             {opp.traffic_estimate.toLocaleString()}/mo
           </Pill>
           <AiSignalFlames signal={opp.ai_signal ?? 0} />
@@ -317,7 +317,7 @@ function SystemConsole() {
                 autopilotOn ? "bg-volt/10 text-volt" : "bg-secondary text-muted-foreground",
               )}
             >
-              <Rocket className="h-5 w-5" />
+              <RocketIcon className="h-5 w-5" />
             </span>
             <div className="min-w-0">
               <div className="flex flex-wrap items-center gap-2">
@@ -367,12 +367,12 @@ function SystemConsole() {
             value={writing ? writing.title : "Idle"}
           />
           <StatusItem
-            icon={<Sparkles className="h-4 w-4 text-info" />}
+            icon={<VoltMark className="h-4 w-4 text-info" />}
             label="Next up"
             value={nextScheduled ? nextScheduled.title : "Nothing queued"}
           />
           <StatusItem
-            icon={<Check className="h-4 w-4 text-success" />}
+            icon={<CheckIcon className="h-4 w-4 text-success" />}
             label="Last published"
             value={lastPublished ? lastPublished.title : "None yet"}
           />
@@ -409,7 +409,7 @@ function SystemConsole() {
           label="Article Credits"
           value={remainingCredits === null ? "—" : remainingCredits.toLocaleString()}
           hint="Remaining this cycle"
-          icon={<Zap className="h-4 w-4" />}
+          icon={<AutopilotIcon className="h-4 w-4" />}
         />
       </div>
 
@@ -445,14 +445,14 @@ function SystemConsole() {
                 ) : (
                   <div className="flex items-center gap-1.5">
                     <Button variant="ghost" onClick={() => prioritize(opp)} disabled={busyId === opp.id}>
-                      <ArrowUpToLine className="h-4 w-4" />
+                      <PublishIcon className="h-4 w-4" />
                     </Button>
                     <Button variant="ghost" onClick={() => generateNow(opp)} disabled={busyId === opp.id}>
-                      {busyId === opp.id ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
+                      {busyId === opp.id ? <Loader2 className="h-4 w-4 animate-spin" /> : <VoltMark className="h-4 w-4" />}
                       <span className="hidden sm:inline">Write now</span>
                     </Button>
                     <Button variant="danger" onClick={() => remove(opp)} disabled={busyId === opp.id}>
-                      <Trash2 className="h-4 w-4" />
+                      <RemoveIcon className="h-4 w-4" />
                     </Button>
                   </div>
                 )
@@ -480,7 +480,7 @@ function SystemConsole() {
               opp={opp}
               action={
                 <Button onClick={() => addToQueue(opp)} disabled={busyId === opp.id}>
-                  {busyId === opp.id ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}
+                  {busyId === opp.id ? <Loader2 className="h-4 w-4 animate-spin" /> : <AddIcon className="h-4 w-4" />}
                   Add to Queue
                 </Button>
               }
