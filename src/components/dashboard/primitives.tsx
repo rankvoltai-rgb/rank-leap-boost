@@ -47,7 +47,7 @@ export function StatCard({
       )}
     >
       {emphasis && (
-        <span className="absolute inset-x-0 top-0 h-1 bg-gradient-traffic" />
+        <span className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-volt to-transparent" />
       )}
       <div className="flex items-center justify-between gap-2">
         <p className="text-[0.68rem] font-semibold uppercase tracking-[0.08em] text-muted-foreground">
@@ -65,13 +65,18 @@ export function StatCard({
         <p
           className={cn(
             "mt-2 font-semibold tracking-tight text-ink tabular-nums",
-            emphasis ? "text-[2rem] leading-none" : "text-2xl",
+            emphasis ? "text-4xl leading-none" : "text-2xl",
           )}
         >
           {value}
         </p>
       )}
-      {hint && <p className="mt-auto pt-1 text-xs text-muted-foreground">{hint}</p>}
+      {hint && (
+        <div className={cn("mt-auto flex items-center gap-2 pt-1", emphasis && "pt-2")}>
+          {emphasis && <span className="h-1.5 w-1.5 rounded-full bg-success" />}
+          <span className="text-xs text-muted-foreground">{hint}</span>
+        </div>
+      )}
     </Panel>
   );
 }
