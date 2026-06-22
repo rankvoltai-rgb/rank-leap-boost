@@ -24,6 +24,7 @@ import { Route as AuthenticatedDashboardCalendarRouteImport } from './routes/_au
 import { Route as AuthenticatedDashboardBlogEngineRouteImport } from './routes/_authenticated/dashboard.blog-engine'
 import { Route as AuthenticatedDashboardBillingRouteImport } from './routes/_authenticated/dashboard.billing'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
+import { Route as ApiPublicHooksAutopilotRunRouteImport } from './routes/api/public/hooks/autopilot-run'
 import { Route as AuthenticatedDashboardEditorBlogIdRouteImport } from './routes/_authenticated/dashboard.editor.$blogId'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
@@ -107,6 +108,12 @@ const ApiPublicPaymentsWebhookRoute =
     path: '/api/public/payments/webhook',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicHooksAutopilotRunRoute =
+  ApiPublicHooksAutopilotRunRouteImport.update({
+    id: '/api/public/hooks/autopilot-run',
+    path: '/api/public/hooks/autopilot-run',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const AuthenticatedDashboardEditorBlogIdRoute =
   AuthenticatedDashboardEditorBlogIdRouteImport.update({
     id: '/editor/$blogId',
@@ -129,6 +136,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/settings': typeof AuthenticatedDashboardSettingsRoute
   '/dashboard/': typeof AuthenticatedDashboardIndexRoute
   '/dashboard/editor/$blogId': typeof AuthenticatedDashboardEditorBlogIdRoute
+  '/api/public/hooks/autopilot-run': typeof ApiPublicHooksAutopilotRunRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
 export interface FileRoutesByTo {
@@ -145,6 +153,7 @@ export interface FileRoutesByTo {
   '/dashboard/settings': typeof AuthenticatedDashboardSettingsRoute
   '/dashboard': typeof AuthenticatedDashboardIndexRoute
   '/dashboard/editor/$blogId': typeof AuthenticatedDashboardEditorBlogIdRoute
+  '/api/public/hooks/autopilot-run': typeof ApiPublicHooksAutopilotRunRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
 export interface FileRoutesById {
@@ -164,6 +173,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/settings': typeof AuthenticatedDashboardSettingsRoute
   '/_authenticated/dashboard/': typeof AuthenticatedDashboardIndexRoute
   '/_authenticated/dashboard/editor/$blogId': typeof AuthenticatedDashboardEditorBlogIdRoute
+  '/api/public/hooks/autopilot-run': typeof ApiPublicHooksAutopilotRunRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
 export interface FileRouteTypes {
@@ -183,6 +193,7 @@ export interface FileRouteTypes {
     | '/dashboard/settings'
     | '/dashboard/'
     | '/dashboard/editor/$blogId'
+    | '/api/public/hooks/autopilot-run'
     | '/api/public/payments/webhook'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -199,6 +210,7 @@ export interface FileRouteTypes {
     | '/dashboard/settings'
     | '/dashboard'
     | '/dashboard/editor/$blogId'
+    | '/api/public/hooks/autopilot-run'
     | '/api/public/payments/webhook'
   id:
     | '__root__'
@@ -217,6 +229,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/settings'
     | '/_authenticated/dashboard/'
     | '/_authenticated/dashboard/editor/$blogId'
+    | '/api/public/hooks/autopilot-run'
     | '/api/public/payments/webhook'
   fileRoutesById: FileRoutesById
 }
@@ -228,6 +241,7 @@ export interface RootRouteChildren {
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   FeaturesSlugRoute: typeof FeaturesSlugRoute
   FeaturesIndexRoute: typeof FeaturesIndexRoute
+  ApiPublicHooksAutopilotRunRoute: typeof ApiPublicHooksAutopilotRunRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
 }
 
@@ -338,6 +352,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicPaymentsWebhookRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/hooks/autopilot-run': {
+      id: '/api/public/hooks/autopilot-run'
+      path: '/api/public/hooks/autopilot-run'
+      fullPath: '/api/public/hooks/autopilot-run'
+      preLoaderRoute: typeof ApiPublicHooksAutopilotRunRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/dashboard/editor/$blogId': {
       id: '/_authenticated/dashboard/editor/$blogId'
       path: '/editor/$blogId'
@@ -395,6 +416,7 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   FeaturesSlugRoute: FeaturesSlugRoute,
   FeaturesIndexRoute: FeaturesIndexRoute,
+  ApiPublicHooksAutopilotRunRoute: ApiPublicHooksAutopilotRunRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
 }
 export const routeTree = rootRouteImport
