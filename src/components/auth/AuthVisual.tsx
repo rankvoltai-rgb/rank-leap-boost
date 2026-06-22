@@ -165,6 +165,7 @@ function TrafficOrbit() {
       {/* engine nodes */}
       {NODES.map((node, i) => {
         const Logo = node.Logo;
+        const isGoogle = node.name === "Google";
         return (
           <motion.div
             key={node.name}
@@ -180,24 +181,18 @@ function TrafficOrbit() {
           >
             <div
               className="flex h-12 w-12 items-center justify-center rounded-2xl border border-background/15 bg-ink/80 shadow-lg backdrop-blur-sm"
-              style={{ boxShadow: `0 6px 20px -8px ${node.color}80` }}
+              style={{
+                boxShadow: `0 6px 20px -8px ${node.color}80`,
+                color: isGoogle ? undefined : node.color,
+              }}
+              title={node.name}
             >
-              <Logo
-                className="h-6 w-6"
-                {...(!node.brandTint && node.name !== "Google" ? {} : {})}
-              />
-              {!node.brandTint && (
-                <span className="sr-only">{node.name}</span>
-              )}
+              <Logo className="h-6 w-6" />
+              <span className="sr-only">{node.name}</span>
             </div>
           </motion.div>
         );
       })}
-
-      {/* tint single-color logos via color wrapper */}
-      <style>{`
-        .ai-tint-ChatGPT { color: #10a37f; }
-      `}</style>
 
       {/* center: your brand */}
       <motion.div
