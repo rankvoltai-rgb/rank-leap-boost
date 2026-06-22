@@ -236,7 +236,7 @@ export function ControlsIcon({ className }: IconProps) {
   );
 }
 
-// Answer Engine Rank — a radar sweep locating where you're cited.
+// Rank — a radar sweep locating where you're cited.
 export function RadarIcon({ className, accent }: IconProps) {
   return (
     <Svg className={className}>
