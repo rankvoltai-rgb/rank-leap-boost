@@ -1,34 +1,15 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import {
-  Radar,
-  FileText,
-  CalendarDays,
-  Search,
-  CreditCard,
-  Settings,
-} from "lucide-react";
 import { Logo } from "@/components/landing/shared";
 import { cn } from "@/lib/utils";
-
-const NAV = [
-  { title: "Overview", icon: Radar, to: "/dashboard", exact: true },
-  { title: "Content Studio", icon: FileText, to: "/dashboard/blog-engine" },
-  { title: "Calendar", icon: CalendarDays, to: "/dashboard/calendar" },
-  { title: "Keyword Research", icon: Search, to: "/dashboard/keywords" },
-];
-
-const NAV_FOOTER = [
-  { title: "Plan & Billing", icon: CreditCard, to: "/dashboard/billing" },
-  { title: "Settings", icon: Settings, to: "/dashboard/settings" },
-];
+import { NAV, NAV_FOOTER, type NavItem } from "./nav";
 
 export function Sidebar() {
   const path = useRouterState({ select: (s) => s.location.pathname });
   const isActive = (to: string, exact?: boolean) =>
     exact ? path === to : path === to || path.startsWith(`${to}/`);
 
-  const renderItem = (item: (typeof NAV)[number]) => {
-    const active = isActive(item.to, (item as { exact?: boolean }).exact);
+  const renderItem = (item: NavItem) => {
+    const active = isActive(item.to, item.exact);
     return (
       <Link
         key={item.title}

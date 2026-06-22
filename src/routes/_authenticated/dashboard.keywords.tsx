@@ -77,8 +77,8 @@ function KeywordPlanner() {
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Keyword Planner"
-        description="Track your target keywords and review the opportunities our AI discovered."
+        title="Keyword Lab"
+        description="Track your target keywords and explore the opportunities our AI discovered."
       />
 
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-3">

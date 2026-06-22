@@ -97,7 +97,7 @@ function CalendarPage() {
     <div className="space-y-6">
       <PageHeader
         title="Calendar"
-        description="Your upcoming publishing schedule — reorder and reschedule queued articles."
+        description="Your autopilot publishing schedule — reorder or reschedule anything autopilot has queued."
       />
 
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-3">
@@ -122,10 +122,10 @@ function CalendarPage() {
         <Panel className="flex flex-col items-center gap-3 p-12 text-center">
           <CalendarDays className="h-8 w-8 text-muted-foreground" />
           <p className="text-sm text-muted-foreground">
-            Nothing scheduled yet. Add opportunities to your queue to fill the calendar.
+            Nothing scheduled yet. Add opportunities from your Overview and autopilot fills the calendar.
           </p>
-          <Link to="/dashboard/blog-engine">
-            <Button>Browse opportunities</Button>
+          <Link to="/dashboard">
+            <Button>Go to Overview</Button>
           </Link>
         </Panel>
       ) : (

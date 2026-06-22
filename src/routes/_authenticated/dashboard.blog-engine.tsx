@@ -53,8 +53,8 @@ function BlogEngine() {
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Content Studio"
-        description="Turn ideas into long-form, AI-optimized articles, then refine them in the editor."
+        title="Articles"
+        description="Everything autopilot is writing for you — plus ideas you can queue and drafts you can refine."
       />
 
       <div className="flex gap-1 rounded-lg border border-border bg-card p-1 shadow-sm">
@@ -91,6 +91,11 @@ function BlogEngine() {
                 <p className="truncate text-sm font-semibold text-ink">{b.title}</p>
                 <p className="mt-0.5 truncate text-xs text-muted-foreground">{b.description}</p>
                 <div className="mt-2 flex flex-wrap items-center gap-2">
+                  {b.status === "generating" && (
+                    <Pill tone="info">
+                      <Loader2 className="h-3 w-3 animate-spin" /> Auto-writing
+                    </Pill>
+                  )}
                   <Pill tone="success">
                     <TrendingUp className="h-3 w-3" />
                     {b.traffic_estimate.toLocaleString()}/mo

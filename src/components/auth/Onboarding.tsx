@@ -368,6 +368,25 @@ export function Onboarding() {
                   }
                 />
               </div>
+              <div className="mt-5 rounded-2xl border border-border bg-secondary/40 p-4">
+                <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                  What happens next
+                </p>
+                <ol className="mt-3 space-y-2.5">
+                  {[
+                    "Your dashboard unlocks instantly — no charge today.",
+                    "Autopilot starts writing & publishing your articles on schedule.",
+                    "We email you before the 48h trial ends. Cancel anytime.",
+                  ].map((step, i) => (
+                    <li key={step} className="flex items-start gap-2.5 text-sm text-ink">
+                      <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-ink text-[11px] font-semibold text-background">
+                        {i + 1}
+                      </span>
+                      {step}
+                    </li>
+                  ))}
+                </ol>
+              </div>
             </div>
           </div>
         </div>
@@ -503,8 +522,8 @@ export function Onboarding() {
                   Your automated growth plan
                 </h1>
                 <p className="mt-1.5 text-sm text-muted-foreground">
-                  Rankvolt mapped {blogs.length} high-intent articles for {business || "your site"} and will write
-                  &amp; publish them for you — completely hands-off.
+                  We found {blogs.length} content gaps AI isn't answering yet for {business || "your site"}. Autopilot
+                  will write &amp; publish them for you — completely hands-off.
                 </p>
 
                 <div className="mt-6 grid gap-6 md:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)]">

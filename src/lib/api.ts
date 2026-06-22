@@ -80,6 +80,9 @@ export interface ContentSettings {
   audience: string;
   brand_voice: string;
   status_online: boolean;
+  autopilot_enabled: boolean;
+  weekly_cadence: number;
+  last_autopilot_run: string | null;
 }
 
 export interface CreditAccount {
@@ -366,12 +369,32 @@ export async function persistOnboarding(input: {
   return (data ?? []) as Blog[];
 }
 
-/** Step 5: trial activation — generate 30 strategic opportunities into the queue. */
+/**
+ * Step 5: trial activation — turn the AI strategy into a fully scheduled
+ * autopilot queue. Articles are auto-scheduled one per day so the engine has a
+ * running plan the moment the user lands on the dashboard. Users can still
+ * pause, reorder, or remove anything later.
+ */
 export async function activateTrial(opportunities: OpportunityInput[]): Promise<void> {
   const user_id = await uid();
   if (!opportunities.length) return;
-  const rows = opportunities.map((o) => oppToBlogRow(o, user_id));
+  const rows = opportunities.map((o, i) => ({
+    ...oppToBlogRow(o, user_id),
+    status: "scheduled" as const,
+    queue_position: i + 1,
+    scheduled_date: nextDate(i + 1),
+  }));
   const { error } = await supabase.from("blogs").insert(rows);
+  if (error) throw error;
+}
+
+/** Toggle autopilot on/off and set how many articles it writes per week. */
+export async function updateAutopilot(patch: {
+  autopilot_enabled?: boolean;
+  weekly_cadence?: number;
+}): Promise<void> {
+  const user_id = await uid();
+  const { error } = await supabase.from("content_settings").update(patch).eq("user_id", user_id);
   if (error) throw error;
 }
 
