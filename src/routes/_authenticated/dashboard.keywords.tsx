@@ -2,9 +2,17 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { Plus, Trash2, Loader2, Search, TrendingUp } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { listKeywords, addKeyword, deleteKeyword, type Keyword } from "@/lib/api";
 import { Panel, Pill, Button, PageHeader, StatCard } from "@/components/dashboard/primitives";
+import {
+  AddIcon,
+  RemoveIcon,
+  BeamIcon,
+  TrendIcon,
+  SignalIcon,
+  TargetIcon,
+} from "@/components/dashboard/icons";
 
 export const Route = createFileRoute("/_authenticated/dashboard/keywords")({
   component: KeywordPlanner,
@@ -82,15 +90,15 @@ function KeywordPlanner() {
       />
 
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-3">
-        <StatCard label="Keywords" value={keywords.length} hint={`In ${tab}`} emphasis />
-        <StatCard label="Search Volume" value={totalVolume.toLocaleString()} hint="Total monthly searches" />
-        <StatCard label="High Intent" value={highIntent} hint="Transactional / high-intent" />
+        <StatCard label="Keywords" value={keywords.length} hint={`In ${tab}`} emphasis icon={<BeamIcon className="h-4 w-4" />} />
+        <StatCard label="Search Volume" value={totalVolume.toLocaleString()} hint="Total monthly searches" icon={<SignalIcon className="h-4 w-4" />} />
+        <StatCard label="High Intent" value={highIntent} hint="Transactional / high-intent" icon={<TargetIcon className="h-4 w-4" />} />
       </div>
 
       {tab === "library" && (
         <Panel className="flex flex-wrap items-center gap-2 p-3">
           <div className="relative flex-1">
-            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <BeamIcon className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <input
               value={input}
               onChange={(e) => setInput(e.target.value)}
@@ -100,7 +108,7 @@ function KeywordPlanner() {
             />
           </div>
           <Button onClick={add} disabled={adding || !input.trim()}>
-            {adding ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}
+            {adding ? <Loader2 className="h-4 w-4 animate-spin" /> : <AddIcon className="h-4 w-4" />}
             Add
           </Button>
         </Panel>
@@ -142,16 +150,21 @@ function KeywordPlanner() {
                 <p className="truncate text-sm font-semibold text-ink">{k.name}</p>
                 <div className="mt-2 flex flex-wrap items-center gap-2">
                   <Pill tone="info">
-                    <Search className="h-3 w-3" />
+                    <SignalIcon className="h-3.5 w-3.5" />
                     {k.search_volume.toLocaleString()} vol.
                   </Pill>
                   {k.traffic_estimate > 0 && (
                     <Pill tone="success">
-                      <TrendingUp className="h-3 w-3" />
+                      <TrendIcon className="h-3.5 w-3.5" />
                       {k.traffic_estimate.toLocaleString()}/mo
                     </Pill>
                   )}
-                  {k.intent && <Pill tone="neutral">{k.intent}</Pill>}
+                  {k.intent && (
+                    <Pill tone="neutral">
+                      <TargetIcon className="h-3.5 w-3.5" />
+                      {k.intent}
+                    </Pill>
+                  )}
                   <Pill tone={trendTone(k.trend)}>{k.trend} trend</Pill>
                 </div>
               </div>
@@ -159,7 +172,7 @@ function KeywordPlanner() {
                 {busyId === k.id ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
                 ) : (
-                  <Trash2 className="h-4 w-4" />
+                  <RemoveIcon className="h-4 w-4" />
                 )}
                 Remove
               </Button>
