@@ -25,21 +25,6 @@ function GoogleIcon() {
   );
 }
 
-function GithubIcon() {
-  return (
-    <svg viewBox="0 0 24 24" className="h-5 w-5 fill-ink" aria-hidden>
-      <path d="M12 1.5A10.5 10.5 0 0 0 8.68 22c.53.1.72-.23.72-.5v-1.8c-2.92.63-3.54-1.4-3.54-1.4-.48-1.22-1.17-1.54-1.17-1.54-.95-.65.07-.64.07-.64 1.06.07 1.62 1.09 1.62 1.09.94 1.6 2.46 1.14 3.06.87.1-.68.37-1.14.67-1.4-2.33-.27-4.78-1.16-4.78-5.18 0-1.14.41-2.08 1.08-2.81-.11-.27-.47-1.34.1-2.79 0 0 .88-.28 2.88 1.07a10 10 0 0 1 5.24 0c2-1.35 2.88-1.07 2.88-1.07.57 1.45.21 2.52.1 2.79.68.73 1.08 1.67 1.08 2.81 0 4.03-2.46 4.91-4.8 5.17.38.33.72.97.72 1.96v2.9c0 .28.19.61.73.5A10.5 10.5 0 0 0 12 1.5z" />
-    </svg>
-  );
-}
-
-function AppleIcon() {
-  return (
-    <svg viewBox="0 0 24 24" className="h-5 w-5 fill-ink" aria-hidden>
-      <path d="M16.37 12.78c-.03-2.45 2-3.63 2.1-3.69-1.14-1.67-2.92-1.9-3.55-1.92-1.51-.15-2.95.89-3.71.89-.77 0-1.95-.87-3.2-.85-1.65.03-3.17.96-4.02 2.44-1.71 2.97-.44 7.37 1.23 9.78.81 1.18 1.78 2.5 3.06 2.46 1.23-.05 1.69-.79 3.18-.79 1.48 0 1.9.79 3.2.77 1.32-.03 2.16-1.2 2.97-2.39.93-1.37 1.32-2.7 1.34-2.77-.03-.01-2.57-.99-2.6-3.92zM14.0 5.36c.68-.83 1.14-1.97 1.01-3.11-.98.04-2.17.65-2.87 1.47-.63.73-1.18 1.9-1.03 3.02 1.09.09 2.21-.55 2.89-1.38z" />
-    </svg>
-  );
-}
 
 function SocialButton({
   children,
@@ -69,17 +54,10 @@ export function SocialButtons() {
     }
   }
 
-  function comingSoon(name: string) {
-    toast(`${name} sign-in is coming soon — use Google or email for now.`);
-  }
-
   return (
-    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+    <div className="grid grid-cols-1 gap-3">
       <SocialButton onClick={google}>
         <GoogleIcon /> Google
-      </SocialButton>
-      <SocialButton onClick={() => comingSoon("Apple")}>
-        <AppleIcon /> Apple
       </SocialButton>
     </div>
   );
