@@ -441,7 +441,6 @@ export async function updateAutopilot(patch: {
 /** Generate full article content for a blog and mark it finished. */
 export async function generateBlogArticle(blog: Blog): Promise<Blog> {
   // Block up front if the monthly cap is already reached.
-  const user_id = await uid();
   const credits = await getCredits();
   if (!hasCreditsRemaining(credits)) throw new CreditsExhaustedError();
   await updateBlog(blog.id, { status: "generating" });
