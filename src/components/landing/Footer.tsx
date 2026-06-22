@@ -14,6 +14,7 @@ const COLS = [
       { label: "Cookies", to: "/legal/cookies" },
       { label: "Acceptable Use", to: "/legal/acceptable-use" },
       { label: "DPA", to: "/legal/dpa" },
+      { label: "Trust & Security", to: "/trust" },
     ],
   },
 ];

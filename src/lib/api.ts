@@ -1,6 +1,11 @@
 import { supabase } from "@/integrations/supabase/client";
 import type { TablesInsert } from "@/integrations/supabase/types";
 import { generateBlogContent } from "@/lib/ai.functions";
+import {
+  consumeArticleCredit,
+  ensureCreditAccount,
+  purchaseCreditPackage,
+} from "@/lib/credits.functions";
 import { getStripeEnvironment } from "@/lib/stripe";
 
 export type BlogStatus = "opportunity" | "scheduled" | "generating" | "finished";
@@ -294,13 +299,11 @@ export async function updateProfile(patch: Partial<Profile>): Promise<void> {
 }
 
 export async function purchaseCredits(pkg: string, credits: number, amountCents: number): Promise<void> {
-  const user_id = await uid();
-  const current = await getCredits();
-  await supabase.from("credit_transactions").insert({ user_id, package: pkg, credits, amount_cents: amountCents });
-  await supabase
-    .from("credit_accounts")
-    .update({ credits_total: (current?.credits_total ?? 1000) + credits })
-    .eq("user_id", user_id);
+  // Amounts and credit grants are validated and applied server-side; the
+  // client cannot influence how many credits are added beyond the package id.
+  void credits;
+  void amountCents;
+  await purchaseCreditPackage({ data: { packageId: pkg as "starter" | "growth" | "scale" } });
 }
 
 function nextDate(offsetDays = 1): string {
@@ -338,14 +341,8 @@ async function ensureAccountBase(
     await supabase.from("content_settings").insert({ user_id, ...settingsInput });
   }
 
-  const existingCredits = await supabase
-    .from("credit_accounts")
-    .select("id")
-    .eq("user_id", user_id)
-    .maybeSingle();
-  if (!existingCredits.data) {
-    await supabase.from("credit_accounts").insert({ user_id, credits_used: 0, credits_total: 30 });
-  }
+  // Credit accounts are write-protected; create via the server function.
+  await ensureCreditAccount();
 }
 
 function oppToBlogRow(o: OpportunityInput, user_id: string): TablesInsert<"blogs"> {
@@ -444,7 +441,6 @@ export async function updateAutopilot(patch: {
 /** Generate full article content for a blog and mark it finished. */
 export async function generateBlogArticle(blog: Blog): Promise<Blog> {
   // Block up front if the monthly cap is already reached.
-  const user_id = await uid();
   const credits = await getCredits();
   if (!hasCreditsRemaining(credits)) throw new CreditsExhaustedError();
   await updateBlog(blog.id, { status: "generating" });
@@ -464,7 +460,7 @@ export async function generateBlogArticle(blog: Blog): Promise<Blog> {
     await updateBlog(blog.id, patch);
     // Count the credit only after a successful generation. The DB function
     // enforces the hard cap atomically and never lets the total exceed 30.
-    await supabase.rpc("consume_article_credit", { _user_id: user_id });
+    await consumeArticleCredit();
     return { ...blog, ...patch } as Blog;
   } catch (err) {
     await updateBlog(blog.id, { status: blog.status });
@@ -500,7 +496,8 @@ export async function seedAccount(profileInput: {
     product_description: profileInput.product_description,
   });
   await supabase.from("content_settings").insert({ user_id });
-  await supabase.from("credit_accounts").insert({ user_id, credits_used: 0, credits_total: 30 });
+  // Credit accounts are write-protected; create via the server function.
+  await ensureCreditAccount();
 
   const libraryKw = profileInput.keywords?.length
     ? profileInput.keywords

@@ -29,6 +29,7 @@ export const Route = createFileRoute("/sitemap.xml")({
             "/legal/cookies",
             "/legal/acceptable-use",
             "/legal/dpa",
+            "/trust",
           ].map((path) => ({
             path,
             changefreq: "yearly" as const,
