@@ -461,7 +461,7 @@ export async function generateBlogArticle(blog: Blog): Promise<Blog> {
     await updateBlog(blog.id, patch);
     // Count the credit only after a successful generation. The DB function
     // enforces the hard cap atomically and never lets the total exceed 30.
-    await supabase.rpc("consume_article_credit", { _user_id: user_id });
+    await consumeArticleCredit();
     return { ...blog, ...patch } as Blog;
   } catch (err) {
     await updateBlog(blog.id, { status: blog.status });
