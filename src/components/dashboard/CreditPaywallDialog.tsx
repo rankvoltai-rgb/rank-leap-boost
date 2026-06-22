@@ -1,5 +1,5 @@
 import { useNavigate } from "@tanstack/react-router";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/dashboard/primitives";
 import { ProgressRing } from "@/components/dashboard/rewards";
 import { VoltMark, RocketIcon } from "@/components/dashboard/icons";
@@ -36,6 +36,7 @@ export function CreditPaywallDialog({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-md overflow-hidden border-border bg-card p-0">
+        <DialogTitle className="sr-only">Out of article credits</DialogTitle>
         <div className="flex flex-col items-center gap-5 px-7 pb-7 pt-8 text-center">
           <ProgressRing value={used} max={total} size={88} stroke={8}>
             <div className="flex flex-col items-center leading-none">
