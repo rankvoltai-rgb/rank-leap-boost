@@ -1,8 +1,18 @@
-import { Radar, FileText, CalendarDays, Search, CreditCard, Settings, type LucideIcon } from "lucide-react";
+import type { ComponentType } from "react";
+import {
+  PulseIcon,
+  ArticleIcon,
+  CalendarIcon,
+  BeamIcon,
+  CardIcon,
+  ControlsIcon,
+} from "@/components/dashboard/icons";
+
+type IconComponent = ComponentType<{ className?: string }>;
 
 export interface NavItem {
   title: string;
-  icon: LucideIcon;
+  icon: IconComponent;
   to: string;
   exact?: boolean;
 }
@@ -11,15 +21,15 @@ export interface NavItem {
 // page headers reuse the same vocabulary so a section is named identically
 // everywhere in the app.
 export const NAV: NavItem[] = [
-  { title: "Overview", icon: Radar, to: "/dashboard", exact: true },
-  { title: "Articles", icon: FileText, to: "/dashboard/blog-engine" },
-  { title: "Calendar", icon: CalendarDays, to: "/dashboard/calendar" },
-  { title: "Keyword Lab", icon: Search, to: "/dashboard/keywords" },
+  { title: "Overview", icon: PulseIcon, to: "/dashboard", exact: true },
+  { title: "Articles", icon: ArticleIcon, to: "/dashboard/blog-engine" },
+  { title: "Calendar", icon: CalendarIcon, to: "/dashboard/calendar" },
+  { title: "Keyword Lab", icon: BeamIcon, to: "/dashboard/keywords" },
 ];
 
 export const NAV_FOOTER: NavItem[] = [
-  { title: "Plan & Billing", icon: CreditCard, to: "/dashboard/billing" },
-  { title: "Settings", icon: Settings, to: "/dashboard/settings" },
+  { title: "Plan & Billing", icon: CardIcon, to: "/dashboard/billing" },
+  { title: "Settings", icon: ControlsIcon, to: "/dashboard/settings" },
 ];
 
 const ALL_NAV = [...NAV, ...NAV_FOOTER];
