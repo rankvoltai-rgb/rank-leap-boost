@@ -320,8 +320,12 @@ function SystemConsole() {
         subscription={subscription}
       />
       <PageHeader
-        title="Your SEO Overview"
-        description="Your autopilot engine — what it's doing now, and the traffic it's building."
+        title={`${timeGreeting()}${firstName ? `, ${firstName}` : ""}`}
+        description={
+          finished.length > 0
+            ? `Your articles are ready — ${finished.length} published and working for you.`
+            : "Your autopilot engine is building your traffic — sit back and watch it grow."
+        }
       />
 
       {outOfCredits && (
