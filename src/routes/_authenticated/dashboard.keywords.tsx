@@ -150,16 +150,21 @@ function KeywordPlanner() {
                 <p className="truncate text-sm font-semibold text-ink">{k.name}</p>
                 <div className="mt-2 flex flex-wrap items-center gap-2">
                   <Pill tone="info">
-                    <Search className="h-3 w-3" />
+                    <SignalIcon className="h-3.5 w-3.5" />
                     {k.search_volume.toLocaleString()} vol.
                   </Pill>
                   {k.traffic_estimate > 0 && (
                     <Pill tone="success">
-                      <TrendingUp className="h-3 w-3" />
+                      <TrendIcon className="h-3.5 w-3.5" />
                       {k.traffic_estimate.toLocaleString()}/mo
                     </Pill>
                   )}
-                  {k.intent && <Pill tone="neutral">{k.intent}</Pill>}
+                  {k.intent && (
+                    <Pill tone="neutral">
+                      <TargetIcon className="h-3.5 w-3.5" />
+                      {k.intent}
+                    </Pill>
+                  )}
                   <Pill tone={trendTone(k.trend)}>{k.trend} trend</Pill>
                 </div>
               </div>
@@ -167,7 +172,7 @@ function KeywordPlanner() {
                 {busyId === k.id ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
                 ) : (
-                  <Trash2 className="h-4 w-4" />
+                  <RemoveIcon className="h-4 w-4" />
                 )}
                 Remove
               </Button>
