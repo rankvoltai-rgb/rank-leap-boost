@@ -87,7 +87,7 @@ export function AuthSplit() {
             <Reveal>
               <h1 className="text-balance text-3xl font-semibold leading-[1.1] tracking-tight text-ink sm:text-4xl">
                 Start getting Google &amp; ChatGPT traffic{" "}
-                <span className="rounded-lg bg-warning/25 px-1.5 decoration-clone box-decoration-clone">
+                <span className="rounded-lg bg-info/15 px-1.5 decoration-clone box-decoration-clone">
                   in the next 7 days
                 </span>
               </h1>
