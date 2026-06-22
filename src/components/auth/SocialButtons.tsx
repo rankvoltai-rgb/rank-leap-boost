@@ -54,17 +54,10 @@ export function SocialButtons() {
     }
   }
 
-  function comingSoon(name: string) {
-    toast(`${name} sign-in is coming soon — use Google or email for now.`);
-  }
-
   return (
-    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+    <div className="grid grid-cols-1 gap-3">
       <SocialButton onClick={google}>
         <GoogleIcon /> Google
-      </SocialButton>
-      <SocialButton onClick={() => comingSoon("Apple")}>
-        <AppleIcon /> Apple
       </SocialButton>
     </div>
   );
