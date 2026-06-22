@@ -216,6 +216,67 @@ export function StatCard({
   );
 }
 
+/**
+ * Reference-style metric card: muted label with a soft icon top-right, a large
+ * tabular figure, and a single delta / context line beneath. Flat and
+ * border-led — no shadows or gradient accents.
+ */
+export function MetricStat({
+  label,
+  value,
+  icon,
+  delta,
+  deltaTone = "success",
+  hint,
+  accent,
+}: {
+  label: string;
+  value: ReactNode;
+  icon?: ReactNode;
+  delta?: ReactNode;
+  deltaTone?: "success" | "danger" | "neutral";
+  hint?: ReactNode;
+  accent?: boolean;
+}) {
+  return (
+    <Panel className="flex min-h-[124px] flex-col gap-3 p-5">
+      <div className="flex items-center justify-between gap-2">
+        <p className="text-sm font-medium text-muted-foreground">{label}</p>
+        {icon && (
+          <span className="grid h-7 w-7 shrink-0 place-items-center rounded-lg border border-border bg-secondary text-muted-foreground">
+            {icon}
+          </span>
+        )}
+      </div>
+      <p
+        className={cn(
+          "text-[2rem] font-semibold leading-none tracking-tight tabular-nums",
+          accent ? "text-volt" : "text-ink",
+        )}
+      >
+        {value}
+      </p>
+      {(delta || hint) && (
+        <p className="mt-auto text-xs text-muted-foreground">
+          {delta && (
+            <span
+              className={cn(
+                "font-semibold",
+                deltaTone === "success" && "text-success",
+                deltaTone === "danger" && "text-destructive",
+                deltaTone === "neutral" && "text-ink",
+              )}
+            >
+              {delta}{" "}
+            </span>
+          )}
+          {hint}
+        </p>
+      )}
+    </Panel>
+  );
+}
+
 const PILL_TONES: Record<string, string> = {
   neutral: "border-border bg-secondary text-muted-foreground",
   ink: "border-transparent bg-ink text-background",
