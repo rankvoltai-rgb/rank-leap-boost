@@ -19,7 +19,7 @@ import { AI_ALGORITHM_MARKS } from "@/components/landing/ai-logos";
 export const Route = createFileRoute("/_authenticated/dashboard/visibility")({
   head: () => ({
     meta: [
-      { title: "Answer Engine Rank — Rankvolt" },
+      { title: "Rank — Rankvolt" },
       {
         name: "description",
         content:
@@ -89,7 +89,7 @@ function VisibilityPage() {
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Answer Engine Rank"
+        title="Rank"
         description="An estimate of how citable your content is across AI answer engines — and the topics to win next."
       />
 
