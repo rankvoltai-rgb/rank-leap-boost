@@ -36,6 +36,32 @@ function AlgorithmLogos() {
 
 function RadarRow({ opp, action }: { opp: Blog; action?: React.ReactNode }) {
   return (
+    <RadarRowInner opp={opp} action={action} />
+  );
+}
+
+function AiSignalFlames({ signal }: { signal: number }) {
+  // Map a 0–100 AI opportunity signal to a 1–3 flame rating.
+  const filled = signal >= 80 ? 3 : signal >= 55 ? 2 : 1;
+  return (
+    <span
+      className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-2.5 py-1"
+      title={`AI opportunity signal: ${signal}/100`}
+      aria-label={`AI opportunity signal ${filled} of 3`}
+    >
+      {[0, 1, 2].map((i) => (
+        <Flame
+          key={i}
+          className={`h-3.5 w-3.5 ${i < filled ? "fill-flame text-flame" : "fill-muted text-muted-foreground/30"}`}
+        />
+      ))}
+      <span className="text-[0.65rem] font-semibold uppercase tracking-wide text-muted-foreground">AI</span>
+    </span>
+  );
+}
+
+function RadarRowInner({ opp, action }: { opp: Blog; action?: React.ReactNode }) {
+  return (
     <Panel hover className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 p-4 sm:p-5">
       <div className="min-w-0">
         <h3 className="truncate text-sm font-semibold text-ink">{opp.title}</h3>
