@@ -2,9 +2,17 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { Plus, Trash2, Loader2, Search, TrendingUp } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { listKeywords, addKeyword, deleteKeyword, type Keyword } from "@/lib/api";
 import { Panel, Pill, Button, PageHeader, StatCard } from "@/components/dashboard/primitives";
+import {
+  AddIcon,
+  RemoveIcon,
+  BeamIcon,
+  TrendIcon,
+  SignalIcon,
+  TargetIcon,
+} from "@/components/dashboard/icons";
 
 export const Route = createFileRoute("/_authenticated/dashboard/keywords")({
   component: KeywordPlanner,
