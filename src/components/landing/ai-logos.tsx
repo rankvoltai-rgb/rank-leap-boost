@@ -72,6 +72,5 @@ export const AI_ALGORITHM_MARKS = [
   { name: "Claude", Mark: ClaudeMark },
   { name: "Gemini", Mark: GeminiMark },
   { name: "Google", Mark: GoogleMark },
-  { name: "Perplexity", Mark: PerplexityMark },
   { name: "Boundless", Mark: BoundlessMark },
 ] as const;
