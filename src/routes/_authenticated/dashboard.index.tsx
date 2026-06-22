@@ -33,8 +33,6 @@ import {
 } from "@/lib/api";
 import {
   Panel,
-  StatCard,
-  MetricStat,
   Pill,
   Button,
   PageHeader,
@@ -65,17 +63,50 @@ function timeGreeting() {
 
 function AlgorithmLogos() {
   return (
-    <div className="flex flex-wrap items-center gap-2">
+    <div className="flex flex-wrap items-center gap-1.5">
       {AI_ALGORITHM_MARKS.map(({ name, Mark }) => (
         <span
           key={name}
           title={name}
           aria-label={name}
-          className="grid h-9 w-9 place-items-center rounded-xl border border-border bg-card"
+          className="grid h-8 w-8 place-items-center rounded-lg border border-border bg-card"
         >
-          <Mark className="h-5 w-5" />
+          <Mark className="h-4 w-4" />
         </span>
       ))}
+    </div>
+  );
+}
+
+/** A single flat metric cell used inside the consolidated stats strip. */
+function StatCell({
+  label,
+  value,
+  icon,
+  hint,
+  accent,
+}: {
+  label: string;
+  value: React.ReactNode;
+  icon?: React.ReactNode;
+  hint?: React.ReactNode;
+  accent?: boolean;
+}) {
+  return (
+    <div className="flex flex-col gap-2.5 bg-card p-5">
+      <div className="flex items-center gap-2 text-muted-foreground">
+        {icon}
+        <p className="text-sm font-medium">{label}</p>
+      </div>
+      <p
+        className={cn(
+          "text-[1.9rem] font-semibold leading-none tracking-tight tabular-nums",
+          accent ? "text-volt" : "text-ink",
+        )}
+      >
+        {value}
+      </p>
+      {hint && <p className="mt-auto text-xs text-muted-foreground">{hint}</p>}
     </div>
   );
 }
@@ -461,48 +492,48 @@ function SystemConsole() {
         </div>
       </Panel>
 
-      {/* Stats */}
-      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-        <MetricStat
-          label="Projected Traffic"
-          value={<CountUp value={estimatedTraffic} />}
-          icon={<ChartIcon className="h-4 w-4" />}
-          hint="Estimated monthly organic visitors"
-          accent
-        />
-        <MetricStat
-          label="Published"
-          value={
-            <>
-              {finished.length}
-              <span className="text-lg font-medium text-muted-foreground"> / {MONTHLY_GOAL}</span>
-            </>
-          }
-          icon={<TargetIcon className="h-4 w-4" />}
-          delta={`${Math.round((finished.length / MONTHLY_GOAL) * 100)}%`}
-          deltaTone="neutral"
-          hint="of your monthly goal"
-        />
-        <MetricStat
-          label="Publishing Streak"
-          value={`${streak}`}
-          icon={<FlameIcon className="h-4 w-4" />}
-          hint={streak > 0 ? "consecutive days live" : "publish to start a streak"}
-        />
-        <MetricStat
-          label="Article Credits"
-          value={remainingCredits === null ? "—" : remainingCredits.toLocaleString()}
-          icon={<CardIcon className="h-4 w-4" />}
-          hint="remaining this cycle"
-        />
-      </div>
-
-      {/* AI engines */}
-      <StatCard
-        label="Optimized for AI Answer Engines"
-        media={<AlgorithmLogos />}
-        hint="Your articles are written to get cited across leading AI engines"
-      />
+      {/* Stats + AI engines — one consolidated, hairline-divided panel */}
+      <Panel className="overflow-hidden">
+        <div className="grid grid-cols-2 gap-px bg-border lg:grid-cols-4">
+          <StatCell
+            label="Projected Traffic"
+            value={<CountUp value={estimatedTraffic} />}
+            icon={<ChartIcon className="h-4 w-4" />}
+            hint="Est. monthly organic visitors"
+            accent
+          />
+          <StatCell
+            label="Published"
+            value={
+              <>
+                {finished.length}
+                <span className="text-lg font-medium text-muted-foreground"> / {MONTHLY_GOAL}</span>
+              </>
+            }
+            icon={<TargetIcon className="h-4 w-4" />}
+            hint={`${Math.round((finished.length / MONTHLY_GOAL) * 100)}% of monthly goal`}
+          />
+          <StatCell
+            label="Publishing Streak"
+            value={`${streak}`}
+            icon={<FlameIcon className="h-4 w-4" />}
+            hint={streak > 0 ? "consecutive days live" : "publish to start a streak"}
+          />
+          <StatCell
+            label="Article Credits"
+            value={remainingCredits === null ? "—" : remainingCredits.toLocaleString()}
+            icon={<CardIcon className="h-4 w-4" />}
+            hint="remaining this cycle"
+          />
+        </div>
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-border px-5 py-4">
+          <p className="text-sm font-medium text-ink">Optimized for AI answer engines</p>
+          <AlgorithmLogos />
+          <p className="ml-auto text-xs text-muted-foreground">
+            Written to get cited across leading AI engines
+          </p>
+        </div>
+      </Panel>
 
       <div className="space-y-5">
         <h2 className="text-sm font-semibold text-ink">Autopilot Queue</h2>
