@@ -63,7 +63,7 @@ function GrokLogo({ className }: { className?: string }) {
 
 type Engine = {
   name: string;
-  Logo: ({ className }: { className?: string }) => JSX.Element;
+  Logo: (props: { className?: string }) => React.ReactElement;
   color: string;
   brandTint?: boolean;
 };
