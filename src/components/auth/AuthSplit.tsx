@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ArrowRight, Check, Loader2 } from "lucide-react";
+import { ArrowRight, Loader2 } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -9,12 +9,6 @@ import { SocialButtons } from "./SocialButtons";
 import { AuthVisual } from "./AuthVisual";
 
 const FACES = ["Owen Carter", "Priya Raman", "Hannah Whitfield", "Marco Silva", "Elise Tanaka"];
-
-const STEPS = [
-  { title: "Sign in", desc: "Create your account in seconds." },
-  { title: "Connect your site", desc: "Point us at your domain and CMS." },
-  { title: "Done", desc: "Daily SEO articles publish on autopilot." },
-];
 
 function Field({
   label,
