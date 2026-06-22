@@ -15,9 +15,9 @@ export function Panel({
   return (
     <div
       className={cn(
-        "rounded-2xl border border-border bg-card shadow-elevation",
+        "rounded-xl border border-border bg-card",
         hover &&
-          "transition-colors duration-200 hover:border-ink/20 hover:bg-secondary/30",
+          "transition-colors duration-200 hover:border-ink/15 hover:bg-secondary/40",
         className,
       )}
     >
