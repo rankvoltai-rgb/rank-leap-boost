@@ -3,7 +3,15 @@ import { useMemo, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
-import { listBlogs, generateBlogArticle, type Blog } from "@/lib/api";
+import {
+  listBlogs,
+  generateBlogArticle,
+  getCredits,
+  getSubscription,
+  creditsRemaining,
+  CreditsExhaustedError,
+  type Blog,
+} from "@/lib/api";
 import {
   Panel,
   Pill,
@@ -15,6 +23,7 @@ import {
 } from "@/components/dashboard/primitives";
 import { AiSignalFlames, DifficultyBar } from "@/components/dashboard/signals";
 import { Confetti } from "@/components/dashboard/rewards";
+import { CreditPaywallDialog } from "@/components/dashboard/CreditPaywallDialog";
 import {
   ArticleIcon,
   VoltMark,
@@ -36,11 +45,15 @@ function BlogEngine() {
   const [tab, setTab] = useState<Tab>("queue");
   const [busyId, setBusyId] = useState<string | null>(null);
   const [confettiKey, setConfettiKey] = useState(0);
+  const [paywallOpen, setPaywallOpen] = useState(false);
 
   const { data: all = [], isLoading } = useQuery({
     queryKey: ["blogs", "all"],
     queryFn: () => listBlogs(),
   });
+  const { data: credits } = useQuery({ queryKey: ["credits"], queryFn: getCredits });
+  const { data: subscription } = useQuery({ queryKey: ["subscription"], queryFn: getSubscription });
+  const remaining = creditsRemaining(credits);
 
   const ideas = useMemo(() => all.filter((b) => b.status === "opportunity"), [all]);
   const queue = useMemo(
@@ -63,6 +76,10 @@ function BlogEngine() {
   ];
 
   async function generate(blog: Blog) {
+    if (remaining <= 0) {
+      setPaywallOpen(true);
+      return;
+    }
     setBusyId(blog.id);
     try {
       await generateBlogArticle(blog);
@@ -74,6 +91,11 @@ function BlogEngine() {
         navigate({ to: "/dashboard/editor/$blogId", params: { blogId: blog.id } });
       }, 900);
     } catch (err) {
+      if (err instanceof CreditsExhaustedError) {
+        setBusyId(null);
+        setPaywallOpen(true);
+        return;
+      }
       toast.error(err instanceof Error ? err.message : "Generation failed.");
       setBusyId(null);
     }
@@ -82,6 +104,12 @@ function BlogEngine() {
   return (
     <div className="space-y-6">
       <Confetti fireKey={confettiKey} />
+      <CreditPaywallDialog
+        open={paywallOpen}
+        onOpenChange={setPaywallOpen}
+        credits={credits}
+        subscription={subscription}
+      />
       <PageHeader
         title="Articles"
         description="Everything autopilot is writing for you — plus ideas you can queue and drafts you can refine."
@@ -204,17 +232,23 @@ function BlogEngine() {
                     >
                       <ArticleIcon className="h-4 w-4" /> Edit
                     </Button>
-                    <Button onClick={() => generate(b)} disabled={busyId === b.id}>
-                      {busyId === b.id ? (
-                        <>
-                          <Loader2 className="h-4 w-4 animate-spin" /> Writing…
-                        </>
-                      ) : (
-                        <>
-                          <VoltMark className="h-4 w-4" /> Write now
-                        </>
-                      )}
-                    </Button>
+                    {remaining <= 0 ? (
+                      <Button onClick={() => setPaywallOpen(true)}>
+                        <VoltMark className="h-4 w-4" /> Upgrade to write
+                      </Button>
+                    ) : (
+                      <Button onClick={() => generate(b)} disabled={busyId === b.id}>
+                        {busyId === b.id ? (
+                          <>
+                            <Loader2 className="h-4 w-4 animate-spin" /> Writing…
+                          </>
+                        ) : (
+                          <>
+                            <VoltMark className="h-4 w-4" /> Write now
+                          </>
+                        )}
+                      </Button>
+                    )}
                   </>
                 )}
               </div>

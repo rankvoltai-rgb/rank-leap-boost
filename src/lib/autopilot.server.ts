@@ -9,6 +9,7 @@ const MODEL = "google/gemini-3-flash-preview";
 
 type AnyClient = {
   from: (t: string) => any;
+  rpc: (fn: string, args: Record<string, unknown>) => Promise<{ data: any; error: any }>;
 };
 
 function extractJson(text: string): Record<string, unknown> {
@@ -138,13 +139,9 @@ export async function runAutopilot(): Promise<{ processed: number; skipped: numb
   for (const row of settings) {
     if (!isDue(row)) { skipped += 1; continue; }
 
-    // Credit check.
-    const { data: credit } = await client
-      .from("credit_accounts")
-      .select("id, credits_used, credits_total")
-      .eq("user_id", row.user_id)
-      .maybeSingle();
-    if (credit && credit.credits_used >= credit.credits_total) { skipped += 1; continue; }
+    // Reserve one credit atomically. Skips the user if their monthly cap is hit.
+    const { data: reserved } = await client.rpc("consume_article_credit", { _user_id: row.user_id });
+    if (!reserved) { skipped += 1; continue; }
 
     // Next due article: scheduled, lowest queue position then soonest date.
     const { data: nextRows } = await client
@@ -156,7 +153,12 @@ export async function runAutopilot(): Promise<{ processed: number; skipped: numb
       .order("scheduled_date", { ascending: true })
       .limit(1);
     const blog = (nextRows ?? [])[0];
-    if (!blog) { skipped += 1; continue; }
+    if (!blog) {
+      // Nothing to write — give the reserved credit back.
+      await client.rpc("refund_article_credit", { _user_id: row.user_id });
+      skipped += 1;
+      continue;
+    }
 
     try {
       await client.from("blogs").update({ status: "generating" }).eq("id", blog.id);
@@ -169,20 +171,15 @@ export async function runAutopilot(): Promise<{ processed: number; skipped: numb
           status: "finished",
         })
         .eq("id", blog.id);
-      if (credit) {
-        await client
-          .from("credit_accounts")
-          .update({ credits_used: (credit.credits_used ?? 0) + 1 })
-          .eq("id", credit.id);
-      }
       await client
         .from("content_settings")
         .update({ last_autopilot_run: new Date().toISOString() })
         .eq("user_id", row.user_id);
       processed += 1;
     } catch {
-      // Roll the article back to scheduled so a later run can retry.
+      // Roll the article back to scheduled and refund the reserved credit.
       await client.from("blogs").update({ status: "scheduled" }).eq("id", blog.id);
+      await client.rpc("refund_article_credit", { _user_id: row.user_id });
       skipped += 1;
     }
   }

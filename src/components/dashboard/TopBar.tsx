@@ -2,8 +2,9 @@ import { useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Coins, LogOut } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { getCredits, getProfile } from "@/lib/api";
+import { getCredits, getProfile, creditsRemaining } from "@/lib/api";
 import { Avatar } from "@/components/landing/shared";
+import { cn } from "@/lib/utils";
 
 export function TopBar() {
   const navigate = useNavigate();
@@ -11,9 +12,15 @@ export function TopBar() {
   const { data: credits } = useQuery({ queryKey: ["credits"], queryFn: getCredits });
   const { data: profile } = useQuery({ queryKey: ["profile"], queryFn: getProfile });
 
-  const remaining = credits
-    ? credits.credits_total - credits.credits_used
-    : null;
+  const remaining = credits ? creditsRemaining(credits) : null;
+  const tone =
+    remaining === null
+      ? "neutral"
+      : remaining <= 0
+        ? "danger"
+        : remaining <= 3
+          ? "warning"
+          : "neutral";
 
   async function signOut() {
     await queryClient.cancelQueries();
@@ -24,11 +31,31 @@ export function TopBar() {
 
   return (
     <header className="sticky top-0 z-20 flex h-14 shrink-0 items-center justify-end gap-2.5 border-b border-border bg-card/70 px-5 backdrop-blur-xl">
-      <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-secondary/70 px-3 py-1 text-xs font-medium text-ink tabular-nums">
-        <Coins className="h-3.5 w-3.5 text-warning" />
+      <button
+        type="button"
+        onClick={() => navigate({ to: "/dashboard/billing" })}
+        title="Articles remaining this month"
+        className={cn(
+          "inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium tabular-nums transition-colors hover:brightness-105",
+          tone === "danger" &&
+            "border-destructive/30 bg-destructive/10 text-destructive",
+          tone === "warning" && "border-warning/30 bg-warning/10 text-warning",
+          tone === "neutral" && "border-border bg-secondary/70 text-ink",
+        )}
+      >
+        <Coins
+          className={cn(
+            "h-3.5 w-3.5",
+            tone === "danger" && "text-destructive",
+            tone === "warning" && "text-warning",
+            tone === "neutral" && "text-warning",
+          )}
+        />
         {remaining === null ? "—" : remaining.toLocaleString()}
-        <span className="text-muted-foreground">credits</span>
-      </span>
+        <span className={tone === "neutral" ? "text-muted-foreground" : "opacity-80"}>
+          {remaining === 0 ? "credits — upgrade" : "credits"}
+        </span>
+      </button>
       <span className="mx-1 h-6 w-px bg-border" />
       <Avatar name={profile?.brand_name ?? "Rankvolt"} className="h-8 w-8 ring-2 ring-border" />
       <button
