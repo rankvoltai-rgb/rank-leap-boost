@@ -127,9 +127,6 @@ export function MetricCard({
   const pct = ring ? Math.round((ring.max > 0 ? ring.value / ring.max : 0) * 100) : 0;
   return (
     <Panel className="relative flex min-h-[128px] flex-col overflow-hidden p-5">
-      {emphasis && (
-        <span className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-volt to-transparent" />
-      )}
       <div className="flex items-center justify-between gap-2">
         <p className="text-[0.68rem] font-semibold uppercase tracking-[0.08em] text-muted-foreground">
           {label}
