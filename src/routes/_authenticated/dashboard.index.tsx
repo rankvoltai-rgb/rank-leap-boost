@@ -528,14 +528,28 @@ function SystemConsole() {
                   </Pill>
                 ) : (
                   <>
-                    <Button variant="ghost" onClick={() => prioritize(opp)} disabled={busyId === opp.id}>
+                    <Button
+                      variant="ghost"
+                      title="Move to top"
+                      onClick={() => prioritize(opp)}
+                      disabled={busyId === opp.id}
+                    >
                       <PublishIcon className="h-4 w-4" />
                     </Button>
-                    <Button variant="ghost" onClick={() => generateNow(opp)} disabled={busyId === opp.id}>
+                    <Button
+                      variant="ghost"
+                      title="Write now"
+                      onClick={() => generateNow(opp)}
+                      disabled={busyId === opp.id}
+                    >
                       {busyId === opp.id ? <Loader2 className="h-4 w-4 animate-spin" /> : <VoltMark className="h-4 w-4" />}
-                      <span className="hidden sm:inline">Write now</span>
                     </Button>
-                    <Button variant="danger" onClick={() => remove(opp)} disabled={busyId === opp.id}>
+                    <Button
+                      variant="danger"
+                      title="Remove from queue"
+                      onClick={() => remove(opp)}
+                      disabled={busyId === opp.id}
+                    >
                       <RemoveIcon className="h-4 w-4" />
                     </Button>
                   </>
