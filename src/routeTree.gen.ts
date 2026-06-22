@@ -21,13 +21,17 @@ import { Route as AuthenticatedDashboardIndexRouteImport } from './routes/_authe
 import { Route as AuthenticatedDashboardVisibilityRouteImport } from './routes/_authenticated/dashboard.visibility'
 import { Route as AuthenticatedDashboardSettingsRouteImport } from './routes/_authenticated/dashboard.settings'
 import { Route as AuthenticatedDashboardKeywordsRouteImport } from './routes/_authenticated/dashboard.keywords'
+import { Route as AuthenticatedDashboardIntegrationsRouteImport } from './routes/_authenticated/dashboard.integrations'
 import { Route as AuthenticatedDashboardInsightsRouteImport } from './routes/_authenticated/dashboard.insights'
 import { Route as AuthenticatedDashboardCalendarRouteImport } from './routes/_authenticated/dashboard.calendar'
 import { Route as AuthenticatedDashboardBlogEngineRouteImport } from './routes/_authenticated/dashboard.blog-engine'
 import { Route as AuthenticatedDashboardBillingRouteImport } from './routes/_authenticated/dashboard.billing'
+import { Route as ApiPublicV1PingRouteImport } from './routes/api/public/v1/ping'
+import { Route as ApiPublicV1ArticlesRouteImport } from './routes/api/public/v1/articles'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
 import { Route as ApiPublicHooksAutopilotRunRouteImport } from './routes/api/public/hooks/autopilot-run'
 import { Route as AuthenticatedDashboardEditorBlogIdRouteImport } from './routes/_authenticated/dashboard.editor.$blogId'
+import { Route as ApiPublicV1ArticlesIdRouteImport } from './routes/api/public/v1/articles.$id'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
@@ -92,6 +96,12 @@ const AuthenticatedDashboardKeywordsRoute =
     path: '/keywords',
     getParentRoute: () => AuthenticatedDashboardRoute,
   } as any)
+const AuthenticatedDashboardIntegrationsRoute =
+  AuthenticatedDashboardIntegrationsRouteImport.update({
+    id: '/integrations',
+    path: '/integrations',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
 const AuthenticatedDashboardInsightsRoute =
   AuthenticatedDashboardInsightsRouteImport.update({
     id: '/insights',
@@ -116,6 +126,16 @@ const AuthenticatedDashboardBillingRoute =
     path: '/billing',
     getParentRoute: () => AuthenticatedDashboardRoute,
   } as any)
+const ApiPublicV1PingRoute = ApiPublicV1PingRouteImport.update({
+  id: '/api/public/v1/ping',
+  path: '/api/public/v1/ping',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicV1ArticlesRoute = ApiPublicV1ArticlesRouteImport.update({
+  id: '/api/public/v1/articles',
+  path: '/api/public/v1/articles',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicPaymentsWebhookRoute =
   ApiPublicPaymentsWebhookRouteImport.update({
     id: '/api/public/payments/webhook',
@@ -134,6 +154,11 @@ const AuthenticatedDashboardEditorBlogIdRoute =
     path: '/editor/$blogId',
     getParentRoute: () => AuthenticatedDashboardRoute,
   } as any)
+const ApiPublicV1ArticlesIdRoute = ApiPublicV1ArticlesIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => ApiPublicV1ArticlesRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -147,6 +172,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/blog-engine': typeof AuthenticatedDashboardBlogEngineRoute
   '/dashboard/calendar': typeof AuthenticatedDashboardCalendarRoute
   '/dashboard/insights': typeof AuthenticatedDashboardInsightsRoute
+  '/dashboard/integrations': typeof AuthenticatedDashboardIntegrationsRoute
   '/dashboard/keywords': typeof AuthenticatedDashboardKeywordsRoute
   '/dashboard/settings': typeof AuthenticatedDashboardSettingsRoute
   '/dashboard/visibility': typeof AuthenticatedDashboardVisibilityRoute
@@ -154,6 +180,9 @@ export interface FileRoutesByFullPath {
   '/dashboard/editor/$blogId': typeof AuthenticatedDashboardEditorBlogIdRoute
   '/api/public/hooks/autopilot-run': typeof ApiPublicHooksAutopilotRunRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
+  '/api/public/v1/articles': typeof ApiPublicV1ArticlesRouteWithChildren
+  '/api/public/v1/ping': typeof ApiPublicV1PingRoute
+  '/api/public/v1/articles/$id': typeof ApiPublicV1ArticlesIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -166,6 +195,7 @@ export interface FileRoutesByTo {
   '/dashboard/blog-engine': typeof AuthenticatedDashboardBlogEngineRoute
   '/dashboard/calendar': typeof AuthenticatedDashboardCalendarRoute
   '/dashboard/insights': typeof AuthenticatedDashboardInsightsRoute
+  '/dashboard/integrations': typeof AuthenticatedDashboardIntegrationsRoute
   '/dashboard/keywords': typeof AuthenticatedDashboardKeywordsRoute
   '/dashboard/settings': typeof AuthenticatedDashboardSettingsRoute
   '/dashboard/visibility': typeof AuthenticatedDashboardVisibilityRoute
@@ -173,6 +203,9 @@ export interface FileRoutesByTo {
   '/dashboard/editor/$blogId': typeof AuthenticatedDashboardEditorBlogIdRoute
   '/api/public/hooks/autopilot-run': typeof ApiPublicHooksAutopilotRunRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
+  '/api/public/v1/articles': typeof ApiPublicV1ArticlesRouteWithChildren
+  '/api/public/v1/ping': typeof ApiPublicV1PingRoute
+  '/api/public/v1/articles/$id': typeof ApiPublicV1ArticlesIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -188,6 +221,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/blog-engine': typeof AuthenticatedDashboardBlogEngineRoute
   '/_authenticated/dashboard/calendar': typeof AuthenticatedDashboardCalendarRoute
   '/_authenticated/dashboard/insights': typeof AuthenticatedDashboardInsightsRoute
+  '/_authenticated/dashboard/integrations': typeof AuthenticatedDashboardIntegrationsRoute
   '/_authenticated/dashboard/keywords': typeof AuthenticatedDashboardKeywordsRoute
   '/_authenticated/dashboard/settings': typeof AuthenticatedDashboardSettingsRoute
   '/_authenticated/dashboard/visibility': typeof AuthenticatedDashboardVisibilityRoute
@@ -195,6 +229,9 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/editor/$blogId': typeof AuthenticatedDashboardEditorBlogIdRoute
   '/api/public/hooks/autopilot-run': typeof ApiPublicHooksAutopilotRunRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
+  '/api/public/v1/articles': typeof ApiPublicV1ArticlesRouteWithChildren
+  '/api/public/v1/ping': typeof ApiPublicV1PingRoute
+  '/api/public/v1/articles/$id': typeof ApiPublicV1ArticlesIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -210,6 +247,7 @@ export interface FileRouteTypes {
     | '/dashboard/blog-engine'
     | '/dashboard/calendar'
     | '/dashboard/insights'
+    | '/dashboard/integrations'
     | '/dashboard/keywords'
     | '/dashboard/settings'
     | '/dashboard/visibility'
@@ -217,6 +255,9 @@ export interface FileRouteTypes {
     | '/dashboard/editor/$blogId'
     | '/api/public/hooks/autopilot-run'
     | '/api/public/payments/webhook'
+    | '/api/public/v1/articles'
+    | '/api/public/v1/ping'
+    | '/api/public/v1/articles/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -229,6 +270,7 @@ export interface FileRouteTypes {
     | '/dashboard/blog-engine'
     | '/dashboard/calendar'
     | '/dashboard/insights'
+    | '/dashboard/integrations'
     | '/dashboard/keywords'
     | '/dashboard/settings'
     | '/dashboard/visibility'
@@ -236,6 +278,9 @@ export interface FileRouteTypes {
     | '/dashboard/editor/$blogId'
     | '/api/public/hooks/autopilot-run'
     | '/api/public/payments/webhook'
+    | '/api/public/v1/articles'
+    | '/api/public/v1/ping'
+    | '/api/public/v1/articles/$id'
   id:
     | '__root__'
     | '/'
@@ -250,6 +295,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/blog-engine'
     | '/_authenticated/dashboard/calendar'
     | '/_authenticated/dashboard/insights'
+    | '/_authenticated/dashboard/integrations'
     | '/_authenticated/dashboard/keywords'
     | '/_authenticated/dashboard/settings'
     | '/_authenticated/dashboard/visibility'
@@ -257,6 +303,9 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/editor/$blogId'
     | '/api/public/hooks/autopilot-run'
     | '/api/public/payments/webhook'
+    | '/api/public/v1/articles'
+    | '/api/public/v1/ping'
+    | '/api/public/v1/articles/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -269,6 +318,8 @@ export interface RootRouteChildren {
   FeaturesIndexRoute: typeof FeaturesIndexRoute
   ApiPublicHooksAutopilotRunRoute: typeof ApiPublicHooksAutopilotRunRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
+  ApiPublicV1ArticlesRoute: typeof ApiPublicV1ArticlesRouteWithChildren
+  ApiPublicV1PingRoute: typeof ApiPublicV1PingRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -357,6 +408,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardKeywordsRouteImport
       parentRoute: typeof AuthenticatedDashboardRoute
     }
+    '/_authenticated/dashboard/integrations': {
+      id: '/_authenticated/dashboard/integrations'
+      path: '/integrations'
+      fullPath: '/dashboard/integrations'
+      preLoaderRoute: typeof AuthenticatedDashboardIntegrationsRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
     '/_authenticated/dashboard/insights': {
       id: '/_authenticated/dashboard/insights'
       path: '/insights'
@@ -385,6 +443,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardBillingRouteImport
       parentRoute: typeof AuthenticatedDashboardRoute
     }
+    '/api/public/v1/ping': {
+      id: '/api/public/v1/ping'
+      path: '/api/public/v1/ping'
+      fullPath: '/api/public/v1/ping'
+      preLoaderRoute: typeof ApiPublicV1PingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/articles': {
+      id: '/api/public/v1/articles'
+      path: '/api/public/v1/articles'
+      fullPath: '/api/public/v1/articles'
+      preLoaderRoute: typeof ApiPublicV1ArticlesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/payments/webhook': {
       id: '/api/public/payments/webhook'
       path: '/api/public/payments/webhook'
@@ -406,6 +478,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardEditorBlogIdRouteImport
       parentRoute: typeof AuthenticatedDashboardRoute
     }
+    '/api/public/v1/articles/$id': {
+      id: '/api/public/v1/articles/$id'
+      path: '/$id'
+      fullPath: '/api/public/v1/articles/$id'
+      preLoaderRoute: typeof ApiPublicV1ArticlesIdRouteImport
+      parentRoute: typeof ApiPublicV1ArticlesRoute
+    }
   }
 }
 
@@ -414,6 +493,7 @@ interface AuthenticatedDashboardRouteChildren {
   AuthenticatedDashboardBlogEngineRoute: typeof AuthenticatedDashboardBlogEngineRoute
   AuthenticatedDashboardCalendarRoute: typeof AuthenticatedDashboardCalendarRoute
   AuthenticatedDashboardInsightsRoute: typeof AuthenticatedDashboardInsightsRoute
+  AuthenticatedDashboardIntegrationsRoute: typeof AuthenticatedDashboardIntegrationsRoute
   AuthenticatedDashboardKeywordsRoute: typeof AuthenticatedDashboardKeywordsRoute
   AuthenticatedDashboardSettingsRoute: typeof AuthenticatedDashboardSettingsRoute
   AuthenticatedDashboardVisibilityRoute: typeof AuthenticatedDashboardVisibilityRoute
@@ -428,6 +508,8 @@ const AuthenticatedDashboardRouteChildren: AuthenticatedDashboardRouteChildren =
       AuthenticatedDashboardBlogEngineRoute,
     AuthenticatedDashboardCalendarRoute: AuthenticatedDashboardCalendarRoute,
     AuthenticatedDashboardInsightsRoute: AuthenticatedDashboardInsightsRoute,
+    AuthenticatedDashboardIntegrationsRoute:
+      AuthenticatedDashboardIntegrationsRoute,
     AuthenticatedDashboardKeywordsRoute: AuthenticatedDashboardKeywordsRoute,
     AuthenticatedDashboardSettingsRoute: AuthenticatedDashboardSettingsRoute,
     AuthenticatedDashboardVisibilityRoute:
@@ -453,6 +535,17 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
 const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
+interface ApiPublicV1ArticlesRouteChildren {
+  ApiPublicV1ArticlesIdRoute: typeof ApiPublicV1ArticlesIdRoute
+}
+
+const ApiPublicV1ArticlesRouteChildren: ApiPublicV1ArticlesRouteChildren = {
+  ApiPublicV1ArticlesIdRoute: ApiPublicV1ArticlesIdRoute,
+}
+
+const ApiPublicV1ArticlesRouteWithChildren =
+  ApiPublicV1ArticlesRoute._addFileChildren(ApiPublicV1ArticlesRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
@@ -463,6 +556,8 @@ const rootRouteChildren: RootRouteChildren = {
   FeaturesIndexRoute: FeaturesIndexRoute,
   ApiPublicHooksAutopilotRunRoute: ApiPublicHooksAutopilotRunRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
+  ApiPublicV1ArticlesRoute: ApiPublicV1ArticlesRouteWithChildren,
+  ApiPublicV1PingRoute: ApiPublicV1PingRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
