@@ -188,26 +188,47 @@ export function AuthVisual() {
         </div>
       </motion.div>
 
-      {/* Ranking strip */}
+      {/* AI search visibility */}
       <motion.div
         custom={2}
         variants={reveal}
         initial="hidden"
         animate="show"
-        className="flex items-center justify-between rounded-2xl border border-background/10 bg-background/[0.04] px-5 py-4"
+        className="rounded-2xl border border-background/10 bg-gradient-to-b from-background/[0.07] to-background/[0.02] p-5"
       >
-        <div>
-          <p className="text-sm font-medium text-background">Avg. Google position</p>
-          <p className="mt-0.5 text-xs text-background/45">across tracked keywords</p>
-        </div>
-        <div className="flex items-center gap-3">
-          <Sparkline />
-          <span
-            className="flex h-9 w-9 items-center justify-center rounded-full text-sm font-semibold text-white"
-            style={{ background: "var(--volt)" }}
-          >
-            #1
+        <div className="flex items-center justify-between">
+          <p className="text-sm font-semibold text-background">Visible across AI search</p>
+          <span className="flex items-center gap-1 text-xs font-medium" style={{ color: "var(--volt)" }}>
+            <ArrowUpRight className="h-3.5 w-3.5" /> 4 engines
           </span>
+        </div>
+        <div className="mt-4 grid grid-cols-2 gap-2.5">
+          {ENGINES.map((engine, i) => {
+            const Logo = engine.Logo;
+            return (
+              <motion.div
+                key={engine.name}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.45, delay: 0.6 + i * 0.12, ease: [0.21, 0.47, 0.32, 0.98] }}
+                className="flex items-center gap-2.5 rounded-xl border border-background/10 bg-background/[0.03] px-3 py-2.5"
+              >
+                <span
+                  className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg"
+                  style={{ background: `${engine.color}1f`, color: engine.color }}
+                >
+                  <Logo className="h-4 w-4" />
+                </span>
+                <div className="min-w-0">
+                  <p className="truncate text-xs font-medium text-background">{engine.name}</p>
+                  <p className="flex items-center gap-1 truncate text-[0.7rem] text-background/50">
+                    <Check className="h-3 w-3 shrink-0" style={{ color: "var(--volt)" }} />
+                    {engine.status}
+                  </p>
+                </div>
+              </motion.div>
+            );
+          })}
         </div>
       </motion.div>
     </div>
