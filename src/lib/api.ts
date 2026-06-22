@@ -341,14 +341,8 @@ async function ensureAccountBase(
     await supabase.from("content_settings").insert({ user_id, ...settingsInput });
   }
 
-  const existingCredits = await supabase
-    .from("credit_accounts")
-    .select("id")
-    .eq("user_id", user_id)
-    .maybeSingle();
-  if (!existingCredits.data) {
-    await supabase.from("credit_accounts").insert({ user_id, credits_used: 0, credits_total: 30 });
-  }
+  // Credit accounts are write-protected; create via the server function.
+  await ensureCreditAccount();
 }
 
 function oppToBlogRow(o: OpportunityInput, user_id: string): TablesInsert<"blogs"> {
