@@ -496,7 +496,8 @@ export async function seedAccount(profileInput: {
     product_description: profileInput.product_description,
   });
   await supabase.from("content_settings").insert({ user_id });
-  await supabase.from("credit_accounts").insert({ user_id, credits_used: 0, credits_total: 30 });
+  // Credit accounts are write-protected; create via the server function.
+  await ensureCreditAccount();
 
   const libraryKw = profileInput.keywords?.length
     ? profileInput.keywords
