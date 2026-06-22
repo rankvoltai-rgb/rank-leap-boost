@@ -1,19 +1,14 @@
 import { useState } from "react";
-import { ArrowRight, Check, Loader2 } from "lucide-react";
+import { ArrowRight, Loader2 } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { getProfile } from "@/lib/api";
 import { Logo, Reveal, Stars, Avatar } from "@/components/landing/shared";
 import { SocialButtons } from "./SocialButtons";
+import { AuthVisual } from "./AuthVisual";
 
 const FACES = ["Owen Carter", "Priya Raman", "Hannah Whitfield", "Marco Silva", "Elise Tanaka"];
-
-const STEPS = [
-  { title: "Sign in", desc: "Create your account in seconds." },
-  { title: "Connect your site", desc: "Point us at your domain and CMS." },
-  { title: "Done", desc: "Daily SEO articles publish on autopilot." },
-];
 
 function Field({
   label,
@@ -192,6 +187,10 @@ export function AuthSplit() {
             backgroundSize: "22px 22px",
           }}
         />
+        <div
+          className="pointer-events-none absolute -right-24 -top-24 h-96 w-96 rounded-full opacity-20 blur-3xl"
+          style={{ background: "radial-gradient(circle, var(--volt), transparent 70%)" }}
+        />
         <div className="relative">
           <span className="inline-flex items-center rounded-full border border-background/20 bg-background/10 px-3 py-1 text-xs font-medium text-background/80">
             Sign in → connect site → done
@@ -200,19 +199,7 @@ export function AuthSplit() {
             Your personal SEO agent, working while you sleep.
           </h2>
 
-          <ol className="mt-10 space-y-6">
-            {STEPS.map((s, i) => (
-              <li key={s.title} className="flex gap-4">
-                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-background/10 text-sm font-semibold ring-1 ring-background/20">
-                  {i === STEPS.length - 1 ? <Check className="h-4 w-4" /> : i + 1}
-                </span>
-                <div>
-                  <p className="font-semibold">{s.title}</p>
-                  <p className="text-sm text-background/70">{s.desc}</p>
-                </div>
-              </li>
-            ))}
-          </ol>
+          <AuthVisual />
         </div>
 
         <div className="relative flex items-center gap-3">
