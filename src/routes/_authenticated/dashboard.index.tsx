@@ -33,8 +33,6 @@ import {
 } from "@/lib/api";
 import {
   Panel,
-  StatCard,
-  MetricStat,
   Pill,
   Button,
   PageHeader,
@@ -65,17 +63,50 @@ function timeGreeting() {
 
 function AlgorithmLogos() {
   return (
-    <div className="flex flex-wrap items-center gap-2">
+    <div className="flex flex-wrap items-center gap-1.5">
       {AI_ALGORITHM_MARKS.map(({ name, Mark }) => (
         <span
           key={name}
           title={name}
           aria-label={name}
-          className="grid h-9 w-9 place-items-center rounded-xl border border-border bg-card"
+          className="grid h-8 w-8 place-items-center rounded-lg border border-border bg-card"
         >
-          <Mark className="h-5 w-5" />
+          <Mark className="h-4 w-4" />
         </span>
       ))}
+    </div>
+  );
+}
+
+/** A single flat metric cell used inside the consolidated stats strip. */
+function StatCell({
+  label,
+  value,
+  icon,
+  hint,
+  accent,
+}: {
+  label: string;
+  value: React.ReactNode;
+  icon?: React.ReactNode;
+  hint?: React.ReactNode;
+  accent?: boolean;
+}) {
+  return (
+    <div className="flex flex-col gap-2.5 bg-card p-5">
+      <div className="flex items-center gap-2 text-muted-foreground">
+        {icon}
+        <p className="text-sm font-medium">{label}</p>
+      </div>
+      <p
+        className={cn(
+          "text-[1.9rem] font-semibold leading-none tracking-tight tabular-nums",
+          accent ? "text-volt" : "text-ink",
+        )}
+      >
+        {value}
+      </p>
+      {hint && <p className="mt-auto text-xs text-muted-foreground">{hint}</p>}
     </div>
   );
 }
