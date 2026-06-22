@@ -1,19 +1,20 @@
 import { motion, useMotionValue, useTransform, animate, type Variants } from "motion/react";
 import { useEffect, useState } from "react";
-import { Search, Sparkles, Globe, Bot, Check, ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Quote } from "lucide-react";
+import rankvoltMark from "@/assets/rankvolt-mark.png.asset.json";
 
 /* ---------- Animated number counter ---------- */
 function Counter({ to, suffix = "" }: { to: number; suffix?: string }) {
   const count = useMotionValue(0);
   const rounded = useTransform(count, (v) => `${Math.round(v).toLocaleString()}${suffix}`);
   useEffect(() => {
-    const controls = animate(count, to, { duration: 1.8, ease: [0.16, 1, 0.3, 1] });
+    const controls = animate(count, to, { duration: 2, ease: [0.16, 1, 0.3, 1] });
     return controls.stop;
   }, [count, to]);
   return <motion.span>{rounded}</motion.span>;
 }
 
-/* ---------- AI engine brand logos ---------- */
+/* ---------- AI engine brand marks (bespoke SVG, not lucide) ---------- */
 function ChatGPTLogo({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden>
@@ -25,6 +26,16 @@ function GeminiLogo({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden>
       <path d="M12 0c.34 6.27 5.73 11.66 12 12-6.27.34-11.66 5.73-12 12-.34-6.27-5.73-11.66-12-12C6.27 11.66 11.66 6.27 12 0Z" />
+    </svg>
+  );
+}
+function GoogleLogo({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} aria-hidden>
+      <path fill="#4285F4" d="M21.6 12.23c0-.74-.07-1.45-.19-2.13H12v4.03h5.38a4.6 4.6 0 0 1-2 3.02v2.5h3.23c1.89-1.74 2.99-4.3 2.99-7.42Z" />
+      <path fill="#34A853" d="M12 22c2.7 0 4.96-.9 6.62-2.42l-3.23-2.5c-.9.6-2.04.96-3.39.96-2.6 0-4.8-1.76-5.59-4.12H3.07v2.58A10 10 0 0 0 12 22Z" />
+      <path fill="#FBBC05" d="M6.41 13.92a6 6 0 0 1 0-3.84V7.5H3.07a10 10 0 0 0 0 9l3.34-2.58Z" />
+      <path fill="#EA4335" d="M12 5.96c1.47 0 2.78.5 3.81 1.49l2.85-2.85C16.95 2.99 14.7 2 12 2A10 10 0 0 0 3.07 7.5l3.34 2.58C7.2 7.72 9.4 5.96 12 5.96Z" />
     </svg>
   );
 }
@@ -42,20 +53,40 @@ function ClaudeLogo({ className }: { className?: string }) {
     </svg>
   );
 }
+function GrokLogo({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden>
+      <path d="M4 20 14.5 9.5 9 4h3.2l4.3 4.3-2.1 2.1L20 4h-3.2l-2.6 2.6L11.9 4H4l6.4 6.4L4 16.8V20Zm14-9.6L11.4 17H8.2l6.6-6.6h3.2Z" />
+    </svg>
+  );
+}
 
-const ENGINES = [
-  { name: "ChatGPT", Logo: ChatGPTLogo, color: "#10a37f", status: "Recommended" },
-  { name: "Gemini", Logo: GeminiLogo, color: "#4285f4", status: "Cited 12×" },
-  { name: "Perplexity", Logo: PerplexityLogo, color: "#20b8cd", status: "Top source" },
-  { name: "Claude", Logo: ClaudeLogo, color: "#d97757", status: "Recommended" },
+type Engine = {
+  name: string;
+  Logo: ({ className }: { className?: string }) => JSX.Element;
+  color: string;
+  brandTint?: boolean;
+};
+
+const ENGINES: Engine[] = [
+  { name: "ChatGPT", Logo: ChatGPTLogo, color: "#10a37f" },
+  { name: "Gemini", Logo: GeminiLogo, color: "#4285f4" },
+  { name: "Google", Logo: GoogleLogo, color: "#ffffff", brandTint: true },
+  { name: "Perplexity", Logo: PerplexityLogo, color: "#20b8cd" },
+  { name: "Claude", Logo: ClaudeLogo, color: "#d97757" },
+  { name: "Grok", Logo: GrokLogo, color: "#e7e7e7" },
 ];
 
-const PIPELINE = [
-  { icon: Search, label: "Researching keywords", sub: "1,240 opportunities found" },
-  { icon: Sparkles, label: "Writing the article", sub: "SEO-optimized, on-brand" },
-  { icon: Globe, label: "Publishing to your CMS", sub: "WordPress · Webflow · Ghost" },
-  { icon: Bot, label: "Indexed by AI search", sub: "Cited by ChatGPT & Google" },
-];
+/* node positions on a circle (viewBox-relative %), starting at top, clockwise */
+const RADIUS = 39;
+const NODES = ENGINES.map((engine, i) => {
+  const angle = (-90 + i * (360 / ENGINES.length)) * (Math.PI / 180);
+  return {
+    ...engine,
+    x: 50 + RADIUS * Math.cos(angle),
+    y: 50 + RADIUS * Math.sin(angle),
+  };
+});
 
 const reveal: Variants = {
   hidden: { opacity: 0, y: 16 },
@@ -70,108 +101,212 @@ const reveal: Variants = {
   }),
 };
 
+/* ---------- Orbital "AI traffic" core ---------- */
+function TrafficOrbit() {
+  return (
+    <div className="relative mx-auto aspect-square w-full max-w-[340px]">
+      {/* moving traffic beams (SVG) */}
+      <svg
+        viewBox="0 0 100 100"
+        className="absolute inset-0 h-full w-full overflow-visible"
+        aria-hidden
+      >
+        <defs>
+          <radialGradient id="beam" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="var(--volt)" stopOpacity="0.9" />
+            <stop offset="100%" stopColor="var(--volt)" stopOpacity="0" />
+          </radialGradient>
+        </defs>
+        {NODES.map((node, i) => (
+          <g key={node.name}>
+            <line
+              x1={node.x}
+              y1={node.y}
+              x2="50"
+              y2="50"
+              stroke="hsl(0 0% 100% / 0.08)"
+              strokeWidth="0.4"
+              strokeDasharray="1.4 2.2"
+            />
+            {/* traffic packet flowing inward */}
+            <motion.circle
+              r="1.4"
+              fill="url(#beam)"
+              initial={{ cx: node.x, cy: node.y, opacity: 0 }}
+              animate={{
+                cx: [node.x, 50],
+                cy: [node.y, 50],
+                opacity: [0, 1, 1, 0],
+              }}
+              transition={{
+                duration: 2.2,
+                delay: i * 0.35,
+                repeat: Infinity,
+                repeatDelay: 0.6,
+                ease: "easeIn",
+              }}
+            />
+          </g>
+        ))}
+      </svg>
+
+      {/* decorative rotating rings */}
+      <motion.span
+        className="absolute inset-[8%] rounded-full border border-dashed border-background/10"
+        animate={{ rotate: 360 }}
+        transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
+      />
+      <motion.span
+        className="absolute inset-[22%] rounded-full border border-background/[0.06]"
+        animate={{ rotate: -360 }}
+        transition={{ duration: 38, repeat: Infinity, ease: "linear" }}
+      />
+
+      {/* engine nodes */}
+      {NODES.map((node, i) => {
+        const Logo = node.Logo;
+        return (
+          <motion.div
+            key={node.name}
+            className="absolute -translate-x-1/2 -translate-y-1/2"
+            style={{ left: `${node.x}%`, top: `${node.y}%` }}
+            initial={{ opacity: 0, scale: 0.6 }}
+            animate={{ opacity: 1, scale: 1, y: [0, -4, 0] }}
+            transition={{
+              opacity: { duration: 0.5, delay: 0.4 + i * 0.1 },
+              scale: { duration: 0.5, delay: 0.4 + i * 0.1, ease: [0.34, 1.56, 0.64, 1] },
+              y: { duration: 3.5 + i * 0.3, repeat: Infinity, ease: "easeInOut" },
+            }}
+          >
+            <div
+              className="flex h-12 w-12 items-center justify-center rounded-2xl border border-background/15 bg-ink/80 shadow-lg backdrop-blur-sm"
+              style={{ boxShadow: `0 6px 20px -8px ${node.color}80` }}
+            >
+              <Logo
+                className="h-6 w-6"
+                {...(!node.brandTint && node.name !== "Google" ? {} : {})}
+              />
+              {!node.brandTint && (
+                <span className="sr-only">{node.name}</span>
+              )}
+            </div>
+          </motion.div>
+        );
+      })}
+
+      {/* tint single-color logos via color wrapper */}
+      <style>{`
+        .ai-tint-ChatGPT { color: #10a37f; }
+      `}</style>
+
+      {/* center: your brand */}
+      <motion.div
+        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+        initial={{ opacity: 0, scale: 0.7 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.6, delay: 0.2, ease: [0.34, 1.56, 0.64, 1] }}
+      >
+        <span
+          className="absolute inset-0 -z-10 animate-ping rounded-3xl opacity-30"
+          style={{ background: "var(--volt)" }}
+        />
+        <div
+          className="flex h-20 w-20 flex-col items-center justify-center gap-1 rounded-3xl border border-background/20 bg-background/[0.06] backdrop-blur-md"
+          style={{ boxShadow: "0 0 40px -6px var(--volt)" }}
+        >
+          <img src={rankvoltMark.url} alt="Rankvolt" className="h-8 w-8 object-contain" />
+          <span className="text-[0.6rem] font-semibold uppercase tracking-wide text-background/70">
+            You
+          </span>
+        </div>
+      </motion.div>
+    </div>
+  );
+}
+
 export function AuthVisual() {
-  const [active, setActive] = useState(0);
+  const [tick, setTick] = useState(0);
 
   useEffect(() => {
-    const id = setInterval(() => setActive((a) => (a + 1) % PIPELINE.length), 2000);
+    const id = setInterval(() => setTick((t) => (t + 1) % ENGINES.length), 2400);
     return () => clearInterval(id);
   }, []);
 
+  const active = ENGINES[tick];
+
   return (
-    <div className="relative mt-10 space-y-5">
-      {/* Hero: live agent pipeline */}
+    <div className="relative mt-8 space-y-5">
+      {/* Orbit hero */}
       <motion.div
         custom={0}
         variants={reveal}
         initial="hidden"
         animate="show"
-        className="rounded-2xl border border-background/10 bg-gradient-to-b from-background/[0.07] to-background/[0.02] p-6"
+        className="relative overflow-hidden rounded-3xl border border-background/10 bg-gradient-to-b from-background/[0.07] to-background/[0.01] p-6"
       >
         <div className="flex items-center justify-between">
           <span className="flex items-center gap-2 text-sm font-semibold text-background">
             <span className="relative flex h-2 w-2">
-              <span
-                className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-75"
-                style={{ background: "var(--volt)" }}
-              />
-              <span
-                className="relative inline-flex h-2 w-2 rounded-full"
-                style={{ background: "var(--volt)" }}
-              />
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-75" style={{ background: "var(--volt)" }} />
+              <span className="relative inline-flex h-2 w-2 rounded-full" style={{ background: "var(--volt)" }} />
             </span>
-            Agent working
+            AI traffic, flowing to you
           </span>
           <span className="rounded-md bg-background/10 px-2 py-0.5 text-[0.7rem] font-medium uppercase tracking-wide text-background/60">
             Live
           </span>
         </div>
 
-        <div className="relative mt-5">
-          {/* connecting spine */}
-          <span className="absolute left-[15px] top-3 bottom-3 w-px bg-background/10" />
-          <ul className="space-y-4">
-            {PIPELINE.map((step, i) => {
-              const Icon = step.icon;
-              const isActive = i === active;
-              const isDone = i < active;
-              return (
-                <li key={step.label} className="relative flex items-center gap-3.5">
-                  <motion.span
-                    animate={{ scale: isActive ? 1.08 : 1 }}
-                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                    className="relative z-10 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border transition-colors duration-300"
-                    style={{
-                      background: isActive ? "var(--volt)" : "hsl(0 0% 100% / 0.04)",
-                      borderColor: isActive ? "transparent" : "hsl(0 0% 100% / 0.12)",
-                    }}
-                  >
-                    {isDone ? (
-                      <Check className="h-4 w-4 text-background/70" />
-                    ) : (
-                      <Icon
-                        className="h-[15px] w-[15px]"
-                        style={{ color: isActive ? "white" : "hsl(0 0% 100% / 0.45)" }}
-                      />
-                    )}
-                  </motion.span>
-                  <div className="min-w-0 flex-1">
-                    <p
-                      className={`truncate text-sm transition-colors duration-300 ${
-                        isActive ? "font-medium text-background" : "text-background/55"
-                      }`}
-                    >
-                      {step.label}
-                    </p>
-                    <motion.p
-                      initial={false}
-                      animate={{
-                        opacity: isActive ? 1 : 0,
-                        height: isActive ? "auto" : 0,
-                      }}
-                      transition={{ duration: 0.3 }}
-                      className="overflow-hidden text-xs text-background/45"
-                    >
-                      {step.sub}
-                    </motion.p>
-                  </div>
-                </li>
-              );
-            })}
-          </ul>
+        <TrafficOrbit />
+
+        {/* rotating "recommended by" line */}
+        <div className="mt-2 flex h-5 items-center justify-center gap-2 text-xs text-background/55">
+          Recommended by
+          <motion.span
+            key={active.name}
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.35 }}
+            className="font-semibold"
+            style={{ color: active.color === "#ffffff" || active.color === "#e7e7e7" ? "var(--background)" : active.color }}
+          >
+            {active.name}
+          </motion.span>
         </div>
       </motion.div>
 
-      {/* Quiet stats strip */}
+      {/* Answer card */}
       <motion.div
         custom={1}
+        variants={reveal}
+        initial="hidden"
+        animate="show"
+        className="rounded-2xl border border-background/10 bg-background/[0.04] p-4"
+      >
+        <div className="flex items-start gap-3">
+          <span
+            className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg"
+            style={{ background: "var(--volt)", color: "white" }}
+          >
+            <Quote className="h-3.5 w-3.5" />
+          </span>
+          <p className="text-sm leading-relaxed text-background/80">
+            "The best option is <span className="font-semibold text-background">your brand</span> — it's
+            widely cited as the most reliable choice."
+          </p>
+        </div>
+      </motion.div>
+
+      {/* Stats */}
+      <motion.div
+        custom={2}
         variants={reveal}
         initial="hidden"
         animate="show"
         className="grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-background/10 bg-background/10"
       >
         <div className="bg-ink p-5">
-          <p className="text-xs text-background/50">Organic traffic</p>
+          <p className="text-xs text-background/50">AI-sourced visits</p>
           <p className="mt-1.5 text-2xl font-semibold tracking-tight text-background">
             <Counter to={12480} />
           </p>
@@ -180,55 +315,11 @@ export function AuthVisual() {
           </p>
         </div>
         <div className="bg-ink p-5">
-          <p className="text-xs text-background/50">Articles live</p>
+          <p className="text-xs text-background/50">Engines citing you</p>
           <p className="mt-1.5 text-2xl font-semibold tracking-tight text-background">
-            <Counter to={146} />
+            <Counter to={6} />
           </p>
-          <p className="mt-1 text-xs text-background/45">auto-published</p>
-        </div>
-      </motion.div>
-
-      {/* AI search visibility */}
-      <motion.div
-        custom={2}
-        variants={reveal}
-        initial="hidden"
-        animate="show"
-        className="rounded-2xl border border-background/10 bg-gradient-to-b from-background/[0.07] to-background/[0.02] p-5"
-      >
-        <div className="flex items-center justify-between">
-          <p className="text-sm font-semibold text-background">Visible across AI search</p>
-          <span className="flex items-center gap-1 text-xs font-medium" style={{ color: "var(--volt)" }}>
-            <ArrowUpRight className="h-3.5 w-3.5" /> 4 engines
-          </span>
-        </div>
-        <div className="mt-4 grid grid-cols-2 gap-2.5">
-          {ENGINES.map((engine, i) => {
-            const Logo = engine.Logo;
-            return (
-              <motion.div
-                key={engine.name}
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.45, delay: 0.6 + i * 0.12, ease: [0.21, 0.47, 0.32, 0.98] }}
-                className="flex items-center gap-2.5 rounded-xl border border-background/10 bg-background/[0.03] px-3 py-2.5"
-              >
-                <span
-                  className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg"
-                  style={{ background: `${engine.color}1f`, color: engine.color }}
-                >
-                  <Logo className="h-4 w-4" />
-                </span>
-                <div className="min-w-0">
-                  <p className="truncate text-xs font-medium text-background">{engine.name}</p>
-                  <p className="flex items-center gap-1 truncate text-[0.7rem] text-background/50">
-                    <Check className="h-3 w-3 shrink-0" style={{ color: "var(--volt)" }} />
-                    {engine.status}
-                  </p>
-                </div>
-              </motion.div>
-            );
-          })}
+          <p className="mt-1 text-xs text-background/45">ChatGPT, Gemini & more</p>
         </div>
       </motion.div>
     </div>
