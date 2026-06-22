@@ -258,14 +258,15 @@ export function Button({
 } & React.ButtonHTMLAttributes<HTMLButtonElement>) {
   const variants = {
     solid:
-      "bg-ink text-background shadow-elevation hover:bg-ink/90",
+      "bg-ink text-background hover:bg-ink/90",
     ghost: "border border-border bg-card text-ink hover:bg-secondary",
-    danger: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
+    danger:
+      "border border-border bg-card text-muted-foreground hover:border-destructive/40 hover:bg-destructive/10 hover:text-destructive",
   };
   return (
     <button
       className={cn(
-        "inline-flex items-center justify-center gap-1.5 rounded-xl px-3.5 py-2 text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-60",
+        "inline-flex items-center justify-center gap-1.5 rounded-lg px-3.5 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-60",
         variants[variant],
         className,
       )}
