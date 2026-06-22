@@ -2,18 +2,18 @@ import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { Loader2 } from "lucide-react";
 import {
-  Check,
-  Flame,
-  Plus,
-  TrendingUp,
-  Sparkles,
-  Loader2,
-  Trash2,
-  ArrowUpToLine,
-  Rocket,
-  Zap,
-} from "lucide-react";
+  CheckIcon,
+  FlameIcon,
+  AddIcon,
+  TrendIcon,
+  VoltMark,
+  RemoveIcon,
+  PublishIcon,
+  RocketIcon,
+  AutopilotIcon,
+} from "@/components/dashboard/icons";
 import {
   listBlogs,
   getCredits,
