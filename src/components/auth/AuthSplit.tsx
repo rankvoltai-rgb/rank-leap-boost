@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ArrowRight, Loader2 } from "lucide-react";
-import { useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { getProfile } from "@/lib/api";
@@ -172,6 +172,22 @@ export function AuthSplit() {
                 </button>
               </form>
             </Reveal>
+
+            {mode === "signup" && (
+              <Reveal delay={0.22}>
+                <p className="mt-4 text-center text-xs leading-relaxed text-muted-foreground">
+                  By creating an account you agree to our{" "}
+                  <Link to="/legal/terms" className="font-medium text-ink hover:underline">
+                    Terms of Service
+                  </Link>{" "}
+                  and{" "}
+                  <Link to="/legal/privacy" className="font-medium text-ink hover:underline">
+                    Privacy Policy
+                  </Link>
+                  .
+                </p>
+              </Reveal>
+            )}
 
             <Reveal delay={0.24}>
               <p className="mt-6 text-center text-sm text-muted-foreground">
