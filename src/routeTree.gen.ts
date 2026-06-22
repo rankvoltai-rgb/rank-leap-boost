@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TrustRouteImport } from './routes/trust'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as LegalRouteImport } from './routes/legal'
@@ -40,6 +41,11 @@ import { Route as ApiPublicHooksAutopilotRunRouteImport } from './routes/api/pub
 import { Route as AuthenticatedDashboardEditorBlogIdRouteImport } from './routes/_authenticated/dashboard.editor.$blogId'
 import { Route as ApiPublicV1ArticlesIdRouteImport } from './routes/api/public/v1/articles.$id'
 
+const TrustRoute = TrustRouteImport.update({
+  id: '/trust',
+  path: '/trust',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
@@ -208,6 +214,7 @@ export interface FileRoutesByFullPath {
   '/legal': typeof LegalRouteWithChildren
   '/onboarding': typeof OnboardingRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/trust': typeof TrustRoute
   '/dashboard': typeof AuthenticatedDashboardRouteWithChildren
   '/features/$slug': typeof FeaturesSlugRoute
   '/legal/acceptable-use': typeof LegalAcceptableUseRoute
@@ -239,6 +246,7 @@ export interface FileRoutesByTo {
   '/legal': typeof LegalRouteWithChildren
   '/onboarding': typeof OnboardingRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/trust': typeof TrustRoute
   '/features/$slug': typeof FeaturesSlugRoute
   '/legal/acceptable-use': typeof LegalAcceptableUseRoute
   '/legal/cookies': typeof LegalCookiesRoute
@@ -271,6 +279,7 @@ export interface FileRoutesById {
   '/legal': typeof LegalRouteWithChildren
   '/onboarding': typeof OnboardingRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/trust': typeof TrustRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRouteWithChildren
   '/features/$slug': typeof FeaturesSlugRoute
   '/legal/acceptable-use': typeof LegalAcceptableUseRoute
@@ -304,6 +313,7 @@ export interface FileRouteTypes {
     | '/legal'
     | '/onboarding'
     | '/sitemap.xml'
+    | '/trust'
     | '/dashboard'
     | '/features/$slug'
     | '/legal/acceptable-use'
@@ -335,6 +345,7 @@ export interface FileRouteTypes {
     | '/legal'
     | '/onboarding'
     | '/sitemap.xml'
+    | '/trust'
     | '/features/$slug'
     | '/legal/acceptable-use'
     | '/legal/cookies'
@@ -366,6 +377,7 @@ export interface FileRouteTypes {
     | '/legal'
     | '/onboarding'
     | '/sitemap.xml'
+    | '/trust'
     | '/_authenticated/dashboard'
     | '/features/$slug'
     | '/legal/acceptable-use'
@@ -399,6 +411,7 @@ export interface RootRouteChildren {
   LegalRoute: typeof LegalRouteWithChildren
   OnboardingRoute: typeof OnboardingRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  TrustRoute: typeof TrustRoute
   FeaturesSlugRoute: typeof FeaturesSlugRoute
   FeaturesIndexRoute: typeof FeaturesIndexRoute
   ApiPublicHooksAutopilotRunRoute: typeof ApiPublicHooksAutopilotRunRoute
@@ -409,6 +422,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/trust': {
+      id: '/trust'
+      path: '/trust'
+      fullPath: '/trust'
+      preLoaderRoute: typeof TrustRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/sitemap.xml': {
       id: '/sitemap.xml'
       path: '/sitemap.xml'
@@ -707,6 +727,7 @@ const rootRouteChildren: RootRouteChildren = {
   LegalRoute: LegalRouteWithChildren,
   OnboardingRoute: OnboardingRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  TrustRoute: TrustRoute,
   FeaturesSlugRoute: FeaturesSlugRoute,
   FeaturesIndexRoute: FeaturesIndexRoute,
   ApiPublicHooksAutopilotRunRoute: ApiPublicHooksAutopilotRunRoute,
