@@ -13,6 +13,18 @@ function getSupabase(): any {
   return _supabase;
 }
 
+// Refill the user's article credits to 30 for a new billing cycle.
+// reset_article_credits no-ops unless the period actually advanced, so this is
+// safe to call on every relevant subscription event.
+async function refillArticleCredits(userId: string, periodEnd: number | null | undefined) {
+  if (!userId) return;
+  const periodIso = periodEnd ? new Date(periodEnd * 1000).toISOString() : null;
+  await getSupabase().rpc("reset_article_credits", {
+    _user_id: userId,
+    _period_end: periodIso,
+  });
+}
+
 async function handleSubscriptionCreated(subscription: any, env: StripeEnv) {
   const userId = subscription.metadata?.userId;
   if (!userId) {
@@ -49,6 +61,9 @@ async function handleSubscriptionCreated(subscription: any, env: StripeEnv) {
     },
     { onConflict: "stripe_subscription_id" },
   );
+
+  // New / trialing subscriber starts the cycle with a full 30 credits.
+  await refillArticleCredits(userId, periodEnd);
 }
 
 async function handleSubscriptionUpdated(subscription: any, env: StripeEnv) {
@@ -78,6 +93,18 @@ async function handleSubscriptionUpdated(subscription: any, env: StripeEnv) {
     })
     .eq("stripe_subscription_id", subscription.id)
     .eq("environment", env);
+
+  // On renewal the period advances → refill to 30. Unrelated updates no-op.
+  let userId = subscription.metadata?.userId as string | undefined;
+  if (!userId) {
+    const { data } = await getSupabase()
+      .from("subscriptions")
+      .select("user_id")
+      .eq("stripe_subscription_id", subscription.id)
+      .maybeSingle();
+    userId = data?.user_id;
+  }
+  if (userId) await refillArticleCredits(userId, periodEnd);
 }
 
 async function handleSubscriptionDeleted(subscription: any, env: StripeEnv) {

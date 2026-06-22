@@ -138,6 +138,26 @@ export async function getCredits(): Promise<CreditAccount | null> {
   return data as CreditAccount | null;
 }
 
+/** Thrown when a user has used all their monthly article credits. */
+export class CreditsExhaustedError extends Error {
+  constructor(message = "You've used all 30 articles this month.") {
+    super(message);
+    this.name = "CreditsExhaustedError";
+  }
+}
+
+/** True when the account still has at least one article credit left. */
+export function hasCreditsRemaining(credits: CreditAccount | null | undefined): boolean {
+  if (!credits) return false;
+  return credits.credits_used < credits.credits_total;
+}
+
+/** Credits left this cycle (never negative). */
+export function creditsRemaining(credits: CreditAccount | null | undefined): number {
+  if (!credits) return 0;
+  return Math.max(0, credits.credits_total - credits.credits_used);
+}
+
 export async function getSubscription(): Promise<Subscription | null> {
   const user_id = await uid();
   const { data } = await supabase
@@ -324,7 +344,7 @@ async function ensureAccountBase(
     .eq("user_id", user_id)
     .maybeSingle();
   if (!existingCredits.data) {
-    await supabase.from("credit_accounts").insert({ user_id, credits_used: 0, credits_total: 200 });
+    await supabase.from("credit_accounts").insert({ user_id, credits_used: 0, credits_total: 30 });
   }
 }
 
@@ -423,6 +443,10 @@ export async function updateAutopilot(patch: {
 
 /** Generate full article content for a blog and mark it finished. */
 export async function generateBlogArticle(blog: Blog): Promise<Blog> {
+  // Block up front if the monthly cap is already reached.
+  const user_id = await uid();
+  const credits = await getCredits();
+  if (!hasCreditsRemaining(credits)) throw new CreditsExhaustedError();
   await updateBlog(blog.id, { status: "generating" });
   try {
     const result = await generateBlogContent({
@@ -438,6 +462,9 @@ export async function generateBlogArticle(blog: Blog): Promise<Blog> {
       status: "finished",
     };
     await updateBlog(blog.id, patch);
+    // Count the credit only after a successful generation. The DB function
+    // enforces the hard cap atomically and never lets the total exceed 30.
+    await supabase.rpc("consume_article_credit", { _user_id: user_id });
     return { ...blog, ...patch } as Blog;
   } catch (err) {
     await updateBlog(blog.id, { status: blog.status });
@@ -473,7 +500,7 @@ export async function seedAccount(profileInput: {
     product_description: profileInput.product_description,
   });
   await supabase.from("content_settings").insert({ user_id });
-  await supabase.from("credit_accounts").insert({ user_id, credits_used: 320, credits_total: 1000 });
+  await supabase.from("credit_accounts").insert({ user_id, credits_used: 0, credits_total: 30 });
 
   const libraryKw = profileInput.keywords?.length
     ? profileInput.keywords

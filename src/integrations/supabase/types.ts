@@ -125,6 +125,7 @@ export type Database = {
           credits_total: number
           credits_used: number
           id: string
+          period_end: string | null
           updated_at: string
           user_id: string
         }
@@ -133,6 +134,7 @@ export type Database = {
           credits_total?: number
           credits_used?: number
           id?: string
+          period_end?: string | null
           updated_at?: string
           user_id: string
         }
@@ -141,6 +143,7 @@ export type Database = {
           credits_total?: number
           credits_used?: number
           id?: string
+          period_end?: string | null
           updated_at?: string
           user_id?: string
         }
@@ -301,7 +304,12 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      consume_article_credit: { Args: { _user_id: string }; Returns: boolean }
+      refund_article_credit: { Args: { _user_id: string }; Returns: undefined }
+      reset_article_credits: {
+        Args: { _period_end: string; _user_id: string }
+        Returns: undefined
+      }
     }
     Enums: {
       blog_status: "opportunity" | "scheduled" | "generating" | "finished"
