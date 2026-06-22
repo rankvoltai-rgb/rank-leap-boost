@@ -1,5 +1,5 @@
 import { motion, useMotionValue, useTransform, animate, type Variants } from "motion/react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactElement } from "react";
 import { ArrowUpRight, Quote } from "lucide-react";
 import rankvoltMark from "@/assets/rankvolt-mark.png.asset.json";
 
@@ -63,7 +63,7 @@ function GrokLogo({ className }: { className?: string }) {
 
 type Engine = {
   name: string;
-  Logo: (props: { className?: string }) => React.ReactElement;
+  Logo: (props: { className?: string }) => ReactElement;
   color: string;
   brandTint?: boolean;
 };
