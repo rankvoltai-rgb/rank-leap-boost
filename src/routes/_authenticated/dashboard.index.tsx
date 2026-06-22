@@ -35,6 +35,7 @@ import { CreditPaywallDialog } from "@/components/dashboard/CreditPaywallDialog"
 import { Switch } from "@/components/ui/switch";
 import { CountUp } from "@/components/ui/count-up";
 import { cn } from "@/lib/utils";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/_authenticated/dashboard/")({
   component: SystemConsole,
@@ -42,6 +43,13 @@ export const Route = createFileRoute("/_authenticated/dashboard/")({
 
 const CADENCE_OPTIONS = [1, 3, 5, 7];
 const MONTHLY_GOAL = 30; // articles per month target
+
+function timeGreeting() {
+  const h = new Date().getHours();
+  if (h < 12) return "Good morning";
+  if (h < 18) return "Good afternoon";
+  return "Good evening";
+}
 
 function AlgorithmLogos() {
   return (
