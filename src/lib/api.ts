@@ -104,6 +104,15 @@ export interface Subscription {
   created_at: string;
 }
 
+export interface CreditTransaction {
+  id: string;
+  user_id: string;
+  package: string | null;
+  credits: number;
+  amount_cents: number;
+  created_at: string;
+}
+
 async function uid(): Promise<string> {
   const { data } = await supabase.auth.getUser();
   if (!data.user) throw new Error("Not authenticated");
@@ -163,6 +172,18 @@ export async function listKeywords(source?: "library" | "discovered"): Promise<K
   const { data, error } = await q.order("created_at", { ascending: false });
   if (error) throw error;
   return (data ?? []) as Keyword[];
+}
+
+export async function listCreditTransactions(): Promise<CreditTransaction[]> {
+  const user_id = await uid();
+  const { data, error } = await supabase
+    .from("credit_transactions")
+    .select("*")
+    .eq("user_id", user_id)
+    .order("created_at", { ascending: false })
+    .limit(20);
+  if (error) throw error;
+  return (data ?? []) as CreditTransaction[];
 }
 
 /* ---------------- Writes ---------------- */

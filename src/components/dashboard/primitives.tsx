@@ -1,5 +1,7 @@
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
+import { CountUp } from "@/components/ui/count-up";
+import { ProgressRing } from "@/components/dashboard/rewards";
 
 export function Panel({
   children,
@@ -21,6 +23,145 @@ export function Panel({
     >
       {children}
     </div>
+  );
+}
+
+/** Pill-style segmented tabs with optional per-tab counts. */
+export function Tabs<T extends string>({
+  tabs,
+  value,
+  onChange,
+  className,
+}: {
+  tabs: { id: T; label: string; count?: number }[];
+  value: T;
+  onChange: (v: T) => void;
+  className?: string;
+}) {
+  return (
+    <div className={cn("flex gap-1 rounded-xl border border-border bg-card p-1 shadow-sm", className)}>
+      {tabs.map((t) => {
+        const active = value === t.id;
+        return (
+          <button
+            key={t.id}
+            type="button"
+            onClick={() => onChange(t.id)}
+            className={cn(
+              "flex flex-1 items-center justify-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium transition-all",
+              active ? "bg-ink text-background shadow-sm" : "text-muted-foreground hover:text-ink",
+            )}
+          >
+            {t.label}
+            {typeof t.count === "number" && (
+              <span
+                className={cn(
+                  "rounded-full px-1.5 py-0.5 text-[0.62rem] font-semibold tabular-nums",
+                  active ? "bg-background/20 text-background" : "bg-secondary text-muted-foreground",
+                )}
+              >
+                {t.count}
+              </span>
+            )}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+/** A friendly, on-brand empty state with optional icon and call to action. */
+export function EmptyState({
+  icon,
+  title,
+  description,
+  action,
+  className,
+}: {
+  icon?: ReactNode;
+  title: string;
+  description?: ReactNode;
+  action?: ReactNode;
+  className?: string;
+}) {
+  return (
+    <Panel className={cn("flex flex-col items-center gap-3 px-6 py-14 text-center", className)}>
+      {icon && (
+        <span className="grid h-12 w-12 place-items-center rounded-2xl border border-border bg-secondary text-muted-foreground">
+          {icon}
+        </span>
+      )}
+      <div className="space-y-1">
+        <p className="text-sm font-semibold text-ink">{title}</p>
+        {description && (
+          <p className="mx-auto max-w-sm text-sm text-muted-foreground">{description}</p>
+        )}
+      </div>
+      {action}
+    </Panel>
+  );
+}
+
+/** Animated metric card with count-up value and optional progress ring. */
+export function MetricCard({
+  label,
+  value,
+  format,
+  suffix,
+  hint,
+  emphasis,
+  icon,
+  accentValue,
+  ring,
+}: {
+  label: string;
+  value: number;
+  format?: (n: number) => string;
+  suffix?: string;
+  hint?: ReactNode;
+  emphasis?: boolean;
+  icon?: ReactNode;
+  accentValue?: boolean;
+  ring?: { value: number; max: number };
+}) {
+  const pct = ring ? Math.round((ring.max > 0 ? ring.value / ring.max : 0) * 100) : 0;
+  return (
+    <Panel className="relative flex min-h-[128px] flex-col overflow-hidden p-5">
+      {emphasis && (
+        <span className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-volt to-transparent" />
+      )}
+      <div className="flex items-center justify-between gap-2">
+        <p className="text-[0.68rem] font-semibold uppercase tracking-[0.08em] text-muted-foreground">
+          {label}
+        </p>
+        {icon && (
+          <span className="grid h-7 w-7 shrink-0 place-items-center rounded-lg border border-border bg-secondary text-muted-foreground">
+            {icon}
+          </span>
+        )}
+      </div>
+      <div className="mt-2 flex items-end justify-between gap-3">
+        <p
+          className={cn(
+            "font-semibold tracking-tight tabular-nums",
+            accentValue ? "text-volt" : "text-ink",
+            emphasis ? "text-4xl leading-none" : "text-3xl",
+          )}
+        >
+          <CountUp value={value} format={format} suffix={suffix} />
+        </p>
+        {ring && (
+          <ProgressRing value={ring.value} max={ring.max} size={52} stroke={5}>
+            <span className="text-[0.68rem] font-semibold text-ink tabular-nums">{pct}%</span>
+          </ProgressRing>
+        )}
+      </div>
+      {hint && (
+        <div className="mt-auto flex items-center gap-2 pt-2">
+          <span className="text-xs text-muted-foreground">{hint}</span>
+        </div>
+      )}
+    </Panel>
   );
 }
 

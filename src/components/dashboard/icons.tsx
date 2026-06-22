@@ -235,3 +235,37 @@ export function ControlsIcon({ className }: IconProps) {
     </Svg>
   );
 }
+
+// Answer Engine Rank — a radar sweep locating where you're cited.
+export function RadarIcon({ className, accent }: IconProps) {
+  return (
+    <Svg className={className}>
+      <path d="M20 12a8 8 0 1 1-4.2-7" />
+      <path d="M12 12 18 7" />
+      <circle cx="12" cy="12" r="3.4" />
+      <circle
+        cx="18"
+        cy="7"
+        r="1.3"
+        className={accent ? "fill-volt stroke-volt" : "fill-current"}
+        strokeWidth={0}
+      />
+    </Svg>
+  );
+}
+
+// Insights — charted bars rising with a spark above the peak.
+export function ChartIcon({ className, accent }: IconProps) {
+  return (
+    <Svg className={className}>
+      <path d="M4 20V11M9 20V8M14 20v-5M19 20V5" />
+      <circle
+        cx="19"
+        cy="3"
+        r="1.3"
+        className={accent ? "fill-volt stroke-volt" : "fill-current"}
+        strokeWidth={0}
+      />
+    </Svg>
+  );
+}
