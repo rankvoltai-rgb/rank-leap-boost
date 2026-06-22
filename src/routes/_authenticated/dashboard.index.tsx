@@ -492,48 +492,48 @@ function SystemConsole() {
         </div>
       </Panel>
 
-      {/* Stats */}
-      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-        <MetricStat
-          label="Projected Traffic"
-          value={<CountUp value={estimatedTraffic} />}
-          icon={<ChartIcon className="h-4 w-4" />}
-          hint="Estimated monthly organic visitors"
-          accent
-        />
-        <MetricStat
-          label="Published"
-          value={
-            <>
-              {finished.length}
-              <span className="text-lg font-medium text-muted-foreground"> / {MONTHLY_GOAL}</span>
-            </>
-          }
-          icon={<TargetIcon className="h-4 w-4" />}
-          delta={`${Math.round((finished.length / MONTHLY_GOAL) * 100)}%`}
-          deltaTone="neutral"
-          hint="of your monthly goal"
-        />
-        <MetricStat
-          label="Publishing Streak"
-          value={`${streak}`}
-          icon={<FlameIcon className="h-4 w-4" />}
-          hint={streak > 0 ? "consecutive days live" : "publish to start a streak"}
-        />
-        <MetricStat
-          label="Article Credits"
-          value={remainingCredits === null ? "—" : remainingCredits.toLocaleString()}
-          icon={<CardIcon className="h-4 w-4" />}
-          hint="remaining this cycle"
-        />
-      </div>
-
-      {/* AI engines */}
-      <StatCard
-        label="Optimized for AI Answer Engines"
-        media={<AlgorithmLogos />}
-        hint="Your articles are written to get cited across leading AI engines"
-      />
+      {/* Stats + AI engines — one consolidated, hairline-divided panel */}
+      <Panel className="overflow-hidden">
+        <div className="grid grid-cols-2 gap-px bg-border lg:grid-cols-4">
+          <StatCell
+            label="Projected Traffic"
+            value={<CountUp value={estimatedTraffic} />}
+            icon={<ChartIcon className="h-4 w-4" />}
+            hint="Est. monthly organic visitors"
+            accent
+          />
+          <StatCell
+            label="Published"
+            value={
+              <>
+                {finished.length}
+                <span className="text-lg font-medium text-muted-foreground"> / {MONTHLY_GOAL}</span>
+              </>
+            }
+            icon={<TargetIcon className="h-4 w-4" />}
+            hint={`${Math.round((finished.length / MONTHLY_GOAL) * 100)}% of monthly goal`}
+          />
+          <StatCell
+            label="Publishing Streak"
+            value={`${streak}`}
+            icon={<FlameIcon className="h-4 w-4" />}
+            hint={streak > 0 ? "consecutive days live" : "publish to start a streak"}
+          />
+          <StatCell
+            label="Article Credits"
+            value={remainingCredits === null ? "—" : remainingCredits.toLocaleString()}
+            icon={<CardIcon className="h-4 w-4" />}
+            hint="remaining this cycle"
+          />
+        </div>
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-border px-5 py-4">
+          <p className="text-sm font-medium text-ink">Optimized for AI answer engines</p>
+          <AlgorithmLogos />
+          <p className="ml-auto text-xs text-muted-foreground">
+            Written to get cited across leading AI engines
+          </p>
+        </div>
+      </Panel>
 
       <div className="space-y-5">
         <h2 className="text-sm font-semibold text-ink">Autopilot Queue</h2>
