@@ -35,6 +35,7 @@ import { CreditPaywallDialog } from "@/components/dashboard/CreditPaywallDialog"
 import { Switch } from "@/components/ui/switch";
 import { CountUp } from "@/components/ui/count-up";
 import { cn } from "@/lib/utils";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/_authenticated/dashboard/")({
   component: SystemConsole,
@@ -42,6 +43,13 @@ export const Route = createFileRoute("/_authenticated/dashboard/")({
 
 const CADENCE_OPTIONS = [1, 3, 5, 7];
 const MONTHLY_GOAL = 30; // articles per month target
+
+function timeGreeting() {
+  const h = new Date().getHours();
+  if (h < 12) return "Good morning";
+  if (h < 18) return "Good afternoon";
+  return "Good evening";
+}
 
 function AlgorithmLogos() {
   return (
@@ -170,6 +178,14 @@ function SystemConsole() {
   });
   const finished = finishedQuery.data ?? [];
   const { data: credits } = useQuery({ queryKey: ["credits"], queryFn: getCredits });
+  const { data: firstName = "" } = useQuery({
+    queryKey: ["auth", "first-name"],
+    queryFn: async () => {
+      const { data } = await supabase.auth.getUser();
+      const full = (data.user?.user_metadata?.full_name as string | undefined) ?? "";
+      return full.trim().split(/\s+/)[0] ?? "";
+    },
+  });
   const { data: settings } = useQuery({ queryKey: ["settings"], queryFn: getSettings });
   const { data: subscription } = useQuery({ queryKey: ["subscription"], queryFn: getSubscription });
   const [paywallOpen, setPaywallOpen] = useState(false);
@@ -304,8 +320,12 @@ function SystemConsole() {
         subscription={subscription}
       />
       <PageHeader
-        title="Your SEO Overview"
-        description="Your autopilot engine — what it's doing now, and the traffic it's building."
+        title={`${timeGreeting()}${firstName ? `, ${firstName}` : ""}`}
+        description={
+          finished.length > 0
+            ? `Your articles are ready — ${finished.length} published and working for you.`
+            : "Your autopilot engine is building your traffic — sit back and watch it grow."
+        }
       />
 
       {outOfCredits && (
