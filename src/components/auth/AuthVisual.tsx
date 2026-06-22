@@ -1,4 +1,4 @@
-import { motion, useMotionValue, useTransform, animate } from "motion/react";
+import { motion, useMotionValue, useTransform, animate, type Variants } from "motion/react";
 import { useEffect, useState } from "react";
 import { Search, Sparkles, Globe, Bot, Check, ArrowUpRight } from "lucide-react";
 
@@ -59,12 +59,16 @@ const PIPELINE = [
   { icon: Bot, label: "Indexed by AI search", sub: "Cited by ChatGPT & Google" },
 ];
 
-const reveal = {
+const reveal: Variants = {
   hidden: { opacity: 0, y: 16 },
   show: (i: number) => ({
     opacity: 1,
     y: 0,
-    transition: { duration: 0.6, delay: 0.15 + i * 0.12, ease: [0.21, 0.47, 0.32, 0.98] },
+    transition: {
+      duration: 0.6,
+      delay: 0.15 + i * 0.12,
+      ease: [0.21, 0.47, 0.32, 0.98] as const,
+    },
   }),
 };
 
