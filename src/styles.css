@@ -59,6 +59,7 @@
   --color-success: var(--success);
   --color-warning: var(--warning);
   --color-info: var(--info);
+  --color-flame: var(--flame);
   --color-chart-1: var(--chart-1);
   --color-chart-2: var(--chart-2);
   --color-chart-3: var(--chart-3);
@@ -101,6 +102,7 @@
   --warning: oklch(0.78 0.16 75);
   --info: oklch(0.58 0.17 255);
   --volt: oklch(0.58 0.17 255);
+  --flame: oklch(0.68 0.14 30);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
