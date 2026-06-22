@@ -90,9 +90,9 @@ function KeywordPlanner() {
       />
 
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-3">
-        <StatCard label="Keywords" value={keywords.length} hint={`In ${tab}`} emphasis />
-        <StatCard label="Search Volume" value={totalVolume.toLocaleString()} hint="Total monthly searches" />
-        <StatCard label="High Intent" value={highIntent} hint="Transactional / high-intent" />
+        <StatCard label="Keywords" value={keywords.length} hint={`In ${tab}`} emphasis icon={<BeamIcon className="h-4 w-4" />} />
+        <StatCard label="Search Volume" value={totalVolume.toLocaleString()} hint="Total monthly searches" icon={<SignalIcon className="h-4 w-4" />} />
+        <StatCard label="High Intent" value={highIntent} hint="Transactional / high-intent" icon={<TargetIcon className="h-4 w-4" />} />
       </div>
 
       {tab === "library" && (
