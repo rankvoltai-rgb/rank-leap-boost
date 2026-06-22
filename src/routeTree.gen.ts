@@ -17,7 +17,11 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as FeaturesIndexRouteImport } from './routes/features.index'
 import { Route as LegalTermsRouteImport } from './routes/legal.terms'
+import { Route as LegalRefundsRouteImport } from './routes/legal.refunds'
 import { Route as LegalPrivacyRouteImport } from './routes/legal.privacy'
+import { Route as LegalDpaRouteImport } from './routes/legal.dpa'
+import { Route as LegalCookiesRouteImport } from './routes/legal.cookies'
+import { Route as LegalAcceptableUseRouteImport } from './routes/legal.acceptable-use'
 import { Route as FeaturesSlugRouteImport } from './routes/features.$slug'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedDashboardIndexRouteImport } from './routes/_authenticated/dashboard.index'
@@ -75,9 +79,29 @@ const LegalTermsRoute = LegalTermsRouteImport.update({
   path: '/terms',
   getParentRoute: () => LegalRoute,
 } as any)
+const LegalRefundsRoute = LegalRefundsRouteImport.update({
+  id: '/refunds',
+  path: '/refunds',
+  getParentRoute: () => LegalRoute,
+} as any)
 const LegalPrivacyRoute = LegalPrivacyRouteImport.update({
   id: '/privacy',
   path: '/privacy',
+  getParentRoute: () => LegalRoute,
+} as any)
+const LegalDpaRoute = LegalDpaRouteImport.update({
+  id: '/dpa',
+  path: '/dpa',
+  getParentRoute: () => LegalRoute,
+} as any)
+const LegalCookiesRoute = LegalCookiesRouteImport.update({
+  id: '/cookies',
+  path: '/cookies',
+  getParentRoute: () => LegalRoute,
+} as any)
+const LegalAcceptableUseRoute = LegalAcceptableUseRouteImport.update({
+  id: '/acceptable-use',
+  path: '/acceptable-use',
   getParentRoute: () => LegalRoute,
 } as any)
 const FeaturesSlugRoute = FeaturesSlugRouteImport.update({
@@ -186,7 +210,11 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/dashboard': typeof AuthenticatedDashboardRouteWithChildren
   '/features/$slug': typeof FeaturesSlugRoute
+  '/legal/acceptable-use': typeof LegalAcceptableUseRoute
+  '/legal/cookies': typeof LegalCookiesRoute
+  '/legal/dpa': typeof LegalDpaRoute
   '/legal/privacy': typeof LegalPrivacyRoute
+  '/legal/refunds': typeof LegalRefundsRoute
   '/legal/terms': typeof LegalTermsRoute
   '/features/': typeof FeaturesIndexRoute
   '/dashboard/billing': typeof AuthenticatedDashboardBillingRoute
@@ -212,7 +240,11 @@ export interface FileRoutesByTo {
   '/onboarding': typeof OnboardingRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/features/$slug': typeof FeaturesSlugRoute
+  '/legal/acceptable-use': typeof LegalAcceptableUseRoute
+  '/legal/cookies': typeof LegalCookiesRoute
+  '/legal/dpa': typeof LegalDpaRoute
   '/legal/privacy': typeof LegalPrivacyRoute
+  '/legal/refunds': typeof LegalRefundsRoute
   '/legal/terms': typeof LegalTermsRoute
   '/features': typeof FeaturesIndexRoute
   '/dashboard/billing': typeof AuthenticatedDashboardBillingRoute
@@ -241,7 +273,11 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRouteWithChildren
   '/features/$slug': typeof FeaturesSlugRoute
+  '/legal/acceptable-use': typeof LegalAcceptableUseRoute
+  '/legal/cookies': typeof LegalCookiesRoute
+  '/legal/dpa': typeof LegalDpaRoute
   '/legal/privacy': typeof LegalPrivacyRoute
+  '/legal/refunds': typeof LegalRefundsRoute
   '/legal/terms': typeof LegalTermsRoute
   '/features/': typeof FeaturesIndexRoute
   '/_authenticated/dashboard/billing': typeof AuthenticatedDashboardBillingRoute
@@ -270,7 +306,11 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/dashboard'
     | '/features/$slug'
+    | '/legal/acceptable-use'
+    | '/legal/cookies'
+    | '/legal/dpa'
     | '/legal/privacy'
+    | '/legal/refunds'
     | '/legal/terms'
     | '/features/'
     | '/dashboard/billing'
@@ -296,7 +336,11 @@ export interface FileRouteTypes {
     | '/onboarding'
     | '/sitemap.xml'
     | '/features/$slug'
+    | '/legal/acceptable-use'
+    | '/legal/cookies'
+    | '/legal/dpa'
     | '/legal/privacy'
+    | '/legal/refunds'
     | '/legal/terms'
     | '/features'
     | '/dashboard/billing'
@@ -324,7 +368,11 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/_authenticated/dashboard'
     | '/features/$slug'
+    | '/legal/acceptable-use'
+    | '/legal/cookies'
+    | '/legal/dpa'
     | '/legal/privacy'
+    | '/legal/refunds'
     | '/legal/terms'
     | '/features/'
     | '/_authenticated/dashboard/billing'
@@ -417,11 +465,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LegalTermsRouteImport
       parentRoute: typeof LegalRoute
     }
+    '/legal/refunds': {
+      id: '/legal/refunds'
+      path: '/refunds'
+      fullPath: '/legal/refunds'
+      preLoaderRoute: typeof LegalRefundsRouteImport
+      parentRoute: typeof LegalRoute
+    }
     '/legal/privacy': {
       id: '/legal/privacy'
       path: '/privacy'
       fullPath: '/legal/privacy'
       preLoaderRoute: typeof LegalPrivacyRouteImport
+      parentRoute: typeof LegalRoute
+    }
+    '/legal/dpa': {
+      id: '/legal/dpa'
+      path: '/dpa'
+      fullPath: '/legal/dpa'
+      preLoaderRoute: typeof LegalDpaRouteImport
+      parentRoute: typeof LegalRoute
+    }
+    '/legal/cookies': {
+      id: '/legal/cookies'
+      path: '/cookies'
+      fullPath: '/legal/cookies'
+      preLoaderRoute: typeof LegalCookiesRouteImport
+      parentRoute: typeof LegalRoute
+    }
+    '/legal/acceptable-use': {
+      id: '/legal/acceptable-use'
+      path: '/acceptable-use'
+      fullPath: '/legal/acceptable-use'
+      preLoaderRoute: typeof LegalAcceptableUseRouteImport
       parentRoute: typeof LegalRoute
     }
     '/features/$slug': {
@@ -594,12 +670,20 @@ const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
 interface LegalRouteChildren {
+  LegalAcceptableUseRoute: typeof LegalAcceptableUseRoute
+  LegalCookiesRoute: typeof LegalCookiesRoute
+  LegalDpaRoute: typeof LegalDpaRoute
   LegalPrivacyRoute: typeof LegalPrivacyRoute
+  LegalRefundsRoute: typeof LegalRefundsRoute
   LegalTermsRoute: typeof LegalTermsRoute
 }
 
 const LegalRouteChildren: LegalRouteChildren = {
+  LegalAcceptableUseRoute: LegalAcceptableUseRoute,
+  LegalCookiesRoute: LegalCookiesRoute,
+  LegalDpaRoute: LegalDpaRoute,
   LegalPrivacyRoute: LegalPrivacyRoute,
+  LegalRefundsRoute: LegalRefundsRoute,
   LegalTermsRoute: LegalTermsRoute,
 }
 
@@ -633,3 +717,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
