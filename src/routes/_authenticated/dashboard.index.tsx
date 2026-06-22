@@ -328,8 +328,7 @@ function SystemConsole() {
       )}
 
       {/* Autopilot control */}
-      <Panel className={cn("relative overflow-hidden p-5 sm:p-6", autopilotOn && "ring-1 ring-volt/20")}>
-        <span className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-volt to-transparent" />
+      <Panel className="relative overflow-hidden p-5 sm:p-6">
         <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
           <div className="flex min-w-0 items-start gap-4">
             <span

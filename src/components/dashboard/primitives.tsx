@@ -15,9 +15,9 @@ export function Panel({
   return (
     <div
       className={cn(
-        "rounded-2xl border border-border bg-card shadow-elevation",
+        "rounded-xl border border-border bg-card",
         hover &&
-          "transition-colors duration-200 hover:border-ink/20 hover:bg-secondary/30",
+          "transition-colors duration-200 hover:border-ink/15 hover:bg-secondary/40",
         className,
       )}
     >
@@ -127,9 +127,6 @@ export function MetricCard({
   const pct = ring ? Math.round((ring.max > 0 ? ring.value / ring.max : 0) * 100) : 0;
   return (
     <Panel className="relative flex min-h-[128px] flex-col overflow-hidden p-5">
-      {emphasis && (
-        <span className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-volt to-transparent" />
-      )}
       <div className="flex items-center justify-between gap-2">
         <p className="text-[0.68rem] font-semibold uppercase tracking-[0.08em] text-muted-foreground">
           {label}
@@ -187,9 +184,6 @@ export function StatCard({
         emphasis && "relative overflow-hidden",
       )}
     >
-      {emphasis && (
-        <span className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-volt to-transparent" />
-      )}
       <div className="flex items-center justify-between gap-2">
         <p className="text-[0.68rem] font-semibold uppercase tracking-[0.08em] text-muted-foreground">
           {label}
@@ -264,14 +258,15 @@ export function Button({
 } & React.ButtonHTMLAttributes<HTMLButtonElement>) {
   const variants = {
     solid:
-      "bg-ink text-background shadow-elevation hover:bg-ink/90",
+      "bg-ink text-background hover:bg-ink/90",
     ghost: "border border-border bg-card text-ink hover:bg-secondary",
-    danger: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
+    danger:
+      "border border-border bg-card text-muted-foreground hover:border-destructive/40 hover:bg-destructive/10 hover:text-destructive",
   };
   return (
     <button
       className={cn(
-        "inline-flex items-center justify-center gap-1.5 rounded-xl px-3.5 py-2 text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-60",
+        "inline-flex items-center justify-center gap-1.5 rounded-lg px-3.5 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-60",
         variants[variant],
         className,
       )}
