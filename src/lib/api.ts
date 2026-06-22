@@ -299,13 +299,11 @@ export async function updateProfile(patch: Partial<Profile>): Promise<void> {
 }
 
 export async function purchaseCredits(pkg: string, credits: number, amountCents: number): Promise<void> {
-  const user_id = await uid();
-  const current = await getCredits();
-  await supabase.from("credit_transactions").insert({ user_id, package: pkg, credits, amount_cents: amountCents });
-  await supabase
-    .from("credit_accounts")
-    .update({ credits_total: (current?.credits_total ?? 1000) + credits })
-    .eq("user_id", user_id);
+  // Amounts and credit grants are validated and applied server-side; the
+  // client cannot influence how many credits are added beyond the package id.
+  void credits;
+  void amountCents;
+  await purchaseCreditPackage({ data: { packageId: pkg as "starter" | "growth" | "scale" } });
 }
 
 function nextDate(offsetDays = 1): string {
