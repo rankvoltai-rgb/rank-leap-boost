@@ -217,7 +217,7 @@ export function AuthSplit() {
         <div className="relative flex items-center gap-3">
           <div className="flex -space-x-2">
             {FACES.map((f) => (
-              <Avatar key={f} name={f} className="h-9 w-9" />
+              <Avatar key={f.name} name={f.name} src={f.src} className="h-9 w-9" />
             ))}
           </div>
           <div className="flex flex-col">
