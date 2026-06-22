@@ -74,12 +74,9 @@ export function SocialButtons() {
   }
 
   return (
-    <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
       <SocialButton onClick={google}>
         <GoogleIcon /> Google
-      </SocialButton>
-      <SocialButton onClick={() => comingSoon("GitHub")}>
-        <GithubIcon /> GitHub
       </SocialButton>
       <SocialButton onClick={() => comingSoon("Apple")}>
         <AppleIcon /> Apple
