@@ -1,33 +1,60 @@
 ## Goal
-Make the auth page's right visual panel feel crafted and on-brand, removing the generic "AI-generated dashboard mock" feel.
 
-## What reads as "vibe coded" today
-- Three near-identical translucent glass cards stacked vertically with the same border, radius, and padding — no hierarchy.
-- Everything is the same size and rhythm, so nothing leads the eye.
-- Generic dark-on-dark with low contrast; the brand blue (`--volt`) barely appears.
-- The mock looks like a stock dashboard rather than a moment in the Rankvolt story (sign in → connect → done).
+Make Rankvolt feel like a smart autopilot that's effortless to navigate. The app's promise — "content that gets cited by AI and drives traffic" — should be visible from the first scan and require almost no manual work. Sequenced per your priorities: Onboarding → Dashboard → Navigation → Content & Calendar. Real Semrush data replaces simulated metrics. Reward moments are engineered into every meaningful action.
 
-## Plan
+---
 
-### 1. Establish a clear visual hierarchy
-- Make the live "Agent working" pipeline the single hero element — larger, with more presence and a subtle volt-blue accent on the active step instead of a plain white bar.
-- Demote the stats to a compact, quieter inline row (smaller, less chrome) so they support rather than compete.
-- Reduce the number of separate "cards" — unify related content into fewer, more deliberate surfaces with varied weight (one feature surface + one quiet strip) rather than 3 equal boxes.
+## 1. Onboarding (keep card-first, kill the friction)
 
-### 2. Tie it back to the brand narrative
-- Reintroduce the "sign in → connect → done" arc as a thin progress spine connecting the steps, so the panel tells the product story instead of showing random metrics.
-- Use the volt accent purposefully (active pipeline node, the ranking line endpoint, the "#1" badge) and keep everything else restrained.
+Keep the credit-card-before-dashboard gate, but make every step feel inevitable and rewarding.
 
-### 3. Tighten craft details
-- Consistent, intentional radii and border treatment (slightly tighter, less "glassy blur everywhere").
-- Better typographic scale: clearer labels, aligned baselines, tighter number/eyebrow pairing.
-- Calmer, more deliberate motion — stagger the reveal as a single choreographed sequence, smooth the pipeline loop, and ease the counters so it feels designed rather than busy.
-- Improve contrast of secondary text for legibility on the dark panel.
+- **Clearer 4-step rhythm.** Keep Details → Analysis → Growth plan → Activate, but tighten copy so each step says what just happened and what's next ("We found 24 gaps AI isn't answering yet").
+- **Value before the card.** The "Growth plan" step becomes the hero moment: animated traffic projection, top opportunities, and an "AI visibility" readout — so the card step feels like unlocking something already built.
+- **Real numbers from Semrush.** The scan pulls real search volume, difficulty, and competitor gaps (see §5) instead of AI guesses, shown with source attribution.
+- **Calmer checkout.** Reassurance row ("48h free · cancel anytime · no charge today"), a plain-language "what happens after you activate" mini-timeline, and clear trial-end date.
+- **Reward beats.** Confetti/particle burst when the plan is revealed; a satisfying "Plan activated" state on checkout success.
+- **Mobile pass.** The whole flow audited for small screens (the checkout split already handles it; the card steps get the grid/min-w-0/truncate treatment).
 
-### 4. Verify
-- Screenshot the `/auth` panel at desktop width and confirm hierarchy, brand accent usage, and motion read as polished.
+## 2. Dashboard — autopilot by default, with override
+
+The Overview becomes an autopilot cockpit, not a to-do list.
+
+- **Autopilot engine.** On trial activation, top opportunities are auto-queued and auto-scheduled (1/day by default). A daily background job generates the next queued article automatically. No manual "Add to Queue" / "Generate" required.
+- **Autopilot control card.** A prominent toggle (On/Paused) plus a cadence selector (e.g. 1, 3, 5, 7 articles/week). This is the single most important control on the page.
+- **Override everywhere.** Users can still pause autopilot, reorder the queue, remove an article, or generate one immediately — manual actions become optional power-ups, not chores.
+- **Status-first layout.** "What autopilot is doing right now" (next publish, what's writing, last published) sits at the top. Stat cards (traffic, opportunity strength, credits) stay but read as outcomes.
+- **Dopamine layer.** Animated count-ups on traffic, a weekly growth sparkline, milestone toasts ("🎉 10th article published"), a publishing streak indicator, and a subtle progress ring toward the monthly goal.
+
+## 3. Navigation — consistent and mobile-complete
+
+- **Mobile navigation (currently missing entirely).** Add a hamburger + slide-over nav for the dashboard so the sidebar's links are reachable below `md`.
+- **One vocabulary.** Align sidebar labels, page titles, and tab names so a section is called the same thing everywhere. Proposed: **Overview, Articles, Calendar, Keyword Lab** (+ Plan & Billing, Settings). Removes today's mismatch (sidebar "Content Studio" vs page "Content Studio" vs tabs "Ideas/Scheduled/Published"; "Keyword Research" vs "Keyword Planner").
+- **TopBar upgrade.** Show the current page name, keep the credits pill (make it a quick link to billing when low), and turn the avatar into an account menu (Settings, Billing, Sign out) instead of a bare logout icon.
+- **Smart empty states.** Every empty list gets a one-line explanation + a single primary action that routes the user to the next logical step.
+
+## 4. Content & Calendar polish
+
+- **Articles (studio).** Clearer tabs (Ideas / Scheduled / Published), status badges that reflect autopilot ("Auto-writing", "Auto-published"), and consistent primary actions.
+- **Calendar.** Reads as the autopilot schedule; reschedule/prioritize stay as overrides. Empty state points back to autopilot.
+- **Publish reward.** Confetti + a shareable "published" confirmation when an article goes live.
+
+## 5. Real Semrush data
+
+- Connect the Semrush connector (you'll get a one-click authorize prompt).
+- Add server functions that call the Semrush gateway for: keyword volume/difficulty/CPC, related + question keywords, and competitor gap keywords.
+- Surface this in the onboarding scan and the Keyword Lab (real metrics, "Source: Semrush" labels, graceful fallback to current AI estimates if the quota is hit or the account isn't connected).
+
+---
 
 ## Technical notes
-- Edits scoped to `src/components/auth/AuthVisual.tsx` (visual structure + motion) and minor layout tweaks in `src/components/auth/AuthSplit.tsx` for the right panel container.
-- Continue using `motion/react` and existing semantic tokens (`--volt`, `background`, `ink`); no new dependencies.
-- Frontend-only; no auth logic or data changes.
+
+- **Autopilot scheduling:** add an `autopilot_enabled` flag and a `weekly_cadence` value (on the existing `content_settings` or `credit_accounts`-adjacent settings; migration with GRANTs + RLS scoped to `auth.uid()`). A `pg_cron` job hits a secured `/api/public/hooks/autopilot-run` route daily that, per active user, generates the next due queued article via the existing `generateBlogArticle` pipeline. Respects credits.
+- **Semrush:** new `src/lib/semrush.server.ts` (gateway calls, reads `LOVABLE_API_KEY` + `SEMRUSH_API_KEY` server-side) and `src/lib/semrush.functions.ts` (`createServerFn` wrappers). Wire into `research.server.ts`/onboarding and Keyword Lab. Connector linked via the connect flow.
+- **Navigation:** extend `Sidebar.tsx` content into a shared nav config reused by a new mobile slide-over (shadcn `Sheet`); update `TopBar.tsx` with page title + account dropdown; rename labels in `Sidebar`, page headers, and tab arrays.
+- **Dashboard:** reorganize `dashboard.index.tsx` around the autopilot status + control card; add reward primitives (count-up, streak, milestone toasts, confetti) using existing tokens. No hardcoded colors — semantic tokens only.
+- **Reward engineering:** lightweight confetti/particle component (reuse the existing `Burst` pattern), milestone detection on publish, streak from published-article dates.
+- All new tables/columns get GRANTs + RLS in the same migration; no secrets exposed to the client; Semrush + autopilot logic stays server-side.
+
+## Out of scope (unless you want it)
+
+Rewriting the AI article generation prompts, new billing tiers, team/multi-user features, and email notifications. I can fold any of these in if you'd like.

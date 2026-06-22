@@ -77,35 +77,44 @@ export type Database = {
       content_settings: {
         Row: {
           audience: string
+          autopilot_enabled: boolean
           brand_voice: string
           created_at: string
           id: string
+          last_autopilot_run: string | null
           status_online: boolean
           tone: string
           updated_at: string
           user_id: string
+          weekly_cadence: number
           writing_style: string
         }
         Insert: {
           audience?: string
+          autopilot_enabled?: boolean
           brand_voice?: string
           created_at?: string
           id?: string
+          last_autopilot_run?: string | null
           status_online?: boolean
           tone?: string
           updated_at?: string
           user_id: string
+          weekly_cadence?: number
           writing_style?: string
         }
         Update: {
           audience?: string
+          autopilot_enabled?: boolean
           brand_voice?: string
           created_at?: string
           id?: string
+          last_autopilot_run?: string | null
           status_online?: boolean
           tone?: string
           updated_at?: string
           user_id?: string
+          weekly_cadence?: number
           writing_style?: string
         }
         Relationships: []
