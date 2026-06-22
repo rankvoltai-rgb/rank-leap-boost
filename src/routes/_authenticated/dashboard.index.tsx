@@ -178,6 +178,14 @@ function SystemConsole() {
   });
   const finished = finishedQuery.data ?? [];
   const { data: credits } = useQuery({ queryKey: ["credits"], queryFn: getCredits });
+  const { data: firstName = "" } = useQuery({
+    queryKey: ["auth", "first-name"],
+    queryFn: async () => {
+      const { data } = await supabase.auth.getUser();
+      const full = (data.user?.user_metadata?.full_name as string | undefined) ?? "";
+      return full.trim().split(/\s+/)[0] ?? "";
+    },
+  });
   const { data: settings } = useQuery({ queryKey: ["settings"], queryFn: getSettings });
   const { data: subscription } = useQuery({ queryKey: ["subscription"], queryFn: getSubscription });
   const [paywallOpen, setPaywallOpen] = useState(false);
