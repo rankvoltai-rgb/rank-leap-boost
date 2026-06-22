@@ -17,7 +17,7 @@ export function Panel({
       className={cn(
         "rounded-2xl border border-border bg-card shadow-elevation",
         hover &&
-          "transition-all duration-200 hover:-translate-y-0.5 hover:border-ink/15 hover:shadow-elevation-lg",
+          "transition-colors duration-200 hover:border-ink/20 hover:bg-secondary/30",
         className,
       )}
     >
@@ -39,7 +39,7 @@ export function Tabs<T extends string>({
   className?: string;
 }) {
   return (
-    <div className={cn("flex gap-1 rounded-xl border border-border bg-card p-1 shadow-sm", className)}>
+    <div className={cn("flex gap-1 rounded-xl border border-border bg-card p-1", className)}>
       {tabs.map((t) => {
         const active = value === t.id;
         return (
@@ -264,7 +264,7 @@ export function Button({
 } & React.ButtonHTMLAttributes<HTMLButtonElement>) {
   const variants = {
     solid:
-      "bg-ink text-background shadow-sm hover:-translate-y-0.5 hover:bg-ink/90 hover:shadow-md active:translate-y-0",
+      "bg-ink text-background shadow-elevation hover:bg-ink/90",
     ghost: "border border-border bg-card text-ink hover:bg-secondary",
     danger: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
   };

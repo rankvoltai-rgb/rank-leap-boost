@@ -51,7 +51,7 @@ function AlgorithmLogos() {
           key={name}
           title={name}
           aria-label={name}
-          className="grid h-9 w-9 place-items-center rounded-xl border border-border bg-card shadow-sm"
+          className="grid h-9 w-9 place-items-center rounded-xl border border-border bg-card"
         >
           <Mark className="h-5 w-5" />
         </span>
