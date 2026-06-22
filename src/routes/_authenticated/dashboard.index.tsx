@@ -100,7 +100,9 @@ function ArticleRow({ opp, action }: { opp: Blog; action: React.ReactNode }) {
           <span className="grid h-7 w-7 shrink-0 place-items-center rounded-lg border border-border bg-secondary text-muted-foreground">
             <ArticleIcon className="h-3.5 w-3.5" />
           </span>
-          <span className="max-w-[280px] truncate font-medium text-ink">{opp.title}</span>
+          <span className="block max-w-[220px] truncate font-medium text-ink" title={opp.title}>
+            {opp.title}
+          </span>
         </div>
       </Td>
       <Td>
@@ -115,7 +117,7 @@ function ArticleRow({ opp, action }: { opp: Blog; action: React.ReactNode }) {
       </Td>
       <Td>
         <div className="flex items-center gap-2.5">
-          <MeterBar value={sig} tone={tone} className="w-24" />
+          <MeterBar value={sig} tone={tone} className="w-16" />
           <span className="text-xs font-semibold tabular-nums text-ink">{sig}</span>
         </div>
       </Td>
