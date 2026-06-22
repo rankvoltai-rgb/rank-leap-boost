@@ -462,35 +462,37 @@ function SystemConsole() {
 
       {/* Stats */}
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-        <StatCard
-          label="Projected Monthly Traffic"
-          value={
-            <span className="text-volt">
-              <CountUp value={estimatedTraffic} />
-            </span>
-          }
-          hint="Monthly organic visitors"
-          emphasis
+        <MetricStat
+          label="Projected Traffic"
+          value={<CountUp value={estimatedTraffic} />}
+          icon={<ChartIcon className="h-4 w-4" />}
+          hint="Estimated monthly organic visitors"
+          accent
         />
-        <Panel className="flex min-h-[128px] flex-col items-center justify-center gap-2 p-5 text-center">
-          <ProgressRing value={finished.length} max={MONTHLY_GOAL}>
-            <span className="text-lg font-semibold text-ink tabular-nums">{finished.length}</span>
-          </ProgressRing>
-          <p className="text-[0.68rem] font-semibold uppercase tracking-[0.08em] text-muted-foreground">
-            Published / {MONTHLY_GOAL} goal
-          </p>
-        </Panel>
-        <StatCard
+        <MetricStat
+          label="Published"
+          value={
+            <>
+              {finished.length}
+              <span className="text-lg font-medium text-muted-foreground"> / {MONTHLY_GOAL}</span>
+            </>
+          }
+          icon={<TargetIcon className="h-4 w-4" />}
+          delta={`${Math.round((finished.length / MONTHLY_GOAL) * 100)}%`}
+          deltaTone="neutral"
+          hint="of your monthly goal"
+        />
+        <MetricStat
           label="Publishing Streak"
           value={`${streak}`}
-          hint={streak > 0 ? "Consecutive days live" : "Publish to start a streak"}
-          media={streak > 0 ? <StreakBadge days={streak} /> : undefined}
+          icon={<FlameIcon className="h-4 w-4" />}
+          hint={streak > 0 ? "consecutive days live" : "publish to start a streak"}
         />
-        <StatCard
+        <MetricStat
           label="Article Credits"
           value={remainingCredits === null ? "—" : remainingCredits.toLocaleString()}
-          hint="Remaining this cycle"
-          icon={<AutopilotIcon className="h-4 w-4" />}
+          icon={<CardIcon className="h-4 w-4" />}
+          hint="remaining this cycle"
         />
       </div>
 
@@ -504,7 +506,7 @@ function SystemConsole() {
       <div className="space-y-5">
         <h2 className="text-sm font-semibold text-ink">Autopilot Queue</h2>
 
-        <RadarSection
+        <QueueTableSection
           label="In the queue"
           count={queue.length}
           empty={
@@ -515,7 +517,7 @@ function SystemConsole() {
           }
         >
           {queue.map((opp) => (
-            <RadarRow
+            <ArticleRow
               key={opp.id}
               opp={opp}
               action={
@@ -524,7 +526,7 @@ function SystemConsole() {
                     <Loader2 className="h-3 w-3 animate-spin" /> Writing
                   </Pill>
                 ) : (
-                  <div className="flex items-center gap-1.5">
+                  <>
                     <Button variant="ghost" onClick={() => prioritize(opp)} disabled={busyId === opp.id}>
                       <PublishIcon className="h-4 w-4" />
                     </Button>
@@ -535,14 +537,14 @@ function SystemConsole() {
                     <Button variant="danger" onClick={() => remove(opp)} disabled={busyId === opp.id}>
                       <RemoveIcon className="h-4 w-4" />
                     </Button>
-                  </div>
+                  </>
                 )
               }
             />
           ))}
-        </RadarSection>
+        </QueueTableSection>
 
-        <RadarSection
+        <QueueTableSection
           label="Content gaps to win"
           count={opportunities.length}
           empty={
@@ -556,7 +558,7 @@ function SystemConsole() {
           }
         >
           {opportunities.map((opp) => (
-            <RadarRow
+            <ArticleRow
               key={opp.id}
               opp={opp}
               action={
@@ -567,7 +569,7 @@ function SystemConsole() {
               }
             />
           ))}
-        </RadarSection>
+        </QueueTableSection>
       </div>
     </div>
   );
