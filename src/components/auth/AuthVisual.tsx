@@ -37,11 +37,11 @@ function RankChart() {
   const area = `${path} L${w},${h} L0,${h} Z`;
 
   return (
-    <svg viewBox={`0 0 ${w} ${h}`} className="h-[88px] w-full overflow-visible">
+    <svg viewBox={`0 0 ${w} ${h}`} className="h-[88px] w-full overflow-visible text-background">
       <defs>
         <linearGradient id="rankFill" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="hsl(var(--background))" stopOpacity="0.18" />
-          <stop offset="100%" stopColor="hsl(var(--background))" stopOpacity="0" />
+          <stop offset="0%" stopColor="currentColor" stopOpacity="0.18" />
+          <stop offset="100%" stopColor="currentColor" stopOpacity="0" />
         </linearGradient>
       </defs>
       <motion.path
@@ -57,7 +57,6 @@ function RankChart() {
         stroke="currentColor"
         strokeWidth="2"
         strokeLinecap="round"
-        className="text-background"
         initial={{ pathLength: 0 }}
         animate={{ pathLength: 1 }}
         transition={{ duration: 1.6, ease: "easeInOut", delay: 0.3 }}
