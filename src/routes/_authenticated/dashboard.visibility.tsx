@@ -45,7 +45,7 @@ function EngineCard({ engine }: { engine: EngineScore }) {
     <Panel className="flex flex-col gap-3 p-5">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2.5">
-          <span className="grid h-9 w-9 place-items-center rounded-xl border border-border bg-card shadow-sm">
+          <span className="grid h-9 w-9 place-items-center rounded-xl border border-border bg-card">
             {Mark ? <Mark className="h-5 w-5" /> : <RadarIcon className="h-5 w-5" />}
           </span>
           <span className="text-sm font-semibold text-ink">{engine.name}</span>
