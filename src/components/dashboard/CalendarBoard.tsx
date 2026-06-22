@@ -232,8 +232,7 @@ function Grid({
             key={d}
             className="px-2 py-2 text-center text-[0.66rem] font-semibold uppercase tracking-[0.08em] text-muted-foreground"
           >
-            <span className="hidden sm:inline">{d}</span>
-            <span className="sm:hidden">{d[0]}</span>
+            {d}
           </div>
         ))}
       </div>
