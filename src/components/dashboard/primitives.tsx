@@ -184,9 +184,6 @@ export function StatCard({
         emphasis && "relative overflow-hidden",
       )}
     >
-      {emphasis && (
-        <span className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-volt to-transparent" />
-      )}
       <div className="flex items-center justify-between gap-2">
         <p className="text-[0.68rem] font-semibold uppercase tracking-[0.08em] text-muted-foreground">
           {label}
