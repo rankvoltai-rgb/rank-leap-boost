@@ -31,7 +31,7 @@ export function Sidebar() {
 
   return (
     <aside className="hidden w-60 shrink-0 flex-col overflow-hidden border-r border-border bg-card md:flex">
-      <div className="flex h-14 shrink-0 items-center px-5">
+      <div className="flex h-14 shrink-0 items-center border-b border-border px-5">
         <Logo />
       </div>
       <p className="px-5 pb-1.5 pt-4 text-[0.6rem] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
