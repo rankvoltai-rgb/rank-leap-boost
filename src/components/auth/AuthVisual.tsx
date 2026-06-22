@@ -13,44 +13,42 @@ function Counter({ to, suffix = "" }: { to: number; suffix?: string }) {
   return <motion.span>{rounded}</motion.span>;
 }
 
-/* ---------- Ranking sparkline ---------- */
-function Sparkline() {
-  const points = [38, 33, 31, 24, 19, 14, 9, 5, 2, 1];
-  const w = 132;
-  const h = 40;
-  const max = 40;
-  const path = points
-    .map((p, i) => {
-      const x = (i / (points.length - 1)) * w;
-      const y = (p / max) * h;
-      return `${i === 0 ? "M" : "L"}${x.toFixed(1)},${y.toFixed(1)}`;
-    })
-    .join(" ");
+/* ---------- AI engine brand logos ---------- */
+function ChatGPTLogo({ className }: { className?: string }) {
   return (
-    <svg viewBox={`0 0 ${w} ${h}`} className="h-10 w-[132px] overflow-visible">
-      <motion.path
-        d={path}
-        fill="none"
-        stroke="var(--volt)"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        initial={{ pathLength: 0 }}
-        animate={{ pathLength: 1 }}
-        transition={{ duration: 1.5, ease: "easeInOut", delay: 0.9 }}
-      />
-      <motion.circle
-        cx={w}
-        cy={(points[points.length - 1] / max) * h}
-        r="3.5"
-        fill="var(--volt)"
-        initial={{ scale: 0 }}
-        animate={{ scale: [0, 1.5, 1] }}
-        transition={{ duration: 0.5, delay: 2.3 }}
-      />
+    <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden>
+      <path d="M22.28 9.82a5.98 5.98 0 0 0-.52-4.91 6.05 6.05 0 0 0-6.51-2.9A6 6 0 0 0 4.98 4.18a5.98 5.98 0 0 0-4 2.9 6.05 6.05 0 0 0 .74 7.1 5.98 5.98 0 0 0 .51 4.91 6.05 6.05 0 0 0 6.52 2.9A6 6 0 0 0 19.02 19.8a5.98 5.98 0 0 0 4-2.9 6.05 6.05 0 0 0-.74-7.08Zm-9.02 12.6a4.48 4.48 0 0 1-2.88-1.04l.14-.08 4.78-2.76a.78.78 0 0 0 .4-.68v-6.74l2.02 1.17a.07.07 0 0 1 .04.05v5.58a4.5 4.5 0 0 1-4.5 4.5ZM3.6 18.1a4.47 4.47 0 0 1-.54-3.01l.14.08 4.78 2.76c.24.14.54.14.78 0l5.84-3.37v2.33a.08.08 0 0 1-.03.06l-4.83 2.79a4.5 4.5 0 0 1-6.14-1.64ZM2.34 7.9a4.48 4.48 0 0 1 2.34-1.97v5.68c0 .28.15.54.39.68l5.82 3.36-2.02 1.17a.07.07 0 0 1-.07 0l-4.83-2.8A4.5 4.5 0 0 1 2.34 7.9Zm16.6 3.86-5.84-3.38 2.02-1.16a.07.07 0 0 1 .07 0l4.83 2.79a4.5 4.5 0 0 1-.68 8.12v-5.69a.78.78 0 0 0-.4-.68Zm2.01-3.02-.14-.09-4.77-2.78a.78.78 0 0 0-.79 0L9.42 9.24V6.91a.07.07 0 0 1 .03-.06l4.83-2.79a4.5 4.5 0 0 1 6.68 4.66ZM8.32 12.87 6.3 11.7a.08.08 0 0 1-.04-.06V6.07a4.5 4.5 0 0 1 7.38-3.45l-.14.08-4.78 2.76a.78.78 0 0 0-.4.68v6.73Zm1.1-2.37L12 9.01l2.6 1.5v3l-2.6 1.5-2.6-1.5v-3Z" />
     </svg>
   );
 }
+function GeminiLogo({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden>
+      <path d="M12 0c.34 6.27 5.73 11.66 12 12-6.27.34-11.66 5.73-12 12-.34-6.27-5.73-11.66-12-12C6.27 11.66 11.66 6.27 12 0Z" />
+    </svg>
+  );
+}
+function PerplexityLogo({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden>
+      <path d="M12 3v18M12 7.5 5 4v8.5L12 16l7-3.5V4l-7 3.5ZM5 12.5V20l7-4 7 4v-7.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+function ClaudeLogo({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden>
+      <path d="M12 2.2c.5 2.9 1.3 4.7 2.4 6 1.2 1.1 3 2 6 2.5-2.9.5-4.7 1.3-6 2.4-1.1 1.2-2 3-2.5 6-.5-2.9-1.3-4.7-2.4-6-1.2-1.1-3-2-6-2.5 2.9-.5 4.7-1.3 6-2.4 1.1-1.2 2-3 2.5-6Z" />
+    </svg>
+  );
+}
+
+const ENGINES = [
+  { name: "ChatGPT", Logo: ChatGPTLogo, color: "#10a37f", status: "Recommended" },
+  { name: "Gemini", Logo: GeminiLogo, color: "#4285f4", status: "Cited 12×" },
+  { name: "Perplexity", Logo: PerplexityLogo, color: "#20b8cd", status: "Top source" },
+  { name: "Claude", Logo: ClaudeLogo, color: "#d97757", status: "Recommended" },
+];
 
 const PIPELINE = [
   { icon: Search, label: "Researching keywords", sub: "1,240 opportunities found" },
@@ -190,26 +188,47 @@ export function AuthVisual() {
         </div>
       </motion.div>
 
-      {/* Ranking strip */}
+      {/* AI search visibility */}
       <motion.div
         custom={2}
         variants={reveal}
         initial="hidden"
         animate="show"
-        className="flex items-center justify-between rounded-2xl border border-background/10 bg-background/[0.04] px-5 py-4"
+        className="rounded-2xl border border-background/10 bg-gradient-to-b from-background/[0.07] to-background/[0.02] p-5"
       >
-        <div>
-          <p className="text-sm font-medium text-background">Avg. Google position</p>
-          <p className="mt-0.5 text-xs text-background/45">across tracked keywords</p>
-        </div>
-        <div className="flex items-center gap-3">
-          <Sparkline />
-          <span
-            className="flex h-9 w-9 items-center justify-center rounded-full text-sm font-semibold text-white"
-            style={{ background: "var(--volt)" }}
-          >
-            #1
+        <div className="flex items-center justify-between">
+          <p className="text-sm font-semibold text-background">Visible across AI search</p>
+          <span className="flex items-center gap-1 text-xs font-medium" style={{ color: "var(--volt)" }}>
+            <ArrowUpRight className="h-3.5 w-3.5" /> 4 engines
           </span>
+        </div>
+        <div className="mt-4 grid grid-cols-2 gap-2.5">
+          {ENGINES.map((engine, i) => {
+            const Logo = engine.Logo;
+            return (
+              <motion.div
+                key={engine.name}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.45, delay: 0.6 + i * 0.12, ease: [0.21, 0.47, 0.32, 0.98] }}
+                className="flex items-center gap-2.5 rounded-xl border border-background/10 bg-background/[0.03] px-3 py-2.5"
+              >
+                <span
+                  className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg"
+                  style={{ background: `${engine.color}1f`, color: engine.color }}
+                >
+                  <Logo className="h-4 w-4" />
+                </span>
+                <div className="min-w-0">
+                  <p className="truncate text-xs font-medium text-background">{engine.name}</p>
+                  <p className="flex items-center gap-1 truncate text-[0.7rem] text-background/50">
+                    <Check className="h-3 w-3 shrink-0" style={{ color: "var(--volt)" }} />
+                    {engine.status}
+                  </p>
+                </div>
+              </motion.div>
+            );
+          })}
         </div>
       </motion.div>
     </div>
