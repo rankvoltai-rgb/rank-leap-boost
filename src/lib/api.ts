@@ -1,6 +1,11 @@
 import { supabase } from "@/integrations/supabase/client";
 import type { TablesInsert } from "@/integrations/supabase/types";
 import { generateBlogContent } from "@/lib/ai.functions";
+import {
+  consumeArticleCredit,
+  ensureCreditAccount,
+  purchaseCreditPackage,
+} from "@/lib/credits.functions";
 import { getStripeEnvironment } from "@/lib/stripe";
 
 export type BlogStatus = "opportunity" | "scheduled" | "generating" | "finished";
