@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { Check, Plus, TrendingUp } from "lucide-react";
+import { Check, Flame, Plus, TrendingUp } from "lucide-react";
 import {
   listBlogs,
   getCredits,
@@ -45,7 +45,7 @@ function RadarRow({ opp, action }: { opp: Blog; action?: React.ReactNode }) {
             <TrendingUp className="h-3 w-3" />
             {opp.traffic_estimate.toLocaleString()}/mo
           </Pill>
-          <Pill tone="info">{opp.ai_signal} AI</Pill>
+          <AiSignalFlames signal={opp.ai_signal ?? 0} />
           <Pill tone="neutral">{opp.competition ?? "—"} comp.</Pill>
         </div>
       </div>
