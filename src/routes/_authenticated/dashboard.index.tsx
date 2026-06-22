@@ -11,7 +11,11 @@ import {
   RemoveIcon,
   PublishIcon,
   RocketIcon,
-  AutopilotIcon,
+  ArticleIcon,
+  ChartIcon,
+  TargetIcon,
+  FlameIcon,
+  CardIcon,
 } from "@/components/dashboard/icons";
 import {
   listBlogs,
@@ -27,10 +31,18 @@ import {
   CreditsExhaustedError,
   type Blog,
 } from "@/lib/api";
-import { Panel, StatCard, Pill, Button, PageHeader } from "@/components/dashboard/primitives";
-import { AiSignalFlames } from "@/components/dashboard/signals";
+import {
+  Panel,
+  StatCard,
+  MetricStat,
+  Pill,
+  Button,
+  PageHeader,
+} from "@/components/dashboard/primitives";
+import { MeterBar, DifficultyBar } from "@/components/dashboard/signals";
+import { DataTable, Tr, Td, TdActions, type Column } from "@/components/dashboard/data-table";
 import { AI_ALGORITHM_MARKS } from "@/components/landing/ai-logos";
-import { Confetti, ProgressRing, StreakBadge } from "@/components/dashboard/rewards";
+import { Confetti } from "@/components/dashboard/rewards";
 import { CreditPaywallDialog } from "@/components/dashboard/CreditPaywallDialog";
 import { Switch } from "@/components/ui/switch";
 import { CountUp } from "@/components/ui/count-up";
@@ -68,27 +80,57 @@ function AlgorithmLogos() {
   );
 }
 
-function RadarRow({ opp, action }: { opp: Blog; action?: React.ReactNode }) {
+const QUEUE_COLUMNS: Column[] = [
+  { label: "Article" },
+  { label: "Keyword" },
+  { label: "Est. Traffic" },
+  { label: "AI Signal" },
+  { label: "Competition" },
+  { label: "", className: "text-right" },
+];
+
+/** A single article row in the queue / opportunities tables. */
+function ArticleRow({ opp, action }: { opp: Blog; action: React.ReactNode }) {
+  const sig = opp.ai_signal ?? 0;
+  const tone = sig >= 80 ? "success" : sig >= 55 ? "volt" : "warning";
   return (
-    <Panel hover className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 p-4 sm:p-5">
-      <div className="min-w-0">
-        <h3 className="truncate text-sm font-semibold text-ink">{opp.title}</h3>
-        <div className="mt-2 flex flex-wrap items-center gap-2">
-          <Pill tone="neutral">{opp.keyword}</Pill>
-          <Pill tone="success">
-            <TrendIcon className="h-3 w-3" />
-            {opp.traffic_estimate.toLocaleString()}/mo
-          </Pill>
-          <AiSignalFlames signal={opp.ai_signal ?? 0} />
-          <Pill tone="neutral">{opp.competition ?? "—"} comp.</Pill>
+    <Tr>
+      <Td>
+        <div className="flex min-w-0 items-center gap-2.5">
+          <span className="grid h-7 w-7 shrink-0 place-items-center rounded-lg border border-border bg-secondary text-muted-foreground">
+            <ArticleIcon className="h-3.5 w-3.5" />
+          </span>
+          <span className="block max-w-[220px] truncate font-medium text-ink" title={opp.title}>
+            {opp.title}
+          </span>
         </div>
-      </div>
-      <div className="shrink-0">{action}</div>
-    </Panel>
+      </Td>
+      <Td>
+        <Pill tone="neutral">{opp.keyword}</Pill>
+      </Td>
+      <Td>
+        <span className="inline-flex items-center gap-1 font-medium tabular-nums text-ink">
+          <TrendIcon className="h-3.5 w-3.5 text-success" />
+          {opp.traffic_estimate.toLocaleString()}
+          <span className="font-normal text-muted-foreground">/mo</span>
+        </span>
+      </Td>
+      <Td>
+        <div className="flex items-center gap-2.5">
+          <MeterBar value={sig} tone={tone} className="w-16" />
+          <span className="text-xs font-semibold tabular-nums text-ink">{sig}</span>
+        </div>
+      </Td>
+      <Td>
+        <DifficultyBar label={opp.competition} />
+      </Td>
+      <TdActions>{action}</TdActions>
+    </Tr>
   );
 }
 
-function RadarSection({
+/** Section wrapper: heading + count, then either an empty panel or a table. */
+function QueueTableSection({
   label,
   count,
   empty,
@@ -100,8 +142,8 @@ function RadarSection({
   children: React.ReactNode;
 }) {
   return (
-    <section>
-      <div className="mb-2.5 flex items-center gap-2">
+    <section className="space-y-3">
+      <div className="flex items-center gap-2">
         <h3 className="text-xs font-semibold uppercase tracking-[0.08em] text-muted-foreground">{label}</h3>
         <span className="rounded-full border border-border bg-secondary px-2 py-0.5 text-[0.65rem] font-semibold text-muted-foreground tabular-nums">
           {count}
@@ -110,7 +152,7 @@ function RadarSection({
       {count === 0 ? (
         <Panel className="p-6 text-center text-sm text-muted-foreground">{empty}</Panel>
       ) : (
-        <div className="space-y-3">{children}</div>
+        <DataTable columns={QUEUE_COLUMNS}>{children}</DataTable>
       )}
     </section>
   );
@@ -421,35 +463,37 @@ function SystemConsole() {
 
       {/* Stats */}
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-        <StatCard
-          label="Projected Monthly Traffic"
-          value={
-            <span className="text-volt">
-              <CountUp value={estimatedTraffic} />
-            </span>
-          }
-          hint="Monthly organic visitors"
-          emphasis
+        <MetricStat
+          label="Projected Traffic"
+          value={<CountUp value={estimatedTraffic} />}
+          icon={<ChartIcon className="h-4 w-4" />}
+          hint="Estimated monthly organic visitors"
+          accent
         />
-        <Panel className="flex min-h-[128px] flex-col items-center justify-center gap-2 p-5 text-center">
-          <ProgressRing value={finished.length} max={MONTHLY_GOAL}>
-            <span className="text-lg font-semibold text-ink tabular-nums">{finished.length}</span>
-          </ProgressRing>
-          <p className="text-[0.68rem] font-semibold uppercase tracking-[0.08em] text-muted-foreground">
-            Published / {MONTHLY_GOAL} goal
-          </p>
-        </Panel>
-        <StatCard
+        <MetricStat
+          label="Published"
+          value={
+            <>
+              {finished.length}
+              <span className="text-lg font-medium text-muted-foreground"> / {MONTHLY_GOAL}</span>
+            </>
+          }
+          icon={<TargetIcon className="h-4 w-4" />}
+          delta={`${Math.round((finished.length / MONTHLY_GOAL) * 100)}%`}
+          deltaTone="neutral"
+          hint="of your monthly goal"
+        />
+        <MetricStat
           label="Publishing Streak"
           value={`${streak}`}
-          hint={streak > 0 ? "Consecutive days live" : "Publish to start a streak"}
-          media={streak > 0 ? <StreakBadge days={streak} /> : undefined}
+          icon={<FlameIcon className="h-4 w-4" />}
+          hint={streak > 0 ? "consecutive days live" : "publish to start a streak"}
         />
-        <StatCard
+        <MetricStat
           label="Article Credits"
           value={remainingCredits === null ? "—" : remainingCredits.toLocaleString()}
-          hint="Remaining this cycle"
-          icon={<AutopilotIcon className="h-4 w-4" />}
+          icon={<CardIcon className="h-4 w-4" />}
+          hint="remaining this cycle"
         />
       </div>
 
@@ -463,7 +507,7 @@ function SystemConsole() {
       <div className="space-y-5">
         <h2 className="text-sm font-semibold text-ink">Autopilot Queue</h2>
 
-        <RadarSection
+        <QueueTableSection
           label="In the queue"
           count={queue.length}
           empty={
@@ -474,7 +518,7 @@ function SystemConsole() {
           }
         >
           {queue.map((opp) => (
-            <RadarRow
+            <ArticleRow
               key={opp.id}
               opp={opp}
               action={
@@ -483,25 +527,39 @@ function SystemConsole() {
                     <Loader2 className="h-3 w-3 animate-spin" /> Writing
                   </Pill>
                 ) : (
-                  <div className="flex items-center gap-1.5">
-                    <Button variant="ghost" onClick={() => prioritize(opp)} disabled={busyId === opp.id}>
+                  <>
+                    <Button
+                      variant="ghost"
+                      title="Move to top"
+                      onClick={() => prioritize(opp)}
+                      disabled={busyId === opp.id}
+                    >
                       <PublishIcon className="h-4 w-4" />
                     </Button>
-                    <Button variant="ghost" onClick={() => generateNow(opp)} disabled={busyId === opp.id}>
+                    <Button
+                      variant="ghost"
+                      title="Write now"
+                      onClick={() => generateNow(opp)}
+                      disabled={busyId === opp.id}
+                    >
                       {busyId === opp.id ? <Loader2 className="h-4 w-4 animate-spin" /> : <VoltMark className="h-4 w-4" />}
-                      <span className="hidden sm:inline">Write now</span>
                     </Button>
-                    <Button variant="danger" onClick={() => remove(opp)} disabled={busyId === opp.id}>
+                    <Button
+                      variant="danger"
+                      title="Remove from queue"
+                      onClick={() => remove(opp)}
+                      disabled={busyId === opp.id}
+                    >
                       <RemoveIcon className="h-4 w-4" />
                     </Button>
-                  </div>
+                  </>
                 )
               }
             />
           ))}
-        </RadarSection>
+        </QueueTableSection>
 
-        <RadarSection
+        <QueueTableSection
           label="Content gaps to win"
           count={opportunities.length}
           empty={
@@ -515,7 +573,7 @@ function SystemConsole() {
           }
         >
           {opportunities.map((opp) => (
-            <RadarRow
+            <ArticleRow
               key={opp.id}
               opp={opp}
               action={
@@ -526,7 +584,7 @@ function SystemConsole() {
               }
             />
           ))}
-        </RadarSection>
+        </QueueTableSection>
       </div>
     </div>
   );
