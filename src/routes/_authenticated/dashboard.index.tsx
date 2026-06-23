@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -483,11 +483,8 @@ function SystemConsole() {
           count={opportunities.length}
           empty={
             <span>
-              No new opportunities right now.{" "}
-              <Link to="/dashboard/keywords" className="text-ink underline">
-                Explore Keyword Lab
-              </Link>{" "}
-              to find more.
+              No new opportunities right now. Autopilot will surface new content gaps as it
+              scans your space.
             </span>
           }
         >
