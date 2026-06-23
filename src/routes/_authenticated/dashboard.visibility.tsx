@@ -203,10 +203,10 @@ function VisibilityPage() {
             <EmptyState
               icon={<RadarIcon className="h-6 w-6" />}
               title="No open gaps right now"
-              description="Explore Keyword Lab to surface new topics you can become the answer for."
+              description="Autopilot surfaces new topics you can become the answer for as it scans your space."
               action={
-                <Link to="/dashboard/keywords">
-                  <Button>Open Keyword Lab</Button>
+                <Link to="/dashboard">
+                  <Button>Back to Overview</Button>
                 </Link>
               }
             />
@@ -225,7 +225,7 @@ function VisibilityPage() {
                   </div>
                   <div className="flex shrink-0 items-center gap-2">
                     <Pill tone="warning">{t.signal} potential</Pill>
-                    <Link to="/dashboard/keywords">
+                    <Link to="/dashboard">
                       <Button variant="ghost" className="px-2.5">
                         <VoltMark className="h-4 w-4" />
                       </Button>
