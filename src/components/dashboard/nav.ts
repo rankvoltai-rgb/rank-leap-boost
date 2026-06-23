@@ -3,11 +3,9 @@ import {
   PulseIcon,
   ArticleIcon,
   CalendarIcon,
-  BeamIcon,
   CardIcon,
   ControlsIcon,
   RadarIcon,
-  ChartIcon,
   PublishIcon,
 } from "@/components/dashboard/icons";
 
@@ -25,11 +23,9 @@ export interface NavItem {
 // everywhere in the app.
 export const NAV: NavItem[] = [
   { title: "Overview", icon: PulseIcon, to: "/dashboard", exact: true },
-  { title: "Rank", icon: RadarIcon, to: "/dashboard/visibility" },
   { title: "Articles", icon: ArticleIcon, to: "/dashboard/blog-engine" },
+  { title: "Rank", icon: RadarIcon, to: "/dashboard/visibility" },
   { title: "Calendar", icon: CalendarIcon, to: "/dashboard/calendar" },
-  { title: "Keyword Lab", icon: BeamIcon, to: "/dashboard/keywords" },
-  { title: "Insights", icon: ChartIcon, to: "/dashboard/insights" },
   { title: "Integrations", icon: PublishIcon, to: "/dashboard/integrations" },
 ];
 
