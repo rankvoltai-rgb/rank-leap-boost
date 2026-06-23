@@ -1,11 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { format } from "date-fns";
 import { CalendarDays, Loader2 } from "lucide-react";
 import { listBlogs, prioritizeBlog, updateBlog, type Blog } from "@/lib/api";
-import { Panel, Button, PageHeader, StatCard } from "@/components/dashboard/primitives";
+import { Panel, Button, PageHeader } from "@/components/dashboard/primitives";
 import { CalendarBoard, prettyDate, type CalendarView } from "@/components/dashboard/CalendarBoard";
 
 export const Route = createFileRoute("/_authenticated/dashboard/calendar")({
@@ -24,13 +24,6 @@ function CalendarPage() {
       return lists.flat();
     },
   });
-
-  const dates = useMemo(
-    () => queue.map((b) => b.scheduled_date).filter(Boolean).sort() as string[],
-    [queue],
-  );
-  const nextDate = dates[0] ?? null;
-  const totalTraffic = queue.reduce((s, b) => s + (b.traffic_estimate ?? 0), 0);
 
   async function prioritize(blog: Blog) {
     setBusyId(blog.id);
