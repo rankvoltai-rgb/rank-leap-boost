@@ -113,8 +113,8 @@ function TrafficOrbit() {
               y1={node.y}
               x2="50"
               y2="50"
-              stroke="var(--border)"
-              strokeWidth="0.4"
+              stroke="color-mix(in oklab, var(--volt) 30%, var(--border))"
+              strokeWidth="0.45"
               strokeDasharray="1.4 2.2"
             />
             {/* traffic packet flowing inward */}
@@ -141,12 +141,12 @@ function TrafficOrbit() {
 
       {/* decorative rotating rings */}
       <motion.span
-        className="absolute inset-[8%] rounded-full border border-dashed border-border"
+        className="absolute inset-[8%] rounded-full border border-dashed border-border/80"
         animate={{ rotate: 360 }}
         transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
       />
       <motion.span
-        className="absolute inset-[22%] rounded-full border border-border/60"
+        className="absolute inset-[22%] rounded-full border border-border/50"
         animate={{ rotate: -360 }}
         transition={{ duration: 38, repeat: Infinity, ease: "linear" }}
       />
@@ -169,9 +169,9 @@ function TrafficOrbit() {
             }}
           >
             <div
-              className="flex h-12 w-12 items-center justify-center rounded-2xl border border-border bg-card shadow-sm"
+              className="flex h-12 w-12 items-center justify-center rounded-2xl bg-card ring-1 ring-ink/[0.06]"
               style={{
-                boxShadow: `0 8px 22px -12px ${node.color}`,
+                boxShadow: `0 10px 24px -14px ${node.color}, 0 4px 12px -8px rgba(15,23,42,0.25)`,
                 color: isGoogle ? undefined : node.color,
               }}
               title={node.name}
@@ -191,15 +191,19 @@ function TrafficOrbit() {
         transition={{ duration: 0.6, delay: 0.2, ease: [0.34, 1.56, 0.64, 1] }}
       >
         <span
-          className="absolute inset-0 -z-10 animate-ping rounded-3xl opacity-20"
+          className="absolute -inset-3 -z-10 rounded-[2rem] opacity-40 blur-xl"
+          style={{ background: "radial-gradient(circle, var(--volt), transparent 70%)" }}
+        />
+        <span
+          className="absolute inset-0 -z-10 animate-ping rounded-3xl opacity-15"
           style={{ background: "var(--volt)" }}
         />
         <div
-          className="flex h-20 w-20 flex-col items-center justify-center gap-1 rounded-3xl border border-border bg-card"
-          style={{ boxShadow: "0 0 36px -10px var(--volt)" }}
+          className="flex h-20 w-20 flex-col items-center justify-center gap-1 rounded-3xl bg-card ring-1 ring-ink/[0.06]"
+          style={{ boxShadow: "0 0 0 6px color-mix(in oklab, var(--volt) 14%, transparent), 0 18px 40px -16px rgba(15,23,42,0.4)" }}
         >
           <img src={rankvoltMark.url} alt="Rankvolt" className="h-8 w-8 object-contain" />
-          <span className="text-[0.6rem] font-semibold uppercase tracking-wide text-muted-foreground">
+          <span className="text-[0.58rem] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
             You
           </span>
         </div>
@@ -219,16 +223,19 @@ export function AuthVisual() {
   const active = ENGINES[tick];
 
   return (
-    <div className="relative mt-8 space-y-5">
+    <div className="relative mt-8 space-y-4">
       {/* Orbit hero */}
       <motion.div
         custom={0}
         variants={reveal}
         initial="hidden"
         animate="show"
-        className="relative overflow-hidden rounded-3xl border border-border bg-card p-6 shadow-sm"
+        className="relative overflow-hidden rounded-[1.75rem] bg-card p-6 ring-1 ring-ink/[0.05]"
+        style={{ boxShadow: "0 28px 64px -28px rgba(15,23,42,0.5)" }}
       >
-        <div className="flex items-center justify-between">
+        {/* subtle top sheen */}
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-muted/60 to-transparent" />
+        <div className="relative flex items-center justify-between">
           <span className="flex items-center gap-2 text-sm font-semibold text-ink">
             <span className="relative flex h-2 w-2">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-75" style={{ background: "var(--volt)" }} />
@@ -236,7 +243,8 @@ export function AuthVisual() {
             </span>
             AI traffic, flowing to you
           </span>
-          <span className="rounded-md bg-muted px-2 py-0.5 text-[0.7rem] font-medium uppercase tracking-wide text-muted-foreground">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-muted px-2.5 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.1em] text-muted-foreground">
+            <span className="h-1.5 w-1.5 rounded-full" style={{ background: "var(--volt)" }} />
             Live
           </span>
         </div>
@@ -244,7 +252,7 @@ export function AuthVisual() {
         <TrafficOrbit />
 
         {/* rotating "recommended by" line */}
-        <div className="mt-2 flex h-5 items-center justify-center gap-2 text-xs text-muted-foreground">
+        <div className="relative mt-3 flex h-5 items-center justify-center gap-1.5 text-xs text-muted-foreground">
           Recommended by
           <motion.span
             key={active.name}
@@ -264,12 +272,13 @@ export function AuthVisual() {
         variants={reveal}
         initial="hidden"
         animate="show"
-        className="rounded-2xl border border-border bg-card p-4 shadow-sm"
+        className="rounded-2xl bg-card p-4 ring-1 ring-ink/[0.05]"
+        style={{ boxShadow: "0 18px 44px -24px rgba(15,23,42,0.45)" }}
       >
         <div className="flex items-start gap-3">
           <span
             className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg"
-            style={{ background: "var(--volt)", color: "white" }}
+            style={{ background: "var(--volt)", color: "white", boxShadow: "0 6px 16px -6px var(--volt)" }}
           >
             <Quote className="h-3.5 w-3.5" />
           </span>

@@ -210,30 +210,47 @@ export function AuthSplit() {
         className="relative hidden flex-col justify-between overflow-hidden px-14 py-12 text-background lg:flex"
         style={{
           background:
-            "linear-gradient(160deg, var(--volt) 0%, color-mix(in oklab, var(--volt) 72%, var(--ink) 28%) 100%)",
+            "linear-gradient(160deg, color-mix(in oklab, var(--volt) 92%, white 8%) 0%, var(--volt) 42%, color-mix(in oklab, var(--volt) 68%, var(--ink) 32%) 100%)",
         }}
       >
+        {/* ambient light + texture */}
+        <div className="pointer-events-none absolute -right-28 -top-28 h-96 w-96 rounded-full bg-background/20 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-32 -left-24 h-80 w-80 rounded-full bg-ink/20 blur-3xl" />
         <div
-          className="pointer-events-none absolute -right-24 -top-24 h-96 w-96 rounded-full bg-background/15 blur-3xl"
+          className="pointer-events-none absolute inset-0 opacity-[0.06]"
+          style={{
+            backgroundImage:
+              "radial-gradient(circle at 1px 1px, currentColor 1px, transparent 0)",
+            backgroundSize: "22px 22px",
+          }}
         />
+
         <div className="relative">
-          <span className="inline-flex items-center rounded-full border border-background/25 bg-background/10 px-3 py-1 text-xs font-medium text-background/80">
+          <span className="inline-flex items-center rounded-full border border-background/25 bg-background/10 px-3.5 py-1.5 text-xs font-medium text-background/90 backdrop-blur-sm">
             Sign in → connect site → done
           </span>
-          <h2 className="mt-6 max-w-sm text-2xl font-semibold leading-tight text-background">
+          <h2 className="mt-6 max-w-md text-[1.75rem] font-semibold leading-[1.15] tracking-tight text-background">
             Get AI traffic on Autopilot, while you sleep
           </h2>
+          <p className="mt-3 max-w-sm text-sm leading-relaxed text-background/75">
+            Your brand, cited across every major AI engine and surfaced where buyers ask.
+          </p>
 
           <AuthVisual />
         </div>
 
-        <div className="relative flex items-center gap-3">
-          <div className="flex -space-x-2">
+        <div className="relative mt-10 flex items-center gap-3">
+          <div className="flex -space-x-2.5">
             {FACES.map((f) => (
-              <Avatar key={f.name} name={f.name} src={f.src} className="h-9 w-9" />
+              <Avatar
+                key={f.name}
+                name={f.name}
+                src={f.src}
+                className="h-9 w-9 ring-2 ring-background/70"
+              />
             ))}
           </div>
-          <div className="flex flex-col">
+          <div className="flex flex-col gap-0.5">
             <Stars />
             <p className="text-sm text-background/80">
               <span className="font-semibold text-background">400+</span> founders growing with Rankvolt
