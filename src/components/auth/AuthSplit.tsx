@@ -206,17 +206,22 @@ export function AuthSplit() {
       </div>
 
       {/* Brand / visual panel */}
-      <div className="relative hidden flex-col justify-between overflow-hidden border-l border-border bg-muted px-14 py-12 text-ink lg:flex">
+      <div
+        className="relative hidden flex-col justify-between overflow-hidden px-14 py-12 text-background lg:flex"
+        style={{
+          background:
+            "linear-gradient(160deg, var(--volt) 0%, color-mix(in oklab, var(--volt) 72%, var(--ink) 28%) 100%)",
+        }}
+      >
         <div
-          className="pointer-events-none absolute -right-24 -top-24 h-96 w-96 rounded-full opacity-[0.18] blur-3xl"
-          style={{ background: "radial-gradient(circle, var(--volt), transparent 70%)" }}
+          className="pointer-events-none absolute -right-24 -top-24 h-96 w-96 rounded-full bg-background/15 blur-3xl"
         />
         <div className="relative">
-          <span className="inline-flex items-center rounded-full border border-border bg-card px-3 py-1 text-xs font-medium text-muted-foreground">
+          <span className="inline-flex items-center rounded-full border border-background/25 bg-background/10 px-3 py-1 text-xs font-medium text-background/80">
             Sign in → connect site → done
           </span>
-          <h2 className="mt-6 max-w-sm text-2xl font-semibold leading-tight text-ink">
-            Your personal SEO agent, working while you sleep.
+          <h2 className="mt-6 max-w-sm text-2xl font-semibold leading-tight text-background">
+            Get AI traffic on Autopilot, while you sleep
           </h2>
 
           <AuthVisual />
@@ -230,8 +235,8 @@ export function AuthSplit() {
           </div>
           <div className="flex flex-col">
             <Stars />
-            <p className="text-sm text-muted-foreground">
-              <span className="font-semibold text-ink">400+</span> founders growing with Rankvolt
+            <p className="text-sm text-background/80">
+              <span className="font-semibold text-background">400+</span> founders growing with Rankvolt
             </p>
           </div>
         </div>
