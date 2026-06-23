@@ -4,7 +4,6 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 import {
-  CheckIcon,
   AddIcon,
   TrendIcon,
   VoltMark,
@@ -20,9 +19,7 @@ import {
 import {
   listBlogs,
   getCredits,
-  getSettings,
   addOpportunityToQueue,
-  updateAutopilot,
   generateBlogArticle,
   prioritizeBlog,
   deleteBlog,
@@ -42,7 +39,6 @@ import { DataTable, Tr, Td, TdActions, type Column } from "@/components/dashboar
 import { AI_ALGORITHM_MARKS } from "@/components/landing/ai-logos";
 import { Confetti } from "@/components/dashboard/rewards";
 import { CreditPaywallDialog } from "@/components/dashboard/CreditPaywallDialog";
-import { Switch } from "@/components/ui/switch";
 import { CountUp } from "@/components/ui/count-up";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
@@ -51,7 +47,6 @@ export const Route = createFileRoute("/_authenticated/dashboard/")({
   component: SystemConsole,
 });
 
-const CADENCE_OPTIONS = [1, 3, 5, 7];
 const MONTHLY_GOAL = 30; // articles per month target
 
 function timeGreeting() {
@@ -208,7 +203,6 @@ function SystemConsole() {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const [busyId, setBusyId] = useState<string | null>(null);
-  const [savingAutopilot, setSavingAutopilot] = useState(false);
   const [confettiKey, setConfettiKey] = useState(0);
   const prevFinished = useRef<number | null>(null);
   const armed = useRef(false);
@@ -259,12 +253,8 @@ function SystemConsole() {
       return full.trim().split(/\s+/)[0] ?? "";
     },
   });
-  const { data: settings } = useQuery({ queryKey: ["settings"], queryFn: getSettings });
   const { data: subscription } = useQuery({ queryKey: ["subscription"], queryFn: getSubscription });
   const [paywallOpen, setPaywallOpen] = useState(false);
-
-  const autopilotOn = settings?.autopilot_enabled ?? true;
-  const cadence = settings?.weekly_cadence ?? 7;
 
   const estimatedTraffic = allBlogs.reduce((sum, b) => sum + (b.traffic_estimate ?? 0), 0);
   const queue = [...generating, ...scheduled];
@@ -288,38 +278,6 @@ function SystemConsole() {
     }
     prevFinished.current = finished.length;
   }, [finishedQuery.isSuccess, finished.length]);
-
-  const nextScheduled = [...scheduled]
-    .filter((b) => b.scheduled_date)
-    .sort((a, b) => (a.scheduled_date! < b.scheduled_date! ? -1 : 1))[0];
-  const writing = generating[0];
-  const lastPublished = [...finished].sort((a, b) =>
-    (a.updated_at ?? a.created_at) > (b.updated_at ?? b.created_at) ? -1 : 1,
-  )[0];
-
-  async function setAutopilot(enabled: boolean) {
-    setSavingAutopilot(true);
-    try {
-      await updateAutopilot({ autopilot_enabled: enabled });
-      queryClient.setQueryData(["settings"], (s: typeof settings) => (s ? { ...s, autopilot_enabled: enabled } : s));
-      toast.success(enabled ? "Autopilot resumed." : "Autopilot paused — you're in manual control.");
-      queryClient.invalidateQueries({ queryKey: ["settings"] });
-    } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Could not update autopilot.");
-    } finally {
-      setSavingAutopilot(false);
-    }
-  }
-
-  async function setCadence(value: number) {
-    try {
-      await updateAutopilot({ weekly_cadence: value });
-      queryClient.setQueryData(["settings"], (s: typeof settings) => (s ? { ...s, weekly_cadence: value } : s));
-      queryClient.invalidateQueries({ queryKey: ["settings"] });
-    } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Could not update cadence.");
-    }
-  }
 
   async function addToQueue(opp: Blog) {
     setBusyId(opp.id);
@@ -421,77 +379,6 @@ function SystemConsole() {
       )}
 
       {/* Autopilot control */}
-      <Panel className="relative overflow-hidden p-5 sm:p-6">
-        <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
-          <div className="flex min-w-0 items-start gap-4">
-            <span
-              className={cn(
-                "grid h-11 w-11 shrink-0 place-items-center rounded-xl",
-                autopilotOn ? "bg-volt/10 text-volt" : "bg-secondary text-muted-foreground",
-              )}
-            >
-              <RocketIcon className="h-5 w-5" />
-            </span>
-            <div className="min-w-0">
-              <div className="flex flex-wrap items-center gap-2">
-                <h2 className="text-base font-semibold text-ink">Autopilot</h2>
-                <Pill tone={autopilotOn ? "success" : "neutral"}>
-                  {autopilotOn ? "Active" : "Paused"}
-                </Pill>
-              </div>
-              <p className="mt-1 text-sm text-muted-foreground">
-                {autopilotOn
-                  ? `Writing & publishing ${cadence} ${cadence === 1 ? "article" : "articles"} per week — fully hands-off.`
-                  : "Paused. You're in manual control — turn it back on to resume automatic publishing."}
-              </p>
-              {autopilotOn && (
-                <div className="mt-3 flex flex-wrap items-center gap-1.5">
-                  <span className="mr-1 text-xs font-medium text-muted-foreground">Per week:</span>
-                  {CADENCE_OPTIONS.map((n) => (
-                    <button
-                      key={n}
-                      type="button"
-                      onClick={() => setCadence(n)}
-                      className={cn(
-                        "rounded-lg border px-2.5 py-1 text-xs font-semibold transition-colors",
-                        cadence === n
-                          ? "border-volt bg-volt/10 text-volt"
-                          : "border-border bg-card text-muted-foreground hover:text-ink",
-                      )}
-                    >
-                      {n}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-          <div className="flex items-center justify-between gap-3 lg:justify-end">
-            <span className="text-sm font-medium text-ink">{autopilotOn ? "On" : "Off"}</span>
-            <Switch checked={autopilotOn} disabled={savingAutopilot} onCheckedChange={setAutopilot} />
-          </div>
-        </div>
-
-        {/* Live status strip */}
-        <div className="mt-5 grid gap-3 border-t border-border pt-5 sm:grid-cols-3">
-          <StatusItem
-            icon={<Loader2 className={cn("h-4 w-4", writing ? "animate-spin text-volt" : "text-muted-foreground")} />}
-            label="Writing now"
-            value={writing ? writing.title : "Idle"}
-          />
-          <StatusItem
-            icon={<VoltMark className="h-4 w-4 text-info" />}
-            label="Next up"
-            value={nextScheduled ? nextScheduled.title : "Nothing queued"}
-          />
-          <StatusItem
-            icon={<CheckIcon className="h-4 w-4 text-success" />}
-            label="Last published"
-            value={lastPublished ? lastPublished.title : "None yet"}
-          />
-        </div>
-      </Panel>
-
       {/* Stats + AI engines — one consolidated, hairline-divided panel */}
       <Panel className="overflow-hidden">
         <div className="grid grid-cols-2 gap-px bg-border lg:grid-cols-4">
@@ -621,16 +508,4 @@ function SystemConsole() {
   );
 }
 
-function StatusItem({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
-  return (
-    <div className="flex items-center gap-2.5">
-      <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg border border-border bg-secondary">
-        {icon}
-      </span>
-      <div className="min-w-0">
-        <p className="text-[0.62rem] font-semibold uppercase tracking-[0.08em] text-muted-foreground">{label}</p>
-        <p className="truncate text-sm font-medium text-ink">{value}</p>
-      </div>
-    </div>
-  );
-}
+
