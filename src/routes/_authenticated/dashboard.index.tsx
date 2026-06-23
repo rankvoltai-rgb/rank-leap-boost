@@ -483,11 +483,8 @@ function SystemConsole() {
           count={opportunities.length}
           empty={
             <span>
-              No new opportunities right now.{" "}
-              <Link to="/dashboard/keywords" className="text-ink underline">
-                Explore Keyword Lab
-              </Link>{" "}
-              to find more.
+              No new opportunities right now. Autopilot will surface new content gaps as it
+              scans your space.
             </span>
           }
         >
