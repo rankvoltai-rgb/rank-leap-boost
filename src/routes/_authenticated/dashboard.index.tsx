@@ -550,16 +550,4 @@ function SystemConsole() {
   );
 }
 
-function StatusItem({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
-  return (
-    <div className="flex items-center gap-2.5">
-      <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg border border-border bg-secondary">
-        {icon}
-      </span>
-      <div className="min-w-0">
-        <p className="text-[0.62rem] font-semibold uppercase tracking-[0.08em] text-muted-foreground">{label}</p>
-        <p className="truncate text-sm font-medium text-ink">{value}</p>
-      </div>
-    </div>
-  );
-}
+
