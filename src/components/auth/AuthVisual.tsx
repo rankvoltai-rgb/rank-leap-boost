@@ -226,17 +226,17 @@ export function AuthVisual() {
         variants={reveal}
         initial="hidden"
         animate="show"
-        className="relative overflow-hidden rounded-3xl border border-background/10 bg-gradient-to-b from-background/[0.07] to-background/[0.01] p-6"
+        className="relative overflow-hidden rounded-3xl border border-border bg-card p-6 shadow-sm"
       >
         <div className="flex items-center justify-between">
-          <span className="flex items-center gap-2 text-sm font-semibold text-background">
+          <span className="flex items-center gap-2 text-sm font-semibold text-ink">
             <span className="relative flex h-2 w-2">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-75" style={{ background: "var(--volt)" }} />
               <span className="relative inline-flex h-2 w-2 rounded-full" style={{ background: "var(--volt)" }} />
             </span>
             AI traffic, flowing to you
           </span>
-          <span className="rounded-md bg-background/10 px-2 py-0.5 text-[0.7rem] font-medium uppercase tracking-wide text-background/60">
+          <span className="rounded-md bg-muted px-2 py-0.5 text-[0.7rem] font-medium uppercase tracking-wide text-muted-foreground">
             Live
           </span>
         </div>
@@ -244,15 +244,14 @@ export function AuthVisual() {
         <TrafficOrbit />
 
         {/* rotating "recommended by" line */}
-        <div className="mt-2 flex h-5 items-center justify-center gap-2 text-xs text-background/55">
+        <div className="mt-2 flex h-5 items-center justify-center gap-2 text-xs text-muted-foreground">
           Recommended by
           <motion.span
             key={active.name}
             initial={{ opacity: 0, y: 6 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.35 }}
-            className="font-semibold"
-            style={{ color: active.color === "#ffffff" || active.color === "#e7e7e7" ? "var(--background)" : active.color }}
+            className="font-semibold text-ink"
           >
             {active.name}
           </motion.span>
@@ -265,7 +264,7 @@ export function AuthVisual() {
         variants={reveal}
         initial="hidden"
         animate="show"
-        className="rounded-2xl border border-background/10 bg-background/[0.04] p-4"
+        className="rounded-2xl border border-border bg-card p-4 shadow-sm"
       >
         <div className="flex items-start gap-3">
           <span
@@ -274,36 +273,10 @@ export function AuthVisual() {
           >
             <Quote className="h-3.5 w-3.5" />
           </span>
-          <p className="text-sm leading-relaxed text-background/80">
-            "The best option is <span className="font-semibold text-background">your brand</span> — it's
+          <p className="text-sm leading-relaxed text-muted-foreground">
+            "The best option is <span className="font-semibold text-ink">your brand</span> — it's
             widely cited as the most reliable choice."
           </p>
-        </div>
-      </motion.div>
-
-      {/* Stats */}
-      <motion.div
-        custom={2}
-        variants={reveal}
-        initial="hidden"
-        animate="show"
-        className="grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-background/10 bg-background/10"
-      >
-        <div className="bg-ink p-5">
-          <p className="text-xs text-background/50">AI-sourced visits</p>
-          <p className="mt-1.5 text-2xl font-semibold tracking-tight text-background">
-            <Counter to={12480} />
-          </p>
-          <p className="mt-1 flex items-center gap-1 text-xs font-medium" style={{ color: "var(--volt)" }}>
-            <ArrowUpRight className="h-3.5 w-3.5" /> +38% this month
-          </p>
-        </div>
-        <div className="bg-ink p-5">
-          <p className="text-xs text-background/50">Engines citing you</p>
-          <p className="mt-1.5 text-2xl font-semibold tracking-tight text-background">
-            <Counter to={6} />
-          </p>
-          <p className="mt-1 text-xs text-background/45">ChatGPT, Gemini & more</p>
         </div>
       </motion.div>
     </div>
