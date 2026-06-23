@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
 import { FEATURE_SLUGS } from "@/data/features";
+import { TOOL_SLUGS } from "@/data/tools";
 
 const BASE_URL = "https://rankvolt.top";
 
@@ -19,6 +20,12 @@ export const Route = createFileRoute("/sitemap.xml")({
           { path: "/features", changefreq: "weekly", priority: "0.8" },
           ...FEATURE_SLUGS.map((slug) => ({
             path: `/features/${slug}`,
+            changefreq: "monthly" as const,
+            priority: "0.7",
+          })),
+          { path: "/tools", changefreq: "weekly", priority: "0.8" },
+          ...TOOL_SLUGS.map((slug) => ({
+            path: `/tools/${slug}`,
             changefreq: "monthly" as const,
             priority: "0.7",
           })),

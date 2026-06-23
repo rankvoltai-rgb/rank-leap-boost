@@ -1,23 +1,29 @@
 import { Link } from "@tanstack/react-router";
 import { Logo } from "./shared";
 
-const COLS = [
-  { title: "Product", links: [{ label: "How It Works" }, { label: "Sample Articles" }, { label: "Pricing" }, { label: "Proof" }] },
-  { title: "Features", links: [{ label: "Growth Automation" }, { label: "Citation-Ready Writer" }, { label: "Answer-Space Research" }, { label: "Backlinks" }] },
-  { title: "Company", links: [{ label: "About" }, { label: "Blog" }, { label: "Careers" }, { label: "Contact" }] },
-  {
-    title: "Legal",
-    links: [
-      { label: "Privacy", to: "/legal/privacy" },
-      { label: "Terms", to: "/legal/terms" },
-      { label: "Refunds", to: "/legal/refunds" },
-      { label: "Cookies", to: "/legal/cookies" },
-      { label: "Acceptable Use", to: "/legal/acceptable-use" },
-      { label: "DPA", to: "/legal/dpa" },
-      { label: "Trust & Security", to: "/trust" },
-    ],
-  },
+const PLACEHOLDER_COLS = [
+  { title: "Product", links: ["How It Works", "Sample Articles", "Pricing", "Proof"] },
+  { title: "Features", links: ["Growth Automation", "Citation-Ready Writer", "Answer-Space Research", "Backlinks"] },
 ];
+
+const TOOL_LINKS = [
+  { label: "llms.txt Generator", slug: "llms-txt-generator" },
+  { label: "AI robots.txt Generator", slug: "ai-robots-txt-generator" },
+  { label: "Schema Generator", slug: "schema-generator" },
+  { label: "SERP Snippet Preview", slug: "serp-snippet-preview" },
+] as const;
+
+const LEGAL_LINKS = [
+  { label: "Privacy", to: "/legal/privacy" },
+  { label: "Terms", to: "/legal/terms" },
+  { label: "Refunds", to: "/legal/refunds" },
+  { label: "Cookies", to: "/legal/cookies" },
+  { label: "Acceptable Use", to: "/legal/acceptable-use" },
+  { label: "DPA", to: "/legal/dpa" },
+  { label: "Trust & Security", to: "/trust" },
+] as const;
+
+const linkClass = "text-sm text-muted-foreground transition-colors hover:text-ink";
 
 export function Footer() {
   return (
@@ -31,32 +37,51 @@ export function Footer() {
               to get you cited by AI and ranked on Google.
             </p>
           </div>
-          {COLS.map((c) => (
+          {PLACEHOLDER_COLS.map((c) => (
             <div key={c.title}>
               <p className="text-sm font-semibold text-ink">{c.title}</p>
               <ul className="mt-3 space-y-2">
-                {c.links.map((l) => (
-                  <li key={l.label}>
-                    {"to" in l && l.to ? (
-                      <Link
-                        to={l.to}
-                        className="text-sm text-muted-foreground transition-colors hover:text-ink"
-                      >
-                        {l.label}
-                      </Link>
-                    ) : (
-                      <a
-                        href="#top"
-                        className="text-sm text-muted-foreground transition-colors hover:text-ink"
-                      >
-                        {l.label}
-                      </a>
-                    )}
+                {c.links.map((label) => (
+                  <li key={label}>
+                    <a href="#top" className={linkClass}>
+                      {label}
+                    </a>
                   </li>
                 ))}
               </ul>
             </div>
           ))}
+
+          <div>
+            <p className="text-sm font-semibold text-ink">Free Tools</p>
+            <ul className="mt-3 space-y-2">
+              <li>
+                <Link to="/tools" className={linkClass}>
+                  All Free Tools
+                </Link>
+              </li>
+              {TOOL_LINKS.map((t) => (
+                <li key={t.slug}>
+                  <Link to="/tools/$slug" params={{ slug: t.slug }} className={linkClass}>
+                    {t.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <p className="text-sm font-semibold text-ink">Legal</p>
+            <ul className="mt-3 space-y-2">
+              {LEGAL_LINKS.map((l) => (
+                <li key={l.label}>
+                  <Link to={l.to} className={linkClass}>
+                    {l.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
         <div className="mt-12 flex flex-col items-center justify-between gap-3 border-t border-border pt-6 sm:flex-row">
           <p className="text-xs text-muted-foreground">© 2026 Rankvolt. All rights reserved.</p>
