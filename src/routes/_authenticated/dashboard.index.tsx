@@ -4,7 +4,6 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 import {
-  CheckIcon,
   AddIcon,
   TrendIcon,
   VoltMark,
@@ -20,9 +19,7 @@ import {
 import {
   listBlogs,
   getCredits,
-  getSettings,
   addOpportunityToQueue,
-  updateAutopilot,
   generateBlogArticle,
   prioritizeBlog,
   deleteBlog,
@@ -42,7 +39,6 @@ import { DataTable, Tr, Td, TdActions, type Column } from "@/components/dashboar
 import { AI_ALGORITHM_MARKS } from "@/components/landing/ai-logos";
 import { Confetti } from "@/components/dashboard/rewards";
 import { CreditPaywallDialog } from "@/components/dashboard/CreditPaywallDialog";
-import { Switch } from "@/components/ui/switch";
 import { CountUp } from "@/components/ui/count-up";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
@@ -51,7 +47,6 @@ export const Route = createFileRoute("/_authenticated/dashboard/")({
   component: SystemConsole,
 });
 
-const CADENCE_OPTIONS = [1, 3, 5, 7];
 const MONTHLY_GOAL = 30; // articles per month target
 
 function timeGreeting() {
