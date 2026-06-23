@@ -230,7 +230,8 @@ export function AuthSplit() {
             Sign in → connect site → done
           </span>
           <h2 className="mt-6 max-w-md text-[1.75rem] font-semibold leading-[1.15] tracking-tight text-background">
-            Get AI traffic on Autopilot, while you sleep
+            Get AI traffic on Autopilot,{"\u00a0"}<br />
+            while you sleep
           </h2>
           <p className="mt-3 max-w-sm text-sm leading-relaxed text-background/75">
             Your brand, cited across every major AI engine and surfaced where buyers ask.
