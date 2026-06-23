@@ -113,8 +113,8 @@ function TrafficOrbit() {
               y1={node.y}
               x2="50"
               y2="50"
-              stroke="var(--border)"
-              strokeWidth="0.4"
+              stroke="color-mix(in oklab, var(--volt) 30%, var(--border))"
+              strokeWidth="0.45"
               strokeDasharray="1.4 2.2"
             />
             {/* traffic packet flowing inward */}
@@ -141,12 +141,12 @@ function TrafficOrbit() {
 
       {/* decorative rotating rings */}
       <motion.span
-        className="absolute inset-[8%] rounded-full border border-dashed border-border"
+        className="absolute inset-[8%] rounded-full border border-dashed border-border/80"
         animate={{ rotate: 360 }}
         transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
       />
       <motion.span
-        className="absolute inset-[22%] rounded-full border border-border/60"
+        className="absolute inset-[22%] rounded-full border border-border/50"
         animate={{ rotate: -360 }}
         transition={{ duration: 38, repeat: Infinity, ease: "linear" }}
       />
@@ -169,9 +169,9 @@ function TrafficOrbit() {
             }}
           >
             <div
-              className="flex h-12 w-12 items-center justify-center rounded-2xl border border-border bg-card shadow-sm"
+              className="flex h-12 w-12 items-center justify-center rounded-2xl bg-card ring-1 ring-ink/[0.06]"
               style={{
-                boxShadow: `0 8px 22px -12px ${node.color}`,
+                boxShadow: `0 10px 24px -14px ${node.color}, 0 4px 12px -8px rgba(15,23,42,0.25)`,
                 color: isGoogle ? undefined : node.color,
               }}
               title={node.name}
@@ -191,15 +191,19 @@ function TrafficOrbit() {
         transition={{ duration: 0.6, delay: 0.2, ease: [0.34, 1.56, 0.64, 1] }}
       >
         <span
-          className="absolute inset-0 -z-10 animate-ping rounded-3xl opacity-20"
+          className="absolute -inset-3 -z-10 rounded-[2rem] opacity-40 blur-xl"
+          style={{ background: "radial-gradient(circle, var(--volt), transparent 70%)" }}
+        />
+        <span
+          className="absolute inset-0 -z-10 animate-ping rounded-3xl opacity-15"
           style={{ background: "var(--volt)" }}
         />
         <div
-          className="flex h-20 w-20 flex-col items-center justify-center gap-1 rounded-3xl border border-border bg-card"
-          style={{ boxShadow: "0 0 36px -10px var(--volt)" }}
+          className="flex h-20 w-20 flex-col items-center justify-center gap-1 rounded-3xl bg-card ring-1 ring-ink/[0.06]"
+          style={{ boxShadow: "0 0 0 6px color-mix(in oklab, var(--volt) 14%, transparent), 0 18px 40px -16px rgba(15,23,42,0.4)" }}
         >
           <img src={rankvoltMark.url} alt="Rankvolt" className="h-8 w-8 object-contain" />
-          <span className="text-[0.6rem] font-semibold uppercase tracking-wide text-muted-foreground">
+          <span className="text-[0.58rem] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
             You
           </span>
         </div>
