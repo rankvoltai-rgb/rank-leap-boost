@@ -1,18 +1,7 @@
-import { motion, useMotionValue, useTransform, animate, type Variants } from "motion/react";
+import { motion, type Variants } from "motion/react";
 import { useEffect, useState, type ReactElement } from "react";
-import { ArrowUpRight, Quote } from "lucide-react";
+import { Quote } from "lucide-react";
 import rankvoltMark from "@/assets/rankvolt-mark.png.asset.json";
-
-/* ---------- Animated number counter ---------- */
-function Counter({ to, suffix = "" }: { to: number; suffix?: string }) {
-  const count = useMotionValue(0);
-  const rounded = useTransform(count, (v) => `${Math.round(v).toLocaleString()}${suffix}`);
-  useEffect(() => {
-    const controls = animate(count, to, { duration: 2, ease: [0.16, 1, 0.3, 1] });
-    return controls.stop;
-  }, [count, to]);
-  return <motion.span>{rounded}</motion.span>;
-}
 
 /* ---------- AI engine brand marks (bespoke SVG, not lucide) ---------- */
 function ChatGPTLogo({ className }: { className?: string }) {
