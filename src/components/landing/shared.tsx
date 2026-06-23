@@ -144,7 +144,7 @@ const BRAND_COLORS: Record<string, string> = {
   Shopify: "bg-[#95bf47]",
   Webflow: "bg-[#4353ff]",
   Wix: "bg-[#0c6efc]",
-  Framer: "bg-[#0099ff]",
+  Framer: "bg-ink",
   Webhooks: "bg-[#6b7280]",
   ChatGPT: "bg-[#10a37f]",
   Claude: "bg-[#d97757]",
