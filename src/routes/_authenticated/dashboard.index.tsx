@@ -208,7 +208,6 @@ function SystemConsole() {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const [busyId, setBusyId] = useState<string | null>(null);
-  const [savingAutopilot, setSavingAutopilot] = useState(false);
   const [confettiKey, setConfettiKey] = useState(0);
   const prevFinished = useRef<number | null>(null);
   const armed = useRef(false);
@@ -259,12 +258,8 @@ function SystemConsole() {
       return full.trim().split(/\s+/)[0] ?? "";
     },
   });
-  const { data: settings } = useQuery({ queryKey: ["settings"], queryFn: getSettings });
   const { data: subscription } = useQuery({ queryKey: ["subscription"], queryFn: getSubscription });
   const [paywallOpen, setPaywallOpen] = useState(false);
-
-  const autopilotOn = settings?.autopilot_enabled ?? true;
-  const cadence = settings?.weekly_cadence ?? 7;
 
   const estimatedTraffic = allBlogs.reduce((sum, b) => sum + (b.traffic_estimate ?? 0), 0);
   const queue = [...generating, ...scheduled];
@@ -288,38 +283,6 @@ function SystemConsole() {
     }
     prevFinished.current = finished.length;
   }, [finishedQuery.isSuccess, finished.length]);
-
-  const nextScheduled = [...scheduled]
-    .filter((b) => b.scheduled_date)
-    .sort((a, b) => (a.scheduled_date! < b.scheduled_date! ? -1 : 1))[0];
-  const writing = generating[0];
-  const lastPublished = [...finished].sort((a, b) =>
-    (a.updated_at ?? a.created_at) > (b.updated_at ?? b.created_at) ? -1 : 1,
-  )[0];
-
-  async function setAutopilot(enabled: boolean) {
-    setSavingAutopilot(true);
-    try {
-      await updateAutopilot({ autopilot_enabled: enabled });
-      queryClient.setQueryData(["settings"], (s: typeof settings) => (s ? { ...s, autopilot_enabled: enabled } : s));
-      toast.success(enabled ? "Autopilot resumed." : "Autopilot paused — you're in manual control.");
-      queryClient.invalidateQueries({ queryKey: ["settings"] });
-    } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Could not update autopilot.");
-    } finally {
-      setSavingAutopilot(false);
-    }
-  }
-
-  async function setCadence(value: number) {
-    try {
-      await updateAutopilot({ weekly_cadence: value });
-      queryClient.setQueryData(["settings"], (s: typeof settings) => (s ? { ...s, weekly_cadence: value } : s));
-      queryClient.invalidateQueries({ queryKey: ["settings"] });
-    } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Could not update cadence.");
-    }
-  }
 
   async function addToQueue(opp: Blog) {
     setBusyId(opp.id);
