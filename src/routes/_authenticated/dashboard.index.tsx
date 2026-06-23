@@ -351,6 +351,7 @@ function SystemConsole() {
         subscription={subscription}
       />
       <PageHeader
+        size="lg"
         title={`${timeGreeting()}${firstName ? `, ${firstName}` : ""}`}
         description={
           finished.length > 0

@@ -342,17 +342,29 @@ export function PageHeader({
   title,
   description,
   action,
+  size = "default",
 }: {
   title: string;
   description?: string;
   action?: ReactNode;
+  size?: "default" | "lg";
 }) {
+  const lg = size === "lg";
   return (
     <div className="flex flex-wrap items-start justify-between gap-3 border-b border-border pb-6">
       <div>
-        <h1 className="text-[1.7rem] font-semibold tracking-tight text-ink">{title}</h1>
+        <h1
+          className={cn(
+            "font-semibold tracking-tight text-ink",
+            lg ? "text-3xl sm:text-[2.5rem] sm:leading-[1.1]" : "text-[1.7rem]",
+          )}
+        >
+          {title}
+        </h1>
         {description && (
-          <p className="mt-1.5 text-sm text-muted-foreground">{description}</p>
+          <p className={cn("text-muted-foreground", lg ? "mt-2.5 text-base sm:text-lg" : "mt-1.5 text-sm")}>
+            {description}
+          </p>
         )}
       </div>
       {action}
