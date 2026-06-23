@@ -72,20 +72,6 @@ function CalendarPage() {
         description="Your autopilot publishing schedule — drag, reorder, or reschedule anything autopilot has queued."
       />
 
-      <div className="grid grid-cols-2 gap-4 lg:grid-cols-3">
-        <StatCard label="In Queue" value={queue.length} hint="Articles scheduled" emphasis />
-        <StatCard
-          label="Next Publish"
-          value={nextDate ? prettyDate(nextDate).replace(/^[A-Za-z]+, /, "") : "—"}
-          hint="Soonest scheduled date"
-        />
-        <StatCard
-          label="Queued Traffic"
-          value={totalTraffic.toLocaleString()}
-          hint="Est. monthly visitors"
-        />
-      </div>
-
       {isLoading ? (
         <Panel className="flex items-center justify-center p-12 text-sm text-muted-foreground">
           <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Loading…
