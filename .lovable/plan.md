@@ -1,50 +1,54 @@
-# Google Calendar–style Calendar
+# Free Tools — AI Search SEO Toolkit
 
-Rebuild `/dashboard/calendar` so it looks and behaves like Google Calendar, while staying wired to the existing `blogs` data (scheduled + generating articles). No backend/schema changes — only the calendar UI and the reads/writes it already uses (`listBlogs`, `updateBlog`, `prioritizeBlog`).
+Build a free-tools hub designed to pull Google traffic and earn AI-search citations. A clean, Notion-style index page lists every tool; clicking one opens its own dedicated, interactive page. Each tool page is SEO-optimized (unique title, meta, JSON-LD) so it can rank on its own.
 
-## What it will look like
+## What we're building
+
+**Footer:** Add a new "Free Tools" column linking to `/tools` and to each individual tool.
+
+**Index page (`/tools`):** Notion-style — generous whitespace, refined type, no icon clutter. A short hero, then tools grouped into two simple lists ("Instant tools" and "AI-powered tools") rendered as clean text-forward rows with name + one-line description + a quiet "Open →" affordance. No heavy cards or busy graphics.
+
+**Tool detail pages (`/tools/$slug`):** Each is a real, working tool with a consistent layout: title, one-paragraph intro, the interactive tool itself, a short "How to use" + FAQ section (great for SEO/JSON-LD), and a soft CTA to Rankvolt.
+
+## Tools (7 total)
+
+**Instant — client-side, no credits, instant results:**
+1. **llms.txt Generator** — fill in site name, description, key URLs → generates a valid `llms.txt` file with copy/download.
+2. **AI Crawler robots.txt Generator** — toggle allow/block for GPTBot, ClaudeBot, PerplexityBot, Google-Extended, CCBot, etc. → outputs robots.txt.
+3. **Schema / JSON-LD Generator** — pick a type (FAQ, Article, Organization, Product), fill fields → outputs ready-to-paste JSON-LD `<script>`.
+4. **SERP & AI Snippet Preview** — type title + meta description + URL → live Google-style preview with real-time length/pixel warnings.
+
+**AI-powered (uses Lovable AI credits, runs server-side):**
+5. **AI Question Generator** — topic → the real questions people ask AI engines, grouped by intent.
+6. **Content Brief Generator** — keyword → outline, questions to answer, entities/terms to cover.
+7. **Meta Description Writer** — page topic/URL → 3 length-optimized meta descriptions.
+
+## How it works (technical)
 
 ```text
-┌──────────────────────────────────────────────────────────────┐
-│  [Today] [‹] [›]   June 2026            [ Month | Week | List ]│
-├──────┬──────┬──────┬──────┬──────┬──────┬──────────────────────┤
-│ SUN  │ MON  │ TUE  │ WED  │ THU  │ FRI  │ SAT                   │
-├──────┼──────┼──────┼──────┼──────┼──────┼──────────────────────┤
-│  31  │  1   │  2   │  3   │  4   │  5   │  6                    │
-│      │ ▦evt │      │ ▦evt │      │      │                       │
-│      │ ▦evt │      │      │      │      │                       │
-├──────┼──────┼──────┼──────┼──────┼──────┼──────────────────────┤
-│  7   │ [8]  │  9   │ ...  (today highlighted with volt ring)    │
-└──────┴──────┴──────┴──────┴──────┴──────┴──────────────────────┘
+src/routes/
+  tools.index.tsx        -> /tools (Notion-style hub)
+  tools.$slug.tsx        -> /tools/<slug> (loads tool by slug, renders its component)
+src/data/tools.ts        -> tool registry: slug, name, group, tagline, meta, faqs, howto
+src/components/tools/
+  ToolLayout.tsx         -> shared page shell (intro, body slot, howto, FAQ, CTA, JSON-LD)
+  ToolField.tsx, CopyBox.tsx -> shared inputs + copy/download output box
+  LlmsTxtGenerator.tsx
+  RobotsTxtGenerator.tsx
+  SchemaGenerator.tsx
+  SnippetPreview.tsx
+  AiQuestionGenerator.tsx
+  ContentBriefGenerator.tsx
+  MetaWriter.tsx
 ```
 
-- **Top toolbar:** `Today` button, prev/next month arrows (chevrons), the current period label (e.g. "June 2026"), and a segmented **Month / Week / List** view switcher on the right.
-- **Month grid:** classic 7-column layout with weekday headers and 5–6 week rows. Each day cell shows the date number; today gets a filled volt circle on the number; days outside the current month are dimmed. Each cell stacks up to ~3 event chips with a "+N more" overflow that opens that day's list.
-- **Event chips:** colored pills with a status dot — scheduled (volt/info) vs generating (animated pulse, "Writing"). Show the article title, truncated.
-- **Week view:** the same 7 columns for the current week with taller cells so every event is visible without overflow.
-- **List (agenda) view:** the current grouped-by-date layout, kept as a familiar fallback for dense queues.
+- Mirrors the existing `features.index.tsx` / `features.$slug.tsx` + `src/data/features.ts` pattern, including `head()` meta, canonical tags, and FAQ + Breadcrumb JSON-LD per page.
+- The `$slug` route maps each slug to its tool component via the registry; unknown slugs throw `notFound()` with a friendly fallback (same as features).
+- **Styling:** semantic tokens only (`bg-background`, `text-ink`, `border-border`, `--volt` accent), Poppins, `Reveal`/`Eyebrow` from `shared.tsx`. Notion vibe = lots of whitespace, hairline borders, minimal icons.
+- **AI tools:** add three server functions in `src/lib/ai.functions.ts` (reusing the existing `ai-gateway.server.ts` Lovable AI provider) returning structured output. Each AI tool page shows loading, results, and surfaces credit-exhausted (402) / rate-limit (429) errors clearly. No API key needed.
+- **SEO:** add all `/tools` URLs to `src/routes/sitemap[.]xml.ts`. Each tool page gets distinct title/description and JSON-LD so it ranks independently.
 
-## Interactions (the "functional" part)
-
-- **Navigate:** prev/next moves by month (month view) or week (week view); `Today` jumps back to the current period and is disabled when already there.
-- **Drag to reschedule:** drag an event chip onto another day cell → calls `updateBlog(id, { scheduled_date })`, optimistic UI, toast confirm, and `queryClient.invalidateQueries(["blogs"])`. Drop target highlights on drag-over. (Native HTML5 drag-and-drop — no new dependency.)
-- **Click an event:** opens a Popover/detail card anchored to the chip with: title, traffic estimate, keyword, status; and actions **Reschedule** (date picker), **Prioritize** (existing `prioritizeBlog`), and **Open in editor** (link to `/dashboard/editor/$blogId`). The existing reschedule Popover/Calendar is reused inside this card.
-- **Click an empty day:** opens that day's agenda list (and, when the queue is empty, shows a CTA pointing to Overview, same as today).
-- **Unscheduled items:** a slim "Unscheduled" strip/column above or below the grid holds articles with no `scheduled_date`; dragging one onto a day schedules it.
-
-## Stats row
-
-Keep the three stat cards (In Queue / Next Publish / Queued Traffic) above the calendar, restyled to sit cleanly with the new toolbar.
-
-## Technical details
-
-- File: rewrite `src/routes/_authenticated/dashboard.calendar.tsx`. Optionally extract the grid into `src/components/dashboard/CalendarBoard.tsx` to keep the route readable.
-- Data: unchanged — `useQuery(["blogs","calendar"])` fetching `scheduled` + `generating`; mutations via `updateBlog` / `prioritizeBlog` with `useQueryClient` invalidation.
-- Dates: use `date-fns` (already installed) — `startOfMonth`, `endOfMonth`, `startOfWeek`, `endOfWeek`, `eachDayOfInterval`, `addMonths`, `addWeeks`, `isSameDay`, `isSameMonth`, `format`. Date keys stay `yyyy-MM-dd` to match `scheduled_date`.
-- State: `viewDate` (anchor), `view` ("month" | "week" | "list"), `selectedEvent`, `dragId`. Light entrance/transition polish with `motion` (already installed); respect reduced motion.
-- Styling: semantic tokens only (`bg-card`, `border-border`, `text-ink`, `text-muted-foreground`, `volt`, `info`, `success`, `shadow-elevation`). No hardcoded colors. Responsive: month grid on desktop; on small screens default to the List/agenda view since a 7-column grid is cramped on mobile.
-- No schema, RLS, or server-function changes.
-
-## Out of scope
-
-- Recurring events, multi-day spanning bars, external Google Calendar sync, and time-of-day hourly grids (articles are day-scheduled, not time-scheduled) — unless you want them as a follow-up.
+## Notes
+- Instant tools require no backend and cost nothing to run — safe for unlimited traffic.
+- AI tools consume Lovable AI credits per use; I'll keep prompts tight and outputs compact to control cost.
+- I'll ship all 7 in this build unless you'd rather start with the 4 instant tools and add the AI ones in a follow-up.
