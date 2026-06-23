@@ -63,7 +63,7 @@ const ENGINES: Engine[] = [
   { name: "Google", Logo: GoogleLogo, color: "#ffffff", brandTint: true },
   { name: "Perplexity", Logo: PerplexityLogo, color: "#20b8cd" },
   { name: "Claude", Logo: ClaudeLogo, color: "#d97757" },
-  { name: "Grok", Logo: GrokLogo, color: "#e7e7e7" },
+  { name: "Grok", Logo: GrokLogo, color: "#1a1a1a" },
 ];
 
 /* node positions on a circle (viewBox-relative %), starting at top, clockwise */
