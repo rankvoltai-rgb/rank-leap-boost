@@ -269,3 +269,13 @@ export function ChartIcon({ className, accent }: IconProps) {
     </Svg>
   );
 }
+
+// Sign out — a door with an exiting arrow, charged at the threshold.
+export function SignOutIcon({ className }: IconProps) {
+  return (
+    <Svg className={className}>
+      <path d="M9 4.5H6.5A1.5 1.5 0 0 0 5 6v12a1.5 1.5 0 0 0 1.5 1.5H9" />
+      <path d="M14.5 8.5 18.5 12l-4 3.5M18.5 12H10" />
+    </Svg>
+  );
+}
