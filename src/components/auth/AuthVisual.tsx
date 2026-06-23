@@ -223,16 +223,19 @@ export function AuthVisual() {
   const active = ENGINES[tick];
 
   return (
-    <div className="relative mt-8 space-y-5">
+    <div className="relative mt-8 space-y-4">
       {/* Orbit hero */}
       <motion.div
         custom={0}
         variants={reveal}
         initial="hidden"
         animate="show"
-        className="relative overflow-hidden rounded-3xl border border-border bg-card p-6 shadow-sm"
+        className="relative overflow-hidden rounded-[1.75rem] bg-card p-6 ring-1 ring-ink/[0.05]"
+        style={{ boxShadow: "0 28px 64px -28px rgba(15,23,42,0.5)" }}
       >
-        <div className="flex items-center justify-between">
+        {/* subtle top sheen */}
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-muted/60 to-transparent" />
+        <div className="relative flex items-center justify-between">
           <span className="flex items-center gap-2 text-sm font-semibold text-ink">
             <span className="relative flex h-2 w-2">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-75" style={{ background: "var(--volt)" }} />
@@ -240,7 +243,8 @@ export function AuthVisual() {
             </span>
             AI traffic, flowing to you
           </span>
-          <span className="rounded-md bg-muted px-2 py-0.5 text-[0.7rem] font-medium uppercase tracking-wide text-muted-foreground">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-muted px-2.5 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.1em] text-muted-foreground">
+            <span className="h-1.5 w-1.5 rounded-full" style={{ background: "var(--volt)" }} />
             Live
           </span>
         </div>
@@ -248,7 +252,7 @@ export function AuthVisual() {
         <TrafficOrbit />
 
         {/* rotating "recommended by" line */}
-        <div className="mt-2 flex h-5 items-center justify-center gap-2 text-xs text-muted-foreground">
+        <div className="relative mt-3 flex h-5 items-center justify-center gap-1.5 text-xs text-muted-foreground">
           Recommended by
           <motion.span
             key={active.name}
@@ -268,12 +272,13 @@ export function AuthVisual() {
         variants={reveal}
         initial="hidden"
         animate="show"
-        className="rounded-2xl border border-border bg-card p-4 shadow-sm"
+        className="rounded-2xl bg-card p-4 ring-1 ring-ink/[0.05]"
+        style={{ boxShadow: "0 18px 44px -24px rgba(15,23,42,0.45)" }}
       >
         <div className="flex items-start gap-3">
           <span
             className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg"
-            style={{ background: "var(--volt)", color: "white" }}
+            style={{ background: "var(--volt)", color: "white", boxShadow: "0 6px 16px -6px var(--volt)" }}
           >
             <Quote className="h-3.5 w-3.5" />
           </span>
