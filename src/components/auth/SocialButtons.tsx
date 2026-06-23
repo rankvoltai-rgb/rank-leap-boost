@@ -25,6 +25,14 @@ function GoogleIcon() {
   );
 }
 
+function AppleIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-5 w-5" aria-hidden fill="currentColor">
+      <path d="M16.36 12.78c.02 2.5 2.18 3.33 2.2 3.34-.02.06-.34 1.18-1.13 2.34-.68 1-1.39 2-2.51 2.02-1.1.02-1.45-.65-2.7-.65-1.26 0-1.65.63-2.69.67-1.08.04-1.9-1.08-2.59-2.08-1.4-2.04-2.48-5.76-1.04-8.27.72-1.25 2-2.04 3.39-2.06 1.06-.02 2.06.71 2.71.71.65 0 1.87-.88 3.15-.75.54.02 2.05.22 3.02 1.64-.08.05-1.8 1.05-1.78 3.13M14.3 4.93c.57-.69.96-1.65.85-2.61-.83.03-1.83.55-2.42 1.24-.53.61-.99 1.59-.87 2.53.92.07 1.87-.47 2.44-1.16" />
+    </svg>
+  );
+}
+
 
 function SocialButton({
   children,
@@ -54,10 +62,22 @@ export function SocialButtons() {
     }
   }
 
+  async function apple() {
+    const result = await lovable.auth.signInWithOAuth("apple", {
+      redirect_uri: window.location.origin + "/onboarding",
+    });
+    if (result?.error) {
+      toast.error("Could not sign in with Apple. Please try again.");
+    }
+  }
+
   return (
     <div className="grid grid-cols-1 gap-3">
       <SocialButton onClick={google}>
         <GoogleIcon /> Google
+      </SocialButton>
+      <SocialButton onClick={apple}>
+        <AppleIcon /> Apple
       </SocialButton>
     </div>
   );
