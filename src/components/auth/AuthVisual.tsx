@@ -1,18 +1,7 @@
-import { motion, useMotionValue, useTransform, animate, type Variants } from "motion/react";
+import { motion, type Variants } from "motion/react";
 import { useEffect, useState, type ReactElement } from "react";
-import { ArrowUpRight, Quote } from "lucide-react";
+import { Quote } from "lucide-react";
 import rankvoltMark from "@/assets/rankvolt-mark.png.asset.json";
-
-/* ---------- Animated number counter ---------- */
-function Counter({ to, suffix = "" }: { to: number; suffix?: string }) {
-  const count = useMotionValue(0);
-  const rounded = useTransform(count, (v) => `${Math.round(v).toLocaleString()}${suffix}`);
-  useEffect(() => {
-    const controls = animate(count, to, { duration: 2, ease: [0.16, 1, 0.3, 1] });
-    return controls.stop;
-  }, [count, to]);
-  return <motion.span>{rounded}</motion.span>;
-}
 
 /* ---------- AI engine brand marks (bespoke SVG, not lucide) ---------- */
 function ChatGPTLogo({ className }: { className?: string }) {
@@ -74,7 +63,7 @@ const ENGINES: Engine[] = [
   { name: "Google", Logo: GoogleLogo, color: "#ffffff", brandTint: true },
   { name: "Perplexity", Logo: PerplexityLogo, color: "#20b8cd" },
   { name: "Claude", Logo: ClaudeLogo, color: "#d97757" },
-  { name: "Grok", Logo: GrokLogo, color: "#e7e7e7" },
+  { name: "Grok", Logo: GrokLogo, color: "#1a1a1a" },
 ];
 
 /* node positions on a circle (viewBox-relative %), starting at top, clockwise */
@@ -124,7 +113,7 @@ function TrafficOrbit() {
               y1={node.y}
               x2="50"
               y2="50"
-              stroke="hsl(0 0% 100% / 0.08)"
+              stroke="var(--border)"
               strokeWidth="0.4"
               strokeDasharray="1.4 2.2"
             />
@@ -152,12 +141,12 @@ function TrafficOrbit() {
 
       {/* decorative rotating rings */}
       <motion.span
-        className="absolute inset-[8%] rounded-full border border-dashed border-background/10"
+        className="absolute inset-[8%] rounded-full border border-dashed border-border"
         animate={{ rotate: 360 }}
         transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
       />
       <motion.span
-        className="absolute inset-[22%] rounded-full border border-background/[0.06]"
+        className="absolute inset-[22%] rounded-full border border-border/60"
         animate={{ rotate: -360 }}
         transition={{ duration: 38, repeat: Infinity, ease: "linear" }}
       />
@@ -180,9 +169,9 @@ function TrafficOrbit() {
             }}
           >
             <div
-              className="flex h-12 w-12 items-center justify-center rounded-2xl border border-background/15 bg-ink/80 shadow-lg backdrop-blur-sm"
+              className="flex h-12 w-12 items-center justify-center rounded-2xl border border-border bg-card shadow-sm"
               style={{
-                boxShadow: `0 6px 20px -8px ${node.color}80`,
+                boxShadow: `0 8px 22px -12px ${node.color}`,
                 color: isGoogle ? undefined : node.color,
               }}
               title={node.name}
@@ -202,15 +191,15 @@ function TrafficOrbit() {
         transition={{ duration: 0.6, delay: 0.2, ease: [0.34, 1.56, 0.64, 1] }}
       >
         <span
-          className="absolute inset-0 -z-10 animate-ping rounded-3xl opacity-30"
+          className="absolute inset-0 -z-10 animate-ping rounded-3xl opacity-20"
           style={{ background: "var(--volt)" }}
         />
         <div
-          className="flex h-20 w-20 flex-col items-center justify-center gap-1 rounded-3xl border border-background/20 bg-background/[0.06] backdrop-blur-md"
-          style={{ boxShadow: "0 0 40px -6px var(--volt)" }}
+          className="flex h-20 w-20 flex-col items-center justify-center gap-1 rounded-3xl border border-border bg-card"
+          style={{ boxShadow: "0 0 36px -10px var(--volt)" }}
         >
           <img src={rankvoltMark.url} alt="Rankvolt" className="h-8 w-8 object-contain" />
-          <span className="text-[0.6rem] font-semibold uppercase tracking-wide text-background/70">
+          <span className="text-[0.6rem] font-semibold uppercase tracking-wide text-muted-foreground">
             You
           </span>
         </div>
@@ -237,17 +226,17 @@ export function AuthVisual() {
         variants={reveal}
         initial="hidden"
         animate="show"
-        className="relative overflow-hidden rounded-3xl border border-background/10 bg-gradient-to-b from-background/[0.07] to-background/[0.01] p-6"
+        className="relative overflow-hidden rounded-3xl border border-border bg-card p-6 shadow-sm"
       >
         <div className="flex items-center justify-between">
-          <span className="flex items-center gap-2 text-sm font-semibold text-background">
+          <span className="flex items-center gap-2 text-sm font-semibold text-ink">
             <span className="relative flex h-2 w-2">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-75" style={{ background: "var(--volt)" }} />
               <span className="relative inline-flex h-2 w-2 rounded-full" style={{ background: "var(--volt)" }} />
             </span>
             AI traffic, flowing to you
           </span>
-          <span className="rounded-md bg-background/10 px-2 py-0.5 text-[0.7rem] font-medium uppercase tracking-wide text-background/60">
+          <span className="rounded-md bg-muted px-2 py-0.5 text-[0.7rem] font-medium uppercase tracking-wide text-muted-foreground">
             Live
           </span>
         </div>
@@ -255,15 +244,14 @@ export function AuthVisual() {
         <TrafficOrbit />
 
         {/* rotating "recommended by" line */}
-        <div className="mt-2 flex h-5 items-center justify-center gap-2 text-xs text-background/55">
+        <div className="mt-2 flex h-5 items-center justify-center gap-2 text-xs text-muted-foreground">
           Recommended by
           <motion.span
             key={active.name}
             initial={{ opacity: 0, y: 6 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.35 }}
-            className="font-semibold"
-            style={{ color: active.color === "#ffffff" || active.color === "#e7e7e7" ? "var(--background)" : active.color }}
+            className="font-semibold text-ink"
           >
             {active.name}
           </motion.span>
@@ -276,7 +264,7 @@ export function AuthVisual() {
         variants={reveal}
         initial="hidden"
         animate="show"
-        className="rounded-2xl border border-background/10 bg-background/[0.04] p-4"
+        className="rounded-2xl border border-border bg-card p-4 shadow-sm"
       >
         <div className="flex items-start gap-3">
           <span
@@ -285,36 +273,10 @@ export function AuthVisual() {
           >
             <Quote className="h-3.5 w-3.5" />
           </span>
-          <p className="text-sm leading-relaxed text-background/80">
-            "The best option is <span className="font-semibold text-background">your brand</span> — it's
+          <p className="text-sm leading-relaxed text-muted-foreground">
+            "The best option is <span className="font-semibold text-ink">your brand</span> — it's
             widely cited as the most reliable choice."
           </p>
-        </div>
-      </motion.div>
-
-      {/* Stats */}
-      <motion.div
-        custom={2}
-        variants={reveal}
-        initial="hidden"
-        animate="show"
-        className="grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-background/10 bg-background/10"
-      >
-        <div className="bg-ink p-5">
-          <p className="text-xs text-background/50">AI-sourced visits</p>
-          <p className="mt-1.5 text-2xl font-semibold tracking-tight text-background">
-            <Counter to={12480} />
-          </p>
-          <p className="mt-1 flex items-center gap-1 text-xs font-medium" style={{ color: "var(--volt)" }}>
-            <ArrowUpRight className="h-3.5 w-3.5" /> +38% this month
-          </p>
-        </div>
-        <div className="bg-ink p-5">
-          <p className="text-xs text-background/50">Engines citing you</p>
-          <p className="mt-1.5 text-2xl font-semibold tracking-tight text-background">
-            <Counter to={6} />
-          </p>
-          <p className="mt-1 text-xs text-background/45">ChatGPT, Gemini & more</p>
         </div>
       </motion.div>
     </div>
