@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
 import { FEATURE_SLUGS } from "@/data/features";
 import { TOOL_SLUGS } from "@/data/tools";
+import { listPublishedPosts } from "@/lib/notion.server";
 
 const BASE_URL = "https://rankvolt.top";
 
@@ -15,6 +16,17 @@ export const Route = createFileRoute("/sitemap.xml")({
   server: {
     handlers: {
       GET: async () => {
+        let blogPosts: { path: string; lastmod?: string }[] = [];
+        try {
+          const posts = await listPublishedPosts();
+          blogPosts = posts.map((p) => ({
+            path: `/blog/${p.slug}`,
+            lastmod: p.date ?? undefined,
+          }));
+        } catch {
+          blogPosts = [];
+        }
+
         const entries: SitemapEntry[] = [
           { path: "/", changefreq: "weekly", priority: "1.0" },
           { path: "/features", changefreq: "weekly", priority: "0.8" },
@@ -29,7 +41,13 @@ export const Route = createFileRoute("/sitemap.xml")({
             changefreq: "monthly" as const,
             priority: "0.7",
           })),
-          { path: "/blog/measuring-geo-success", changefreq: "monthly", priority: "0.7" },
+          { path: "/blog", changefreq: "weekly", priority: "0.8" },
+          ...blogPosts.map((p) => ({
+            path: p.path,
+            lastmod: p.lastmod,
+            changefreq: "monthly" as const,
+            priority: "0.7",
+          })),
           ...[
             "/legal/privacy",
             "/legal/terms",
@@ -49,6 +67,7 @@ export const Route = createFileRoute("/sitemap.xml")({
           [
             `  <url>`,
             `    <loc>${BASE_URL}${e.path}</loc>`,
+            e.lastmod ? `    <lastmod>${e.lastmod}</lastmod>` : null,
             e.changefreq ? `    <changefreq>${e.changefreq}</changefreq>` : null,
             e.priority ? `    <priority>${e.priority}</priority>` : null,
             `  </url>`,
