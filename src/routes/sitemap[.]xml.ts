@@ -18,6 +18,7 @@ export const Route = createFileRoute("/sitemap.xml")({
       GET: async () => {
         let blogPosts: { path: string; lastmod?: string }[] = [];
         try {
+          const { listPublishedPosts } = await import("@/lib/notion.server");
           const posts = await listPublishedPosts();
           blogPosts = posts.map((p) => ({
             path: `/blog/${p.slug}`,
