@@ -18,6 +18,7 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ToolsIndexRouteImport } from './routes/tools.index'
 import { Route as FeaturesIndexRouteImport } from './routes/features.index'
+import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as ToolsSlugRouteImport } from './routes/tools.$slug'
 import { Route as LegalTermsRouteImport } from './routes/legal.terms'
 import { Route as LegalRefundsRouteImport } from './routes/legal.refunds'
@@ -26,7 +27,7 @@ import { Route as LegalDpaRouteImport } from './routes/legal.dpa'
 import { Route as LegalCookiesRouteImport } from './routes/legal.cookies'
 import { Route as LegalAcceptableUseRouteImport } from './routes/legal.acceptable-use'
 import { Route as FeaturesSlugRouteImport } from './routes/features.$slug'
-import { Route as BlogMeasuringGeoSuccessRouteImport } from './routes/blog.measuring-geo-success'
+import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedDashboardIndexRouteImport } from './routes/_authenticated/dashboard.index'
 import { Route as AuthenticatedDashboardVisibilityRouteImport } from './routes/_authenticated/dashboard.visibility'
@@ -86,6 +87,11 @@ const FeaturesIndexRoute = FeaturesIndexRouteImport.update({
   path: '/features/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BlogIndexRoute = BlogIndexRouteImport.update({
+  id: '/blog/',
+  path: '/blog/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ToolsSlugRoute = ToolsSlugRouteImport.update({
   id: '/tools/$slug',
   path: '/tools/$slug',
@@ -126,9 +132,9 @@ const FeaturesSlugRoute = FeaturesSlugRouteImport.update({
   path: '/features/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
-const BlogMeasuringGeoSuccessRoute = BlogMeasuringGeoSuccessRouteImport.update({
-  id: '/blog/measuring-geo-success',
-  path: '/blog/measuring-geo-success',
+const BlogSlugRoute = BlogSlugRouteImport.update({
+  id: '/blog/$slug',
+  path: '/blog/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
@@ -220,7 +226,7 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/trust': typeof TrustRoute
   '/dashboard': typeof AuthenticatedDashboardRouteWithChildren
-  '/blog/measuring-geo-success': typeof BlogMeasuringGeoSuccessRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/features/$slug': typeof FeaturesSlugRoute
   '/legal/acceptable-use': typeof LegalAcceptableUseRoute
   '/legal/cookies': typeof LegalCookiesRoute
@@ -229,6 +235,7 @@ export interface FileRoutesByFullPath {
   '/legal/refunds': typeof LegalRefundsRoute
   '/legal/terms': typeof LegalTermsRoute
   '/tools/$slug': typeof ToolsSlugRoute
+  '/blog/': typeof BlogIndexRoute
   '/features/': typeof FeaturesIndexRoute
   '/tools/': typeof ToolsIndexRoute
   '/dashboard/billing': typeof AuthenticatedDashboardBillingRoute
@@ -252,7 +259,7 @@ export interface FileRoutesByTo {
   '/onboarding': typeof OnboardingRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/trust': typeof TrustRoute
-  '/blog/measuring-geo-success': typeof BlogMeasuringGeoSuccessRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/features/$slug': typeof FeaturesSlugRoute
   '/legal/acceptable-use': typeof LegalAcceptableUseRoute
   '/legal/cookies': typeof LegalCookiesRoute
@@ -261,6 +268,7 @@ export interface FileRoutesByTo {
   '/legal/refunds': typeof LegalRefundsRoute
   '/legal/terms': typeof LegalTermsRoute
   '/tools/$slug': typeof ToolsSlugRoute
+  '/blog': typeof BlogIndexRoute
   '/features': typeof FeaturesIndexRoute
   '/tools': typeof ToolsIndexRoute
   '/dashboard/billing': typeof AuthenticatedDashboardBillingRoute
@@ -287,7 +295,7 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/trust': typeof TrustRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRouteWithChildren
-  '/blog/measuring-geo-success': typeof BlogMeasuringGeoSuccessRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/features/$slug': typeof FeaturesSlugRoute
   '/legal/acceptable-use': typeof LegalAcceptableUseRoute
   '/legal/cookies': typeof LegalCookiesRoute
@@ -296,6 +304,7 @@ export interface FileRoutesById {
   '/legal/refunds': typeof LegalRefundsRoute
   '/legal/terms': typeof LegalTermsRoute
   '/tools/$slug': typeof ToolsSlugRoute
+  '/blog/': typeof BlogIndexRoute
   '/features/': typeof FeaturesIndexRoute
   '/tools/': typeof ToolsIndexRoute
   '/_authenticated/dashboard/billing': typeof AuthenticatedDashboardBillingRoute
@@ -322,7 +331,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/trust'
     | '/dashboard'
-    | '/blog/measuring-geo-success'
+    | '/blog/$slug'
     | '/features/$slug'
     | '/legal/acceptable-use'
     | '/legal/cookies'
@@ -331,6 +340,7 @@ export interface FileRouteTypes {
     | '/legal/refunds'
     | '/legal/terms'
     | '/tools/$slug'
+    | '/blog/'
     | '/features/'
     | '/tools/'
     | '/dashboard/billing'
@@ -354,7 +364,7 @@ export interface FileRouteTypes {
     | '/onboarding'
     | '/sitemap.xml'
     | '/trust'
-    | '/blog/measuring-geo-success'
+    | '/blog/$slug'
     | '/features/$slug'
     | '/legal/acceptable-use'
     | '/legal/cookies'
@@ -363,6 +373,7 @@ export interface FileRouteTypes {
     | '/legal/refunds'
     | '/legal/terms'
     | '/tools/$slug'
+    | '/blog'
     | '/features'
     | '/tools'
     | '/dashboard/billing'
@@ -388,7 +399,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/trust'
     | '/_authenticated/dashboard'
-    | '/blog/measuring-geo-success'
+    | '/blog/$slug'
     | '/features/$slug'
     | '/legal/acceptable-use'
     | '/legal/cookies'
@@ -397,6 +408,7 @@ export interface FileRouteTypes {
     | '/legal/refunds'
     | '/legal/terms'
     | '/tools/$slug'
+    | '/blog/'
     | '/features/'
     | '/tools/'
     | '/_authenticated/dashboard/billing'
@@ -422,9 +434,10 @@ export interface RootRouteChildren {
   OnboardingRoute: typeof OnboardingRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TrustRoute: typeof TrustRoute
-  BlogMeasuringGeoSuccessRoute: typeof BlogMeasuringGeoSuccessRoute
+  BlogSlugRoute: typeof BlogSlugRoute
   FeaturesSlugRoute: typeof FeaturesSlugRoute
   ToolsSlugRoute: typeof ToolsSlugRoute
+  BlogIndexRoute: typeof BlogIndexRoute
   FeaturesIndexRoute: typeof FeaturesIndexRoute
   ToolsIndexRoute: typeof ToolsIndexRoute
   ApiPublicHooksAutopilotRunRoute: typeof ApiPublicHooksAutopilotRunRoute
@@ -498,6 +511,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FeaturesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/blog/': {
+      id: '/blog/'
+      path: '/blog'
+      fullPath: '/blog/'
+      preLoaderRoute: typeof BlogIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/tools/$slug': {
       id: '/tools/$slug'
       path: '/tools/$slug'
@@ -554,11 +574,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FeaturesSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/blog/measuring-geo-success': {
-      id: '/blog/measuring-geo-success'
-      path: '/blog/measuring-geo-success'
-      fullPath: '/blog/measuring-geo-success'
-      preLoaderRoute: typeof BlogMeasuringGeoSuccessRouteImport
+    '/blog/$slug': {
+      id: '/blog/$slug'
+      path: '/blog/$slug'
+      fullPath: '/blog/$slug'
+      preLoaderRoute: typeof BlogSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/dashboard': {
@@ -744,9 +764,10 @@ const rootRouteChildren: RootRouteChildren = {
   OnboardingRoute: OnboardingRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TrustRoute: TrustRoute,
-  BlogMeasuringGeoSuccessRoute: BlogMeasuringGeoSuccessRoute,
+  BlogSlugRoute: BlogSlugRoute,
   FeaturesSlugRoute: FeaturesSlugRoute,
   ToolsSlugRoute: ToolsSlugRoute,
+  BlogIndexRoute: BlogIndexRoute,
   FeaturesIndexRoute: FeaturesIndexRoute,
   ToolsIndexRoute: ToolsIndexRoute,
   ApiPublicHooksAutopilotRunRoute: ApiPublicHooksAutopilotRunRoute,

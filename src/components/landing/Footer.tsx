@@ -1,10 +1,18 @@
 import { Link } from "@tanstack/react-router";
 import { Logo } from "./shared";
 
-const PLACEHOLDER_COLS = [
-  { title: "Product", links: ["How It Works", "Sample Articles", "Pricing", "Proof"] },
-  { title: "Features", links: ["Growth Automation", "Citation-Ready Writer", "Answer-Space Research", "Backlinks"] },
-];
+const PRODUCT_LINKS = [
+  { label: "How It Works", href: "#top" },
+  { label: "Pricing", href: "#pricing" },
+  { label: "Proof", href: "#proof" },
+] as const;
+
+const FEATURE_LINKS = [
+  "Growth Automation",
+  "Citation-Ready Writer",
+  "Answer-Space Research",
+  "Backlinks",
+] as const;
 
 const TOOL_LINKS = [
   { label: "llms.txt Generator", slug: "llms-txt-generator" },
@@ -37,20 +45,35 @@ export function Footer() {
               to get you cited by AI and ranked on Google.
             </p>
           </div>
-          {PLACEHOLDER_COLS.map((c) => (
-            <div key={c.title}>
-              <p className="text-sm font-semibold text-ink">{c.title}</p>
-              <ul className="mt-3 space-y-2">
-                {c.links.map((label) => (
-                  <li key={label}>
-                    <a href="#top" className={linkClass}>
-                      {label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+          <div>
+            <p className="text-sm font-semibold text-ink">Product</p>
+            <ul className="mt-3 space-y-2">
+              <li>
+                <Link to="/blog" className={linkClass}>
+                  Blog
+                </Link>
+              </li>
+              {PRODUCT_LINKS.map((l) => (
+                <li key={l.label}>
+                  <a href={l.href} className={linkClass}>
+                    {l.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <p className="text-sm font-semibold text-ink">Features</p>
+            <ul className="mt-3 space-y-2">
+              {FEATURE_LINKS.map((label) => (
+                <li key={label}>
+                  <a href="#top" className={linkClass}>
+                    {label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
 
           <div>
             <p className="text-sm font-semibold text-ink">Free Tools</p>
