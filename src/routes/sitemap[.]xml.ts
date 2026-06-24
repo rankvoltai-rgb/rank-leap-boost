@@ -2,7 +2,6 @@ import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
 import { FEATURE_SLUGS } from "@/data/features";
 import { TOOL_SLUGS } from "@/data/tools";
-import { listPublishedPosts } from "@/lib/notion.server";
 
 const BASE_URL = "https://rankvolt.top";
 
