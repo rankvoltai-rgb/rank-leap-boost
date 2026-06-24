@@ -6,7 +6,6 @@ import { FEATURES } from "@/data/features";
 
 const LINKS = [
   { label: "Proof", href: "#proof" },
-  { label: "Sample Articles", href: "#examples" },
   { label: "Pricing", href: "#pricing" },
   { label: "FAQ", href: "#faq" },
 ];
@@ -15,6 +14,8 @@ export function Navbar() {
   const [open, setOpen] = useState(false);
   const [featuresOpen, setFeaturesOpen] = useState(false);
   const [mobileFeaturesOpen, setMobileFeaturesOpen] = useState(false);
+  const [resourcesOpen, setResourcesOpen] = useState(false);
+  const [mobileResourcesOpen, setMobileResourcesOpen] = useState(false);
   return (
     <header className="sticky top-0 z-50 border-b border-border/60 bg-background/80 backdrop-blur-md">
       <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5">
@@ -85,6 +86,67 @@ export function Navbar() {
               >
                 View all features →
               </Link>
+            </div>
+          </div>
+          <div
+            className="relative"
+            onMouseEnter={() => setResourcesOpen(true)}
+            onMouseLeave={() => setResourcesOpen(false)}
+            onFocus={() => setResourcesOpen(true)}
+            onBlur={(e) => {
+              if (!e.currentTarget.contains(e.relatedTarget as Node)) setResourcesOpen(false);
+            }}
+          >
+            <Link
+              to="/blog"
+              aria-haspopup="menu"
+              aria-expanded={resourcesOpen}
+              className="flex items-center gap-1 text-sm font-medium text-muted-foreground transition-colors hover:text-ink"
+            >
+              Resources
+              <ChevronDown
+                className={`h-3.5 w-3.5 transition-transform duration-200 ${resourcesOpen ? "rotate-180" : ""}`}
+              />
+            </Link>
+            <div className="absolute left-1/2 top-full h-3 w-full -translate-x-1/2" aria-hidden />
+            <div
+              role="menu"
+              className={`absolute left-1/2 top-[calc(100%+0.5rem)] w-56 -translate-x-1/2 rounded-2xl border border-border bg-card p-2 shadow-elevation-lg transition-all duration-200 ${
+                resourcesOpen
+                  ? "pointer-events-auto translate-y-0 opacity-100"
+                  : "pointer-events-none -translate-y-1 opacity-0"
+              }`}
+            >
+              <Link
+                to="/blog"
+                role="menuitem"
+                className="block rounded-xl px-3 py-2.5 text-sm font-medium text-ink transition-colors hover:bg-secondary"
+              >
+                Blog
+                <span className="mt-0.5 block text-xs font-normal text-muted-foreground">
+                  Guides & GEO playbooks
+                </span>
+              </Link>
+              <Link
+                to="/tools"
+                role="menuitem"
+                className="block rounded-xl px-3 py-2.5 text-sm font-medium text-ink transition-colors hover:bg-secondary"
+              >
+                Free Tools
+                <span className="mt-0.5 block text-xs font-normal text-muted-foreground">
+                  llms.txt, schema & more
+                </span>
+              </Link>
+              <a
+                href="#examples"
+                role="menuitem"
+                className="block rounded-xl px-3 py-2.5 text-sm font-medium text-ink transition-colors hover:bg-secondary"
+              >
+                Sample Output
+                <span className="mt-0.5 block text-xs font-normal text-muted-foreground">
+                  Example AI articles
+                </span>
+              </a>
             </div>
           </div>
           {LINKS.map((l) => (
