@@ -221,6 +221,42 @@ export function Navbar() {
                 </Link>
               </div>
             )}
+            <button
+              type="button"
+              onClick={() => setMobileResourcesOpen((v) => !v)}
+              aria-expanded={mobileResourcesOpen}
+              className="flex items-center justify-between rounded-lg px-2 py-2.5 text-sm font-medium text-muted-foreground hover:bg-secondary hover:text-ink"
+            >
+              Resources
+              <ChevronDown
+                className={`h-4 w-4 transition-transform duration-200 ${mobileResourcesOpen ? "rotate-180" : ""}`}
+              />
+            </button>
+            {mobileResourcesOpen && (
+              <div className="mb-1 ml-2 flex flex-col gap-0.5 border-l border-border pl-3">
+                <Link
+                  to="/blog"
+                  onClick={() => setOpen(false)}
+                  className="rounded-lg px-2 py-2 text-sm text-muted-foreground hover:bg-secondary hover:text-ink"
+                >
+                  Blog
+                </Link>
+                <Link
+                  to="/tools"
+                  onClick={() => setOpen(false)}
+                  className="rounded-lg px-2 py-2 text-sm text-muted-foreground hover:bg-secondary hover:text-ink"
+                >
+                  Free Tools
+                </Link>
+                <a
+                  href="#examples"
+                  onClick={() => setOpen(false)}
+                  className="rounded-lg px-2 py-2 text-sm text-muted-foreground hover:bg-secondary hover:text-ink"
+                >
+                  Sample Output
+                </a>
+              </div>
+            )}
             {LINKS.map((l) => (
               <a
                 key={l.label}
