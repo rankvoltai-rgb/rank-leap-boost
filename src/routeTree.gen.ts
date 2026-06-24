@@ -26,6 +26,7 @@ import { Route as LegalDpaRouteImport } from './routes/legal.dpa'
 import { Route as LegalCookiesRouteImport } from './routes/legal.cookies'
 import { Route as LegalAcceptableUseRouteImport } from './routes/legal.acceptable-use'
 import { Route as FeaturesSlugRouteImport } from './routes/features.$slug'
+import { Route as BlogMeasuringGeoSuccessRouteImport } from './routes/blog.measuring-geo-success'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedDashboardIndexRouteImport } from './routes/_authenticated/dashboard.index'
 import { Route as AuthenticatedDashboardVisibilityRouteImport } from './routes/_authenticated/dashboard.visibility'
@@ -125,6 +126,11 @@ const FeaturesSlugRoute = FeaturesSlugRouteImport.update({
   path: '/features/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BlogMeasuringGeoSuccessRoute = BlogMeasuringGeoSuccessRouteImport.update({
+  id: '/blog/measuring-geo-success',
+  path: '/blog/measuring-geo-success',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -214,6 +220,7 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/trust': typeof TrustRoute
   '/dashboard': typeof AuthenticatedDashboardRouteWithChildren
+  '/blog/measuring-geo-success': typeof BlogMeasuringGeoSuccessRoute
   '/features/$slug': typeof FeaturesSlugRoute
   '/legal/acceptable-use': typeof LegalAcceptableUseRoute
   '/legal/cookies': typeof LegalCookiesRoute
@@ -245,6 +252,7 @@ export interface FileRoutesByTo {
   '/onboarding': typeof OnboardingRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/trust': typeof TrustRoute
+  '/blog/measuring-geo-success': typeof BlogMeasuringGeoSuccessRoute
   '/features/$slug': typeof FeaturesSlugRoute
   '/legal/acceptable-use': typeof LegalAcceptableUseRoute
   '/legal/cookies': typeof LegalCookiesRoute
@@ -279,6 +287,7 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/trust': typeof TrustRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRouteWithChildren
+  '/blog/measuring-geo-success': typeof BlogMeasuringGeoSuccessRoute
   '/features/$slug': typeof FeaturesSlugRoute
   '/legal/acceptable-use': typeof LegalAcceptableUseRoute
   '/legal/cookies': typeof LegalCookiesRoute
@@ -313,6 +322,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/trust'
     | '/dashboard'
+    | '/blog/measuring-geo-success'
     | '/features/$slug'
     | '/legal/acceptable-use'
     | '/legal/cookies'
@@ -344,6 +354,7 @@ export interface FileRouteTypes {
     | '/onboarding'
     | '/sitemap.xml'
     | '/trust'
+    | '/blog/measuring-geo-success'
     | '/features/$slug'
     | '/legal/acceptable-use'
     | '/legal/cookies'
@@ -377,6 +388,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/trust'
     | '/_authenticated/dashboard'
+    | '/blog/measuring-geo-success'
     | '/features/$slug'
     | '/legal/acceptable-use'
     | '/legal/cookies'
@@ -410,6 +422,7 @@ export interface RootRouteChildren {
   OnboardingRoute: typeof OnboardingRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TrustRoute: typeof TrustRoute
+  BlogMeasuringGeoSuccessRoute: typeof BlogMeasuringGeoSuccessRoute
   FeaturesSlugRoute: typeof FeaturesSlugRoute
   ToolsSlugRoute: typeof ToolsSlugRoute
   FeaturesIndexRoute: typeof FeaturesIndexRoute
@@ -539,6 +552,13 @@ declare module '@tanstack/react-router' {
       path: '/features/$slug'
       fullPath: '/features/$slug'
       preLoaderRoute: typeof FeaturesSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog/measuring-geo-success': {
+      id: '/blog/measuring-geo-success'
+      path: '/blog/measuring-geo-success'
+      fullPath: '/blog/measuring-geo-success'
+      preLoaderRoute: typeof BlogMeasuringGeoSuccessRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/dashboard': {
@@ -724,6 +744,7 @@ const rootRouteChildren: RootRouteChildren = {
   OnboardingRoute: OnboardingRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TrustRoute: TrustRoute,
+  BlogMeasuringGeoSuccessRoute: BlogMeasuringGeoSuccessRoute,
   FeaturesSlugRoute: FeaturesSlugRoute,
   ToolsSlugRoute: ToolsSlugRoute,
   FeaturesIndexRoute: FeaturesIndexRoute,
@@ -736,13 +757,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
