@@ -18,6 +18,7 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ToolsIndexRouteImport } from './routes/tools.index'
 import { Route as FeaturesIndexRouteImport } from './routes/features.index'
+import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as ToolsSlugRouteImport } from './routes/tools.$slug'
 import { Route as LegalTermsRouteImport } from './routes/legal.terms'
 import { Route as LegalRefundsRouteImport } from './routes/legal.refunds'
@@ -83,6 +84,11 @@ const ToolsIndexRoute = ToolsIndexRouteImport.update({
 const FeaturesIndexRoute = FeaturesIndexRouteImport.update({
   id: '/features/',
   path: '/features/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogIndexRoute = BlogIndexRouteImport.update({
+  id: '/blog/',
+  path: '/blog/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ToolsSlugRoute = ToolsSlugRouteImport.update({
@@ -222,6 +228,7 @@ export interface FileRoutesByFullPath {
   '/legal/refunds': typeof LegalRefundsRoute
   '/legal/terms': typeof LegalTermsRoute
   '/tools/$slug': typeof ToolsSlugRoute
+  '/blog/': typeof BlogIndexRoute
   '/features/': typeof FeaturesIndexRoute
   '/tools/': typeof ToolsIndexRoute
   '/dashboard/billing': typeof AuthenticatedDashboardBillingRoute
@@ -253,6 +260,7 @@ export interface FileRoutesByTo {
   '/legal/refunds': typeof LegalRefundsRoute
   '/legal/terms': typeof LegalTermsRoute
   '/tools/$slug': typeof ToolsSlugRoute
+  '/blog': typeof BlogIndexRoute
   '/features': typeof FeaturesIndexRoute
   '/tools': typeof ToolsIndexRoute
   '/dashboard/billing': typeof AuthenticatedDashboardBillingRoute
@@ -287,6 +295,7 @@ export interface FileRoutesById {
   '/legal/refunds': typeof LegalRefundsRoute
   '/legal/terms': typeof LegalTermsRoute
   '/tools/$slug': typeof ToolsSlugRoute
+  '/blog/': typeof BlogIndexRoute
   '/features/': typeof FeaturesIndexRoute
   '/tools/': typeof ToolsIndexRoute
   '/_authenticated/dashboard/billing': typeof AuthenticatedDashboardBillingRoute
@@ -321,6 +330,7 @@ export interface FileRouteTypes {
     | '/legal/refunds'
     | '/legal/terms'
     | '/tools/$slug'
+    | '/blog/'
     | '/features/'
     | '/tools/'
     | '/dashboard/billing'
@@ -352,6 +362,7 @@ export interface FileRouteTypes {
     | '/legal/refunds'
     | '/legal/terms'
     | '/tools/$slug'
+    | '/blog'
     | '/features'
     | '/tools'
     | '/dashboard/billing'
@@ -385,6 +396,7 @@ export interface FileRouteTypes {
     | '/legal/refunds'
     | '/legal/terms'
     | '/tools/$slug'
+    | '/blog/'
     | '/features/'
     | '/tools/'
     | '/_authenticated/dashboard/billing'
@@ -412,6 +424,7 @@ export interface RootRouteChildren {
   TrustRoute: typeof TrustRoute
   FeaturesSlugRoute: typeof FeaturesSlugRoute
   ToolsSlugRoute: typeof ToolsSlugRoute
+  BlogIndexRoute: typeof BlogIndexRoute
   FeaturesIndexRoute: typeof FeaturesIndexRoute
   ToolsIndexRoute: typeof ToolsIndexRoute
   ApiPublicHooksAutopilotRunRoute: typeof ApiPublicHooksAutopilotRunRoute
@@ -483,6 +496,13 @@ declare module '@tanstack/react-router' {
       path: '/features'
       fullPath: '/features/'
       preLoaderRoute: typeof FeaturesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog/': {
+      id: '/blog/'
+      path: '/blog'
+      fullPath: '/blog/'
+      preLoaderRoute: typeof BlogIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/tools/$slug': {
@@ -726,6 +746,7 @@ const rootRouteChildren: RootRouteChildren = {
   TrustRoute: TrustRoute,
   FeaturesSlugRoute: FeaturesSlugRoute,
   ToolsSlugRoute: ToolsSlugRoute,
+  BlogIndexRoute: BlogIndexRoute,
   FeaturesIndexRoute: FeaturesIndexRoute,
   ToolsIndexRoute: ToolsIndexRoute,
   ApiPublicHooksAutopilotRunRoute: ApiPublicHooksAutopilotRunRoute,
