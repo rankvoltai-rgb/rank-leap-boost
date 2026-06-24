@@ -1,4 +1,4 @@
-import type { Fragment, ReactNode } from "react";
+import type { ReactNode } from "react";
 import type { NotionBlock, RichTextSpan } from "@/lib/notion.server";
 
 /* ---------- inline rich text ---------- */
