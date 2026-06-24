@@ -29,6 +29,7 @@ export const Route = createFileRoute("/sitemap.xml")({
             changefreq: "monthly" as const,
             priority: "0.7",
           })),
+          { path: "/blog/measuring-geo-success", changefreq: "monthly", priority: "0.7" },
           ...[
             "/legal/privacy",
             "/legal/terms",
