@@ -1,54 +1,71 @@
-# Free Tools — AI Search SEO Toolkit
+# Notion-Powered Blog + Resources Menu
 
-Build a free-tools hub designed to pull Google traffic and earn AI-search citations. A clean, Notion-style index page lists every tool; clicking one opens its own dedicated, interactive page. Each tool page is SEO-optimized (unique title, meta, JSON-LD) so it can rank on its own.
+## Goal
+Turn `/blog` into a real, Notion-driven blog. You write posts in a Notion database; published posts appear live on the site (fetched fresh on every visit). Posts support rich formatting plus embedded YouTube/Vimeo videos and uploaded media. Replace the "Sample Articles" navigation item with a "Resources" dropdown.
 
-## What we're building
+## 1. Connect Notion
+- Link the existing **Amplify's Notion** connection to this project. This exposes the credentials the server needs to read your Notion content.
+- You'll then **duplicate a database template** I describe below and share it with the connected integration so the site can read it.
 
-**Footer:** Add a new "Free Tools" column linking to `/tools` and to each individual tool.
+### The Notion "Blog" database schema (you create this)
+| Property | Type | Purpose |
+|---|---|---|
+| Name | Title | Post title |
+| Slug | Text | URL path, e.g. `measuring-geo-success` → `/blog/measuring-geo-success` |
+| Status | Select | `Draft` / `Published` (only Published shows on site) |
+| Excerpt | Text | Card + meta-description summary |
+| Date | Date | Publish date (shown + used for ordering) |
+| Tags | Multi-select | Optional category chips |
+| Author | Text | Optional byline (defaults to "Rankvolt") |
 
-**Index page (`/tools`):** Notion-style — generous whitespace, refined type, no icon clutter. A short hero, then tools grouped into two simple lists ("Instant tools" and "AI-powered tools") rendered as clean text-forward rows with name + one-line description + a quiet "Open →" affordance. No heavy cards or busy graphics.
+The page **cover image** is used as the post hero/card image. The page **body** is the article — write normally and add YouTube videos via Notion's `/video` or `/embed` blocks.
 
-**Tool detail pages (`/tools/$slug`):** Each is a real, working tool with a consistent layout: title, one-paragraph intro, the interactive tool itself, a short "How to use" + FAQ section (great for SEO/JSON-LD), and a soft CTA to Rankvolt.
+## 2. Data layer (live fetch)
+- `src/lib/notion.server.ts` — server-only helpers that call the Notion API through the Lovable connector gateway (reads keys inside the handler):
+  - `resolveBlogDatabaseId()` — finds the shared database (matches one named "Blog", caches the id) so no manual id wiring is needed.
+  - `listPublishedPosts()` — queries the DB filtered to `Status = Published`, sorted by `Date` desc; returns normalized post metadata.
+  - `getPostBySlug(slug)` — finds the page by slug, fetches all body blocks (with pagination + nested children for lists/toggles), returns a normalized block tree.
+- `src/lib/notion.functions.ts` — `createServerFn` wrappers (`listPosts`, `getPost`) that the routes call. Plain serializable DTOs only.
 
-## Tools (7 total)
+## 3. Block renderer (with video embeds)
+- `src/components/blog/NotionBlocks.tsx` — renders the normalized block tree to styled React:
+  - Text: paragraphs, h1–h3, bold/italic/strikethrough/code/links, blockquotes, callouts, dividers.
+  - Lists: bulleted + numbered (incl. nesting), to-dos.
+  - Code blocks with language label.
+  - Images (page-uploaded or external), with captions.
+  - **`video` blocks** — uploaded files render in a native `<video>` player; YouTube/Vimeo URLs are converted to responsive 16:9 `<iframe>` embeds.
+  - **`embed` / `bookmark` blocks** — YouTube/Vimeo become iframes; other URLs become rich link cards.
+- Styling reuses existing tokens (`text-ink`, `text-muted-foreground`, `border-border`, `bg-card`) to match the current guide aesthetic.
 
-**Instant — client-side, no credits, instant results:**
-1. **llms.txt Generator** — fill in site name, description, key URLs → generates a valid `llms.txt` file with copy/download.
-2. **AI Crawler robots.txt Generator** — toggle allow/block for GPTBot, ClaudeBot, PerplexityBot, Google-Extended, CCBot, etc. → outputs robots.txt.
-3. **Schema / JSON-LD Generator** — pick a type (FAQ, Article, Organization, Product), fill fields → outputs ready-to-paste JSON-LD `<script>`.
-4. **SERP & AI Snippet Preview** — type title + meta description + URL → live Google-style preview with real-time length/pixel warnings.
+## 4. Routes
+- `src/routes/blog.index.tsx` → `/blog`
+  - Loader primes `listPosts` via `ensureQueryData`; component reads with `useSuspenseQuery`.
+  - Renders `Navbar`, a header, and a responsive card grid (cover, title, excerpt, date, tags) linking to each post. Empty + error states included.
+  - Unique SEO head (title/description/canonical) + `Blog` JSON-LD.
+- `src/routes/blog.$slug.tsx` → `/blog/:slug`
+  - Loader fetches `getPost(slug)`; `notFound()` for missing/unpublished slugs.
+  - Renders breadcrumb, hero cover, title, byline/date, `NotionBlocks` body, and the existing "Start getting cited" CTA.
+  - Per-post SEO head (title, excerpt as description, cover as og:image, canonical) + `Article` + `BreadcrumbList` JSON-LD.
+  - `errorComponent` + `notFoundComponent` per route conventions.
+- Delete `src/routes/blog.measuring-geo-success.tsx` (retired per "Notion only"). To preserve that URL's SEO, recreate it in Notion with slug `measuring-geo-success` — same path keeps working through the dynamic route.
 
-**AI-powered (uses Lovable AI credits, runs server-side):**
-5. **AI Question Generator** — topic → the real questions people ask AI engines, grouped by intent.
-6. **Content Brief Generator** — keyword → outline, questions to answer, entities/terms to cover.
-7. **Meta Description Writer** — page topic/URL → 3 length-optimized meta descriptions.
+## 5. Navigation: "Sample Articles" → "Resources" dropdown
+- `src/components/landing/Navbar.tsx`:
+  - Remove the `Sample Articles` (`#examples`) link.
+  - Add a **Resources** dropdown (same hover-menu pattern as Features) with: **Blog** (`/blog`), **Free Tools** (`/tools`), **Sample Output** (`#examples` anchor for the on-page examples section).
+  - Mirror the dropdown in the mobile menu (collapsible like the mobile Features group).
+- `src/components/landing/Footer.tsx`: replace the "Sample Articles" link with **Blog** → `/blog`.
 
-## How it works (technical)
+## 6. Sitemap
+- `src/routes/sitemap[.]xml.ts`: drop the hardcoded `measuring-geo-success` entry and instead generate one `<url>` per published Notion post (via `listPublishedPosts`), plus the `/blog` index. Keeps the sitemap accurate as you publish.
 
-```text
-src/routes/
-  tools.index.tsx        -> /tools (Notion-style hub)
-  tools.$slug.tsx        -> /tools/<slug> (loads tool by slug, renders its component)
-src/data/tools.ts        -> tool registry: slug, name, group, tagline, meta, faqs, howto
-src/components/tools/
-  ToolLayout.tsx         -> shared page shell (intro, body slot, howto, FAQ, CTA, JSON-LD)
-  ToolField.tsx, CopyBox.tsx -> shared inputs + copy/download output box
-  LlmsTxtGenerator.tsx
-  RobotsTxtGenerator.tsx
-  SchemaGenerator.tsx
-  SnippetPreview.tsx
-  AiQuestionGenerator.tsx
-  ContentBriefGenerator.tsx
-  MetaWriter.tsx
-```
+## Technical notes
+- All Notion calls run server-side through the gateway (`https://connector-gateway.lovable.dev/notion/...`) with `LOVABLE_API_KEY` + `NOTION_API_KEY`; nothing hits Notion from the browser.
+- Dates are formatted in a fixed UTC format to avoid SSR/client hydration mismatches (the current guide has exactly this bug — removing it resolves it).
+- Live fetch means a published edit in Notion appears on the next page load; no rebuild needed.
+- If Notion is unreachable, routes return a graceful empty/error state rather than crashing.
 
-- Mirrors the existing `features.index.tsx` / `features.$slug.tsx` + `src/data/features.ts` pattern, including `head()` meta, canonical tags, and FAQ + Breadcrumb JSON-LD per page.
-- The `$slug` route maps each slug to its tool component via the registry; unknown slugs throw `notFound()` with a friendly fallback (same as features).
-- **Styling:** semantic tokens only (`bg-background`, `text-ink`, `border-border`, `--volt` accent), Poppins, `Reveal`/`Eyebrow` from `shared.tsx`. Notion vibe = lots of whitespace, hairline borders, minimal icons.
-- **AI tools:** add three server functions in `src/lib/ai.functions.ts` (reusing the existing `ai-gateway.server.ts` Lovable AI provider) returning structured output. Each AI tool page shows loading, results, and surfaces credit-exhausted (402) / rate-limit (429) errors clearly. No API key needed.
-- **SEO:** add all `/tools` URLs to `src/routes/sitemap[.]xml.ts`. Each tool page gets distinct title/description and JSON-LD so it ranks independently.
-
-## Notes
-- Instant tools require no backend and cost nothing to run — safe for unlimited traffic.
-- AI tools consume Lovable AI credits per use; I'll keep prompts tight and outputs compact to control cost.
-- I'll ship all 7 in this build unless you'd rather start with the 4 instant tools and add the AI ones in a follow-up.
+## What you'll do after I build
+1. Approve linking the Notion connection (one click).
+2. Create the "Blog" database with the schema above and **share it with the integration** in Notion.
+3. Write a post, set Status = Published — it appears at `/blog`.
