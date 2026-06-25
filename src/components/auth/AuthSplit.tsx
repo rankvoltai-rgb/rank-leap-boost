@@ -4,23 +4,9 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { getProfile } from "@/lib/api";
-import { Logo, Reveal, Stars, Avatar } from "@/components/landing/shared";
+import { Logo, Reveal } from "@/components/landing/shared";
 import { SocialButtons } from "./SocialButtons";
 import { AuthVisual } from "./AuthVisual";
-
-import avatar1 from "@/assets/avatar-1.jpg.asset.json";
-import avatar2 from "@/assets/avatar-2.jpg.asset.json";
-import avatar3 from "@/assets/avatar-3.jpg.asset.json";
-import avatar4 from "@/assets/avatar-4.jpg.asset.json";
-import avatar5 from "@/assets/avatar-5.jpg.asset.json";
-
-const FACES = [
-  { name: "Owen Carter", src: avatar1.url },
-  { name: "Priya Raman", src: avatar2.url },
-  { name: "Hannah Whitfield", src: avatar3.url },
-  { name: "Marco Silva", src: avatar4.url },
-  { name: "Elise Tanaka", src: avatar5.url },
-];
 
 function Field({
   label,
@@ -207,17 +193,17 @@ export function AuthSplit() {
 
       {/* Brand / visual panel */}
       <div
-        className="relative hidden flex-col justify-between overflow-hidden px-14 py-12 text-background lg:flex"
+        className="relative hidden flex-col items-center justify-center overflow-hidden px-14 py-12 lg:flex"
         style={{
           background:
-            "linear-gradient(160deg, color-mix(in oklab, var(--volt) 92%, white 8%) 0%, var(--volt) 42%, color-mix(in oklab, var(--volt) 68%, var(--ink) 32%) 100%)",
+            "linear-gradient(160deg, #ffffff 0%, #dee9f8 55%, #dee9f8 100%)",
         }}
       >
         {/* ambient light + texture */}
-        <div className="pointer-events-none absolute -right-28 -top-28 h-96 w-96 rounded-full bg-background/20 blur-3xl" />
-        <div className="pointer-events-none absolute -bottom-32 -left-24 h-80 w-80 rounded-full bg-ink/20 blur-3xl" />
+        <div className="pointer-events-none absolute -right-28 -top-28 h-96 w-96 rounded-full bg-white/40 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-32 -left-24 h-80 w-80 rounded-full bg-white/30 blur-3xl" />
         <div
-          className="pointer-events-none absolute inset-0 opacity-[0.06]"
+          className="pointer-events-none absolute inset-0 text-ink opacity-[0.05]"
           style={{
             backgroundImage:
               "radial-gradient(circle at 1px 1px, currentColor 1px, transparent 0)",
@@ -225,27 +211,8 @@ export function AuthSplit() {
           }}
         />
 
-        <div className="relative flex flex-1 items-center justify-center py-6">
+        <div className="relative w-4/5">
           <AuthVisual />
-        </div>
-
-        <div className="relative mt-10 flex items-center gap-3">
-          <div className="flex -space-x-2.5">
-            {FACES.map((f) => (
-              <Avatar
-                key={f.name}
-                name={f.name}
-                src={f.src}
-                className="h-9 w-9 ring-2 ring-background/70"
-              />
-            ))}
-          </div>
-          <div className="flex flex-col gap-0.5">
-            <Stars />
-            <p className="text-sm text-background/80">
-              <span className="font-semibold text-background">400+</span> founders growing with Rankvolt
-            </p>
-          </div>
         </div>
       </div>
     </div>
