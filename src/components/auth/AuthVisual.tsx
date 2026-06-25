@@ -326,9 +326,6 @@ export function AuthVisual() {
               </svg>
             </motion.span>
           </div>
-          {/* home indicator */}
-          <div className="mx-auto mt-3 h-1 w-28 rounded-full bg-ink/25" />
-        </div>
         </div>
       </div>
     </motion.div>
