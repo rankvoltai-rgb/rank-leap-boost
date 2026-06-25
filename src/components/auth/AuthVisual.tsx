@@ -137,17 +137,12 @@ export function AuthVisual() {
       initial={{ opacity: 0, y: 24 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: EASE }}
-      className="relative mx-auto w-full max-w-[360px]"
+      className="relative w-full"
     >
-      {/* iPhone bezel */}
-      <div className="relative rounded-[3rem] bg-ink p-2.5 shadow-2xl ring-1 ring-ink/40">
-        {/* screen */}
-        <div className="relative overflow-hidden rounded-[2.4rem] bg-card">
-          {/* Dynamic Island */}
-          <div className="pointer-events-none absolute left-1/2 top-2.5 z-10 h-6 w-28 -translate-x-1/2 rounded-full bg-ink" />
-
+      {/* screen */}
+      <div className="relative overflow-hidden rounded-[2rem] border border-ink/[0.06] bg-card ring-1 ring-ink/[0.03]">
         {/* header */}
-        <div className="flex items-center gap-2.5 border-b border-border/70 px-4 pb-3 pt-9">
+        <div className="flex items-center gap-2.5 border-b border-border/70 px-5 py-4">
           <span className="flex h-6 w-6 items-center justify-center rounded-full bg-ink text-background">
             <AssistantGlyph className="h-3.5 w-3.5" />
           </span>
