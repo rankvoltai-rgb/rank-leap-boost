@@ -22,6 +22,12 @@ const FEATURES = [
   "Customer Intelligence",
 ];
 
+const SOURCES = [
+  { letter: "F", domain: "flowdesk.io" },
+  { letter: "L", domain: "loopcraft.ai" },
+  { letter: "Y", domain: "yardstick.team" },
+];
+
 const EASE = [0.21, 0.47, 0.32, 0.98] as const;
 
 type Phase = "typing" | "thinking" | "answer" | "card" | "reset";
@@ -217,6 +223,21 @@ export function AuthVisual() {
                   <AssistantGlyph className="h-4 w-4" />
                 </span>
                 <div className="min-w-0 flex-1 space-y-3">
+                  {/* status line */}
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.4, ease: EASE }}
+                    className="flex items-center gap-2 text-[0.72rem] font-medium text-muted-foreground"
+                  >
+                    <span
+                      className="h-1.5 w-1.5 shrink-0 rounded-full"
+                      style={{ background: "var(--volt)" }}
+                    />
+                    Searched 24 sources ·{" "}
+                    {phase === "card" ? "answer ready" : "writing answer"}
+                  </motion.div>
+
                   <p className="text-[0.9rem] leading-relaxed text-ink">
                     <AnswerStream text={answerText} highlighted={productHighlighted} />
                     {phase === "answer" && answerChars < fullAnswer.length && (
@@ -226,6 +247,25 @@ export function AuthVisual() {
                       />
                     )}
                   </p>
+
+                  {/* shimmer loading bar (while streaming) */}
+                  {phase === "answer" && answerChars < fullAnswer.length && (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1, backgroundPosition: ["0% 0%", "200% 0%"] }}
+                      exit={{ opacity: 0 }}
+                      transition={{
+                        opacity: { duration: 0.3 },
+                        backgroundPosition: { duration: 1.3, repeat: Infinity, ease: "linear" },
+                      }}
+                      className="h-1.5 w-2/3 rounded-full"
+                      style={{
+                        backgroundImage:
+                          "linear-gradient(90deg, color-mix(in oklab, var(--ink) 8%, transparent) 0%, color-mix(in oklab, var(--ink) 16%, transparent) 50%, color-mix(in oklab, var(--ink) 8%, transparent) 100%)",
+                        backgroundSize: "200% 100%",
+                      }}
+                    />
+                  )}
 
                   {/* feature ticks */}
                   {featuresShown > 0 && (
@@ -282,6 +322,37 @@ export function AuthVisual() {
                           <AssistantGlyph className="h-2.5 w-2.5" />
                           Recommended by AI
                         </span>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+
+                  {/* sources row */}
+                  <AnimatePresence>
+                    {phase === "card" && (
+                      <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.4, ease: EASE }}
+                        className="flex flex-wrap items-center gap-2 pt-0.5"
+                      >
+                        <span className="text-[0.72rem] font-medium text-muted-foreground">
+                          Sources
+                        </span>
+                        {SOURCES.map((s, i) => (
+                          <motion.span
+                            key={s.domain}
+                            initial={{ opacity: 0, y: 6 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.35, ease: EASE, delay: 0.1 + i * 0.1 }}
+                            className="inline-flex items-center gap-1.5 rounded-full border border-border bg-surface py-1 pl-1 pr-2.5 text-[0.72rem] text-ink"
+                          >
+                            <span className="flex h-4 w-4 items-center justify-center rounded-full bg-card text-[0.58rem] font-semibold text-muted-foreground">
+                              {s.letter}
+                            </span>
+                            {s.domain}
+                          </motion.span>
+                        ))}
                       </motion.div>
                     )}
                   </AnimatePresence>
@@ -345,10 +416,11 @@ function AnswerStream({ text, highlighted }: { text: string; highlighted: boolea
     <>
       {before}
       <motion.span
-        animate={highlighted ? { backgroundColor: "color-mix(in oklab, var(--volt) 14%, transparent)" } : {}}
+        animate={highlighted ? { opacity: 1 } : { opacity: 1 }}
         transition={{ duration: 0.5, ease: EASE }}
-        className="rounded px-1 font-semibold text-ink"
+        className="font-bold text-ink underline decoration-2 underline-offset-[3px]"
         style={{
+          textDecorationColor: "var(--volt)",
           boxDecorationBreak: "clone",
           WebkitBoxDecorationBreak: "clone",
         }}
