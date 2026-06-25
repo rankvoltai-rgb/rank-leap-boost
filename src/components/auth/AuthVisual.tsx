@@ -223,6 +223,21 @@ export function AuthVisual() {
                   <AssistantGlyph className="h-4 w-4" />
                 </span>
                 <div className="min-w-0 flex-1 space-y-3">
+                  {/* status line */}
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.4, ease: EASE }}
+                    className="flex items-center gap-2 text-[0.72rem] font-medium text-muted-foreground"
+                  >
+                    <span
+                      className="h-1.5 w-1.5 shrink-0 rounded-full"
+                      style={{ background: "var(--volt)" }}
+                    />
+                    Searched 24 sources ·{" "}
+                    {phase === "card" ? "answer ready" : "writing answer"}
+                  </motion.div>
+
                   <p className="text-[0.9rem] leading-relaxed text-ink">
                     <AnswerStream text={answerText} highlighted={productHighlighted} />
                     {phase === "answer" && answerChars < fullAnswer.length && (
@@ -232,6 +247,25 @@ export function AuthVisual() {
                       />
                     )}
                   </p>
+
+                  {/* shimmer loading bar (while streaming) */}
+                  {phase === "answer" && answerChars < fullAnswer.length && (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1, backgroundPosition: ["0% 0%", "200% 0%"] }}
+                      exit={{ opacity: 0 }}
+                      transition={{
+                        opacity: { duration: 0.3 },
+                        backgroundPosition: { duration: 1.3, repeat: Infinity, ease: "linear" },
+                      }}
+                      className="h-1.5 w-2/3 rounded-full"
+                      style={{
+                        backgroundImage:
+                          "linear-gradient(90deg, color-mix(in oklab, var(--ink) 8%, transparent) 0%, color-mix(in oklab, var(--ink) 16%, transparent) 50%, color-mix(in oklab, var(--ink) 8%, transparent) 100%)",
+                        backgroundSize: "200% 100%",
+                      }}
+                    />
+                  )}
 
                   {/* feature ticks */}
                   {featuresShown > 0 && (
