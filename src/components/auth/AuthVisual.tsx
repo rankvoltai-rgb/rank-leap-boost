@@ -325,6 +325,37 @@ export function AuthVisual() {
                       </motion.div>
                     )}
                   </AnimatePresence>
+
+                  {/* sources row */}
+                  <AnimatePresence>
+                    {phase === "card" && (
+                      <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.4, ease: EASE }}
+                        className="flex flex-wrap items-center gap-2 pt-0.5"
+                      >
+                        <span className="text-[0.72rem] font-medium text-muted-foreground">
+                          Sources
+                        </span>
+                        {SOURCES.map((s, i) => (
+                          <motion.span
+                            key={s.domain}
+                            initial={{ opacity: 0, y: 6 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.35, ease: EASE, delay: 0.1 + i * 0.1 }}
+                            className="inline-flex items-center gap-1.5 rounded-full border border-border bg-surface py-1 pl-1 pr-2.5 text-[0.72rem] text-ink"
+                          >
+                            <span className="flex h-4 w-4 items-center justify-center rounded-full bg-card text-[0.58rem] font-semibold text-muted-foreground">
+                              {s.letter}
+                            </span>
+                            {s.domain}
+                          </motion.span>
+                        ))}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
               </motion.div>
             )}
