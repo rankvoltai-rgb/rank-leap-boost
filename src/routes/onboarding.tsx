@@ -8,13 +8,13 @@ export const Route = createFileRoute("/onboarding")({
       {
         name: "description",
         content:
-          "Set up your brand, review your keywords, and choose your hosting to start your free Rankvolt trial.",
+          "Add your website, let our AI analyze it, confirm the plan, and see your projected traffic before starting your free Rankvolt trial.",
       },
       { property: "og:title", content: "Get Started — Rankvolt" },
       {
         property: "og:description",
         content:
-          "Two quick steps: tell us about your brand, then review keywords and hosting to launch your traffic engine.",
+          "Enter your site, review the AI analysis, see your traffic forecast, and activate your engine in minutes.",
       },
       { property: "og:type", content: "website" },
     ],
