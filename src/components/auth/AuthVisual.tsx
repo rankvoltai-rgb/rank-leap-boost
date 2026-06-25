@@ -146,7 +146,7 @@ export function AuthVisual() {
           <span className="flex h-6 w-6 items-center justify-center rounded-full bg-ink text-background">
             <AssistantGlyph className="h-3.5 w-3.5" />
           </span>
-          <span className="text-sm font-semibold text-ink">AI Assistant</span>
+          <span className="text-sm font-semibold text-ink">ChatGPT</span>
           <span className="ml-auto inline-flex items-center gap-1.5 text-[0.65rem] font-medium uppercase tracking-[0.1em] text-muted-foreground">
             <span className="h-1.5 w-1.5 rounded-full" style={{ background: "var(--volt)" }} />
             Live
