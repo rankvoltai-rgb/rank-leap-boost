@@ -133,15 +133,21 @@ export function AuthVisual() {
   const productHighlighted = phase === "card";
 
   return (
-    <div className="relative mt-8">
-      <motion.div
-        initial={{ opacity: 0, y: 18 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: EASE }}
-        className="overflow-hidden rounded-[1.5rem] border border-ink/[0.06] bg-card ring-1 ring-ink/[0.03]"
-      >
+    <motion.div
+      initial={{ opacity: 0, y: 24 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, ease: EASE }}
+      className="relative mx-auto w-full max-w-[360px]"
+    >
+      {/* iPhone bezel */}
+      <div className="relative rounded-[3rem] bg-ink p-2.5 shadow-2xl ring-1 ring-ink/40">
+        {/* screen */}
+        <div className="relative overflow-hidden rounded-[2.4rem] bg-card">
+          {/* Dynamic Island */}
+          <div className="pointer-events-none absolute left-1/2 top-2.5 z-10 h-6 w-28 -translate-x-1/2 rounded-full bg-ink" />
+
         {/* header */}
-        <div className="flex items-center gap-2.5 border-b border-border/70 px-4 py-3">
+        <div className="flex items-center gap-2.5 border-b border-border/70 px-4 pb-3 pt-9">
           <span className="flex h-6 w-6 items-center justify-center rounded-full bg-ink text-background">
             <AssistantGlyph className="h-3.5 w-3.5" />
           </span>
@@ -153,7 +159,7 @@ export function AuthVisual() {
         </div>
 
         {/* conversation thread */}
-        <div className="flex min-h-[320px] flex-col gap-4 px-4 py-5">
+        <div className="flex min-h-[400px] flex-col gap-4 px-4 py-5">
           <AnimatePresence mode="popLayout">
             {showThread && (
               <motion.div
@@ -291,7 +297,7 @@ export function AuthVisual() {
         </div>
 
         {/* composer */}
-        <div className="border-t border-border/70 px-4 py-3">
+        <div className="border-t border-border/70 px-4 pb-7 pt-3">
           <div className="flex items-center gap-2 rounded-full border border-border bg-surface px-4 py-2">
             <span className="flex-1 truncate text-sm text-ink">
               {phase === "typing" ? (
@@ -325,9 +331,12 @@ export function AuthVisual() {
               </svg>
             </motion.span>
           </div>
+          {/* home indicator */}
+          <div className="mx-auto mt-3 h-1 w-28 rounded-full bg-ink/25" />
         </div>
-      </motion.div>
-    </div>
+        </div>
+      </div>
+    </motion.div>
   );
 }
 
