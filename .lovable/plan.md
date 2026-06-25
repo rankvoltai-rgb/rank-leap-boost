@@ -1,49 +1,24 @@
-## Goal
+# Auth page: full-screen iPhone chat animation
 
-Replace the orbital "AI traffic" graphic on the auth page's right brand panel with a premium, self-looping ChatGPT-style motion graphic that demonstrates: a user asks AI for a CRM recommendation → AI streams an answer → a product card appears. The loop runs ~10s, seamlessly, communicating "Users ask AI for recommendations. AI recommends your product" within 3 seconds.
+Redesign the right-hand brand panel of the Auth/Login page so the looping ChatGPT-style chat animation becomes the hero — framed inside an iPhone, with the marketing copy removed and only the testimonial strip kept.
 
-Per your choices: generic CRM demo (neutral product name, no brand/competitor names), and it swaps the existing orbital graphic in-place (white chat card sitting on the current blue panel — no other panel changes).
+## Changes
 
-## What gets built
+### `src/components/auth/AuthSplit.tsx` (right panel)
+- Remove the badge ("Sign in → connect site → done"), the headline ("Get AI traffic on Autopilot, while you sleep"), and the supporting paragraph.
+- Restructure the panel to a vertical flex column that centers the iPhone-framed animation and takes up almost the full panel height.
+- Keep the avatar + stars + "400+ founders growing with Rankvolt" testimonial row pinned at the bottom.
+- Keep the blue gradient background, ambient glows, and dot texture.
 
-Rewrite `src/components/auth/AuthVisual.tsx` into a single self-contained, autonomous looping animation component (same `AuthVisual` export so `AuthSplit.tsx` needs no change). All motion uses `motion/react` (already in the project) plus a small phase state machine driven by timers.
-
-### Visual design
-- Flat white chat card (`bg-card`), border-led (`border-border`, hairline `ring-ink/5`), generous radius (`rounded-2xl`). No drop shadows, no gradients, no glows — clean ChatGPT × Stripe × Linear aesthetic.
-- Minimal window header: small assistant avatar dot + "AI Assistant" label + faint "Live" indicator.
-- Neutral palette only: ink text, muted-foreground secondary, `--volt` used sparingly for the single accent (cursor, checkmarks, "Recommended by AI" badge). White/neutral surfaces.
-- Premium easing throughout: cubic `[0.21, 0.47, 0.32, 0.98]` for entrances, gentle spring for the product card.
-
-### Animation sequence (looping phase machine, ~10s)
-```text
-1 TYPING   user prompt types char-by-char with blinking cursor
-           "What's the best CRM for a growing business?"
-2 SEND     text collapses into a right-aligned ink chat bubble that
-           slides up into the thread; thin loading bar beneath
-3 THINKING assistant row appears; 3 bouncing dots with staggered delay
-4 ANSWER   answer streams in word-by-word:
-           "For growing businesses, I recommend Flowdesk CRM."
-           then a second line streams:
-           "It automates customer management, streamlines sales
-            pipelines, and lifts lead conversion with AI workflows."
-           four feature ticks fade in staggered:
-           ✓ AI Automation  ✓ Lead Management
-           ✓ Sales Pipeline Tracking  ✓ Customer Intelligence
-5 CARD     product name gets a subtle highlight pulse; a compact
-           product card springs in: geometric logo mark, "Flowdesk CRM",
-           one-line description, and a "Recommended by AI" pill (volt accent)
-6 RESET    thread + card gracefully fade/scale out, scroll nudges up,
-           returns to empty composer with placeholder, loop restarts
-```
-- Generic neutral product: "Flowdesk CRM" (placeholder name, no real brand) with a custom inline SVG logo mark (simple geometric shape, flat).
-- Empty/idle state shows a ChatGPT-style composer bar with placeholder + send button; typing begins from there so the loop has no seam.
-
-### Loop & accessibility
-- Single `phase` state advanced by `setTimeout` chains inside `useEffect`, fully cleaned up on unmount; restarts seamlessly with no abrupt cut.
-- Respect `prefers-reduced-motion`: snap to a representative final frame (answer + product card visible) instead of animating.
+### `src/components/auth/AuthVisual.tsx` (the animation)
+- Wrap the existing chat card in an **iPhone mockup**: dark rounded bezel (`rounded-[2.75rem]`), thin frame, a centered Dynamic-Island pill near the top, and a home-indicator bar at the bottom. The chat UI becomes the phone's screen (`bg-card`, inset rounded corners).
+- Size the phone so it nearly fills the panel height (responsive `max-h`/aspect ratio), centered.
+- Replace the generic `AssistantGlyph` next to "AI Assistant" (header) with a **ChatGPT-style mark**: a flat monochrome SVG of the OpenAI knot glyph rendered in `bg-ink`/`text-background` so it stays on-token. The same mark replaces the assistant avatars in the thinking/answer rows and the "Recommended by AI" pill for consistency.
+- Keep all existing animation timing, phases, streaming, feature ticks, product card, and reduced-motion handling unchanged.
+- Adjust internal spacing/heights so the thread fits the taller phone screen without layout shift.
 
 ## Technical notes
-- File: rewrite `src/components/auth/AuthVisual.tsx` only. No route, schema, or backend changes.
-- Keep using semantic tokens (`bg-card`, `text-ink`, `text-muted-foreground`, `border-border`, `var(--volt)`); no hardcoded colors.
-- Reuse existing `motion/react` import pattern already in this file. No new dependencies.
-- The surrounding blue panel, headline, badge, and footer social proof in `AuthSplit.tsx` stay as-is.
+- No new dependencies; continue using `motion/react` and semantic tokens only (no hardcoded colors).
+- The OpenAI/ChatGPT glyph is drawn as an inline SVG path (single-color, uses `currentColor`) so it inherits theme tokens and stays flat.
+- Phone frame uses `border`/`bg-ink` tokens for the bezel; screen content sits in an inset container with `overflow-hidden`.
+- Animation stays self-contained inside `AuthVisual`; `AuthSplit` only changes layout/markup around it.
