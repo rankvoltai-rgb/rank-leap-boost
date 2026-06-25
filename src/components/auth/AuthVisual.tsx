@@ -416,10 +416,11 @@ function AnswerStream({ text, highlighted }: { text: string; highlighted: boolea
     <>
       {before}
       <motion.span
-        animate={highlighted ? { backgroundColor: "color-mix(in oklab, var(--volt) 14%, transparent)" } : {}}
+        animate={highlighted ? { opacity: 1 } : { opacity: 1 }}
         transition={{ duration: 0.5, ease: EASE }}
-        className="rounded px-1 font-semibold text-ink"
+        className="font-bold text-ink underline decoration-2 underline-offset-[3px]"
         style={{
+          textDecorationColor: "var(--volt)",
           boxDecorationBreak: "clone",
           WebkitBoxDecorationBreak: "clone",
         }}
