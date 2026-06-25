@@ -292,7 +292,7 @@ export function AuthVisual() {
         </div>
 
         {/* composer */}
-        <div className="border-t border-border/70 px-4 pb-7 pt-3">
+        <div className="border-t border-border/70 px-5 py-4">
           <div className="flex items-center gap-2 rounded-full border border-border bg-surface px-4 py-2">
             <span className="flex-1 truncate text-sm text-ink">
               {phase === "typing" ? (
