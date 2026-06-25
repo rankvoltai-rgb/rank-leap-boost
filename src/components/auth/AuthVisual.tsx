@@ -1,293 +1,360 @@
-import { motion, type Variants } from "motion/react";
-import { useEffect, useState, type ReactElement } from "react";
-import { Quote } from "lucide-react";
-import rankvoltMark from "@/assets/rankvolt-mark.png.asset.json";
+import { useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion } from "motion/react";
+import { Check } from "lucide-react";
 
-/* ---------- AI engine brand marks (bespoke SVG, not lucide) ---------- */
-function ChatGPTLogo({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden>
-      <path d="M22.28 9.82a5.98 5.98 0 0 0-.52-4.91 6.05 6.05 0 0 0-6.51-2.9A6 6 0 0 0 4.98 4.18a5.98 5.98 0 0 0-4 2.9 6.05 6.05 0 0 0 .74 7.1 5.98 5.98 0 0 0 .51 4.91 6.05 6.05 0 0 0 6.52 2.9A6 6 0 0 0 19.02 19.8a5.98 5.98 0 0 0 4-2.9 6.05 6.05 0 0 0-.74-7.08Zm-9.02 12.6a4.48 4.48 0 0 1-2.88-1.04l.14-.08 4.78-2.76a.78.78 0 0 0 .4-.68v-6.74l2.02 1.17a.07.07 0 0 1 .04.05v5.58a4.5 4.5 0 0 1-4.5 4.5ZM3.6 18.1a4.47 4.47 0 0 1-.54-3.01l.14.08 4.78 2.76c.24.14.54.14.78 0l5.84-3.37v2.33a.08.08 0 0 1-.03.06l-4.83 2.79a4.5 4.5 0 0 1-6.14-1.64ZM2.34 7.9a4.48 4.48 0 0 1 2.34-1.97v5.68c0 .28.15.54.39.68l5.82 3.36-2.02 1.17a.07.07 0 0 1-.07 0l-4.83-2.8A4.5 4.5 0 0 1 2.34 7.9Zm16.6 3.86-5.84-3.38 2.02-1.16a.07.07 0 0 1 .07 0l4.83 2.79a4.5 4.5 0 0 1-.68 8.12v-5.69a.78.78 0 0 0-.4-.68Zm2.01-3.02-.14-.09-4.77-2.78a.78.78 0 0 0-.79 0L9.42 9.24V6.91a.07.07 0 0 1 .03-.06l4.83-2.79a4.5 4.5 0 0 1 6.68 4.66ZM8.32 12.87 6.3 11.7a.08.08 0 0 1-.04-.06V6.07a4.5 4.5 0 0 1 7.38-3.45l-.14.08-4.78 2.76a.78.78 0 0 0-.4.68v6.73Zm1.1-2.37L12 9.01l2.6 1.5v3l-2.6 1.5-2.6-1.5v-3Z" />
-    </svg>
-  );
-}
-function GeminiLogo({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden>
-      <path d="M12 0c.34 6.27 5.73 11.66 12 12-6.27.34-11.66 5.73-12 12-.34-6.27-5.73-11.66-12-12C6.27 11.66 11.66 6.27 12 0Z" />
-    </svg>
-  );
-}
-function GoogleLogo({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" className={className} aria-hidden>
-      <path fill="#4285F4" d="M21.6 12.23c0-.74-.07-1.45-.19-2.13H12v4.03h5.38a4.6 4.6 0 0 1-2 3.02v2.5h3.23c1.89-1.74 2.99-4.3 2.99-7.42Z" />
-      <path fill="#34A853" d="M12 22c2.7 0 4.96-.9 6.62-2.42l-3.23-2.5c-.9.6-2.04.96-3.39.96-2.6 0-4.8-1.76-5.59-4.12H3.07v2.58A10 10 0 0 0 12 22Z" />
-      <path fill="#FBBC05" d="M6.41 13.92a6 6 0 0 1 0-3.84V7.5H3.07a10 10 0 0 0 0 9l3.34-2.58Z" />
-      <path fill="#EA4335" d="M12 5.96c1.47 0 2.78.5 3.81 1.49l2.85-2.85C16.95 2.99 14.7 2 12 2A10 10 0 0 0 3.07 7.5l3.34 2.58C7.2 7.72 9.4 5.96 12 5.96Z" />
-    </svg>
-  );
-}
-function PerplexityLogo({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" className={className} fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden>
-      <path d="M12 3v18M12 7.5 5 4v8.5L12 16l7-3.5V4l-7 3.5ZM5 12.5V20l7-4 7 4v-7.5" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
-function ClaudeLogo({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden>
-      <path d="M12 2.2c.5 2.9 1.3 4.7 2.4 6 1.2 1.1 3 2 6 2.5-2.9.5-4.7 1.3-6 2.4-1.1 1.2-2 3-2.5 6-.5-2.9-1.3-4.7-2.4-6-1.2-1.1-3-2-6-2.5 2.9-.5 4.7-1.3 6-2.4 1.1-1.2 2-3 2.5-6Z" />
-    </svg>
-  );
-}
-function GrokLogo({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden>
-      <path d="M4 20 14.5 9.5 9 4h3.2l4.3 4.3-2.1 2.1L20 4h-3.2l-2.6 2.6L11.9 4H4l6.4 6.4L4 16.8V20Zm14-9.6L11.4 17H8.2l6.6-6.6h3.2Z" />
-    </svg>
-  );
-}
+/* ------------------------------------------------------------------ *
+ * Premium, self-looping ChatGPT-style "AI recommends your product"
+ * motion graphic. Flat, white, border-led, neutral palette with a
+ * single volt accent. Fully autonomous ~10s loop.
+ * ------------------------------------------------------------------ */
 
-type Engine = {
-  name: string;
-  Logo: (props: { className?: string }) => ReactElement;
-  color: string;
-  brandTint?: boolean;
-};
+const PROMPT = "What's the best CRM for a growing business?";
 
-const ENGINES: Engine[] = [
-  { name: "ChatGPT", Logo: ChatGPTLogo, color: "#10a37f" },
-  { name: "Gemini", Logo: GeminiLogo, color: "#4285f4" },
-  { name: "Google", Logo: GoogleLogo, color: "#ffffff", brandTint: true },
-  { name: "Perplexity", Logo: PerplexityLogo, color: "#20b8cd" },
-  { name: "Claude", Logo: ClaudeLogo, color: "#d97757" },
-  { name: "Grok", Logo: GrokLogo, color: "#1a1a1a" },
+const ANSWER_LEAD = "For growing businesses, I recommend ";
+const PRODUCT = "Flowdesk CRM";
+const ANSWER_BODY =
+  "It automates customer management, streamlines sales pipelines, and lifts lead conversion with AI-powered workflows.";
+
+const FEATURES = [
+  "AI Automation",
+  "Lead Management",
+  "Sales Pipeline Tracking",
+  "Customer Intelligence",
 ];
 
-/* node positions on a circle (viewBox-relative %), starting at top, clockwise */
-const RADIUS = 39;
-const NODES = ENGINES.map((engine, i) => {
-  const angle = (-90 + i * (360 / ENGINES.length)) * (Math.PI / 180);
-  return {
-    ...engine,
-    x: 50 + RADIUS * Math.cos(angle),
-    y: 50 + RADIUS * Math.sin(angle),
-  };
-});
+const EASE = [0.21, 0.47, 0.32, 0.98] as const;
 
-const reveal: Variants = {
-  hidden: { opacity: 0, y: 16 },
-  show: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.6,
-      delay: 0.15 + i * 0.12,
-      ease: [0.21, 0.47, 0.32, 0.98] as const,
-    },
-  }),
-};
+type Phase = "typing" | "thinking" | "answer" | "card" | "reset";
 
-/* ---------- Orbital "AI traffic" core ---------- */
-function TrafficOrbit() {
+function prefersReducedMotion() {
+  if (typeof window === "undefined") return false;
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
+/* simple flat geometric product mark */
+function ProductMark({ className }: { className?: string }) {
   return (
-    <div className="relative mx-auto aspect-square w-full max-w-[340px]">
-      {/* moving traffic beams (SVG) */}
-      <svg
-        viewBox="0 0 100 100"
-        className="absolute inset-0 h-full w-full overflow-visible"
-        aria-hidden
-      >
-        <defs>
-          <radialGradient id="beam" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="var(--volt)" stopOpacity="0.9" />
-            <stop offset="100%" stopColor="var(--volt)" stopOpacity="0" />
-          </radialGradient>
-        </defs>
-        {NODES.map((node, i) => (
-          <g key={node.name}>
-            <line
-              x1={node.x}
-              y1={node.y}
-              x2="50"
-              y2="50"
-              stroke="color-mix(in oklab, var(--volt) 30%, var(--border))"
-              strokeWidth="0.45"
-              strokeDasharray="1.4 2.2"
-            />
-            {/* traffic packet flowing inward */}
-            <motion.circle
-              r="1.4"
-              fill="url(#beam)"
-              initial={{ cx: node.x, cy: node.y, opacity: 0 }}
-              animate={{
-                cx: [node.x, 50],
-                cy: [node.y, 50],
-                opacity: [0, 1, 1, 0],
-              }}
-              transition={{
-                duration: 2.2,
-                delay: i * 0.35,
-                repeat: Infinity,
-                repeatDelay: 0.6,
-                ease: "easeIn",
-              }}
-            />
-          </g>
-        ))}
-      </svg>
+    <svg viewBox="0 0 24 24" className={className} fill="none" aria-hidden>
+      <rect x="3" y="3" width="8" height="8" rx="2.5" fill="currentColor" />
+      <rect x="13" y="3" width="8" height="8" rx="2.5" fill="currentColor" opacity="0.45" />
+      <rect x="3" y="13" width="8" height="8" rx="2.5" fill="currentColor" opacity="0.45" />
+      <rect x="13" y="13" width="8" height="8" rx="2.5" fill="currentColor" />
+    </svg>
+  );
+}
 
-      {/* decorative rotating rings */}
-      <motion.span
-        className="absolute inset-[8%] rounded-full border border-dashed border-border/80"
-        animate={{ rotate: 360 }}
-        transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
-      />
-      <motion.span
-        className="absolute inset-[22%] rounded-full border border-border/50"
-        animate={{ rotate: -360 }}
-        transition={{ duration: 38, repeat: Infinity, ease: "linear" }}
-      />
-
-      {/* engine nodes */}
-      {NODES.map((node, i) => {
-        const Logo = node.Logo;
-        const isGoogle = node.name === "Google";
-        return (
-          <motion.div
-            key={node.name}
-            className="absolute -translate-x-1/2 -translate-y-1/2"
-            style={{ left: `${node.x}%`, top: `${node.y}%` }}
-            initial={{ opacity: 0, scale: 0.6 }}
-            animate={{ opacity: 1, scale: 1, y: [0, -4, 0] }}
-            transition={{
-              opacity: { duration: 0.5, delay: 0.4 + i * 0.1 },
-              scale: { duration: 0.5, delay: 0.4 + i * 0.1, ease: [0.34, 1.56, 0.64, 1] },
-              y: { duration: 3.5 + i * 0.3, repeat: Infinity, ease: "easeInOut" },
-            }}
-          >
-            <div
-              className="flex h-12 w-12 items-center justify-center rounded-2xl bg-card ring-1 ring-ink/[0.06]"
-              style={{
-                boxShadow: `0 10px 24px -14px ${node.color}, 0 4px 12px -8px rgba(15,23,42,0.25)`,
-                color: isGoogle ? undefined : node.color,
-              }}
-              title={node.name}
-            >
-              <Logo className="h-6 w-6" />
-              <span className="sr-only">{node.name}</span>
-            </div>
-          </motion.div>
-        );
-      })}
-
-      {/* center: your brand */}
-      <motion.div
-        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
-        initial={{ opacity: 0, scale: 0.7 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.6, delay: 0.2, ease: [0.34, 1.56, 0.64, 1] }}
-      >
-        <span
-          className="absolute -inset-3 -z-10 rounded-[2rem] opacity-40 blur-xl"
-          style={{ background: "radial-gradient(circle, var(--volt), transparent 70%)" }}
-        />
-        <span
-          className="absolute inset-0 -z-10 animate-ping rounded-3xl opacity-15"
-          style={{ background: "var(--volt)" }}
-        />
-        <div
-          className="flex h-20 w-20 flex-col items-center justify-center gap-1 rounded-3xl bg-card ring-1 ring-ink/[0.06]"
-          style={{ boxShadow: "0 0 0 6px color-mix(in oklab, var(--volt) 14%, transparent), 0 18px 40px -16px rgba(15,23,42,0.4)" }}
-        >
-          <img src={rankvoltMark.url} alt="Rankvolt" className="h-8 w-8 object-contain" />
-          <span className="text-[0.58rem] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
-            You
-          </span>
-        </div>
-      </motion.div>
-    </div>
+function AssistantGlyph({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden>
+      <path d="M12 2.4c.45 2.6 1.2 4.2 2.2 5.4 1 1 2.6 1.8 5.4 2.2-2.8.45-4.4 1.2-5.4 2.2-1 1-1.75 2.6-2.2 5.4-.45-2.8-1.2-4.4-2.2-5.4-1-1-2.6-1.75-5.4-2.2 2.8-.45 4.4-1.2 5.4-2.2 1-1.2 1.75-2.8 2.2-5.4Z" />
+    </svg>
   );
 }
 
 export function AuthVisual() {
-  const [tick, setTick] = useState(0);
+  const [phase, setPhase] = useState<Phase>("typing");
+  const [typed, setTyped] = useState(0);
+  const [answerChars, setAnswerChars] = useState(0);
+  const [featuresShown, setFeaturesShown] = useState(0);
+  const cancelled = useRef(false);
+
+  const fullAnswer = ANSWER_LEAD + PRODUCT + ". " + ANSWER_BODY;
 
   useEffect(() => {
-    const id = setInterval(() => setTick((t) => (t + 1) % ENGINES.length), 2400);
-    return () => clearInterval(id);
+    cancelled.current = false;
+
+    if (prefersReducedMotion()) {
+      setPhase("card");
+      setTyped(PROMPT.length);
+      setAnswerChars(fullAnswer.length);
+      setFeaturesShown(FEATURES.length);
+      return;
+    }
+
+    const wait = (ms: number) =>
+      new Promise<void>((resolve) => setTimeout(resolve, ms));
+
+    async function run() {
+      // eslint-disable-next-line no-constant-condition
+      while (!cancelled.current) {
+        // 1 — TYPING
+        setPhase("typing");
+        setTyped(0);
+        setAnswerChars(0);
+        setFeaturesShown(0);
+        for (let i = 1; i <= PROMPT.length; i++) {
+          if (cancelled.current) return;
+          setTyped(i);
+          await wait(34);
+        }
+        await wait(520);
+
+        // 2 + 3 — SEND + THINKING
+        if (cancelled.current) return;
+        setPhase("thinking");
+        await wait(1400);
+
+        // 4 — ANSWER streaming
+        if (cancelled.current) return;
+        setPhase("answer");
+        for (let i = 1; i <= fullAnswer.length; i++) {
+          if (cancelled.current) return;
+          setAnswerChars(i);
+          await wait(16);
+        }
+        for (let f = 1; f <= FEATURES.length; f++) {
+          if (cancelled.current) return;
+          setFeaturesShown(f);
+          await wait(180);
+        }
+        await wait(420);
+
+        // 5 — PRODUCT CARD
+        if (cancelled.current) return;
+        setPhase("card");
+        await wait(2600);
+
+        // 6 — RESET
+        if (cancelled.current) return;
+        setPhase("reset");
+        await wait(820);
+      }
+    }
+
+    run();
+    return () => {
+      cancelled.current = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const active = ENGINES[tick];
+  const showThread = phase !== "typing" && phase !== "reset";
+  const answerText = fullAnswer.slice(0, answerChars);
+  const productHighlighted = phase === "card";
 
   return (
-    <div className="relative mt-8 space-y-4">
-      {/* Orbit hero */}
+    <div className="relative mt-8">
       <motion.div
-        custom={0}
-        variants={reveal}
-        initial="hidden"
-        animate="show"
-        className="relative overflow-hidden rounded-[1.75rem] bg-card p-6 ring-1 ring-ink/[0.05]"
-        style={{ boxShadow: "0 28px 64px -28px rgba(15,23,42,0.5)" }}
+        initial={{ opacity: 0, y: 18 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: EASE }}
+        className="overflow-hidden rounded-[1.5rem] border border-ink/[0.06] bg-card ring-1 ring-ink/[0.03]"
       >
-        {/* subtle top sheen */}
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-muted/60 to-transparent" />
-        <div className="relative flex items-center justify-between">
-          <span className="flex items-center gap-2 text-sm font-semibold text-ink">
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-75" style={{ background: "var(--volt)" }} />
-              <span className="relative inline-flex h-2 w-2 rounded-full" style={{ background: "var(--volt)" }} />
-            </span>
-            AI traffic, flowing to you
+        {/* header */}
+        <div className="flex items-center gap-2.5 border-b border-border/70 px-4 py-3">
+          <span className="flex h-6 w-6 items-center justify-center rounded-full bg-ink text-background">
+            <AssistantGlyph className="h-3.5 w-3.5" />
           </span>
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-muted px-2.5 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.1em] text-muted-foreground">
+          <span className="text-sm font-semibold text-ink">AI Assistant</span>
+          <span className="ml-auto inline-flex items-center gap-1.5 text-[0.65rem] font-medium uppercase tracking-[0.1em] text-muted-foreground">
             <span className="h-1.5 w-1.5 rounded-full" style={{ background: "var(--volt)" }} />
             Live
           </span>
         </div>
 
-        <TrafficOrbit />
+        {/* conversation thread */}
+        <div className="flex min-h-[320px] flex-col gap-4 px-4 py-5">
+          <AnimatePresence mode="popLayout">
+            {showThread && (
+              <motion.div
+                key="user-bubble"
+                layout
+                initial={{ opacity: 0, y: 14, scale: 0.96 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.45, ease: EASE }}
+                className="flex justify-end"
+              >
+                <div className="max-w-[85%] rounded-2xl rounded-br-md bg-ink px-3.5 py-2.5 text-sm leading-relaxed text-background">
+                  {PROMPT}
+                </div>
+              </motion.div>
+            )}
 
-        {/* rotating "recommended by" line */}
-        <div className="relative mt-3 flex h-5 items-center justify-center gap-1.5 text-xs text-muted-foreground">
-          Recommended by
-          <motion.span
-            key={active.name}
-            initial={{ opacity: 0, y: 6 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.35 }}
-            className="font-semibold text-ink"
-          >
-            {active.name}
-          </motion.span>
+            {phase === "thinking" && (
+              <motion.div
+                key="thinking"
+                layout
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.35, ease: EASE }}
+                className="flex items-center gap-3"
+              >
+                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-border bg-background text-ink">
+                  <AssistantGlyph className="h-4 w-4" />
+                </span>
+                <span className="flex items-center gap-1 rounded-2xl rounded-bl-md border border-border bg-surface px-3.5 py-3">
+                  {[0, 1, 2].map((d) => (
+                    <motion.span
+                      key={d}
+                      className="h-1.5 w-1.5 rounded-full bg-muted-foreground"
+                      animate={{ opacity: [0.25, 1, 0.25], y: [0, -3, 0] }}
+                      transition={{
+                        duration: 0.9,
+                        repeat: Infinity,
+                        delay: d * 0.16,
+                        ease: "easeInOut",
+                      }}
+                    />
+                  ))}
+                </span>
+              </motion.div>
+            )}
+
+            {(phase === "answer" || phase === "card") && (
+              <motion.div
+                key="answer"
+                layout
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.4, ease: EASE }}
+                className="flex gap-3"
+              >
+                <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-border bg-background text-ink">
+                  <AssistantGlyph className="h-4 w-4" />
+                </span>
+                <div className="min-w-0 flex-1 space-y-3">
+                  <p className="text-[0.9rem] leading-relaxed text-ink">
+                    <AnswerStream text={answerText} highlighted={productHighlighted} />
+                    {phase === "answer" && answerChars < fullAnswer.length && (
+                      <span
+                        className="ml-0.5 inline-block h-[1em] w-[2px] translate-y-[0.15em] animate-pulse rounded-full align-middle"
+                        style={{ background: "var(--volt)" }}
+                      />
+                    )}
+                  </p>
+
+                  {/* feature ticks */}
+                  {featuresShown > 0 && (
+                    <div className="grid grid-cols-2 gap-x-3 gap-y-1.5 pt-0.5">
+                      {FEATURES.slice(0, featuresShown).map((f) => (
+                        <motion.span
+                          key={f}
+                          initial={{ opacity: 0, x: -6 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ duration: 0.35, ease: EASE }}
+                          className="flex items-center gap-1.5 text-[0.78rem] text-muted-foreground"
+                        >
+                          <span
+                            className="flex h-3.5 w-3.5 items-center justify-center rounded-full"
+                            style={{ background: "color-mix(in oklab, var(--volt) 14%, transparent)" }}
+                          >
+                            <Check className="h-2.5 w-2.5" style={{ color: "var(--volt)" }} />
+                          </span>
+                          {f}
+                        </motion.span>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* product card */}
+                  <AnimatePresence>
+                    {phase === "card" && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 12, scale: 0.96 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: 8 }}
+                        transition={{ type: "spring", stiffness: 260, damping: 22 }}
+                        className="mt-1 flex items-center gap-3 rounded-xl border border-border bg-surface p-3"
+                      >
+                        <span
+                          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-card"
+                          style={{ color: "var(--volt)" }}
+                        >
+                          <ProductMark className="h-5 w-5" />
+                        </span>
+                        <div className="min-w-0 flex-1">
+                          <p className="truncate text-sm font-semibold text-ink">{PRODUCT}</p>
+                          <p className="truncate text-[0.72rem] text-muted-foreground">
+                            AI-powered CRM for growing teams
+                          </p>
+                        </div>
+                        <span
+                          className="inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-1 text-[0.62rem] font-semibold"
+                          style={{
+                            background: "color-mix(in oklab, var(--volt) 12%, transparent)",
+                            color: "var(--volt)",
+                          }}
+                        >
+                          <AssistantGlyph className="h-2.5 w-2.5" />
+                          Recommended by AI
+                        </span>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
-      </motion.div>
 
-      {/* Answer card */}
-      <motion.div
-        custom={1}
-        variants={reveal}
-        initial="hidden"
-        animate="show"
-        className="rounded-2xl bg-card p-4 ring-1 ring-ink/[0.05]"
-        style={{ boxShadow: "0 18px 44px -24px rgba(15,23,42,0.45)" }}
-      >
-        <div className="flex items-start gap-3">
-          <span
-            className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg"
-            style={{ background: "var(--volt)", color: "white", boxShadow: "0 6px 16px -6px var(--volt)" }}
-          >
-            <Quote className="h-3.5 w-3.5" />
-          </span>
-          <p className="text-sm leading-relaxed text-muted-foreground">
-            "The best option is <span className="font-semibold text-ink">your brand</span> — it's
-            widely cited as the most reliable choice."
-          </p>
+        {/* composer */}
+        <div className="border-t border-border/70 px-4 py-3">
+          <div className="flex items-center gap-2 rounded-full border border-border bg-surface px-4 py-2">
+            <span className="flex-1 truncate text-sm text-ink">
+              {phase === "typing" ? (
+                <>
+                  {PROMPT.slice(0, typed)}
+                  <span
+                    className="ml-px inline-block h-[1em] w-[2px] translate-y-[0.15em] animate-pulse rounded-full align-middle"
+                    style={{ background: "var(--volt)" }}
+                  />
+                </>
+              ) : (
+                <span className="text-muted-foreground">Ask anything…</span>
+              )}
+            </span>
+            <motion.span
+              animate={phase === "typing" && typed === PROMPT.length ? { scale: [1, 0.86, 1] } : {}}
+              transition={{ duration: 0.4, ease: EASE }}
+              className="flex h-7 w-7 items-center justify-center rounded-full bg-ink text-background"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                className="h-3.5 w-3.5"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden
+              >
+                <path d="M12 19V5M5 12l7-7 7 7" />
+              </svg>
+            </motion.span>
+          </div>
         </div>
       </motion.div>
     </div>
+  );
+}
+
+/* renders the streamed answer, emphasising the product name once present */
+function AnswerStream({ text, highlighted }: { text: string; highlighted: boolean }) {
+  const idx = text.indexOf(PRODUCT);
+  if (idx === -1) {
+    return <>{text}</>;
+  }
+  const before = text.slice(0, idx);
+  const product = text.slice(idx, idx + PRODUCT.length);
+  const after = text.slice(idx + PRODUCT.length);
+  return (
+    <>
+      {before}
+      <motion.span
+        animate={highlighted ? { backgroundColor: "color-mix(in oklab, var(--volt) 14%, transparent)" } : {}}
+        transition={{ duration: 0.5, ease: EASE }}
+        className="rounded px-1 font-semibold text-ink"
+        style={{
+          boxDecorationBreak: "clone",
+          WebkitBoxDecorationBreak: "clone",
+        }}
+      >
+        {product}
+      </motion.span>
+      {after}
+    </>
   );
 }

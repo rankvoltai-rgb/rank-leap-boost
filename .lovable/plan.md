@@ -1,62 +1,49 @@
-# Redesign the Onboarding Flow
+## Goal
 
-Rebuild `/onboarding` from the ground up using a Flux-inspired split layout (numbered step rail on the left, content panel on the right, top bar, footer) styled with Rankvolt's existing tokens (Cloud White + Blue, Poppins, semantic tokens only — light, clean). The underlying data/AI logic is reused; this is primarily a frontend/presentation rebuild with one new editable step.
+Replace the orbital "AI traffic" graphic on the auth page's right brand panel with a premium, self-looping ChatGPT-style motion graphic that demonstrates: a user asks AI for a CRM recommendation → AI streams an answer → a product card appears. The loop runs ~10s, seamlessly, communicating "Users ask AI for recommendations. AI recommends your product" within 3 seconds.
 
-## The new flow
+Per your choices: generic CRM demo (neutral product name, no brand/competitor names), and it swaps the existing orbital graphic in-place (white chat card sitting on the current blue panel — no other panel changes).
 
+## What gets built
+
+Rewrite `src/components/auth/AuthVisual.tsx` into a single self-contained, autonomous looping animation component (same `AuthVisual` export so `AuthSplit.tsx` needs no change). All motion uses `motion/react` (already in the project) plus a small phase state machine driven by timers.
+
+### Visual design
+- Flat white chat card (`bg-card`), border-led (`border-border`, hairline `ring-ink/5`), generous radius (`rounded-2xl`). No drop shadows, no gradients, no glows — clean ChatGPT × Stripe × Linear aesthetic.
+- Minimal window header: small assistant avatar dot + "AI Assistant" label + faint "Live" indicator.
+- Neutral palette only: ink text, muted-foreground secondary, `--volt` used sparingly for the single accent (cursor, checkmarks, "Recommended by AI" badge). White/neutral surfaces.
+- Premium easing throughout: cubic `[0.21, 0.47, 0.32, 0.98]` for entrances, gentle spring for the product card.
+
+### Animation sequence (looping phase machine, ~10s)
 ```text
- 1  Your website     →  name + website URL, then "Analyze my site"
- 2  Review analysis  →  AI scans, then user confirms/edits profile + keywords
- 3  Traffic forecast →  projected monthly traffic number + stat cards
- 4  Start free trial →  Stripe embedded checkout → dashboard on success
+1 TYPING   user prompt types char-by-char with blinking cursor
+           "What's the best CRM for a growing business?"
+2 SEND     text collapses into a right-aligned ink chat bubble that
+           slides up into the thread; thin loading bar beneath
+3 THINKING assistant row appears; 3 bouncing dots with staggered delay
+4 ANSWER   answer streams in word-by-word:
+           "For growing businesses, I recommend Flowdesk CRM."
+           then a second line streams:
+           "It automates customer management, streamlines sales
+            pipelines, and lifts lead conversion with AI workflows."
+           four feature ticks fade in staggered:
+           ✓ AI Automation  ✓ Lead Management
+           ✓ Sales Pipeline Tracking  ✓ Customer Intelligence
+5 CARD     product name gets a subtle highlight pulse; a compact
+           product card springs in: geometric logo mark, "Flowdesk CRM",
+           one-line description, and a "Recommended by AI" pill (volt accent)
+6 RESET    thread + card gracefully fade/scale out, scroll nudges up,
+           returns to empty composer with placeholder, loop restarts
 ```
+- Generic neutral product: "Flowdesk CRM" (placeholder name, no real brand) with a custom inline SVG logo mark (simple geometric shape, flat).
+- Empty/idle state shows a ChatGPT-style composer bar with placeholder + send button; typing begins from there so the loop has no seam.
 
-## Layout (Flux-style, Rankvolt-branded)
-
-- **Top bar:** Rankvolt logo + "Set up your engine" label on the left; "Restart" and "Leave" actions on the right (Restart resets to step 1; Leave returns to `/`).
-- **Left rail:** vertical numbered steps (1–4) each with a title and one-line description. Current step highlighted (filled dark/volt chip), completed steps show a check, upcoming steps muted. Collapses above the content on mobile into a slim progress strip.
-- **Right panel:** the active step's content, vertically centered with generous spacing.
-- **Footer:** small muted links (Help Center, Status, Contact) + "© Rankvolt 2026".
-
-## Step details
-
-**Step 1 — Your website**
-- Fields: Full name, Website URL (both validated; URL required to proceed).
-- Primary CTA "Analyze my site" → triggers `analyzeWebsite` and advances to step 2 in its scanning state.
-
-**Step 2 — Review analysis**
-- While running: animated scan checklist (reuse the existing scan-step labels) inside the right panel.
-- When complete: editable form the user confirms or changes:
-  - **Profile:** Business name, Niche, Audience, Brand tone (text inputs/textarea, prefilled from analysis).
-  - **Keywords:** the discovered keywords as removable chips, plus an input to add new ones.
-- CTA "Looks good — see my forecast" persists edits and advances. Edits are merged back into the analysis object before persisting.
-
-**Step 3 — Traffic forecast**
-- Hero: projected monthly traffic as a large animated `CountUp` number.
-- Supporting stat cards: number of articles, average AI signal, setup = "Auto" (redesigned card styling to match the new layout).
-- A compact, scrollable list of the included article opportunities below the stats.
-- CTA "Start free trial".
-
-**Step 4 — Start free trial**
-- Split: plan value/social proof on one side, `StripeEmbeddedCheckout` on the other (reuse existing component, `business_monthly`, `trialDays={2}`).
-- `returnUrl` → `/dashboard?checkout=success&session_id={CHECKOUT_SESSION_ID}` (unchanged), so Stripe success lands on the dashboard.
-
-## Data / logic (reused, minimal changes)
-
-- `analyzeWebsite` (server fn) — unchanged.
-- `persistOnboarding` — called after step 2 with the **edited** analysis (merged profile + keyword edits) instead of the raw result. Same signature; we pass the user-edited `WebsiteAnalysis` and the confirmed business name.
-- On "Start free trial": keep current behavior — auto-queue opportunities (`addOpportunityToQueue`), `generateBlogStrategy`, `activateTrial`, then fetch user and mount Stripe checkout.
-- No database/schema changes. No changes to AI prompts.
-
-## Files
-
-- **Rewrite** `src/components/auth/Onboarding.tsx` — new stepper shell + four step views and edit state (profile fields + editable keyword list). Keep the existing server-fn wiring and the Stripe checkout step.
-- Likely **add** small presentational subcomponents in the same file (StepRail, TopBar, Footer, editable keyword chips) to keep it readable; no new routes.
-- `src/routes/onboarding.tsx` — unchanged (still renders `<Onboarding />`); update the `head` description copy to match the new website-first flow.
+### Loop & accessibility
+- Single `phase` state advanced by `setTimeout` chains inside `useEffect`, fully cleaned up on unmount; restarts seamlessly with no abrupt cut.
+- Respect `prefers-reduced-motion`: snap to a representative final frame (answer + product card visible) instead of animating.
 
 ## Technical notes
-
-- Stage machine extends to: `form` → `scanning` → `review` (new editable step) → `forecast` → `checkout`.
-- Keyword edits update a local copy of `analysis.keywords`; profile edits update local fields, merged into the `WebsiteAnalysis` passed to `persistOnboarding`.
-- All colors via semantic tokens; Poppins; motion via the already-installed `motion/react`. Respect `prefers-reduced-motion` as the current implementation does.
-- No business-logic changes beyond passing edited values into the existing persist call.
+- File: rewrite `src/components/auth/AuthVisual.tsx` only. No route, schema, or backend changes.
+- Keep using semantic tokens (`bg-card`, `text-ink`, `text-muted-foreground`, `border-border`, `var(--volt)`); no hardcoded colors.
+- Reuse existing `motion/react` import pattern already in this file. No new dependencies.
+- The surrounding blue panel, headline, badge, and footer social proof in `AuthSplit.tsx` stay as-is.
