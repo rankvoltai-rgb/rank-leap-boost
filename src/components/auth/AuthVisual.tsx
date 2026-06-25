@@ -22,6 +22,12 @@ const FEATURES = [
   "Customer Intelligence",
 ];
 
+const SOURCES = [
+  { letter: "F", domain: "flowdesk.io" },
+  { letter: "L", domain: "loopcraft.ai" },
+  { letter: "Y", domain: "yardstick.team" },
+];
+
 const EASE = [0.21, 0.47, 0.32, 0.98] as const;
 
 type Phase = "typing" | "thinking" | "answer" | "card" | "reset";

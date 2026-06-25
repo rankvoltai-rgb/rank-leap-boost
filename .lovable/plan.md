@@ -1,24 +1,48 @@
-# Auth page: full-screen iPhone chat animation
+## Goal
 
-Redesign the right-hand brand panel of the Auth/Login page so the looping ChatGPT-style chat animation becomes the hero — framed inside an iPhone, with the marketing copy removed and only the testimonial strip kept.
+Enrich the ChatGPT-style chat mockup in `src/components/auth/AuthVisual.tsx` with four design details from the reference screenshot, while keeping the existing feature checklist and recommended-product card.
 
-## Changes
+## What gets added
 
-### `src/components/auth/AuthSplit.tsx` (right panel)
-- Remove the badge ("Sign in → connect site → done"), the headline ("Get AI traffic on Autopilot, while you sleep"), and the supporting paragraph.
-- Restructure the panel to a vertical flex column that centers the iPhone-framed animation and takes up almost the full panel height.
-- Keep the avatar + stars + "400+ founders growing with Rankvolt" testimonial row pinned at the bottom.
-- Keep the blue gradient background, ambient glows, and dot texture.
+```text
+┌───────────────────────────────────────┐
+│ ◎ ChatGPT                       • Live │  (unchanged header)
+├───────────────────────────────────────┤
+│                  ┌──────────────────┐  │
+│                  │ user prompt …    │  │  (unchanged dark bubble)
+│                  └──────────────────┘  │
+│  ◎  • Searched 24 sources · writing…   │  ← NEW status line
+│     For lean teams, Flowdesk CRM is …  │  ← product name now bold+underline
+│     ▓▓▓▓▓▓▓░░░░░░  (shimmer bar)        │  ← NEW shimmer while streaming
+│     ✓ AI Automation   ✓ Lead Mgmt       │  (kept checklist)
+│     ✓ Pipeline        ✓ Intelligence    │
+│     ┌─ Flowdesk CRM ── Recommended ─┐   │  (kept product card)
+│     Sources  [P plannora] [L loop] [Y …]│  ← NEW source chips row
+├───────────────────────────────────────┤
+│  Ask a follow-up…                   ↑  │  (composer)
+└───────────────────────────────────────┘
+```
 
-### `src/components/auth/AuthVisual.tsx` (the animation)
-- Wrap the existing chat card in an **iPhone mockup**: dark rounded bezel (`rounded-[2.75rem]`), thin frame, a centered Dynamic-Island pill near the top, and a home-indicator bar at the bottom. The chat UI becomes the phone's screen (`bg-card`, inset rounded corners).
-- Size the phone so it nearly fills the panel height (responsive `max-h`/aspect ratio), centered.
-- Replace the generic `AssistantGlyph` next to "AI Assistant" (header) with a **ChatGPT-style mark**: a flat monochrome SVG of the OpenAI knot glyph rendered in `bg-ink`/`text-background` so it stays on-token. The same mark replaces the assistant avatars in the thinking/answer rows and the "Recommended by AI" pill for consistency.
-- Keep all existing animation timing, phases, streaming, feature ticks, product card, and reduced-motion handling unchanged.
-- Adjust internal spacing/heights so the thread fits the taller phone screen without layout shift.
+### 1. "Searched 24 sources · writing answer" status line
+Add a small row at the top of the assistant answer block: a blue dot (`var(--volt)`) + muted text. During the `answer` phase it reads `Searched 24 sources · writing answer`; once the `card` phase is reached it switches to `Searched 24 sources · answer ready`. Fades in with the answer.
+
+### 2. Underlined product name
+Change the `AnswerStream` emphasis from the current highlighted background pill to **bold + underline** (underline offset for legibility), matching the screenshot. Underline color uses the volt accent.
+
+### 3. Shimmer loading bar
+Add a thin rounded grey bar (`h-1.5 w-2/3 rounded-full`) beneath the streamed text that shows only while `phase === "answer"` and the answer is still streaming. It animates with a left-to-right moving gradient highlight (Motion `backgroundPosition` loop), then disappears when streaming completes.
+
+### 4. Source chips row
+Add a `SOURCES` array (3 fictional, non-real-company domains consistent with the brand — e.g. `plannora.io`, `loopcraft.ai`, `yardstick.team`). Render a "Sources" label followed by pill chips, each with a small circular letter avatar + domain text. Chips appear during the `card` phase, staggered in with a small fade/slide. Styled with `border-border`, `bg-surface`, rounded-full, using semantic tokens only.
+
+## Ordering inside the answer block
+Status line → answer text → shimmer bar (while streaming) → feature checklist → product card → sources row.
+
+## Loop timing
+The existing autonomous loop (`typing → thinking → answer → card → reset`) stays intact. The new elements key off the existing `phase`/`answerChars`/`featuresShown` state plus a small staggered reveal for source chips, so no timing logic is restructured.
 
 ## Technical notes
-- No new dependencies; continue using `motion/react` and semantic tokens only (no hardcoded colors).
-- The OpenAI/ChatGPT glyph is drawn as an inline SVG path (single-color, uses `currentColor`) so it inherits theme tokens and stays flat.
-- Phone frame uses `border`/`bg-ink` tokens for the bezel; screen content sits in an inset container with `overflow-hidden`.
-- Animation stays self-contained inside `AuthVisual`; `AuthSplit` only changes layout/markup around it.
+- All work stays in `src/components/auth/AuthVisual.tsx` (presentation only; no logic/backend changes).
+- Semantic tokens only (`text-muted-foreground`, `bg-surface`, `border-border`, `var(--volt)`); no hardcoded colors.
+- Respects `prefersReducedMotion` (shimmer/animations skipped, final state shown) like the existing component.
+- Verify with a Playwright screenshot of the `/auth` right panel after the change.
