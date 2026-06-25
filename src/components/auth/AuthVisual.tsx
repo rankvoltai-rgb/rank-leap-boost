@@ -91,14 +91,14 @@ export function AuthVisual() {
         for (let i = 1; i <= PROMPT.length; i++) {
           if (cancelled.current) return;
           setTyped(i);
-          await wait(42);
+          await wait(34);
         }
-        await wait(900);
+        await wait(650);
 
         // 2 + 3 — SEND + THINKING
         if (cancelled.current) return;
         setPhase("thinking");
-        await wait(1900);
+        await wait(1400);
 
         // 4 — ANSWER streaming
         if (cancelled.current) return;
@@ -106,25 +106,25 @@ export function AuthVisual() {
         for (let i = 1; i <= fullAnswer.length; i++) {
           if (cancelled.current) return;
           setAnswerChars(i);
-          await wait(22);
+          await wait(16);
         }
-        await wait(700);
+        await wait(500);
         for (let f = 1; f <= FEATURES.length; f++) {
           if (cancelled.current) return;
           setFeaturesShown(f);
-          await wait(320);
+          await wait(240);
         }
-        await wait(900);
+        await wait(650);
 
         // 5 — PRODUCT CARD
         if (cancelled.current) return;
         setPhase("card");
-        await wait(4800);
+        await wait(3800);
 
         // 6 — RESET
         if (cancelled.current) return;
         setPhase("reset");
-        await wait(1200);
+        await wait(900);
       }
     }
 
@@ -161,7 +161,7 @@ export function AuthVisual() {
         </div>
 
         {/* conversation thread */}
-        <div className="flex min-h-[400px] flex-col gap-4 px-4 py-5">
+        <div className="flex min-h-[560px] flex-col gap-4 px-4 py-6">
           <AnimatePresence mode="popLayout">
             {showThread && (
               <motion.div
