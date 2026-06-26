@@ -110,6 +110,26 @@ export function Footer() {
           <p className="text-xs text-muted-foreground">© 2026 Rankvolt. All rights reserved.</p>
           <p className="text-xs text-muted-foreground">Built to be the answer on Google &amp; AI search.</p>
         </div>
+        {/* TrustBox widget */}
+        <div className="mt-8 flex justify-center">
+          <div
+            className="trustpilot-widget"
+            data-locale="en-US"
+            data-template-id="56278e9abfbbba0bdcd568bc"
+            data-businessunit-id="rankvolt.top"
+            data-style-height="52px"
+            data-style-width="100%"
+          >
+            <a
+              href="https://www.trustpilot.com/review/rankvolt.top"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs text-muted-foreground hover:text-ink"
+            >
+              Trustpilot
+            </a>
+          </div>
+        </div>
       </div>
     </footer>
   );
