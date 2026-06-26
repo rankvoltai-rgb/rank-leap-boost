@@ -102,6 +102,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "icon", type: "image/png", href: rankvoltMark.url },
       { rel: "apple-touch-icon", href: rankvoltMark.url },
     ],
+    scripts: [
+      {
+        type: "text/javascript",
+        src: "//widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js",
+        async: true,
+      },
+    ],
   }),
   shellComponent: RootShell,
   component: RootComponent,
