@@ -683,7 +683,7 @@ export function Onboarding() {
                         )}
                       </button>
                       <p className="mt-2.5 text-center text-xs text-muted-foreground">
-                        30+ more articles auto-generated on activation. No charge for 48 hours.
+                        30+ more articles auto-generated on activation. $1 card check, refunded instantly.
                       </p>
                     </div>
 
