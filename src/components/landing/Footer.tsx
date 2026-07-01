@@ -1,5 +1,49 @@
+import { useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { Logo } from "./shared";
+
+// Client-only TrustBox: the Trustpilot script replaces the div's contents with
+// an iframe after load. Rendering it only after mount keeps SSR and client
+// markup identical, avoiding a hydration mismatch.
+function TrustBox() {
+  const ref = useRef<HTMLDivElement>(null);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (mounted && ref.current && (window as any).Trustpilot) {
+      (window as any).Trustpilot.loadFromElement(ref.current, true);
+    }
+  }, [mounted]);
+
+  if (!mounted) return null;
+
+  return (
+    <div className="mt-8 flex justify-center">
+      <div
+        ref={ref}
+        className="trustpilot-widget"
+        data-locale="en-US"
+        data-template-id="56278e9abfbbba0bdcd568bc"
+        data-businessunit-id="rankvolt.top"
+        data-style-height="52px"
+        data-style-width="100%"
+      >
+        <a
+          href="https://www.trustpilot.com/review/rankvolt.top"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-xs text-muted-foreground hover:text-ink"
+        >
+          Trustpilot
+        </a>
+      </div>
+    </div>
+  );
+}
 
 const PRODUCT_LINKS = [
   { label: "How It Works", href: "#top" },
@@ -110,26 +154,8 @@ export function Footer() {
           <p className="text-xs text-muted-foreground">© 2026 Rankvolt. All rights reserved.</p>
           <p className="text-xs text-muted-foreground">Built to be the answer on Google &amp; AI search.</p>
         </div>
-        {/* TrustBox widget */}
-        <div className="mt-8 flex justify-center">
-          <div
-            className="trustpilot-widget"
-            data-locale="en-US"
-            data-template-id="56278e9abfbbba0bdcd568bc"
-            data-businessunit-id="rankvolt.top"
-            data-style-height="52px"
-            data-style-width="100%"
-          >
-            <a
-              href="https://www.trustpilot.com/review/rankvolt.top"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-xs text-muted-foreground hover:text-ink"
-            >
-              Trustpilot
-            </a>
-          </div>
-        </div>
+        {/* TrustBox widget (client-only) */}
+        <TrustBox />
       </div>
     </footer>
   );

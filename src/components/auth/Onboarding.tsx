@@ -683,7 +683,7 @@ export function Onboarding() {
                         )}
                       </button>
                       <p className="mt-2.5 text-center text-xs text-muted-foreground">
-                        30+ more articles auto-generated on activation. No charge for 48 hours.
+                        30+ more articles auto-generated on activation. $1 card check, refunded instantly.
                       </p>
                     </div>
 
@@ -748,7 +748,7 @@ export function Onboarding() {
                     />
                     <div className="relative">
                       <span className="inline-flex items-center gap-1.5 rounded-full border border-background/20 bg-background/10 px-3 py-1 text-xs font-medium text-background/80">
-                        <Sparkles className="h-3.5 w-3.5" /> 48-hour free trial · cancel anytime
+                        <Sparkles className="h-3.5 w-3.5" /> $1 card check · refunded instantly
                       </span>
                       <h2 className="mt-5 text-3xl font-semibold tracking-tight">Business</h2>
                       <p className="mt-1 text-sm text-background/70">All-in-one growth package</p>
@@ -758,7 +758,7 @@ export function Onboarding() {
                         <span className="mb-1.5 text-sm text-background/70">/month</span>
                       </div>
                       <p className="mt-1 text-xs text-background/60">
-                        Free for 48 hours, then 50% off your first month.
+                        $1 to verify your card (refunded), free for 48 hours, then 50% off your first month.
                       </p>
                       <ul className="mt-7 space-y-2.5">
                         {PLAN_FEATURES.map((f) => (
@@ -792,17 +792,18 @@ export function Onboarding() {
                       <Check className="h-3.5 w-3.5" /> Plan secured
                     </div>
                     <h1 className="text-2xl font-semibold tracking-tight text-ink">
-                      Activate your free trial
+                      Verify your card to start
                     </h1>
                     <p className="mt-1.5 text-sm text-muted-foreground">
-                      No charge for 48 hours. Add your card to unlock your dashboard — cancel anytime
-                      before the trial ends and you won't be billed.
+                      We charge <span className="font-medium text-ink">$1 to confirm your card</span> and
+                      refund it right away. Free for 48 hours, then $49.50/month — cancel anytime before
+                      the trial ends and you won't be billed.
                     </p>
                     <div className="mt-4 flex flex-wrap items-center gap-2">
                       {[
                         { icon: Lock, label: "Secured by Stripe" },
                         { icon: Check, label: "Cancel anytime" },
-                        { icon: Sparkles, label: "48h free" },
+                        { icon: Sparkles, label: "$1 refundable check" },
                       ].map((t) => (
                         <span
                           key={t.label}
@@ -814,7 +815,8 @@ export function Onboarding() {
                     </div>
                     <div className="mt-5 overflow-hidden rounded-2xl border border-border bg-card p-4">
                       <StripeEmbeddedCheckout
-                        priceId="business_monthly"
+                        priceId="card_validation_fee"
+                        validatePlanPriceId="business_monthly"
                         trialDays={2}
                         customerEmail={checkout?.email}
                         userId={checkout?.userId}
