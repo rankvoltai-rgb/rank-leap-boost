@@ -1,0 +1,24 @@
+{
+  "name": "@rankvolt/api-client",
+  "version": "0.1.0",
+  "description": "Typed client for the Rankvolt public API (/api/public/v1/*). Shared by the Framer, Webflow, and Shopify plugins.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": ["dist", "src"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsc -p tsconfig.json --watch"
+  },
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "typescript": "^5.8.3"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "name": "@rankvolt/plugin-starter",
+  "version": "0.1.0",
+  "description": "Shared React + Vite shell every Rankvolt CMS plugin forks: connect an API key, list finished articles, and publish. Swap the publish step for the platform SDK.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@rankvolt/api-client": "file:../api-client",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "@vitejs/plugin-react": "^5.0.4",
+    "typescript": "^5.8.3",
+    "vite": "^7.3.1"
+  }
+}
