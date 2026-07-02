@@ -14,9 +14,16 @@ export const Route = createFileRoute("/api/public/v1/ping")({
       OPTIONS: async () => corsPreflight(),
       GET: async ({ request }) => {
         try {
+          const { rateLimitByIp, rateLimitByUser } = await import("@/lib/rate-limit.server");
+          const ipBlock = await rateLimitByIp(request);
+          if (ipBlock) return ipBlock;
+
           const { resolveApiKeyUser } = await import("@/lib/api-keys.server");
           const userId = await resolveApiKeyUser(request);
           if (!userId) return unauthorized();
+
+          const userBlock = await rateLimitByUser(userId);
+          if (userBlock) return userBlock;
 
           const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
           const { data: profile } = await supabaseAdmin
@@ -32,10 +39,10 @@ export const Route = createFileRoute("/api/public/v1/ping")({
           });
         } catch (err) {
           console.error("v1/ping failed", err);
-          return new Response(
-            JSON.stringify({ error: "Internal error" }),
-            { status: 500, headers: { "Content-Type": "application/json", ...API_CORS_HEADERS } },
-          );
+          return new Response(JSON.stringify({ error: "Internal error" }), {
+            status: 500,
+            headers: { "Content-Type": "application/json", ...API_CORS_HEADERS },
+          });
         }
       },
     },

@@ -50,6 +50,24 @@ export type Database = {
         }
         Relationships: []
       }
+      rate_limit_hits: {
+        Row: {
+          bucket: string
+          hits: number
+          window_start: string
+        }
+        Insert: {
+          bucket: string
+          hits?: number
+          window_start: string
+        }
+        Update: {
+          bucket?: string
+          hits?: number
+          window_start?: string
+        }
+        Relationships: []
+      }
       blogs: {
         Row: {
           ai_signal: number
@@ -341,6 +359,10 @@ export type Database = {
     }
     Functions: {
       consume_article_credit: { Args: { _user_id: string }; Returns: boolean }
+      hit_rate_limit: {
+        Args: { p_bucket: string; p_window_start: string }
+        Returns: number
+      }
       refund_article_credit: { Args: { _user_id: string }; Returns: undefined }
       reset_article_credits: {
         Args: { _period_end: string; _user_id: string }
