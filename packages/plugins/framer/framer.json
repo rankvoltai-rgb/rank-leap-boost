@@ -1,0 +1,6 @@
+{
+  "id": "rankvolt-articles",
+  "name": "Rankvolt",
+  "modes": ["canvas", "collection"],
+  "icon": "/icon.png"
+}
