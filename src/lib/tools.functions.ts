@@ -167,3 +167,83 @@ export const writeMetaDescriptions = createServerFn({ method: "POST" })
     }
     return options;
   });
+
+/* -------------------- Personal AI Visibility Plan -------------------- */
+
+const PersonalPlanInput = z.object({
+  name: z.string().trim().min(1).max(120),
+  role: z.string().trim().min(2).max(300),
+  current: z.string().trim().max(600).optional(),
+});
+
+export interface ChecklistItem {
+  task: string;
+  why: string;
+}
+
+export interface ChecklistSection {
+  section: string;
+  items: ChecklistItem[];
+}
+
+export interface PersonalAiPlan {
+  headlines: string[];
+  aboutMe: string;
+  checklist: ChecklistSection[];
+}
+
+export const generatePersonalAiPlan = createServerFn({ method: "POST" })
+  .inputValidator((d: unknown) => PersonalPlanInput.parse(d))
+  .handler(async ({ data }): Promise<PersonalAiPlan> => {
+    const context = data.current
+      ? `Their current LinkedIn headline or profile info: "${data.current}".`
+      : "They have not shared a current headline.";
+    const json = await generateJson(
+      `You are a personal-branding and generative engine optimization (GEO) expert. A professional named "${data.name}" describes what they do as: "${data.role}". ${context}
+
+Create a personalized plan to help this specific person become discoverable and recommended by AI engines (ChatGPT, Perplexity, Gemini, Google AI Overviews) when people ask about their field.
+
+Return JSON with this exact shape:
+{
+  "headlines": ["3 keyword-rich but human LinkedIn headline options tailored to them, each under 120 chars"],
+  "aboutMe": "A first-person About-Me draft (120-180 words) they can paste into their LinkedIn About section or a personal site. Make it specific to their role, natural, and easy for AI to quote. Reference concrete outcomes/skills implied by their role.",
+  "checklist": [
+    {"section": "LinkedIn for SEO", "items": [{"task": "concrete action", "why": "one short sentence on why it matters for AI visibility"}]},
+    {"section": "Optimize your profile", "items": [{"task": "...", "why": "..."}]},
+    {"section": "Create an About-Me page", "items": [{"task": "...", "why": "..."}]},
+    {"section": "Title & important notes", "items": [{"task": "...", "why": "..."}]}
+  ]
+}
+
+Rules: 3 headlines. 4 checklist sections using exactly those section names. 3-4 specific, actionable items per section, each personalized to "${data.name}" and "${data.role}" where natural. Keep every "task" and "why" concise and jargon-light.`,
+    ).catch(() => null);
+
+    const rec = (json ?? {}) as {
+      headlines?: unknown;
+      aboutMe?: unknown;
+      checklist?: unknown;
+    };
+
+    const headlines = strList(rec.headlines, 3);
+    const aboutMe = str(rec.aboutMe);
+    const checklist = asArray(rec.checklist)
+      .map((s): ChecklistSection => {
+        const sec = (s ?? {}) as { section?: unknown; items?: unknown };
+        const items = asArray(sec.items)
+          .map((it): ChecklistItem => {
+            const item = (it ?? {}) as { task?: unknown; why?: unknown };
+            return { task: str(item.task), why: str(item.why) };
+          })
+          .filter((it) => it.task)
+          .slice(0, 6);
+        return { section: str(sec.section), items };
+      })
+      .filter((s) => s.section && s.items.length > 0)
+      .slice(0, 6);
+
+    if (!headlines.length || !aboutMe || !checklist.length) {
+      throw new Error("Couldn't generate your plan. Please try again with a bit more detail.");
+    }
+
+    return { headlines, aboutMe, checklist };
+  });
