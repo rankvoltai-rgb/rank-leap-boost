@@ -335,6 +335,33 @@ export type Database = {
         }
         Relationships: []
       }
+      tool_leads: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          name: string | null
+          role: string | null
+          tool: string | null
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          name?: string | null
+          role?: string | null
+          tool?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          name?: string | null
+          role?: string | null
+          tool?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

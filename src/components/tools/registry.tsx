@@ -6,6 +6,7 @@ import { SnippetPreview } from "./SnippetPreview";
 import { AiQuestionGenerator } from "./AiQuestionGenerator";
 import { ContentBriefGenerator } from "./ContentBriefGenerator";
 import { MetaWriter } from "./MetaWriter";
+import { PersonalAiVisibility } from "./PersonalAiVisibility";
 
 export const TOOL_COMPONENTS: Record<string, ComponentType> = {
   "llms-txt-generator": LlmsTxtGenerator,
@@ -15,4 +16,5 @@ export const TOOL_COMPONENTS: Record<string, ComponentType> = {
   "ai-question-generator": AiQuestionGenerator,
   "content-brief-generator": ContentBriefGenerator,
   "meta-description-writer": MetaWriter,
+  "get-recommended-by-chatgpt": PersonalAiVisibility,
 };

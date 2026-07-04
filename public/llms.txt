@@ -5,3 +5,8 @@
 ## Pages
 
 - [Home](/): What Rankvolt does, how it works, proof, sample articles, pricing, and FAQ.
+
+## Free Tools
+
+- [Free Tools](/tools): Free SEO and AI-search tools — no signup required.
+- [Get Recommended by ChatGPT](/tools/get-recommended-by-chatgpt): Free tool that generates a personalized LinkedIn + About-Me plan so AI engines find and recommend you.

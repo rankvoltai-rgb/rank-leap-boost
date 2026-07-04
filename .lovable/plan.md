@@ -1,54 +1,78 @@
-## Goal
+## Get Recommended by ChatGPT — free B2C tool
 
-Turn the onboarding "free trial" into a **card-validated trial**: charge **$1 immediately** to confirm the card has funds, **auto-refund it**, then start a **2-day trial** that rolls into **$49.50/month**.
+A new free tool in the same system as your existing ones (`/tools/...`), matching the landing-page quality and layout. A "normal person" enters their name and what they do; Lovable AI generates a personalized plan to make them show up in ChatGPT answers. The full result is gated behind an email capture, and everything drives toward starting a Rankvolt trial.
 
-## Why a rework is needed
+### The experience
+1. Fun hero + short form: **Your name**, **What you do / your role**, optional **Current LinkedIn headline or profile URL**.
+2. Click "Show me how to get found" → Lovable AI generates a personalized plan.
+3. A teaser is shown immediately (their new headline preview + a locked checklist behind a soft blur).
+4. Email capture unlocks the full result. Email + name + role are stored as a lead.
+5. Unlocked result is an interactive, checkable checklist with live progress, plus copy-ready content and a closing trial CTA.
 
-The current checkout uses Stripe's native subscription trial (`trialDays={2}`), which charges **nothing** at signup — a trial subscription's first invoice isn't billed until the trial ends. Stripe also can't validate the card up front in that mode. To actually charge (and refund) $1 now, we switch to a **charge-then-subscribe** flow:
+### What the AI generates (personalized)
+- **3 optimized LinkedIn headline/title options** — keyword-rich, human, ChatGPT-friendly.
+- **An "About Me" draft** — ready to paste into their LinkedIn About section or a personal site, written to be quotable by AI.
+- **A personalized visibility checklist**, grouped and each with a short "why it matters" note:
+  - LinkedIn for SEO (headline, keywords, custom URL, featured links, consistency of name/title everywhere)
+  - Optimize the profile (About section, skills, experience phrased as answers to questions)
+  - Create an About-Me page (own domain/bio site so AI has a canonical source to cite)
+  - Add a clear title + important notes (bio consistency, external mentions, structured claims)
+- **Engagement hook** connecting their situation to how Rankvolt does this on autopilot.
+
+### Look & feel
+- Reuses the tool page shell (breadcrumb, eyebrow, H1, intro, "How to use it", FAQ, closing CTA) exactly like other tools, so it inherits landing-page quality automatically.
+- Uses existing tool primitives (`Field`, `TextInput`, `RunButton`, `ErrorNote`, cards) plus a new interactive checklist with a progress bar and copy buttons, styled with the same semantic tokens (`ink`, `volt`, `border`, `card`).
+- Fun, human ICP copy aimed at any professional ("You already Google yourself — now people ask ChatGPT about you").
+
+### Engagement / lead capture
+- Full checklist + About-Me draft are locked until the visitor enters an email.
+- Email, name, and role are saved to a new `tool_leads` table via a public server function (validated, deduped by email).
 
 ```text
-1. User submits card in embedded checkout (mode: payment, $1)
-2. Stripe charges $1  → card + funds validated, payment method saved
-3. Webhook: create the real subscription with a 2-day trial on that card
-4. Webhook: refund the $1 immediately
-5. After 2 days → subscription bills $49.50/month automatically
+[ form ] -> [ generate ] -> [ teaser + locked result ]
+                                      |
+                              [ enter email ]
+                                      |
+                        [ unlock: checklist + About-Me + CTA ]
 ```
 
-The user still sees a single card form — only the backing mechanics change.
+---
 
-## Changes
+## Technical details
 
-### 1. Create a $1 validation product/price (Stripe)
-- Product `card_validation` → price `card_validation_fee`, **$1.00 one-time**, single-purchase, SaaS tax code. Used only for the verification charge.
+**New data entry** — add one `Tool` to `src/data/tools.ts` (`group: "ai"`), e.g. slug `get-recommended-by-chatgpt`, with name, tagline, eyebrow, h1, intro, `metaTitle`/`metaDescription`, `howto`, and `faqs`. This auto-lists it on `/tools` and gives it SEO head tags + FAQ/Breadcrumb JSON-LD via the existing `tools.$slug.tsx` route (no route changes needed).
 
-### 2. New server function — `createValidationCheckoutSession` (`src/lib/payments.functions.ts`)
-- `mode: "payment"`, `ui_mode: "embedded_page"`, line item = `card_validation_fee`.
-- `payment_intent_data`: `setup_future_usage: "off_session"` (saves the card) + `description: "Card validation (refunded)"`.
-- Resolves/creates the Stripe customer with `metadata.userId` (reuse existing `resolveOrCreateCustomer`).
-- Session `metadata`: `{ userId, flow: "trial_validation", planPriceId: "business_monthly", trialDays: "2" }`.
-- Returns `{ clientSecret }` with the same error-handling pattern as the existing function. The existing `createCheckoutSession` stays as-is for any other use.
+**New AI server function** in `src/lib/tools.functions.ts`:
+- `generatePersonalAiPlan` — `createServerFn({ method: "POST" })`, zod-validated input `{ name, role, current? }`, reuses the existing `generateJson` helper + `google/gemini-3-flash-preview`. Returns a typed object: `{ headlines: string[]; aboutMe: string; checklist: { section: string; items: { task: string; why: string }[] }[] }`. Same error-mapping pattern as other AI tools.
 
-### 3. Webhook: handle `checkout.session.completed` (`src/routes/api/public/payments/webhook.ts`)
-When `metadata.flow === "trial_validation"`:
-1. Guard for idempotency (skip if a subscription already exists for this customer/user in this env).
-2. Retrieve the session's PaymentIntent → set the saved payment method as the customer's default.
-3. Create the subscription: `business_monthly` (resolved via `lookup_keys`), `trial_period_days: 2`, `default_payment_method`, `metadata.userId`. This fires `customer.subscription.created`, which the existing handler already stores + refills 30 credits — no change there.
-4. **Refund the $1** PaymentIntent (`stripe.refunds.create`).
-- Adds `createStripeClient` import to the webhook for the subscription-create + refund calls.
+**New lead-capture server function** in a client-safe file (`src/lib/leads.functions.ts`):
+- `captureToolLead` — `createServerFn({ method: "POST" })`, zod-validated `{ email, name?, role?, tool }`; inside the handler `await import("@/integrations/supabase/client.server")` and upsert into `public.tool_leads` (dedupe on email). Public endpoint, input length-capped.
 
-### 4. Checkout component (`src/components/StripeEmbeddedCheckout.tsx` + `Onboarding.tsx`)
-- Point the onboarding checkout at the new validation session (either a `mode="validation"` prop on the component or a small dedicated wrapper). Drops the `trialDays`/`priceId="business_monthly"` subscription path in favor of the $1 validation session; the plan + trial length are carried in session metadata.
+**Migration** (via migration tool) — create the leads table with grants + RLS in the required order:
+```sql
+CREATE TABLE public.tool_leads (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  email text NOT NULL UNIQUE,
+  name text,
+  role text,
+  tool text,
+  created_at timestamptz NOT NULL DEFAULT now()
+);
+GRANT ALL ON public.tool_leads TO service_role;
+ALTER TABLE public.tool_leads ENABLE ROW LEVEL SECURITY;
+-- no anon/authenticated policies: only the service-role server fn writes; nothing reads it from the client
+```
 
-### 5. Copy updates (`src/components/auth/Onboarding.tsx`)
-Reword the trial messaging to reflect the $1 validation, e.g.:
-- Badge: "$1 to verify your card · refunded instantly".
-- Checkout heading/subline: "We'll charge **$1 to confirm your card** and refund it right away. Free for 48 hours, then $49.50/month — cancel anytime."
-- Trust chips: "$1 refundable check" instead of "48h free" where relevant.
+**New tool component** `src/components/tools/PersonalAiVisibility.tsx`:
+- Form → calls `generatePersonalAiPlan` via `useServerFn`.
+- Renders headline teaser immediately; locks checklist + About-Me behind an email input that calls `captureToolLead`, then reveals.
+- Interactive checklist: local `useState` checkbox state + progress bar; copy buttons on headlines and About-Me using the existing clipboard pattern.
 
-### 6. Quiet fix (unrelated bug)
-The footer Trustpilot widget renders a fallback `<a>` on the server and the Trustpilot script swaps in an `<iframe>` on the client, causing a **hydration mismatch** on the homepage. I'll make that widget client-only (render after mount) so SSR and client markup agree.
+**Register** the component in `src/components/tools/registry.tsx` under the new slug.
 
-## Notes / trade-offs
-- The $1 appears then disappears on the customer's statement (authorization + refund). This is standard for card-validation trials.
-- In sandbox, test with card `4242 4242 4242 4242`; the $1 charge + refund both show in the payments dashboard.
-- If a card has no funds, the $1 fails at checkout and no subscription is created — exactly the validation behavior requested.
+**llms.txt** — optionally add the new tool page under a Pages/Tools section (minor).
+
+### Notes
+- Consistent with existing AI tools: public server functions, Lovable AI (no key handling needed), credit cost per generation.
+- No landing-page or checkout changes.
+- Honors brand memory: honest positioning, volt/white/grey tokens, Poppins, no RankPill mirroring.

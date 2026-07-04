@@ -37,7 +37,12 @@ async function hit(bucket: string): Promise<number | null> {
   const windowStart = new Date(Math.floor(Date.now() / WINDOW_MS) * WINDOW_MS).toISOString();
   try {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { data, error } = await supabaseAdmin.rpc("hit_rate_limit", {
+    // `hit_rate_limit` is an optional RPC that may not exist yet (fail-open).
+    // It is not in the generated types, so call it via a loosely-typed handle.
+    const rpc = (supabaseAdmin as unknown as {
+      rpc: (fn: string, args: Record<string, unknown>) => Promise<{ data: unknown; error: unknown }>;
+    }).rpc;
+    const { data, error } = await rpc("hit_rate_limit", {
       p_bucket: bucket,
       p_window_start: windowStart,
     });
