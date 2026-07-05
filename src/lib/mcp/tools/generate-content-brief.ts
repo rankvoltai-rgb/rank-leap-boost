@@ -22,6 +22,6 @@ export default defineTool({
       `## Questions to answer\n${brief.questions.map((q) => `- ${q}`).join("\n")}`,
       `## Entities to mention\n${brief.entities.map((e) => `- ${e}`).join("\n")}`,
     ].join("\n\n");
-    return { content: [{ type: "text", text }], structuredContent: brief };
+    return { content: [{ type: "text", text }], structuredContent: { brief } };
   },
 });
