@@ -1,0 +1,98 @@
+{
+  "version": 1,
+  "sdk_version": "0.20.0",
+  "path": "/mcp",
+  "auth": {
+    "type": "none"
+  },
+  "mcp": {
+    "server": {
+      "name": "rankvolt-mcp",
+      "version": "0.1.0",
+      "title": "Rankvolt MCP"
+    },
+    "tools": [
+      {
+        "name": "generate_ai_questions",
+        "title": "Generate AI search questions",
+        "description": "Given a topic, list the real questions people ask AI assistants (ChatGPT, Perplexity, Gemini, Google AI Overviews), grouped by intent (Informational, Commercial, Comparison, Transactional). Use it to plan content that gets cited by AI engines.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": false,
+          "openWorldHint": true
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "topic": {
+              "type": "string",
+              "minLength": 2,
+              "maxLength": 200,
+              "description": "The topic, product, or niche to research."
+            }
+          },
+          "required": [
+            "topic"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "generate_content_brief",
+        "title": "Generate SEO content brief",
+        "description": "Build a content brief for a target keyword: a working title, an H2 outline with talking points, questions the article must answer, and key entities to mention. Optimized to rank on Google and get cited by AI engines.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": false,
+          "openWorldHint": true
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "keyword": {
+              "type": "string",
+              "minLength": 2,
+              "maxLength": 200,
+              "description": "The target keyword or phrase."
+            }
+          },
+          "required": [
+            "keyword"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "write_meta_descriptions",
+        "title": "Write meta descriptions",
+        "description": "Generate 3 compelling, click-worthy SEO meta descriptions (120-160 characters each) for a web page, given a topic or short page summary.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": false,
+          "openWorldHint": true
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "topic": {
+              "type": "string",
+              "minLength": 2,
+              "maxLength": 600,
+              "description": "The page topic or a short summary of its content."
+            }
+          },
+          "required": [
+            "topic"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}
