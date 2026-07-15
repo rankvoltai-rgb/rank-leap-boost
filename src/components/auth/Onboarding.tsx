@@ -734,97 +734,88 @@ export function Onboarding() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -8 }}
                   transition={{ duration: 0.3 }}
-                  className="grid gap-8 lg:grid-cols-2 lg:gap-10"
+                  className="mx-auto max-w-2xl"
                 >
-                  {/* Plan value */}
-                  <div className="relative overflow-hidden rounded-2xl bg-ink px-7 py-8 text-background">
-                    <div
-                      className="pointer-events-none absolute inset-0 opacity-[0.07]"
-                      style={{
-                        backgroundImage:
-                          "radial-gradient(circle at 1px 1px, currentColor 1px, transparent 0)",
-                        backgroundSize: "22px 22px",
-                      }}
-                    />
-                    <div className="relative">
-                      <span className="inline-flex items-center gap-1.5 rounded-full border border-background/20 bg-background/10 px-3 py-1 text-xs font-medium text-background/80">
-                        <Sparkles className="h-3.5 w-3.5" /> Free for 48 hours · cancel anytime
-                      </span>
-                      <h2 className="mt-5 text-3xl font-semibold tracking-tight">Business</h2>
-                      <p className="mt-1 text-sm text-background/70">All-in-one growth package</p>
-                      <div className="mt-5 flex items-end gap-2.5">
-                        <span className="text-xl text-background/50 line-through">$99</span>
-                        <span className="text-5xl font-semibold tracking-tight">$49.5</span>
-                        <span className="mb-1.5 text-sm text-background/70">/month</span>
-                      </div>
-                      <p className="mt-1 text-xs text-background/60">
-                        Free for 48 hours, then 50% off your first month. Cancel anytime.
-                      </p>
-                      <ul className="mt-7 space-y-2.5">
-                        {PLAN_FEATURES.map((f) => (
-                          <li key={f} className="flex items-start gap-2.5 text-sm text-background/90">
-                            <span className="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-background/15 text-background">
-                              <Check className="h-3 w-3" />
-                            </span>
-                            {f}
-                          </li>
-                        ))}
-                      </ul>
-                      <div className="mt-8 flex items-center gap-3">
-                        <div className="flex -space-x-2">
-                          {PROOF_FACES.map((f) => (
-                            <Avatar key={f} name={f} className="h-9 w-9 ring-2 ring-ink" />
-                          ))}
-                        </div>
-                        <div className="flex flex-col">
-                          <Stars />
-                          <p className="text-sm text-background/70">
-                            <span className="font-semibold text-background">400+</span> founders growing with Rankvolt
-                          </p>
-                        </div>
-                      </div>
-                    </div>
+                  {/* Header */}
+                  <div className="text-center">
+                    <span className="inline-flex items-center gap-1.5 rounded-full border border-success/20 bg-success/10 px-3 py-1 text-xs font-medium text-success">
+                      <Sparkles className="h-3.5 w-3.5" /> Free for 48 hours · No charge today
+                    </span>
+                    <h1 className="mt-4 text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
+                      Start Free Trial
+                    </h1>
+                    <p className="mx-auto mt-2 max-w-md text-sm text-muted-foreground">
+                      Cancel anytime before day 2 and you won't be billed. It really is that simple.
+                    </p>
                   </div>
 
-                  {/* Stripe checkout */}
-                  <div>
-                    <div className="mb-3 inline-flex items-center gap-1.5 rounded-full border border-success/20 bg-success/10 px-3 py-1 text-xs font-medium text-success">
-                      <Check className="h-3.5 w-3.5" /> Plan secured
+                  {/* Trust strip */}
+                  <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
+                    {[
+                      { icon: Lock, label: "Secured by Stripe" },
+                      { icon: Check, label: "Cancel anytime" },
+                      { icon: Sparkles, label: "No charge today" },
+                    ].map((t) => (
+                      <span
+                        key={t.label}
+                        className="inline-flex items-center gap-1.5 rounded-full border border-border bg-secondary px-3 py-1 text-[11px] font-medium text-ink"
+                      >
+                        <t.icon className="h-3 w-3 text-success" /> {t.label}
+                      </span>
+                    ))}
+                  </div>
+
+                  {/* Compact plan summary */}
+                  <div className="mt-6 rounded-2xl border border-border bg-card p-5">
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="min-w-0">
+                        <p className="text-sm font-semibold text-ink">Business plan</p>
+                        <p className="mt-0.5 text-xs text-muted-foreground">
+                          $0 today · then $49.50/month · cancel anytime
+                        </p>
+                      </div>
+                      <span className="inline-flex shrink-0 items-center gap-1 rounded-full border border-success/20 bg-success/10 px-2.5 py-1 text-[11px] font-medium text-success">
+                        <Check className="h-3 w-3" /> Plan secured
+                      </span>
                     </div>
-                    <h1 className="text-2xl font-semibold tracking-tight text-ink">
-                      Start your free trial
-                    </h1>
-                    <p className="mt-1.5 text-sm text-muted-foreground">
-                      <span className="font-medium text-ink">Free for 48 hours</span>, then
-                      $49.50/month — cancel anytime before the trial ends and you won't be billed.
-                    </p>
-                    <div className="mt-4 flex flex-wrap items-center gap-2">
-                      {[
-                        { icon: Lock, label: "Secured by Stripe" },
-                        { icon: Check, label: "Cancel anytime" },
-                        { icon: Sparkles, label: "No charge today" },
-                      ].map((t) => (
-                        <span
-                          key={t.label}
-                          className="inline-flex items-center gap-1.5 rounded-full border border-border bg-secondary px-3 py-1 text-[11px] font-medium text-ink"
-                        >
-                          <t.icon className="h-3 w-3 text-success" /> {t.label}
-                        </span>
+                    <ul className="mt-4 grid gap-2 sm:grid-cols-2">
+                      {PLAN_FEATURES.slice(0, 6).map((f) => (
+                        <li key={f} className="flex items-start gap-2 text-xs text-ink">
+                          <span className="mt-0.5 flex h-3.5 w-3.5 shrink-0 items-center justify-center rounded-full bg-success/15 text-success">
+                            <Check className="h-2.5 w-2.5" />
+                          </span>
+                          {f}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {/* Stripe checkout — primary focus */}
+                  <div className="mt-5 overflow-hidden rounded-2xl border border-border bg-card p-4 shadow-sm">
+                    <StripeEmbeddedCheckout
+                      priceId="business_monthly"
+                      trialDays={2}
+                      customerEmail={checkout?.email}
+                      userId={checkout?.userId}
+                      returnUrl={
+                        typeof window !== "undefined"
+                          ? `${window.location.origin}/dashboard?checkout=success&session_id={CHECKOUT_SESSION_ID}`
+                          : undefined
+                      }
+                    />
+                  </div>
+
+                  {/* Social proof */}
+                  <div className="mt-6 flex flex-col items-center gap-2 text-center">
+                    <div className="flex -space-x-2">
+                      {PROOF_FACES.map((f) => (
+                        <Avatar key={f} name={f} className="h-8 w-8" />
                       ))}
                     </div>
-                    <div className="mt-5 overflow-hidden rounded-2xl border border-border bg-card p-4">
-                      <StripeEmbeddedCheckout
-                        priceId="business_monthly"
-                        trialDays={2}
-                        customerEmail={checkout?.email}
-                        userId={checkout?.userId}
-                        returnUrl={
-                          typeof window !== "undefined"
-                            ? `${window.location.origin}/dashboard?checkout=success&session_id={CHECKOUT_SESSION_ID}`
-                            : undefined
-                        }
-                      />
-                    </div>
+                    <Stars />
+                    <p className="text-xs text-muted-foreground">
+                      <span className="font-semibold text-ink">400+ founders</span> growing with Rankvolt
+                    </p>
                   </div>
                 </motion.div>
               )}
