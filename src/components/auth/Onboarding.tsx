@@ -400,7 +400,7 @@ export function Onboarding() {
       </header>
 
       {/* Body */}
-      <div className="mx-auto grid w-full max-w-6xl flex-1 grid-cols-1 gap-8 px-5 py-8 sm:px-8 lg:grid-cols-[280px_1px_minmax(0,1fr)] lg:gap-12 lg:py-14">
+      <div className="mx-auto grid w-full max-w-7xl flex-1 grid-cols-1 gap-8 px-5 py-8 sm:px-8 lg:grid-cols-[240px_1px_minmax(0,1fr)] lg:gap-12 lg:py-14">
         {/* Left rail (desktop) */}
         <aside className="hidden lg:block">
           <div className="sticky top-8">
