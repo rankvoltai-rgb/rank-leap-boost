@@ -422,7 +422,7 @@ export function Onboarding() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -8 }}
                   transition={{ duration: 0.3 }}
-                  className="max-w-xl"
+                  className="max-w-3xl"
                 >
                   <div className="mb-3 inline-flex items-center gap-1.5 rounded-full border border-border bg-secondary px-3 py-1 text-xs font-medium text-muted-foreground">
                     <Sparkles className="h-3.5 w-3.5 text-volt" /> 48-hour free trial
@@ -462,7 +462,7 @@ export function Onboarding() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -8 }}
                   transition={{ duration: 0.3 }}
-                  className="max-w-xl"
+                  className="max-w-3xl"
                 >
                   <div className="flex items-center gap-3">
                     <span className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-ink">
