@@ -7,13 +7,8 @@
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 import { mcpPlugin } from "@lovable.dev/mcp-js/stacks/tanstack/vite";
 
-// Image assets live in Lovable's asset store, not in the repo — src/assets/*.asset.json
-// only holds pointers to /__l5e/assets-v1/<id>/<file>. The config's asset proxy serves
-// those in dev, but only when LOVABLE_PREVIEW_HOST is set, so without this every image
-// 404s locally. Read from process.env directly (Vite's loadEnv only exposes VITE_*),
-// and leave any externally-set value alone so a preview host can still override it.
-process.env.LOVABLE_PREVIEW_HOST ||= "rankvolt.top";
-
+// Images are served from public/assets; src/assets/*.asset.json point there. They
+// used to live in Lovable's asset store, which only Lovable's hosting can serve.
 export default defineConfig({
   tanstackStart: {
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
