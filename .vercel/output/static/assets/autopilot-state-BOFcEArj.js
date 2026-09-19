@@ -1,0 +1,1 @@
+function r(e){return e?["trialing","active","past_due"].includes(e.status)?!0:e.status==="canceled"&&!!e.current_period_end&&new Date(e.current_period_end).getTime()>Date.now():!1}function a({subscription:e,remaining:t,enabled:n}){return r(e)?t<=0?"out-of-credits":n?"running":"paused":"needs-trial"}export{a as e,r as i};

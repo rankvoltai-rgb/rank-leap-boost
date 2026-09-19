@@ -1,0 +1,1 @@
+import{j as r,N as s,a3 as a,F as e}from"./index-CZ0eq6GB.js";function n(){return r.jsxs("div",{className:"min-h-screen bg-background",children:[r.jsx(s,{}),r.jsx("main",{className:"border-t border-border bg-surface/30",children:r.jsx(a,{})}),r.jsx(e,{})]})}export{n as component};
