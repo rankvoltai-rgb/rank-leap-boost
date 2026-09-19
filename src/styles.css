@@ -1,13 +1,21 @@
 @import "tailwindcss" source(none);
 @source "../src";
 @import "tw-animate-css";
-@import "@fontsource/poppins/400.css";
-@import "@fontsource/poppins/500.css";
-@import "@fontsource/poppins/600.css";
-@import "@fontsource/poppins/700.css";
-@import "@fontsource/poppins/800.css";
+@import "@fontsource-variable/plus-jakarta-sans";
 
 @custom-variant dark (&:is(.dark *));
+
+/* Arial reshaped to Plus Jakarta Sans's proportions (measured: 4.5% wider,
+   taller ascent). If the web font lands after first paint, text swaps in
+   place instead of re-wrapping — the "glitch" a plain system fallback causes. */
+@font-face {
+  font-family: "Plus Jakarta Sans Fallback";
+  src: local("Arial"), local("ArialMT"), local("Helvetica");
+  size-adjust: 104.51%;
+  ascent-override: 99.51%;
+  descent-override: 21.05%;
+  line-gap-override: 0%;
+}
 
 /*
  * Design system definition.
@@ -24,8 +32,14 @@
  */
 
 @theme inline {
-  --font-sans: "Poppins", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Poppins", ui-sans-serif, system-ui, sans-serif;
+  /* One family for display and body. Plus Jakarta Sans is the same
+     geometric-humanist cut as the Sora/Manrope pair it replaces, so display
+     and UI text now share metrics instead of two near-miss faces. */
+  --font-sans:
+    "Plus Jakarta Sans Variable", "Plus Jakarta Sans Fallback", ui-sans-serif, system-ui, sans-serif;
+  --font-display:
+    "Plus Jakarta Sans Variable", "Plus Jakarta Sans Fallback", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, "SFMono-Regular", "SF Mono", Menlo, monospace;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -33,6 +47,8 @@
   --radius-2xl: calc(var(--radius) + 8px);
   --radius-3xl: calc(var(--radius) + 12px);
   --radius-4xl: calc(var(--radius) + 16px);
+  /* Dashboard surfaces (cards, panels, tables, icon tiles). */
+  --radius-card: 12px;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -56,6 +72,11 @@
   --color-surface: var(--surface);
   --color-ink: var(--ink);
   --color-volt: var(--volt);
+  --color-brand-blue: var(--brand-blue);
+  --color-hero-black: var(--hero-black);
+  --color-hero-black-elev: var(--hero-black-elev);
+  --color-hero-black-elev-2: var(--hero-black-elev-2);
+  --color-brand-blue-deep: var(--brand-blue-deep);
   --color-success: var(--success);
   --color-warning: var(--warning);
   --color-info: var(--info);
@@ -100,6 +121,18 @@
   --ink: oklch(0.17 0.02 255);
   --success: oklch(0.48 0.15 150);
   --warning: oklch(0.78 0.16 75);
+  /* Facebook blue. Kept as hex so the brand value stays exact. */
+  --brand-blue: #1877f2;
+  /* Tints the frosted scrim behind the nav menus, so a menu in the hero's
+     own blue still stands off the hero instead of merging into it. */
+  --brand-blue-deep: #0c4ea8;
+  /* Near-black hero field — softer than #000 under large type. */
+  --hero-black: #0a0a0b;
+  /* Opaque raised surfaces on the black field (cards, then insets within
+     them). Opaque on purpose: the hero's pixel halo would show through a
+     translucent panel. */
+  --hero-black-elev: #121417;
+  --hero-black-elev-2: #181b1f;
   --info: oklch(0.58 0.17 255);
   --volt: oklch(0.58 0.17 255);
   --flame: oklch(0.68 0.14 30);
@@ -130,11 +163,7 @@
     var(--success) 0%,
     color-mix(in oklab, var(--success) 70%, var(--info) 30%) 100%
   );
-  --gradient-traffic: linear-gradient(
-    100deg,
-    var(--info) 0%,
-    var(--success) 100%
-  );
+  --gradient-traffic: linear-gradient(100deg, var(--info) 0%, var(--success) 100%);
   --gradient-surface: linear-gradient(
     180deg,
     color-mix(in oklab, var(--info) 7%, var(--card)) 0%,
@@ -143,6 +172,11 @@
 }
 
 :root {
+  /* Height of the fixed chrome above the hero: the sticky navbar (h-16), and
+     nothing else now that the event banner is gone. The hero subtracts this
+     from the viewport so it fills exactly one screen. Keep in sync with
+     Navbar. */
+  --top-chrome: 4rem;
   /* Premium surface / elevation / glass tokens. */
   --glass-bg: color-mix(in oklab, var(--card) 72%, transparent);
   --glass-border: color-mix(in oklab, var(--ink) 9%, transparent);
@@ -150,8 +184,23 @@
      floating drop-shadowed cards. Elevation is a near-invisible hairline. */
   --shadow-elevation: 0 1px 1px color-mix(in oklab, var(--ink) 3%, transparent);
   /* Reserved for genuinely floating elements (menus, popovers, toolbars). */
-  --shadow-elevation-lg: 0 1px 2px color-mix(in oklab, var(--ink) 6%, transparent),
+  --shadow-elevation-lg:
+    0 1px 2px color-mix(in oklab, var(--ink) 6%, transparent),
     0 12px 28px -16px color-mix(in oklab, var(--ink) 18%, transparent);
+  /* Depth scale for the redesigned product surfaces. The flat hairline above
+     stays the default, so existing screens are visually unchanged. */
+  --shadow-1: 0 1px 2px color-mix(in oklab, var(--ink) 5%, transparent);
+  --shadow-2:
+    0 1px 2px color-mix(in oklab, var(--ink) 5%, transparent),
+    0 4px 12px -4px color-mix(in oklab, var(--ink) 10%, transparent);
+  --shadow-3:
+    0 2px 4px color-mix(in oklab, var(--ink) 5%, transparent),
+    0 12px 32px -8px color-mix(in oklab, var(--ink) 14%, transparent);
+  --shadow-4:
+    0 4px 8px color-mix(in oklab, var(--ink) 6%, transparent),
+    0 24px 56px -12px color-mix(in oklab, var(--ink) 18%, transparent);
+  --ring-focus:
+    0 0 0 2px var(--background), 0 0 0 4px color-mix(in oklab, var(--volt) 55%, transparent);
   --hero-glow: radial-gradient(
     60% 50% at 50% 0%,
     color-mix(in oklab, var(--info) 16%, transparent) 0%,
@@ -248,6 +297,67 @@
   box-shadow: var(--shadow-elevation-lg);
 }
 
+@utility shadow-1 {
+  box-shadow: var(--shadow-1);
+}
+
+@utility shadow-2 {
+  box-shadow: var(--shadow-2);
+}
+
+@utility shadow-3 {
+  box-shadow: var(--shadow-3);
+}
+
+@utility shadow-4 {
+  box-shadow: var(--shadow-4);
+}
+
+@utility ring-focus {
+  box-shadow: var(--ring-focus);
+}
+
+/* Corner glow for a highlighted stat: deep volt at the top-left, paling through
+   lighter blues and fading out to the card by the bottom-right. Built from
+   --volt so the dark theme gets the same glow in its own accent. */
+@utility volt-glow {
+  background-image: radial-gradient(
+    farthest-corner at 0% 0%,
+    color-mix(in oklab, var(--volt) 24%, transparent) 0%,
+    color-mix(in oklab, color-mix(in oklab, var(--volt) 65%, white) 15%, transparent) 30%,
+    color-mix(in oklab, color-mix(in oklab, var(--volt) 30%, white) 8%, transparent) 60%,
+    transparent 95%
+  );
+}
+
+/* The headline number's shine: Facebook blue, with a milky band that sweeps
+   through the digits every few seconds — enough to catch the eye, then it
+   rests. Put it on an inline-sized element so the band spans the digits,
+   not the empty cell beside them. */
+@utility milk-shimmer {
+  color: var(--brand-blue);
+  background-image: linear-gradient(
+    100deg,
+    var(--brand-blue) 38%,
+    color-mix(in oklab, var(--brand-blue) 40%, white) 50%,
+    var(--brand-blue) 62%
+  );
+  background-size: 300% 100%;
+  background-position: 100% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: milk-sweep 3.6s ease-in-out infinite;
+}
+
+/* Skeleton block — pairs with the existing bg-shimmer keyframes. */
+@utility skeleton {
+  background-color: color-mix(in oklab, var(--ink) 7%, transparent);
+  border-radius: var(--radius-md);
+  position: relative;
+  overflow: hidden;
+}
+
 @utility bg-hero-glow {
   background-image: var(--hero-glow);
 }
@@ -276,6 +386,17 @@
   );
   background-size: 200% 100%;
   animation: shimmer-slide 1.6s ease-in-out infinite;
+}
+
+/* Sweep left to right, then hold for the rest of the cycle. */
+@keyframes milk-sweep {
+  0% {
+    background-position: 100% 0;
+  }
+  45%,
+  100% {
+    background-position: 0% 0;
+  }
 }
 
 @keyframes shimmer-slide {
@@ -316,9 +437,125 @@
   animation: hero-float 6s ease-in-out infinite;
 }
 
+/* Hero pixels fade in and out on their own staggered cycles. Peak opacity is
+   passed per-pixel as --pixel-opacity so each square keeps its own weight. */
+@keyframes pixel-blink {
+  0%,
+  100% {
+    opacity: calc(var(--pixel-opacity, 0.06) * 0.2);
+  }
+  50% {
+    opacity: var(--pixel-opacity, 0.06);
+  }
+}
+
+@utility animate-pixel-blink {
+  animation: pixel-blink var(--pixel-duration, 4s) ease-in-out infinite;
+  animation-delay: var(--pixel-delay, 0s);
+  /* Without this the staggered delay leaves each square at its own opacity of
+     1 until the animation starts, which flashes solid white squares on load. */
+  animation-fill-mode: backwards;
+}
+
+/* AI search scene (landing hero): grid cells that light up like data moving
+   through the field, and specks rising slowly through it. Each element passes
+   its own peak opacity, duration and delay as custom properties. */
+@keyframes cell-pulse {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: var(--cell-opacity, 0.15);
+  }
+}
+
+@utility animate-cell-pulse {
+  animation: cell-pulse var(--cell-duration, 5s) ease-in-out infinite;
+  animation-delay: var(--cell-delay, 0s);
+  animation-fill-mode: backwards;
+}
+
+/* A brief flash with a fading tail. Staggered up a column of cells, it reads
+   as a packet of data travelling through the grid rather than a lit bar. */
+@keyframes cell-flow {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  4% {
+    opacity: var(--cell-opacity, 0.2);
+  }
+  16% {
+    opacity: 0;
+  }
+}
+
+@utility animate-cell-flow {
+  animation: cell-flow var(--cell-duration, 4s) linear infinite;
+  animation-delay: var(--cell-delay, 0s);
+  animation-fill-mode: backwards;
+}
+
+@keyframes particle-rise {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  20%,
+  80% {
+    opacity: var(--particle-opacity, 0.5);
+  }
+  100% {
+    transform: translateY(var(--particle-travel, -160px));
+    opacity: 0;
+  }
+}
+
+@utility animate-particle-rise {
+  animation: particle-rise var(--particle-duration, 12s) linear infinite;
+  animation-delay: var(--particle-delay, 0s);
+  animation-fill-mode: backwards;
+}
+
+/* The multicolour ring an AI search bar wears while it's working. */
+@keyframes gradient-pan {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+@utility animate-gradient-pan {
+  background-size: 200% 100%;
+  animation: gradient-pan 2.8s linear infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .animate-cell-pulse {
+    animation: none;
+    opacity: calc(var(--cell-opacity, 0.15) * 0.6);
+  }
+
+  .animate-cell-flow,
+  .animate-particle-rise,
+  .animate-gradient-pan {
+    animation: none;
+  }
+
   .animate-hero-float {
     animation: none;
+  }
+
+  .milk-shimmer {
+    animation: none;
+  }
+
+  .animate-pixel-blink {
+    animation: none;
+    opacity: var(--pixel-opacity, 0.06);
   }
 }
 

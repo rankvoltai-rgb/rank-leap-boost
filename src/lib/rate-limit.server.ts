@@ -39,10 +39,15 @@ async function hit(bucket: string): Promise<number | null> {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     // `hit_rate_limit` is an optional RPC that may not exist yet (fail-open).
     // It is not in the generated types, so call it via a loosely-typed handle.
-    const rpc = (supabaseAdmin as unknown as {
-      rpc: (fn: string, args: Record<string, unknown>) => Promise<{ data: unknown; error: unknown }>;
-    }).rpc;
-    const { data, error } = await rpc("hit_rate_limit", {
+    // Keep it a method call: `rpc` pulled off on its own loses its client and
+    // throws, which the catch below turns into a silent fail-open every time.
+    const client = supabaseAdmin as unknown as {
+      rpc: (
+        fn: string,
+        args: Record<string, unknown>,
+      ) => Promise<{ data: unknown; error: unknown }>;
+    };
+    const { data, error } = await client.rpc("hit_rate_limit", {
       p_bucket: bucket,
       p_window_start: windowStart,
     });
@@ -60,6 +65,23 @@ export async function rateLimitByIp(request: Request): Promise<Response | null> 
   const count = await hit(`ip:${ip}`);
   if (count === null) return null;
   return count > ipLimit() ? tooManyRequests() : null;
+}
+
+/**
+ * Per-user guard for authenticated AI server functions.
+ *
+ * Throws rather than returning a Response, because createServerFn handlers
+ * surface errors, not HTTP objects. These endpoints were completely
+ * unthrottled: a signed-in account could loop analyzeWebsite or
+ * generateBlogContent, each of which is a multi-call LLM + Firecrawl
+ * operation, all before any payment method exists.
+ */
+export async function assertAiRateLimit(userId: string): Promise<void> {
+  const count = await hit(`ai:${userId}`);
+  if (count === null) return; // store unavailable — fail open, as above
+  if (count > limitFromEnv("AI_USER_RATE_LIMIT", 12)) {
+    throw new Error("You're making AI requests too quickly. Wait a minute and try again.");
+  }
 }
 
 /** Per-user guard (caps one account across all its keys). 429 Response, or null. */

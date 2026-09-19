@@ -38,7 +38,7 @@ export function LlmsTxtGenerator() {
           <TextInput
             value={name}
             onChange={(e) => setName(e.target.value)}
-            placeholder="Rankvolt"
+            placeholder="Rankbox"
           />
         </Field>
         <Field label="One-line description">

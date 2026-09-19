@@ -1,19 +1,23 @@
-// Server-only Lovable AI Gateway provider helper.
-import { createOpenAICompatible } from "@ai-sdk/openai-compatible";
+/**
+ * Server-only AI provider helper.
+ *
+ * Was hard-wired to the Lovable AI Gateway with the model id duplicated across
+ * four files. It now delegates to ai-config.server.ts, so the vendor and model
+ * are chosen from env in one place while call sites keep the same shape.
+ */
+import { getAiClient, resolveAiModel, resolveAiProvider } from "./ai-config.server";
 
-export function createLovableAiGatewayProvider(lovableApiKey: string) {
-  return createOpenAICompatible({
-    name: "lovable",
-    baseURL: "https://ai.gateway.lovable.dev/v1",
-    headers: {
-      "Lovable-API-Key": lovableApiKey,
-      "X-Lovable-AIG-SDK": "vercel-ai-sdk",
-    },
-  });
+/** The configured provider client. Call it with a model id. */
+export function createAiProvider() {
+  return getAiClient().client;
 }
 
-export function requireLovableApiKey(): string {
-  const key = process.env.LOVABLE_API_KEY;
-  if (!key) throw new Error("Missing LOVABLE_API_KEY");
-  return key;
+/**
+ * The active model id.
+ *
+ * A function rather than a const because Cloudflare Workers bind env at
+ * request time — a module-scope read would resolve to undefined.
+ */
+export function activeModelId(): string {
+  return resolveAiModel(resolveAiProvider().provider);
 }

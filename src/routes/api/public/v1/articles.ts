@@ -4,6 +4,7 @@ import {
   corsPreflight,
   jsonResponse,
   serializeArticle,
+  subscriptionRequired,
   unauthorized,
 } from "@/lib/public-api.server";
 
@@ -20,8 +21,9 @@ export const Route = createFileRoute("/api/public/v1/articles")({
           if (ipBlock) return ipBlock;
 
           const { resolveApiKeyUser } = await import("@/lib/api-keys.server");
-          const userId = await resolveApiKeyUser(request);
-          if (!userId) return unauthorized();
+          const auth = await resolveApiKeyUser(request);
+          if (!auth.ok) return auth.reason === "no-plan" ? subscriptionRequired() : unauthorized();
+          const { userId } = auth;
 
           const userBlock = await rateLimitByUser(userId);
           if (userBlock) return userBlock;

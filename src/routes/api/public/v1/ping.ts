@@ -3,11 +3,12 @@ import {
   API_CORS_HEADERS,
   corsPreflight,
   jsonResponse,
+  subscriptionRequired,
   unauthorized,
 } from "@/lib/public-api.server";
 
 // Lightweight key-validation endpoint. Plugins call this on setup to confirm
-// the pasted Rankvolt API key works and to show the connected brand name.
+// the pasted Rankbox API key works and to show the connected brand name.
 export const Route = createFileRoute("/api/public/v1/ping")({
   server: {
     handlers: {
@@ -19,8 +20,9 @@ export const Route = createFileRoute("/api/public/v1/ping")({
           if (ipBlock) return ipBlock;
 
           const { resolveApiKeyUser } = await import("@/lib/api-keys.server");
-          const userId = await resolveApiKeyUser(request);
-          if (!userId) return unauthorized();
+          const auth = await resolveApiKeyUser(request);
+          if (!auth.ok) return auth.reason === "no-plan" ? subscriptionRequired() : unauthorized();
+          const { userId } = auth;
 
           const userBlock = await rateLimitByUser(userId);
           if (userBlock) return userBlock;
@@ -34,7 +36,7 @@ export const Route = createFileRoute("/api/public/v1/ping")({
 
           return jsonResponse({
             ok: true,
-            service: "Rankvolt",
+            service: "Rankbox",
             brand_name: (profile?.brand_name as string) ?? null,
           });
         } catch (err) {

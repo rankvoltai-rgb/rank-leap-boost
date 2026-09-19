@@ -13,21 +13,21 @@ import {
 export const Route = createFileRoute("/legal/privacy")({
   head: () => ({
     meta: [
-      { title: "Privacy Policy — Rankvolt" },
+      { title: "Privacy Policy — Rankbox" },
       {
         name: "description",
         content:
-          "How Autusus LLC (Rankvolt) collects, uses, shares, and protects your personal data, and the privacy rights available to you.",
+          "How Autusus LLC (Rankbox) collects, uses, shares, and protects your personal data, and the privacy rights available to you.",
       },
-      { property: "og:title", content: "Privacy Policy — Rankvolt" },
+      { property: "og:title", content: "Privacy Policy — Rankbox" },
       {
         property: "og:description",
-        content: "Learn what data Rankvolt collects, how it is used, and your privacy rights.",
+        content: "Learn what data Rankbox collects, how it is used, and your privacy rights.",
       },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "https://rankvolt.top/legal/privacy" },
+      { property: "og:url", content: "https://rankbox.xyz/legal/privacy" },
     ],
-    links: [{ rel: "canonical", href: "https://rankvolt.top/legal/privacy" }],
+    links: [{ rel: "canonical", href: "https://rankbox.xyz/legal/privacy" }],
   }),
   component: PrivacyPage,
 });
@@ -37,11 +37,11 @@ function PrivacyPage() {
     <LegalPage
       current="/legal/privacy"
       title="Privacy Policy"
-      summary="This policy explains what personal information we collect when you use Rankvolt, how we use it, who we share it with, and the choices and rights you have."
+      summary="This policy explains what personal information we collect when you use Rankbox, how we use it, who we share it with, and the choices and rights you have."
     >
       <Section title="1. Who we are">
         <P>
-          Rankvolt is operated by <B>Autusus LLC</B> ("Rankvolt", "we", "us", or "our"). This
+          Rankbox is operated by <B>Autusus LLC</B> ("Rankbox", "we", "us", or "our"). This
           Privacy Policy applies to our website, app, and related services (the "Service"). If you
           have any questions, contact us at <MailLink />.
         </P>

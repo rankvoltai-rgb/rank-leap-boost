@@ -15,9 +15,8 @@ export function Panel({
   return (
     <div
       className={cn(
-        "rounded-xl border border-border bg-card",
-        hover &&
-          "transition-colors duration-200 hover:border-ink/15 hover:bg-secondary/40",
+        "rounded-card border border-border bg-card",
+        hover && "transition-colors duration-200 hover:border-ink/15 hover:bg-secondary/40",
         className,
       )}
     >
@@ -39,7 +38,7 @@ export function Tabs<T extends string>({
   className?: string;
 }) {
   return (
-    <div className={cn("flex gap-1 rounded-xl border border-border bg-card p-1", className)}>
+    <div className={cn("flex gap-1 rounded-card border border-border bg-card p-1", className)}>
       {tabs.map((t) => {
         const active = value === t.id;
         return (
@@ -49,7 +48,9 @@ export function Tabs<T extends string>({
             onClick={() => onChange(t.id)}
             className={cn(
               "flex flex-1 items-center justify-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium transition-all",
-              active ? "bg-ink text-background shadow-sm" : "text-muted-foreground hover:text-ink",
+              active
+                ? "bg-brand-blue text-white shadow-sm"
+                : "text-muted-foreground hover:text-ink",
             )}
           >
             {t.label}
@@ -57,7 +58,7 @@ export function Tabs<T extends string>({
               <span
                 className={cn(
                   "rounded-full px-1.5 py-0.5 text-[0.62rem] font-semibold tabular-nums",
-                  active ? "bg-background/20 text-background" : "bg-secondary text-muted-foreground",
+                  active ? "bg-white/20 text-white" : "bg-secondary text-muted-foreground",
                 )}
               >
                 {t.count}
@@ -87,7 +88,7 @@ export function EmptyState({
   return (
     <Panel className={cn("flex flex-col items-center gap-3 px-6 py-14 text-center", className)}>
       {icon && (
-        <span className="grid h-12 w-12 place-items-center rounded-2xl border border-border bg-secondary text-muted-foreground">
+        <span className="grid h-12 w-12 place-items-center rounded-card border border-border bg-secondary text-muted-foreground">
           {icon}
         </span>
       )}
@@ -179,10 +180,7 @@ export function StatCard({
 }) {
   return (
     <Panel
-      className={cn(
-        "flex min-h-[128px] flex-col p-5",
-        emphasis && "relative overflow-hidden",
-      )}
+      className={cn("flex min-h-[128px] flex-col p-5", emphasis && "relative overflow-hidden")}
     >
       <div className="flex items-center justify-between gap-2">
         <p className="text-[0.68rem] font-semibold uppercase tracking-[0.08em] text-muted-foreground">
@@ -298,7 +296,7 @@ export function Pill({
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-xs font-medium",
+        "inline-flex items-center gap-1 rounded-sm border px-2.5 py-0.5 text-xs font-medium",
         PILL_TONES[tone],
         className,
       )}
@@ -315,11 +313,12 @@ export function Button({
   ...props
 }: {
   children: ReactNode;
-  variant?: "solid" | "ghost" | "danger";
+  variant?: "solid" | "brand" | "ghost" | "danger";
 } & React.ButtonHTMLAttributes<HTMLButtonElement>) {
   const variants = {
-    solid:
-      "bg-ink text-background hover:bg-ink/90",
+    solid: "bg-ink text-background hover:bg-ink/90",
+    // Reserved for writing — the product's paid, magic action.
+    brand: "bg-brand-blue text-white hover:bg-brand-blue/90",
     ghost: "border border-border bg-card text-ink hover:bg-secondary",
     danger:
       "border border-border bg-card text-muted-foreground hover:border-destructive/40 hover:bg-destructive/10 hover:text-destructive",
@@ -362,7 +361,12 @@ export function PageHeader({
           {title}
         </h1>
         {description && (
-          <p className={cn("text-muted-foreground", lg ? "mt-2.5 text-base sm:text-lg" : "mt-1.5 text-sm")}>
+          <p
+            className={cn(
+              "text-muted-foreground",
+              lg ? "mt-2.5 text-base sm:text-lg" : "mt-1.5 text-sm",
+            )}
+          >
             {description}
           </p>
         )}

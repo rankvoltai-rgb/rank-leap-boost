@@ -113,7 +113,7 @@ export function SchemaGenerator() {
         {type === "Organization" && (
           <>
             <Field label="Organization name">
-              <TextInput value={orgName} onChange={(e) => setOrgName(e.target.value)} placeholder="Rankvolt" />
+              <TextInput value={orgName} onChange={(e) => setOrgName(e.target.value)} placeholder="Rankbox" />
             </Field>
             <Field label="Website URL">
               <TextInput value={orgUrl} onChange={(e) => setOrgUrl(e.target.value)} placeholder="https://yoursite.com" />

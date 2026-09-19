@@ -1,4 +1,4 @@
-// Shared helpers for the Rankvolt public publishing API (/api/public/v1/*).
+// Shared helpers for the Rankbox public publishing API (/api/public/v1/*).
 // These endpoints are key-authenticated and read-only; they are consumed by
 // CMS plugins (Framer, Shopify, WordPress) that pull a user's finished articles.
 import { markdownToHtml } from "@/lib/markdown";
@@ -26,6 +26,18 @@ export function unauthorized(): Response {
   return jsonResponse(
     { error: "Invalid or missing API key. Pass it as 'Authorization: Bearer <key>'." },
     401,
+  );
+}
+
+/** The key is real, but its Rankbox account has no trial or plan. */
+export function subscriptionRequired(): Response {
+  return jsonResponse(
+    {
+      error:
+        "This Rankbox account has no active plan, so it can't sync articles. Start or renew it at https://rankbox.xyz/dashboard/billing.",
+      code: "subscription_required",
+    },
+    402,
   );
 }
 

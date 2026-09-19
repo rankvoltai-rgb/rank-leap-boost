@@ -1,36 +1,19 @@
 import { useState } from "react";
-import { Link, useRouterState } from "@tanstack/react-router";
+import { useRouterState } from "@tanstack/react-router";
 import { Menu } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
 import { Logo } from "@/components/landing/shared";
-import { cn } from "@/lib/utils";
-import { NAV, NAV_FOOTER, type NavItem } from "./nav";
+import { NavSections } from "./SidebarNav";
+import { SignOutIcon } from "./icons";
+import { useSignOut } from "./use-sign-out";
+import type { NavItem } from "./nav";
 
 export function MobileNav() {
   const [open, setOpen] = useState(false);
+  const signOut = useSignOut();
   const path = useRouterState({ select: (s) => s.location.pathname });
-  const isActive = (to: string, exact?: boolean) =>
-    exact ? path === to : path === to || path.startsWith(`${to}/`);
-
-  const renderItem = (item: NavItem) => {
-    const active = isActive(item.to, item.exact);
-    return (
-      <Link
-        key={item.title}
-        to={item.to}
-        onClick={() => setOpen(false)}
-        className={cn(
-          "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
-          active
-            ? "bg-secondary text-ink"
-            : "text-muted-foreground hover:bg-secondary/60 hover:text-ink",
-        )}
-      >
-        <item.icon className={cn("h-4 w-4 shrink-0", active ? "text-ink" : "text-muted-foreground")} />
-        {item.title}
-      </Link>
-    );
-  };
+  const isActive = (item: NavItem) =>
+    item.exact ? path === item.to : path === item.to || path.startsWith(`${item.to}/`);
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -43,17 +26,23 @@ export function MobileNav() {
           <Menu className="h-4 w-4" />
         </button>
       </SheetTrigger>
-      <SheetContent side="left" className="w-64 overflow-hidden p-0">
+      <SheetContent side="left" className="w-64 overflow-hidden border-none bg-brand-blue p-0">
         <SheetTitle className="sr-only">Navigation</SheetTitle>
-        <div className="flex h-14 items-center border-b border-border px-5">
-          <Logo />
+        <div className="flex h-14 items-center border-b border-white/15 px-5">
+          <Logo inverted />
         </div>
-        <p className="px-5 pb-1.5 pt-5 text-[0.62rem] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
-          Your Workspace
-        </p>
-        <nav className="space-y-0.5 px-3 pt-1">{NAV.map(renderItem)}</nav>
-        <div className="mt-3 border-t border-border px-3 py-3">
-          <div className="space-y-0.5">{NAV_FOOTER.map(renderItem)}</div>
+        <nav className="py-4">
+          <NavSections isActive={isActive} onNavigate={() => setOpen(false)} />
+        </nav>
+        <div className="absolute inset-x-0 bottom-0 border-t border-white/15 p-3">
+          <button
+            type="button"
+            onClick={signOut}
+            className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-white/70 transition-colors hover:bg-white/10 hover:text-white"
+          >
+            <SignOutIcon className="h-4 w-4" />
+            Sign out
+          </button>
         </div>
       </SheetContent>
     </Sheet>

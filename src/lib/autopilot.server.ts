@@ -1,48 +1,12 @@
 // Server-only autopilot engine. Generates the next due article for each user
 // who has autopilot enabled, paced by their weekly cadence. Runs from the
 // public cron route with the service-role client (RLS bypassed).
-import { generateText } from "ai";
-import { createLovableAiGatewayProvider, requireLovableApiKey } from "./ai-gateway.server";
-import { gatherResearch, scoreArticle } from "./research.server";
-
-const MODEL = "google/gemini-3-flash-preview";
+import { hasGenerationEntitlement } from "./entitlement.server";
 
 type AnyClient = {
   from: (t: string) => any;
   rpc: (fn: string, args: Record<string, unknown>) => Promise<{ data: any; error: any }>;
 };
-
-function extractJson(text: string): Record<string, unknown> {
-  const trimmed = text.trim().replace(/^```(?:json)?/i, "").replace(/```$/i, "").trim();
-  try {
-    return JSON.parse(trimmed) as Record<string, unknown>;
-  } catch {
-    const start = trimmed.indexOf("{");
-    if (start < 0) return {};
-    let depth = 0;
-    let inString = false;
-    let escaped = false;
-    for (let i = start; i < trimmed.length; i += 1) {
-      const c = trimmed[i];
-      if (escaped) { escaped = false; continue; }
-      if (c === "\\") { escaped = true; continue; }
-      if (c === '"') inString = !inString;
-      if (inString) continue;
-      if (c === "{") depth += 1;
-      if (c === "}") depth -= 1;
-      if (depth === 0) {
-        try { return JSON.parse(trimmed.slice(start, i + 1)) as Record<string, unknown>; }
-        catch { return {}; }
-      }
-    }
-    return {};
-  }
-}
-
-function str(v: unknown, fallback: string): string {
-  const t = typeof v === "string" ? v.trim() : "";
-  return t || fallback;
-}
 
 async function loadStyle(supabase: AnyClient, userId: string): Promise<string> {
   const [{ data: settings }, { data: profile }] = await Promise.all([
@@ -64,47 +28,19 @@ async function generateArticle(
   userId: string,
   blog: { title: string; keyword: string | null; description: string | null },
 ) {
-  const gateway = createLovableAiGatewayProvider(requireLovableApiKey());
   const style = await loadStyle(supabase, userId);
-  const keyword = blog.keyword ?? blog.title;
-  const research = await gatherResearch(keyword);
-  const sources = research.ok
-    ? `Use ONLY these real sources for citations and a "## References" section:\n${research.sources
-        .map((s) => `- ${s.title}: ${s.url}`)
-        .join("\n")}`
-    : `Cite 3-5 reputable, real, well-known authoritative sources with accurate URLs.`;
-
-  const prompt = `${style}
-
-You are a world-class SEO content strategist. Write a flagship, in-depth article engineered to rank #1 on Google AND be cited by AI answer engines (ChatGPT, Gemini, Claude, Perplexity).
-
-TOPIC: ${blog.title}
-PRIMARY KEYWORD: ${keyword}
-BRIEF: ${blog.description ?? "(none)"}
-TARGET WORD COUNT: 2500+ (genuinely useful, specific content — no fluff)
-
-Requirements: a single H1 under 60 chars including the keyword; a 2-3 sentence quotable answer up top; at least 12 headings (## and ###); a "## Key Takeaways" bullet list; a "## Frequently Asked Questions" section with 5 ### questions ending in "?"; in-text markdown links; a "## References" section. Format in clean Markdown.
-
-${sources}
-
-Return ONLY this exact JSON shape (escape all newlines inside "body"):
-{"title":"SEO H1 under 60 chars","body":"full markdown article","description":"meta description 120-160 chars with keyword","seo_score":92,"traffic_estimate":1200,"tags":["Tag","Tag"]}`;
-
-  const { text } = await generateText({
-    model: gateway(MODEL) as unknown as Parameters<typeof generateText>[0]["model"],
-    maxOutputTokens: 24000,
-    prompt,
-  });
-  const json = extractJson(text);
-  const title = str(json.title, blog.title).slice(0, 70);
-  const body = str(json.body, text);
-  const description = str(json.description, blog.description ?? `${title} — a practical SEO guide.`).slice(0, 160);
-  const tags = Array.isArray(json.tags)
-    ? (json.tags as unknown[]).map((t) => String(t)).filter(Boolean).slice(0, 4)
-    : ["SEO", "Strategy"];
-  const score = scoreArticle({ title, keyword, metaDescription: description, body }).score;
-  const traffic = typeof json.traffic_estimate === "number" ? Math.round(json.traffic_estimate) : 0;
-  return { title, body, description, tags, seo_score: score, traffic_estimate: traffic };
+  const { writeArticle } = await import("./article.server");
+  const article = await writeArticle(
+    {
+      title: blog.title,
+      keyword: blog.keyword ?? blog.title,
+      description: blog.description ?? undefined,
+    },
+    style,
+  );
+  const { video, ...content } = article;
+  void video;
+  return content;
 }
 
 interface SettingsRow {
@@ -137,11 +73,27 @@ export async function runAutopilot(): Promise<{ processed: number; skipped: numb
   let skipped = 0;
 
   for (const row of settings) {
-    if (!isDue(row)) { skipped += 1; continue; }
+    if (!isDue(row)) {
+      skipped += 1;
+      continue;
+    }
+
+    // autopilot_enabled defaults to true, so without this the cron generates
+    // paid articles for accounts that never started a trial. Checked before
+    // the credit is reserved so a blocked user is not charged one.
+    if (!(await hasGenerationEntitlement(client, row.user_id))) {
+      skipped += 1;
+      continue;
+    }
 
     // Reserve one credit atomically. Skips the user if their monthly cap is hit.
-    const { data: reserved } = await client.rpc("consume_article_credit", { _user_id: row.user_id });
-    if (!reserved) { skipped += 1; continue; }
+    const { data: reserved } = await client.rpc("consume_article_credit", {
+      _user_id: row.user_id,
+    });
+    if (!reserved) {
+      skipped += 1;
+      continue;
+    }
 
     // Next due article: scheduled, lowest queue position then soonest date.
     const { data: nextRows } = await client

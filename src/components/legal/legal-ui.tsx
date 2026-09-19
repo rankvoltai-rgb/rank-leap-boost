@@ -2,8 +2,8 @@ import type { ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
 
 export const LEGAL_ENTITY = "Autusus LLC";
-export const LEGAL_BRAND = "Rankvolt";
-export const LEGAL_CONTACT = "Rankvoltai@gmail.com";
+export const LEGAL_BRAND = "Rankbox";
+export const LEGAL_CONTACT = "Rankboxai@gmail.com";
 export const LEGAL_UPDATED = "June 22, 2026";
 
 export const LEGAL_LINKS = [

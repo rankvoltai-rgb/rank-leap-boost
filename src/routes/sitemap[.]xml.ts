@@ -3,7 +3,7 @@ import type {} from "@tanstack/react-start";
 import { FEATURE_SLUGS } from "@/data/features";
 import { TOOL_SLUGS } from "@/data/tools";
 
-const BASE_URL = "https://rankvolt.top";
+const BASE_URL = "https://rankbox.xyz";
 
 interface SitemapEntry {
   path: string;
@@ -16,20 +16,26 @@ export const Route = createFileRoute("/sitemap.xml")({
   server: {
     handlers: {
       GET: async () => {
-        let blogPosts: { path: string; lastmod?: string }[] = [];
+        // Repo articles (src/content/blog) first: they win a slug clash with Notion.
+        const { listHousePosts } = await import("@/lib/house-posts.server");
+        const blogPosts: { path: string; lastmod?: string }[] = listHousePosts().map((p) => ({
+          path: `/blog/${p.slug}`,
+          lastmod: p.updated ?? p.date ?? undefined,
+        }));
         try {
           const { listPublishedPosts } = await import("@/lib/notion.server");
-          const posts = await listPublishedPosts();
-          blogPosts = posts.map((p) => ({
-            path: `/blog/${p.slug}`,
-            lastmod: p.date ?? undefined,
-          }));
+          const seen = new Set(blogPosts.map((p) => p.path));
+          for (const p of await listPublishedPosts()) {
+            const path = `/blog/${p.slug}`;
+            if (!seen.has(path)) blogPosts.push({ path, lastmod: p.date ?? undefined });
+          }
         } catch {
-          blogPosts = [];
+          // Notion unavailable: the sitemap still lists the repo articles.
         }
 
         const entries: SitemapEntry[] = [
           { path: "/", changefreq: "weekly", priority: "1.0" },
+          { path: "/pricing", changefreq: "monthly", priority: "0.9" },
           { path: "/features", changefreq: "weekly", priority: "0.8" },
           ...FEATURE_SLUGS.map((slug) => ({
             path: `/features/${slug}`,

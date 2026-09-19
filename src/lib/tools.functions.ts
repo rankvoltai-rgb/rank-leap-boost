@@ -1,14 +1,12 @@
 import { createServerFn } from "@tanstack/react-start";
 import { generateText } from "ai";
 import { z } from "zod";
-import { createLovableAiGatewayProvider, requireLovableApiKey } from "./ai-gateway.server";
+import { createAiProvider, activeModelId } from "./ai-gateway.server";
 
-const MODEL = "google/gemini-3-flash-preview";
-
-type Gateway = ReturnType<typeof createLovableAiGatewayProvider>;
+type Gateway = ReturnType<typeof createAiProvider>;
 
 function model(gateway: Gateway) {
-  return gateway(MODEL) as unknown as Parameters<typeof generateText>[0]["model"];
+  return gateway(activeModelId()) as unknown as Parameters<typeof generateText>[0]["model"];
 }
 
 function extractJson(text: string): unknown {
@@ -50,7 +48,7 @@ function extractJson(text: string): unknown {
 }
 
 async function generateJson(prompt: string): Promise<unknown> {
-  const gateway = createLovableAiGatewayProvider(requireLovableApiKey());
+  const gateway = createAiProvider();
   const { text } = await generateText({
     model: model(gateway),
     maxOutputTokens: 4000,

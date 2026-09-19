@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Navbar } from "@/components/landing/Navbar";
-import { EventBanner } from "@/components/landing/EventBanner";
 import { Hero } from "@/components/landing/Hero";
 import { SuccessStories } from "@/components/landing/SuccessStories";
 import { GrowTraffic } from "@/components/landing/GrowTraffic";
@@ -16,13 +15,13 @@ import { Footer } from "@/components/landing/Footer";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Rankvolt — Get Found by ChatGPT, Gemini & AI Search" },
+      { title: "Rankbox — Get Found by ChatGPT, Gemini & AI Search" },
       {
         name: "description",
         content:
-          "Rankvolt is the AI growth engine that researches, writes, and publishes daily articles engineered to get your brand cited by ChatGPT, Perplexity, and Google AI Overviews — and ranked on Google.",
+          "Rankbox is the AI growth engine that researches, writes, and publishes daily articles engineered to get your brand cited by ChatGPT, Perplexity, and Google AI Overviews — and ranked on Google.",
       },
-      { property: "og:title", content: "Rankvolt — Get Found by ChatGPT, Gemini & AI Search" },
+      { property: "og:title", content: "Rankbox — Get Found by ChatGPT, Gemini & AI Search" },
       {
         property: "og:description",
         content:
@@ -31,7 +30,7 @@ export const Route = createFileRoute("/")({
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
-    links: [{ rel: "canonical", href: "https://rankvolt.top/" }],
+    links: [{ rel: "canonical", href: "https://rankbox.xyz/" }],
     scripts: [
       {
         type: "application/ld+json",
@@ -40,28 +39,28 @@ export const Route = createFileRoute("/")({
           "@graph": [
             {
               "@type": "Organization",
-              "@id": "https://rankvolt.top/#organization",
-              name: "Rankvolt",
-              url: "https://rankvolt.top/",
+              "@id": "https://rankbox.xyz/#organization",
+              name: "Rankbox",
+              url: "https://rankbox.xyz/",
             },
             {
               "@type": "WebSite",
-              "@id": "https://rankvolt.top/#website",
-              name: "Rankvolt",
-              url: "https://rankvolt.top/",
-              publisher: { "@id": "https://rankvolt.top/#organization" },
+              "@id": "https://rankbox.xyz/#website",
+              name: "Rankbox",
+              url: "https://rankbox.xyz/",
+              publisher: { "@id": "https://rankbox.xyz/#organization" },
             },
             {
               "@type": "Product",
-              name: "Rankvolt",
+              name: "Rankbox",
               description:
                 "AI-powered growth engine that researches your buyers' questions, writes daily articles, publishes to your site, and builds backlinks to get your brand cited by AI search engines and ranked on Google.",
-              brand: { "@id": "https://rankvolt.top/#organization" },
+              brand: { "@id": "https://rankbox.xyz/#organization" },
               offers: {
                 "@type": "Offer",
                 price: "99",
                 priceCurrency: "USD",
-                url: "https://rankvolt.top/",
+                url: "https://rankbox.xyz/",
               },
             },
             {
@@ -84,7 +83,6 @@ function Index() {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      <EventBanner />
       <main>
         <Hero />
         <SuccessStories />

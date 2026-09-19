@@ -7,23 +7,23 @@ import { INSTANT_TOOLS, AI_TOOLS, type Tool } from "@/data/tools";
 export const Route = createFileRoute("/tools/")({
   head: () => ({
     meta: [
-      { title: "Free SEO & AI Search Tools | Rankvolt" },
+      { title: "Free SEO & AI Search Tools | Rankbox" },
       {
         name: "description",
         content:
           "Free tools for SEO and AI search: llms.txt generator, AI crawler robots.txt, schema markup, SERP preview, AI question generator, content briefs, and meta writer.",
       },
-      { property: "og:title", content: "Free SEO & AI Search Tools | Rankvolt" },
+      { property: "og:title", content: "Free SEO & AI Search Tools | Rankbox" },
       {
         property: "og:description",
         content:
           "A free toolkit to get found on Google and cited by AI engines — llms.txt, robots.txt, schema, SERP preview, and AI content tools.",
       },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "https://rankvolt.top/tools" },
+      { property: "og:url", content: "https://rankbox.xyz/tools" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
-    links: [{ rel: "canonical", href: "https://rankvolt.top/tools" }],
+    links: [{ rel: "canonical", href: "https://rankbox.xyz/tools" }],
   }),
   component: ToolsIndex,
 });

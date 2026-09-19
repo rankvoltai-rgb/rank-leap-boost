@@ -12,21 +12,21 @@ import {
 export const Route = createFileRoute("/legal/cookies")({
   head: () => ({
     meta: [
-      { title: "Cookie Policy — Rankvolt" },
+      { title: "Cookie Policy — Rankbox" },
       {
         name: "description",
         content:
-          "How Rankvolt uses cookies and similar technologies, the types of cookies we use, and how to control them.",
+          "How Rankbox uses cookies and similar technologies, the types of cookies we use, and how to control them.",
       },
-      { property: "og:title", content: "Cookie Policy — Rankvolt" },
+      { property: "og:title", content: "Cookie Policy — Rankbox" },
       {
         property: "og:description",
-        content: "Learn about the cookies Rankvolt uses and how to manage them.",
+        content: "Learn about the cookies Rankbox uses and how to manage them.",
       },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "https://rankvolt.top/legal/cookies" },
+      { property: "og:url", content: "https://rankbox.xyz/legal/cookies" },
     ],
-    links: [{ rel: "canonical", href: "https://rankvolt.top/legal/cookies" }],
+    links: [{ rel: "canonical", href: "https://rankbox.xyz/legal/cookies" }],
   }),
   component: CookiesPage,
 });
@@ -36,7 +36,7 @@ function CookiesPage() {
     <LegalPage
       current="/legal/cookies"
       title="Cookie Policy"
-      summary="This policy explains how Rankvolt uses cookies and similar technologies, and how you can control them."
+      summary="This policy explains how Rankbox uses cookies and similar technologies, and how you can control them."
     >
       <Section title="1. What are cookies?">
         <P>

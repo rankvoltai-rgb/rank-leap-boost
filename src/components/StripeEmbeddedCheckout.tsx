@@ -1,37 +1,30 @@
-import {
-  EmbeddedCheckoutProvider,
-  EmbeddedCheckout,
-} from "@stripe/react-stripe-js";
-import { getStripe, getStripeEnvironment } from "@/lib/stripe";
+import { EmbeddedCheckoutProvider, EmbeddedCheckout } from "@stripe/react-stripe-js";
+import { getStripe } from "@/lib/stripe";
 import { createCheckoutSession } from "@/lib/payments.functions";
 
+/**
+ * customerEmail / userId / environment / trialDays used to be props sent to the
+ * server. They are now derived server-side from the caller's session and env,
+ * because trusting the client with them let a caller pick a test-mode
+ * environment (or a longer trial) and get a real entitlement for free.
+ */
 interface StripeEmbeddedCheckoutProps {
   priceId: string;
   quantity?: number;
-  customerEmail?: string;
-  userId?: string;
   returnUrl?: string;
-  trialDays?: number;
 }
 
 export function StripeEmbeddedCheckout({
   priceId,
   quantity,
-  customerEmail,
-  userId,
   returnUrl,
-  trialDays,
 }: StripeEmbeddedCheckoutProps) {
   const fetchClientSecret = async (): Promise<string> => {
     const result = await createCheckoutSession({
       data: {
         priceId,
         quantity,
-        customerEmail,
-        userId,
         returnUrl: returnUrl || window.location.href,
-        environment: getStripeEnvironment(),
-        trialDays,
       },
     });
     if ("error" in result) throw new Error(result.error);

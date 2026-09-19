@@ -32,6 +32,43 @@ function SourcePill({ domain }: { domain: string }) {
   );
 }
 
+/* ---------- Expanded citation row ---------- */
+function SourceRow({ domain }: { domain: string }) {
+  return (
+    <div className="flex items-center gap-2.5 rounded-lg border border-border bg-background px-2.5 py-1.5">
+      <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-secondary text-[0.6rem] font-semibold uppercase text-muted-foreground">
+        {domain.charAt(0)}
+      </span>
+      <span className="min-w-0 flex-1 truncate text-xs font-medium text-ink">{domain}</span>
+      <span className="shrink-0 text-[0.65rem] font-medium text-volt">cited</span>
+    </div>
+  );
+}
+
+function SourcePills({ sources }: { sources: string[] }) {
+  return (
+    <div className="flex flex-wrap items-center gap-1.5 pt-1">
+      <span className="text-[0.7rem] font-medium text-muted-foreground">Sources</span>
+      {sources.map((s) => (
+        <SourcePill key={s} domain={s} />
+      ))}
+    </div>
+  );
+}
+
+function SourceRows({ sources }: { sources: string[] }) {
+  return (
+    <div className="space-y-1.5 pt-1">
+      <span className="text-[0.7rem] font-medium text-muted-foreground">Sources</span>
+      <div className="space-y-1.5">
+        {sources.map((s) => (
+          <SourceRow key={s} domain={s} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 /* ---------- Engine switcher tab row (ChatGPT-style chrome) ---------- */
 export function EngineTabs({ active = "ChatGPT" }: { active?: EngineName }) {
   return (
@@ -57,6 +94,17 @@ export function EngineTabs({ active = "ChatGPT" }: { active?: EngineName }) {
   );
 }
 
+/* ---------- Right-aligned user message ---------- */
+function PromptBubble({ children }: { children: ReactNode }) {
+  return (
+    <div className="flex justify-end">
+      <div className="max-w-[88%] rounded-lg rounded-br-sm bg-ink px-4 py-2.5 text-sm leading-relaxed text-background">
+        {children}
+      </div>
+    </div>
+  );
+}
+
 /* ---------- Full prompt -> answer card with citation ---------- */
 export function ChatAnswerCard({
   engine = "ChatGPT",
@@ -66,6 +114,7 @@ export function ChatAnswerCard({
   sources = [],
   className,
   tabs = true,
+  sourceStyle = "pills",
 }: {
   engine?: EngineName;
   prompt: ReactNode;
@@ -74,37 +123,39 @@ export function ChatAnswerCard({
   sources?: string[];
   className?: string;
   tabs?: boolean;
+  /* "rows" gives each citation its own line — for a card with a fixed height,
+     where pills would leave the panel looking empty. Only use it where the
+     card has the room: rows are ~130px taller than pills. */
+  sourceStyle?: "pills" | "rows";
 }) {
   return (
     <div
       className={cn(
-        "overflow-hidden rounded-xl border border-border bg-card shadow-elevation-lg ring-1 ring-ink/5",
+        // Column layout so a min-height on the card is absorbed by the
+        // conversation body rather than stretching the chrome.
+        "flex flex-col overflow-hidden rounded-xl border border-border bg-card shadow-elevation-lg ring-1 ring-ink/5",
         className,
       )}
     >
-      {/* Window chrome */}
-      <div className="flex items-center gap-2 border-b border-border bg-surface/70 px-4 py-2.5">
+      {/* Window chrome — the engine label is absolutely centred so it stays
+          centred regardless of what sits beside it. */}
+      <div className="relative flex items-center gap-2 border-b border-border bg-surface/70 px-4 py-2.5">
         <span className="flex gap-1.5">
-          <span className="h-2.5 w-2.5 rounded-full bg-border" />
-          <span className="h-2.5 w-2.5 rounded-full bg-border" />
-          <span className="h-2.5 w-2.5 rounded-full bg-border" />
+          {[0, 1, 2].map((i) => (
+            <span key={i} className="h-2.5 w-2.5 rounded-full bg-border" />
+          ))}
         </span>
-        <span className="mx-auto flex items-center gap-1.5 text-[0.7rem] font-medium text-muted-foreground">
+        <span className="absolute left-1/2 flex -translate-x-1/2 items-center gap-1.5 text-[0.7rem] font-medium text-muted-foreground">
           <EngineIcon name={engine} className="h-3.5 w-3.5" />
           {engine}
         </span>
-        <span className="hidden items-center gap-1.5 text-[0.65rem] font-medium text-muted-foreground sm:flex">
-          <span className="h-1.5 w-1.5 rounded-full bg-success" />
-          Live
-        </span>
       </div>
       {tabs && <EngineTabs active={engine} />}
-      <div className="space-y-4 p-5 sm:p-6">
-        <div className="flex justify-end">
-          <div className="max-w-[88%] rounded-lg rounded-br-sm bg-ink px-4 py-2.5 text-sm leading-relaxed text-background">
-            {prompt}
-          </div>
-        </div>
+      {/* Centred, not bottom-anchored: where the card is given a height beyond
+          its content, splitting the slack above and below reads as a framed
+          exchange rather than a conversation that has fallen to the floor. */}
+      <div className="flex flex-1 flex-col justify-center gap-4 p-5 sm:p-6">
+        <PromptBubble>{prompt}</PromptBubble>
 
         <div className="flex gap-3">
           <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-border bg-background">
@@ -124,25 +175,30 @@ export function ChatAnswerCard({
             </p>
             {/* shimmer line suggesting the answer is still streaming */}
             <div className="h-2.5 w-2/5 rounded-full bg-shimmer" />
-            {sources.length > 0 && (
-              <div className="flex flex-wrap items-center gap-1.5 pt-1">
-                <span className="text-[0.7rem] font-medium text-muted-foreground">Sources</span>
-                {sources.map((s) => (
-                  <SourcePill key={s} domain={s} />
-                ))}
-              </div>
-            )}
+            {sources.length > 0 &&
+              (sourceStyle === "rows" ? (
+                <SourceRows sources={sources} />
+              ) : (
+                <SourcePills sources={sources} />
+              ))}
           </div>
         </div>
       </div>
       {/* Composer bar (visual only) */}
       <div className="border-t border-border bg-surface/50 px-4 py-3">
         <div className="flex items-center gap-2 rounded-lg border border-border bg-card px-4 py-2 shadow-sm">
-          <span className="flex-1 truncate text-sm text-muted-foreground">
-            Ask a follow-up…
-          </span>
+          <span className="flex-1 truncate text-sm text-muted-foreground">Ask a follow-up…</span>
           <span className="flex h-7 w-7 items-center justify-center rounded-full bg-ink text-background">
-            <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+            <svg
+              viewBox="0 0 24 24"
+              className="h-3.5 w-3.5"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden
+            >
               <path d="M12 19V5M5 12l7-7 7 7" />
             </svg>
           </span>

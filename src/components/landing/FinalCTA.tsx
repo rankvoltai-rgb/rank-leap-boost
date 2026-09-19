@@ -1,25 +1,26 @@
 import { ArrowRight } from "lucide-react";
 import { Reveal } from "./shared";
 import { ChatAnswerCard } from "./chat";
+import { PixelField } from "./Hero";
 
 export function FinalCTA() {
   return (
     <section className="py-24 sm:py-32">
       <div className="mx-auto max-w-6xl px-5">
         <Reveal>
-          <div className="relative overflow-hidden rounded-3xl border border-border bg-ink px-6 py-14 text-center sm:px-12">
-            <div className="pointer-events-none absolute inset-0 bg-gridlines opacity-[0.07]" />
+          <div className="relative overflow-hidden rounded-3xl bg-brand-blue px-6 py-14 text-center sm:px-12">
+            <PixelField seed={3} />
             <div className="relative">
-              <h2 className="font-display mx-auto max-w-2xl text-balance text-3xl font-semibold tracking-tight text-background sm:text-4xl">
+              <h2 className="font-display mx-auto max-w-2xl text-balance text-3xl font-semibold tracking-tight text-white sm:text-4xl">
                 Become the answer AI recommends
               </h2>
-              <p className="mx-auto mt-4 max-w-xl text-balance text-base text-background/70">
-                Put your growth on autopilot. Rankvolt researches, writes, optimizes, and publishes
+              <p className="mx-auto mt-4 max-w-xl text-balance text-base text-white/80">
+                Put your growth on autopilot. Rankbox researches, writes, optimizes, and publishes
                 daily articles engineered to get your brand cited by AI search and ranked on Google.
               </p>
               <a
                 href="#pricing"
-                className="mt-8 inline-flex items-center justify-center gap-2 rounded-xl bg-background px-6 py-3.5 text-sm font-semibold text-ink transition-transform hover:-translate-y-0.5"
+                className="mt-8 inline-flex items-center justify-center gap-2 rounded-xl bg-white px-6 py-3.5 text-sm font-semibold text-ink transition-transform hover:-translate-y-0.5"
               >
                 Start Growing on Autopilot <ArrowRight className="h-4 w-4" />
               </a>

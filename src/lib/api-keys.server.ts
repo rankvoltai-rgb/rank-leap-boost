@@ -1,4 +1,4 @@
-// Server-only helpers for Rankvolt publishing API keys.
+// Server-only helpers for Rankbox publishing API keys.
 // The raw key is shown to the user exactly once at creation; we only ever
 // store its SHA-256 hash, so a database leak never exposes usable keys.
 import { createHash, randomBytes } from "crypto";
@@ -36,14 +36,22 @@ export function extractApiKey(request: Request): string | null {
   return headerKey ? headerKey.trim() : null;
 }
 
+export type ApiKeyAuth =
+  | { ok: true; userId: string }
+  /** Missing, malformed, unknown, or revoked. */
+  | { ok: false; reason: "invalid" }
+  /** A real key whose account has no trial or plan. */
+  | { ok: false; reason: "no-plan" };
+
 /**
- * Resolve the owner of an incoming API key. Returns the user id for a valid,
- * non-revoked key, otherwise null. Bumps last_used_at as a side effect.
+ * Resolve the owner of an incoming API key. A valid, non-revoked key only
+ * authenticates while its account has a trial or plan. Bumps last_used_at on
+ * success only, so the dashboard never shows a lapsed site as syncing.
  * Uses the service-role client because the request is unauthenticated HTTP.
  */
-export async function resolveApiKeyUser(request: Request): Promise<string | null> {
+export async function resolveApiKeyUser(request: Request): Promise<ApiKeyAuth> {
   const raw = extractApiKey(request);
-  if (!raw || !raw.startsWith(KEY_PREFIX)) return null;
+  if (!raw || !raw.startsWith(KEY_PREFIX)) return { ok: false, reason: "invalid" };
 
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   const hash = hashApiKey(raw);
@@ -54,7 +62,13 @@ export async function resolveApiKeyUser(request: Request): Promise<string | null
     .eq("key_hash", hash)
     .maybeSingle();
 
-  if (error || !data || data.revoked_at) return null;
+  if (error || !data || data.revoked_at) return { ok: false, reason: "invalid" };
+
+  const userId = data.user_id as string;
+  const { hasGenerationEntitlement } = await import("@/lib/entitlement.server");
+  if (!(await hasGenerationEntitlement(supabaseAdmin, userId))) {
+    return { ok: false, reason: "no-plan" };
+  }
 
   // Best-effort usage timestamp; never block the response on it.
   void supabaseAdmin
@@ -62,7 +76,7 @@ export async function resolveApiKeyUser(request: Request): Promise<string | null
     .update({ last_used_at: new Date().toISOString() })
     .eq("id", data.id);
 
-  return data.user_id as string;
+  return { ok: true, userId };
 }
 
 /** Stable, human-friendly slug derived from a title plus a short id suffix. */

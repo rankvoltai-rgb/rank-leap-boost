@@ -12,21 +12,21 @@ import {
 export const Route = createFileRoute("/legal/acceptable-use")({
   head: () => ({
     meta: [
-      { title: "Acceptable Use Policy — Rankvolt" },
+      { title: "Acceptable Use Policy — Rankbox" },
       {
         name: "description",
         content:
-          "The rules for using Rankvolt responsibly: prohibited content and conduct, and the consequences of violations.",
+          "The rules for using Rankbox responsibly: prohibited content and conduct, and the consequences of violations.",
       },
-      { property: "og:title", content: "Acceptable Use Policy — Rankvolt" },
+      { property: "og:title", content: "Acceptable Use Policy — Rankbox" },
       {
         property: "og:description",
-        content: "What you may and may not do when using Rankvolt.",
+        content: "What you may and may not do when using Rankbox.",
       },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "https://rankvolt.top/legal/acceptable-use" },
+      { property: "og:url", content: "https://rankbox.xyz/legal/acceptable-use" },
     ],
-    links: [{ rel: "canonical", href: "https://rankvolt.top/legal/acceptable-use" }],
+    links: [{ rel: "canonical", href: "https://rankbox.xyz/legal/acceptable-use" }],
   }),
   component: AcceptableUsePage,
 });
@@ -36,7 +36,7 @@ function AcceptableUsePage() {
     <LegalPage
       current="/legal/acceptable-use"
       title="Acceptable Use Policy"
-      summary="To keep Rankvolt safe and trustworthy for everyone, you agree to follow these rules when using the Service."
+      summary="To keep Rankbox safe and trustworthy for everyone, you agree to follow these rules when using the Service."
     >
       <Section title="1. Prohibited content">
         <P>You may not use the Service to create, publish, or distribute content that:</P>

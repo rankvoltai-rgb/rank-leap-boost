@@ -3,7 +3,7 @@ import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/dashboard/primitives";
 import { ProgressRing } from "@/components/dashboard/rewards";
 import { VoltMark, RocketIcon } from "@/components/dashboard/icons";
-import type { CreditAccount, Subscription } from "@/lib/api";
+import type { CreditAccount, Subscription } from "@/lib/data";
 
 function formatDate(iso: string | null | undefined): string {
   if (!iso) return "your next billing date";

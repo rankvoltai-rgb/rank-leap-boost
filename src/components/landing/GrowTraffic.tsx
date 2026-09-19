@@ -47,7 +47,7 @@ export function GrowTraffic() {
             Win Google and AI answers at once
           </h2>
           <p className="mt-4 text-balance text-lg text-muted-foreground">
-            Stop choosing between ranking on Google and showing up in AI answers. Rankvolt
+            Stop choosing between ranking on Google and showing up in AI answers. Rankbox
             researches, writes, and publishes for both — traffic and citations grow while you sleep.
           </p>
         </Reveal>

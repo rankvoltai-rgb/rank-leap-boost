@@ -1,552 +1,411 @@
 import { useMemo, useState } from "react";
-import { Link } from "@tanstack/react-router";
-import { motion, useReducedMotion } from "motion/react";
 import {
   addDays,
-  addMonths,
-  addWeeks,
   eachDayOfInterval,
   endOfMonth,
   endOfWeek,
   format,
-  isSameDay,
   isSameMonth,
-  isToday,
   startOfMonth,
   startOfWeek,
 } from "date-fns";
-import {
-  ChevronLeft,
-  ChevronRight,
-  Loader2,
-  TrendingUp,
-  ArrowUpToLine,
-  CalendarDays,
-  PenLine,
-  Inbox,
-  X,
-} from "lucide-react";
-import type { Blog } from "@/lib/api";
-import { Button, Pill } from "@/components/dashboard/primitives";
-import { Calendar } from "@/components/ui/calendar";
+import { Loader2 } from "lucide-react";
+import type { Blog } from "@/lib/data";
+import { CheckIcon } from "@/components/dashboard/icons";
+import { TrafficValue } from "@/components/dashboard/traffic";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  dateKey,
+  parseDateKey,
+  todayKey,
+  type Placed,
+  type Tone,
+} from "@/components/dashboard/queue-plan";
 import { cn } from "@/lib/utils";
 
-export type CalendarView = "month" | "week" | "list";
+const TONE_LABEL: Record<Tone, string> = {
+  published: "Published",
+  writing: "Writing now",
+  scheduled: "Scheduled",
+  overdue: "Overdue",
+};
 
-const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-const DATE_FMT = "yyyy-MM-dd";
+/* ── Article chip ───────────────────────────────────────────────── */
 
-function keyOf(date: Date): string {
-  return format(date, DATE_FMT);
+const CHIP_TONE: Record<Tone, string> = {
+  published: "border-success/20 bg-success/[0.08] hover:bg-success/15",
+  writing: "border-info/25 bg-info/10 hover:bg-info/15",
+  scheduled: "border-volt/25 bg-volt/10 hover:bg-volt/20",
+  overdue: "border-warning/40 bg-warning/15 hover:bg-warning/25",
+};
+
+function StatusGlyph({ tone }: { tone: Tone }) {
+  if (tone === "published") return <CheckIcon className="h-3 w-3 shrink-0 text-success" />;
+  if (tone === "writing") return <Loader2 className="h-3 w-3 shrink-0 animate-spin text-info" />;
+  return (
+    <span
+      aria-hidden
+      className={cn(
+        "mx-[3px] h-1.5 w-1.5 shrink-0 rounded-full",
+        tone === "overdue" ? "bg-warning" : "bg-volt",
+      )}
+    />
+  );
 }
 
-function parseKey(key: string): Date {
-  return new Date(`${key}T00:00:00`);
+/** Queued articles move; published work and work in progress stay where they are. */
+function movable(tone: Tone) {
+  return tone === "scheduled" || tone === "overdue";
 }
 
-export function prettyDate(key: string): string {
-  if (key === "unscheduled") return "Unscheduled";
-  const d = parseKey(key);
-  if (Number.isNaN(d.getTime())) return key;
-  return d.toLocaleDateString(undefined, {
-    weekday: "long",
-    month: "long",
-    day: "numeric",
-  });
-}
-
-interface BoardProps {
-  events: Blog[];
-  busyId: string | null;
-  onReschedule: (blog: Blog, date: Date) => void;
-  onPrioritize: (blog: Blog) => void;
-}
-
-/* ---------------- Event chip + detail popover ---------------- */
-
-function EventChip({
-  blog,
-  busyId,
-  onReschedule,
-  onPrioritize,
-  compact,
+function Chip({
+  item,
+  active,
+  dragging,
+  onOpen,
   onDragStart,
   onDragEnd,
 }: {
-  blog: Blog;
-  busyId: string | null;
-  onReschedule: (blog: Blog, date: Date) => void;
-  onPrioritize: (blog: Blog) => void;
-  compact?: boolean;
+  item: Placed;
+  active: boolean;
+  dragging: boolean;
+  onOpen: (id: string) => void;
   onDragStart?: () => void;
   onDragEnd?: () => void;
 }) {
-  const [open, setOpen] = useState(false);
-  const [showCal, setShowCal] = useState(false);
-  const generating = blog.status === "generating";
-  const busy = busyId === blog.id;
-
+  const { blog, tone } = item;
+  const canMove = movable(tone) && !!onDragStart;
   return (
-    <Popover open={open} onOpenChange={(o) => { setOpen(o); if (!o) setShowCal(false); }}>
-      <PopoverTrigger asChild>
-        <button
-          type="button"
-          draggable
-          onDragStart={(e) => {
-            e.dataTransfer.effectAllowed = "move";
-            e.dataTransfer.setData("text/plain", blog.id);
-            onDragStart?.();
-          }}
-          onDragEnd={() => onDragEnd?.()}
-          className={cn(
-            "group flex w-full items-center gap-1.5 rounded-md border px-1.5 text-left transition-colors",
-            "cursor-grab active:cursor-grabbing",
-            compact ? "py-0.5" : "py-1",
-            generating
-              ? "border-warning/30 bg-warning/15 hover:bg-warning/25"
-              : "border-volt/25 bg-volt/10 hover:bg-volt/20",
-          )}
-          title={blog.title}
-        >
-          <span
-            className={cn(
-              "h-1.5 w-1.5 shrink-0 rounded-full",
-              generating ? "animate-pulse bg-warning" : "bg-volt",
-            )}
-          />
-          <span className="truncate text-[0.72rem] font-medium leading-tight text-ink">
-            {blog.title}
-          </span>
-        </button>
-      </PopoverTrigger>
-      <PopoverContent align="start" className="w-80 p-0">
-        <div className="flex items-start justify-between gap-2 border-b border-border p-4">
-          <div className="min-w-0">
-            <p className="text-sm font-semibold leading-snug text-ink">{blog.title}</p>
-            <p className="mt-0.5 text-xs text-muted-foreground">
-              {blog.scheduled_date ? prettyDate(blog.scheduled_date) : "Unscheduled"}
-            </p>
-          </div>
-          <button
-            type="button"
-            onClick={() => setOpen(false)}
-            className="rounded-md p-1 text-muted-foreground transition-colors hover:bg-secondary hover:text-ink"
-            aria-label="Close"
-          >
-            <X className="h-4 w-4" />
-          </button>
-        </div>
-
-        <div className="flex flex-wrap items-center gap-2 px-4 py-3">
-          {generating ? (
-            <Pill tone="warning">
-              <Loader2 className="h-3 w-3 animate-spin" /> Writing
-            </Pill>
-          ) : (
-            <Pill tone="info">Scheduled</Pill>
-          )}
-          <Pill tone="success">
-            <TrendingUp className="h-3 w-3" />
-            {blog.traffic_estimate.toLocaleString()}/mo
-          </Pill>
-          {blog.keyword && <Pill tone="neutral">{blog.keyword}</Pill>}
-        </div>
-
-        {showCal ? (
-          <div className="border-t border-border p-2">
-            <Calendar
-              mode="single"
-              selected={blog.scheduled_date ? parseKey(blog.scheduled_date) : undefined}
-              onSelect={(date) => {
-                if (date) {
-                  onReschedule(blog, date);
-                  setOpen(false);
-                }
-              }}
-              initialFocus
-              className={cn("pointer-events-auto p-2")}
-            />
-          </div>
-        ) : (
-          <div className="flex flex-wrap gap-2 border-t border-border p-3">
-            <Button variant="ghost" onClick={() => setShowCal(true)} disabled={busy}>
-              <CalendarDays className="h-4 w-4" /> Reschedule
-            </Button>
-            <Button onClick={() => onPrioritize(blog)} disabled={busy}>
-              {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <ArrowUpToLine className="h-4 w-4" />}
-              Prioritize
-            </Button>
-            <Link to="/dashboard/editor/$blogId" params={{ blogId: blog.id }} className="contents">
-              <Button variant="ghost">
-                <PenLine className="h-4 w-4" /> Open
-              </Button>
-            </Link>
-          </div>
-        )}
-      </PopoverContent>
-    </Popover>
+    <button
+      type="button"
+      data-article-link={blog.id}
+      draggable={canMove}
+      onDragStart={(e) => {
+        e.dataTransfer.effectAllowed = "move";
+        e.dataTransfer.setData("text/plain", blog.id);
+        onDragStart?.();
+      }}
+      onDragEnd={onDragEnd}
+      onClick={() => onOpen(blog.id)}
+      title={`${blog.title} — ${TONE_LABEL[tone]}${canMove ? " · drag to another day" : ""}`}
+      className={cn(
+        "relative flex w-full min-w-0 items-center gap-1.5 rounded-md border px-1.5 py-1 text-left text-[0.72rem] font-medium leading-tight text-ink transition-[background-color,opacity] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+        CHIP_TONE[tone],
+        canMove && "cursor-grab active:cursor-grabbing",
+        active && "ring-2 ring-brand-blue/60",
+        dragging && "opacity-40",
+      )}
+    >
+      <StatusGlyph tone={tone} />
+      <span className="truncate">{blog.title}</span>
+      <span className="sr-only">, {TONE_LABEL[tone]}</span>
+    </button>
   );
 }
 
-/* ---------------- Grid (month / week) ---------------- */
+/* ── Legend ─────────────────────────────────────────────────────── */
 
-function Grid({
-  days,
-  anchor,
-  view,
-  byDay,
-  board,
-  dragId,
-  setDragId,
-  dragOverKey,
-  setDragOverKey,
-}: {
-  days: Date[];
-  anchor: Date;
-  view: "month" | "week";
-  byDay: Map<string, Blog[]>;
-  board: BoardProps;
-  dragId: string | null;
-  setDragId: (id: string | null) => void;
-  dragOverKey: string | null;
-  setDragOverKey: (k: string | null) => void;
-}) {
-  const maxVisible = view === "week" ? 99 : 3;
-
-  function drop(key: string) {
-    if (!dragId) return;
-    const blog = board.events.find((b) => b.id === dragId);
-    setDragOverKey(null);
-    setDragId(null);
-    if (!blog) return;
-    if (blog.scheduled_date === key) return;
-    board.onReschedule(blog, parseKey(key));
-  }
-
+export function CalendarLegend() {
   return (
-    <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-elevation">
-      <div className="grid grid-cols-7 border-b border-border bg-secondary/40">
-        {WEEKDAYS.map((d) => (
-          <div
-            key={d}
-            className="px-2 py-2 text-center text-[0.66rem] font-semibold uppercase tracking-[0.08em] text-muted-foreground"
-          >
-            {d}
-          </div>
-        ))}
-      </div>
-      <div className="grid grid-cols-7">
-        {days.map((day) => {
-          const key = keyOf(day);
-          const inMonth = view === "week" || isSameMonth(day, anchor);
-          const today = isToday(day);
-          const items = byDay.get(key) ?? [];
-          const overflow = items.length - maxVisible;
-          const isOver = dragOverKey === key;
-          return (
-            <div
-              key={key}
-              onDragOver={(e) => {
-                e.preventDefault();
-                e.dataTransfer.dropEffect = "move";
-                if (dragOverKey !== key) setDragOverKey(key);
-              }}
-              onDragLeave={() => {
-                if (dragOverKey === key) setDragOverKey(null);
-              }}
-              onDrop={() => drop(key)}
-              className={cn(
-                "flex flex-col gap-1 border-b border-r border-border p-1.5 transition-colors",
-                "[&:nth-child(7n)]:border-r-0",
-                view === "month" ? "min-h-[104px]" : "min-h-[320px]",
-                !inMonth && "bg-secondary/20",
-                isOver && "bg-volt/10 ring-1 ring-inset ring-volt/40",
-              )}
-            >
-              <div className="flex items-center justify-between">
-                <span
-                  className={cn(
-                    "grid h-6 min-w-6 place-items-center rounded-full px-1 text-xs font-semibold tabular-nums",
-                    today
-                      ? "bg-volt text-background"
-                      : inMonth
-                        ? "text-ink"
-                        : "text-muted-foreground/60",
-                  )}
-                >
-                  {format(day, "d")}
-                </span>
-                {items.length > 0 && (
-                  <span className="text-[0.6rem] font-medium text-muted-foreground tabular-nums">
-                    {items.length}
-                  </span>
-                )}
-              </div>
-              <div className="flex flex-col gap-1">
-                {items.slice(0, maxVisible).map((b) => (
-                  <EventChip
-                    key={b.id}
-                    blog={b}
-                    busyId={board.busyId}
-                    onReschedule={board.onReschedule}
-                    onPrioritize={board.onPrioritize}
-                    compact={view === "month"}
-                    onDragStart={() => setDragId(b.id)}
-                    onDragEnd={() => {
-                      setDragId(null);
-                      setDragOverKey(null);
-                    }}
-                  />
-                ))}
-                {overflow > 0 && (
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <button
-                        type="button"
-                        className="rounded-md px-1.5 py-0.5 text-left text-[0.68rem] font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-ink"
-                      >
-                        +{overflow} more
-                      </button>
-                    </PopoverTrigger>
-                    <PopoverContent align="start" className="w-72 p-3">
-                      <p className="mb-2 text-xs font-semibold text-ink">{prettyDate(key)}</p>
-                      <div className="flex flex-col gap-1.5">
-                        {items.map((b) => (
-                          <EventChip
-                            key={b.id}
-                            blog={b}
-                            busyId={board.busyId}
-                            onReschedule={board.onReschedule}
-                            onPrioritize={board.onPrioritize}
-                          />
-                        ))}
-                      </div>
-                    </PopoverContent>
-                  </Popover>
-                )}
-              </div>
-            </div>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
-
-/* ---------------- Agenda / list ---------------- */
-
-function Agenda({ board }: { board: BoardProps }) {
-  const groups = useMemo(() => {
-    const map = new Map<string, Blog[]>();
-    for (const b of board.events) {
-      const key = b.scheduled_date ?? "unscheduled";
-      const arr = map.get(key) ?? [];
-      arr.push(b);
-      map.set(key, arr);
-    }
-    return [...map.entries()].sort(([a], [b]) => {
-      if (a === "unscheduled") return 1;
-      if (b === "unscheduled") return -1;
-      return a.localeCompare(b);
-    });
-  }, [board.events]);
-
-  return (
-    <div className="space-y-5">
-      {groups.map(([key, blogs]) => (
-        <div key={key} className="rounded-2xl border border-border bg-card p-4 shadow-elevation">
-          <div className="mb-3 flex items-center gap-2">
-            <h2 className="text-sm font-semibold text-ink">{prettyDate(key)}</h2>
-            <span className="text-xs text-muted-foreground">
-              {blogs.length} {blogs.length === 1 ? "article" : "articles"}
-            </span>
-          </div>
-          <div className="grid gap-2 sm:grid-cols-2">
-            {blogs.map((b) => (
-              <EventChip
-                key={b.id}
-                blog={b}
-                busyId={board.busyId}
-                onReschedule={board.onReschedule}
-                onPrioritize={board.onPrioritize}
-              />
-            ))}
-          </div>
-        </div>
+    <div className="flex items-center gap-4 text-xs text-muted-foreground">
+      {(["published", "scheduled", "overdue"] as const).map((tone) => (
+        <span key={tone} className="inline-flex items-center gap-1.5">
+          <StatusGlyph tone={tone} />
+          {TONE_LABEL[tone]}
+        </span>
       ))}
     </div>
   );
 }
 
-/* ---------------- Unscheduled strip ---------------- */
+/* ── Month grid ─────────────────────────────────────────────────── */
 
-function UnscheduledStrip({
+const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+const VISIBLE_PER_DAY = 3;
+
+export function MonthGrid({
+  month,
   items,
-  board,
-  setDragId,
+  loading,
+  openId,
+  onOpen,
+  onMove,
 }: {
-  items: Blog[];
-  board: BoardProps;
-  setDragId: (id: string | null) => void;
+  month: Date;
+  items: Placed[];
+  loading?: boolean;
+  openId?: string;
+  onOpen: (id: string) => void;
+  onMove: (blog: Blog, day: string) => void;
 }) {
-  if (items.length === 0) return null;
+  const [dragId, setDragId] = useState<string | null>(null);
+  const [overDay, setOverDay] = useState<string | null>(null);
+  const today = todayKey();
+
+  const days = useMemo(
+    () =>
+      eachDayOfInterval({
+        start: startOfWeek(startOfMonth(month)),
+        end: endOfWeek(endOfMonth(month)),
+      }),
+    [month],
+  );
+
+  const byDay = useMemo(() => {
+    const map = new Map<string, Placed[]>();
+    for (const item of items) {
+      if (!item.day) continue;
+      const list = map.get(item.day) ?? [];
+      list.push(item);
+      map.set(item.day, list);
+    }
+    return map;
+  }, [items]);
+
+  const unscheduled = items.filter((i) => !i.day);
+
+  function endDrag() {
+    setDragId(null);
+    setOverDay(null);
+  }
+
+  function drop(day: string) {
+    const item = items.find((i) => i.blog.id === dragId);
+    endDrag();
+    if (item && item.day !== day) onMove(item.blog, day);
+  }
+
+  const chipProps = (item: Placed) => ({
+    item,
+    active: item.blog.id === openId,
+    dragging: item.blog.id === dragId,
+    onOpen,
+    onDragStart: () => setDragId(item.blog.id),
+    onDragEnd: endDrag,
+  });
+
   return (
-    <div className="rounded-2xl border border-dashed border-border bg-secondary/30 p-3">
-      <div className="mb-2 flex items-center gap-2">
-        <Inbox className="h-4 w-4 text-muted-foreground" />
-        <p className="text-xs font-semibold text-ink">Unscheduled</p>
-        <span className="text-xs text-muted-foreground">drag onto a day to schedule</span>
-      </div>
-      <div className="grid gap-1.5 sm:grid-cols-3 lg:grid-cols-4">
-        {items.map((b) => (
-          <EventChip
-            key={b.id}
-            blog={b}
-            busyId={board.busyId}
-            onReschedule={board.onReschedule}
-            onPrioritize={board.onPrioritize}
-            onDragStart={() => setDragId(b.id)}
-            onDragEnd={() => setDragId(null)}
-          />
-        ))}
+    <div className="space-y-3">
+      {unscheduled.length > 0 && (
+        <div className="rounded-card border border-dashed border-border bg-card px-4 py-3">
+          <p className="mb-2 text-xs text-muted-foreground">
+            <span className="font-semibold text-ink">No day yet.</span> Drag onto the calendar to
+            schedule.
+          </p>
+          <div className="grid gap-1.5 sm:grid-cols-3 lg:grid-cols-4">
+            {unscheduled.map((item) => (
+              <Chip key={item.blog.id} {...chipProps(item)} />
+            ))}
+          </div>
+        </div>
+      )}
+
+      <div className="overflow-hidden rounded-card border border-border bg-card">
+        <div className="grid grid-cols-7 border-b border-border bg-secondary/30">
+          {WEEKDAYS.map((d) => (
+            <div
+              key={d}
+              className="px-2.5 py-2 text-[0.64rem] font-semibold uppercase tracking-[0.09em] text-muted-foreground"
+            >
+              {d}
+            </div>
+          ))}
+        </div>
+        <div className="grid grid-cols-7">
+          {days.map((date) => {
+            const day = dateKey(date);
+            const list = byDay.get(day) ?? [];
+            const inMonth = isSameMonth(date, month);
+            const isToday = day === today;
+            const isPast = day < today;
+            // Autopilot can't write in the past, so the past doesn't take drops.
+            const accepts = !!dragId && !isPast;
+            const hidden = list.length - VISIBLE_PER_DAY;
+            return (
+              <div
+                key={day}
+                data-day={day}
+                onDragOver={(e) => {
+                  if (!accepts) return;
+                  e.preventDefault();
+                  e.dataTransfer.dropEffect = "move";
+                  if (overDay !== day) setOverDay(day);
+                }}
+                onDragLeave={() => overDay === day && setOverDay(null)}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  if (accepts) drop(day);
+                }}
+                className={cn(
+                  "flex min-h-[7.25rem] min-w-0 flex-col gap-1 border-b border-r border-border p-1.5 transition-colors [&:nth-child(7n)]:border-r-0 [&:nth-last-child(-n+7)]:border-b-0",
+                  isPast && "bg-secondary/35",
+                  isToday && "bg-brand-blue/[0.04]",
+                  dragId && isPast && "cursor-not-allowed",
+                  overDay === day &&
+                    "bg-volt/10 shadow-[inset_0_0_0_2px_color-mix(in_oklab,var(--volt)_45%,transparent)]",
+                )}
+              >
+                <div className="flex h-6 items-center justify-between px-0.5">
+                  <span
+                    className={cn(
+                      "grid h-6 min-w-6 place-items-center rounded-full px-1 text-xs font-semibold tabular-nums",
+                      isToday
+                        ? "bg-brand-blue text-white"
+                        : !inMonth
+                          ? "text-muted-foreground/45"
+                          : isPast
+                            ? "text-muted-foreground"
+                            : "text-ink",
+                    )}
+                  >
+                    {format(date, "d")}
+                  </span>
+                  {isToday && (
+                    <span className="text-[0.6rem] font-semibold uppercase tracking-[0.09em] text-brand-blue">
+                      Today
+                    </span>
+                  )}
+                </div>
+
+                {loading ? (
+                  inMonth && date.getDate() % 3 !== 0 && <div className="skeleton h-5 w-full" />
+                ) : (
+                  <div className="flex min-w-0 flex-col gap-1">
+                    {list.slice(0, VISIBLE_PER_DAY).map((item) => (
+                      <Chip key={item.blog.id} {...chipProps(item)} />
+                    ))}
+                    {hidden > 0 && (
+                      <Popover>
+                        <PopoverTrigger className="rounded-md px-1.5 py-0.5 text-left text-[0.68rem] font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-ink">
+                          +{hidden} more
+                        </PopoverTrigger>
+                        <PopoverContent
+                          align="start"
+                          className="w-72 rounded-card border-border p-2 shadow-elevation-lg"
+                        >
+                          <p className="px-1 pb-2 text-xs font-semibold text-ink">
+                            {format(date, "EEEE, MMMM d")}
+                          </p>
+                          <div className="flex flex-col gap-1">
+                            {list.map((item) => (
+                              <Chip key={item.blog.id} {...chipProps(item)} />
+                            ))}
+                          </div>
+                        </PopoverContent>
+                      </Popover>
+                    )}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );
 }
 
-/* ---------------- Main board ---------------- */
+/* ── Agenda ─────────────────────────────────────────────────────── */
 
-export function CalendarBoard({
-  view,
-  setView,
-  events,
-  busyId,
-  onReschedule,
-  onPrioritize,
+function dayHeading(day: string, today: string): { label: string; date: string } {
+  const date = format(parseDateKey(day), "EEE, MMM d");
+  if (day === today) return { label: "Today", date };
+  if (day === dateKey(addDays(parseDateKey(today), 1))) return { label: "Tomorrow", date };
+  return { label: format(parseDateKey(day), "EEEE"), date: format(parseDateKey(day), "MMM d") };
+}
+
+/**
+ * What's coming, in order: anything overdue first (it needs a decision), then
+ * each upcoming day. Published history lives in the month view and on Articles.
+ */
+export function Agenda({
+  items,
+  openId,
+  onOpen,
 }: {
-  view: CalendarView;
-  setView: (v: CalendarView) => void;
-} & BoardProps) {
-  const [anchor, setAnchor] = useState(() => new Date());
-  const [dragId, setDragId] = useState<string | null>(null);
-  const [dragOverKey, setDragOverKey] = useState<string | null>(null);
-  const reduce = useReducedMotion();
-
-  const board: BoardProps = { events, busyId, onReschedule, onPrioritize };
-
-  const byDay = useMemo(() => {
-    const map = new Map<string, Blog[]>();
-    for (const b of events) {
-      if (!b.scheduled_date) continue;
-      const arr = map.get(b.scheduled_date) ?? [];
-      arr.push(b);
-      map.set(b.scheduled_date, arr);
+  items: Placed[];
+  openId?: string;
+  onOpen: (id: string) => void;
+}) {
+  const today = todayKey();
+  const groups = useMemo(() => {
+    const overdue = items.filter((i) => i.tone === "overdue");
+    const byDay = new Map<string, Placed[]>();
+    for (const item of items) {
+      if (item.tone === "overdue" || item.tone === "published" || !item.day) continue;
+      const list = byDay.get(item.day) ?? [];
+      list.push(item);
+      byDay.set(item.day, list);
     }
-    return map;
-  }, [events]);
+    const days = [...byDay.entries()].map(([day, list]) => ({
+      key: day,
+      ...dayHeading(day, today),
+      list,
+    }));
+    return overdue.length
+      ? [{ key: "overdue", label: "Overdue", date: "Not written yet", list: overdue }, ...days]
+      : days;
+  }, [items, today]);
 
-  const unscheduled = useMemo(() => events.filter((b) => !b.scheduled_date), [events]);
-
-  const days = useMemo(() => {
-    if (view === "week") {
-      const start = startOfWeek(anchor);
-      return eachDayOfInterval({ start, end: endOfWeek(anchor) });
-    }
-    const start = startOfWeek(startOfMonth(anchor));
-    const end = endOfWeek(endOfMonth(anchor));
-    return eachDayOfInterval({ start, end });
-  }, [anchor, view]);
-
-  const label =
-    view === "week"
-      ? `${format(startOfWeek(anchor), "MMM d")} – ${format(endOfWeek(anchor), "MMM d, yyyy")}`
-      : format(anchor, "MMMM yyyy");
-
-  const isCurrentPeriod =
-    view === "month"
-      ? isSameMonth(anchor, new Date())
-      : isSameDay(startOfWeek(anchor), startOfWeek(new Date()));
-
-  function step(dir: 1 | -1) {
-    setAnchor((d) => (view === "week" ? addWeeks(d, dir) : addMonths(d, dir)));
-  }
+  if (groups.length === 0) return null;
 
   return (
-    <div className="space-y-4">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-2">
-          <Button variant="ghost" onClick={() => setAnchor(new Date())} disabled={view === "list" || isCurrentPeriod}>
-            Today
-          </Button>
-          {view !== "list" && (
-            <div className="flex items-center gap-1">
-              <button
-                type="button"
-                onClick={() => step(-1)}
-                className="grid h-9 w-9 place-items-center rounded-xl border border-border bg-card text-ink transition-colors hover:bg-secondary"
-                aria-label="Previous"
-              >
-                <ChevronLeft className="h-4 w-4" />
-              </button>
-              <button
-                type="button"
-                onClick={() => step(1)}
-                className="grid h-9 w-9 place-items-center rounded-xl border border-border bg-card text-ink transition-colors hover:bg-secondary"
-                aria-label="Next"
-              >
-                <ChevronRight className="h-4 w-4" />
-              </button>
-            </div>
-          )}
-          {view !== "list" && (
-            <h2 className="ml-1 text-lg font-semibold tracking-tight text-ink">{label}</h2>
-          )}
-        </div>
-
-        <div className="flex gap-1 rounded-xl border border-border bg-card p-1">
-          {(["month", "week", "list"] as const).map((v) => (
-            <button
-              key={v}
-              type="button"
-              onClick={() => setView(v)}
+    // One list, day headers inside it: a card per day would repeat the same
+    // frame thirty times. overflow-clip (not hidden) keeps the headers sticky.
+    <div className="overflow-clip rounded-card border border-border bg-card">
+      {groups.map((g) => (
+        <section key={g.key} className="border-b border-border last:border-b-0">
+          <header className="sticky top-0 z-[1] flex items-baseline gap-2 border-b border-border bg-secondary px-4 py-2">
+            <h3
               className={cn(
-                "rounded-lg px-3 py-1.5 text-sm font-medium capitalize transition-all",
-                view === v ? "bg-ink text-background shadow-sm" : "text-muted-foreground hover:text-ink",
+                "text-sm font-semibold",
+                g.label === "Today" ? "text-brand-blue" : "text-ink",
               )}
             >
-              {v}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {view !== "list" && (
-        <UnscheduledStrip items={unscheduled} board={board} setDragId={setDragId} />
-      )}
-
-      <motion.div
-        key={`${view}-${label}`}
-        initial={reduce ? false : { opacity: 0, y: 6 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.2 }}
-      >
-        {view === "list" ? (
-          <Agenda board={board} />
-        ) : (
-          <Grid
-            days={days}
-            anchor={anchor}
-            view={view}
-            byDay={byDay}
-            board={board}
-            dragId={dragId}
-            setDragId={setDragId}
-            dragOverKey={dragOverKey}
-            setDragOverKey={setDragOverKey}
-          />
-        )}
-      </motion.div>
+              {g.label}
+            </h3>
+            <span className="text-xs text-muted-foreground">{g.date}</span>
+            <span className="ml-auto text-xs tabular-nums text-muted-foreground">
+              {g.list.length} {g.list.length === 1 ? "article" : "articles"}
+            </span>
+          </header>
+          <ul className="divide-y divide-border">
+            {g.list.map((item) => (
+              <li key={item.blog.id}>
+                <button
+                  type="button"
+                  data-article-link={item.blog.id}
+                  onClick={() => onOpen(item.blog.id)}
+                  className={cn(
+                    "flex w-full items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-secondary/40 focus-visible:bg-secondary/40 focus-visible:outline-none",
+                    item.blog.id === openId && "bg-secondary/60",
+                  )}
+                >
+                  <span className="grid h-5 w-5 shrink-0 place-items-center">
+                    <StatusGlyph tone={item.tone} />
+                  </span>
+                  <span className="min-w-0 flex-1">
+                    <span className="block truncate text-sm font-medium text-ink">
+                      {item.blog.title}
+                    </span>
+                    <span className="mt-0.5 block truncate text-xs text-muted-foreground">
+                      {item.tone === "overdue" && item.day
+                        ? `Was due ${format(parseDateKey(item.day), "MMM d")}`
+                        : item.tone === "writing"
+                          ? "Writing now"
+                          : (item.blog.keyword ?? "Scheduled")}
+                    </span>
+                  </span>
+                  <TrafficValue
+                    value={item.blog.traffic_estimate ?? 0}
+                    className="hidden shrink-0 text-xs sm:inline-flex"
+                  />
+                </button>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))}
     </div>
   );
 }

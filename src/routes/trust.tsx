@@ -17,22 +17,22 @@ import {
 export const Route = createFileRoute("/trust")({
   head: () => ({
     meta: [
-      { title: "Trust & Security — Rankvolt" },
+      { title: "Trust & Security — Rankbox" },
       {
         name: "description",
         content:
-          "How Rankvolt approaches security, privacy, and data protection — the controls we have in place and how responsibility is shared between us, our platform, and you.",
+          "How Rankbox approaches security, privacy, and data protection — the controls we have in place and how responsibility is shared between us, our platform, and you.",
       },
-      { property: "og:title", content: "Trust & Security — Rankvolt" },
+      { property: "og:title", content: "Trust & Security — Rankbox" },
       {
         property: "og:description",
         content:
-          "Learn about Rankvolt's security and privacy practices: authentication, hosting, data handling, subprocessors, retention, and how to report a concern.",
+          "Learn about Rankbox's security and privacy practices: authentication, hosting, data handling, subprocessors, retention, and how to report a concern.",
       },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "https://rankvolt.top/trust" },
+      { property: "og:url", content: "https://rankbox.xyz/trust" },
     ],
-    links: [{ rel: "canonical", href: "https://rankvolt.top/trust" }],
+    links: [{ rel: "canonical", href: "https://rankbox.xyz/trust" }],
   }),
   component: TrustPage,
 });

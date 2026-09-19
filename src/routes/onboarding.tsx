@@ -1,16 +1,44 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { Onboarding } from "@/components/auth/Onboarding";
+import { createFileRoute, redirect } from "@tanstack/react-router";
+import { Onboarding } from "@/components/onboarding";
+import { getSessionUser } from "@/lib/auth";
+import { getProfile } from "@/lib/data";
+import { IS_MOCK } from "@/lib/mock/mode";
 
 export const Route = createFileRoute("/onboarding")({
+  // Client-only: progress is restored from localStorage in a state
+  // initializer, so a server render would disagree with the first client
+  // render and trip a hydration mismatch. Same reason /_authenticated opts out.
+  ssr: false,
+  // The URL captured on the landing page arrives here as ?url=. It is also
+  // mirrored into localStorage (see src/lib/pending-site.ts) because OAuth and
+  // email confirmation both drop the query string.
+  validateSearch: (search: Record<string, unknown>): { url?: string } => ({
+    url: typeof search.url === "string" ? search.url : undefined,
+  }),
+  // Mock data is stored per local account, so onboarding needs one signed in.
+  // Real mode stays open: email confirmation arrives here before a session exists.
+  beforeLoad: async ({ search }) => {
+    // Reading the session also finishes an OAuth sign-in: Supabase takes the
+    // tokens the sign-in redirect left in the URL when its client first loads.
+    const user = await getSessionUser();
+    if (IS_MOCK && !user) {
+      throw redirect({ to: "/auth", search: { url: search.url } });
+    }
+    // OAuth sends returning users here too; anyone who already finished
+    // onboarding goes on to the dashboard.
+    if (!IS_MOCK && user && (await getProfile())) {
+      throw redirect({ to: "/dashboard" });
+    }
+  },
   head: () => ({
     meta: [
-      { title: "Get Started — Rankvolt" },
+      { title: "Get Started — Rankbox" },
       {
         name: "description",
         content:
-          "Add your website, let our AI analyze it, confirm the plan, and see your projected traffic before starting your free Rankvolt trial.",
+          "Add your website, let our AI analyze it, confirm the plan, and see your projected traffic before starting your free Rankbox trial.",
       },
-      { property: "og:title", content: "Get Started — Rankvolt" },
+      { property: "og:title", content: "Get Started — Rankbox" },
       {
         property: "og:description",
         content:
@@ -19,5 +47,10 @@ export const Route = createFileRoute("/onboarding")({
       { property: "og:type", content: "website" },
     ],
   }),
-  component: Onboarding,
+  component: OnboardingRoute,
 });
+
+function OnboardingRoute() {
+  const { url } = Route.useSearch();
+  return <Onboarding searchUrl={url} />;
+}

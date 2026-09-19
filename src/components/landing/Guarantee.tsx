@@ -17,7 +17,7 @@ export function Guarantee() {
                 Try it with zero risk
               </h2>
               <p className="mt-4 text-lg text-muted-foreground">
-                Start growing with Rankvolt and cancel anytime — no hidden fees, no long-term
+                Start growing with Rankbox and cancel anytime — no hidden fees, no long-term
                 contracts. Your access stays active until the end of your billing period.
               </p>
             </div>

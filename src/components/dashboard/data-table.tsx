@@ -21,8 +21,8 @@ export function DataTable({
   minWidth?: number;
 }) {
   return (
-    <div className={cn("overflow-hidden rounded-xl border border-border bg-card", className)}>
-      <div className="overflow-x-auto">
+    <div className={cn("overflow-hidden rounded-card border border-border bg-card", className)}>
+      <div className="relative overflow-x-auto">
         <table className="w-full border-collapse text-sm" style={{ minWidth }}>
           <thead>
             <tr className="border-b border-border bg-secondary/30">
@@ -46,13 +46,14 @@ export function DataTable({
   );
 }
 
-export function Tr({ children, className }: { children: ReactNode; className?: string }) {
+export function Tr({ children, className, ...props }: React.HTMLAttributes<HTMLTableRowElement>) {
   return (
     <tr
       className={cn(
         "border-b border-border transition-colors last:border-b-0 hover:bg-secondary/40",
         className,
       )}
+      {...props}
     >
       {children}
     </tr>

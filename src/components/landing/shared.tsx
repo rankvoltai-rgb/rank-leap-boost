@@ -28,14 +28,39 @@ export function Reveal({
   );
 }
 
-/* ---------- Rankvolt logo ---------- */
-export function Logo({ className }: { className?: string }) {
+/* ---------- Rankbox logo ---------- */
+export function Logo({
+  className,
+  inverted = false,
+}: {
+  className?: string;
+  /* Set on the dark navigation, where the wordmark has to read white. */
+  inverted?: boolean;
+}) {
   return (
     <div className={cn("flex items-center gap-2.5", className)}>
-      <span className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-[10px] border border-border bg-card shadow-sm">
-        <img src={rankvoltMark.url} alt="Rankvolt" className="h-5 w-5 object-contain" />
+      {inverted ? (
+        // On coloured chrome the mark stands alone, white, with no tile behind
+        // it. brightness-0 invert turns the black source PNG white without
+        // needing a second asset.
+        <img
+          src={rankvoltMark.url}
+          alt="Rankbox"
+          className="h-6 w-6 object-contain brightness-0 invert"
+        />
+      ) : (
+        <span className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-[10px] border border-border bg-card shadow-sm">
+          <img src={rankvoltMark.url} alt="Rankbox" className="h-5 w-5 object-contain" />
+        </span>
+      )}
+      <span
+        className={cn(
+          "text-[1.2rem] font-semibold tracking-tight",
+          inverted ? "text-white" : "text-ink",
+        )}
+      >
+        Rankbox
       </span>
-      <span className="text-[1.2rem] font-semibold tracking-tight text-ink">Rankvolt</span>
     </div>
   );
 }
@@ -110,18 +135,14 @@ export function Avatar({
     .slice(0, 2)
     .join("")
     .toUpperCase();
-  const idx =
-    name.split("").reduce((a, c) => a + c.charCodeAt(0), 0) % GRADIENTS.length;
+  const idx = name.split("").reduce((a, c) => a + c.charCodeAt(0), 0) % GRADIENTS.length;
   if (src) {
     return (
       <img
         src={src}
         alt={name}
         loading="lazy"
-        className={cn(
-          "rounded-full object-cover ring-2 ring-background",
-          className,
-        )}
+        className={cn("rounded-full object-cover ring-2 ring-background", className)}
       />
     );
   }
@@ -168,13 +189,7 @@ const BRAND_PATHS: Record<string, string> = {
   Framer: "M4 0h16v8h-8zM4 8h8l8 8H4zM4 16h8v8z",
 };
 
-export function BrandMark({
-  name,
-  className,
-}: {
-  name: string;
-  className?: string;
-}) {
+export function BrandMark({ name, className }: { name: string; className?: string }) {
   const path = BRAND_PATHS[name];
   return (
     <span

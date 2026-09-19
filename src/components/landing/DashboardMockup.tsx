@@ -8,7 +8,7 @@ import {
 } from "lucide-react";
 
 const NAV_GENERAL = ["Dashboard", "Articles", "Citations", "Settings"];
-const NAV_SUPPORT = ["Ask Rankvolt", "Help Center"];
+const NAV_SUPPORT = ["Ask Rankbox", "Help Center"];
 const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
 const QUEUED = [
@@ -32,7 +32,7 @@ export function DashboardMockup() {
           <span className="h-2.5 w-2.5 rounded-full bg-border" />
         </span>
         <span className="mx-auto flex items-center gap-1.5 rounded-md border border-border bg-card px-2.5 py-0.5 text-[0.6rem] font-medium text-muted-foreground">
-          app.rankvolt.top/dashboard
+          app.rankbox.xyz/dashboard
         </span>
       </div>
       <div className="flex">

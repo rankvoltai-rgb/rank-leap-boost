@@ -29,7 +29,7 @@ export const TOOLS: Tool[] = [
     h1: "llms.txt Generator",
     intro:
       "Build a clean, valid llms.txt file so ChatGPT, Perplexity, and other AI engines understand your site and surface the right pages. Fill in the fields, copy the file, and drop it at the root of your domain.",
-    metaTitle: "Free llms.txt Generator for AI Search | Rankvolt",
+    metaTitle: "Free llms.txt Generator for AI Search | Rankbox",
     metaDescription:
       "Generate a valid llms.txt file in seconds so AI engines like ChatGPT and Perplexity understand and cite your site. Free, no signup.",
     howto: [
@@ -62,7 +62,7 @@ export const TOOLS: Tool[] = [
     h1: "AI Crawler robots.txt Generator",
     intro:
       "Control exactly which AI crawlers can read your site. Toggle each bot on or off and generate a clean robots.txt you can paste straight onto your domain.",
-    metaTitle: "Free AI Crawler robots.txt Generator | Rankvolt",
+    metaTitle: "Free AI Crawler robots.txt Generator | Rankbox",
     metaDescription:
       "Generate a robots.txt that allows or blocks GPTBot, ClaudeBot, PerplexityBot, Google-Extended, and more. Free AI crawler control tool.",
     howto: [
@@ -95,7 +95,7 @@ export const TOOLS: Tool[] = [
     h1: "Schema Markup (JSON-LD) Generator",
     intro:
       "Structured data helps Google and AI engines understand your page. Pick a type, fill in the fields, and copy a ready-to-paste JSON-LD script tag.",
-    metaTitle: "Free Schema Markup (JSON-LD) Generator | Rankvolt",
+    metaTitle: "Free Schema Markup (JSON-LD) Generator | Rankbox",
     metaDescription:
       "Generate valid JSON-LD structured data for FAQ, Article, Organization, and Product schemas. Copy and paste ready for Google rich results.",
     howto: [
@@ -128,7 +128,7 @@ export const TOOLS: Tool[] = [
     h1: "SERP & AI Snippet Preview",
     intro:
       "See how your page looks in Google results before you publish. Type your title, description, and URL to get a live preview with length warnings that keep you from getting truncated.",
-    metaTitle: "Free SERP Snippet Preview & Meta Length Checker | Rankvolt",
+    metaTitle: "Free SERP Snippet Preview & Meta Length Checker | Rankbox",
     metaDescription:
       "Preview your Google search snippet live and check title and meta description lengths so they never get cut off. Free SEO snippet tool.",
     howto: [
@@ -161,7 +161,7 @@ export const TOOLS: Tool[] = [
     h1: "AI Question Generator",
     intro:
       "Enter a topic and get the real questions buyers ask AI engines, grouped by intent. Use them to plan content that becomes the answer ChatGPT and Perplexity cite.",
-    metaTitle: "Free AI Question Generator for Content & GEO | Rankvolt",
+    metaTitle: "Free AI Question Generator for Content & GEO | Rankbox",
     metaDescription:
       "Generate the real questions people ask AI engines about any topic, grouped by intent. Plan content that earns AI citations. Free AI tool.",
     howto: [
@@ -190,7 +190,7 @@ export const TOOLS: Tool[] = [
     h1: "AI Content Brief Generator",
     intro:
       "Enter a target keyword and get a ready-to-write brief: a working title, a full outline, the questions to answer, and the entities and terms to cover for both Google and AI search.",
-    metaTitle: "Free AI Content Brief Generator | Rankvolt",
+    metaTitle: "Free AI Content Brief Generator | Rankbox",
     metaDescription:
       "Turn any keyword into a complete content brief — title, outline, questions, and entities to cover for SEO and AI search. Free AI tool.",
     howto: [
@@ -219,7 +219,7 @@ export const TOOLS: Tool[] = [
     h1: "AI Meta Description Writer",
     intro:
       "Describe your page and get three compelling, length-optimized meta descriptions written to earn clicks from Google — each one ready to paste.",
-    metaTitle: "Free AI Meta Description Writer | Rankvolt",
+    metaTitle: "Free AI Meta Description Writer | Rankbox",
     metaDescription:
       "Generate three click-worthy, length-optimized meta descriptions for any page in seconds. Free AI meta description generator.",
     howto: [
@@ -248,7 +248,7 @@ export const TOOLS: Tool[] = [
     h1: "Get Yourself Recommended by ChatGPT",
     intro:
       "People used to Google you. Now they ask ChatGPT. Tell us your name and what you do, and we'll generate a personalized plan — new LinkedIn headlines, a quotable About-Me, and a step-by-step checklist — so AI engines know who you are and recommend you.",
-    metaTitle: "Get Recommended by ChatGPT — Free Personal AI Visibility Tool | Rankvolt",
+    metaTitle: "Get Recommended by ChatGPT — Free Personal AI Visibility Tool | Rankbox",
     metaDescription:
       "Free tool: get a personalized LinkedIn + About-Me plan so ChatGPT and other AI engines find, understand, and recommend you. No jargon, built for any professional.",
     howto: [

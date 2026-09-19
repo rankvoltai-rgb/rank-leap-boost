@@ -2,6 +2,7 @@ import { createStart, createMiddleware } from "@tanstack/react-start";
 
 import { renderErrorPage } from "./lib/error-page";
 import { attachSupabaseAuth } from "@/integrations/supabase/auth-attacher";
+import { IS_MOCK } from "@/lib/mock/mode";
 
 const errorMiddleware = createMiddleware().server(async ({ next }) => {
   try {
@@ -19,6 +20,7 @@ const errorMiddleware = createMiddleware().server(async ({ next }) => {
 });
 
 export const startInstance = createStart(() => ({
-  functionMiddleware: [attachSupabaseAuth],
+  // Mock mode has no Supabase session to attach, and must not start the client.
+  functionMiddleware: IS_MOCK ? [] : [attachSupabaseAuth],
   requestMiddleware: [errorMiddleware],
 }));

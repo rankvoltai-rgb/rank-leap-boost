@@ -13,21 +13,21 @@ import {
 export const Route = createFileRoute("/legal/refunds")({
   head: () => ({
     meta: [
-      { title: "Refund & Cancellation Policy — Rankvolt" },
+      { title: "Refund & Cancellation Policy — Rankbox" },
       {
         name: "description",
         content:
-          "Rankvolt's refund and cancellation policy: subscriptions are non-refundable, you can cancel anytime, and access continues until the end of your paid billing period.",
+          "Rankbox's refund and cancellation policy: subscriptions are non-refundable, you can cancel anytime, and access continues until the end of your paid billing period.",
       },
-      { property: "og:title", content: "Refund & Cancellation Policy — Rankvolt" },
+      { property: "og:title", content: "Refund & Cancellation Policy — Rankbox" },
       {
         property: "og:description",
-        content: "How cancellations and refunds work for Rankvolt subscriptions.",
+        content: "How cancellations and refunds work for Rankbox subscriptions.",
       },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "https://rankvolt.top/legal/refunds" },
+      { property: "og:url", content: "https://rankbox.xyz/legal/refunds" },
     ],
-    links: [{ rel: "canonical", href: "https://rankvolt.top/legal/refunds" }],
+    links: [{ rel: "canonical", href: "https://rankbox.xyz/legal/refunds" }],
   }),
   component: RefundsPage,
 });
@@ -41,7 +41,7 @@ function RefundsPage() {
     >
       <Section title="1. Cancel anytime">
         <P>
-          You can cancel your Rankvolt subscription at any time from your account billing settings.
+          You can cancel your Rankbox subscription at any time from your account billing settings.
           When you cancel, your plan will not renew, and you will keep access to paid features until
           the end of your current paid billing period.
         </P>

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion } from "motion/react";
-import { Flame } from "lucide-react";
+import { FlameIcon } from "./icons";
 import { cn } from "@/lib/utils";
 
 function reducedMotion() {
@@ -65,7 +65,13 @@ export function ProgressRing({
   return (
     <div className="relative grid place-items-center" style={{ width: size, height: size }}>
       <svg width={size} height={size} className="-rotate-90">
-        <circle cx={size / 2} cy={size / 2} r={r} strokeWidth={stroke} className="fill-none stroke-secondary" />
+        <circle
+          cx={size / 2}
+          cy={size / 2}
+          r={r}
+          strokeWidth={stroke}
+          className="fill-none stroke-secondary"
+        />
         <motion.circle
           cx={size / 2}
           cy={size / 2}
@@ -91,7 +97,7 @@ export function StreakBadge({ days }: { days: number }) {
       className="inline-flex items-center gap-1.5 rounded-full border border-flame/25 bg-flame/10 px-2.5 py-1 text-xs font-semibold text-ink"
       title={`${days}-day publishing streak`}
     >
-      <Flame className="h-3.5 w-3.5 fill-flame text-flame" />
+      <FlameIcon className="h-3.5 w-3.5 fill-flame text-flame" />
       {days} day{days === 1 ? "" : "s"}
     </span>
   );

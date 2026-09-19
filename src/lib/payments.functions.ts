@@ -3,6 +3,7 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import {
   type StripeEnv,
   createStripeClient,
+  getServerStripeEnv,
   getStripeErrorMessage,
 } from "@/lib/stripe.server";
 
@@ -42,50 +43,47 @@ async function resolveOrCreateCustomer(
   return created.id;
 }
 
+/** Prices the server will sell, and the trial each carries. Client cannot add to this. */
+const ALLOWED_PRICES: Record<string, { trialDays: number }> = {
+  business_monthly: { trialDays: 7 },
+};
+
 export const createCheckoutSession = createServerFn({ method: "POST" })
-  .inputValidator(
-    (data: {
-      priceId: string;
-      quantity?: number;
-      customerEmail?: string;
-      userId?: string;
-      returnUrl: string;
-      environment: StripeEnv;
-      trialDays?: number;
-    }) => {
-      if (!/^[a-zA-Z0-9_-]+$/.test(data.priceId)) throw new Error("Invalid priceId");
-      return data;
-    },
-  )
-  .handler(async ({ data }): Promise<CheckoutSessionResult> => {
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: { priceId: string; quantity?: number; returnUrl: string }) => {
+    if (!/^[a-zA-Z0-9_-]+$/.test(data.priceId)) throw new Error("Invalid priceId");
+    if (!(data.priceId in ALLOWED_PRICES)) throw new Error("Unknown priceId");
+    return data;
+  })
+  .handler(async ({ data, context }): Promise<CheckoutSessionResult> => {
     try {
-      const stripe = createStripeClient(data.environment);
+      // Identity, environment and trial length are all server-derived. Taking
+      // any of them from the caller is what let a client mint a free
+      // entitlement via a test-mode checkout.
+      const environment = getServerStripeEnv();
+      const userId = context.userId;
+      const customerEmail = (context.claims as { email?: string } | undefined)?.email;
+      const stripe = createStripeClient(environment);
 
       const prices = await stripe.prices.list({ lookup_keys: [data.priceId] });
       if (!prices.data.length) throw new Error("Price not found");
       const stripePrice = prices.data[0];
       const isRecurring = stripePrice.type === "recurring";
 
-      const customerId =
-        data.customerEmail || data.userId
-          ? await resolveOrCreateCustomer(stripe, {
-              email: data.customerEmail,
-              userId: data.userId,
-            })
-          : undefined;
+      const customerId = await resolveOrCreateCustomer(stripe, {
+        email: customerEmail,
+        userId,
+      });
 
       let productDescription: string | undefined;
       if (!isRecurring) {
         const productId =
-          typeof stripePrice.product === "string"
-            ? stripePrice.product
-            : stripePrice.product.id;
+          typeof stripePrice.product === "string" ? stripePrice.product : stripePrice.product.id;
         const product = await stripe.products.retrieve(productId);
         productDescription = product.name;
       }
 
-      const trialDays =
-        isRecurring && data.trialDays && data.trialDays > 0 ? data.trialDays : undefined;
+      const trialDays = isRecurring ? ALLOWED_PRICES[data.priceId].trialDays : undefined;
 
       const session = await stripe.checkout.sessions.create({
         line_items: [{ price: stripePrice.id, quantity: data.quantity || 1 }],
@@ -96,18 +94,13 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
         ...(!isRecurring && {
           payment_intent_data: { description: productDescription },
         }),
-        ...(data.userId && {
-          metadata: { userId: data.userId },
-          ...(isRecurring && {
-            subscription_data: {
-              metadata: { userId: data.userId },
-              ...(trialDays && { trial_period_days: trialDays }),
-            },
-          }),
+        metadata: { userId },
+        ...(isRecurring && {
+          subscription_data: {
+            metadata: { userId },
+            ...(trialDays && { trial_period_days: trialDays }),
+          },
         }),
-        ...(isRecurring && !data.userId && trialDays
-          ? { subscription_data: { trial_period_days: trialDays } }
-          : {}),
       });
 
       return { clientSecret: session.client_secret ?? "" };
@@ -118,7 +111,7 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
 
 export const createPortalSession = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: { returnUrl?: string; environment: StripeEnv }) => data)
+  .inputValidator((data: { returnUrl?: string }) => data)
   .handler(async ({ data, context }): Promise<PortalSessionResult> => {
     const { supabase, userId } = context;
 
@@ -126,14 +119,14 @@ export const createPortalSession = createServerFn({ method: "POST" })
       .from("subscriptions")
       .select("stripe_customer_id")
       .eq("user_id", userId)
-      .eq("environment", data.environment)
+      .eq("environment", getServerStripeEnv())
       .order("created_at", { ascending: false })
       .limit(1)
       .maybeSingle();
     if (subError || !sub?.stripe_customer_id) throw new Error("No subscription found");
 
     try {
-      const stripe = createStripeClient(data.environment);
+      const stripe = createStripeClient(getServerStripeEnv());
       const portal = await stripe.billingPortal.sessions.create({
         customer: sub.stripe_customer_id as string,
         ...(data.returnUrl && { return_url: data.returnUrl }),

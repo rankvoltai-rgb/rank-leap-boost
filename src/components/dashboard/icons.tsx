@@ -1,42 +1,40 @@
 import { cn } from "@/lib/utils";
 
 /**
- * Rankvolt icon system — bespoke, geometric line marks engineered for the
- * AI-search / GEO product. Single 24px grid, 1.7 stroke, rounded joins, with
- * an optional "volt" accent node that ties the set to the brand.
+ * Rankbox icon system — bespoke, geometric line marks engineered for the
+ * AI-search / GEO product. 24px grid with a 2px safe margin, rounded joins.
  *
- * These intentionally avoid the generic lucide look: every glyph carries a
- * small charge/energy cue (a node, a spark, a beam) so the UI reads as a
- * living signal system rather than a stock dashboard.
+ * Strokes are non-scaling: every icon draws a 1.5px line whether it renders at
+ * 12px or 24px, so small icons stay crisp instead of thinning to a grey hairline.
+ *
+ * Where a glyph carries the brand "charge" cue it is a solid node (a filled dot)
+ * rather than a tiny bolt or spark — a dot stays legible at 16px, detail doesn't.
  */
 
 export interface IconProps {
   className?: string;
-  /** Renders the brand accent node in the volt color instead of currentColor. */
-  accent?: boolean;
 }
 
-function Svg({
-  className,
-  children,
-}: {
-  className?: string;
-  children: React.ReactNode;
-}) {
+function Svg({ className, children }: { className?: string; children: React.ReactNode }) {
   return (
     <svg
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth={1.7}
+      strokeWidth={1.5}
       strokeLinecap="round"
       strokeLinejoin="round"
-      className={cn("h-5 w-5", className)}
+      className={cn("h-5 w-5 [&_*]:[vector-effect:non-scaling-stroke]", className)}
       aria-hidden
     >
       {children}
     </svg>
   );
+}
+
+/** The solid charge node shared across the set. */
+function Node({ cx, cy, r = 1.5 }: { cx: number; cy: number; r?: number }) {
+  return <circle cx={cx} cy={cy} r={r} fill="currentColor" stroke="none" />;
 }
 
 /* ── Signature mark ─────────────────────────────────────────────── */
@@ -51,100 +49,93 @@ export function VoltMark({ className }: IconProps) {
 
 /* ── Navigation ─────────────────────────────────────────────────── */
 
-// Overview — an oscilloscope pulse, the heartbeat of the autopilot.
-export function PulseIcon({ className, accent }: IconProps) {
+// Overview — an oscilloscope pulse ending in a live node.
+export function PulseIcon({ className }: IconProps) {
   return (
     <Svg className={className}>
-      <path d="M2.5 12.5h3.2l2-5.4 3.2 10 2.3-7 1.6 2.4h4.7" />
-      <circle
-        cx="21"
-        cy="12.5"
-        r="1.4"
-        className={accent ? "fill-volt stroke-volt" : "fill-current"}
-        strokeWidth={0}
-      />
+      <path d="M2.5 12h3.25L8.5 5.5l4 13 2.75-6.5h2" />
+      <Node cx={20} cy={12} r={1.75} />
     </Svg>
   );
 }
 
-// Articles — a sheet with a generative spark in the corner.
-export function ArticleIcon({ className, accent }: IconProps) {
+// Articles — a folded sheet, its last line still being written.
+export function ArticleIcon({ className }: IconProps) {
   return (
     <Svg className={className}>
-      <path d="M13.5 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-8.5" />
-      <path d="M8.5 12h7M8.5 16h4.5" />
-      <path
-        d="M18 2.2c.25 1.3.7 1.75 2 2-1.3.25-1.75.7-2 2-.25-1.3-.7-1.75-2-2 1.3-.25 1.75-.7 2-2Z"
-        className={accent ? "fill-volt stroke-volt" : "fill-current/0"}
-      />
+      <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8Z" />
+      <path d="M14 3v3.5A1.5 1.5 0 0 0 15.5 8H19" />
+      <path d="M8.75 12.5h6.5M8.75 16.5h3" />
+      <Node cx={15} cy={16.5} r={1.25} />
     </Svg>
   );
 }
 
-// Calendar — schedule carrying a charge (the autopilot cadence).
+// Calendar — a schedule with one day charged.
 export function CalendarIcon({ className }: IconProps) {
   return (
     <Svg className={className}>
-      <rect x="3.5" y="5" width="17" height="15" rx="2.5" />
-      <path d="M3.5 9.5h17M8 3v3.5M16 3v3.5" />
-      <path d="M12.6 12.2 10 15.6h2.2l-.8 2.8 3.3-4h-2.4l.7-2.2-.4-.0Z" />
+      <rect x="3.5" y="5" width="17" height="15.5" rx="2.5" />
+      <path d="M3.5 10h17M8 3v4M16 3v4" />
+      <Node cx={15.5} cy={15.25} />
     </Svg>
   );
 }
 
-// Keyword Lab — a lens with a beam, scanning for gaps.
-export function BeamIcon({ className, accent }: IconProps) {
+// Rank — a radar sweep: open range rings (so it never reads as the closed
+// Target rings) and a blip on the beam where you're cited.
+export function RadarIcon({ className }: IconProps) {
   return (
     <Svg className={className}>
-      <circle cx="11" cy="11" r="6.2" />
-      <path d="m20 20-3.6-3.6" />
-      <path
-        d="M11 8.3c.2 1.3.8 1.9 2.1 2.1-1.3.2-1.9.8-2.1 2.1-.2-1.3-.8-1.9-2.1-2.1 1.3-.2 1.9-.8 2.1-2.1Z"
-        className={accent ? "fill-volt stroke-volt" : ""}
-      />
+      <path d="M12 3a9 9 0 1 0 9 9" />
+      <path d="M12 7a5 5 0 1 0 5 5" />
+      <path d="M12 12 18.36 5.64" />
+      <Node cx={12} cy={12} r={1.25} />
+      <Node cx={18.36} cy={5.64} r={1.75} />
+    </Svg>
+  );
+}
+
+// Integrations — a plug: connect a site and power flows in.
+export function ConnectIcon({ className }: IconProps) {
+  return (
+    <Svg className={className}>
+      <path d="M9 2.5V7M15 2.5V7" />
+      <path d="M6.5 7h11v3.5a5.5 5.5 0 0 1-11 0Z" />
+      <path d="M12 16v5.5" />
     </Svg>
   );
 }
 
 /* ── Metric / signal glyphs ─────────────────────────────────────── */
 
-// Search demand — radiating signal waves from a source.
-export function SignalIcon({ className }: IconProps) {
-  return (
-    <Svg className={className}>
-      <circle cx="6" cy="18" r="1.6" className="fill-current" strokeWidth={0} />
-      <path d="M5 13a8 8 0 0 1 6 6" />
-      <path d="M5 8.5A12.5 12.5 0 0 1 16.5 20" />
-    </Svg>
-  );
-}
-
 // Trajectory / trend — a charted rise with a launch arrow.
 export function TrendIcon({ className }: IconProps) {
   return (
     <Svg className={className}>
-      <path d="M3 16.5 8.5 11l3.4 3 6.6-7.2" />
-      <path d="M14.5 6.5h4v4" />
-      <circle cx="8.5" cy="11" r="1" className="fill-current" strokeWidth={0} />
-      <circle cx="11.9" cy="14" r="1" className="fill-current" strokeWidth={0} />
+      <path d="M3 17 9 11l4 4 8-8" />
+      <path d="M15 7h6v6" />
     </Svg>
   );
 }
 
-// Intent — a precision target lock.
-export function TargetIcon({ className, accent }: IconProps) {
+// Intent — a target with a charged bullseye.
+export function TargetIcon({ className }: IconProps) {
   return (
     <Svg className={className}>
-      <circle cx="12" cy="12" r="7.5" />
-      <circle cx="12" cy="12" r="3.6" />
-      <circle
-        cx="12"
-        cy="12"
-        r="1.1"
-        className={accent ? "fill-volt stroke-volt" : "fill-current"}
-        strokeWidth={0}
-      />
-      <path d="M12 1.5v3M12 19.5v3M1.5 12h3M19.5 12h3" />
+      <circle cx="12" cy="12" r="9" />
+      <circle cx="12" cy="12" r="5" />
+      <Node cx={12} cy={12} />
+    </Svg>
+  );
+}
+
+// Insights — bars rising to a charged peak.
+export function ChartIcon({ className }: IconProps) {
+  return (
+    <Svg className={className}>
+      <path d="M4.5 20v-6.5M9.5 20v-11M14.5 20v-5M19.5 20v-9.5" />
+      <Node cx={19.5} cy={5.25} />
     </Svg>
   );
 }
@@ -154,8 +145,8 @@ export function TargetIcon({ className, accent }: IconProps) {
 export function AddIcon({ className }: IconProps) {
   return (
     <Svg className={className}>
-      <circle cx="12" cy="12" r="8.5" />
-      <path d="M12 8.5v7M8.5 12h7" />
+      <circle cx="12" cy="12" r="9" />
+      <path d="M12 8v8M8 12h8" />
     </Svg>
   );
 }
@@ -163,30 +154,34 @@ export function AddIcon({ className }: IconProps) {
 export function RemoveIcon({ className }: IconProps) {
   return (
     <Svg className={className}>
-      <path d="M4.5 7h15M9.5 7V5.5a1.5 1.5 0 0 1 1.5-1.5h2a1.5 1.5 0 0 1 1.5 1.5V7" />
-      <path d="M6.5 7l.9 12a2 2 0 0 0 2 1.9h5.2a2 2 0 0 0 2-1.9l.9-12" />
-      <path d="M10.5 11v6M13.5 11v6" />
+      <path d="M4 6.5h16M9 6.5V5a1.5 1.5 0 0 1 1.5-1.5h3A1.5 1.5 0 0 1 15 5v1.5" />
+      <path d="m6 6.5.85 12.1a2 2 0 0 0 2 1.9h6.3a2 2 0 0 0 2-1.9L18 6.5" />
+      <path d="M10 10.5v6M14 10.5v6" />
     </Svg>
   );
 }
 
-// Autopilot — an orbiting system with a volt core.
-export function AutopilotIcon({ className, accent }: IconProps) {
+// Autopilot — the volt mark cycling on its own.
+export function AutopilotIcon({ className }: IconProps) {
   return (
     <Svg className={className}>
-      <path d="M12 4.5a7.5 7.5 0 1 1-5.3 2.2" />
-      <path d="M6.7 6.7 5 4.4M6.7 6.7l2.7-.4" />
-      <path d="M12.6 9.3 10 12.7h2.2l-.8 2.7 3.2-3.9h-2.4l.8-2.2-.4-.0Z" className={accent ? "fill-volt stroke-volt" : ""} />
+      <path d="M21 12a9 9 0 1 1-2.64-6.36L21 8" />
+      <path d="M21 3v5h-5" />
+      <path d="M13 6.5 8.25 13H11.5l-1 4.5 4.75-6.5H12Z" fill="currentColor" stroke="none" />
     </Svg>
   );
 }
 
+// Upgrade — a rocket climbing at 45°.
 export function RocketIcon({ className }: IconProps) {
   return (
     <Svg className={className}>
-      <path d="M13.5 4.5C17 6 18 9.5 18 13l-3.2 2.4-3-3L14 9.2c-.2-3 .3-4.7-.5-4.7Z" />
-      <path d="M14.8 4.6C11 4 7.8 5.4 5.5 8.7L8 11M9.2 13.8 11.5 16c3.3-2.3 4.7-5.5 4.1-9.3" />
-      <path d="M7 16c-1.4.6-2 2-2 4 2 0 3.4-.6 4-2" />
+      <g transform="translate(-0.5 0.4) rotate(45 12 12)">
+        <path d="M12 2.5c2.9 1.9 4.25 5.1 4.25 8.75V16h-8.5v-4.75C7.75 7.6 9.1 4.4 12 2.5Z" />
+        <path d="M7.75 11.5 5.25 14v3.75l2.5-1.75M16.25 11.5l2.5 2.5v3.75L16.25 16" />
+        <circle cx="12" cy="9" r="1.75" />
+        <path d="M10.5 19v1.5M13.5 19v1.5" />
+      </g>
     </Svg>
   );
 }
@@ -210,8 +205,8 @@ export function CheckIcon({ className }: IconProps) {
 export function PublishIcon({ className }: IconProps) {
   return (
     <Svg className={className}>
-      <path d="M12 16V4.5M12 4.5 7.5 9M12 4.5 16.5 9" />
-      <path d="M4.5 15v2.5a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V15" />
+      <path d="M12 15.5V4M7.5 8.5 12 4l4.5 4.5" />
+      <path d="M4 14.5v3A2.5 2.5 0 0 0 6.5 20h11a2.5 2.5 0 0 0 2.5-2.5v-3" />
     </Svg>
   );
 }
@@ -219,8 +214,8 @@ export function PublishIcon({ className }: IconProps) {
 export function CardIcon({ className }: IconProps) {
   return (
     <Svg className={className}>
-      <rect x="3" y="5.5" width="18" height="13" rx="2.5" />
-      <path d="M3 9.5h18M6.5 14.5h3" />
+      <rect x="2.5" y="5" width="19" height="14" rx="2.5" />
+      <path d="M2.5 9.5h19M6.5 15h3" />
     </Svg>
   );
 }
@@ -229,53 +224,19 @@ export function CardIcon({ className }: IconProps) {
 export function ControlsIcon({ className }: IconProps) {
   return (
     <Svg className={className}>
-      <path d="M4 8h9M17 8h3M4 16h3M11 16h9" />
-      <circle cx="15" cy="8" r="2.1" />
-      <circle cx="9" cy="16" r="2.1" />
+      <path d="M3.5 8H13M17.5 8h3M3.5 16h3M11 16h9.5" />
+      <circle cx="15.25" cy="8" r="2.25" />
+      <circle cx="8.75" cy="16" r="2.25" />
     </Svg>
   );
 }
 
-// Rank — a radar sweep locating where you're cited.
-export function RadarIcon({ className, accent }: IconProps) {
-  return (
-    <Svg className={className}>
-      <path d="M20 12a8 8 0 1 1-4.2-7" />
-      <path d="M12 12 18 7" />
-      <circle cx="12" cy="12" r="3.4" />
-      <circle
-        cx="18"
-        cy="7"
-        r="1.3"
-        className={accent ? "fill-volt stroke-volt" : "fill-current"}
-        strokeWidth={0}
-      />
-    </Svg>
-  );
-}
-
-// Insights — charted bars rising with a spark above the peak.
-export function ChartIcon({ className, accent }: IconProps) {
-  return (
-    <Svg className={className}>
-      <path d="M4 20V11M9 20V8M14 20v-5M19 20V5" />
-      <circle
-        cx="19"
-        cy="3"
-        r="1.3"
-        className={accent ? "fill-volt stroke-volt" : "fill-current"}
-        strokeWidth={0}
-      />
-    </Svg>
-  );
-}
-
-// Sign out — a door with an exiting arrow, charged at the threshold.
+// Sign out — a door with an exiting arrow.
 export function SignOutIcon({ className }: IconProps) {
   return (
     <Svg className={className}>
-      <path d="M9 4.5H6.5A1.5 1.5 0 0 0 5 6v12a1.5 1.5 0 0 0 1.5 1.5H9" />
-      <path d="M14.5 8.5 18.5 12l-4 3.5M18.5 12H10" />
+      <path d="M10 3.5H6.5a2.5 2.5 0 0 0-2.5 2.5v12a2.5 2.5 0 0 0 2.5 2.5H10" />
+      <path d="M15.5 7.5 20 12l-4.5 4.5M20 12H9.5" />
     </Svg>
   );
 }

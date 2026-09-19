@@ -65,7 +65,7 @@ export function SnippetPreview() {
           <TextInput
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            placeholder="Free llms.txt Generator for AI Search | Rankvolt"
+            placeholder="Free llms.txt Generator for AI Search | Rankbox"
           />
         </Field>
         <Field label="URL">

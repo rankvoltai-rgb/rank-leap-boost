@@ -2,11 +2,13 @@ import { useState } from "react";
 import { ArrowRight, Loader2 } from "lucide-react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
-import { getProfile } from "@/lib/api";
+import { signInWithPassword, signUpWithPassword } from "@/lib/auth";
+import { getProfile } from "@/lib/data";
+import { IS_MOCK } from "@/lib/mock/mode";
+import { DEMO_EMAIL, DEMO_PASSWORD } from "@/lib/mock/auth";
 import { Logo, Reveal } from "@/components/landing/shared";
 import { SocialButtons } from "./SocialButtons";
-import { AuthVisual } from "./AuthVisual";
+import { AiSearchScene } from "./AiSearchScene";
 
 function Field({
   label,
@@ -51,20 +53,11 @@ export function AuthSplit() {
     setLoading(true);
     try {
       if (mode === "signup") {
-        const { error } = await supabase.auth.signUp({
-          email,
-          password,
-          options: {
-            emailRedirectTo: `${window.location.origin}/onboarding`,
-            data: { full_name: name },
-          },
-        });
-        if (error) throw error;
+        await signUpWithPassword({ email, password, fullName: name });
         navigate({ to: "/onboarding" });
         return;
       }
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
-      if (error) throw error;
+      await signInWithPassword({ email, password });
       const profile = await getProfile();
       navigate({ to: profile ? "/dashboard" : "/onboarding" });
     } catch (err) {
@@ -85,7 +78,7 @@ export function AuthSplit() {
             <Reveal>
               <h1 className="text-balance text-3xl font-semibold leading-[1.1] tracking-tight text-ink sm:text-4xl">
                 Start getting Google &amp; ChatGPT traffic{" "}
-                <span className="rounded-lg bg-info/15 px-1.5 decoration-clone box-decoration-clone">
+                <span className="rounded-lg bg-brand-blue px-1.5 text-white decoration-clone box-decoration-clone">
                   in the next 7 days
                 </span>
               </h1>
@@ -145,7 +138,7 @@ export function AuthSplit() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-ink px-6 py-3.5 text-sm font-semibold text-background shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md disabled:opacity-70"
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-brand-blue px-6 py-3.5 text-sm font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md disabled:opacity-70"
                 >
                   {loading ? (
                     <Loader2 className="h-4 w-4 animate-spin" />
@@ -158,6 +151,26 @@ export function AuthSplit() {
                 </button>
               </form>
             </Reveal>
+
+            {IS_MOCK && (
+              <div className="mt-4 flex items-center justify-between gap-3 rounded-xl border border-dashed border-border bg-secondary/40 px-3.5 py-2.5 text-xs text-muted-foreground">
+                <span>
+                  Mock mode · accounts stay in this browser. Demo:{" "}
+                  <span className="font-medium text-ink">{DEMO_EMAIL}</span> / {DEMO_PASSWORD}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMode("login");
+                    setEmail(DEMO_EMAIL);
+                    setPassword(DEMO_PASSWORD);
+                  }}
+                  className="shrink-0 font-semibold text-ink hover:underline"
+                >
+                  Use demo
+                </button>
+              </div>
+            )}
 
             {mode === "signup" && (
               <Reveal delay={0.22}>
@@ -177,7 +190,7 @@ export function AuthSplit() {
 
             <Reveal delay={0.24}>
               <p className="mt-6 text-center text-sm text-muted-foreground">
-                {mode === "signup" ? "Already have an account? " : "New to Rankvolt? "}
+                {mode === "signup" ? "Already have an account? " : "New to Rankbox? "}
                 <button
                   type="button"
                   onClick={() => setMode(mode === "signup" ? "login" : "signup")}
@@ -191,29 +204,11 @@ export function AuthSplit() {
         </div>
       </div>
 
-      {/* Brand / visual panel */}
-      <div
-        className="relative hidden flex-col items-center justify-center overflow-hidden px-14 py-12 lg:flex"
-        style={{
-          background:
-            "linear-gradient(160deg, #ffffff 0%, #dee9f8 55%, #dee9f8 100%)",
-        }}
-      >
-        {/* ambient light + texture */}
-        <div className="pointer-events-none absolute -right-28 -top-28 h-96 w-96 rounded-full bg-white/40 blur-3xl" />
-        <div className="pointer-events-none absolute -bottom-32 -left-24 h-80 w-80 rounded-full bg-white/30 blur-3xl" />
-        <div
-          className="pointer-events-none absolute inset-0 text-ink opacity-[0.05]"
-          style={{
-            backgroundImage:
-              "radial-gradient(circle at 1px 1px, currentColor 1px, transparent 0)",
-            backgroundSize: "22px 22px",
-          }}
-        />
-
-        <div className="relative w-4/5">
-          <AuthVisual />
-        </div>
+      {/* What Rankbox sees: an AI search for a recommendation, the AI Overview
+          it returns, and where the brand lands in it. One screen tall and
+          pinned, so the whole scene stays in view while the form scrolls. */}
+      <div className="relative hidden lg:sticky lg:top-0 lg:block lg:h-screen lg:self-start">
+        <AiSearchScene className="absolute inset-0" />
       </div>
     </div>
   );

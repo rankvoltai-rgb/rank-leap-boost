@@ -298,7 +298,7 @@ export function PersonalAiVisibility() {
                   Don't want to do this by hand?
                 </h2>
                 <p className="mx-auto mt-3 max-w-lg text-balance text-sm leading-relaxed text-background/70">
-                  Rankvolt researches your buyers' questions and publishes citation-ready content daily —
+                  Rankbox researches your buyers' questions and publishes citation-ready content daily —
                   so AI engines find, understand, and recommend you on autopilot.
                 </p>
                 <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
@@ -306,7 +306,7 @@ export function PersonalAiVisibility() {
                     to="/"
                     className="rounded-xl bg-background px-5 py-3 text-sm font-semibold text-ink transition-opacity hover:opacity-90"
                   >
-                    See how Rankvolt works
+                    See how Rankbox works
                   </Link>
                 </div>
               </section>

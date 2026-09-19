@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TrustRouteImport } from './routes/trust'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as McpRouteImport } from './routes/mcp'
 import { Route as LegalRouteImport } from './routes/legal'
@@ -55,6 +56,11 @@ const TrustRoute = TrustRouteImport.update({
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PricingRoute = PricingRouteImport.update({
+  id: '/pricing',
+  path: '/pricing',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OnboardingRoute = OnboardingRouteImport.update({
@@ -251,6 +257,7 @@ export interface FileRoutesByFullPath {
   '/legal': typeof LegalRouteWithChildren
   '/mcp': typeof McpRoute
   '/onboarding': typeof OnboardingRoute
+  '/pricing': typeof PricingRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/trust': typeof TrustRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
@@ -289,6 +296,7 @@ export interface FileRoutesByTo {
   '/legal': typeof LegalRouteWithChildren
   '/mcp': typeof McpRoute
   '/onboarding': typeof OnboardingRoute
+  '/pricing': typeof PricingRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/trust': typeof TrustRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
@@ -328,6 +336,7 @@ export interface FileRoutesById {
   '/legal': typeof LegalRouteWithChildren
   '/mcp': typeof McpRoute
   '/onboarding': typeof OnboardingRoute
+  '/pricing': typeof PricingRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/trust': typeof TrustRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
@@ -368,6 +377,7 @@ export interface FileRouteTypes {
     | '/legal'
     | '/mcp'
     | '/onboarding'
+    | '/pricing'
     | '/sitemap.xml'
     | '/trust'
     | '/.mcp/list-tools'
@@ -406,6 +416,7 @@ export interface FileRouteTypes {
     | '/legal'
     | '/mcp'
     | '/onboarding'
+    | '/pricing'
     | '/sitemap.xml'
     | '/trust'
     | '/.mcp/list-tools'
@@ -444,6 +455,7 @@ export interface FileRouteTypes {
     | '/legal'
     | '/mcp'
     | '/onboarding'
+    | '/pricing'
     | '/sitemap.xml'
     | '/trust'
     | '/.mcp/list-tools'
@@ -484,6 +496,7 @@ export interface RootRouteChildren {
   LegalRoute: typeof LegalRouteWithChildren
   McpRoute: typeof McpRoute
   OnboardingRoute: typeof OnboardingRoute
+  PricingRoute: typeof PricingRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TrustRoute: typeof TrustRoute
   Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
@@ -515,6 +528,13 @@ declare module '@tanstack/react-router' {
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pricing': {
+      id: '/pricing'
+      path: '/pricing'
+      fullPath: '/pricing'
+      preLoaderRoute: typeof PricingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/onboarding': {
@@ -846,6 +866,7 @@ const rootRouteChildren: RootRouteChildren = {
   LegalRoute: LegalRouteWithChildren,
   McpRoute: McpRoute,
   OnboardingRoute: OnboardingRoute,
+  PricingRoute: PricingRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TrustRoute: TrustRoute,
   Char91DotmcpChar93ListToolsRoute: Char91DotmcpChar93ListToolsRoute,

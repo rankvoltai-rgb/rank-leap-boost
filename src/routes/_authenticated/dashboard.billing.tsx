@@ -3,8 +3,9 @@ import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
 import { toast } from "sonner";
-import { CreditCard, ExternalLink, Loader2 } from "lucide-react";
-import { getSubscription, getCredits } from "@/lib/api";
+import { ExternalLink, Loader2 } from "lucide-react";
+import { CardIcon } from "@/components/dashboard/icons";
+import { getSubscription, getCredits } from "@/lib/data";
 import { createPortalSession } from "@/lib/payments.functions";
 import { getStripeEnvironment } from "@/lib/stripe";
 import { Panel, Pill, Button, PageHeader, StatCard } from "@/components/dashboard/primitives";
@@ -13,7 +14,10 @@ export const Route = createFileRoute("/_authenticated/dashboard/billing")({
   component: Billing,
 });
 
-const STATUS_LABELS: Record<string, { label: string; tone: "success" | "warning" | "danger" | "neutral" }> = {
+const STATUS_LABELS: Record<
+  string,
+  { label: string; tone: "success" | "warning" | "danger" | "neutral" }
+> = {
   trialing: { label: "Free trial", tone: "success" },
   active: { label: "Active", tone: "success" },
   past_due: { label: "Payment due", tone: "warning" },
@@ -42,17 +46,19 @@ function Billing() {
   });
   const { data: credits } = useQuery({ queryKey: ["credits"], queryFn: getCredits });
 
-  const status = subscription ? STATUS_LABELS[subscription.status] ?? { label: subscription.status, tone: "neutral" as const } : null;
+  const status = subscription
+    ? (STATUS_LABELS[subscription.status] ?? {
+        label: subscription.status,
+        tone: "neutral" as const,
+      })
+    : null;
   const remaining = credits ? credits.credits_total - credits.credits_used : null;
 
   async function manage() {
     setOpening(true);
     try {
       const result = await openPortal({
-        data: {
-          environment: getStripeEnvironment(),
-          returnUrl: `${window.location.origin}/dashboard/billing`,
-        },
+        data: { returnUrl: `${window.location.origin}/dashboard/billing` },
       });
       if ("error" in result) throw new Error(result.error);
       window.open(result.url, "_blank");
@@ -110,7 +116,8 @@ function Billing() {
               </p>
             ) : (
               <p className="max-w-md text-sm text-muted-foreground">
-                No active subscription found. Start your free trial from onboarding to unlock the full engine.
+                No active subscription found. Start your free trial from onboarding to unlock the
+                full engine.
               </p>
             )}
           </div>
@@ -121,7 +128,7 @@ function Billing() {
               </>
             ) : (
               <>
-                <CreditCard className="h-4 w-4" /> Manage subscription
+                <CardIcon className="h-4 w-4" /> Manage subscription
                 <ExternalLink className="h-3.5 w-3.5" />
               </>
             )}

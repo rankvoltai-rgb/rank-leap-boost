@@ -2,15 +2,19 @@ import { createFileRoute } from "@tanstack/react-router";
 import { AuthSplit } from "@/components/auth/AuthSplit";
 
 export const Route = createFileRoute("/auth")({
+  // Forwarded from the landing hero so the URL survives into onboarding.
+  validateSearch: (search: Record<string, unknown>): { url?: string } => ({
+    url: typeof search.url === "string" ? search.url : undefined,
+  }),
   head: () => ({
     meta: [
-      { title: "Sign Up — Rankvolt" },
+      { title: "Sign Up — Rankbox" },
       {
         name: "description",
         content:
-          "Start getting Google & ChatGPT traffic in the next 7 days. Sign in, connect your site, and let Rankvolt publish SEO-optimized articles on autopilot.",
+          "Start getting Google & ChatGPT traffic in the next 7 days. Sign in, connect your site, and let Rankbox publish SEO-optimized articles on autopilot.",
       },
-      { property: "og:title", content: "Sign Up — Rankvolt" },
+      { property: "og:title", content: "Sign Up — Rankbox" },
       {
         property: "og:description",
         content:

@@ -13,21 +13,21 @@ import {
 export const Route = createFileRoute("/legal/dpa")({
   head: () => ({
     meta: [
-      { title: "Data Processing Addendum — Rankvolt" },
+      { title: "Data Processing Addendum — Rankbox" },
       {
         name: "description",
         content:
-          "Rankvolt's Data Processing Addendum for business customers: roles, data categories, subprocessors, security, and deletion commitments.",
+          "Rankbox's Data Processing Addendum for business customers: roles, data categories, subprocessors, security, and deletion commitments.",
       },
-      { property: "og:title", content: "Data Processing Addendum — Rankvolt" },
+      { property: "og:title", content: "Data Processing Addendum — Rankbox" },
       {
         property: "og:description",
         content: "How Autusus LLC processes personal data on behalf of business customers.",
       },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "https://rankvolt.top/legal/dpa" },
+      { property: "og:url", content: "https://rankbox.xyz/legal/dpa" },
     ],
-    links: [{ rel: "canonical", href: "https://rankvolt.top/legal/dpa" }],
+    links: [{ rel: "canonical", href: "https://rankbox.xyz/legal/dpa" }],
   }),
   component: DpaPage,
 });

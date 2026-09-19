@@ -2,9 +2,7 @@
 // Shared by MCP tools so model calls, prompts, and the API key stay on the server.
 // Reads env only inside functions (never at module scope) so this stays import-safe.
 import { generateText } from "ai";
-import { createLovableAiGatewayProvider, requireLovableApiKey } from "./ai-gateway.server";
-
-const MODEL = "google/gemini-3-flash-preview";
+import { createAiProvider, activeModelId } from "./ai-gateway.server";
 
 function extractJson(text: string): unknown {
   const trimmed = text
@@ -45,8 +43,8 @@ function extractJson(text: string): unknown {
 }
 
 async function generateJson(prompt: string): Promise<unknown> {
-  const gateway = createLovableAiGatewayProvider(requireLovableApiKey());
-  const model = gateway(MODEL) as unknown as Parameters<typeof generateText>[0]["model"];
+  const gateway = createAiProvider();
+  const model = gateway(activeModelId()) as unknown as Parameters<typeof generateText>[0]["model"];
   const { text } = await generateText({
     model,
     maxOutputTokens: 4000,

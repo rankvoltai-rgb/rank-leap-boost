@@ -34,6 +34,13 @@ export const createApiKey = createServerFn({ method: "POST" })
     z.object({ name: z.string().trim().max(60).optional() }).parse(data),
   )
   .handler(async ({ data, context }): Promise<{ id: string; raw: string; prefix: string }> => {
+    // Connecting a site is part of the plan. The page gates this too, but only
+    // this check can't be skipped.
+    const { hasGenerationEntitlement } = await import("@/lib/entitlement.server");
+    if (!(await hasGenerationEntitlement(context.supabase, context.userId))) {
+      throw new Error("Start your free trial to connect your site.");
+    }
+
     const { generateApiKey } = await import("@/lib/api-keys.server");
     const key = generateApiKey();
     const name = data.name?.trim() || "API key";
@@ -56,9 +63,7 @@ export const createApiKey = createServerFn({ method: "POST" })
 /** Revoke (permanently disable) one of the caller's API keys. */
 export const revokeApiKey = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: { id: string }) =>
-    z.object({ id: z.string().uuid() }).parse(data),
-  )
+  .inputValidator((data: { id: string }) => z.object({ id: z.string().uuid() }).parse(data))
   .handler(async ({ data, context }): Promise<{ ok: true }> => {
     const { error } = await context.supabase
       .from("api_keys")

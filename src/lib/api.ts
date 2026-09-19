@@ -7,6 +7,8 @@ import {
   purchaseCreditPackage,
 } from "@/lib/credits.functions";
 import { getStripeEnvironment } from "@/lib/stripe";
+import { DASHBOARD_IDEAS, TRACKED_KEYWORDS } from "@/lib/site-meta";
+import type { OnboardingDraft } from "@/lib/mock/store";
 
 export type BlogStatus = "opportunity" | "scheduled" | "generating" | "finished";
 
@@ -133,13 +135,21 @@ export async function getProfile(): Promise<Profile | null> {
 
 export async function getSettings(): Promise<ContentSettings | null> {
   const user_id = await uid();
-  const { data } = await supabase.from("content_settings").select("*").eq("user_id", user_id).maybeSingle();
+  const { data } = await supabase
+    .from("content_settings")
+    .select("*")
+    .eq("user_id", user_id)
+    .maybeSingle();
   return data as ContentSettings | null;
 }
 
 export async function getCredits(): Promise<CreditAccount | null> {
   const user_id = await uid();
-  const { data } = await supabase.from("credit_accounts").select("*").eq("user_id", user_id).maybeSingle();
+  const { data } = await supabase
+    .from("credit_accounts")
+    .select("*")
+    .eq("user_id", user_id)
+    .maybeSingle();
   return data as CreditAccount | null;
 }
 
@@ -240,8 +250,11 @@ export async function prioritizeBlog(id: string): Promise<void> {
     .select("id, queue_position")
     .eq("user_id", user_id)
     .eq("status", "scheduled");
-  const min = Math.min(1, ...((data ?? []).map((b) => b.queue_position ?? 999)));
-  await supabase.from("blogs").update({ queue_position: min - 1 }).eq("id", id);
+  const min = Math.min(1, ...(data ?? []).map((b) => b.queue_position ?? 999));
+  await supabase
+    .from("blogs")
+    .update({ queue_position: min - 1 })
+    .eq("id", id);
 }
 
 export async function addOpportunityToQueue(opp: Blog): Promise<number> {
@@ -260,7 +273,11 @@ export async function addOpportunityToQueue(opp: Blog): Promise<number> {
   return opp.traffic_estimate;
 }
 
-export async function addKeyword(name: string, source: "library" | "discovered" = "library", extra: Partial<Keyword> = {}): Promise<Keyword> {
+export async function addKeyword(
+  name: string,
+  source: "library" | "discovered" = "library",
+  extra: Partial<Keyword> = {},
+): Promise<Keyword> {
   const user_id = await uid();
   const { data, error } = await supabase
     .from("keywords")
@@ -298,7 +315,11 @@ export async function updateProfile(patch: Partial<Profile>): Promise<void> {
   }
 }
 
-export async function purchaseCredits(pkg: string, credits: number, amountCents: number): Promise<void> {
+export async function purchaseCredits(
+  pkg: string,
+  credits: number,
+  amountCents: number,
+): Promise<void> {
   // Amounts and credit grants are validated and applied server-side; the
   // client cannot influence how many credits are added beyond the package id.
   void credits;
@@ -312,7 +333,7 @@ function nextDate(offsetDays = 1): string {
   return d.toISOString().slice(0, 10);
 }
 
-/* ---------------- Onboarding (Rankvolt flow) ---------------- */
+/* ---------------- Onboarding (Rankbox flow) ---------------- */
 
 async function ensureAccountBase(
   user_id: string,
@@ -408,6 +429,102 @@ export async function persistOnboarding(input: {
 }
 
 /**
+ * Saves a confirmed onboarding — brand profile, content settings, the keyword
+ * set and the content-gap articles — so the dashboard and autopilot run on it.
+ *
+ * The first DASHBOARD_IDEAS articles become dashboard opportunities; the rest
+ * are queued as `scheduled`, one a day in plan order, which is exactly what
+ * runAutopilot writes from. Mirrors commitOnboarding in src/lib/mock/store.ts.
+ *
+ * Safe to retry: keywords and not-yet-written articles for the same keywords
+ * are replaced rather than duplicated, and nothing else on the account is
+ * touched. autopilot_enabled is left as is — the engine already skips accounts
+ * without a trial.
+ */
+export async function commitOnboardingDraft(d: OnboardingDraft): Promise<void> {
+  const user_id = await uid();
+
+  await updateProfile({
+    brand_name: d.brandName.trim(),
+    website_url: d.url.trim(),
+    product_description: d.description.trim(),
+    avatar_url: d.logoUrl,
+  });
+
+  const settings = {
+    ...(d.brandTone.trim() ? { tone: d.brandTone.trim() } : {}),
+    ...(d.audience.trim() ? { audience: d.audience.trim() } : {}),
+    brand_voice: `Niche: ${d.niche}. Geo: ${d.geo}.`,
+  };
+  const existingSettings = await supabase
+    .from("content_settings")
+    .select("id")
+    .eq("user_id", user_id)
+    .maybeSingle();
+  const settingsWrite = existingSettings.data
+    ? await supabase.from("content_settings").update(settings).eq("user_id", user_id)
+    : await supabase.from("content_settings").insert({ user_id, ...settings });
+  if (settingsWrite.error) throw settingsWrite.error;
+  // Credit accounts are write-protected; create via the server function.
+  await ensureCreditAccount();
+
+  const keywordNames = d.keywords.map((k) => k.name);
+  if (keywordNames.length) {
+    const cleared = await supabase
+      .from("keywords")
+      .delete()
+      .eq("user_id", user_id)
+      .in("name", keywordNames);
+    if (cleared.error) throw cleared.error;
+    const inserted = await supabase.from("keywords").insert(
+      d.keywords.map((k, i) => ({
+        user_id,
+        name: k.name,
+        source: i < TRACKED_KEYWORDS ? ("library" as const) : ("discovered" as const),
+        tag: k.intent,
+        search_volume: Math.round(k.search_volume),
+        traffic_estimate: Math.round(k.search_volume * 0.14),
+        intent: k.intent,
+        trend: k.trend,
+      })),
+    );
+    if (inserted.error) throw inserted.error;
+  }
+
+  const plannedKeywords = [...new Set(d.titles.map((t) => t.keyword))];
+  if (plannedKeywords.length) {
+    // Only unwritten articles: anything generated keeps its body.
+    const cleared = await supabase
+      .from("blogs")
+      .delete()
+      .eq("user_id", user_id)
+      .in("status", ["opportunity", "scheduled"])
+      .eq("body", "")
+      .in("keyword", plannedKeywords);
+    if (cleared.error) throw cleared.error;
+    const rows: TablesInsert<"blogs">[] = d.titles.map((t, i) => {
+      const slot = i - DASHBOARD_IDEAS + 1;
+      const queued = slot >= 1;
+      return {
+        user_id,
+        title: t.title,
+        description: t.description,
+        keyword: t.keyword,
+        traffic_estimate: Math.round(t.traffic_estimate),
+        competition: t.competition,
+        ai_signal: Math.round(t.ai_signal),
+        tags: [],
+        status: queued ? "scheduled" : "opportunity",
+        queue_position: queued ? slot : null,
+        scheduled_date: queued ? nextDate(slot) : null,
+      };
+    });
+    const inserted = await supabase.from("blogs").insert(rows);
+    if (inserted.error) throw inserted.error;
+  }
+}
+
+/**
  * Step 5: trial activation — turn the AI strategy into a fully scheduled
  * autopilot queue. Articles are auto-scheduled one per day so the engine has a
  * running plan the moment the user lands on the dashboard. Users can still
@@ -446,7 +563,11 @@ export async function generateBlogArticle(blog: Blog): Promise<Blog> {
   await updateBlog(blog.id, { status: "generating" });
   try {
     const result = await generateBlogContent({
-      data: { title: blog.title, keyword: blog.keyword ?? undefined, description: blog.description },
+      data: {
+        title: blog.title,
+        keyword: blog.keyword ?? undefined,
+        description: blog.description,
+      },
     });
     const patch: Partial<Blog> = {
       title: result.title || blog.title,
@@ -476,7 +597,11 @@ export async function seedAccount(profileInput: {
   keywords?: string[];
 }): Promise<void> {
   const user_id = await uid();
-  const existing = await supabase.from("profiles").select("id").eq("user_id", user_id).maybeSingle();
+  const existing = await supabase
+    .from("profiles")
+    .select("id")
+    .eq("user_id", user_id)
+    .maybeSingle();
   if (existing.data) {
     await supabase
       .from("profiles")
@@ -503,13 +628,23 @@ export async function seedAccount(profileInput: {
     ? profileInput.keywords
     : ["SEO automation", "AI content", "blog engine", "keyword research", "organic traffic"];
   await supabase.from("keywords").insert(
-    libraryKw.map((name) => ({ user_id, name, source: "library", tag: "Library", trend: "Medium" })),
+    libraryKw.map((name) => ({
+      user_id,
+      name,
+      source: "library",
+      tag: "Library",
+      trend: "Medium",
+    })),
   );
 
   const discovered = SEED_KEYWORDS.map((k) => ({ ...k, user_id, source: "discovered" as const }));
   await supabase.from("keywords").insert(discovered);
 
-  const opportunities = SEED_OPPORTUNITIES.map((o) => ({ ...o, user_id, status: "opportunity" as const }));
+  const opportunities = SEED_OPPORTUNITIES.map((o) => ({
+    ...o,
+    user_id,
+    status: "opportunity" as const,
+  }));
   const scheduled = SEED_SCHEDULED.map((s, i) => ({
     ...s,
     user_id,
@@ -524,54 +659,320 @@ export async function seedAccount(profileInput: {
 }
 
 const SEED_KEYWORDS = [
-  { name: "ai seo tools", tag: "High Competition", search_volume: 18000, traffic_estimate: 2400, intent: "Transactional", trend: "High" },
-  { name: "content automation software", tag: "Medium Competition", search_volume: 9100, traffic_estimate: 1200, intent: "High Intent", trend: "High" },
-  { name: "how to rank on chatgpt", tag: "Low Competition", search_volume: 4400, traffic_estimate: 980, intent: "Informational", trend: "High" },
-  { name: "programmatic seo guide", tag: "Low Competition", search_volume: 3200, traffic_estimate: 720, intent: "Informational", trend: "Medium" },
-  { name: "best ai blog writer", tag: "High Competition", search_volume: 12000, traffic_estimate: 1500, intent: "Transactional", trend: "High" },
-  { name: "seo content calendar", tag: "Medium Competition", search_volume: 5400, traffic_estimate: 860, intent: "Informational", trend: "Medium" },
-  { name: "long tail keyword strategy", tag: "Low Competition", search_volume: 2900, traffic_estimate: 640, intent: "Informational", trend: "Medium" },
-  { name: "automated link building", tag: "High Competition", search_volume: 7600, traffic_estimate: 1100, intent: "High Intent", trend: "Low" },
+  {
+    name: "ai seo tools",
+    tag: "High Competition",
+    search_volume: 18000,
+    traffic_estimate: 2400,
+    intent: "Transactional",
+    trend: "High",
+  },
+  {
+    name: "content automation software",
+    tag: "Medium Competition",
+    search_volume: 9100,
+    traffic_estimate: 1200,
+    intent: "High Intent",
+    trend: "High",
+  },
+  {
+    name: "how to rank on chatgpt",
+    tag: "Low Competition",
+    search_volume: 4400,
+    traffic_estimate: 980,
+    intent: "Informational",
+    trend: "High",
+  },
+  {
+    name: "programmatic seo guide",
+    tag: "Low Competition",
+    search_volume: 3200,
+    traffic_estimate: 720,
+    intent: "Informational",
+    trend: "Medium",
+  },
+  {
+    name: "best ai blog writer",
+    tag: "High Competition",
+    search_volume: 12000,
+    traffic_estimate: 1500,
+    intent: "Transactional",
+    trend: "High",
+  },
+  {
+    name: "seo content calendar",
+    tag: "Medium Competition",
+    search_volume: 5400,
+    traffic_estimate: 860,
+    intent: "Informational",
+    trend: "Medium",
+  },
+  {
+    name: "long tail keyword strategy",
+    tag: "Low Competition",
+    search_volume: 2900,
+    traffic_estimate: 640,
+    intent: "Informational",
+    trend: "Medium",
+  },
+  {
+    name: "automated link building",
+    tag: "High Competition",
+    search_volume: 7600,
+    traffic_estimate: 1100,
+    intent: "High Intent",
+    trend: "Low",
+  },
 ];
 
 const SEED_OPPORTUNITIES = [
-  { title: "How AI Is Changing SEO in 2026", description: "Cover the shift to AI-cited search.", keyword: "ai seo 2026", traffic_estimate: 2400, competition: "Medium", ai_signal: 92 },
-  { title: "The Complete Guide to Programmatic SEO", description: "Scale content with templates.", keyword: "programmatic seo", traffic_estimate: 1800, competition: "Low", ai_signal: 88 },
-  { title: "Getting Cited by ChatGPT: A Playbook", description: "Optimize for AI answer engines.", keyword: "rank on chatgpt", traffic_estimate: 1500, competition: "Low", ai_signal: 95 },
-  { title: "10 Keyword Research Tools Compared", description: "Roundup with pros and cons.", keyword: "keyword research tools", traffic_estimate: 3200, competition: "High", ai_signal: 79 },
-  { title: "Building a Content Engine That Scales", description: "Systems for consistent output.", keyword: "content engine", traffic_estimate: 1100, competition: "Medium", ai_signal: 84 },
-  { title: "Internal Linking Strategies That Work", description: "Boost rankings with structure.", keyword: "internal linking", traffic_estimate: 900, competition: "Low", ai_signal: 81 },
+  {
+    title: "How AI Is Changing SEO in 2026",
+    description: "Cover the shift to AI-cited search.",
+    keyword: "ai seo 2026",
+    traffic_estimate: 2400,
+    competition: "Medium",
+    ai_signal: 92,
+  },
+  {
+    title: "The Complete Guide to Programmatic SEO",
+    description: "Scale content with templates.",
+    keyword: "programmatic seo",
+    traffic_estimate: 1800,
+    competition: "Low",
+    ai_signal: 88,
+  },
+  {
+    title: "Getting Cited by ChatGPT: A Playbook",
+    description: "Optimize for AI answer engines.",
+    keyword: "rank on chatgpt",
+    traffic_estimate: 1500,
+    competition: "Low",
+    ai_signal: 95,
+  },
+  {
+    title: "10 Keyword Research Tools Compared",
+    description: "Roundup with pros and cons.",
+    keyword: "keyword research tools",
+    traffic_estimate: 3200,
+    competition: "High",
+    ai_signal: 79,
+  },
+  {
+    title: "Building a Content Engine That Scales",
+    description: "Systems for consistent output.",
+    keyword: "content engine",
+    traffic_estimate: 1100,
+    competition: "Medium",
+    ai_signal: 84,
+  },
+  {
+    title: "Internal Linking Strategies That Work",
+    description: "Boost rankings with structure.",
+    keyword: "internal linking",
+    traffic_estimate: 900,
+    competition: "Low",
+    ai_signal: 81,
+  },
 ];
 
 const SAMPLE_BODY = `## Introduction\n\nSearch is changing faster than ever. In this guide we break down exactly what works today and how to put it on autopilot.\n\n## Why It Matters\n\nOrganic traffic compounds. Every article you publish becomes a long-term asset that keeps bringing visitors.\n\n- Lower acquisition costs over time\n- Compounding authority\n- Citations from AI answer engines\n\n## The Strategy\n\nStart with intent-rich keywords, build a clear heading structure, and interlink related content so search engines understand your topical authority.\n\n## Conclusion\n\nConsistency wins. Ship quality content on a predictable cadence and the rankings follow.`;
 
 const SEED_FINISHED = [
-  { title: "Why Organic Traffic Beats Paid Ads", description: "The long-term case for SEO over paid acquisition.", body: SAMPLE_BODY, tags: ["High Traffic", "Low Competition"], keyword: "organic vs paid", seo_score: 91, traffic_estimate: 2100 },
-  { title: "A Founder's Guide to SEO", description: "Everything early-stage founders need to know.", body: SAMPLE_BODY, tags: ["Evergreen"], keyword: "founder seo guide", seo_score: 88, traffic_estimate: 1400 },
-  { title: "How to Structure a Blog Post for Rankings", description: "Heading hierarchy and on-page basics.", body: SAMPLE_BODY, tags: ["How-To", "High Intent"], keyword: "blog post structure", seo_score: 93, traffic_estimate: 1750 },
-  { title: "Keyword Clustering Explained", description: "Group keywords for topical authority.", body: SAMPLE_BODY, tags: ["Advanced"], keyword: "keyword clustering", seo_score: 86, traffic_estimate: 980 },
-  { title: "The Anatomy of a High-Converting Article", description: "Turn readers into customers.", body: SAMPLE_BODY, tags: ["Conversion"], keyword: "high converting article", seo_score: 90, traffic_estimate: 1300 },
-  { title: "AI Writing Tools: A Practical Review", description: "What to use and when.", body: SAMPLE_BODY, tags: ["Tools", "High Traffic"], keyword: "ai writing tools", seo_score: 84, traffic_estimate: 2600 },
-  { title: "Measuring SEO ROI the Right Way", description: "Metrics that actually matter.", body: SAMPLE_BODY, tags: ["Analytics"], keyword: "seo roi", seo_score: 87, traffic_estimate: 1120 },
-  { title: "Topical Authority in Plain English", description: "Become the go-to source in your niche.", body: SAMPLE_BODY, tags: ["Strategy"], keyword: "topical authority", seo_score: 92, traffic_estimate: 1680 },
-  { title: "From Zero to 10k Monthly Visitors", description: "A repeatable growth playbook.", body: SAMPLE_BODY, tags: ["Case Study", "High Traffic"], keyword: "grow blog traffic", seo_score: 89, traffic_estimate: 3100 },
+  {
+    title: "Why Organic Traffic Beats Paid Ads",
+    description: "The long-term case for SEO over paid acquisition.",
+    body: SAMPLE_BODY,
+    tags: ["High Traffic", "Low Competition"],
+    keyword: "organic vs paid",
+    seo_score: 91,
+    traffic_estimate: 2100,
+  },
+  {
+    title: "A Founder's Guide to SEO",
+    description: "Everything early-stage founders need to know.",
+    body: SAMPLE_BODY,
+    tags: ["Evergreen"],
+    keyword: "founder seo guide",
+    seo_score: 88,
+    traffic_estimate: 1400,
+  },
+  {
+    title: "How to Structure a Blog Post for Rankings",
+    description: "Heading hierarchy and on-page basics.",
+    body: SAMPLE_BODY,
+    tags: ["How-To", "High Intent"],
+    keyword: "blog post structure",
+    seo_score: 93,
+    traffic_estimate: 1750,
+  },
+  {
+    title: "Keyword Clustering Explained",
+    description: "Group keywords for topical authority.",
+    body: SAMPLE_BODY,
+    tags: ["Advanced"],
+    keyword: "keyword clustering",
+    seo_score: 86,
+    traffic_estimate: 980,
+  },
+  {
+    title: "The Anatomy of a High-Converting Article",
+    description: "Turn readers into customers.",
+    body: SAMPLE_BODY,
+    tags: ["Conversion"],
+    keyword: "high converting article",
+    seo_score: 90,
+    traffic_estimate: 1300,
+  },
+  {
+    title: "AI Writing Tools: A Practical Review",
+    description: "What to use and when.",
+    body: SAMPLE_BODY,
+    tags: ["Tools", "High Traffic"],
+    keyword: "ai writing tools",
+    seo_score: 84,
+    traffic_estimate: 2600,
+  },
+  {
+    title: "Measuring SEO ROI the Right Way",
+    description: "Metrics that actually matter.",
+    body: SAMPLE_BODY,
+    tags: ["Analytics"],
+    keyword: "seo roi",
+    seo_score: 87,
+    traffic_estimate: 1120,
+  },
+  {
+    title: "Topical Authority in Plain English",
+    description: "Become the go-to source in your niche.",
+    body: SAMPLE_BODY,
+    tags: ["Strategy"],
+    keyword: "topical authority",
+    seo_score: 92,
+    traffic_estimate: 1680,
+  },
+  {
+    title: "From Zero to 10k Monthly Visitors",
+    description: "A repeatable growth playbook.",
+    body: SAMPLE_BODY,
+    tags: ["Case Study", "High Traffic"],
+    keyword: "grow blog traffic",
+    seo_score: 89,
+    traffic_estimate: 3100,
+  },
 ];
 
 const SEED_SCHEDULED = [
-  { title: "The Future of Search Engines", description: "Where discovery is heading next.", tags: ["Trend"], keyword: "future of search", traffic_estimate: 1900 },
-  { title: "Local SEO for Small Businesses", description: "Win your neighborhood searches.", tags: ["Local"], keyword: "local seo", traffic_estimate: 1400 },
-  { title: "Schema Markup Made Simple", description: "Rich results without the headache.", tags: ["Technical"], keyword: "schema markup", traffic_estimate: 880 },
-  { title: "Content Refreshing for Rankings", description: "Update old posts to climb the SERP.", tags: ["Maintenance"], keyword: "content refresh", traffic_estimate: 760 },
-  { title: "Voice Search Optimization", description: "Optimize for spoken queries.", tags: ["Emerging"], keyword: "voice search", traffic_estimate: 1020 },
-  { title: "E-E-A-T for Modern SEO", description: "Experience, expertise, authority, trust.", tags: ["Quality"], keyword: "eeat seo", traffic_estimate: 1320 },
-  { title: "Building Backlinks Without Spam", description: "White-hat link strategies.", tags: ["Off-Page"], keyword: "white hat backlinks", traffic_estimate: 1150 },
-  { title: "Mobile-First Indexing Checklist", description: "Make sure mobile is covered.", tags: ["Technical"], keyword: "mobile first indexing", traffic_estimate: 670 },
-  { title: "Search Intent Decoded", description: "Match content to what users want.", tags: ["Strategy"], keyword: "search intent", traffic_estimate: 1480 },
-  { title: "The Pillar-Cluster Model", description: "Organize content for authority.", tags: ["Structure"], keyword: "pillar cluster", traffic_estimate: 940 },
-  { title: "SEO Copywriting Fundamentals", description: "Write for humans and bots.", tags: ["Writing"], keyword: "seo copywriting", traffic_estimate: 1260 },
-  { title: "Featured Snippets Strategy", description: "Win position zero.", tags: ["SERP"], keyword: "featured snippets", traffic_estimate: 1390 },
-  { title: "International SEO Basics", description: "Go global with hreflang.", tags: ["Global"], keyword: "international seo", traffic_estimate: 720 },
-  { title: "Page Speed and Core Web Vitals", description: "Faster pages, better rankings.", tags: ["Technical"], keyword: "core web vitals", traffic_estimate: 1010 },
-  { title: "Content Gap Analysis Guide", description: "Find what competitors rank for.", tags: ["Research"], keyword: "content gap analysis", traffic_estimate: 850 },
-  { title: "Evergreen vs Trending Content", description: "Balance your content mix.", tags: ["Planning"], keyword: "evergreen content", traffic_estimate: 990 },
+  {
+    title: "The Future of Search Engines",
+    description: "Where discovery is heading next.",
+    tags: ["Trend"],
+    keyword: "future of search",
+    traffic_estimate: 1900,
+  },
+  {
+    title: "Local SEO for Small Businesses",
+    description: "Win your neighborhood searches.",
+    tags: ["Local"],
+    keyword: "local seo",
+    traffic_estimate: 1400,
+  },
+  {
+    title: "Schema Markup Made Simple",
+    description: "Rich results without the headache.",
+    tags: ["Technical"],
+    keyword: "schema markup",
+    traffic_estimate: 880,
+  },
+  {
+    title: "Content Refreshing for Rankings",
+    description: "Update old posts to climb the SERP.",
+    tags: ["Maintenance"],
+    keyword: "content refresh",
+    traffic_estimate: 760,
+  },
+  {
+    title: "Voice Search Optimization",
+    description: "Optimize for spoken queries.",
+    tags: ["Emerging"],
+    keyword: "voice search",
+    traffic_estimate: 1020,
+  },
+  {
+    title: "E-E-A-T for Modern SEO",
+    description: "Experience, expertise, authority, trust.",
+    tags: ["Quality"],
+    keyword: "eeat seo",
+    traffic_estimate: 1320,
+  },
+  {
+    title: "Building Backlinks Without Spam",
+    description: "White-hat link strategies.",
+    tags: ["Off-Page"],
+    keyword: "white hat backlinks",
+    traffic_estimate: 1150,
+  },
+  {
+    title: "Mobile-First Indexing Checklist",
+    description: "Make sure mobile is covered.",
+    tags: ["Technical"],
+    keyword: "mobile first indexing",
+    traffic_estimate: 670,
+  },
+  {
+    title: "Search Intent Decoded",
+    description: "Match content to what users want.",
+    tags: ["Strategy"],
+    keyword: "search intent",
+    traffic_estimate: 1480,
+  },
+  {
+    title: "The Pillar-Cluster Model",
+    description: "Organize content for authority.",
+    tags: ["Structure"],
+    keyword: "pillar cluster",
+    traffic_estimate: 940,
+  },
+  {
+    title: "SEO Copywriting Fundamentals",
+    description: "Write for humans and bots.",
+    tags: ["Writing"],
+    keyword: "seo copywriting",
+    traffic_estimate: 1260,
+  },
+  {
+    title: "Featured Snippets Strategy",
+    description: "Win position zero.",
+    tags: ["SERP"],
+    keyword: "featured snippets",
+    traffic_estimate: 1390,
+  },
+  {
+    title: "International SEO Basics",
+    description: "Go global with hreflang.",
+    tags: ["Global"],
+    keyword: "international seo",
+    traffic_estimate: 720,
+  },
+  {
+    title: "Page Speed and Core Web Vitals",
+    description: "Faster pages, better rankings.",
+    tags: ["Technical"],
+    keyword: "core web vitals",
+    traffic_estimate: 1010,
+  },
+  {
+    title: "Content Gap Analysis Guide",
+    description: "Find what competitors rank for.",
+    tags: ["Research"],
+    keyword: "content gap analysis",
+    traffic_estimate: 850,
+  },
+  {
+    title: "Evergreen vs Trending Content",
+    description: "Balance your content mix.",
+    tags: ["Planning"],
+    keyword: "evergreen content",
+    traffic_estimate: 990,
+  },
 ];

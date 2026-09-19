@@ -10,6 +10,8 @@ import {
 import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
+// The one font file almost every page needs; preloaded so text paints in it.
+import jakartaLatin from "@fontsource-variable/plus-jakarta-sans/files/plus-jakarta-sans-latin-wght-normal.woff2?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Toaster } from "@/components/ui/sonner";
 import rankvoltMark from "@/assets/rankvolt-mark.png.asset.json";
@@ -79,22 +81,29 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Rankvolt — Get AI Traffic on Autopilot" },
+      { title: "Rankbox — Get AI Traffic on Autopilot" },
       { name: "google-site-verification", content: "fG4neVF-dPj7kLMIjpCUpXjX2XhTPhoZvyyiGL-xs40" },
       { name: "trustpilot-one-time-domain-verification-id", content: "de145b7d-659e-4783-a55a-4dac354411ea" },
-      { name: "description", content: "Rankvolt is the AI growth engine that researches, writes, and publishes daily articles engineered to get your brand cited by ChatGPT, Perplexity, and Google AI Overviews — and ranked on classic search." },
+      { name: "description", content: "Rankbox is the AI growth engine that researches, writes, and publishes daily articles engineered to get your brand cited by ChatGPT, Perplexity, and Google AI Overviews — and ranked on classic search." },
       { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Rankvolt — Get AI Traffic on Autopilot" },
-      { property: "og:description", content: "Rankvolt is the AI growth engine that researches, writes, and publishes daily articles engineered to get your brand cited by ChatGPT, Perplexity, and Google AI Overviews — and ranked on classic search." },
+      { property: "og:title", content: "Rankbox — Get AI Traffic on Autopilot" },
+      { property: "og:description", content: "Rankbox is the AI growth engine that researches, writes, and publishes daily articles engineered to get your brand cited by ChatGPT, Perplexity, and Google AI Overviews — and ranked on classic search." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:site", content: "@Lovable" },
-      { name: "twitter:title", content: "Rankvolt — Get AI Traffic on Autopilot" },
-      { name: "twitter:description", content: "Rankvolt is the AI growth engine that researches, writes, and publishes daily articles engineered to get your brand cited by ChatGPT, Perplexity, and Google AI Overviews — and ranked on classic search." },
+      { name: "twitter:title", content: "Rankbox — Get AI Traffic on Autopilot" },
+      { name: "twitter:description", content: "Rankbox is the AI growth engine that researches, writes, and publishes daily articles engineered to get your brand cited by ChatGPT, Perplexity, and Google AI Overviews — and ranked on classic search." },
       { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/WF1UgF3SxPUJn7F8lU25p39cNwL2/social-images/social-1782014917752-Get_3.webp" },
       { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/WF1UgF3SxPUJn7F8lU25p39cNwL2/social-images/social-1782014917752-Get_3.webp" },
     ],
     links: [
+      {
+        rel: "preload",
+        href: jakartaLatin,
+        as: "font",
+        type: "font/woff2",
+        crossOrigin: "anonymous",
+      },
       {
         rel: "stylesheet",
         href: appCss,

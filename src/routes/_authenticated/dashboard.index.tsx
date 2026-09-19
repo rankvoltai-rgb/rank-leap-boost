@@ -1,53 +1,63 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { Loader2 } from "lucide-react";
+import { ChevronDown, Loader2 } from "lucide-react";
 import {
-  AddIcon,
-  TrendIcon,
   VoltMark,
   RemoveIcon,
-  PublishIcon,
   RocketIcon,
   ArticleIcon,
   ChartIcon,
   TargetIcon,
-  FlameIcon,
   CardIcon,
+  CalendarIcon,
+  PulseIcon,
 } from "@/components/dashboard/icons";
 import {
   listBlogs,
   getCredits,
+  listIntegrationKeys,
+  TRIAL_DAYS,
   addOpportunityToQueue,
   generateBlogArticle,
-  prioritizeBlog,
   deleteBlog,
   getSubscription,
+  getCurrentUser,
+  getSettings,
   creditsRemaining,
   CreditsExhaustedError,
+  TrialRequiredError,
   type Blog,
-} from "@/lib/api";
-import {
-  Panel,
-  Pill,
-  Button,
-  PageHeader,
-} from "@/components/dashboard/primitives";
-import { MeterBar, DifficultyBar } from "@/components/dashboard/signals";
+} from "@/lib/data";
+import { Panel, Pill, Button } from "@/components/dashboard/primitives";
 import { DataTable, Tr, Td, TdActions, type Column } from "@/components/dashboard/data-table";
 import { AI_ALGORITHM_MARKS } from "@/components/landing/ai-logos";
 import { Confetti } from "@/components/dashboard/rewards";
 import { CreditPaywallDialog } from "@/components/dashboard/CreditPaywallDialog";
+import { StartTrialDialog } from "@/components/dashboard/StartTrialDialog";
 import { CountUp } from "@/components/ui/count-up";
+import { PlatformLogos } from "@/components/dashboard/platforms";
+import { TrafficValue } from "@/components/dashboard/traffic";
+import { lastSync, siteStatus, timeAgo } from "@/components/dashboard/connection-model";
+import { PublishingSchedule } from "@/components/dashboard/PublishingSchedule";
+import { ContentGaps } from "@/components/dashboard/ContentGaps";
+import { engineState, type EngineState } from "@/components/dashboard/autopilot-state";
+import { paceLabel } from "@/components/dashboard/queue-plan";
+import { firstNameOf } from "@/lib/auth";
 import { cn } from "@/lib/utils";
-import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/_authenticated/dashboard/")({
   component: SystemConsole,
 });
 
 const MONTHLY_GOAL = 30; // articles per month target
+
+type QueueFilter = "all" | "scheduled" | "generating";
+
+/** Rows shown before "View all" — enough to see what's next without pushing
+ *  the schedule and content gaps off the screen. */
+const QUEUE_PREVIEW = 5;
 
 function timeGreeting() {
   const h = new Date().getHours();
@@ -73,30 +83,34 @@ function AlgorithmLogos() {
   );
 }
 
-/** A single flat metric cell used inside the consolidated stats strip. */
+/** A single flat metric cell used inside the consolidated stats panel. */
 function StatCell({
   label,
   value,
   icon,
   hint,
   accent,
+  valueClassName,
 }: {
-  label: string;
+  label: React.ReactNode;
   value: React.ReactNode;
   icon?: React.ReactNode;
   hint?: React.ReactNode;
   accent?: boolean;
+  /** Renders the value at text size — for statuses rather than figures. */
+  valueClassName?: string;
 }) {
   return (
-    <div className="flex flex-col gap-2.5 bg-card p-5">
+    <div className={cn("flex flex-col gap-2.5 bg-card p-5", accent && "volt-glow")}>
       <div className="flex items-center gap-2 text-muted-foreground">
         {icon}
-        <p className="text-sm font-medium">{label}</p>
+        <span className="text-sm font-medium">{label}</span>
       </div>
       <p
         className={cn(
           "text-[1.9rem] font-semibold leading-none tracking-tight tabular-nums",
-          accent ? "text-volt" : "text-ink",
+          accent ? "w-fit font-bold milk-shimmer" : "text-ink",
+          valueClassName,
         )}
       >
         {value}
@@ -106,19 +120,29 @@ function StatCell({
   );
 }
 
+/** Where an article stands, in the queue's own vocabulary. */
+function StatusPill({ status }: { status: Blog["status"] }) {
+  if (status === "generating") {
+    return (
+      <Pill tone="info">
+        <Loader2 className="h-3 w-3 animate-spin" /> Writing
+      </Pill>
+    );
+  }
+  if (status === "finished") return <Pill tone="success">Ready</Pill>;
+  return <Pill tone="neutral">Scheduled</Pill>;
+}
+
 const QUEUE_COLUMNS: Column[] = [
   { label: "Article" },
   { label: "Keyword" },
-  { label: "Est. Traffic" },
-  { label: "AI Signal" },
-  { label: "Competition" },
+  { label: "Est. traffic" },
+  { label: "Status" },
   { label: "", className: "text-right" },
 ];
 
-/** A single article row in the queue / opportunities tables. */
-function ArticleRow({ opp, action }: { opp: Blog; action: React.ReactNode }) {
-  const sig = opp.ai_signal ?? 0;
-  const tone = sig >= 80 ? "success" : sig >= 55 ? "volt" : "warning";
+/** A single queued article. */
+function QueueRow({ blog, action }: { blog: Blog; action: React.ReactNode }) {
   return (
     <Tr>
       <Td>
@@ -126,83 +150,76 @@ function ArticleRow({ opp, action }: { opp: Blog; action: React.ReactNode }) {
           <span className="grid h-7 w-7 shrink-0 place-items-center rounded-lg border border-border bg-secondary text-muted-foreground">
             <ArticleIcon className="h-3.5 w-3.5" />
           </span>
-          <span className="block max-w-[220px] truncate font-medium text-ink" title={opp.title}>
-            {opp.title}
+          <span className="block max-w-[260px] truncate font-medium text-ink" title={blog.title}>
+            {blog.title}
           </span>
         </div>
       </Td>
       <Td>
-        <Pill tone="neutral">{opp.keyword}</Pill>
+        <Pill tone="neutral">{blog.keyword}</Pill>
       </Td>
       <Td>
-        <span className="inline-flex items-center gap-1 font-medium tabular-nums text-ink">
-          <TrendIcon className="h-3.5 w-3.5 text-success" />
-          {opp.traffic_estimate.toLocaleString()}
-          <span className="font-normal text-muted-foreground">/mo</span>
-        </span>
+        <TrafficValue value={blog.traffic_estimate} />
       </Td>
       <Td>
-        <div className="flex items-center gap-2.5">
-          <MeterBar value={sig} tone={tone} className="w-16" />
-          <span className="text-xs font-semibold tabular-nums text-ink">{sig}</span>
-        </div>
-      </Td>
-      <Td>
-        <DifficultyBar label={opp.competition} />
+        <StatusPill status={blog.status} />
       </Td>
       <TdActions>{action}</TdActions>
     </Tr>
   );
 }
 
-/** Section wrapper: heading + count, then either an empty panel or a table. */
-function QueueTableSection({
-  label,
-  count,
-  empty,
-  children,
-}: {
-  label: string;
-  count: number;
-  empty: React.ReactNode;
-  children: React.ReactNode;
-}) {
-  return (
-    <section className="space-y-3">
-      <div className="flex items-center gap-2">
-        <h3 className="text-xs font-semibold uppercase tracking-[0.08em] text-muted-foreground">{label}</h3>
-        <span className="rounded-full border border-border bg-secondary px-2 py-0.5 text-[0.65rem] font-semibold text-muted-foreground tabular-nums">
-          {count}
-        </span>
-      </div>
-      {count === 0 ? (
-        <Panel className="p-6 text-center text-sm text-muted-foreground">{empty}</Panel>
-      ) : (
-        <DataTable columns={QUEUE_COLUMNS}>{children}</DataTable>
-      )}
-    </section>
-  );
-}
+const OFFLINE_REASON: Record<Exclude<EngineState, "running">, string> = {
+  "needs-trial": "Start your free trial to turn autopilot on.",
+  "out-of-credits": "This month's articles are used up. Autopilot resumes when your plan renews.",
+  paused: "Autopilot is paused. Turn it back on in Settings.",
+};
 
-/** Consecutive-day publishing streak based on finished-article dates. */
-function computeStreak(finished: Blog[]): number {
-  const days = new Set(finished.map((b) => (b.updated_at ?? b.created_at).slice(0, 10)));
-  if (days.size === 0) return 0;
-  let streak = 0;
-  const cursor = new Date();
-  // Allow the streak to start from today or yesterday.
-  if (!days.has(cursor.toISOString().slice(0, 10))) cursor.setDate(cursor.getDate() - 1);
-  while (days.has(cursor.toISOString().slice(0, 10))) {
-    streak += 1;
-    cursor.setDate(cursor.getDate() - 1);
-  }
-  return streak;
+/** Autopilot on or off at a glance; opens the switch in Settings. */
+function AutopilotStatus({ state, perWeek }: { state: EngineState | null; perWeek: number }) {
+  const online = state === "running";
+  const label = state === null ? "" : online ? "Online" : "Offline";
+  const detail =
+    state === null
+      ? undefined
+      : state === "running"
+        ? `Autopilot is writing ${paceLabel(perWeek)}.`
+        : OFFLINE_REASON[state];
+  return (
+    <Link
+      to="/dashboard/settings"
+      hash="autopilot"
+      title={detail}
+      aria-label={state === null ? "Autopilot" : `Autopilot ${label}. ${detail}`}
+      className="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-3.5 py-2 text-sm font-medium text-ink transition-colors hover:bg-secondary"
+    >
+      <span className="relative flex h-2 w-2 shrink-0" aria-hidden>
+        {online && (
+          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-success opacity-50 motion-reduce:animate-none" />
+        )}
+        <span
+          className={cn(
+            "relative inline-flex h-2 w-2 rounded-full",
+            online ? "bg-success" : "bg-muted-foreground/50",
+          )}
+        />
+      </span>
+      Autopilot
+      {label && (
+        <span className={cn("font-semibold", online ? "text-success" : "text-muted-foreground")}>
+          {label}
+        </span>
+      )}
+    </Link>
+  );
 }
 
 function SystemConsole() {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const [busyId, setBusyId] = useState<string | null>(null);
+  const [queueFilter, setQueueFilter] = useState<QueueFilter>("all");
+  const [showAllQueue, setShowAllQueue] = useState(false);
   const [confettiKey, setConfettiKey] = useState(0);
   const prevFinished = useRef<number | null>(null);
   const armed = useRef(false);
@@ -226,7 +243,10 @@ function SystemConsole() {
     }
   }, []);
 
-  const { data: allBlogs = [] } = useQuery({ queryKey: ["blogs", "all"], queryFn: () => listBlogs() });
+  const { data: allBlogs = [] } = useQuery({
+    queryKey: ["blogs", "all"],
+    queryFn: () => listBlogs(),
+  });
   const { data: opportunities = [] } = useQuery({
     queryKey: ["blogs", "opportunity"],
     queryFn: () => listBlogs("opportunity"),
@@ -248,17 +268,29 @@ function SystemConsole() {
   const { data: firstName = "" } = useQuery({
     queryKey: ["auth", "first-name"],
     queryFn: async () => {
-      const { data } = await supabase.auth.getUser();
-      const full = (data.user?.user_metadata?.full_name as string | undefined) ?? "";
-      return full.trim().split(/\s+/)[0] ?? "";
+      const { fullName } = await getCurrentUser();
+      return firstNameOf(fullName);
     },
   });
   const { data: subscription } = useQuery({ queryKey: ["subscription"], queryFn: getSubscription });
+  const { data: settings } = useQuery({ queryKey: ["settings"], queryFn: getSettings });
+  const { data: integrationKeys, isLoading: integrationsLoading } = useQuery({
+    queryKey: ["api-keys"],
+    queryFn: listIntegrationKeys,
+  });
+  // A key existing isn't a connection; a site using it is.
+  const connection = siteStatus(integrationKeys);
+  const lastSiteSync = lastSync(integrationKeys);
+  // Drives the trial banner: it disappears the moment a subscription exists.
+  const hasEntitlement =
+    !!subscription && ["trialing", "active", "past_due"].includes(subscription.status);
   const [paywallOpen, setPaywallOpen] = useState(false);
+  const [trialOpen, setTrialOpen] = useState(false);
+  // Set when Generate was blocked, so the article runs itself once the trial starts.
+  const [pendingBlog, setPendingBlog] = useState<Blog | null>(null);
 
   const estimatedTraffic = allBlogs.reduce((sum, b) => sum + (b.traffic_estimate ?? 0), 0);
   const queue = [...generating, ...scheduled];
-  const streak = computeStreak(finished);
   const remainingCredits = credits ? creditsRemaining(credits) : null;
   const outOfCredits = remainingCredits !== null && remainingCredits <= 0;
 
@@ -303,26 +335,19 @@ function SystemConsole() {
       toast.success(`"${blog.title}" is ready.`);
       queryClient.invalidateQueries({ queryKey: ["blogs"] });
       queryClient.invalidateQueries({ queryKey: ["credits"] });
-      navigate({ to: "/dashboard/editor/$blogId", params: { blogId: blog.id } });
+      navigate({ to: "/dashboard/blog-engine", search: { article: blog.id } });
     } catch (err) {
+      // No trial yet: this is the moment the trial is sold, not onboarding.
+      if (err instanceof TrialRequiredError) {
+        setPendingBlog(blog);
+        setTrialOpen(true);
+        return;
+      }
       if (err instanceof CreditsExhaustedError) {
         setPaywallOpen(true);
         return;
       }
       toast.error(err instanceof Error ? err.message : "Generation failed.");
-    } finally {
-      setBusyId(null);
-    }
-  }
-
-  async function prioritize(blog: Blog) {
-    setBusyId(blog.id);
-    try {
-      await prioritizeBlog(blog.id);
-      toast.success(`"${blog.title}" moved to the top.`);
-      queryClient.invalidateQueries({ queryKey: ["blogs"] });
-    } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Could not prioritize.");
     } finally {
       setBusyId(null);
     }
@@ -341,45 +366,72 @@ function SystemConsole() {
     }
   }
 
+  const today = new Date();
+  const dateLine = new Intl.DateTimeFormat("en-US", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+  }).format(today);
+  // Null until everything it depends on has loaded, so it never flashes "Offline".
+  const autopilot =
+    settings === undefined || subscription === undefined || credits === undefined
+      ? null
+      : engineState({
+          subscription,
+          remaining: remainingCredits ?? 0,
+          enabled: settings?.autopilot_enabled !== false,
+        });
+  const visibleQueue = queue.filter((b) => queueFilter === "all" || b.status === queueFilter);
+  const shownQueue = showAllQueue ? visibleQueue : visibleQueue.slice(0, QUEUE_PREVIEW);
+  const hiddenCount = visibleQueue.length - shownQueue.length;
+
   return (
     <div className="space-y-6">
       <Confetti fireKey={confettiKey} />
+      <StartTrialDialog
+        open={trialOpen}
+        onOpenChange={setTrialOpen}
+        queuedCount={scheduled.length + opportunities.length}
+        projectedTraffic={estimatedTraffic}
+        onStarted={() => {
+          const b = pendingBlog;
+          setPendingBlog(null);
+          if (b) void generateNow(b);
+        }}
+      />
       <CreditPaywallDialog
         open={paywallOpen}
         onOpenChange={setPaywallOpen}
         credits={credits}
         subscription={subscription}
       />
-      <PageHeader
-        size="lg"
-        title={`${timeGreeting()}${firstName ? `, ${firstName}` : ""}`}
-        description={
-          finished.length > 0
-            ? `Your articles are ready — ${finished.length} published and working for you.`
-            : "Your autopilot engine is building your traffic — sit back and watch it grow."
-        }
-      />
 
-      {outOfCredits && (
-        <Panel className="flex flex-wrap items-center justify-between gap-3 border-destructive/30 bg-destructive/5 p-4 sm:p-5">
-          <div className="flex items-start gap-3">
-            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-destructive/10 text-destructive">
-              <RocketIcon className="h-5 w-5" />
-            </span>
-            <div>
-              <h3 className="text-sm font-semibold text-ink">You're out of article credits</h3>
-              <p className="mt-0.5 text-sm text-muted-foreground">
-                You've used all 30 articles this month. Upgrade to keep publishing today.
-              </p>
-            </div>
-          </div>
-          <Button onClick={() => setPaywallOpen(true)}>
-            <RocketIcon className="h-4 w-4" /> Upgrade
-          </Button>
-        </Panel>
-      )}
+      {/* Greeting, then the one action worth taking right now. */}
+      <header className="flex flex-wrap items-end justify-between gap-4">
+        <div className="min-w-0">
+          <p className="text-sm text-muted-foreground">{dateLine}</p>
+          <h1 className="font-display mt-1 text-3xl font-semibold tracking-tight text-ink sm:text-[2.1rem]">
+            {timeGreeting()}
+            {firstName ? `, ${firstName}` : ""}
+          </h1>
+          <p className="mt-1.5 text-sm text-muted-foreground">
+            {finished.length > 0
+              ? `Your articles are working for you — ${finished.length} published so far.`
+              : "Your autopilot engine is building your traffic — sit back and watch it grow."}
+          </p>
+        </div>
+        <div className="flex items-center gap-2">
+          <Link
+            to="/dashboard/calendar"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-card px-3.5 py-2 text-sm font-medium text-ink transition-colors hover:bg-secondary"
+          >
+            <CalendarIcon className="h-4 w-4" />
+            Calendar
+          </Link>
+          <AutopilotStatus state={autopilot} perWeek={settings?.weekly_cadence ?? 7} />
+        </div>
+      </header>
 
-      {/* Autopilot control */}
       {/* Stats + AI engines — one consolidated, hairline-divided panel */}
       <Panel className="overflow-hidden">
         <div className="grid grid-cols-2 gap-px bg-border lg:grid-cols-4">
@@ -402,10 +454,55 @@ function SystemConsole() {
             hint={`${Math.round((finished.length / MONTHLY_GOAL) * 100)}% of monthly goal`}
           />
           <StatCell
-            label="Publishing Streak"
-            value={`${streak}`}
-            icon={<FlameIcon className="h-4 w-4" />}
-            hint={streak > 0 ? "consecutive days live" : "publish to start a streak"}
+            label={<PlatformLogos />}
+            valueClassName="text-[1.35rem]"
+            value={
+              <span className="inline-flex items-center gap-2">
+                <span
+                  className={cn(
+                    "h-2 w-2 rounded-full",
+                    connection === "live"
+                      ? "bg-success"
+                      : connection === "stale"
+                        ? "bg-warning"
+                        : connection === "waiting"
+                          ? "bg-brand-blue"
+                          : "bg-muted-foreground/40",
+                  )}
+                />
+                <span
+                  className={cn(
+                    connection === "live"
+                      ? "text-success"
+                      : connection === "none"
+                        ? "text-muted-foreground"
+                        : "text-ink",
+                  )}
+                >
+                  {integrationsLoading
+                    ? "—"
+                    : { live: "Live", stale: "Not syncing", waiting: "Waiting", none: "Offline" }[
+                        connection
+                      ]}
+                </span>
+              </span>
+            }
+            hint={
+              connection === "live" ? (
+                `Synced ${timeAgo(lastSiteSync)}`
+              ) : (
+                <Link
+                  to="/dashboard/integrations"
+                  className="font-medium text-volt underline-offset-2 hover:underline"
+                >
+                  {connection === "none"
+                    ? "Connect your site →"
+                    : connection === "waiting"
+                      ? "Finish setup →"
+                      : `Last sync ${timeAgo(lastSiteSync)} →`}
+                </Link>
+              )
+            }
           />
           <StatCell
             label="Article Credits"
@@ -421,89 +518,151 @@ function SystemConsole() {
             Written to get cited across leading AI engines
           </p>
         </div>
+
+        {/* Only until the trial exists — it disappears once subscribed. */}
+        {!hasEntitlement && (
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-3 border-t border-border bg-brand-blue px-5 py-4 text-white">
+            <span className="grid h-9 w-9 shrink-0 place-items-center rounded-card bg-white/15">
+              <RocketIcon className="h-4.5 w-4.5" />
+            </span>
+            <div className="min-w-0 flex-1">
+              <p className="text-sm font-semibold">
+                Start your {TRIAL_DAYS}-day free trial to publish these articles
+              </p>
+              <p className="mt-0.5 text-xs text-white/75">
+                {queue.length + opportunities.length} articles are queued and ready. No charge
+                today.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setTrialOpen(true)}
+              className="inline-flex h-9 shrink-0 items-center gap-1.5 rounded-lg bg-white px-4 text-sm font-semibold text-brand-blue transition-transform hover:-translate-y-0.5"
+            >
+              Start free trial
+            </button>
+          </div>
+        )}
       </Panel>
 
-      <div className="space-y-5">
-        <h2 className="text-sm font-semibold text-ink">Autopilot Queue</h2>
-
-        <QueueTableSection
-          label="In the queue"
-          count={queue.length}
-          empty={
-            <span>
-              Queue is empty.{" "}
-              <span className="text-ink">Add an opportunity below</span> and autopilot takes it from there.
+      {outOfCredits && (
+        <Panel className="flex flex-wrap items-center justify-between gap-3 border-destructive/30 bg-destructive/5 p-4 sm:p-5">
+          <div className="flex items-start gap-3">
+            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-card bg-destructive/10 text-destructive">
+              <RocketIcon className="h-5 w-5" />
             </span>
-          }
-        >
-          {queue.map((opp) => (
-            <ArticleRow
-              key={opp.id}
-              opp={opp}
-              action={
-                opp.status === "generating" ? (
-                  <Pill tone="info">
-                    <Loader2 className="h-3 w-3 animate-spin" /> Writing
-                  </Pill>
-                ) : (
-                  <>
-                    <Button
-                      variant="ghost"
-                      title="Move to top"
-                      onClick={() => prioritize(opp)}
-                      disabled={busyId === opp.id}
-                    >
-                      <PublishIcon className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      title="Write now"
-                      onClick={() => generateNow(opp)}
-                      disabled={busyId === opp.id}
-                    >
-                      {busyId === opp.id ? <Loader2 className="h-4 w-4 animate-spin" /> : <VoltMark className="h-4 w-4" />}
-                    </Button>
-                    <Button
-                      variant="danger"
-                      title="Remove from queue"
-                      onClick={() => remove(opp)}
-                      disabled={busyId === opp.id}
-                    >
-                      <RemoveIcon className="h-4 w-4" />
-                    </Button>
-                  </>
-                )
-              }
-            />
-          ))}
-        </QueueTableSection>
+            <div>
+              <h3 className="text-sm font-semibold text-ink">You're out of article credits</h3>
+              <p className="mt-0.5 text-sm text-muted-foreground">
+                You've used all {MONTHLY_GOAL} articles this month. Upgrade to keep publishing
+                today.
+              </p>
+            </div>
+          </div>
+          <Button onClick={() => setPaywallOpen(true)}>
+            <RocketIcon className="h-4 w-4" /> Upgrade
+          </Button>
+        </Panel>
+      )}
 
-        <QueueTableSection
-          label="Content gaps to win"
-          count={opportunities.length}
-          empty={
-            <span>
-              No new opportunities right now. Autopilot will surface new content gaps as it
-              scans your space.
-            </span>
-          }
-        >
-          {opportunities.map((opp) => (
-            <ArticleRow
-              key={opp.id}
-              opp={opp}
-              action={
-                <Button onClick={() => addToQueue(opp)} disabled={busyId === opp.id}>
-                  {busyId === opp.id ? <Loader2 className="h-4 w-4 animate-spin" /> : <AddIcon className="h-4 w-4" />}
-                  Add to Queue
-                </Button>
-              }
+      {/* The queue: what autopilot writes next, in order. */}
+      <Panel className="overflow-hidden">
+        <div className="flex flex-wrap items-center gap-3 px-5 py-4">
+          <PulseIcon className="h-4 w-4 text-muted-foreground" />
+          <h2 className="text-base font-semibold text-ink">Autopilot queue</h2>
+          <span className="rounded-full bg-secondary px-2 py-0.5 text-[0.65rem] font-semibold tabular-nums text-muted-foreground">
+            {queue.length}
+          </span>
+          <div className="ml-auto flex items-center gap-2">
+            <select
+              value={queueFilter}
+              onChange={(e) => setQueueFilter(e.target.value as QueueFilter)}
+              aria-label="Filter the queue"
+              className="rounded-lg border border-border bg-card px-2.5 py-1.5 text-xs font-medium text-ink outline-none transition-colors hover:bg-secondary focus:ring-2 focus:ring-ring"
+            >
+              <option value="all">All</option>
+              <option value="scheduled">Scheduled</option>
+              <option value="generating">Writing</option>
+            </select>
+            <Link
+              to="/dashboard/blog-engine"
+              className="rounded-lg px-2.5 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-ink"
+            >
+              See all
+            </Link>
+          </div>
+        </div>
+
+        <div className="border-t border-border">
+          {visibleQueue.length === 0 ? (
+            <p className="px-5 py-10 text-center text-sm text-muted-foreground">
+              {queue.length === 0
+                ? "Queue is empty. Claim a content gap below and autopilot takes it from there."
+                : "Nothing matches this filter."}
+            </p>
+          ) : (
+            // The card is the frame; the table's own border would double it.
+            <DataTable columns={QUEUE_COLUMNS} className="rounded-none border-0">
+              {shownQueue.map((blog) => (
+                <QueueRow
+                  key={blog.id}
+                  blog={blog}
+                  action={
+                    blog.status === "generating" ? null : (
+                      <>
+                        <Button
+                          variant="ghost"
+                          onClick={() => generateNow(blog)}
+                          disabled={busyId === blog.id}
+                          // White at rest; blue on hover, press, and while this row is writing.
+                          className={cn(
+                            "whitespace-nowrap hover:border-brand-blue hover:bg-brand-blue hover:text-white focus-visible:border-brand-blue focus-visible:bg-brand-blue focus-visible:text-white active:border-brand-blue active:bg-brand-blue active:text-white",
+                            busyId === blog.id && "border-brand-blue bg-brand-blue text-white",
+                          )}
+                        >
+                          {busyId === blog.id ? (
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                          ) : (
+                            <VoltMark className="h-4 w-4" />
+                          )}
+                          Generate now
+                        </Button>
+                        <Button
+                          variant="danger"
+                          title="Remove from queue"
+                          aria-label="Remove from queue"
+                          onClick={() => remove(blog)}
+                          disabled={busyId === blog.id}
+                        >
+                          <RemoveIcon className="h-4 w-4" />
+                        </Button>
+                      </>
+                    )
+                  }
+                />
+              ))}
+            </DataTable>
+          )}
+        </div>
+
+        {(hiddenCount > 0 || showAllQueue) && visibleQueue.length > QUEUE_PREVIEW && (
+          <button
+            type="button"
+            onClick={() => setShowAllQueue((v) => !v)}
+            className="flex w-full items-center justify-center gap-1.5 border-t border-border px-5 py-3 text-sm font-medium text-brand-blue transition-colors hover:bg-secondary/60"
+          >
+            {showAllQueue ? "Show less" : `View all ${visibleQueue.length}`}
+            <ChevronDown
+              className={cn("h-4 w-4 transition-transform", showAllQueue && "rotate-180")}
             />
-          ))}
-        </QueueTableSection>
+          </button>
+        )}
+      </Panel>
+
+      <div className="grid gap-6 lg:grid-cols-2">
+        <PublishingSchedule blogs={queue} />
+        <ContentGaps gaps={opportunities} busyId={busyId} onQueue={addToQueue} />
       </div>
     </div>
   );
 }
-
-

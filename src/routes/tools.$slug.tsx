@@ -10,10 +10,10 @@ export const Route = createFileRoute("/tools/$slug")({
     if (!getTool(params.slug)) throw notFound();
   },
   head: ({ params }) => {
-    const url = `https://rankvolt.top/tools/${params.slug}`;
+    const url = `https://rankbox.xyz/tools/${params.slug}`;
     const tool = getTool(params.slug);
     if (!tool) {
-      return { meta: [{ title: "Tool not found — Rankvolt" }] };
+      return { meta: [{ title: "Tool not found — Rankbox" }] };
     }
     return {
       meta: [
@@ -43,8 +43,8 @@ export const Route = createFileRoute("/tools/$slug")({
               {
                 "@type": "BreadcrumbList",
                 itemListElement: [
-                  { "@type": "ListItem", position: 1, name: "Home", item: "https://rankvolt.top/" },
-                  { "@type": "ListItem", position: 2, name: "Free Tools", item: "https://rankvolt.top/tools" },
+                  { "@type": "ListItem", position: 1, name: "Home", item: "https://rankbox.xyz/" },
+                  { "@type": "ListItem", position: 2, name: "Free Tools", item: "https://rankbox.xyz/tools" },
                   { "@type": "ListItem", position: 3, name: tool.name, item: url },
                 ],
               },
@@ -144,7 +144,7 @@ function ToolPage() {
               Want this on autopilot?
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-balance text-base leading-relaxed text-muted-foreground">
-              Rankvolt researches, writes, and publishes citation-ready articles daily — so you
+              Rankbox researches, writes, and publishes citation-ready articles daily — so you
               become the answer AI recommends and rank on Google.
             </p>
             <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
@@ -152,7 +152,7 @@ function ToolPage() {
                 to="/"
                 className="rounded-xl bg-ink px-5 py-3 text-sm font-semibold text-background transition-opacity hover:opacity-90"
               >
-                See how Rankvolt works
+                See how Rankbox works
               </Link>
               <Link
                 to="/tools"

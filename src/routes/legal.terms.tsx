@@ -14,21 +14,21 @@ import {
 export const Route = createFileRoute("/legal/terms")({
   head: () => ({
     meta: [
-      { title: "Terms of Service — Rankvolt" },
+      { title: "Terms of Service — Rankbox" },
       {
         name: "description",
         content:
-          "The terms and conditions governing your use of Rankvolt, operated by Autusus LLC, including billing, AI content, liability, and account terms.",
+          "The terms and conditions governing your use of Rankbox, operated by Autusus LLC, including billing, AI content, liability, and account terms.",
       },
-      { property: "og:title", content: "Terms of Service — Rankvolt" },
+      { property: "og:title", content: "Terms of Service — Rankbox" },
       {
         property: "og:description",
-        content: "The terms that govern your use of the Rankvolt service.",
+        content: "The terms that govern your use of the Rankbox service.",
       },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "https://rankvolt.top/legal/terms" },
+      { property: "og:url", content: "https://rankbox.xyz/legal/terms" },
     ],
-    links: [{ rel: "canonical", href: "https://rankvolt.top/legal/terms" }],
+    links: [{ rel: "canonical", href: "https://rankbox.xyz/legal/terms" }],
   }),
   component: TermsPage,
 });
@@ -38,11 +38,11 @@ function TermsPage() {
     <LegalPage
       current="/legal/terms"
       title="Terms of Service"
-      summary="These Terms are a binding agreement between you and Autusus LLC. By creating an account or using Rankvolt, you agree to them."
+      summary="These Terms are a binding agreement between you and Autusus LLC. By creating an account or using Rankbox, you agree to them."
     >
       <Section title="1. Acceptance of terms">
         <P>
-          By accessing or using Rankvolt (the "Service"), you agree to be bound by these Terms of
+          By accessing or using Rankbox (the "Service"), you agree to be bound by these Terms of
           Service and our <PolicyLink to="/legal/privacy">Privacy Policy</PolicyLink>. If you do not
           agree, do not use the Service. If you use the Service on behalf of a company, you represent
           that you are authorized to bind that company.
@@ -51,7 +51,7 @@ function TermsPage() {
 
       <Section title="2. The Service">
         <P>
-          Rankvolt is a software platform that uses artificial intelligence to research, write, and
+          Rankbox is a software platform that uses artificial intelligence to research, write, and
           publish SEO and AI-search-optimized articles, and to connect with third-party publishing
           platforms. We may add, change, or remove features at any time.
         </P>
@@ -85,7 +85,7 @@ function TermsPage() {
           or unoriginal</B>. You are solely responsible for reviewing, editing, fact-checking, and
           approving any content before you publish or rely on it. You are responsible for ensuring
           that published content complies with applicable laws and the rules of any platform you
-          publish to. Rankvolt does not guarantee any specific search ranking, traffic, citation, or
+          publish to. Rankbox does not guarantee any specific search ranking, traffic, citation, or
           business result.
         </P>
       </Section>
@@ -94,7 +94,7 @@ function TermsPage() {
         <P>
           As between you and us, you own the content you create and publish through the Service,
           subject to these Terms. You grant us a limited license to process and store that content as
-          needed to operate the Service. We retain all rights in the Rankvolt platform, software,
+          needed to operate the Service. We retain all rights in the Rankbox platform, software,
           branding, and underlying technology. You may not copy, resell, or reverse engineer the
           Service.
         </P>

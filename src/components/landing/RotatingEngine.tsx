@@ -26,11 +26,12 @@ export function RotatingEngine({ className }: { className?: string }) {
     <span
       aria-hidden
       className={
-        "relative inline-flex h-[1em] w-[1em] shrink-0 -translate-y-[0.08em] items-center justify-center rounded-xl align-middle glass shadow-elevation ring-1 ring-ink/5 " +
+        // Solid white, not `glass`: the translucent variant picked up whatever
+        // sat behind it, so the tile read differently on every field.
+        "relative inline-flex h-[1em] w-[1em] shrink-0 -translate-y-[0.08em] items-center justify-center rounded-xl bg-white align-middle shadow-elevation ring-1 ring-border " +
         (className ?? "")
       }
     >
-      <span className="pointer-events-none absolute inset-0 rounded-xl bg-volt/10 opacity-60 blur-[6px]" />
       <Mark key={name} className="relative h-[58%] w-[58%] animate-engine-swap" />
     </span>
   );

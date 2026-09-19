@@ -1,4 +1,5 @@
 import TurndownService from "turndown";
+import { IFRAME_ALLOW, isYoutubeEmbedSrc } from "./editor-youtube";
 
 let turndown: TurndownService | null = null;
 
@@ -17,6 +18,17 @@ export function htmlToMarkdown(html: string): string {
       codeBlockStyle: "fenced",
       bulletListMarker: "-",
       emDelimiter: "*",
+    });
+    // turndown drops tags it has no rule for, which would delete a generated
+    // article's video on the first save. Write the embed back out as-is.
+    turndown.addRule("youtubeEmbed", {
+      filter: (node) => node.nodeName === "IFRAME" && isYoutubeEmbedSrc(node.getAttribute("src")),
+      replacement: (_content, node) => {
+        const el = node as HTMLElement;
+        const src = el.getAttribute("src") ?? "";
+        const title = (el.getAttribute("title") ?? "").replace(/"/g, "'");
+        return `\n\n<iframe width="560" height="315" src="${src}" title="${title}" frameborder="0" allow="${IFRAME_ALLOW}" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>\n\n`;
+      },
     });
   }
   return turndown.turndown(html).trim();

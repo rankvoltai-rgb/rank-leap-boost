@@ -26,6 +26,11 @@ export interface NotionBlock {
   embedKind?: "youtube" | "vimeo" | "file" | "other";
   icon?: string | null;
   children?: NotionBlock[];
+  /** table: every row's cells, header row first when hasColumnHeader. */
+  rows?: RichTextSpan[][][];
+  hasColumnHeader?: boolean;
+  /** figure: alt text for a built-in diagram (the figure's id is in url). */
+  alt?: string;
 }
 
 export interface PostMeta {
@@ -37,6 +42,12 @@ export interface PostMeta {
   cover: string | null;
   tags: string[];
   author: string;
+  /** Last substantive revision, when it differs from the publish date. */
+  updated?: string | null;
+  /** Estimated minutes to read, when the source knows the body length. */
+  readingMinutes?: number;
+  /** Pinned as the blog's lead story. */
+  featured?: boolean;
 }
 
 export interface PostFull extends PostMeta {
@@ -167,7 +178,7 @@ function metaFromPage(page: any): PostMeta {
     tags: Array.isArray(tagsProp?.multi_select)
       ? tagsProp.multi_select.map((t: { name: string }) => t.name)
       : [],
-    author: authorProp ? plain(authorProp.rich_text) || "Rankvolt" : "Rankvolt",
+    author: authorProp ? plain(authorProp.rich_text) || "Rankbox" : "Rankbox",
   };
 }
 
@@ -289,6 +300,13 @@ async function fetchBlocks(blockId: string, depth = 0): Promise<NotionBlock[]> {
       }
       case "divider":
         break;
+      case "table":
+        block.hasColumnHeader = !!payload.has_column_header;
+        break;
+      case "table_row":
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        block.rows = [(payload.cells ?? []).map((cell: any[]) => spans(cell))];
+        break;
       default:
         // unsupported block: keep type so renderer can skip gracefully
         block.richText = spans(payload.rich_text);
@@ -296,7 +314,10 @@ async function fetchBlocks(blockId: string, depth = 0): Promise<NotionBlock[]> {
     }
 
     if (b.has_children && type !== "code") {
-      block.children = await fetchBlocks(b.id, depth + 1);
+      const children = await fetchBlocks(b.id, depth + 1);
+      // A table's children are its rows: fold them into the table itself.
+      if (type === "table") block.rows = children.flatMap((row) => row.rows ?? []);
+      else block.children = children;
     }
     out.push(block);
   }

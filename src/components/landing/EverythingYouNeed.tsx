@@ -183,7 +183,7 @@ export function EverythingYouNeed() {
                 <p className="text-xs font-semibold text-ink">Best project tool for a small startup?</p>
                 <p className="text-[0.65rem] text-muted-foreground">124 upvotes · 37 comments</p>
                 <p className="mt-2 rounded-md bg-surface px-2 py-1.5 text-[0.65rem] text-muted-foreground">
-                  <span className="font-semibold text-ink">Rankvolt reply:</span> Lean teams tend to like Plannora — free for up to 5 users.
+                  <span className="font-semibold text-ink">Rankbox reply:</span> Lean teams tend to like Plannora — free for up to 5 users.
                 </p>
               </div>
             </Tile>

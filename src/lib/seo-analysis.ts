@@ -1,3 +1,5 @@
+import { markdownToHtml } from "@/lib/markdown";
+
 /**
  * Deterministic, in-app SEO + AI-readability analysis for the blog editor.
  * Everything is computed from the live document — no external API.
@@ -59,9 +61,7 @@ function fleschReadingEase(text: string): number {
   if (!words.length || !sentences.length) return 0;
   const syllables = words.reduce((sum, w) => sum + countSyllables(w), 0);
   const score =
-    206.835 -
-    1.015 * (words.length / sentences.length) -
-    84.6 * (syllables / words.length);
+    206.835 - 1.015 * (words.length / sentences.length) - 84.6 * (syllables / words.length);
   return Math.max(0, Math.min(100, Math.round(score)));
 }
 
@@ -116,15 +116,12 @@ export function analyzeContent(input: AnalyzeInput): SeoAnalysis {
 
   const checks: SeoCheck[] = [];
   const scores: Weighted[] = [];
-  const add = (
-    id: string,
-    label: string,
-    status: CheckStatus,
-    detail: string,
-    weight: number,
-  ) => {
+  const add = (id: string, label: string, status: CheckStatus, detail: string, weight: number) => {
     checks.push({ id, label, status, detail });
-    scores.push({ weight, achieved: status === "pass" ? weight : status === "warn" ? weight * 0.5 : 0 });
+    scores.push({
+      weight,
+      achieved: status === "pass" ? weight : status === "warn" ? weight * 0.5 : 0,
+    });
   };
 
   // Keyword in title
@@ -139,20 +136,50 @@ export function analyzeContent(input: AnalyzeInput): SeoAnalysis {
   // Keyword in intro
   if (keyword) {
     if (intro.includes(keyword)) {
-      add("kw-intro", "Keyword in introduction", "pass", "Keyword appears in the first 100 words.", 10);
+      add(
+        "kw-intro",
+        "Keyword in introduction",
+        "pass",
+        "Keyword appears in the first 100 words.",
+        10,
+      );
     } else {
-      add("kw-intro", "Keyword in introduction", "warn", "Mention the keyword early in the intro.", 10);
+      add(
+        "kw-intro",
+        "Keyword in introduction",
+        "warn",
+        "Mention the keyword early in the intro.",
+        10,
+      );
     }
   }
 
   // Keyword density
   if (keyword) {
     if (keywordDensity >= 0.5 && keywordDensity <= 2.5) {
-      add("kw-density", "Keyword density", "pass", `${metrics.keywordDensity}% — within the ideal range.`, 12);
+      add(
+        "kw-density",
+        "Keyword density",
+        "pass",
+        `${metrics.keywordDensity}% — within the ideal range.`,
+        12,
+      );
     } else if (keywordDensity > 0 && keywordDensity < 0.5) {
-      add("kw-density", "Keyword density", "warn", `${metrics.keywordDensity}% — use the keyword a bit more.`, 12);
+      add(
+        "kw-density",
+        "Keyword density",
+        "warn",
+        `${metrics.keywordDensity}% — use the keyword a bit more.`,
+        12,
+      );
     } else if (keywordDensity > 2.5) {
-      add("kw-density", "Keyword density", "warn", `${metrics.keywordDensity}% — risk of keyword stuffing.`, 12);
+      add(
+        "kw-density",
+        "Keyword density",
+        "warn",
+        `${metrics.keywordDensity}% — risk of keyword stuffing.`,
+        12,
+      );
     } else {
       add("kw-density", "Keyword density", "fail", "Keyword does not appear in the body.", 12);
     }
@@ -160,16 +187,40 @@ export function analyzeContent(input: AnalyzeInput): SeoAnalysis {
 
   // Word count
   if (wordCount >= 1500) {
-    add("words", "In-depth content", "pass", `${wordCount.toLocaleString()} words — great depth for ranking.`, 15);
+    add(
+      "words",
+      "In-depth content",
+      "pass",
+      `${wordCount.toLocaleString()} words — great depth for ranking.`,
+      15,
+    );
   } else if (wordCount >= 800) {
-    add("words", "Content length", "warn", `${wordCount.toLocaleString()} words — aim for 1,500+.`, 15);
+    add(
+      "words",
+      "Content length",
+      "warn",
+      `${wordCount.toLocaleString()} words — aim for 1,500+.`,
+      15,
+    );
   } else {
-    add("words", "Content length", "fail", `${wordCount.toLocaleString()} words — too short to rank well.`, 15);
+    add(
+      "words",
+      "Content length",
+      "fail",
+      `${wordCount.toLocaleString()} words — too short to rank well.`,
+      15,
+    );
   }
 
   // H2 structure
   if (h2 >= 3) {
-    add("h2", "Clear section structure", "pass", `${h2} H2 sections help scanning and AI parsing.`, 10);
+    add(
+      "h2",
+      "Clear section structure",
+      "pass",
+      `${h2} H2 sections help scanning and AI parsing.`,
+      10,
+    );
   } else if (h2 >= 1) {
     add("h2", "Section structure", "warn", `Only ${h2} H2 — add more sections.`, 10);
   } else {
@@ -199,7 +250,9 @@ export function analyzeContent(input: AnalyzeInput): SeoAnalysis {
     "faq",
     "FAQ for AI engines",
     hasFaq ? "pass" : "warn",
-    hasFaq ? "FAQ section helps AI answer engines cite you." : "Add a FAQ section for AI citations.",
+    hasFaq
+      ? "FAQ section helps AI answer engines cite you."
+      : "Add a FAQ section for AI citations.",
     8,
   );
 
@@ -218,7 +271,9 @@ export function analyzeContent(input: AnalyzeInput): SeoAnalysis {
     "links",
     "Internal & external links",
     links >= 2 ? "pass" : links === 1 ? "warn" : "fail",
-    links ? `${links} links add authority and context.` : "Add links to relevant pages and sources.",
+    links
+      ? `${links} links add authority and context.`
+      : "Add links to relevant pages and sources.",
     7,
   );
 
@@ -236,4 +291,37 @@ export function analyzeContent(input: AnalyzeInput): SeoAnalysis {
   const score = totalWeight ? Math.round((achieved / totalWeight) * 100) : 0;
 
   return { score, checks, metrics };
+}
+/**
+ * The visible text of an HTML fragment, block boundaries kept as spaces. The
+ * editor and the article list both score from this, so a score never differs
+ * between the row and the open article.
+ */
+export function htmlToPlainText(html: string): string {
+  return html
+    .replace(/<(br|\/p|\/h[1-6]|\/li|\/blockquote|\/div|\/pre)\b[^>]*>/gi, " ")
+    .replace(/<[^>]+>/g, "")
+    .replace(/&nbsp;/g, " ")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&amp;/g, "&");
+}
+
+/** Score a stored article exactly the way the editor scores it live. */
+export function analyzeArticle(article: {
+  title: string;
+  keyword: string | null;
+  description: string | null;
+  body: string | null;
+}): SeoAnalysis {
+  const html = markdownToHtml(article.body ?? "");
+  return analyzeContent({
+    title: article.title,
+    keyword: article.keyword ?? "",
+    metaDescription: article.description ?? "",
+    html,
+    text: htmlToPlainText(html),
+  });
 }

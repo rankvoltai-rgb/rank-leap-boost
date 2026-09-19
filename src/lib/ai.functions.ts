@@ -2,12 +2,12 @@ import { createServerFn } from "@tanstack/react-start";
 import { generateText } from "ai";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { createLovableAiGatewayProvider, requireLovableApiKey } from "./ai-gateway.server";
-import { gatherResearch, scoreArticle, type ResearchBrief } from "./research.server";
+import { createAiProvider, activeModelId } from "./ai-gateway.server";
+import { safeFetchText, UnsafeUrlError } from "./safe-fetch.server";
+import { assertAiRateLimit } from "./rate-limit.server";
+import { requireGenerationEntitlement } from "./entitlement.server";
 
-const MODEL = "google/gemini-3-flash-preview";
-
-type Gateway = ReturnType<typeof createLovableAiGatewayProvider>;
+type Gateway = ReturnType<typeof createAiProvider>;
 type JsonRecord = Record<string, unknown>;
 
 type Opportunity = {
@@ -35,15 +35,6 @@ type WebsiteAnalysis = {
   opportunities: Opportunity[];
 };
 
-type BlogContent = {
-  title: string;
-  body: string;
-  description: string;
-  seo_score: number;
-  traffic_estimate: number;
-  tags: string[];
-};
-
 type KeywordOutput = {
   name: string;
   tag: string;
@@ -69,7 +60,7 @@ type SupabaseClientLike = {
 // The gateway provider and the `ai` package can resolve to different provider
 // spec versions during build; normalize the model type at one boundary.
 function model(gateway: Gateway) {
-  return gateway(MODEL) as unknown as Parameters<typeof generateText>[0]["model"];
+  return gateway(activeModelId()) as unknown as Parameters<typeof generateText>[0]["model"];
 }
 
 const AnalyzeInput = z.object({
@@ -91,13 +82,16 @@ async function loadStyleContext(supabase: unknown, userId: string) {
     client.from("content_settings").select("*").eq("user_id", userId).maybeSingle(),
     client.from("profiles").select("*").eq("user_id", userId).maybeSingle(),
   ]);
-  const tone = settings?.tone ?? "Professional";
-  const style = settings?.writing_style ?? "Balanced";
-  const audience = settings?.audience ?? "Founders / Entrepreneurs";
-  const voice = settings?.brand_voice ?? "";
-  const brand = profile?.brand_name ?? "the brand";
-  const product = profile?.product_description ?? "";
-  return `Brand: ${brand}\nProduct context: ${product}\nTone: ${tone}\nWriting style: ${style}\nTarget audience: ${audience}\nBrand voice instructions: ${voice}\nAlways apply Rankvolt core rules: keyword optimization, clear heading structure, internal linking logic, and high readability.`;
+  const { composeStyleBrief } = await import("./style-brief");
+  const text = (v: unknown) => (typeof v === "string" ? v : null);
+  return composeStyleBrief({
+    brand: text(profile?.brand_name),
+    product: text(profile?.product_description),
+    tone: text(settings?.tone),
+    style: text(settings?.writing_style),
+    audience: text(settings?.audience),
+    voice: text(settings?.brand_voice),
+  });
 }
 
 function asRecord(value: unknown): JsonRecord {
@@ -286,27 +280,32 @@ async function generateJson(gateway: Gateway, prompt: string): Promise<unknown> 
   return extractJson(text);
 }
 
-async function fetchWebsiteBrief(rawUrl: string): Promise<string> {
-  const url = /^https?:\/\//i.test(rawUrl) ? rawUrl : `https://${rawUrl}`;
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 7000);
+/**
+ * Fetches a site and returns tag-stripped text for the model.
+ *
+ * Also returns the raw HTML so callers that need metadata (title, og:image,
+ * icons) can read it before it is flattened — the previous version discarded
+ * the markup, which is why no logo could ever be extracted.
+ */
+async function fetchWebsiteRaw(
+  rawUrl: string,
+): Promise<{ html: string; text: string; finalUrl: string } | { error: string }> {
   try {
-    const response = await fetch(url, {
-      signal: controller.signal,
-      headers: {
-        "User-Agent": "RankvoltBot/1.0 (+https://rankvolt.app)",
-        Accept: "text/html,text/plain;q=0.9,*/*;q=0.5",
-      },
+    const res = await safeFetchText(rawUrl, {
+      timeoutMs: 8000,
+      accept: "text/html,text/plain;q=0.9,*/*;q=0.5",
     });
-    if (!response.ok) {
-      return `Website returned HTTP ${response.status}. Use the domain and business name for inference.`;
+    if (res.status < 200 || res.status >= 300) {
+      return {
+        error: `Website returned HTTP ${res.status}. Use the domain and business name for inference.`,
+      };
     }
-    const contentType = response.headers.get("content-type") ?? "";
-    if (!/text\/html|text\/plain|application\/xhtml\+xml/i.test(contentType)) {
-      return `Website content type was ${contentType || "unknown"}. Use the domain and business name for inference.`;
+    if (!/text\/html|text\/plain|application\/xhtml\+xml/i.test(res.contentType)) {
+      return {
+        error: `Website content type was ${res.contentType || "unknown"}. Use the domain and business name for inference.`,
+      };
     }
-    const html = await response.text();
-    return html
+    const text = res.body
       .replace(/<script[\s\S]*?<\/script>/gi, " ")
       .replace(/<style[\s\S]*?<\/style>/gi, " ")
       .replace(/<[^>]+>/g, " ")
@@ -315,11 +314,18 @@ async function fetchWebsiteBrief(rawUrl: string): Promise<string> {
       .replace(/\s+/g, " ")
       .trim()
       .slice(0, 12000);
-  } catch {
-    return `Website fetch timed out or was blocked. Infer from business name and domain: ${domainFromUrl(rawUrl)}.`;
-  } finally {
-    clearTimeout(timeout);
+    return { html: res.body, text, finalUrl: res.url };
+  } catch (err) {
+    if (err instanceof UnsafeUrlError) return { error: err.message };
+    return {
+      error: `Website fetch timed out or was blocked. Infer from business name and domain: ${domainFromUrl(rawUrl)}.`,
+    };
   }
+}
+
+async function fetchWebsiteBrief(rawUrl: string): Promise<string> {
+  const res = await fetchWebsiteRaw(rawUrl);
+  return "error" in res ? res.error : res.text;
 }
 
 function normalizeAnalysis(
@@ -403,203 +409,18 @@ function normalizeAnalysis(
   };
 }
 
-function normalizeBlogContent(
-  value: unknown,
-  input: z.infer<typeof BlogInput>,
-  rawText = "",
-): BlogContent {
-  const record = asRecord(value);
-  const title = cleanString(record.title, input.title).slice(0, 70);
-  const body = cleanString(
-    record.body,
-    rawText.trim() ||
-      `## ${title}\n\n${input.description ?? "This article covers the core search intent behind the topic."}\n\n## Key Takeaways\n\n- Explain the problem clearly.\n- Answer the buyer's next question.\n- Link readers to the most relevant service or product page.`,
-  );
-  return {
-    title,
-    body,
-    description: cleanString(
-      record.description,
-      input.description ?? `${title} — a practical SEO guide for qualified buyers.`,
-    ).slice(0, 160),
-    seo_score: toNumber(record.seo_score, 86, 0, 100),
-    traffic_estimate: toNumber(record.traffic_estimate, 900, 0, 1000000),
-    tags: stringArray(record.tags, ["SEO", "Strategy"], 4),
-  };
-}
-
-function buildResearchBlock(keyword: string, research: ResearchBrief): string {
-  if (!research.ok) {
-    return `LIVE WEB RESEARCH: unavailable for this run. Infer the competitive landscape from expertise, and cite 3–5 reputable, real, well-known authoritative sources using accurate URLs you are confident exist (official docs, major publications, research bodies).`;
-  }
-  const top = research.topResults
-    .map((r, i) => `${i + 1}. ${r.title} — ${r.url}`)
-    .join("\n");
-  const headings = research.competitorHeadings.map((h) => `- ${h}`).join("\n");
-  const sources = research.sources.map((s) => `- ${s.title}: ${s.url}`).join("\n");
-  return `LIVE WEB RESEARCH — the top ranking pages for "${keyword}":
-Top 10 results:
-${top}
-
-Headings/subtopics competitors cover (cover these comprehensively and find the GAPS they miss):
-${headings || "- (no headings extracted)"}
-
-Use ONLY these REAL sources for in-text citations and the "## References" section (cite with [text](url)):
-${sources}
-
-Key points distilled from the results:
-${research.notes}`;
-}
-
-function buildBlueprint(opts: {
-  title: string;
-  keyword: string;
-  description: string;
-  wordCount: number;
-}): string {
-  const { title, keyword, description, wordCount } = opts;
-  return `You are a world-class SEO content strategist and writer. Produce a flagship, in-depth article engineered to RANK #1 on Google AND be cited by AI answer engines (ChatGPT, Gemini, Claude, Perplexity, Google AI Overviews).
-
-TOPIC: ${title}
-PRIMARY KEYWORD: ${keyword}
-BRIEF: ${description || "(none)"}
-TARGET WORD COUNT: ${wordCount} (meet or exceed it with genuinely useful, specific content — no fluff)
-
-Follow this exact blueprint:
-1. Analyze the top-ranking competitor pages above: their structure, headings, and key points. Beat them on depth and clarity.
-2. Build a comprehensive structure with AT LEAST 15 headings/subheadings (a single H1, then ## H2, ### H3, and #### H4 where useful) with a logical flow that fully satisfies user intent.
-3. Naturally weave in 10–15 related long-tail keywords and LSI/semantic terms throughout.
-4. H1 title: SEO-optimized, UNDER 60 characters, includes the PRIMARY KEYWORD, appeals to the target audience.
-5. Introduction: 150–200 words that hook the reader, introduce the topic, and naturally include the primary keyword. Lead with a direct, quotable 2–3 sentence answer (answer-engine friendly).
-6. Each ## H2 section: 300–500 words of in-depth content, with concrete examples/data/mini case studies, 1–2 long-tail/LSI terms, a conversational tone speaking directly to the audience, and at least one unique insight competitors miss.
-7. Add a "## Key Takeaways" (or "Quick Takeaways") section with 5–7 concise bullet points.
-8. Describe 2–3 image/infographic concepts inline using this exact format: **[Image: <description>] (alt: "<keyword-optimized alt text>")**.
-9. Include at least two bulleted or numbered lists and, where relevant, a comparison or step-by-step section.
-10. Conclusion: 200–250 words that summarize key points, reinforce the message, and end with a clear call-to-action for the audience.
-11. "## Frequently Asked Questions": exactly 5 Q&A pairs. Each question is a ### heading ending in "?", followed by a concise 2–4 sentence answer that includes a long-tail keyword.
-12. Add one short reader-engagement line inviting feedback and social shares, ending with a question.
-13. In-text citations to the real sources, plus a final "## References" section listing them as markdown links [title](url).
-14. Keyword density for the primary keyword: aim for 1–2% (no stuffing). Keep paragraphs short (2–4 sentences) and scannable; vary sentence length for natural rhythm.
-15. Where an internal link would help, add suggestions inline using: [anchor text](#internal: descriptive target page).
-16. Format everything in clean Markdown: bold key phrases, italics for emphasis.`;
-}
-
-const BLOG_JSON_SHAPE = `Return ONLY this exact JSON shape (escape all newlines inside "body"):
-{"title":"SEO H1 under 60 chars including the keyword","body":"Full markdown article","description":"Compelling meta description, 120–160 characters, includes the keyword","seo_score":92,"traffic_estimate":1200,"tags":["Tag","Tag"]}`;
-
-/** Re-run the model on the exact failing SEO checks until the article scores 100. */
-async function optimizeToHundred(
-  gateway: Gateway,
-  style: string,
-  content: BlogContent,
-  primaryKeyword: string,
-  input: z.infer<typeof BlogInput>,
-): Promise<BlogContent> {
-  let current = content;
-  for (let pass = 0; pass < 3; pass += 1) {
-    const analysis = scoreArticle({
-      title: current.title,
-      keyword: primaryKeyword,
-      metaDescription: current.description,
-      body: current.body,
-    });
-    if (analysis.score >= 100) {
-      return { ...current, seo_score: 100 };
-    }
-    const gaps = analysis.checks
-      .filter((c) => c.status !== "pass")
-      .map((c) => `- ${c.label}: ${c.detail}`)
-      .join("\n");
-    if (!gaps) return { ...current, seo_score: analysis.score };
-
-    const fixPrompt = `${style}
-
-You are optimizing an existing SEO article to a PERFECT 100/100 score. Keep everything that already works; fix ONLY the issues below while preserving the article's depth, structure, citations, and meaning.
-
-PRIMARY KEYWORD: ${primaryKeyword}
-ISSUES TO FIX (current score ${analysis.score}/100):
-${gaps}
-
-How to fix common issues:
-- Keyword in title: include the exact primary keyword in the H1 (keep it under 60 characters).
-- Keyword in introduction: mention the primary keyword in the first 100 words.
-- Keyword density: adjust usage to land between 1% and 2% (no stuffing).
-- Content length: expand thin sections with specific, useful detail.
-- Section structure: ensure at least 3 ## H2 sections and helpful ### H3s.
-- Scannable lists: add bulleted/numbered lists.
-- FAQ: include a "## Frequently Asked Questions" section with 5 ### question headings ending in "?".
-- Meta description: rewrite to 120–160 characters including the keyword.
-- Links: include at least 2 markdown links [text](url) (citations / internal-link suggestions).
-- Readability: shorten long sentences, use simpler words and shorter paragraphs to raise readability.
-
-Current title: ${current.title}
-Current meta description: ${current.description}
-Current article (markdown):
-"""
-${current.body}
-"""
-
-Return ONLY this exact JSON shape (escape all newlines inside "body"):
-{"title":"optimized H1","body":"full improved markdown article","description":"120–160 char meta with keyword"}`;
-
-    const { text } = await generateText({
-      model: model(gateway),
-      maxOutputTokens: 24000,
-      prompt: fixPrompt,
-    });
-    try {
-      const record = asRecord(extractJson(text));
-      const next = normalizeBlogContent(record, { ...input, title: current.title }, current.body);
-      current = {
-        ...current,
-        title: next.title,
-        body: next.body,
-        description: next.description,
-      };
-    } catch {
-      // Keep the best version we have if a pass fails to parse.
-      break;
-    }
-  }
-  const finalScore = scoreArticle({
-    title: current.title,
-    keyword: primaryKeyword,
-    metaDescription: current.description,
-    body: current.body,
-  }).score;
-  return { ...current, seo_score: finalScore };
-}
-
 export const generateBlogContent = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => BlogInput.parse(d))
   .handler(async ({ data, context }) => {
-    const gateway = createLovableAiGatewayProvider(requireLovableApiKey());
+    // Server-side trial gate. This function is a plain POST endpoint, so a UI
+    // check alone is bypassable, and credits are granted during onboarding
+    // before any payment — a credits check does not stand in for this.
+    await requireGenerationEntitlement(context.supabase, context.userId);
+    await assertAiRateLimit(context.userId);
     const style = await loadStyleContext(context.supabase, context.userId);
-    const primaryKeyword = data.keyword ?? data.title;
-    const wordCount = data.wordCount ?? 2750;
-
-    const research = await gatherResearch(primaryKeyword);
-    const prompt = `${style}
-
-${buildBlueprint({ title: data.title, keyword: primaryKeyword, description: data.description ?? "", wordCount })}
-
-${buildResearchBlock(primaryKeyword, research)}
-
-${BLOG_JSON_SHAPE}`;
-
-    const { text } = await generateText({
-      model: model(gateway),
-      maxOutputTokens: 24000,
-      prompt,
-    });
-    let content: BlogContent;
-    try {
-      content = normalizeBlogContent(extractJson(text), data);
-    } catch {
-      content = normalizeBlogContent({}, data, text);
-    }
-    return optimizeToHundred(gateway, style, content, primaryKeyword, data);
+    const { writeArticle } = await import("./article.server");
+    return writeArticle(data, style);
   });
 
 const ACTIONS: Record<string, string> = {
@@ -617,7 +438,8 @@ export const editBlogSection = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: { selection: string; action: string }) => d)
   .handler(async ({ data, context }) => {
-    const gateway = createLovableAiGatewayProvider(requireLovableApiKey());
+    await assertAiRateLimit(context.userId);
+    const gateway = createAiProvider();
     const style = await loadStyleContext(context.supabase, context.userId);
     const instruction = ACTIONS[data.action] ?? ACTIONS.ai_suggest;
     const { text } = await generateText({
@@ -631,7 +453,8 @@ export const discoverKeywords = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: { seed?: string }) => d)
   .handler(async ({ data, context }) => {
-    const gateway = createLovableAiGatewayProvider(requireLovableApiKey());
+    await assertAiRateLimit(context.userId);
+    const gateway = createAiProvider();
     const style = await loadStyleContext(context.supabase, context.userId);
     const json = await generateJson(
       gateway,
@@ -668,10 +491,11 @@ export const discoverKeywords = createServerFn({ method: "POST" })
 export const analyzeWebsite = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => AnalyzeInput.parse(d))
-  .handler(async ({ data }) => {
-    const gateway = createLovableAiGatewayProvider(requireLovableApiKey());
+  .handler(async ({ data, context }) => {
+    await assertAiRateLimit(context.userId);
+    const gateway = createAiProvider();
     const websiteBrief = await fetchWebsiteBrief(data.website_url);
-    const prompt = `You are Rankvolt, an AI SEO intelligence engine. Analyze the business and website text below.\n\nBusiness name: ${data.business_name}\nWebsite: ${data.website_url}\nDomain: ${domainFromUrl(data.website_url)}\nWebsite text excerpt:\n"""${websiteBrief}"""\n\nReturn this exact JSON shape, with no missing keys:\n{"niche":"business niche","services":["service"],"audience":"target audience","geo":"geographic target","brand_tone":"brand tone","competitors":["competitor"],"existing_content":"one sentence","internal_linking":"one sentence","missing_opportunities":["opportunity"],"semantic_clusters":["cluster"],"ai_visibility":["AI citation opportunity"],"keywords":[{"name":"keyword","search_volume":1200,"intent":"Transactional","trend":"High"}],"opportunities":[{"title":"Specific blog title","description":"article angle","keyword":"primary keyword","traffic_estimate":1000,"competition":"Low","ai_signal":88}]}\n\nProduce 6-10 concrete blog opportunities tailored to this exact business.`;
+    const prompt = `You are Rankbox, an AI SEO intelligence engine. Analyze the business and website text below.\n\nBusiness name: ${data.business_name}\nWebsite: ${data.website_url}\nDomain: ${domainFromUrl(data.website_url)}\nWebsite text excerpt:\n"""${websiteBrief}"""\n\nReturn this exact JSON shape, with no missing keys:\n{"niche":"business niche","services":["service"],"audience":"target audience","geo":"geographic target","brand_tone":"brand tone","competitors":["competitor"],"existing_content":"one sentence","internal_linking":"one sentence","missing_opportunities":["opportunity"],"semantic_clusters":["cluster"],"ai_visibility":["AI citation opportunity"],"keywords":[{"name":"keyword","search_volume":1200,"intent":"Transactional","trend":"High"}],"opportunities":[{"title":"Specific blog title","description":"article angle","keyword":"primary keyword","traffic_estimate":1000,"competition":"Low","ai_signal":88}]}\n\nProduce 6-10 concrete blog opportunities tailored to this exact business.`;
     const json = await generateJson(gateway, prompt).catch(() => ({}));
     return normalizeAnalysis(json, data, websiteBrief);
   });
@@ -680,7 +504,8 @@ export const generateBlogStrategy = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: { existingTitles?: string[] }) => d)
   .handler(async ({ data, context }) => {
-    const gateway = createLovableAiGatewayProvider(requireLovableApiKey());
+    await assertAiRateLimit(context.userId);
+    const gateway = createAiProvider();
     const style = await loadStyleContext(context.supabase, context.userId);
     const avoid = data.existingTitles?.length
       ? `\n\nDo NOT repeat any of these existing titles:\n${data.existingTitles.join("\n")}`
@@ -689,7 +514,7 @@ export const generateBlogStrategy = createServerFn({ method: "POST" })
       gateway,
       `${style}\n\nBuild a strategic content plan of 30 distinct, high-impact blog article opportunities for this brand. Return JSON: {"opportunities":[{"title":"Specific blog title","description":"article angle","keyword":"primary keyword","traffic_estimate":1000,"competition":"Low","ai_signal":88}]}. Cover high-intent, informational, comparison, and AI-citation-friendly topics.${avoid}`,
     ).catch(() => ({ opportunities: [] }));
-    const fallback = fallbackOpportunities("SEO growth", "Rankvolt", 30);
+    const fallback = fallbackOpportunities("SEO growth", "Rankbox", 30);
     const opportunities = asArray(asRecord(json).opportunities)
       .slice(0, 30)
       .map((item, index) => normalizeOpportunity(item, fallback[index % fallback.length], index));

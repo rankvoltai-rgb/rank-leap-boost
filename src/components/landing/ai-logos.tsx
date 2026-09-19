@@ -52,6 +52,17 @@ export function PerplexityMark({ className }: { className?: string }) {
   );
 }
 
+export function BingMark({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={cn("text-[#0078d4]", className)} aria-hidden>
+      <path
+        fill="currentColor"
+        d="M5.11 1.56v18.39l4.44 2.49 9.34-5.35v-4.22L10.5 9.59l1.54 3.84 2.66 1.25-5.14 2.95V3.11z"
+      />
+    </svg>
+  );
+}
+
 export function BoundlessMark({ className }: { className?: string }) {
   return (
     <img src={boundlessAsset.url} alt="" aria-hidden className={cn("object-contain", className)} />

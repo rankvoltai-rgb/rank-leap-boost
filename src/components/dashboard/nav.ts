@@ -6,7 +6,7 @@ import {
   CardIcon,
   ControlsIcon,
   RadarIcon,
-  PublishIcon,
+  ConnectIcon,
 } from "@/components/dashboard/icons";
 
 type IconComponent = ComponentType<{ className?: string }>;
@@ -16,6 +16,8 @@ export interface NavItem {
   icon: IconComponent;
   to: string;
   exact?: boolean;
+  /** Shows how many articles are waiting in the autopilot queue. */
+  showsQueueCount?: boolean;
 }
 
 // Primary workspace navigation. Labels here are the single source of truth —
@@ -23,10 +25,10 @@ export interface NavItem {
 // everywhere in the app.
 export const NAV: NavItem[] = [
   { title: "Overview", icon: PulseIcon, to: "/dashboard", exact: true },
-  { title: "Articles", icon: ArticleIcon, to: "/dashboard/blog-engine" },
-  { title: "Rank", icon: RadarIcon, to: "/dashboard/visibility" },
+  { title: "Articles", icon: ArticleIcon, to: "/dashboard/blog-engine", showsQueueCount: true },
   { title: "Calendar", icon: CalendarIcon, to: "/dashboard/calendar" },
-  { title: "Integrations", icon: PublishIcon, to: "/dashboard/integrations" },
+  { title: "Rank", icon: RadarIcon, to: "/dashboard/visibility" },
+  { title: "Integrations", icon: ConnectIcon, to: "/dashboard/integrations" },
 ];
 
 export const NAV_FOOTER: NavItem[] = [
@@ -34,12 +36,16 @@ export const NAV_FOOTER: NavItem[] = [
   { title: "Settings", icon: ControlsIcon, to: "/dashboard/settings" },
 ];
 
+/** The navigation as it is rendered: grouped, in order. */
+export const NAV_SECTIONS: Array<{ label: string; items: NavItem[] }> = [
+  { label: "Workspace", items: NAV },
+  { label: "Account", items: NAV_FOOTER },
+];
+
 const ALL_NAV = [...NAV, ...NAV_FOOTER];
 
 /** Resolve the human label for the current pathname (used by the top bar). */
 export function currentPageTitle(pathname: string): string {
-  // Editor is a detail view that isn't in the nav.
-  if (pathname.startsWith("/dashboard/editor")) return "Article Editor";
   const match = ALL_NAV.filter((n) =>
     n.exact ? pathname === n.to : pathname === n.to || pathname.startsWith(`${n.to}/`),
   ).sort((a, b) => b.to.length - a.to.length)[0];

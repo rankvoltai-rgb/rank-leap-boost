@@ -1,12 +1,12 @@
 import { Reveal, Eyebrow, Avatar, Stars, StatCard } from "./shared";
 import { AVATARS } from "./avatars";
 
-const QUOTES = [
+export const TESTIMONIALS = [
   { q: "About a month in, a couple of our guides started showing up as the cited source inside ChatGPT answers. We didn't even know that was possible — now it's our most qualified traffic.", n: "Owen Carter", r: "Founder", c: "Briefly", a: AVATARS[0] },
-  { q: "Rankvolt got us quoted in Perplexity for our core questions. Steady visibility, real signups, and all of it runs without me touching a thing.", n: "Priya Raman", r: "Growth Lead", c: "Safeguard", a: AVATARS[1] },
+  { q: "Rankbox got us quoted in Perplexity for our core questions. Steady visibility, real signups, and all of it runs without me touching a thing.", n: "Priya Raman", r: "Growth Lead", c: "Safeguard", a: AVATARS[1] },
   { q: "We filled a thin site with genuinely good, source-backed articles in weeks. The structure is clearly built for how AI models read content — it shows in where we surface.", n: "Aman Desai", r: "Founder", c: "Yardstick", a: AVATARS[2] },
   { q: "Setup took minutes and it plugged into our store cleanly. The answer-space research is the part that surprised me — it finds questions our buyers actually ask AI.", n: "Elise Tanaka", r: "Co-founder", c: "Plannora", a: AVATARS[3] },
-  { q: "I was paying a writer and an SEO tool subscription. Rankvolt replaced both, writes better, and I'm finally ranking for terms I'd given up on.", n: "Marco Silva", r: "Marketing Lead", c: "Northwind Labs", a: AVATARS[4] },
+  { q: "I was paying a writer and an SEO tool subscription. Rankbox replaced both, writes better, and I'm finally ranking for terms I'd given up on.", n: "Marco Silva", r: "Marketing Lead", c: "Northwind Labs", a: AVATARS[4] },
   { q: "The consistency is the whole game. A strong article goes live every day without me thinking about outlines, keywords, or publishing. It just compounds.", n: "Hannah Whitfield", r: "Founder", c: "Loopcraft", a: AVATARS[5] },
   { q: "Compared to an agency this is a fraction of the cost and honestly more reliable. Our brand-new site is pulling steady search and AI traffic within months.", n: "Daniel Okafor", r: "Founder", c: "Northlight", a: AVATARS[6] },
   { q: "What sold me is how little effort it takes. It really is this easy, and the content holds up. I've already pointed two other founders to it.", n: "Sofia Marin", r: "Owner", c: "Verdure Goods", a: AVATARS[7] },
@@ -23,7 +23,7 @@ export function Testimonials() {
             Growth-minded teams, real results
           </h2>
           <p className="mt-4 text-balance text-lg text-muted-foreground">
-            See how teams across SaaS, e-commerce, and agencies use Rankvolt to grow organic
+            See how teams across SaaS, e-commerce, and agencies use Rankbox to grow organic
             traffic and get their brand cited by AI assistants.
           </p>
         </Reveal>
@@ -36,7 +36,7 @@ export function Testimonials() {
         </div>
 
         <div className="mt-16 columns-1 gap-6 sm:columns-2 lg:columns-3 [&>*]:mb-6">
-          {QUOTES.map((t, i) => (
+          {TESTIMONIALS.map((t, i) => (
             <Reveal key={t.n} delay={(i % 3) * 0.05}>
               <figure className="break-inside-avoid rounded-2xl border border-border bg-card p-6 transition-all hover:-translate-y-1 hover:shadow-elevation-lg">
                 <Stars className="mb-3" />

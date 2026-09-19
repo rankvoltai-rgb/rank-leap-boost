@@ -1,6 +1,8 @@
 import type { ReactNode } from "react";
+import { useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
-import { lovable } from "@/integrations/lovable";
+import { signInWithProvider } from "@/lib/auth";
+import { getProfile } from "@/lib/data";
 
 function GoogleIcon() {
   return (
@@ -53,23 +55,21 @@ function SocialButton({
 }
 
 export function SocialButtons() {
-  async function google() {
-    const result = await lovable.auth.signInWithOAuth("google", {
-      redirect_uri: window.location.origin + "/onboarding",
-    });
-    if (result?.error) {
-      toast.error("Could not sign in with Google. Please try again.");
+  const navigate = useNavigate();
+
+  async function signIn(provider: "google" | "apple", label: string) {
+    try {
+      const outcome = await signInWithProvider(provider, window.location.origin + "/onboarding");
+      if (outcome === "redirected") return;
+      const profile = await getProfile();
+      navigate({ to: profile ? "/dashboard" : "/onboarding" });
+    } catch {
+      toast.error(`Could not sign in with ${label}. Please try again.`);
     }
   }
 
-  async function apple() {
-    const result = await lovable.auth.signInWithOAuth("apple", {
-      redirect_uri: window.location.origin + "/onboarding",
-    });
-    if (result?.error) {
-      toast.error("Could not sign in with Apple. Please try again.");
-    }
-  }
+  const google = () => signIn("google", "Google");
+  const apple = () => signIn("apple", "Apple");
 
   return (
     <div className="grid grid-cols-2 gap-3">

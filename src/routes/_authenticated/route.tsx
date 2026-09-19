@@ -1,12 +1,13 @@
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
-import { supabase } from "@/integrations/supabase/client";
+import { getSessionUser } from "@/lib/auth";
 
 export const Route = createFileRoute("/_authenticated")({
   ssr: false,
   beforeLoad: async () => {
-    const { data, error } = await supabase.auth.getUser();
-    if (error || !data.user) throw redirect({ to: "/auth" });
-    return { user: data.user };
+    // Supabase session, or the local mock account when VITE_MOCK_DATA=1.
+    const user = await getSessionUser();
+    if (!user) throw redirect({ to: "/auth" });
+    return { user };
   },
   component: () => <Outlet />,
 });

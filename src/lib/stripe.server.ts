@@ -8,12 +8,23 @@ const getEnv = (key: string): string => {
 
 export type StripeEnv = "sandbox" | "live";
 
+/**
+ * The Stripe environment the server trusts.
+ *
+ * This must NEVER come from the client. Both STRIPE_SANDBOX_API_KEY and
+ * STRIPE_LIVE_API_KEY live on the same worker, so a caller who could choose
+ * "sandbox" in production would complete a $0 test-mode checkout and receive a
+ * real entitlement. Defaults to sandbox so a missing value can never
+ * accidentally transact against live.
+ */
+export function getServerStripeEnv(): StripeEnv {
+  return process.env.PAYMENTS_ENVIRONMENT === "live" ? "live" : "sandbox";
+}
+
 const GATEWAY_STRIPE_BASE = "https://connector-gateway.lovable.dev/stripe";
 
 export function getConnectionApiKey(env: StripeEnv): string {
-  return env === "sandbox"
-    ? getEnv("STRIPE_SANDBOX_API_KEY")
-    : getEnv("STRIPE_LIVE_API_KEY");
+  return env === "sandbox" ? getEnv("STRIPE_SANDBOX_API_KEY") : getEnv("STRIPE_LIVE_API_KEY");
 }
 
 // Routes api.stripe.com requests through the connector gateway.

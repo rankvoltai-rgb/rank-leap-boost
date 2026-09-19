@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { Logo } from "./shared";
+import { PixelField } from "./Hero";
+import { FEATURES } from "@/data/features";
 
 // Client-only TrustBox: the Trustpilot script replaces the div's contents with
 // an iframe after load. Rendering it only after mount keeps SSR and client
@@ -28,15 +30,15 @@ function TrustBox() {
         className="trustpilot-widget"
         data-locale="en-US"
         data-template-id="56278e9abfbbba0bdcd568bc"
-        data-businessunit-id="rankvolt.top"
+        data-businessunit-id="rankbox.xyz"
         data-style-height="52px"
         data-style-width="100%"
       >
         <a
-          href="https://www.trustpilot.com/review/rankvolt.top"
+          href="https://www.trustpilot.com/review/rankbox.xyz"
           target="_blank"
           rel="noopener noreferrer"
-          className="text-xs text-muted-foreground hover:text-ink"
+          className="text-xs text-white/70 hover:text-white"
         >
           Trustpilot
         </a>
@@ -45,17 +47,12 @@ function TrustBox() {
   );
 }
 
+/* Landing-page sections; the footer is shared by every public page. Pricing
+   has its own page. */
 const PRODUCT_LINKS = [
-  { label: "How It Works", href: "#top" },
-  { label: "Pricing", href: "#pricing" },
-  { label: "Proof", href: "#proof" },
-] as const;
-
-const FEATURE_LINKS = [
-  "Growth Automation",
-  "Citation-Ready Writer",
-  "Answer-Space Research",
-  "Backlinks",
+  { label: "How It Works", to: "/", hash: "top" },
+  { label: "Pricing", to: "/pricing" },
+  { label: "Proof", to: "/", hash: "proof" },
 ] as const;
 
 const TOOL_LINKS = [
@@ -75,22 +72,23 @@ const LEGAL_LINKS = [
   { label: "Trust & Security", to: "/trust" },
 ] as const;
 
-const linkClass = "text-sm text-muted-foreground transition-colors hover:text-ink";
+const linkClass = "text-sm text-white/70 transition-colors hover:text-white";
 
 export function Footer() {
   return (
-    <footer className="border-t border-border bg-card">
-      <div className="mx-auto max-w-6xl px-5 py-14">
+    <footer className="relative overflow-hidden bg-brand-blue text-white">
+      <PixelField seed={5} />
+      <div className="relative mx-auto max-w-6xl px-5 py-14">
         <div className="grid gap-10 md:grid-cols-[1.5fr_repeat(4,1fr)]">
           <div>
-            <Logo />
-            <p className="mt-4 max-w-xs text-sm leading-relaxed text-muted-foreground">
+            <Logo inverted />
+            <p className="mt-4 max-w-xs text-sm leading-relaxed text-white/70">
               The AI search growth engine for founders. Daily published articles engineered
               to get you cited by AI and ranked on Google.
             </p>
           </div>
           <div>
-            <p className="text-sm font-semibold text-ink">Product</p>
+            <p className="text-sm font-semibold text-white">Product</p>
             <ul className="mt-3 space-y-2">
               <li>
                 <Link to="/blog" className={linkClass}>
@@ -99,28 +97,28 @@ export function Footer() {
               </li>
               {PRODUCT_LINKS.map((l) => (
                 <li key={l.label}>
-                  <a href={l.href} className={linkClass}>
+                  <Link to={l.to} hash={"hash" in l ? l.hash : undefined} className={linkClass}>
                     {l.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
           </div>
           <div>
-            <p className="text-sm font-semibold text-ink">Features</p>
+            <p className="text-sm font-semibold text-white">Features</p>
             <ul className="mt-3 space-y-2">
-              {FEATURE_LINKS.map((label) => (
-                <li key={label}>
-                  <a href="#top" className={linkClass}>
-                    {label}
-                  </a>
+              {FEATURES.map((f) => (
+                <li key={f.slug}>
+                  <Link to="/features/$slug" params={{ slug: f.slug }} className={linkClass}>
+                    {f.name}
+                  </Link>
                 </li>
               ))}
             </ul>
           </div>
 
           <div>
-            <p className="text-sm font-semibold text-ink">Free Tools</p>
+            <p className="text-sm font-semibold text-white">Free Tools</p>
             <ul className="mt-3 space-y-2">
               <li>
                 <Link to="/tools" className={linkClass}>
@@ -138,7 +136,7 @@ export function Footer() {
           </div>
 
           <div>
-            <p className="text-sm font-semibold text-ink">Legal</p>
+            <p className="text-sm font-semibold text-white">Legal</p>
             <ul className="mt-3 space-y-2">
               {LEGAL_LINKS.map((l) => (
                 <li key={l.label}>
@@ -150,9 +148,9 @@ export function Footer() {
             </ul>
           </div>
         </div>
-        <div className="mt-12 flex flex-col items-center justify-between gap-3 border-t border-border pt-6 sm:flex-row">
-          <p className="text-xs text-muted-foreground">© 2026 Rankvolt. All rights reserved.</p>
-          <p className="text-xs text-muted-foreground">Built to be the answer on Google &amp; AI search.</p>
+        <div className="mt-12 flex flex-col items-center justify-between gap-3 border-t border-white/15 pt-6 sm:flex-row">
+          <p className="text-xs text-white/60">© 2026 Rankbox. All rights reserved.</p>
+          <p className="text-xs text-white/60">Built to be the answer on Google &amp; AI search.</p>
         </div>
         {/* TrustBox widget (client-only) */}
         <TrustBox />
