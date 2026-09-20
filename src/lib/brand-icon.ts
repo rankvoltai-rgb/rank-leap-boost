@@ -36,3 +36,19 @@ export function brandIconUrl(domain: string): string | null {
   const host = hostnameFrom(domain);
   return host ? `https://icons.duckduckgo.com/ip3/${encodeURIComponent(host)}.ico` : null;
 }
+
+/**
+ * Icon URL sized for display on a tile, or null if the input is not a usable
+ * hostname.
+ *
+ * The DuckDuckGo service above serves whatever .ico the site happens to
+ * publish — usually 16 or 32px, which is fine inside a text input but visibly
+ * soft on a 48px comparison-page lockup at 2x. Google's endpoint takes an
+ * explicit size and upscales from the best source it has, so it is the better
+ * choice wherever the mark is a design element rather than an affordance.
+ */
+export function brandIconUrlAt(domain: string, size: 32 | 64 | 128 | 256): string | null {
+  const host = hostnameFrom(domain);
+  if (!host) return null;
+  return `https://www.google.com/s2/favicons?domain=${encodeURIComponent(host)}&sz=${size}`;
+}

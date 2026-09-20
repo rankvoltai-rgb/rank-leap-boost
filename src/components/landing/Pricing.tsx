@@ -3,14 +3,21 @@ import { Reveal, Eyebrow, Stars } from "./shared";
 import { BrandTile } from "./used-by";
 import { BRANDS } from "@/data/brands";
 import { PLAN, TRIAL_DAYS, formatUsd } from "@/data/pricing";
-import { BingMark, ChatGPTMark, ClaudeMark, GeminiMark, GoogleMark, PerplexityMark } from "./ai-logos";
+import {
+  BingMark,
+  ChatGPTMark,
+  ClaudeMark,
+  GeminiMark,
+  GoogleMark,
+  PerplexityMark,
+} from "./ai-logos";
 
 const INCLUDED = [
   "Answer-space research plan",
   "30 GEO/SEO articles (1 daily)",
   "2,500+ word, source-backed articles",
   "Auto-publish to your website",
-  "30 authority backlink credits monthly",
+  "30 backlink credits monthly, once you're on the paid plan",
   "Auto images, links & promotion",
   "Unlimited rewrites & team members",
 ];
@@ -82,7 +89,9 @@ export function Pricing() {
               </ul>
 
               <div className="mt-6 border-t border-border pt-5">
-                <p className="mb-3 text-xs text-muted-foreground">Optimized for all major search platforms</p>
+                <p className="mb-3 text-xs text-muted-foreground">
+                  Optimized for all major search platforms
+                </p>
                 <div className="flex flex-wrap gap-2">
                   {PLATFORMS.map(({ name, Mark }) => (
                     <span
@@ -102,7 +111,10 @@ export function Pricing() {
           {/* Highlights + social proof */}
           <Reveal delay={0.08} className="flex flex-col gap-4">
             {HIGHLIGHTS.map((h) => (
-              <div key={h[0]} className="flex items-start gap-3 rounded-2xl border border-border bg-card p-5">
+              <div
+                key={h[0]}
+                className="flex items-start gap-3 rounded-2xl border border-border bg-card p-5"
+              >
                 <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand-blue/10 text-brand-blue">
                   <Check className="h-4 w-4" />
                 </span>

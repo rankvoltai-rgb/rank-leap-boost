@@ -13,6 +13,7 @@
 import * as real from "@/lib/api";
 import * as mock from "@/lib/mock/store";
 import * as mockAi from "@/lib/mock/ai";
+import * as mockExchange from "@/lib/mock/exchange";
 import { IS_MOCK } from "@/lib/mock/mode";
 import { getSessionUser } from "@/lib/auth";
 import type {
@@ -27,6 +28,10 @@ import * as localDraft from "@/lib/onboarding-draft";
 import type { DraftKeyword, DraftTitle } from "@/lib/mock/fixtures";
 import type { ContentPlanInput, PlannedArticle, SiteAnalysis, SiteMeta } from "@/lib/site-meta";
 import type { Entitlement, OnboardingDraft } from "@/lib/mock/store";
+import type {
+  ExchangeSettingsPatch as ExchangeSettingsPatchInput,
+  TargetInput as TargetInputData,
+} from "@/lib/exchange/types";
 
 export { IS_MOCK };
 
@@ -248,6 +253,132 @@ export async function revokeApiKey(data: { id: string }) {
 export const connectIntegration: (name?: string) => Promise<unknown> = IS_MOCK
   ? mock.connectIntegration
   : () => phaseTwo("connectIntegration");
+
+/* ---------- backlink exchange ---------- */
+
+export type {
+  ExchangeAccess,
+  ExchangeBalance,
+  ExchangeBlock,
+  ExchangeOverview,
+  ExchangeSettingsPatch,
+  ExchangeSite,
+  ExchangeTarget,
+  HostedPlacement,
+  InboundPlacement,
+  LedgerEntry,
+  NetworkPulse,
+  PlacementStatus,
+  TargetInput,
+  VerificationResult,
+} from "@/lib/exchange/types";
+export { EXCHANGE_CATEGORIES, tierCost } from "@/lib/exchange/types";
+
+/**
+ * Paid members only. Every read and write is a server function acting with
+ * the service role — placements name both parties, so members have no direct
+ * table access. Mock mode runs the same scoring against a synthetic network.
+ */
+export async function getExchangeOverview() {
+  if (IS_MOCK) return mockExchange.getExchangeOverview();
+  const { getExchangeOverview: fn } = await import("@/lib/exchange.functions");
+  return fn();
+}
+
+export async function listExchangeTargets() {
+  if (IS_MOCK) return mockExchange.listTargets();
+  const { listTargets: fn } = await import("@/lib/exchange.functions");
+  return fn();
+}
+
+export async function listInboundPlacements() {
+  if (IS_MOCK) return mockExchange.listInboundPlacements();
+  const { listInboundPlacements: fn } = await import("@/lib/exchange.functions");
+  return fn();
+}
+
+export async function listHostedPlacements() {
+  if (IS_MOCK) return mockExchange.listHostedPlacements();
+  const { listHostedPlacements: fn } = await import("@/lib/exchange.functions");
+  return fn();
+}
+
+export async function listExchangeLedger() {
+  if (IS_MOCK) return mockExchange.listExchangeLedger();
+  const { listExchangeLedger: fn } = await import("@/lib/exchange.functions");
+  return fn();
+}
+
+export async function listExchangeBlocks() {
+  if (IS_MOCK) return mockExchange.listExchangeBlocks();
+  const { listExchangeBlocks: fn } = await import("@/lib/exchange.functions");
+  return fn();
+}
+
+export async function startDomainVerification(data: { domain: string }) {
+  if (IS_MOCK) return mockExchange.startDomainVerification(data);
+  const { startDomainVerification: fn } = await import("@/lib/exchange.functions");
+  return fn({ data });
+}
+
+export async function checkDomainVerification() {
+  if (IS_MOCK) return mockExchange.checkDomainVerification();
+  const { checkDomainVerification: fn } = await import("@/lib/exchange.functions");
+  return fn();
+}
+
+export async function updateExchangeSettings(data: ExchangeSettingsPatchInput) {
+  if (IS_MOCK) return mockExchange.updateExchangeSettings(data);
+  const { updateExchangeSettings: fn } = await import("@/lib/exchange.functions");
+  return fn({ data });
+}
+
+export async function createExchangeTarget(data: TargetInputData) {
+  if (IS_MOCK) return mockExchange.createTarget(data);
+  const { createTarget: fn } = await import("@/lib/exchange.functions");
+  return fn({ data });
+}
+
+export async function updateExchangeTarget(data: { id: string; patch: Partial<TargetInputData> }) {
+  if (IS_MOCK) return mockExchange.updateTarget(data);
+  const { updateTarget: fn } = await import("@/lib/exchange.functions");
+  return fn({ data });
+}
+
+export async function deleteExchangeTarget(data: { id: string }) {
+  if (IS_MOCK) return mockExchange.deleteTarget(data);
+  const { deleteTarget: fn } = await import("@/lib/exchange.functions");
+  return fn({ data });
+}
+
+export async function blockExchangeDomain(data: { domain: string; reason?: string }) {
+  if (IS_MOCK) return mockExchange.blockDomain(data);
+  const { blockDomain: fn } = await import("@/lib/exchange.functions");
+  return fn({ data });
+}
+
+export async function unblockExchangeDomain(data: { domain: string }) {
+  if (IS_MOCK) return mockExchange.unblockDomain(data);
+  const { unblockDomain: fn } = await import("@/lib/exchange.functions");
+  return fn({ data });
+}
+
+export async function removeHostedPlacement(data: { id: string }) {
+  if (IS_MOCK) return mockExchange.removeHostedPlacement(data);
+  const { removeHostedPlacement: fn } = await import("@/lib/exchange.functions");
+  return fn({ data });
+}
+
+export async function setPublishedUrl(data: { blogId: string; url: string }) {
+  if (IS_MOCK) return mockExchange.setPublishedUrl(data);
+  const { setPublishedUrl: fn } = await import("@/lib/exchange.functions");
+  return fn({ data });
+}
+
+/** Mock-only: stands in for the first paid invoice. A no-op in real mode. */
+export const simulatePaidPlan: () => Promise<void> = IS_MOCK
+  ? mockExchange.simulatePaidPlan
+  : async () => undefined;
 
 /* ---------- mock-only utilities ---------- */
 

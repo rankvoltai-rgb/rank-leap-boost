@@ -646,6 +646,17 @@ export async function generateBlogArticle(blog: Blog): Promise<Blog> {
     throw err;
   }
 
+  // Hosting is opt-in: when this member takes part in the exchange, the best
+  // network target for this article gets its link, as the server would do.
+  const { hostLinkForArticle } = await import("./exchange");
+  const body = hostLinkForArticle({
+    id: blog.id,
+    title: article.title || blog.title,
+    keyword: blog.keyword,
+    tags: article.tags,
+    body: article.body,
+  });
+
   mutate((st) => {
     const i = st.blogs.findIndex((b) => b.id === blog.id);
     if (i >= 0) {
@@ -653,7 +664,7 @@ export async function generateBlogArticle(blog: Blog): Promise<Blog> {
         ...st.blogs[i],
         status: "finished",
         title: article.title || st.blogs[i].title,
-        body: article.body,
+        body,
         description: article.description || st.blogs[i].description,
         tags: article.tags.length ? article.tags : st.blogs[i].tags,
         seo_score: article.seo_score,

@@ -18,9 +18,12 @@ import { Route as LegalRouteImport } from './routes/legal'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as UseCasesIndexRouteImport } from './routes/use-cases.index'
 import { Route as ToolsIndexRouteImport } from './routes/tools.index'
 import { Route as FeaturesIndexRouteImport } from './routes/features.index'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
+import { Route as AlternativesIndexRouteImport } from './routes/alternatives.index'
+import { Route as UseCasesSlugRouteImport } from './routes/use-cases.$slug'
 import { Route as ToolsSlugRouteImport } from './routes/tools.$slug'
 import { Route as LegalTermsRouteImport } from './routes/legal.terms'
 import { Route as LegalRefundsRouteImport } from './routes/legal.refunds'
@@ -30,6 +33,7 @@ import { Route as LegalCookiesRouteImport } from './routes/legal.cookies'
 import { Route as LegalAcceptableUseRouteImport } from './routes/legal.acceptable-use'
 import { Route as FeaturesSlugRouteImport } from './routes/features.$slug'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
+import { Route as AlternativesSlugRouteImport } from './routes/alternatives.$slug'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
@@ -40,10 +44,12 @@ import { Route as AuthenticatedDashboardIntegrationsRouteImport } from './routes
 import { Route as AuthenticatedDashboardCalendarRouteImport } from './routes/_authenticated/dashboard.calendar'
 import { Route as AuthenticatedDashboardBlogEngineRouteImport } from './routes/_authenticated/dashboard.blog-engine'
 import { Route as AuthenticatedDashboardBillingRouteImport } from './routes/_authenticated/dashboard.billing'
+import { Route as AuthenticatedDashboardBacklinksRouteImport } from './routes/_authenticated/dashboard.backlinks'
 import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
 import { Route as ApiPublicV1PingRouteImport } from './routes/api/public/v1/ping'
 import { Route as ApiPublicV1ArticlesRouteImport } from './routes/api/public/v1/articles'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
+import { Route as ApiPublicHooksExchangeRunRouteImport } from './routes/api/public/hooks/exchange-run'
 import { Route as ApiPublicHooksAutopilotRunRouteImport } from './routes/api/public/hooks/autopilot-run'
 import { Route as AuthenticatedDashboardEditorBlogIdRouteImport } from './routes/_authenticated/dashboard.editor.$blogId'
 import { Route as ApiPublicV1ArticlesIdRouteImport } from './routes/api/public/v1/articles.$id'
@@ -92,6 +98,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const UseCasesIndexRoute = UseCasesIndexRouteImport.update({
+  id: '/use-cases/',
+  path: '/use-cases/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ToolsIndexRoute = ToolsIndexRouteImport.update({
   id: '/tools/',
   path: '/tools/',
@@ -105,6 +116,16 @@ const FeaturesIndexRoute = FeaturesIndexRouteImport.update({
 const BlogIndexRoute = BlogIndexRouteImport.update({
   id: '/blog/',
   path: '/blog/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AlternativesIndexRoute = AlternativesIndexRouteImport.update({
+  id: '/alternatives/',
+  path: '/alternatives/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UseCasesSlugRoute = UseCasesSlugRouteImport.update({
+  id: '/use-cases/$slug',
+  path: '/use-cases/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ToolsSlugRoute = ToolsSlugRouteImport.update({
@@ -150,6 +171,11 @@ const FeaturesSlugRoute = FeaturesSlugRouteImport.update({
 const BlogSlugRoute = BlogSlugRouteImport.update({
   id: '/blog/$slug',
   path: '/blog/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AlternativesSlugRoute = AlternativesSlugRouteImport.update({
+  id: '/alternatives/$slug',
+  path: '/alternatives/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
@@ -211,6 +237,12 @@ const AuthenticatedDashboardBillingRoute =
     path: '/billing',
     getParentRoute: () => AuthenticatedDashboardRoute,
   } as any)
+const AuthenticatedDashboardBacklinksRoute =
+  AuthenticatedDashboardBacklinksRouteImport.update({
+    id: '/backlinks',
+    path: '/backlinks',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
 const Char91DotmcpChar93InvokeToolToolRoute =
   Char91DotmcpChar93InvokeToolToolRouteImport.update({
     id: '/.mcp/invoke-tool/$tool',
@@ -231,6 +263,12 @@ const ApiPublicPaymentsWebhookRoute =
   ApiPublicPaymentsWebhookRouteImport.update({
     id: '/api/public/payments/webhook',
     path: '/api/public/payments/webhook',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicHooksExchangeRunRoute =
+  ApiPublicHooksExchangeRunRouteImport.update({
+    id: '/api/public/hooks/exchange-run',
+    path: '/api/public/hooks/exchange-run',
     getParentRoute: () => rootRouteImport,
   } as any)
 const ApiPublicHooksAutopilotRunRoute =
@@ -263,6 +301,7 @@ export interface FileRoutesByFullPath {
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/dashboard': typeof AuthenticatedDashboardRouteWithChildren
+  '/alternatives/$slug': typeof AlternativesSlugRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/features/$slug': typeof FeaturesSlugRoute
   '/legal/acceptable-use': typeof LegalAcceptableUseRoute
@@ -272,10 +311,14 @@ export interface FileRoutesByFullPath {
   '/legal/refunds': typeof LegalRefundsRoute
   '/legal/terms': typeof LegalTermsRoute
   '/tools/$slug': typeof ToolsSlugRoute
+  '/use-cases/$slug': typeof UseCasesSlugRoute
+  '/alternatives/': typeof AlternativesIndexRoute
   '/blog/': typeof BlogIndexRoute
   '/features/': typeof FeaturesIndexRoute
   '/tools/': typeof ToolsIndexRoute
+  '/use-cases/': typeof UseCasesIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
+  '/dashboard/backlinks': typeof AuthenticatedDashboardBacklinksRoute
   '/dashboard/billing': typeof AuthenticatedDashboardBillingRoute
   '/dashboard/blog-engine': typeof AuthenticatedDashboardBlogEngineRoute
   '/dashboard/calendar': typeof AuthenticatedDashboardCalendarRoute
@@ -285,6 +328,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/': typeof AuthenticatedDashboardIndexRoute
   '/dashboard/editor/$blogId': typeof AuthenticatedDashboardEditorBlogIdRoute
   '/api/public/hooks/autopilot-run': typeof ApiPublicHooksAutopilotRunRoute
+  '/api/public/hooks/exchange-run': typeof ApiPublicHooksExchangeRunRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/api/public/v1/articles': typeof ApiPublicV1ArticlesRouteWithChildren
   '/api/public/v1/ping': typeof ApiPublicV1PingRoute
@@ -301,6 +345,7 @@ export interface FileRoutesByTo {
   '/trust': typeof TrustRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
+  '/alternatives/$slug': typeof AlternativesSlugRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/features/$slug': typeof FeaturesSlugRoute
   '/legal/acceptable-use': typeof LegalAcceptableUseRoute
@@ -310,10 +355,14 @@ export interface FileRoutesByTo {
   '/legal/refunds': typeof LegalRefundsRoute
   '/legal/terms': typeof LegalTermsRoute
   '/tools/$slug': typeof ToolsSlugRoute
+  '/use-cases/$slug': typeof UseCasesSlugRoute
+  '/alternatives': typeof AlternativesIndexRoute
   '/blog': typeof BlogIndexRoute
   '/features': typeof FeaturesIndexRoute
   '/tools': typeof ToolsIndexRoute
+  '/use-cases': typeof UseCasesIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
+  '/dashboard/backlinks': typeof AuthenticatedDashboardBacklinksRoute
   '/dashboard/billing': typeof AuthenticatedDashboardBillingRoute
   '/dashboard/blog-engine': typeof AuthenticatedDashboardBlogEngineRoute
   '/dashboard/calendar': typeof AuthenticatedDashboardCalendarRoute
@@ -323,6 +372,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AuthenticatedDashboardIndexRoute
   '/dashboard/editor/$blogId': typeof AuthenticatedDashboardEditorBlogIdRoute
   '/api/public/hooks/autopilot-run': typeof ApiPublicHooksAutopilotRunRoute
+  '/api/public/hooks/exchange-run': typeof ApiPublicHooksExchangeRunRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/api/public/v1/articles': typeof ApiPublicV1ArticlesRouteWithChildren
   '/api/public/v1/ping': typeof ApiPublicV1PingRoute
@@ -342,6 +392,7 @@ export interface FileRoutesById {
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRouteWithChildren
+  '/alternatives/$slug': typeof AlternativesSlugRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/features/$slug': typeof FeaturesSlugRoute
   '/legal/acceptable-use': typeof LegalAcceptableUseRoute
@@ -351,10 +402,14 @@ export interface FileRoutesById {
   '/legal/refunds': typeof LegalRefundsRoute
   '/legal/terms': typeof LegalTermsRoute
   '/tools/$slug': typeof ToolsSlugRoute
+  '/use-cases/$slug': typeof UseCasesSlugRoute
+  '/alternatives/': typeof AlternativesIndexRoute
   '/blog/': typeof BlogIndexRoute
   '/features/': typeof FeaturesIndexRoute
   '/tools/': typeof ToolsIndexRoute
+  '/use-cases/': typeof UseCasesIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
+  '/_authenticated/dashboard/backlinks': typeof AuthenticatedDashboardBacklinksRoute
   '/_authenticated/dashboard/billing': typeof AuthenticatedDashboardBillingRoute
   '/_authenticated/dashboard/blog-engine': typeof AuthenticatedDashboardBlogEngineRoute
   '/_authenticated/dashboard/calendar': typeof AuthenticatedDashboardCalendarRoute
@@ -364,6 +419,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/': typeof AuthenticatedDashboardIndexRoute
   '/_authenticated/dashboard/editor/$blogId': typeof AuthenticatedDashboardEditorBlogIdRoute
   '/api/public/hooks/autopilot-run': typeof ApiPublicHooksAutopilotRunRoute
+  '/api/public/hooks/exchange-run': typeof ApiPublicHooksExchangeRunRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/api/public/v1/articles': typeof ApiPublicV1ArticlesRouteWithChildren
   '/api/public/v1/ping': typeof ApiPublicV1PingRoute
@@ -383,6 +439,7 @@ export interface FileRouteTypes {
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
     | '/dashboard'
+    | '/alternatives/$slug'
     | '/blog/$slug'
     | '/features/$slug'
     | '/legal/acceptable-use'
@@ -392,10 +449,14 @@ export interface FileRouteTypes {
     | '/legal/refunds'
     | '/legal/terms'
     | '/tools/$slug'
+    | '/use-cases/$slug'
+    | '/alternatives/'
     | '/blog/'
     | '/features/'
     | '/tools/'
+    | '/use-cases/'
     | '/.mcp/invoke-tool/$tool'
+    | '/dashboard/backlinks'
     | '/dashboard/billing'
     | '/dashboard/blog-engine'
     | '/dashboard/calendar'
@@ -405,6 +466,7 @@ export interface FileRouteTypes {
     | '/dashboard/'
     | '/dashboard/editor/$blogId'
     | '/api/public/hooks/autopilot-run'
+    | '/api/public/hooks/exchange-run'
     | '/api/public/payments/webhook'
     | '/api/public/v1/articles'
     | '/api/public/v1/ping'
@@ -421,6 +483,7 @@ export interface FileRouteTypes {
     | '/trust'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
+    | '/alternatives/$slug'
     | '/blog/$slug'
     | '/features/$slug'
     | '/legal/acceptable-use'
@@ -430,10 +493,14 @@ export interface FileRouteTypes {
     | '/legal/refunds'
     | '/legal/terms'
     | '/tools/$slug'
+    | '/use-cases/$slug'
+    | '/alternatives'
     | '/blog'
     | '/features'
     | '/tools'
+    | '/use-cases'
     | '/.mcp/invoke-tool/$tool'
+    | '/dashboard/backlinks'
     | '/dashboard/billing'
     | '/dashboard/blog-engine'
     | '/dashboard/calendar'
@@ -443,6 +510,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/dashboard/editor/$blogId'
     | '/api/public/hooks/autopilot-run'
+    | '/api/public/hooks/exchange-run'
     | '/api/public/payments/webhook'
     | '/api/public/v1/articles'
     | '/api/public/v1/ping'
@@ -461,6 +529,7 @@ export interface FileRouteTypes {
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
     | '/_authenticated/dashboard'
+    | '/alternatives/$slug'
     | '/blog/$slug'
     | '/features/$slug'
     | '/legal/acceptable-use'
@@ -470,10 +539,14 @@ export interface FileRouteTypes {
     | '/legal/refunds'
     | '/legal/terms'
     | '/tools/$slug'
+    | '/use-cases/$slug'
+    | '/alternatives/'
     | '/blog/'
     | '/features/'
     | '/tools/'
+    | '/use-cases/'
     | '/.mcp/invoke-tool/$tool'
+    | '/_authenticated/dashboard/backlinks'
     | '/_authenticated/dashboard/billing'
     | '/_authenticated/dashboard/blog-engine'
     | '/_authenticated/dashboard/calendar'
@@ -483,6 +556,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/'
     | '/_authenticated/dashboard/editor/$blogId'
     | '/api/public/hooks/autopilot-run'
+    | '/api/public/hooks/exchange-run'
     | '/api/public/payments/webhook'
     | '/api/public/v1/articles'
     | '/api/public/v1/ping'
@@ -501,14 +575,19 @@ export interface RootRouteChildren {
   TrustRoute: typeof TrustRoute
   Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
+  AlternativesSlugRoute: typeof AlternativesSlugRoute
   BlogSlugRoute: typeof BlogSlugRoute
   FeaturesSlugRoute: typeof FeaturesSlugRoute
   ToolsSlugRoute: typeof ToolsSlugRoute
+  UseCasesSlugRoute: typeof UseCasesSlugRoute
+  AlternativesIndexRoute: typeof AlternativesIndexRoute
   BlogIndexRoute: typeof BlogIndexRoute
   FeaturesIndexRoute: typeof FeaturesIndexRoute
   ToolsIndexRoute: typeof ToolsIndexRoute
+  UseCasesIndexRoute: typeof UseCasesIndexRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
   ApiPublicHooksAutopilotRunRoute: typeof ApiPublicHooksAutopilotRunRoute
+  ApiPublicHooksExchangeRunRoute: typeof ApiPublicHooksExchangeRunRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
   ApiPublicV1ArticlesRoute: typeof ApiPublicV1ArticlesRouteWithChildren
   ApiPublicV1PingRoute: typeof ApiPublicV1PingRoute
@@ -579,6 +658,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/use-cases/': {
+      id: '/use-cases/'
+      path: '/use-cases'
+      fullPath: '/use-cases/'
+      preLoaderRoute: typeof UseCasesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/tools/': {
       id: '/tools/'
       path: '/tools'
@@ -598,6 +684,20 @@ declare module '@tanstack/react-router' {
       path: '/blog'
       fullPath: '/blog/'
       preLoaderRoute: typeof BlogIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/alternatives/': {
+      id: '/alternatives/'
+      path: '/alternatives'
+      fullPath: '/alternatives/'
+      preLoaderRoute: typeof AlternativesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/use-cases/$slug': {
+      id: '/use-cases/$slug'
+      path: '/use-cases/$slug'
+      fullPath: '/use-cases/$slug'
+      preLoaderRoute: typeof UseCasesSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/tools/$slug': {
@@ -661,6 +761,13 @@ declare module '@tanstack/react-router' {
       path: '/blog/$slug'
       fullPath: '/blog/$slug'
       preLoaderRoute: typeof BlogSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/alternatives/$slug': {
+      id: '/alternatives/$slug'
+      path: '/alternatives/$slug'
+      fullPath: '/alternatives/$slug'
+      preLoaderRoute: typeof AlternativesSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/dashboard': {
@@ -733,6 +840,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardBillingRouteImport
       parentRoute: typeof AuthenticatedDashboardRoute
     }
+    '/_authenticated/dashboard/backlinks': {
+      id: '/_authenticated/dashboard/backlinks'
+      path: '/backlinks'
+      fullPath: '/dashboard/backlinks'
+      preLoaderRoute: typeof AuthenticatedDashboardBacklinksRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
     '/.mcp/invoke-tool/$tool': {
       id: '/.mcp/invoke-tool/$tool'
       path: '/.mcp/invoke-tool/$tool'
@@ -761,6 +875,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicPaymentsWebhookRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/hooks/exchange-run': {
+      id: '/api/public/hooks/exchange-run'
+      path: '/api/public/hooks/exchange-run'
+      fullPath: '/api/public/hooks/exchange-run'
+      preLoaderRoute: typeof ApiPublicHooksExchangeRunRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/hooks/autopilot-run': {
       id: '/api/public/hooks/autopilot-run'
       path: '/api/public/hooks/autopilot-run'
@@ -786,6 +907,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedDashboardRouteChildren {
+  AuthenticatedDashboardBacklinksRoute: typeof AuthenticatedDashboardBacklinksRoute
   AuthenticatedDashboardBillingRoute: typeof AuthenticatedDashboardBillingRoute
   AuthenticatedDashboardBlogEngineRoute: typeof AuthenticatedDashboardBlogEngineRoute
   AuthenticatedDashboardCalendarRoute: typeof AuthenticatedDashboardCalendarRoute
@@ -798,6 +920,7 @@ interface AuthenticatedDashboardRouteChildren {
 
 const AuthenticatedDashboardRouteChildren: AuthenticatedDashboardRouteChildren =
   {
+    AuthenticatedDashboardBacklinksRoute: AuthenticatedDashboardBacklinksRoute,
     AuthenticatedDashboardBillingRoute: AuthenticatedDashboardBillingRoute,
     AuthenticatedDashboardBlogEngineRoute:
       AuthenticatedDashboardBlogEngineRoute,
@@ -872,14 +995,19 @@ const rootRouteChildren: RootRouteChildren = {
   Char91DotmcpChar93ListToolsRoute: Char91DotmcpChar93ListToolsRoute,
   Char91DotwellKnownChar93OauthProtectedResourceRoute:
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
+  AlternativesSlugRoute: AlternativesSlugRoute,
   BlogSlugRoute: BlogSlugRoute,
   FeaturesSlugRoute: FeaturesSlugRoute,
   ToolsSlugRoute: ToolsSlugRoute,
+  UseCasesSlugRoute: UseCasesSlugRoute,
+  AlternativesIndexRoute: AlternativesIndexRoute,
   BlogIndexRoute: BlogIndexRoute,
   FeaturesIndexRoute: FeaturesIndexRoute,
   ToolsIndexRoute: ToolsIndexRoute,
+  UseCasesIndexRoute: UseCasesIndexRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
   ApiPublicHooksAutopilotRunRoute: ApiPublicHooksAutopilotRunRoute,
+  ApiPublicHooksExchangeRunRoute: ApiPublicHooksExchangeRunRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
   ApiPublicV1ArticlesRoute: ApiPublicV1ArticlesRouteWithChildren,
   ApiPublicV1PingRoute: ApiPublicV1PingRoute,

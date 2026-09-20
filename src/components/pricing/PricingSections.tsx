@@ -225,7 +225,7 @@ export function PlanCard() {
               <Metric
                 value={String(PLAN.backlinkCreditsPerMonth)}
                 label="Authority backlink credits"
-                sub="Verified, dofollow links"
+                sub="Verified, dofollow · opens with your first invoice"
               />
             </div>
             <ul className="mt-6 space-y-3">
@@ -624,8 +624,8 @@ export function TheMath() {
             What {PLAN.articlesPerMonth} great articles a month really cost
           </h2>
           <p className="mt-4 text-balance text-lg text-muted-foreground">
-            Price it at your own rate. Then see everything else that comes with Rankbox, and what
-            it would take to get it anywhere else.
+            Price it at your own rate. Then see everything else that comes with Rankbox, and what it
+            would take to get it anywhere else.
           </p>
         </Reveal>
 

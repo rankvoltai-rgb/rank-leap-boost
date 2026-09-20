@@ -7,11 +7,14 @@ import {
   BookOpen,
   Wrench,
   FileText,
+  GitCompare,
   type LucideIcon,
 } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { Logo } from "./shared";
 import { FEATURES, FEATURE_GROUPS } from "@/data/features";
+import { COMPETITORS } from "@/data/alternatives";
+import { PERSONAS } from "@/data/personas";
 
 /* Sections of the landing page. The navbar is shared by every public page,
    so these always target "/" rather than a bare hash on the current page.
@@ -161,13 +164,13 @@ export function Navbar() {
             <div className="absolute left-1/2 top-full h-7 w-full -translate-x-1/2" aria-hidden />
             <div
               role="menu"
-              className={`fixed left-1/2 top-[4.25rem] w-[min(52rem,calc(100vw-2rem))] -translate-x-1/2 rounded-2xl border border-white/25 bg-brand-blue p-4 shadow-2xl shadow-brand-blue-deep/50 transition-all duration-200 ${
+              className={`fixed left-1/2 top-[4.25rem] w-[min(64rem,calc(100vw-2rem))] -translate-x-1/2 rounded-2xl border border-white/25 bg-brand-blue p-4 shadow-2xl shadow-brand-blue-deep/50 transition-all duration-200 ${
                 featuresOpen
                   ? "pointer-events-auto translate-y-0 opacity-100"
                   : "pointer-events-none -translate-y-1 opacity-0"
               }`}
             >
-              <div className="grid grid-cols-2 gap-x-4 gap-y-1 lg:grid-cols-[1fr_1fr_16rem]">
+              <div className="grid grid-cols-2 gap-x-4 gap-y-1 lg:grid-cols-[1fr_1fr_1fr_15rem]">
                 {FEATURE_GROUPS.map((group) => (
                   <div key={group}>
                     <MenuColumnLabel>{group}</MenuColumnLabel>
@@ -183,6 +186,26 @@ export function Navbar() {
                     ))}
                   </div>
                 ))}
+                <div>
+                  <MenuColumnLabel>Who it&rsquo;s for</MenuColumnLabel>
+                  {PERSONAS.map((p) => (
+                    <MenuItem
+                      key={p.slug}
+                      icon={p.icon}
+                      title={p.name}
+                      description={p.tagline}
+                      to="/use-cases/$slug"
+                      params={{ slug: p.slug }}
+                    />
+                  ))}
+                  <Link
+                    to="/use-cases"
+                    role="menuitem"
+                    className="block rounded-xl px-2.5 py-2 text-sm font-semibold text-white/80 transition-colors hover:bg-white/10 hover:text-white"
+                  >
+                    All use cases →
+                  </Link>
+                </div>
                 <MenuFeaturePanel />
               </div>
               <Link
@@ -217,31 +240,54 @@ export function Navbar() {
             <div className="absolute left-1/2 top-full h-3 w-full -translate-x-1/2" aria-hidden />
             <div
               role="menu"
-              className={`absolute left-1/2 top-[calc(100%+0.5rem)] w-72 -translate-x-1/2 rounded-2xl border border-white/25 bg-brand-blue p-3 shadow-2xl shadow-brand-blue-deep/50 transition-all duration-200 ${
+              className={`absolute left-1/2 top-[calc(100%+0.5rem)] w-[min(36rem,calc(100vw-2rem))] -translate-x-1/2 rounded-2xl border border-white/25 bg-brand-blue p-3 shadow-2xl shadow-brand-blue-deep/50 transition-all duration-200 ${
                 resourcesOpen
                   ? "pointer-events-auto translate-y-0 opacity-100"
                   : "pointer-events-none -translate-y-1 opacity-0"
               }`}
             >
-              <MenuColumnLabel>Learn</MenuColumnLabel>
-              <MenuItem
-                icon={BookOpen}
-                title="Blog"
-                description="Guides & GEO playbooks"
-                to="/blog"
-              />
-              <MenuItem
-                icon={Wrench}
-                title="Free Tools"
-                description="llms.txt, schema & more"
-                to="/tools"
-              />
-              <MenuItem
-                icon={FileText}
-                title="Sample Output"
-                description="Example AI articles"
-                href="/#examples"
-              />
+              <div className="grid grid-cols-2 gap-x-3">
+                <div>
+                  <MenuColumnLabel>Learn</MenuColumnLabel>
+                  <MenuItem
+                    icon={BookOpen}
+                    title="Blog"
+                    description="Guides & GEO playbooks"
+                    to="/blog"
+                  />
+                  <MenuItem
+                    icon={Wrench}
+                    title="Free Tools"
+                    description="llms.txt, schema & more"
+                    to="/tools"
+                  />
+                  <MenuItem
+                    icon={FileText}
+                    title="Sample Output"
+                    description="Example AI articles"
+                    href="/#examples"
+                  />
+                </div>
+                <div>
+                  <MenuColumnLabel>Compare</MenuColumnLabel>
+                  <MenuItem
+                    icon={GitCompare}
+                    title="All comparisons"
+                    description="Honest side-by-sides"
+                    to="/alternatives"
+                  />
+                  {COMPETITORS.map((c) => (
+                    <MenuItem
+                      key={c.slug}
+                      icon={GitCompare}
+                      title={`vs ${c.name}`}
+                      description={c.category}
+                      to="/alternatives/$slug"
+                      params={{ slug: c.slug }}
+                    />
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
           {LINKS.map((l) => (
@@ -315,6 +361,32 @@ export function Navbar() {
                 >
                   View all features →
                 </Link>
+                {/* Labelled, or "For marketers" reads as a ninth feature. */}
+                <p className="mt-3 px-2 pb-1 text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-white/60">
+                  Who it&rsquo;s for
+                </p>
+                {PERSONAS.map((p) => {
+                  const Icon = p.icon;
+                  return (
+                    <Link
+                      key={p.slug}
+                      to="/use-cases/$slug"
+                      params={{ slug: p.slug }}
+                      onClick={() => setOpen(false)}
+                      className="flex items-center gap-2.5 rounded-lg px-2 py-2 text-sm text-white/80 hover:bg-white/10 hover:text-white"
+                    >
+                      <Icon className="h-4 w-4 shrink-0" />
+                      For {p.nameLower}
+                    </Link>
+                  );
+                })}
+                <Link
+                  to="/use-cases"
+                  onClick={() => setOpen(false)}
+                  className="rounded-lg px-2 py-2 text-sm font-semibold text-white hover:bg-white/10"
+                >
+                  All use cases →
+                </Link>
               </div>
             )}
             <button
@@ -351,6 +423,24 @@ export function Navbar() {
                 >
                   Sample Output
                 </a>
+                <Link
+                  to="/alternatives"
+                  onClick={() => setOpen(false)}
+                  className="rounded-lg px-2 py-2 text-sm text-white/80 hover:bg-white/10 hover:text-white"
+                >
+                  Comparisons
+                </Link>
+                {COMPETITORS.map((c) => (
+                  <Link
+                    key={c.slug}
+                    to="/alternatives/$slug"
+                    params={{ slug: c.slug }}
+                    onClick={() => setOpen(false)}
+                    className="rounded-lg px-2 py-2 pl-4 text-sm text-white/70 hover:bg-white/10 hover:text-white"
+                  >
+                    vs {c.name}
+                  </Link>
+                ))}
               </div>
             )}
             {LINKS.map((l) => (

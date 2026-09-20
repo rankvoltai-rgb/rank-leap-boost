@@ -1,12 +1,13 @@
 // Shared helpers for the Rankbox public publishing API (/api/public/v1/*).
-// These endpoints are key-authenticated and read-only; they are consumed by
-// CMS plugins (Framer, Shopify, WordPress) that pull a user's finished articles.
+// These endpoints are key-authenticated; they are consumed by CMS plugins
+// (Framer, Shopify, WordPress) that pull a user's finished articles, and that
+// may report back where each one was published (PATCH /articles/:id).
 import { markdownToHtml } from "@/lib/markdown";
 import { articleSlug } from "@/lib/api-keys.server";
 
 export const API_CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "GET, OPTIONS",
+  "Access-Control-Allow-Methods": "GET, PATCH, OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Api-Key",
   "Access-Control-Max-Age": "86400",
 } as const;
@@ -20,6 +21,10 @@ export function jsonResponse(body: unknown, status = 200): Response {
 
 export function corsPreflight(): Response {
   return new Response(null, { status: 204, headers: API_CORS_HEADERS });
+}
+
+export function badRequest(message: string): Response {
+  return jsonResponse({ error: message }, 400);
 }
 
 export function unauthorized(): Response {
@@ -50,9 +55,15 @@ export interface PublishedArticle {
   body_html: string;
   tags: string[];
   seo_score: number;
+  /** Where the plugin published it, once reported — see PATCH /articles/:id. */
+  published_url: string | null;
   published_at: string;
   updated_at: string;
 }
+
+/** The columns every article endpoint selects. */
+export const ARTICLE_COLUMNS =
+  "id, title, description, body, tags, seo_score, published_url, created_at, updated_at";
 
 interface BlogRow {
   id: string;
@@ -61,6 +72,7 @@ interface BlogRow {
   body: string | null;
   tags: string[] | null;
   seo_score: number | null;
+  published_url?: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -77,6 +89,7 @@ export function serializeArticle(row: BlogRow): PublishedArticle {
     body_html: markdownToHtml(body),
     tags: row.tags ?? [],
     seo_score: row.seo_score ?? 0,
+    published_url: row.published_url ?? null,
     published_at: row.updated_at,
     updated_at: row.updated_at,
   };

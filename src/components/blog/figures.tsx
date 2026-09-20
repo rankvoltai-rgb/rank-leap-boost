@@ -7,7 +7,7 @@
  */
 import type { ReactNode } from "react";
 import { Bot, Check, Search } from "lucide-react";
-import { ChatGPTMark } from "@/components/landing/ai-logos";
+import { ChatGPTMark, GoogleMark } from "@/components/landing/ai-logos";
 import { cn } from "@/lib/utils";
 
 /* ---------- shared bits ---------- */
@@ -337,12 +337,128 @@ function PromptPanel() {
   );
 }
 
+/* ---------- 4. How one question fans out into many searches ---------- */
+
+/**
+ * Google's own docs describe "query fan-out": one question becomes several
+ * background searches across subtopics, each pulling its own sources. The
+ * figure shows why a page that owns one subtopic outright can be cited even
+ * when it does not rank for the question the buyer typed.
+ */
+const FAN_OUT: { q: string; source: string; mine: boolean }[] = [
+  { q: "crm pricing for small teams", source: "yoursite.com/pricing", mine: true },
+  { q: "crm that syncs with gmail", source: "yoursite.com/blog/gmail-sync", mine: true },
+  { q: "best crm for realtors 2026", source: "review-site.com/best-crm", mine: false },
+  { q: "is a crm worth it for 5 agents", source: "reddit.com/r/realtors", mine: false },
+];
+
+function QueryFanOut() {
+  return (
+    <div className="grid gap-4 md:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] md:items-center">
+      <div className="rounded-2xl border border-border bg-card p-4 shadow-1">
+        <div className="flex items-center gap-2">
+          <Callout n={1} />
+          <p className="text-sm font-semibold text-ink">What the buyer types</p>
+        </div>
+        <div className="mt-3 flex items-center gap-2 rounded-full border border-border bg-surface px-3 py-2">
+          <Search className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
+          <span className="truncate text-[0.72rem] text-ink">
+            best crm for a small real estate team
+          </span>
+        </div>
+        <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
+          One query in. Google does not answer it from one page.
+        </p>
+      </div>
+
+      <div className="rounded-2xl border border-border bg-card p-4 shadow-1">
+        <div className="flex items-center gap-2">
+          <Callout n={2} />
+          <p className="text-sm font-semibold text-ink">What Google actually searches</p>
+        </div>
+        <ul className="mt-3 space-y-1.5">
+          {FAN_OUT.map(({ q, source, mine }) => (
+            <li
+              key={q}
+              className={cn(
+                "rounded-lg border px-2.5 py-2",
+                mine ? "border-volt/40 bg-volt/5" : "border-border bg-surface",
+              )}
+            >
+              <div className="flex items-center gap-1.5">
+                <span
+                  className={cn(
+                    "h-1.5 w-1.5 shrink-0 rounded-full",
+                    mine ? "bg-volt" : "bg-ink/20",
+                  )}
+                />
+                <span className="truncate text-[0.68rem] font-medium text-ink">{q}</span>
+              </div>
+              <p
+                className={cn(
+                  "mt-1 truncate pl-3 font-mono text-[0.62rem]",
+                  mine ? "text-ink" : "text-muted-foreground",
+                )}
+              >
+                {source}
+              </p>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div className="rounded-2xl border border-border bg-card p-4 shadow-1 md:col-span-2">
+        <div className="flex items-center gap-2">
+          <Callout n={3} />
+          <p className="text-sm font-semibold text-ink">What the buyer sees</p>
+        </div>
+        <div className="mt-3 rounded-xl border border-border bg-surface p-3">
+          <div className="flex items-center gap-1.5">
+            <GoogleMark className="h-3.5 w-3.5" />
+            <span className="text-[0.65rem] font-semibold text-ink">AI Overview</span>
+          </div>
+          <div className="mt-2 space-y-1.5">
+            <Bar w="94%" />
+            <div className="flex items-center gap-1">
+              <Bar w="48%" />
+              <span className="rounded bg-volt/15 px-1 text-[0.55rem] font-bold text-volt">1</span>
+              <Bar w="30%" />
+            </div>
+            <Bar w="76%" />
+          </div>
+          <div className="mt-3 flex flex-wrap gap-1.5">
+            {FAN_OUT.map(({ source, mine }) => (
+              <span
+                key={source}
+                className={cn(
+                  "inline-flex items-center gap-1 rounded-md border px-1.5 py-0.5 text-[0.6rem] font-semibold",
+                  mine
+                    ? "border-volt/40 bg-volt/10 text-ink"
+                    : "border-border bg-background text-muted-foreground",
+                )}
+              >
+                <span className={cn("h-1 w-1 rounded-full", mine ? "bg-volt" : "bg-ink/20")} />
+                {source.split("/")[0]}
+              </span>
+            ))}
+          </div>
+        </div>
+        <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
+          Two of the four subtopics were answered by pages on one site, so that site is cited twice,
+          even though it never ranked first for the question the buyer typed.
+        </p>
+      </div>
+    </div>
+  );
+}
+
 /* ---------- registry ---------- */
 
 const FIGURES: Record<string, () => ReactNode> = {
   "citation-pipeline": CitationPipeline,
   "citable-page": CitablePage,
   "prompt-panel": PromptPanel,
+  "query-fan-out": QueryFanOut,
 };
 
 export function ArticleFigure({

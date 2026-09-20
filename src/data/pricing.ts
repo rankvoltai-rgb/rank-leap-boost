@@ -69,6 +69,10 @@ export const PRICING_FAQS: { q: string; a: string }[] = [
     a: `Your plan continues automatically at ${afterTrialCopy()}. Cancel any time before day ${TRIAL_DAYS} and you won't be charged at all.`,
   },
   {
+    q: "Is everything included in the free trial?",
+    a: `Everything except the backlink exchange, which opens with your first paid invoice. Research, writing, publishing, and citation tracking all work during the trial, with up to ${TRIAL_ARTICLE_CREDITS} articles. Backlinks wait for a paid plan so that throwaway accounts can't join the network.`,
+  },
+  {
     q: "Are there any add-ons, setup fees, or contracts?",
     a: "None. Every feature is in the one plan: research, writing, auto-publishing, backlinks, citation tracking, unlimited rewrites, and unlimited team members. No setup fees, no long-term contract.",
   },

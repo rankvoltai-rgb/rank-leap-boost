@@ -46,6 +46,43 @@ async function refillArticleCredits(
 }
 
 /**
+ * Keeps the backlink exchange in step with the subscription.
+ *
+ * The exchange is PAID ONLY. `activated_at` is stamped the first time a
+ * subscription is seen active, so a later past_due or canceled row can still
+ * be told apart from a trial that never converted; `paid_active` on the
+ * member's exchange site is then the matcher's one-boolean gate; and the
+ * monthly credit grant happens only for a paying period — a trial gets none,
+ * not a smaller one. Everything is idempotent, so replays are harmless.
+ */
+async function syncExchange(userId: string, subscription: any, periodEnd: number | null | undefined) {
+  if (!userId) return;
+  const db = getSupabase();
+  if (subscription.status === "active") {
+    await db
+      .from("subscriptions")
+      .update({ activated_at: new Date().toISOString() })
+      .eq("stripe_subscription_id", subscription.id)
+      .is("activated_at", null);
+  }
+  const { data: row } = await db
+    .from("subscriptions")
+    .select("status, current_period_end, past_due_since, card_verified, activated_at")
+    .eq("stripe_subscription_id", subscription.id)
+    .maybeSingle();
+  const { subscriptionIsPaid } = await import("@/lib/entitlement.server");
+  const paid = subscriptionIsPaid(row);
+  await db.rpc("exchange_set_paid", { _user_id: userId, _paid: paid });
+  if (paid && subscription.status === "active") {
+    await db.rpc("exchange_grant_credits", {
+      _user_id: userId,
+      _period_end: periodEnd ? new Date(periodEnd * 1000).toISOString() : null,
+      _credits: PLAN.backlinkCreditsPerMonth,
+    });
+  }
+}
+
+/**
  * What the card must prove it can cover, in cents. Held and released in the
  * same breath — never captured, so nothing is charged. It appears on the
  * customer's statement as a pending authorization for a day or two, which is
@@ -185,6 +222,7 @@ async function handleSubscriptionCreated(subscription: any, env: StripeEnv) {
 
   // A trial starts with the capped allowance; a straight-to-paid one gets all 30.
   await refillArticleCredits(userId, periodEnd, creditsForStatus(subscription.status));
+  await syncExchange(userId, subscription, periodEnd);
 
   // Only a trial needs the check — a paid subscription has already moved money.
   if (subscription.status === "trialing") {
@@ -238,6 +276,7 @@ async function handleSubscriptionUpdated(subscription: any, env: StripeEnv) {
   const userId = (subscription.metadata?.userId as string | undefined) ?? existing?.user_id;
   if (userId) {
     await refillArticleCredits(userId, periodEnd, creditsForStatus(subscription.status));
+    await syncExchange(userId, subscription, periodEnd);
   }
 }
 
@@ -251,6 +290,14 @@ async function handleSubscriptionDeleted(subscription: any, env: StripeEnv) {
     })
     .eq("stripe_subscription_id", subscription.id)
     .eq("environment", env);
+
+  const { data: row } = await getSupabase()
+    .from("subscriptions")
+    .select("user_id")
+    .eq("stripe_subscription_id", subscription.id)
+    .maybeSingle();
+  const userId = (subscription.metadata?.userId as string | undefined) ?? row?.user_id;
+  if (userId) await syncExchange(userId, { ...subscription, status: "canceled" }, null);
 }
 
 async function handleWebhook(req: Request, env: StripeEnv) {

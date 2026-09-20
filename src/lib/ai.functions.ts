@@ -74,6 +74,8 @@ const BlogInput = z.object({
   keyword: z.string().optional(),
   description: z.string().optional(),
   wordCount: z.number().int().min(800).max(6000).optional(),
+  /** The blog row being written. Lets the backlink exchange place a link in it. */
+  blogId: z.string().uuid().optional(),
 });
 
 async function loadStyleContext(supabase: unknown, userId: string) {
@@ -420,7 +422,30 @@ export const generateBlogContent = createServerFn({ method: "POST" })
     await assertAiRateLimit(context.userId);
     const style = await loadStyleContext(context.supabase, context.userId);
     const { writeArticle } = await import("./article.server");
-    return writeArticle(data, style);
+
+    // The backlink exchange: one link for another member, if the network has
+    // a page that belongs in this article. Escrowed before writing, confirmed
+    // after, released on failure — and never allowed to fail the article.
+    const { reserveForArticle, settleReservations, releaseReservations } =
+      await import("./exchange/engine.server");
+    const reserved = data.blogId
+      ? await reserveForArticle(context.userId, {
+          id: data.blogId,
+          title: data.title,
+          keyword: data.keyword ?? null,
+          tags: [],
+        })
+      : [];
+    try {
+      const article = await writeArticle(data, style, {
+        outboundLinks: reserved.map((r) => r.link),
+      });
+      await settleReservations(reserved, article.outboundLinks, data.blogId ?? null);
+      return article;
+    } catch (err) {
+      await releaseReservations(reserved, "generation failed");
+      throw err;
+    }
   });
 
 const ACTIONS: Record<string, string> = {

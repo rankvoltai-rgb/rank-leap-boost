@@ -48,6 +48,8 @@ interface SubRow {
   current_period_end: string | null;
   past_due_since: string | null;
   card_verified: boolean | null;
+  /** First time the subscription was seen active — i.e. paid. See subscriptionIsPaid. */
+  activated_at?: string | null;
 }
 
 function rowEntitles(row: SubRow | null | undefined): boolean {
@@ -110,7 +112,7 @@ async function latestSubscription(
   const client = supabase as MinimalClient;
   const { data } = await client
     .from("subscriptions")
-    .select("status, current_period_end, past_due_since, card_verified")
+    .select("status, current_period_end, past_due_since, card_verified, activated_at")
     .eq("user_id", userId)
     .eq("environment", env)
     .order("created_at", { ascending: false })
@@ -148,4 +150,55 @@ export async function requireGenerationEntitlement(
       ? CARD_CHECK_FAILED_MESSAGE
       : undefined,
   );
+}
+
+/* ── Paid-only entitlement (the backlink exchange) ───────────────────────── */
+
+/**
+ * Whether a subscription row is PAID, as opposed to merely entitled.
+ *
+ * Generation is open to a trial; the backlink exchange is not — a throwaway
+ * seven-day trial must not be able to mint link equity out of the network.
+ * So `trialing` fails here even with a verified card, and the two statuses
+ * that follow a trial as easily as a paid period (`past_due`, `canceled`) only
+ * qualify when the subscription was actually seen active at some point
+ * (`activated_at`, stamped by the webhook).
+ */
+export function subscriptionIsPaid(row: SubRow | null | undefined, now = Date.now()): boolean {
+  if (!row?.status) return false;
+  if (row.status === "active") return true;
+  if (!row.activated_at) return false;
+  if (row.status === "past_due") {
+    if (!row.past_due_since) return false;
+    return now - new Date(row.past_due_since).getTime() < PAST_DUE_GRACE_MS;
+  }
+  // A cancelled plan was paid for through the end of its period.
+  if (row.status === "canceled" && row.current_period_end) {
+    return new Date(row.current_period_end).getTime() > now;
+  }
+  return false;
+}
+
+export class PaidPlanRequiredError extends Error {
+  constructor(
+    message = "The backlink exchange is part of the paid plan. It unlocks with your first invoice.",
+  ) {
+    super(message);
+    this.name = "PaidPlanRequiredError";
+  }
+}
+
+/** Whether this user may take part in the backlink exchange. Paid plans only. */
+export async function hasExchangeEntitlement(
+  supabase: unknown,
+  userId: string,
+  env: StripeEnv = getServerStripeEnv(),
+): Promise<boolean> {
+  return subscriptionIsPaid(await latestSubscription(supabase, userId, env));
+}
+
+/** Throws unless the user is on a paid plan. */
+export async function requireExchangeEntitlement(supabase: unknown, userId: string): Promise<void> {
+  if (await hasExchangeEntitlement(supabase, userId)) return;
+  throw new PaidPlanRequiredError();
 }

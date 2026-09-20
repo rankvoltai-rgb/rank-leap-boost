@@ -71,6 +71,17 @@ export function ArticleIcon({ className }: IconProps) {
   );
 }
 
+// Backlinks — two links of a chain, charged where they meet.
+export function LinkIcon({ className }: IconProps) {
+  return (
+    <Svg className={className}>
+      <path d="M10.5 13.5a3.75 3.75 0 0 0 5.3 0l2.7-2.7a3.75 3.75 0 0 0-5.3-5.3l-1.2 1.2" />
+      <path d="M13.5 10.5a3.75 3.75 0 0 0-5.3 0l-2.7 2.7a3.75 3.75 0 0 0 5.3 5.3l1.2-1.2" />
+      <Node cx={12} cy={12} r={1.25} />
+    </Svg>
+  );
+}
+
 // Calendar — a schedule with one day charged.
 export function CalendarIcon({ className }: IconProps) {
   return (

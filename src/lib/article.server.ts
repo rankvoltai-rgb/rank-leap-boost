@@ -11,6 +11,9 @@
  *   4. Video      a relevant YouTube video, embedded under the opening answer.
  *                 Done last: an optimize pass rewrites the body and would
  *                 otherwise drop the embed.
+ *   5. Links      the backlink exchange's outbound link(s), asked for in the
+ *                 prompt and every optimize pass, then checked and repaired
+ *                 here for the same reason the video is placed last.
  *
  * The structure the blueprint asks for is what answer engines quote: a direct
  * 2-3 sentence answer up top, key takeaways, real citations, and an FAQ of the
@@ -20,6 +23,12 @@ import { generateText } from "ai";
 import { createAiProvider, activeModelId } from "./ai-gateway.server";
 import { gatherResearch, scoreArticle, type ResearchBrief } from "./research.server";
 import { findArticleVideo, insertVideo, type ArticleVideo } from "./youtube.server";
+import {
+  ensureOutboundLink,
+  outboundLinkDirective,
+  type InsertMethod,
+  type OutboundLink,
+} from "./exchange/link-insert";
 
 /** What the caller knows about the article before it exists. */
 export interface ArticleBrief {
@@ -41,6 +50,14 @@ interface DraftContent {
 export interface ArticleContent extends DraftContent {
   /** The embedded video, or null when none was found. */
   video: ArticleVideo | null;
+  /** Each requested exchange link, and whether it made it into the body. */
+  outboundLinks: Array<OutboundLink & { method: InsertMethod; ok: boolean }>;
+}
+
+/** What the caller wants woven into the article beyond the brief. */
+export interface WriteOptions {
+  /** Links the backlink exchange reserved for this article. */
+  outboundLinks?: OutboundLink[];
 }
 
 const DEFAULT_WORD_COUNT = 2750;
@@ -213,6 +230,7 @@ async function optimizeToHundred(
   content: DraftContent,
   primaryKeyword: string,
   brief: ArticleBrief,
+  directive = "",
 ): Promise<DraftContent> {
   let current = content;
   let best = -1;
@@ -243,7 +261,7 @@ You are optimizing an existing SEO article to a PERFECT 100/100 score. Keep ever
 PRIMARY KEYWORD: ${primaryKeyword}
 ISSUES TO FIX (current score ${analysis.score}/100):
 ${gaps}
-
+${directive ? `\n${directive}\n` : ""}
 How to fix common issues:
 - Keyword in title: include the exact primary keyword in the H1 (keep it under 60 characters).
 - Keyword in introduction: mention the primary keyword in the first 100 words.
@@ -300,15 +318,23 @@ Return ONLY this exact JSON shape (escape all newlines inside "body"):
  * `style` is the brand context (voice, audience, product) the caller has
  * already loaded — this module never touches the database.
  */
-export async function writeArticle(brief: ArticleBrief, style: string): Promise<ArticleContent> {
+export async function writeArticle(
+  brief: ArticleBrief,
+  style: string,
+  opts: WriteOptions = {},
+): Promise<ArticleContent> {
   const primaryKeyword = brief.keyword?.trim() || brief.title;
   const wordCount = brief.wordCount ?? DEFAULT_WORD_COUNT;
   const research = await gatherResearch(primaryKeyword);
+  const links = (opts.outboundLinks ?? []).filter((l) => l.url.trim() && l.anchor.trim());
+  // Asked for up front so the model places it where it reads naturally; the
+  // same block rides along in every optimize pass so a rewrite keeps it.
+  const directive = links.map(outboundLinkDirective).join("\n\n");
 
   const prompt = `${style}
 
 ${buildBlueprint({ title: brief.title, keyword: primaryKeyword, description: brief.description ?? "", wordCount })}
-
+${directive ? `\n${directive}\n` : ""}
 ${buildResearchBlock(primaryKeyword, research)}
 
 ${BLOG_JSON_SHAPE}`;
@@ -330,14 +356,25 @@ ${BLOG_JSON_SHAPE}`;
     draft = normalizeBlogContent({}, brief, text);
   }
 
-  const optimized = await optimizeToHundred(style, draft, primaryKeyword, brief);
+  const optimized = await optimizeToHundred(style, draft, primaryKeyword, brief, directive);
   const video = await videoSearch;
-  const body = video ? insertVideo(optimized.body, video) : optimized.body;
+  let body = video ? insertVideo(optimized.body, video) : optimized.body;
+
+  // The exchange links: usually already there from the prompt; repaired
+  // deterministically if a rewrite dropped one, and given up on rather than
+  // forced where nothing fits.
+  const outboundLinks: ArticleContent["outboundLinks"] = [];
+  for (const link of links) {
+    const result = ensureOutboundLink(body, link);
+    body = result.body;
+    outboundLinks.push({ ...link, method: result.method, ok: result.ok });
+  }
 
   return {
     ...optimized,
     body,
     video,
+    outboundLinks,
     // Re-scored after the embed so the stored score matches the stored body.
     seo_score: scoreArticle({
       title: optimized.title,

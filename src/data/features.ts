@@ -459,12 +459,12 @@ export const FEATURES: Feature[] = [
     eyebrow: "Backlink building",
     headline: { lead: "Authority backlinks", accent: "that lift rankings" },
     subhead:
-      "Earn dofollow backlinks from verified sites in your niche, so every article you publish ranks higher and AI engines treat your brand as a source worth citing.",
+      "Earn dofollow backlinks from verified member sites in your niche, so every article you publish ranks higher and AI engines treat your brand as a source worth citing.",
     metaTitle: "High-Authority Backlinks from Verified Sites | Rankbox",
     metaDescription:
       "Grow domain authority with dofollow backlinks from verified, relevant sites in your niche. White-hat, no link farms, so your content ranks and gets cited.",
     specs: [
-      { value: "30", label: "backlink credits every month" },
+      { value: "30", label: "backlink credits a month on the paid plan" },
       { value: "Verified", label: "real sites relevant to your niche" },
       { value: "Dofollow", label: "links that pass authority" },
       { value: "0", label: "link farms or private networks" },
@@ -482,7 +482,7 @@ export const FEATURES: Feature[] = [
         "Placements on verified sites in your niche",
         "Links that point at the pages you want to rank",
         "White-hat only, with no PBNs and no link farms",
-        "Domain authority tracked as every placement lands",
+        "Every placement verified live on a real page before it counts",
       ],
     },
     benefitsTitle: "Links that build trust, not risk",
@@ -505,11 +505,17 @@ export const FEATURES: Feature[] = [
     stepsTitle: "From target list to live links",
     steps: [
       {
-        title: "Identify targets",
-        body: "Rankbox finds relevant, high-authority sites in your space.",
+        title: "Pick your pages",
+        body: "Choose the pages you want ranked and a few natural ways to link to them.",
       },
-      { title: "Earn placements", body: "Quality content earns links from verified domains." },
-      { title: "Track authority", body: "Watch your domain rating climb as placements land." },
+      {
+        title: "Earn and spend credits",
+        body: "Host one relevant link in an article you publish to earn a credit; spend credits on links from other members' articles.",
+      },
+      {
+        title: "Verified live",
+        body: "Every link is checked on the real page. Credits move only once it is live and dofollow.",
+      },
     ],
     connects:
       "Backlinks amplify everything else. They point authority at the articles Auto-Publishing puts live, which helps them rank on Google and get picked up by the engines Citation Tracking watches.",
@@ -521,11 +527,19 @@ export const FEATURES: Feature[] = [
       },
       {
         q: "How many backlinks do I get?",
-        a: "Every plan includes 30 authority backlink credits each month.",
+        a: "The paid plan includes 30 backlink credits each month, and you earn more by hosting links. A credit is only spent when a link is verified live on a real page, never for one that doesn't publish.",
       },
       {
-        q: "How fast does authority grow?",
-        a: "Authority builds steadily as placements land, and consistency compounds over months.",
+        q: "Is it part of the free trial?",
+        a: "No. The backlink exchange opens with your first paid invoice. Keeping it out of the trial is what keeps throwaway accounts, and their links, out of the network.",
+      },
+      {
+        q: "Isn't exchanging links risky?",
+        a: "Direct swaps are, which is why Rankbox never makes one. If a site links to you, you are never asked to link back to it. Links travel one way through the network: one per article, only where the topic genuinely fits, with rotating anchor text and a cap on how fast any page gains links.",
+      },
+      {
+        q: "How fast do links arrive?",
+        a: "Links are placed as relevant articles come up across the network, so the pace depends on how many members publish in your niche. Your dashboard shows the live size of the network and where your pages are in the queue.",
       },
       {
         q: "Do backlinks help with AI search?",
@@ -533,7 +547,7 @@ export const FEATURES: Feature[] = [
       },
       {
         q: "What makes a site verified?",
-        a: "It is a real site with content relevant to your niche. Rankbox never uses link farms, private blog networks, or sites that exist only to sell links.",
+        a: "Its owner has proven control of the domain and is a paying Rankbox member publishing real articles on it. Rankbox never uses link farms, private blog networks, or sites that exist only to sell links.",
       },
     ],
     ctaTitle: "Build authority that lifts every page",

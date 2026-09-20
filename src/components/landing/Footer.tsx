@@ -3,6 +3,8 @@ import { Link } from "@tanstack/react-router";
 import { Logo } from "./shared";
 import { PixelField } from "./Hero";
 import { FEATURES } from "@/data/features";
+import { COMPETITORS } from "@/data/alternatives";
+import { PERSONAS } from "@/data/personas";
 
 // Client-only TrustBox: the Trustpilot script replaces the div's contents with
 // an iframe after load. Rendering it only after mount keeps SSR and client
@@ -83,8 +85,8 @@ export function Footer() {
           <div>
             <Logo inverted />
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-white/70">
-              The AI search growth engine for founders. Daily published articles engineered
-              to get you cited by AI and ranked on Google.
+              The AI search growth engine for founders. Daily published articles engineered to get
+              you cited by AI and ranked on Google.
             </p>
           </div>
           <div>
@@ -99,6 +101,30 @@ export function Footer() {
                 <li key={l.label}>
                   <Link to={l.to} hash={"hash" in l ? l.hash : undefined} className={linkClass}>
                     {l.label}
+                  </Link>
+                </li>
+              ))}
+              <li>
+                <Link to="/use-cases" className={linkClass}>
+                  Use cases
+                </Link>
+              </li>
+              {PERSONAS.map((p) => (
+                <li key={p.slug}>
+                  <Link to="/use-cases/$slug" params={{ slug: p.slug }} className={linkClass}>
+                    For {p.nameLower}
+                  </Link>
+                </li>
+              ))}
+              <li>
+                <Link to="/alternatives" className={linkClass}>
+                  Comparisons
+                </Link>
+              </li>
+              {COMPETITORS.map((c) => (
+                <li key={c.slug}>
+                  <Link to="/alternatives/$slug" params={{ slug: c.slug }} className={linkClass}>
+                    Rankbox vs {c.name}
                   </Link>
                 </li>
               ))}

@@ -13,33 +13,56 @@ async function loadStyle(supabase: AnyClient, userId: string): Promise<string> {
     supabase.from("content_settings").select("*").eq("user_id", userId).maybeSingle(),
     supabase.from("profiles").select("*").eq("user_id", userId).maybeSingle(),
   ]);
-  const tone = settings?.tone ?? "Professional";
-  const style = settings?.writing_style ?? "Balanced";
-  const audience = settings?.audience ?? "Founders / Entrepreneurs";
-  const voice = settings?.brand_voice ?? "";
-  const brand = profile?.brand_name ?? "the brand";
-  const product = profile?.product_description ?? "";
-  return `Brand: ${brand}\nProduct context: ${product}\nTone: ${tone}\nWriting style: ${style}\nTarget audience: ${audience}\nBrand voice: ${voice}`;
+  // The same composer the dashboard's writer and the Settings preview use, so
+  // autopilot reads exactly the brief Settings shows.
+  const { composeStyleBrief } = await import("./style-brief");
+  return composeStyleBrief({
+    brand: profile?.brand_name,
+    product: profile?.product_description,
+    tone: settings?.tone,
+    style: settings?.writing_style,
+    audience: settings?.audience,
+    voice: settings?.brand_voice,
+  });
 }
 
 /** Generate a full, source-backed article for one queued blog row. */
 async function generateArticle(
   supabase: AnyClient,
   userId: string,
-  blog: { title: string; keyword: string | null; description: string | null },
+  blog: { id: string; title: string; keyword: string | null; description: string | null },
 ) {
   const style = await loadStyle(supabase, userId);
   const { writeArticle } = await import("./article.server");
-  const article = await writeArticle(
-    {
-      title: blog.title,
-      keyword: blog.keyword ?? blog.title,
-      description: blog.description ?? undefined,
-    },
-    style,
-  );
-  const { video, ...content } = article;
+  // The backlink exchange, exactly as in generateBlogContent: reserve before,
+  // confirm after, release on failure, never fail the article.
+  const { reserveForArticle, settleReservations, releaseReservations } =
+    await import("./exchange/engine.server");
+  const reserved = await reserveForArticle(userId, {
+    id: blog.id,
+    title: blog.title,
+    keyword: blog.keyword,
+    tags: [],
+  });
+  let article;
+  try {
+    article = await writeArticle(
+      {
+        title: blog.title,
+        keyword: blog.keyword ?? blog.title,
+        description: blog.description ?? undefined,
+      },
+      style,
+      { outboundLinks: reserved.map((r) => r.link) },
+    );
+  } catch (err) {
+    await releaseReservations(reserved, "generation failed");
+    throw err;
+  }
+  await settleReservations(reserved, article.outboundLinks, blog.id);
+  const { video, outboundLinks, ...content } = article;
   void video;
+  void outboundLinks;
   return content;
 }
 

@@ -2,6 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
 import { FEATURE_SLUGS } from "@/data/features";
 import { TOOL_SLUGS } from "@/data/tools";
+import { COMPETITOR_SLUGS } from "@/data/alternatives";
+import { PERSONA_SLUGS } from "@/data/personas";
 
 const BASE_URL = "https://rankbox.xyz";
 
@@ -39,6 +41,18 @@ export const Route = createFileRoute("/sitemap.xml")({
           { path: "/features", changefreq: "weekly", priority: "0.8" },
           ...FEATURE_SLUGS.map((slug) => ({
             path: `/features/${slug}`,
+            changefreq: "monthly" as const,
+            priority: "0.7",
+          })),
+          { path: "/use-cases", changefreq: "monthly", priority: "0.8" },
+          ...PERSONA_SLUGS.map((slug) => ({
+            path: `/use-cases/${slug}`,
+            changefreq: "monthly" as const,
+            priority: "0.8",
+          })),
+          { path: "/alternatives", changefreq: "monthly", priority: "0.8" },
+          ...COMPETITOR_SLUGS.map((slug) => ({
+            path: `/alternatives/${slug}`,
             changefreq: "monthly" as const,
             priority: "0.7",
           })),

@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import {
   API_CORS_HEADERS,
+  ARTICLE_COLUMNS,
   corsPreflight,
   jsonResponse,
   serializeArticle,
@@ -38,11 +39,17 @@ export const Route = createFileRoute("/api/public/v1/articles")({
           const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
           let query = supabaseAdmin
             .from("blogs")
-            .select("id, title, description, body, tags, seo_score, created_at, updated_at")
+            .select(ARTICLE_COLUMNS)
             .eq("user_id", userId)
             .eq("status", "finished")
             .order("updated_at", { ascending: true })
             .limit(limit);
+
+          // ?published=false — only the articles whose live URL hasn't been
+          // reported yet, so a plugin can catch up after an update.
+          if (url.searchParams.get("published") === "false") {
+            query = query.is("published_url", null);
+          }
 
           if (since) {
             const ts = new Date(since);

@@ -567,6 +567,7 @@ export async function generateBlogArticle(blog: Blog): Promise<Blog> {
         title: blog.title,
         keyword: blog.keyword ?? undefined,
         description: blog.description,
+        blogId: blog.id,
       },
     });
     const patch: Partial<Blog> = {
