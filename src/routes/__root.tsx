@@ -75,6 +75,11 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   );
 }
 
+const SITE_URL = "https://rankbox.xyz";
+
+const OG_IMAGE_ALT =
+  "Rankbox: get AI traffic on autopilot — a ChatGPT answer citing a brand as its source.";
+
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   head: () => ({
     meta: [
@@ -84,16 +89,25 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "google-site-verification", content: "fG4neVF-dPj7kLMIjpCUpXjX2XhTPhoZvyyiGL-xs40" },
       { name: "trustpilot-one-time-domain-verification-id", content: "de145b7d-659e-4783-a55a-4dac354411ea" },
       { name: "description", content: "Rankbox is the AI growth engine that researches, writes, and publishes daily articles engineered to get your brand cited by ChatGPT, Perplexity, and Google AI Overviews — and ranked on classic search." },
-      { name: "author", content: "Lovable" },
+      { name: "author", content: "Rankbox" },
       { property: "og:title", content: "Rankbox — Get AI Traffic on Autopilot" },
       { property: "og:description", content: "Rankbox is the AI growth engine that researches, writes, and publishes daily articles engineered to get your brand cited by ChatGPT, Perplexity, and Google AI Overviews — and ranked on classic search." },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: `${SITE_URL}/` },
+      { property: "og:site_name", content: "Rankbox" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@Lovable" },
       { name: "twitter:title", content: "Rankbox — Get AI Traffic on Autopilot" },
       { name: "twitter:description", content: "Rankbox is the AI growth engine that researches, writes, and publishes daily articles engineered to get your brand cited by ChatGPT, Perplexity, and Google AI Overviews — and ranked on classic search." },
-      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/WF1UgF3SxPUJn7F8lU25p39cNwL2/social-images/social-1782014917752-Get_3.webp" },
-      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/WF1UgF3SxPUJn7F8lU25p39cNwL2/social-images/social-1782014917752-Get_3.webp" },
+      // Built from scripts/og/card.html — re-render with scripts/og/render.sh.
+      // Absolute, because crawlers resolve og:image against nothing.
+      { property: "og:image", content: `${SITE_URL}/assets/og-rankbox.png` },
+      { property: "og:image:secure_url", content: `${SITE_URL}/assets/og-rankbox.png` },
+      { property: "og:image:type", content: "image/png" },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "630" },
+      { property: "og:image:alt", content: OG_IMAGE_ALT },
+      { name: "twitter:image", content: `${SITE_URL}/assets/og-rankbox.png` },
+      { name: "twitter:image:alt", content: OG_IMAGE_ALT },
     ],
     links: [
       {
