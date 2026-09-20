@@ -80,6 +80,22 @@ export const CARD_PIXELS: Pixel[] = [
   { top: "97.5%", left: "84%", size: 12, opacity: 0.12 },
 ];
 
+/* Clustered around the hero's call to action. The field behind the whole hero
+   thins out around the text column, so these give the CTA its own sparkle
+   without dropping squares on top of the form itself — they sit in the band
+   outside it. */
+export const CTA_PIXELS: Pixel[] = [
+  { top: "6%", left: "2%", size: 14, opacity: 0.18 },
+  { top: "38%", left: "0.5%", size: 10, opacity: 0.13 },
+  { top: "74%", left: "3%", size: 16, opacity: 0.16 },
+  { top: "12%", left: "97%", size: 12, opacity: 0.15 },
+  { top: "52%", left: "94%", size: 18, opacity: 0.18 },
+  { top: "86%", left: "98%", size: 10, opacity: 0.12 },
+  { top: "2%", left: "44%", size: 10, opacity: 0.12 },
+  { top: "95%", left: "62%", size: 14, opacity: 0.15 },
+  { top: "92%", left: "24%", size: 10, opacity: 0.11 },
+];
+
 export function PixelField({ pixels = PIXELS, seed = 0 }: { pixels?: Pixel[]; seed?: number }) {
   return (
     <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
@@ -171,9 +187,11 @@ export function UrlForm({ url, onChange }: { url: string; onChange: (v: string) 
         e.preventDefault();
         go();
       }}
-      className="group flex w-full max-w-xl flex-col gap-2 rounded-xl border border-border bg-card p-1.5 shadow-elevation transition-all focus-within:shadow-elevation-lg sm:flex-row sm:items-center"
+      className="group flex w-full max-w-xl flex-row items-center gap-2 rounded-xl border border-border bg-card p-1.5 shadow-elevation transition-all focus-within:shadow-elevation-lg"
     >
-      <div className="flex flex-1 items-center gap-2.5 pl-3.5 pr-2">
+      {/* min-w-0 lets the field shrink instead of pushing the button out of the
+          card on a narrow phone. */}
+      <div className="flex min-w-0 flex-1 items-center gap-2.5 pl-2.5 pr-1 sm:pl-3.5 sm:pr-2">
         <SiteIcon url={url} />
         <input
           type="text"
@@ -188,9 +206,12 @@ export function UrlForm({ url, onChange }: { url: string; onChange: (v: string) 
       </div>
       <button
         type="submit"
-        className="inline-flex h-12 shrink-0 items-center justify-center gap-2 rounded-lg bg-brand-blue px-6 text-sm font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:bg-brand-blue/85 hover:shadow-md active:translate-y-0"
+        className="inline-flex h-12 shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-lg bg-brand-blue px-4 text-sm font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:bg-brand-blue/85 hover:shadow-md active:translate-y-0 sm:px-6"
       >
-        Get Started Free
+        {/* "Free" is dropped on the narrowest phones so the button keeps its
+            place on the row instead of wrapping the field beneath it. */}
+        <span className="max-[420px]:hidden">Get Started Free</span>
+        <span className="hidden max-[420px]:inline">Get Started</span>
         <ArrowRight className="h-4 w-4 transition-transform group-focus-within:translate-x-0.5" />
       </button>
     </form>
@@ -269,9 +290,19 @@ export function Hero() {
             </Reveal>
 
             <Reveal delay={0.26}>
-              <div className="mt-8 flex flex-col items-center gap-3 lg:items-start">
-                <UrlForm url={url} onChange={setUrl} />
-                <p className="text-sm text-white/70">No credit card required · Free 7-day trial</p>
+              <div className="relative mt-8 flex flex-col items-center gap-3 lg:items-start">
+                {/* Sits in the margin around the form, not over it. */}
+                <div className="pointer-events-none absolute -inset-x-10 -inset-y-8">
+                  <PixelField pixels={CTA_PIXELS} seed={11} />
+                </div>
+                {/* Positioned, so the form paints above the pixel layer rather
+                    than getting squares scattered across its white card. */}
+                <div className="relative w-full max-w-xl">
+                  <UrlForm url={url} onChange={setUrl} />
+                </div>
+                <p className="relative text-sm text-white/70">
+                  No credit card required · Free 7-day trial
+                </p>
               </div>
             </Reveal>
           </div>

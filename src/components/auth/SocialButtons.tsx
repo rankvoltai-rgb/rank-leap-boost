@@ -27,14 +27,13 @@ function GoogleIcon() {
   );
 }
 
-function AppleIcon() {
+function GitHubIcon() {
   return (
     <svg viewBox="0 0 24 24" className="h-5 w-5" aria-hidden fill="currentColor">
-      <path d="M16.36 12.78c.02 2.5 2.18 3.33 2.2 3.34-.02.06-.34 1.18-1.13 2.34-.68 1-1.39 2-2.51 2.02-1.1.02-1.45-.65-2.7-.65-1.26 0-1.65.63-2.69.67-1.08.04-1.9-1.08-2.59-2.08-1.4-2.04-2.48-5.76-1.04-8.27.72-1.25 2-2.04 3.39-2.06 1.06-.02 2.06.71 2.71.71.65 0 1.87-.88 3.15-.75.54.02 2.05.22 3.02 1.64-.08.05-1.8 1.05-1.78 3.13M14.3 4.93c.57-.69.96-1.65.85-2.61-.83.03-1.83.55-2.42 1.24-.53.61-.99 1.59-.87 2.53.92.07 1.87-.47 2.44-1.16" />
+      <path d="M12 1.5a10.5 10.5 0 0 0-3.32 20.47c.53.1.72-.23.72-.5v-1.8c-2.92.64-3.54-1.25-3.54-1.25-.48-1.22-1.17-1.54-1.17-1.54-.96-.66.07-.64.07-.64 1.06.07 1.61 1.09 1.61 1.09.94 1.6 2.47 1.14 3.07.87.1-.68.37-1.14.67-1.4-2.33-.27-4.78-1.17-4.78-5.2 0-1.15.41-2.09 1.08-2.83-.11-.27-.47-1.34.1-2.8 0 0 .88-.28 2.88 1.08a9.9 9.9 0 0 1 5.24 0c2-1.36 2.88-1.08 2.88-1.08.57 1.46.21 2.53.1 2.8.67.74 1.08 1.68 1.08 2.83 0 4.04-2.46 4.93-4.8 5.19.38.33.72.97.72 1.96v2.9c0 .28.19.61.73.5A10.5 10.5 0 0 0 12 1.5Z" />
     </svg>
   );
 }
-
 
 function SocialButton({
   children,
@@ -54,31 +53,51 @@ function SocialButton({
   );
 }
 
+/** A provider we mean to support, shown so people know it is coming. */
+function ComingSoonButton({ children, label }: { children: ReactNode; label: string }) {
+  return (
+    <button
+      type="button"
+      disabled
+      aria-label={`${label} sign-in — coming soon`}
+      title="Coming soon"
+      className="group relative inline-flex w-full cursor-not-allowed items-center justify-center gap-2.5 rounded-xl border border-dashed border-border bg-surface/60 px-4 py-3 text-sm font-semibold text-muted-foreground"
+    >
+      {children}
+      <span className="absolute -top-2 right-2 rounded-full bg-ink px-1.5 py-0.5 text-[0.6rem] font-bold uppercase tracking-wide text-background">
+        Soon
+      </span>
+    </button>
+  );
+}
+
+/**
+ * Google is the only provider that works. GitHub sits beside it as a disabled
+ * "soon" tile: it is off in Supabase, so a live button would only ever error.
+ * Apple was removed outright — it needs a paid developer account.
+ */
 export function SocialButtons() {
   const navigate = useNavigate();
 
-  async function signIn(provider: "google" | "apple", label: string) {
+  async function signInWithGoogle() {
     try {
-      const outcome = await signInWithProvider(provider, window.location.origin + "/onboarding");
+      const outcome = await signInWithProvider("google", window.location.origin + "/onboarding");
       if (outcome === "redirected") return;
       const profile = await getProfile();
       navigate({ to: profile ? "/dashboard" : "/onboarding" });
     } catch {
-      toast.error(`Could not sign in with ${label}. Please try again.`);
+      toast.error("Could not sign in with Google. Please try again.");
     }
   }
 
-  const google = () => signIn("google", "Google");
-  const apple = () => signIn("apple", "Apple");
-
   return (
     <div className="grid grid-cols-2 gap-3">
-      <SocialButton onClick={google}>
+      <SocialButton onClick={signInWithGoogle}>
         <GoogleIcon /> Google
       </SocialButton>
-      <SocialButton onClick={apple}>
-        <AppleIcon /> Apple
-      </SocialButton>
+      <ComingSoonButton label="GitHub">
+        <GitHubIcon /> GitHub
+      </ComingSoonButton>
     </div>
   );
 }

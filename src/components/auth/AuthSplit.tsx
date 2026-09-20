@@ -76,7 +76,7 @@ export function AuthSplit() {
         <div className="flex flex-1 items-center justify-center py-10">
           <div className="w-full max-w-md">
             <Reveal>
-              <h1 className="text-balance text-3xl font-semibold leading-[1.1] tracking-tight text-ink sm:text-4xl">
+              <h1 className="text-balance text-3xl font-bold leading-[1.1] tracking-tight text-ink sm:text-4xl">
                 Start getting Google &amp; ChatGPT traffic{" "}
                 <span className="rounded-lg bg-brand-blue px-1.5 text-white decoration-clone box-decoration-clone">
                   in the next 7 days
