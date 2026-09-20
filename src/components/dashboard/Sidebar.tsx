@@ -10,7 +10,7 @@ import { useRouterState } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { ChevronsLeft, ChevronsRight } from "lucide-react";
 import { Avatar, Logo } from "@/components/landing/shared";
-import rankvoltMark from "@/assets/rankvolt-mark.png.asset.json";
+import { Mark } from "@/components/brand/Mark";
 import { getCurrentUser, getProfile, getSubscription, listBlogs } from "@/lib/data";
 import { brandIconUrl } from "@/lib/brand-icon";
 import { cn } from "@/lib/utils";
@@ -106,13 +106,7 @@ export function Sidebar() {
         )}
       >
         {collapsed ? (
-          <img
-            src={rankvoltMark.url}
-            alt="Rankbox"
-            /* brightness-0 invert turns the black source mark white, the same
-               trick the inverted Logo uses. */
-            className="h-6 w-6 object-contain brightness-0 invert"
-          />
+          <Mark className="h-6 w-6 text-white" />
         ) : (
           <Logo inverted />
         )}

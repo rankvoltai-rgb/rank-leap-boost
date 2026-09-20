@@ -4,7 +4,7 @@ import { CoverArt } from "@/components/blog/CoverArt";
 import { formatDate } from "@/lib/format-date";
 import type { PostMeta } from "@/lib/notion.server";
 import { cn } from "@/lib/utils";
-import rankvoltMark from "@/assets/rankvolt-mark.png.asset.json";
+import { Mark } from "@/components/brand/Mark";
 
 /* ---------- byline ---------- */
 
@@ -16,7 +16,7 @@ export function AuthorMark({ className }: { className?: string }) {
         className,
       )}
     >
-      <img src={rankvoltMark.url} alt="" className="h-[55%] w-[55%] object-contain" />
+      <Mark className="h-[55%] w-[55%] text-ink/80" />
     </span>
   );
 }

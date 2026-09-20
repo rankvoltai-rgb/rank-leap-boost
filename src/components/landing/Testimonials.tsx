@@ -8,9 +8,6 @@ export const TESTIMONIALS = [
   { q: "Setup took minutes and it plugged into our store cleanly. The answer-space research is the part that surprised me — it finds questions our buyers actually ask AI.", n: "Elise Tanaka", r: "Co-founder", c: "Plannora", a: AVATARS[3] },
   { q: "I was paying a writer and an SEO tool subscription. Rankbox replaced both, writes better, and I'm finally ranking for terms I'd given up on.", n: "Marco Silva", r: "Marketing Lead", c: "Northwind Labs", a: AVATARS[4] },
   { q: "The consistency is the whole game. A strong article goes live every day without me thinking about outlines, keywords, or publishing. It just compounds.", n: "Hannah Whitfield", r: "Founder", c: "Loopcraft", a: AVATARS[5] },
-  { q: "Compared to an agency this is a fraction of the cost and honestly more reliable. Our brand-new site is pulling steady search and AI traffic within months.", n: "Daniel Okafor", r: "Founder", c: "Northlight", a: AVATARS[6] },
-  { q: "What sold me is how little effort it takes. It really is this easy, and the content holds up. I've already pointed two other founders to it.", n: "Sofia Marin", r: "Owner", c: "Verdure Goods", a: AVATARS[7] },
-  { q: "Daily content has already scaled our visitors meaningfully in just a few weeks — and the citations in AI answers are a bonus I didn't expect.", n: "Lena Brandt", r: "Founder", c: "Claystone", a: AVATARS[1] },
 ];
 
 export function Testimonials() {

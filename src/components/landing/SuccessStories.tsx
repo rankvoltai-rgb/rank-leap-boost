@@ -13,7 +13,7 @@ const STORIES = [
     period: "After 5 months",
     name: "Elise Tanaka",
     role: "Co-founder · Plannora",
-    avatar: AVATARS[3],
+    avatar: AVATARS[0],
   },
   {
     engine: "Perplexity",
@@ -24,7 +24,7 @@ const STORIES = [
     period: "After 6 months",
     name: "Marcus Reyes",
     role: "Owner · Summit HVAC Co.",
-    avatar: AVATARS[4],
+    avatar: AVATARS[1],
   },
   {
     engine: "ChatGPT",
@@ -35,7 +35,7 @@ const STORIES = [
     period: "From AI citations",
     name: "Hannah Whitfield",
     role: "Founder · Loopcraft",
-    avatar: AVATARS[5],
+    avatar: AVATARS[2],
   },
   {
     engine: "Gemini",
@@ -46,7 +46,7 @@ const STORIES = [
     period: "After 4 months",
     name: "Daniel Okafor",
     role: "Founder · Northlight Studio",
-    avatar: AVATARS[6],
+    avatar: AVATARS[3],
   },
   {
     engine: "Google",
@@ -57,7 +57,7 @@ const STORIES = [
     period: "After 3 months",
     name: "Priya Raman",
     role: "Ops Lead · Safeguard Facilities",
-    avatar: AVATARS[1],
+    avatar: AVATARS[4],
   },
   {
     engine: "Claude",
@@ -68,7 +68,7 @@ const STORIES = [
     period: "After 5 months",
     name: "Lena Brandt",
     role: "Founder · Verdure Goods",
-    avatar: AVATARS[2],
+    avatar: AVATARS[5],
   },
 ] as const;
 

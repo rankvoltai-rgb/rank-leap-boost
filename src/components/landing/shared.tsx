@@ -1,7 +1,7 @@
 import { motion } from "motion/react";
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
-import rankvoltMark from "@/assets/rankvolt-mark.png.asset.json";
+import { Mark } from "@/components/brand/Mark";
 
 /* ---------- Animated reveal wrapper ---------- */
 export function Reveal({
@@ -40,17 +40,11 @@ export function Logo({
   return (
     <div className={cn("flex items-center gap-2.5", className)}>
       {inverted ? (
-        // On coloured chrome the mark stands alone, white, with no tile behind
-        // it. brightness-0 invert turns the black source PNG white without
-        // needing a second asset.
-        <img
-          src={rankvoltMark.url}
-          alt="Rankbox"
-          className="h-6 w-6 object-contain brightness-0 invert"
-        />
+        // On coloured chrome the mark stands alone, white, with no tile behind it.
+        <Mark className="h-6 w-6 text-white" />
       ) : (
         <span className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-[10px] border border-border bg-card shadow-sm">
-          <img src={rankvoltMark.url} alt="Rankbox" className="h-5 w-5 object-contain" />
+          <Mark className="h-5 w-5 text-ink" />
         </span>
       )}
       <span

@@ -11,6 +11,13 @@
 /** Free-trial length. Must match `trialDays` in ALLOWED_PRICES. */
 export const TRIAL_DAYS = 7;
 
+/**
+ * Articles a trialing subscriber may generate before their first payment.
+ * Deliberately far below the monthly allowance: a trial that hands over all
+ * 30 articles up front is worth stealing with a card that will decline.
+ */
+export const TRIAL_ARTICLE_CREDITS = 7;
+
 export const PLAN = {
   name: "Business",
   sites: 1,

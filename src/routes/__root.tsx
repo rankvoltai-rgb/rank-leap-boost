@@ -14,7 +14,6 @@ import appCss from "../styles.css?url";
 import jakartaLatin from "@fontsource-variable/plus-jakarta-sans/files/plus-jakarta-sans-latin-wght-normal.woff2?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Toaster } from "@/components/ui/sonner";
-import rankvoltMark from "@/assets/rankvolt-mark.png.asset.json";
 
 function NotFoundComponent() {
   return (
@@ -108,8 +107,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: appCss,
       },
-      { rel: "icon", type: "image/png", href: rankvoltMark.url },
-      { rel: "apple-touch-icon", href: rankvoltMark.url },
+      { rel: "icon", type: "image/svg+xml", href: "/mark.svg" },
+      { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
     ],
     scripts: [
       {

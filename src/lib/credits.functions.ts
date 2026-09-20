@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { TRIAL_ARTICLE_CREDITS } from "@/data/pricing";
 
 /**
  * Server-authoritative credit operations. Credit tables are SELECT-only for
@@ -41,7 +42,13 @@ export const ensureCreditAccount = createServerFn({ method: "POST" })
     if (!existing) {
       const { error } = await supabaseAdmin
         .from("credit_accounts")
-        .insert({ user_id: context.userId, credits_used: 0, credits_total: 30 });
+        .insert({
+          user_id: context.userId,
+          credits_used: 0,
+          // Pre-payment balance. The Stripe webhook sets the real allowance
+          // when a trial starts, and the full one on first payment.
+          credits_total: TRIAL_ARTICLE_CREDITS,
+        });
       if (error) throw new Error(error.message);
     }
     return { ok: true };

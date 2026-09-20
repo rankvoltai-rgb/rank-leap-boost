@@ -14,24 +14,55 @@
 import type { StripeEnv } from "@/lib/stripe.server";
 import { getServerStripeEnv } from "@/lib/stripe.server";
 
-/** Statuses that entitle a user to generate. */
-const ENTITLED = new Set(["trialing", "active", "past_due"]);
+/** Statuses that entitle a user to generate outright. */
+const ENTITLED = new Set(["trialing", "active"]);
+
+/**
+ * How long a failed payment keeps its access.
+ *
+ * `past_due` used to entitle indefinitely, which handed anyone whose card
+ * declined the whole of Stripe's retry schedule — about three weeks — for
+ * free. A short window still covers the genuine case of an expired card, and
+ * is measured from `past_due_since` because `current_period_end` jumps a month
+ * ahead the moment a trial converts, failed payment or not.
+ */
+const PAST_DUE_GRACE_MS = 48 * 60 * 60 * 1000;
 
 export class TrialRequiredError extends Error {
-  constructor() {
-    super("Start your free trial to generate articles.");
+  constructor(message = "Start your free trial to generate articles.") {
+    super(message);
     this.name = "TrialRequiredError";
   }
 }
 
+/**
+ * Shown when the card check failed. Deliberately says what to do rather than
+ * what went wrong: the same failure covers an empty card and a real one whose
+ * bank wanted 3-D Secure, and only one of those deserves an accusation.
+ */
+const CARD_CHECK_FAILED_MESSAGE =
+  "We couldn't verify your card. Update it in billing to start generating.";
+
 interface SubRow {
   status: string | null;
   current_period_end: string | null;
+  past_due_since: string | null;
+  card_verified: boolean | null;
 }
 
 function rowEntitles(row: SubRow | null | undefined): boolean {
   if (!row?.status) return false;
+  // A trial whose card could not hold a dollar generates nothing. Only an
+  // explicit false blocks: null means the check has not run or found no card,
+  // and a paying subscriber is past the question entirely.
+  if (row.status === "trialing" && row.card_verified === false) return false;
   if (ENTITLED.has(row.status)) return true;
+  if (row.status === "past_due") {
+    // No stamp means the spell predates this column: treat it as expired
+    // rather than granting open-ended access.
+    if (!row.past_due_since) return false;
+    return Date.now() - new Date(row.past_due_since).getTime() < PAST_DUE_GRACE_MS;
+  }
   // A cancelled plan still entitles until the paid period actually ends.
   if (row.status === "canceled" && row.current_period_end) {
     return new Date(row.current_period_end).getTime() > Date.now();
@@ -71,21 +102,29 @@ type MinimalClient = {
  * live on the same worker, so a client-chosen "sandbox" would otherwise let
  * someone complete a $0 test-mode checkout and unlock real generation.
  */
-export async function hasGenerationEntitlement(
+async function latestSubscription(
   supabase: unknown,
   userId: string,
-  env: StripeEnv = getServerStripeEnv(),
-): Promise<boolean> {
+  env: StripeEnv,
+): Promise<SubRow | null> {
   const client = supabase as MinimalClient;
   const { data } = await client
     .from("subscriptions")
-    .select("status, current_period_end")
+    .select("status, current_period_end, past_due_since, card_verified")
     .eq("user_id", userId)
     .eq("environment", env)
     .order("created_at", { ascending: false })
     .limit(1)
     .maybeSingle();
-  return rowEntitles(data);
+  return data;
+}
+
+export async function hasGenerationEntitlement(
+  supabase: unknown,
+  userId: string,
+  env: StripeEnv = getServerStripeEnv(),
+): Promise<boolean> {
+  return rowEntitles(await latestSubscription(supabase, userId, env));
 }
 
 /**
@@ -102,7 +141,11 @@ export async function requireGenerationEntitlement(
   supabase: unknown,
   userId: string,
 ): Promise<void> {
-  if (!(await hasGenerationEntitlement(supabase, userId))) {
-    throw new TrialRequiredError();
-  }
+  const row = await latestSubscription(supabase, userId, getServerStripeEnv());
+  if (rowEntitles(row)) return;
+  throw new TrialRequiredError(
+    row?.status === "trialing" && row.card_verified === false
+      ? CARD_CHECK_FAILED_MESSAGE
+      : undefined,
+  );
 }
