@@ -1,20 +1,23 @@
 /**
- * The three-step onboarding, laid out as an accordion: brand, then keywords,
- * then the content plan, each closing as the next opens. Proof sits in the
- * left column and the live traffic projection in the right.
+ * The three-step onboarding: brand, then keywords, then the content plan, one
+ * step on screen at a time, with a rail that keeps the projection and what's
+ * been confirmed in view.
  *
- * Replaces the previous four-stage flow that ended in Stripe checkout. The
- * trial is no longer an onboarding step — step 3 confirms straight into the
+ * The trial is not an onboarding step: step 3 confirms straight into the
  * dashboard, and generation is what prompts the trial later.
  *
- * Every field is written to a persisted draft on change, so a refresh, an
- * email-confirmation round trip, or an accidental back button doesn't discard
- * the analysis.
+ * Every change is written to a persisted draft — including the current step,
+ * which lives in the draft rather than beside it, so a later field save can
+ * never write a stale step back — and a refresh, an email-confirmation round
+ * trip, or an accidental back button resumes where the user was.
  */
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
+import { AnimatePresence, motion } from "motion/react";
 import { toast } from "sonner";
 import {
+  claimOnboardingDraft,
+  clearOnboardingDraft,
   commitOnboarding,
   getCurrentUser,
   getOnboardingDraft,
@@ -25,12 +28,12 @@ import {
 import { firstNameOf } from "@/lib/auth";
 import { clearPendingSiteUrl, resolvePendingSiteUrl } from "@/lib/pending-site";
 import { domainOf } from "@/lib/site-meta";
-import { OnboardingShell, StepSection, type Step } from "./shell";
+import { reducedMotion } from "./constants";
+import { OnboardingShell, StepHeader, type Step } from "./shell";
 import { Part1Profile, type Part1Value } from "./Part1Profile";
 import { Part2Analysis, type Part2Value } from "./Part2Analysis";
 import { Part3Forecast } from "./Part3Forecast";
-import { ProofColumn } from "./ProofColumn";
-import { TrafficProjection } from "./TrafficProjection";
+import { PlanRail, ProjectionStrip } from "./TrafficProjection";
 
 function emptyDraft(url: string): OnboardingDraft {
   return {
@@ -60,7 +63,7 @@ function emptyDraft(url: string): OnboardingDraft {
  * The saved draft, if it can be resumed.
  *
  * Drafts saved before the scan read real sites have no `analyzedUrl`; their
- * brand details and keywords are placeholders, so those restart from Part 1
+ * brand details and keywords are placeholders, so those restart from step 1
  * with only the URL carried over.
  */
 function restorableDraft(): OnboardingDraft | null {
@@ -84,12 +87,7 @@ export function Onboarding({ searchUrl }: { searchUrl?: string }) {
     return emptyDraft(url);
   });
 
-  const [step, setStep] = useState<Step>(() => {
-    const saved = restorableDraft();
-    return saved && saved.step !== "done" ? saved.step : 1;
-  });
-
-  // A single persist point keeps the draft and the step in lockstep.
+  // A single persist point keeps every field, and the step, saved together.
   const patch = useCallback((next: Partial<OnboardingDraft>) => {
     setDraft((prev) => {
       const merged = { ...prev, ...next };
@@ -98,20 +96,34 @@ export function Onboarding({ searchUrl }: { searchUrl?: string }) {
     });
   }, []);
 
+  const step: Step = draft.step === "done" ? 1 : draft.step;
+  const goTo = useCallback((s: Step) => patch({ step: s }), [patch]);
+
+  // Each step opens at the top of the page, not wherever the last one ended.
+  const firstRender = useRef(true);
   useEffect(() => {
-    saveOnboardingDraft({ step });
+    if (firstRender.current) {
+      firstRender.current = false;
+      return;
+    }
+    window.scrollTo({ top: 0, behavior: reducedMotion() ? "auto" : "smooth" });
   }, [step]);
 
-  // The name was given at sign-up, so it isn't asked for again here.
+  // The name was given at sign-up, so it isn't asked for again here. A draft
+  // left on this browser by a different account is dropped, not resumed.
   useEffect(() => {
     let active = true;
-    void getCurrentUser().then(({ fullName }) => {
-      if (active) patch({ firstName: firstNameOf(fullName) });
+    void getCurrentUser().then(({ id, fullName }) => {
+      if (!active) return;
+      if (!claimOnboardingDraft(id)) {
+        setDraft(emptyDraft(resolvePendingSiteUrl(searchUrl)));
+      }
+      patch({ firstName: firstNameOf(fullName) });
     });
     return () => {
       active = false;
     };
-  }, [patch]);
+  }, [patch, searchUrl]);
 
   const part1: Part1Value = useMemo(
     () => ({
@@ -146,6 +158,7 @@ export function Onboarding({ searchUrl }: { searchUrl?: string }) {
     try {
       await commitOnboarding(draft);
       clearPendingSiteUrl();
+      clearOnboardingDraft();
       toast.success("You're set up. Welcome to Rankbox.");
       navigate({ to: "/dashboard" });
     } catch (err) {
@@ -154,91 +167,87 @@ export function Onboarding({ searchUrl }: { searchUrl?: string }) {
     }
   }
 
-  const stateOf = (n: Step) => (n < step ? "done" : n === step ? "active" : "upcoming");
   const domain = draft.url.trim() ? domainOf(draft.url) : "";
   // Keywords analyzed for a different URL are stale; don't project from them.
   const keywords = draft.analyzedUrl === draft.url ? draft.keywords : [];
-  const searches = keywords.reduce((sum, k) => sum + k.search_volume, 0);
+  const projection = { step, domain, keywords, titles: draft.titles };
+  const reduced = reducedMotion();
 
   return (
     <OnboardingShell
       active={step}
-      onStep={setStep}
-      proof={<ProofColumn />}
-      projection={
-        <TrafficProjection step={step} domain={domain} keywords={keywords} titles={draft.titles} />
+      onStep={goTo}
+      rail={
+        <PlanRail
+          {...projection}
+          brandName={draft.brandName}
+          logoUrl={draft.logoUrl}
+          onStep={goTo}
+        />
       }
     >
-      <StepSection
-        n={1}
-        title="Your brand"
-        subtitle="We read your site and filled this in. Change anything that isn't right."
-        state={stateOf(1)}
-        onEdit={() => setStep(1)}
-        summary={
-          <span className="flex min-w-0 items-center gap-2">
-            {draft.logoUrl && (
-              <img
-                src={draft.logoUrl}
-                alt=""
-                className="h-4 w-4 shrink-0 rounded-sm object-contain"
+      <ProjectionStrip {...projection} />
+
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.div
+          key={step}
+          initial={reduced ? false : { opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={reduced ? { opacity: 0 } : { opacity: 0, y: -6 }}
+          transition={{ duration: reduced ? 0 : 0.2, ease: "easeOut" }}
+        >
+          {step === 1 && (
+            <>
+              <StepHeader
+                n={1}
+                title={domain ? "Is this your brand?" : "Start with your website"}
+                subtitle={
+                  domain
+                    ? "We read your site and filled this in. Fix anything that's off. It briefs every article we write."
+                    : "Enter your site and we'll fill in the rest: your brand name, what you do, and your logo."
+                }
               />
-            )}
-            <span className="truncate">
-              {draft.brandName}
-              {domain ? ` · ${domain}` : ""}
-            </span>
-          </span>
-        }
-      >
-        <Part1Profile value={part1} onChange={(p) => patch(p)} onNext={() => setStep(2)} />
-      </StepSection>
+              <Part1Profile value={part1} onChange={(p) => patch(p)} onNext={() => goTo(2)} />
+            </>
+          )}
 
-      <StepSection
-        n={2}
-        title="Keywords"
-        subtitle="The searches we'll target. Remove any that don't fit, or add your own."
-        state={stateOf(2)}
-        onEdit={() => setStep(2)}
-        summary={`${keywords.length} keywords · ${searches.toLocaleString()} monthly searches`}
-      >
-        <Part2Analysis
-          url={draft.url}
-          brandName={draft.brandName}
-          description={draft.description}
-          value={part2}
-          // A changed keyword set makes the planned articles stale; step 3
-          // re-plans when it finds none.
-          onChange={(p) => patch(p.keywords ? { ...p, titles: [] } : p)}
-          onNext={() => setStep(3)}
-        />
-      </StepSection>
+          {step === 2 && (
+            <Part2Analysis
+              url={draft.url}
+              brandName={draft.brandName}
+              description={draft.description}
+              value={part2}
+              // A changed keyword set makes the planned articles stale; step 3
+              // re-plans when it finds none.
+              onChange={(p) => patch(p.keywords ? { ...p, titles: [] } : p)}
+              onNext={() => goTo(3)}
+              onBack={() => goTo(1)}
+            />
+          )}
 
-      <StepSection
-        n={3}
-        title="Content plan"
-        subtitle="Articles that fill your content gaps, in the order we'll publish them."
-        state={stateOf(3)}
-      >
-        <Part3Forecast
-          plan={{
-            url: draft.url,
-            brandName: draft.brandName,
-            description: draft.description,
-            niche: draft.niche,
-            audience: draft.audience,
-            geo: draft.geo,
-            competitors: draft.competitors,
-            semanticClusters: draft.semanticClusters,
-            missingOpportunities: draft.missingOpportunities,
-            keywords: draft.keywords,
-          }}
-          titles={draft.titles}
-          onTitles={(titles: DraftTitle[]) => patch({ titles })}
-          onConfirm={confirm}
-          confirming={confirming}
-        />
-      </StepSection>
+          {step === 3 && (
+            <Part3Forecast
+              plan={{
+                url: draft.url,
+                brandName: draft.brandName,
+                description: draft.description,
+                niche: draft.niche,
+                audience: draft.audience,
+                geo: draft.geo,
+                competitors: draft.competitors,
+                semanticClusters: draft.semanticClusters,
+                missingOpportunities: draft.missingOpportunities,
+                keywords: draft.keywords,
+              }}
+              titles={draft.titles}
+              onTitles={(titles: DraftTitle[]) => patch({ titles })}
+              onConfirm={confirm}
+              onBack={() => goTo(2)}
+              confirming={confirming}
+            />
+          )}
+        </motion.div>
+      </AnimatePresence>
     </OnboardingShell>
   );
 }

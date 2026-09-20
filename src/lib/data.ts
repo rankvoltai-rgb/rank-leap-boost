@@ -23,6 +23,7 @@ import type {
   Profile,
   Subscription,
 } from "@/lib/api";
+import * as localDraft from "@/lib/onboarding-draft";
 import type { DraftKeyword, DraftTitle } from "@/lib/mock/fixtures";
 import type { ContentPlanInput, PlannedArticle, SiteAnalysis, SiteMeta } from "@/lib/site-meta";
 import type { Entitlement, OnboardingDraft } from "@/lib/mock/store";
@@ -122,7 +123,7 @@ export async function getCurrentUser(): Promise<{
   return (await getSessionUser()) ?? { id: "", email: "", fullName: "" };
 }
 
-/* ---------- onboarding (mock-only until phase 2) ---------- */
+/* ---------- onboarding ---------- */
 
 /**
  * Reads the live site in both modes — scraped through Firecrawl (falling back to
@@ -156,11 +157,25 @@ export async function planArticles(input: ContentPlanInput): Promise<PlannedArti
 
 export const getOnboardingDraft: () => OnboardingDraft | null = IS_MOCK
   ? mock.getOnboardingDraft
-  : () => null;
+  : localDraft.loadLocalDraft;
 
 export const saveOnboardingDraft: (patch: Partial<OnboardingDraft>) => void = IS_MOCK
   ? mock.saveOnboardingDraft
-  : () => undefined;
+  : localDraft.saveLocalDraft;
+
+/**
+ * Whether the saved draft may be resumed by this account. Mock drafts are
+ * already stored per account; the real-mode draft is shared by the browser, so
+ * one left by a different account is dropped.
+ */
+export const claimOnboardingDraft: (userId: string) => boolean = IS_MOCK
+  ? () => true
+  : localDraft.claimLocalDraft;
+
+/** Called once setup is committed; mock marks its draft done instead. */
+export const clearOnboardingDraft: () => void = IS_MOCK
+  ? () => undefined
+  : localDraft.clearLocalDraft;
 
 /**
  * Pushes a confirmed onboarding to the dashboard and the autopilot queue. Mock

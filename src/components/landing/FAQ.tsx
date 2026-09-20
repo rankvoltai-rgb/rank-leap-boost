@@ -8,7 +8,7 @@ import { Reveal, Eyebrow } from "./shared";
 
 export const FAQS = [
   { q: "How fast will I see results?", a: "Most founders watch their first articles pick up views within two to three weeks. Because Rankbox publishes a fresh, well-researched piece every day, momentum builds faster than manual blogging — and citations in AI answers tend to follow once the content base is in place." },
-  { q: "What does Rankbox cost?", a: "Rankbox is $99 a month, or $990 a year on annual billing. Every plan includes 30 articles per month, answer-space research, and full automation. That's a fraction of an SEO agency while saving you 20+ hours a week." },
+  { q: "What does Rankbox cost?", a: "Rankbox is $49.50 a month. Every plan includes 30 articles per month, answer-space research, and full automation. That's a fraction of an SEO agency while saving you 20+ hours a week." },
   { q: "Is AI content really good enough?", a: "Yes — and at scale it's hard to match by hand. Rankbox studies the top results and AI answers, then writes fresh, source-backed pieces structured to rank and get quoted. You get consistent long-form articles in minutes, with no writer burnout." },
   { q: "What is GEO, and why does it matter?", a: "GEO is generative engine optimization — getting your brand cited inside answers from ChatGPT, Perplexity, and Google AI Overviews. Buyers increasingly ask AI instead of scrolling results, so being the recommended answer is quickly becoming as valuable as ranking #1." },
   { q: "Do I need any SEO experience?", a: "None at all. Rankbox is built for founders who want growth without a technical background. It handles the research, optimization, internal linking, and publishing so you can stay focused on the business." },

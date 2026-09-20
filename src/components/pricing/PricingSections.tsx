@@ -41,15 +41,12 @@ import { AVATARS } from "@/components/landing/avatars";
 import { LEGAL_CONTACT } from "@/components/legal/legal-ui";
 import { ENGINE_ORDER, getFeature, type Feature } from "@/data/features";
 import {
-  INTRO_OFFER,
   PLAN,
   PRICING_FAQS,
   TRIAL_DAYS,
   afterTrialCopy,
   formatUsd,
-  introPrice,
   priceFor,
-  type BillingCycle,
 } from "@/data/pricing";
 import { cn } from "@/lib/utils";
 
@@ -58,84 +55,9 @@ const PLAN_ID = "pricing";
 /* Id of the closing CTA, where the sticky bar steps aside. */
 const FINAL_CTA_ID = "get-started";
 
-/* ---------- Billing toggle ---------- */
-
-const CYCLES: { id: BillingCycle; label: string; badge?: string }[] = [
-  { id: "monthly", label: "Monthly" },
-  { id: "yearly", label: "Yearly", badge: "2 months free" },
-];
-
-function BillingToggle({
-  cycle,
-  onChange,
-}: {
-  cycle: BillingCycle;
-  onChange: (cycle: BillingCycle) => void;
-}) {
-  const refs = useRef<(HTMLButtonElement | null)[]>([]);
-
-  // Radio-group keyboard model: arrows move the selection and the focus.
-  function onKeyDown(e: KeyboardEvent<HTMLButtonElement>, index: number) {
-    const step = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[e.key];
-    if (!step) return;
-    e.preventDefault();
-    const next = (index + step + CYCLES.length) % CYCLES.length;
-    onChange(CYCLES[next].id);
-    refs.current[next]?.focus();
-  }
-
-  return (
-    <div
-      role="radiogroup"
-      aria-label="Billing period"
-      className="inline-flex items-center gap-1 rounded-full border border-white/25 bg-white/10 p-1 backdrop-blur"
-    >
-      {CYCLES.map((c, i) => {
-        const active = cycle === c.id;
-        return (
-          <button
-            key={c.id}
-            ref={(el) => {
-              refs.current[i] = el;
-            }}
-            type="button"
-            role="radio"
-            aria-checked={active}
-            tabIndex={active ? 0 : -1}
-            onClick={() => onChange(c.id)}
-            onKeyDown={(e) => onKeyDown(e, i)}
-            className={cn(
-              "inline-flex h-10 items-center gap-2 rounded-full px-5 text-sm font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80",
-              active ? "bg-white text-brand-blue shadow-sm" : "text-white/80 hover:text-white",
-            )}
-          >
-            {c.label}
-            {c.badge && (
-              <span
-                className={cn(
-                  "rounded-full px-2 py-0.5 text-[0.68rem] font-bold transition-colors",
-                  active ? "bg-success/15 text-success" : "bg-white/15 text-white",
-                )}
-              >
-                {c.badge}
-              </span>
-            )}
-          </button>
-        );
-      })}
-    </div>
-  );
-}
-
 /* ---------- Hero ---------- */
 
-export function PricingHero({
-  cycle,
-  onCycleChange,
-}: {
-  cycle: BillingCycle;
-  onCycleChange: (cycle: BillingCycle) => void;
-}) {
+export function PricingHero() {
   return (
     <section
       id="top"
@@ -164,9 +86,6 @@ export function PricingHero({
             Research, writing, publishing, backlinks, and citation tracking — working every day, for
             less than you'd pay for a single freelance article.
           </p>
-        </Reveal>
-        <Reveal delay={0.2} className="mt-9">
-          <BillingToggle cycle={cycle} onChange={onCycleChange} />
         </Reveal>
       </div>
     </section>
@@ -198,10 +117,8 @@ function Metric({ value, label, sub }: { value: string; label: string; sub: stri
   );
 }
 
-export function PlanCard({ cycle }: { cycle: BillingCycle }) {
-  const price = priceFor(cycle);
-  const intro = introPrice();
-  const yearly = cycle === "yearly";
+export function PlanCard() {
+  const price = priceFor();
 
   return (
     <section
@@ -225,27 +142,13 @@ export function PlanCard({ cycle }: { cycle: BillingCycle }) {
 
             <div className="mt-7" aria-live="polite">
               <div className="flex flex-wrap items-end gap-x-2.5 gap-y-1">
-                {yearly && (
-                  <span className="mb-2.5 text-xl font-medium text-muted-foreground line-through">
-                    {formatUsd(PLAN.monthly)}
-                  </span>
-                )}
                 <span className="font-display text-6xl font-bold leading-none tracking-tight text-ink tabular-nums sm:text-7xl">
                   {formatUsd(price.perMonth)}
                 </span>
                 <span className="mb-1.5 text-base font-medium text-muted-foreground">/month</span>
               </div>
               <p className="mt-3 text-sm text-muted-foreground">
-                {yearly ? (
-                  <>
-                    Billed {formatUsd(PLAN.yearly)} yearly ·{" "}
-                    <span className="font-semibold text-success">
-                      you save {formatUsd(price.yearlySaving)}
-                    </span>
-                  </>
-                ) : (
-                  <>Billed monthly · go yearly and get 2 months free</>
-                )}
+                Billed monthly · no contract, no setup fee
               </p>
               <p className="mt-4 inline-block rounded-lg bg-surface px-3 py-1.5 text-sm text-muted-foreground ring-1 ring-border">
                 Works out to{" "}
@@ -276,31 +179,19 @@ export function PlanCard({ cycle }: { cycle: BillingCycle }) {
               </li>
             </ul>
 
-            {/* One offer line per cycle, so the card keeps its height when toggled. */}
             <div className="mt-6 flex items-start gap-3 rounded-2xl border border-volt/25 bg-volt/[0.06] p-4">
               <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-volt text-white">
                 <Sparkles className="h-4 w-4" />
               </span>
-              {!yearly && INTRO_OFFER && intro !== null ? (
-                <div>
-                  <p className="text-sm font-semibold text-ink">
-                    Launch offer: {INTRO_OFFER.percentOff}% off your first month
-                  </p>
-                  <p className="mt-0.5 text-xs leading-relaxed text-muted-foreground">
-                    After your free trial, pay {formatUsd(intro)} for month one, then{" "}
-                    {formatUsd(PLAN.monthly)}/month.
-                  </p>
-                </div>
-              ) : (
-                <div>
-                  <p className="text-sm font-semibold text-ink">
-                    {yearly ? "Two months on us" : "Go yearly, get two months free"}
-                  </p>
-                  <p className="mt-0.5 text-xs leading-relaxed text-muted-foreground">
-                    Pay for 10 months, get 12. Same plan, same features, billed once a year.
-                  </p>
-                </div>
-              )}
+              <div>
+                <p className="text-sm font-semibold text-ink">
+                  Your first {TRIAL_DAYS} days are free
+                </p>
+                <p className="mt-0.5 text-xs leading-relaxed text-muted-foreground">
+                  Nothing is charged today. After the trial it is {formatUsd(PLAN.monthly)} a month,
+                  cancelable in one click.
+                </p>
+              </div>
             </div>
 
             <div className="mt-auto pt-8">
@@ -390,7 +281,7 @@ const PROMISES: { icon: LucideIcon; title: string; body: string }[] = [
   },
 ];
 
-export function TrialTimeline({ cycle }: { cycle: BillingCycle }) {
+export function TrialTimeline() {
   const steps: { when: string; title: string; body: string; icon: LucideIcon }[] = [
     {
       when: "Today",
@@ -413,7 +304,7 @@ export function TrialTimeline({ cycle }: { cycle: BillingCycle }) {
     {
       when: `Day ${TRIAL_DAYS}`,
       title: "Keep going, or don't",
-      body: `Stay on for ${afterTrialCopy(cycle)}. Or cancel before then and pay nothing.`,
+      body: `Stay on for ${afterTrialCopy()}. Or cancel before then and pay nothing.`,
       icon: CalendarCheck,
     },
   ];
@@ -967,7 +858,7 @@ export function PricingFAQ() {
 
 /* ---------- Final CTA ---------- */
 
-export function PricingFinalCTA({ cycle }: { cycle: BillingCycle }) {
+export function PricingFinalCTA() {
   const [url, setUrl] = useState("");
   return (
     <section id={FINAL_CTA_ID} aria-labelledby="cta-title" className="px-5 pb-24 sm:pb-28">
@@ -991,7 +882,7 @@ export function PricingFinalCTA({ cycle }: { cycle: BillingCycle }) {
               <UrlForm url={url} onChange={setUrl} />
             </div>
             <p className="mt-4 text-sm text-white/70">
-              {TRIAL_DAYS} days free, then {afterTrialCopy(cycle)} · Cancel anytime
+              {TRIAL_DAYS} days free, then {afterTrialCopy()} · Cancel anytime
             </p>
           </div>
         </div>
@@ -1007,7 +898,7 @@ export function PricingFinalCTA({ cycle }: { cycle: BillingCycle }) {
  * price and the CTA within thumb reach from there until the closing CTA,
  * where it steps aside so the page never shows two at once.
  */
-export function MobileStickyCTA({ cycle }: { cycle: BillingCycle }) {
+export function MobileStickyCTA() {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -1037,7 +928,7 @@ export function MobileStickyCTA({ cycle }: { cycle: BillingCycle }) {
     };
   }, []);
 
-  const price = priceFor(cycle);
+  const price = priceFor();
 
   return (
     <div

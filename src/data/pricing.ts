@@ -8,8 +8,6 @@
  * src/lib/payments.functions.ts). Change them together.
  */
 
-export type BillingCycle = "monthly" | "yearly";
-
 /** Free-trial length. Must match `trialDays` in ALLOWED_PRICES. */
 export const TRIAL_DAYS = 7;
 
@@ -18,14 +16,9 @@ export const PLAN = {
   sites: 1,
   articlesPerMonth: 30,
   backlinkCreditsPerMonth: 30,
-  /** List price, billed monthly. */
-  monthly: 99,
-  /** Billed once a year: two months free against monthly. */
-  yearly: 990,
+  /** List price, billed monthly. Must match the `business_monthly` price in Stripe. */
+  monthly: 49.5,
 } as const;
-
-/** First-month discount on monthly billing. Set to null to retire the offer. */
-export const INTRO_OFFER: { percentOff: number } | null = { percentOff: 50 };
 
 /** $99 → "$99", 49.5 → "$49.50", 4500 → "$4,500". */
 export function formatUsd(n: number): string {
@@ -39,38 +32,24 @@ export function formatUsd(n: number): string {
 }
 
 export interface CyclePrice {
-  /** The effective monthly rate, the headline number. */
+  /** The monthly rate, the headline number. */
   perMonth: number;
   /** What one invoice is for. */
   billed: number;
   perArticle: number;
-  /** Saving against paying monthly for a year. Zero on monthly. */
-  yearlySaving: number;
 }
 
-export function priceFor(cycle: BillingCycle): CyclePrice {
-  const perMonth = cycle === "monthly" ? PLAN.monthly : PLAN.yearly / 12;
+export function priceFor(): CyclePrice {
   return {
-    perMonth,
-    billed: cycle === "monthly" ? PLAN.monthly : PLAN.yearly,
-    perArticle: Math.round((perMonth / PLAN.articlesPerMonth) * 100) / 100,
-    yearlySaving: cycle === "yearly" ? PLAN.monthly * 12 - PLAN.yearly : 0,
+    perMonth: PLAN.monthly,
+    billed: PLAN.monthly,
+    perArticle: Math.round((PLAN.monthly / PLAN.articlesPerMonth) * 100) / 100,
   };
 }
 
-/** First month's price on monthly billing, when the intro offer runs. */
-export function introPrice(): number | null {
-  if (!INTRO_OFFER) return null;
-  return Math.round(PLAN.monthly * (100 - INTRO_OFFER.percentOff)) / 100;
-}
-
-/** What happens at the end of the trial, in one sentence, for either cycle. */
-export function afterTrialCopy(cycle: BillingCycle): string {
-  if (cycle === "yearly") return `${formatUsd(PLAN.yearly)} a year — two months free`;
-  const intro = introPrice();
-  return intro !== null
-    ? `${formatUsd(intro)} for your first month, then ${formatUsd(PLAN.monthly)}/month`
-    : `${formatUsd(PLAN.monthly)}/month`;
+/** What happens at the end of the trial, in one sentence. */
+export function afterTrialCopy(): string {
+  return `${formatUsd(PLAN.monthly)}/month`;
 }
 
 export const PRICING_FAQS: { q: string; a: string }[] = [
@@ -80,11 +59,7 @@ export const PRICING_FAQS: { q: string; a: string }[] = [
   },
   {
     q: "What happens when my free trial ends?",
-    a: `Your plan continues automatically: ${afterTrialCopy("monthly")} on monthly billing. Cancel any time before day ${TRIAL_DAYS} and you won't be charged at all.`,
-  },
-  {
-    q: "How does yearly billing work?",
-    a: `You pay ${formatUsd(PLAN.yearly)} once a year instead of ${formatUsd(PLAN.monthly)} a month — ${formatUsd(PLAN.monthly * 12 - PLAN.yearly)} saved, or two months free. Everything else about the plan is identical.`,
+    a: `Your plan continues automatically at ${afterTrialCopy()}. Cancel any time before day ${TRIAL_DAYS} and you won't be charged at all.`,
   },
   {
     q: "Are there any add-ons, setup fees, or contracts?",

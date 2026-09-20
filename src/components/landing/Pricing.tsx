@@ -1,8 +1,8 @@
-import { useState } from "react";
 import { Check, ArrowRight } from "lucide-react";
 import { Reveal, Eyebrow, Stars } from "./shared";
 import { BrandTile } from "./used-by";
 import { BRANDS } from "@/data/brands";
+import { PLAN, TRIAL_DAYS, formatUsd } from "@/data/pricing";
 import { BingMark, ChatGPTMark, ClaudeMark, GeminiMark, GoogleMark, PerplexityMark } from "./ai-logos";
 
 const INCLUDED = [
@@ -33,7 +33,6 @@ const PLATFORMS = [
 ] as const;
 
 export function Pricing() {
-  const [yearly, setYearly] = useState(false);
   return (
     <section id="pricing" className="py-24 sm:py-32">
       <div className="mx-auto max-w-6xl px-5">
@@ -48,35 +47,18 @@ export function Pricing() {
           </p>
         </Reveal>
 
-        <Reveal className="mt-8 flex items-center justify-center gap-3">
-          <span className={`text-sm font-medium ${!yearly ? "text-ink" : "text-muted-foreground"}`}>Monthly</span>
-          <button
-            onClick={() => setYearly((v) => !v)}
-            className="relative h-6 w-11 rounded-full bg-ink transition-colors"
-            aria-label="Toggle billing"
-          >
-            <span className={`absolute top-0.5 h-5 w-5 rounded-full bg-background transition-all ${yearly ? "left-[22px]" : "left-0.5"}`} />
-          </button>
-          <span className={`text-sm font-medium ${yearly ? "text-ink" : "text-muted-foreground"}`}>Yearly</span>
-          <span className="rounded-full bg-brand-blue/10 px-2 py-0.5 text-xs font-semibold text-brand-blue">Save 17% OFF</span>
-        </Reveal>
-
         <div className="mt-12 grid items-start gap-8 lg:grid-cols-2">
           {/* Plan card */}
           <Reveal>
             <div className="relative overflow-hidden rounded-3xl border border-volt/40 bg-card p-8 shadow-[0_30px_80px_-50px_rgba(0,0,0,0.45)] ring-1 ring-volt/20">
-              <span className="absolute right-6 top-6 rounded-full border border-volt/40 bg-volt/15 px-3 py-1 text-xs font-semibold text-ink">
-                50% OFF
-              </span>
               <p className="text-xs font-medium text-muted-foreground">1 website</p>
               <h3 className="mt-1 text-2xl font-semibold text-ink">Business</h3>
               <p className="text-sm text-muted-foreground">All-in-one growth package</p>
               <div className="mt-5 flex items-end gap-2">
-                <span className="text-lg text-muted-foreground line-through">{yearly ? "$990" : "$99"}</span>
                 <span className="text-5xl font-bold tracking-tight text-ink">
-                  {yearly ? "$825" : "$49.5"}
+                  {formatUsd(PLAN.monthly)}
                 </span>
-                <span className="mb-1 text-sm text-muted-foreground">/{yearly ? "year" : "month"}</span>
+                <span className="mb-1 text-sm text-muted-foreground">/month</span>
               </div>
               <a
                 href="#top"
@@ -85,7 +67,7 @@ export function Pricing() {
                 Get Traffic on Autopilot <ArrowRight className="h-4 w-4" />
               </a>
               <p className="mt-2 text-center text-xs text-muted-foreground">
-                50% off your first month, then $99/month. Cancel anytime.
+                {TRIAL_DAYS} days free, then {formatUsd(PLAN.monthly)}/month. Cancel anytime.
               </p>
 
               <ul className="mt-6 space-y-3 border-t border-border pt-6">

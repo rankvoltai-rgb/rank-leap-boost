@@ -13,11 +13,11 @@ import {
   TheMath,
   TrialTimeline,
 } from "@/components/pricing/PricingSections";
-import { PLAN, PRICING_FAQS, TRIAL_DAYS, formatUsd, type BillingCycle } from "@/data/pricing";
+import { PLAN, PRICING_FAQS, TRIAL_DAYS, formatUsd } from "@/data/pricing";
 
 const SITE = "https://rankbox.xyz";
 const TITLE = "Pricing — One Plan, Everything Included | Rankbox";
-const DESCRIPTION = `Rankbox is ${formatUsd(PLAN.monthly)}/month or ${formatUsd(PLAN.yearly)}/year, with a ${TRIAL_DAYS}-day free trial. ${PLAN.articlesPerMonth} AI-optimized articles a month, authority backlinks, auto-publishing, and AI citation tracking. Cancel anytime.`;
+const DESCRIPTION = `Rankbox is ${formatUsd(PLAN.monthly)}/month, with a ${TRIAL_DAYS}-day free trial. ${PLAN.articlesPerMonth} AI-optimized articles a month, authority backlinks, auto-publishing, and AI citation tracking. Cancel anytime.`;
 
 export const Route = createFileRoute("/pricing")({
   head: () => ({
@@ -67,19 +67,6 @@ export const Route = createFileRoute("/pricing")({
                     billingDuration: "P1M",
                   },
                 },
-                {
-                  "@type": "Offer",
-                  name: "Yearly",
-                  price: String(PLAN.yearly),
-                  priceCurrency: "USD",
-                  url: `${SITE}/pricing`,
-                  priceSpecification: {
-                    "@type": "UnitPriceSpecification",
-                    price: String(PLAN.yearly),
-                    priceCurrency: "USD",
-                    billingDuration: "P1Y",
-                  },
-                },
               ],
             },
             {
@@ -106,23 +93,21 @@ export const Route = createFileRoute("/pricing")({
 });
 
 function PricingPage() {
-  // Monthly by default: it is the cycle checkout sells today.
-  const [cycle, setCycle] = useState<BillingCycle>("monthly");
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
       <main>
-        <PricingHero cycle={cycle} onCycleChange={setCycle} />
-        <PlanCard cycle={cycle} />
-        <TrialTimeline cycle={cycle} />
+        <PricingHero />
+        <PlanCard />
+        <TrialTimeline />
         <TheMath />
         <IncludedFeatures />
         <PricingProof />
         <PricingFAQ />
-        <PricingFinalCTA cycle={cycle} />
+        <PricingFinalCTA />
       </main>
       <Footer />
-      <MobileStickyCTA cycle={cycle} />
+      <MobileStickyCTA />
     </div>
   );
 }

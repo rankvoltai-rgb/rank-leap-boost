@@ -1,6 +1,6 @@
 /**
- * Onboarding's right column: the traffic the plan is projected to earn, updated
- * live as the user moves through the steps.
+ * The onboarding rail: the traffic the plan is projected to earn, what has
+ * been confirmed so far, and one customer quote.
  *
  *   Step 1  nothing to project yet, so it says what unlocks the number.
  *   Step 2  previewed from the keyword set; it moves as keywords are edited.
@@ -8,88 +8,54 @@
  *
  * Both numbers come from one model (modeledTraffic), are labelled Modeled, and
  * the method is one click away. It is a projection, not measured traffic.
+ *
+ * Below lg the rail is hidden and ProjectionStrip carries the number instead.
  */
 import { useState } from "react";
-import { ChevronDown, Info } from "lucide-react";
+import { CalendarClock, Search } from "lucide-react";
+import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { CountUp } from "@/components/ui/count-up";
 import { modeledTraffic } from "@/lib/site-meta";
 import type { DraftKeyword, DraftTitle } from "@/lib/data";
 import { Burst, type Step } from "./shell";
+import { ProofQuote } from "./ProofColumn";
 
-const TICKS = 32;
-
-function Stat({ label, value, sub }: { label: string; value: React.ReactNode; sub: string }) {
-  return (
-    <div className="px-4 py-3.5">
-      <p className="text-[0.64rem] font-semibold uppercase tracking-[0.11em] text-muted-foreground">
-        {label}
-      </p>
-      <p className="font-display mt-1 text-xl font-semibold tabular-nums text-ink">{value}</p>
-      <p className="mt-0.5 text-xs text-muted-foreground">{sub}</p>
-    </div>
-  );
+export interface ProjectionInput {
+  step: Step;
+  domain: string;
+  keywords: DraftKeyword[];
+  titles: DraftTitle[];
 }
 
-/** Setup progress as a tick scale with a moving readout. */
-function ProgressTicks({ progress }: { progress: number }) {
-  const filled = Math.round((progress / 100) * TICKS);
-  return (
-    <div
-      role="progressbar"
-      aria-label="Setup progress"
-      aria-valuemin={0}
-      aria-valuemax={100}
-      aria-valuenow={progress}
-      className="mt-8"
-    >
-      <div className="relative h-5">
-        <span
-          className="absolute -translate-x-1/2 rounded-md bg-white/15 px-1.5 py-0.5 text-[0.64rem] font-semibold tabular-nums transition-[left] duration-300"
-          style={{ left: `${Math.min(90, Math.max(10, progress))}%` }}
-        >
-          {progress}%
-        </span>
-      </div>
-      <div className="mt-1.5 flex h-3 items-end justify-between">
-        {Array.from({ length: TICKS }, (_, i) => (
-          <span
-            key={i}
-            className={cn(
-              "w-px rounded-full transition-colors duration-300",
-              i < filled ? "h-3 bg-white" : "h-2 bg-white/35",
-            )}
-          />
-        ))}
-      </div>
-    </div>
-  );
+function useProjection({ step, keywords, titles }: ProjectionInput) {
+  const planned = step === 3 && titles.length > 0;
+  const previewed = step >= 2 && keywords.length > 0;
+  const traffic = planned
+    ? titles.reduce((sum, t) => sum + t.traffic_estimate, 0)
+    : [...keywords]
+        .sort((a, b) => b.search_volume - a.search_volume)
+        .reduce((sum, k, i) => sum + modeledTraffic(k.search_volume, i), 0);
+  return { planned, shown: previewed || planned, traffic };
 }
 
 function Methodology() {
   const [open, setOpen] = useState(false);
   return (
-    <div className="mt-3 rounded-xl border border-border bg-card">
+    <div className="px-1">
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
-        className="flex w-full items-center gap-2 px-4 py-2.5 text-left"
+        className="text-xs font-medium text-muted-foreground underline decoration-border underline-offset-4 transition-colors hover:text-ink hover:decoration-ink/40"
       >
-        <Info className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
-        <span className="flex-1 text-xs font-medium text-ink">How we estimate this</span>
-        <ChevronDown
-          className={cn(
-            "h-3.5 w-3.5 shrink-0 text-muted-foreground transition-transform",
-            open && "rotate-180",
-          )}
-        />
+        How we estimate this
       </button>
       {open && (
-        <p className="border-t border-border px-4 py-3 text-xs leading-relaxed text-muted-foreground">
+        <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
           Each article's estimate is its keyword's monthly search volume multiplied by an assumed
           capture rate, which decays for articles further down the plan. Search volumes are
-          estimates too. It's a projection, not a measurement — actual traffic depends on your
+          estimates too. It's a projection, not a measurement: actual traffic depends on your
           domain, your competition, and how each article performs once it's live.
         </p>
       )}
@@ -97,79 +63,170 @@ function Methodology() {
   );
 }
 
-export function TrafficProjection({
+function SummaryItem({
+  icon,
+  title,
+  sub,
+  state,
+  onEdit,
+}: {
+  icon: ReactNode;
+  title: string;
+  sub: string;
+  state: "done" | "current" | "pending";
+  onEdit?: () => void;
+}) {
+  return (
+    <li className="flex items-center gap-3 px-4 py-3.5">
+      <span
+        className={cn(
+          "flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-xl border",
+          state === "pending"
+            ? "border-dashed border-border text-muted-foreground/60"
+            : "border-border bg-surface text-ink",
+        )}
+      >
+        {icon}
+      </span>
+      <div className="min-w-0 flex-1">
+        <p
+          className={cn(
+            "truncate text-sm font-semibold",
+            state === "pending" ? "text-muted-foreground" : "text-ink",
+          )}
+        >
+          {title}
+        </p>
+        <p className="truncate text-xs text-muted-foreground">{sub}</p>
+      </div>
+      {state === "done" && onEdit ? (
+        <button
+          type="button"
+          onClick={onEdit}
+          className="shrink-0 rounded-md px-1.5 py-1 text-xs font-semibold text-muted-foreground transition-colors hover:bg-secondary hover:text-ink"
+        >
+          Edit
+        </button>
+      ) : state === "current" ? (
+        <span
+          className="h-1.5 w-1.5 shrink-0 rounded-full bg-brand-blue"
+          aria-label="In progress"
+        />
+      ) : null}
+    </li>
+  );
+}
+
+export function PlanRail({
   step,
   domain,
+  brandName,
+  logoUrl,
   keywords,
   titles,
-}: {
-  step: Step;
-  domain: string;
-  keywords: DraftKeyword[];
-  titles: DraftTitle[];
+  onStep,
+}: ProjectionInput & {
+  brandName: string;
+  logoUrl: string | null;
+  onStep: (step: Step) => void;
 }) {
-  const planned = step === 3 && titles.length > 0;
-  const previewed = step >= 2 && keywords.length > 0;
-
+  const { planned, shown, traffic } = useProjection({ step, domain, keywords, titles });
   const searches = keywords.reduce((sum, k) => sum + k.search_volume, 0);
-  const traffic = planned
-    ? titles.reduce((sum, t) => sum + t.traffic_estimate, 0)
-    : [...keywords]
-        .sort((a, b) => b.search_volume - a.search_volume)
-        .reduce((sum, k, i) => sum + modeledTraffic(k.search_volume, i), 0);
-  const avgSignal = titles.length
-    ? Math.round(titles.reduce((sum, t) => sum + t.ai_signal, 0) / titles.length)
-    : 0;
-
-  // Starts above zero so the finish reads as close; full only once confirmed.
-  const progress = step === 1 ? 15 : step === 2 ? (previewed ? 60 : 40) : planned ? 90 : 75;
+  const stateOf = (n: Step) => (n < step ? "done" : n === step ? "current" : "pending");
 
   const status =
     step === 1
-      ? "Analyze your site to see what your content could earn."
-      : step === 2 && !previewed
-        ? "Finding the searches your buyers make…"
-        : step === 3 && !planned
-          ? "Sizing each article in your plan…"
-          : planned
-            ? `From ${titles.length} articles in your plan`
-            : `From ${keywords.length} keywords you're targeting`;
+      ? "Appears once we've analyzed your site."
+      : !shown
+        ? step === 2
+          ? "Sizing the searches your buyers make…"
+          : "Sizing each article in your plan…"
+        : planned
+          ? `From ${titles.length} articles in your plan.`
+          : `From the ${keywords.length} keywords you're targeting.`;
 
   return (
-    <div>
-      <div className="relative overflow-hidden rounded-xl bg-brand-blue px-6 py-7 text-white shadow-2">
+    <div className="space-y-5">
+      <div className="relative overflow-hidden rounded-2xl bg-brand-blue p-6 text-white shadow-2">
         {planned && <Burst key={titles.length} />}
-        <p className="text-center text-sm font-medium text-white/80">
-          {domain ? `Projected traffic for ${domain}` : "Projected monthly traffic"}
-        </p>
-        <p className="font-display mt-4 text-center text-5xl font-semibold tabular-nums tracking-tight">
-          {previewed || planned ? <CountUp value={traffic} duration={900} /> : "—"}
-        </p>
-        <p className="mt-1.5 text-center text-xs text-white/70">
-          visits / month ·{" "}
-          <span className="font-semibold uppercase tracking-wide text-white/85">Modeled</span>
-        </p>
-        <p className="mt-5 text-center text-sm leading-snug text-white/90">{status}</p>
-        <ProgressTicks progress={progress} />
-      </div>
-
-      {(previewed || planned) && (
-        <div className="mt-3 grid grid-cols-2 divide-x divide-border rounded-xl border border-border bg-card">
-          {planned ? (
-            <>
-              <Stat label="Articles" value={titles.length} sub="Published daily" />
-              <Stat label="AI signal" value={avgSignal} sub="Avg. citability" />
-            </>
-          ) : (
-            <>
-              <Stat label="Keywords" value={keywords.length} sub="Targeted" />
-              <Stat label="Searches" value={searches.toLocaleString()} sub="Per month" />
-            </>
-          )}
+        <div className="flex items-center justify-between gap-3">
+          <p className="text-sm font-medium text-white/85">
+            {domain ? `Projected visits to ${domain}` : "Projected monthly visits"}
+          </p>
+          <span className="shrink-0 rounded-full bg-white/15 px-2 py-0.5 text-[0.6rem] font-semibold uppercase tracking-[0.1em]">
+            Modeled
+          </span>
         </div>
-      )}
-
+        <p
+          className={cn(
+            "font-display mt-3 text-[2.75rem] font-semibold leading-none tabular-nums tracking-tight",
+            !shown && "text-white/35",
+          )}
+        >
+          {shown ? <CountUp value={traffic} duration={900} /> : "—"}
+        </p>
+        <p className="mt-1 text-xs text-white/70">visits a month</p>
+        <p className="mt-4 border-t border-white/15 pt-3.5 text-sm leading-snug text-white/85">
+          {status}
+        </p>
+      </div>
       <Methodology />
+
+      <ul className="divide-y divide-border rounded-2xl border border-border bg-card">
+        <SummaryItem
+          icon={
+            logoUrl ? (
+              <img src={logoUrl} alt="" className="h-full w-full object-contain p-1" />
+            ) : (
+              <span className="text-sm font-semibold">
+                {(brandName.trim()[0] || "?").toUpperCase()}
+              </span>
+            )
+          }
+          title={brandName.trim() || "Your brand"}
+          sub={domain || "Add your website"}
+          state={stateOf(1)}
+          onEdit={() => onStep(1)}
+        />
+        <SummaryItem
+          icon={<Search className="h-4 w-4" />}
+          title={step >= 2 && keywords.length ? `${keywords.length} keywords` : "Keywords"}
+          sub={
+            step >= 2 && keywords.length
+              ? `${searches.toLocaleString()} searches a month`
+              : "Found from your site"
+          }
+          state={stateOf(2)}
+          onEdit={() => onStep(2)}
+        />
+        <SummaryItem
+          icon={<CalendarClock className="h-4 w-4" />}
+          title={planned ? `${titles.length} articles` : "Content plan"}
+          sub={planned ? "One a day on autopilot" : "Built from your keywords"}
+          state={stateOf(3)}
+        />
+      </ul>
+
+      <ProofQuote />
+    </div>
+  );
+}
+
+/** The projection for small screens, where the rail is hidden. */
+export function ProjectionStrip(input: ProjectionInput) {
+  const { shown, traffic } = useProjection(input);
+  if (!shown) return null;
+  return (
+    <div className="mb-6 flex items-center justify-between gap-3 rounded-xl bg-brand-blue px-4 py-3 text-white lg:hidden">
+      <div className="min-w-0">
+        <p className="truncate text-xs text-white/80">Projected visits a month</p>
+        <p className="mt-0.5 text-[0.65rem] font-semibold uppercase tracking-[0.1em] text-white/70">
+          Modeled
+        </p>
+      </div>
+      <p className="font-display text-2xl font-semibold tabular-nums tracking-tight">
+        <CountUp value={traffic} duration={900} />
+      </p>
     </div>
   );
 }

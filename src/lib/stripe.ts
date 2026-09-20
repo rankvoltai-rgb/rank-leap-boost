@@ -9,7 +9,7 @@ function paymentsEnvironment(): StripeEnv {
   if (clientToken?.startsWith("pk_live_")) return "live";
   throw new Error(
     "Payments are not configured for this build. " +
-      "Complete go-live in your Lovable project to enable production checkout.",
+      "Set VITE_PAYMENTS_CLIENT_TOKEN to your Stripe publishable key (pk_test_ or pk_live_).",
   );
 }
 
