@@ -1,4 +1,4 @@
-import { ArrowBigUp, MessageSquare } from "lucide-react";
+import { ArrowBigUp, MessageSquare, Minus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { AI_MARKS, GoogleMark } from "@/components/landing/ai-logos";
 import { BrandMark } from "@/components/landing/shared";
@@ -29,7 +29,9 @@ export function RedditHero({ className }: { className?: string }) {
           <span className="flex items-center gap-1 rounded-md bg-card px-1.5 py-0.5 ring-1 ring-border">
             <Perplexity className="h-3 w-3" /> Cited by Perplexity
           </span>
-          <span className="ml-auto text-muted-foreground">Active · 3 days old</span>
+          <span className="ml-auto text-muted-foreground">
+            Measured 2 days ago · thread 3 days old
+          </span>
         </div>
 
         <div className="flex flex-1 flex-col gap-3.5 p-5">
@@ -98,18 +100,23 @@ export function RedditHero({ className }: { className?: string }) {
 
 /* ---------- Benefits ---------- */
 
+/**
+ * The third row has no AI badge on purpose. The product only asks AI engines
+ * about a member's top keywords, so most threads read "not checked" — and the
+ * page should show what the dashboard shows, not a better-looking version.
+ */
 const THREADS = [
   { sub: "r/startups", t: "Best project tool for a 4-person startup?", g: 3, ai: "Perplexity" },
   { sub: "r/projectmanagement", t: "Kanban or Scrum for a tiny team?", g: 2, ai: "ChatGPT" },
-  { sub: "r/SaaS", t: "What do you use instead of Jira?", g: 5, ai: "Gemini" },
-];
+  { sub: "r/SaaS", t: "What do you use instead of Jira?", g: 5, ai: null },
+] as const;
 
 function HighVisibility() {
   return (
     <Panel>
       <div className="space-y-1.5">
         {THREADS.map((t) => {
-          const Mark = markOf(t.ai);
+          const Mark = t.ai ? markOf(t.ai) : null;
           return (
             <div key={t.t} className="rounded-lg bg-card px-3 py-2.5 ring-1 ring-border">
               <p className="flex items-center gap-1.5 text-[0.65rem] text-muted-foreground">
@@ -121,9 +128,15 @@ function HighVisibility() {
                 <span className="flex items-center gap-1 rounded-md bg-surface px-1.5 py-0.5 text-[0.6rem] font-medium text-ink ring-1 ring-border">
                   <GoogleMark className="h-2.5 w-2.5" /> #{t.g} on Google
                 </span>
-                <span className="flex items-center gap-1 rounded-md bg-surface px-1.5 py-0.5 text-[0.6rem] font-medium text-ink ring-1 ring-border">
-                  <Mark className="h-2.5 w-2.5" /> Cited by {t.ai}
-                </span>
+                {Mark ? (
+                  <span className="flex items-center gap-1 rounded-md bg-surface px-1.5 py-0.5 text-[0.6rem] font-medium text-ink ring-1 ring-border">
+                    <Mark className="h-2.5 w-2.5" /> Cited by {t.ai}
+                  </span>
+                ) : (
+                  <span className="rounded-md border border-dashed border-border px-1.5 py-0.5 text-[0.6rem] font-medium text-muted-foreground">
+                    AI not checked
+                  </span>
+                )}
               </div>
             </div>
           );
@@ -133,11 +146,16 @@ function HighVisibility() {
   );
 }
 
+/**
+ * `null` is the state the real checklist has and a tidier mock-up wouldn't:
+ * where Rankbox couldn't read a subreddit's rules it says so, and never ticks
+ * a check it didn't run.
+ */
 const CHECKS = [
   ["Answers the question first", true],
   ["Discloses that you work there", true],
-  ["Follows the subreddit's rules", true],
   ["No bare link drops", true],
+  ["Follows r/agile's rules", null],
 ] as const;
 
 function HelpfulNotSpammy() {
@@ -147,15 +165,30 @@ function HelpfulNotSpammy() {
       <div className="mt-3 space-y-1.5">
         {CHECKS.map(([c, ok]) => (
           <Row key={c}>
-            <span className="text-xs font-medium text-ink">{c}</span>
-            <Tick ok={ok} />
+            <span className="text-xs font-medium text-ink">
+              {c}
+              {ok === null && (
+                <span className="block text-[0.6rem] font-normal text-muted-foreground">
+                  Couldn&rsquo;t read them — check the sidebar yourself
+                </span>
+              )}
+            </span>
+            {ok === null ? (
+              <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-secondary text-muted-foreground">
+                <Minus className="h-2.5 w-2.5" strokeWidth={3} />
+              </span>
+            ) : (
+              <Tick ok={ok} />
+            )}
           </Row>
         ))}
       </div>
       <div className="mt-auto flex items-center justify-between gap-2 pt-4">
-        <span className="text-[0.65rem] text-muted-foreground">4 of 4 checks pass</span>
-        <Chip tone="success" dot>
-          Ready for you to post
+        <span className="text-[0.65rem] text-muted-foreground">
+          3 of 4 pass · 1 we couldn&rsquo;t run
+        </span>
+        <Chip tone="muted" dot>
+          Ready after your check
         </Chip>
       </div>
     </Panel>
@@ -170,8 +203,8 @@ function Compounding() {
         <ol className="relative space-y-3 border-l border-border pl-4">
           {[
             ["14 months ago", "Helpful reply posted in r/startups"],
-            ["12 months ago", "Thread reaches #2 on Google"],
-            ["This week", "Still quoted in ChatGPT answers"],
+            ["12 months ago", "Thread measured at #2 on Google"],
+            ["This week", "ChatGPT cited the thread"],
           ].map(([when, what], i) => (
             <li key={when} className="relative">
               <span
@@ -191,7 +224,9 @@ function Compounding() {
           ))}
         </ol>
         <div className="rounded-lg bg-card p-3 ring-1 ring-border">
-          <p className="text-[0.65rem] text-muted-foreground">Monthly thread views</p>
+          {/* Comments, not views: Reddit shows a thread's view count to nobody
+              but its author, so it isn't a number Rankbox can ever have. */}
+          <p className="text-[0.65rem] text-muted-foreground">Comments on the thread</p>
           <AreaChart
             points={[3, 9, 14, 16, 18, 21, 22, 24, 27, 29, 31, 34]}
             className="mt-2 h-16 w-full"

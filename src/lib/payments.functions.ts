@@ -6,8 +6,9 @@ import {
   getServerStripeEnv,
   getStripeErrorMessage,
 } from "@/lib/stripe.server";
+import { PLAN_PRICE_LOOKUP_KEY, TRIAL_DAYS } from "@/data/pricing";
 
-type CheckoutSessionResult = { clientSecret: string } | { error: string };
+type CheckoutSessionResult = { clientSecret: string; sessionId: string } | { error: string };
 type PortalSessionResult = { url: string } | { error: string };
 
 async function resolveOrCreateCustomer(
@@ -45,12 +46,12 @@ async function resolveOrCreateCustomer(
 
 /** Prices the server will sell, and the trial each carries. Client cannot add to this. */
 const ALLOWED_PRICES: Record<string, { trialDays: number }> = {
-  business_monthly: { trialDays: 7 },
+  [PLAN_PRICE_LOOKUP_KEY]: { trialDays: TRIAL_DAYS },
 };
 
 export const createCheckoutSession = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: { priceId: string; quantity?: number; returnUrl: string }) => {
+  .inputValidator((data: { priceId: string; quantity?: number; returnUrl?: string }) => {
     if (!/^[a-zA-Z0-9_-]+$/.test(data.priceId)) throw new Error("Invalid priceId");
     if (!(data.priceId in ALLOWED_PRICES)) throw new Error("Unknown priceId");
     return data;
@@ -89,7 +90,13 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
         line_items: [{ price: stripePrice.id, quantity: data.quantity || 1 }],
         mode: isRecurring ? "subscription" : "payment",
         ui_mode: "embedded_page",
-        return_url: data.returnUrl,
+        // No return URL means the checkout was opened inside a dialog that
+        // wants to stay open: Stripe then calls the client's onComplete
+        // instead of navigating the page away, and the caller reconciles
+        // through `confirmCheckout` below.
+        ...(data.returnUrl
+          ? { return_url: data.returnUrl }
+          : { redirect_on_completion: "never" as const }),
         ...(customerId && { customer: customerId }),
         ...(!isRecurring && {
           payment_intent_data: { description: productDescription },
@@ -103,7 +110,54 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
         }),
       });
 
-      return { clientSecret: session.client_secret ?? "" };
+      return { clientSecret: session.client_secret ?? "", sessionId: session.id };
+    } catch (error) {
+      return { error: getStripeErrorMessage(error) };
+    }
+  });
+
+type ConfirmCheckoutResult = { status: string | null } | { error: string };
+
+/**
+ * Reconcile a just-completed checkout without waiting for the webhook.
+ *
+ * The webhook remains the source of truth — it is the only thing that hears
+ * about renewals, failures and cancellations — but it is asynchronous, and
+ * the user is standing in front of a dialog that is about to start generating
+ * articles. `requireGenerationEntitlement` reads the `subscriptions` row, so
+ * a user who beat the webhook back would be told to start a trial they had
+ * just paid for. This closes that race, and is also what makes checkout work
+ * in local development, where no webhook is forwarded at all.
+ *
+ * The session id is not a secret, so ownership is checked rather than
+ * assumed: the session's metadata must name the caller. Everything the sync
+ * does is idempotent, so running alongside the webhook is harmless.
+ */
+export const confirmCheckout = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: { sessionId: string }) => {
+    if (!/^cs_[a-zA-Z0-9_]+$/.test(data.sessionId)) throw new Error("Invalid sessionId");
+    return data;
+  })
+  .handler(async ({ data, context }): Promise<ConfirmCheckoutResult> => {
+    try {
+      const environment = getServerStripeEnv();
+      const stripe = createStripeClient(environment);
+
+      const session = await stripe.checkout.sessions.retrieve(data.sessionId, {
+        expand: ["subscription"],
+      });
+      if (session.metadata?.userId !== context.userId) {
+        throw new Error("This checkout session belongs to another account");
+      }
+      if (session.status !== "complete") return { status: session.status ?? null };
+
+      const subscription = session.subscription;
+      if (!subscription || typeof subscription === "string") return { status: session.status };
+
+      const { syncSubscriptionFromCheckout } = await import("@/lib/subscriptions.server");
+      await syncSubscriptionFromCheckout(subscription, environment);
+      return { status: subscription.status };
     } catch (error) {
       return { error: getStripeErrorMessage(error) };
     }

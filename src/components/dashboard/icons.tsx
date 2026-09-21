@@ -82,6 +82,17 @@ export function LinkIcon({ className }: IconProps) {
   );
 }
 
+// Reddit — a conversation with one reply charged: the thread you joined.
+export function ThreadIcon({ className }: IconProps) {
+  return (
+    <Svg className={className}>
+      <path d="M20.5 11.5a7.5 7.5 0 0 1-11.2 6.5L4 19.5l1.4-4.6A7.5 7.5 0 1 1 20.5 11.5Z" />
+      <path d="M9 10h6M9 13.5h3" />
+      <Node cx={16} cy={13.5} r={1.25} />
+    </Svg>
+  );
+}
+
 // Calendar — a schedule with one day charged.
 export function CalendarIcon({ className }: IconProps) {
   return (

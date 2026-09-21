@@ -460,6 +460,15 @@ function requirePaid(s: MockExchangeState) {
     );
 }
 
+/**
+ * Whether this mock account has had its first paid invoice. Reddit Presence
+ * sits behind the same gate, so it reads this rather than keeping a second
+ * flag that could disagree with this one.
+ */
+export function isMockPaid(): boolean {
+  return load().paid;
+}
+
 /** Mock-only: stands in for the first paid invoice, and grants the month's credits. */
 export async function simulatePaidPlan(): Promise<void> {
   mutate((s) => {

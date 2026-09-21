@@ -717,6 +717,634 @@ export type Database = {
         }
         Relationships: []
       }
+      reddit_credit_accounts: {
+        Row: {
+          balance: number
+          created_at: string
+          id: string
+          lifetime_spent: number
+          period_end: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          balance?: number
+          created_at?: string
+          id?: string
+          lifetime_spent?: number
+          period_end?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          balance?: number
+          created_at?: string
+          id?: string
+          lifetime_spent?: number
+          period_end?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      reddit_drafts: {
+        Row: {
+          body: string
+          compliance: Json
+          compliance_pass: boolean
+          created_at: string
+          credits_spent: number
+          edited_body: string | null
+          id: string
+          model: string
+          opportunity_id: string
+          regen_count: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          body: string
+          compliance?: Json
+          compliance_pass?: boolean
+          created_at?: string
+          credits_spent?: number
+          edited_body?: string | null
+          id?: string
+          model?: string
+          opportunity_id: string
+          regen_count?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          body?: string
+          compliance?: Json
+          compliance_pass?: boolean
+          created_at?: string
+          credits_spent?: number
+          edited_body?: string | null
+          id?: string
+          model?: string
+          opportunity_id?: string
+          regen_count?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reddit_drafts_opportunity_id_fkey"
+            columns: ["opportunity_id"]
+            isOneToOne: false
+            referencedRelation: "reddit_opportunities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      reddit_ledger: {
+        Row: {
+          balance_after: number
+          created_at: string
+          credits: number
+          draft_id: string | null
+          id: string
+          kind: Database["public"]["Enums"]["reddit_ledger_kind"]
+          note: string
+          user_id: string
+        }
+        Insert: {
+          balance_after: number
+          created_at?: string
+          credits: number
+          draft_id?: string | null
+          id?: string
+          kind: Database["public"]["Enums"]["reddit_ledger_kind"]
+          note?: string
+          user_id: string
+        }
+        Update: {
+          balance_after?: number
+          created_at?: string
+          credits?: number
+          draft_id?: string | null
+          id?: string
+          kind?: Database["public"]["Enums"]["reddit_ledger_kind"]
+          note?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reddit_ledger_draft_id_fkey"
+            columns: ["draft_id"]
+            isOneToOne: false
+            referencedRelation: "reddit_drafts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      reddit_opportunities: {
+        Row: {
+          blocked_reason: string | null
+          breakdown: Json
+          channel: string
+          dismiss_reason: string
+          first_seen_at: string
+          id: string
+          last_scored_at: string
+          matched_keyword: string
+          score: number
+          status: Database["public"]["Enums"]["reddit_opportunity_status"]
+          sweep_id: string | null
+          thread_id: string
+          user_id: string
+        }
+        Insert: {
+          blocked_reason?: string | null
+          breakdown?: Json
+          channel?: string
+          dismiss_reason?: string
+          first_seen_at?: string
+          id?: string
+          last_scored_at?: string
+          matched_keyword?: string
+          score?: number
+          status?: Database["public"]["Enums"]["reddit_opportunity_status"]
+          sweep_id?: string | null
+          thread_id: string
+          user_id: string
+        }
+        Update: {
+          blocked_reason?: string | null
+          breakdown?: Json
+          channel?: string
+          dismiss_reason?: string
+          first_seen_at?: string
+          id?: string
+          last_scored_at?: string
+          matched_keyword?: string
+          score?: number
+          status?: Database["public"]["Enums"]["reddit_opportunity_status"]
+          sweep_id?: string | null
+          thread_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reddit_opportunities_sweep_id_fkey"
+            columns: ["sweep_id"]
+            isOneToOne: false
+            referencedRelation: "reddit_sweeps"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reddit_opportunities_thread_id_fkey"
+            columns: ["thread_id"]
+            isOneToOne: false
+            referencedRelation: "reddit_threads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      reddit_replies: {
+        Row: {
+          confirmed_at: string | null
+          consecutive_failures: number
+          draft_id: string | null
+          id: string
+          last_checked_at: string | null
+          opportunity_id: string
+          permalink: string | null
+          posted_at: string
+          reddit_comment_id: string | null
+          removed_at: string | null
+          score: number | null
+          status: Database["public"]["Enums"]["reddit_reply_status"]
+          thread_id: string
+          user_id: string
+        }
+        Insert: {
+          confirmed_at?: string | null
+          consecutive_failures?: number
+          draft_id?: string | null
+          id?: string
+          last_checked_at?: string | null
+          opportunity_id: string
+          permalink?: string | null
+          posted_at?: string
+          reddit_comment_id?: string | null
+          removed_at?: string | null
+          score?: number | null
+          status?: Database["public"]["Enums"]["reddit_reply_status"]
+          thread_id: string
+          user_id: string
+        }
+        Update: {
+          confirmed_at?: string | null
+          consecutive_failures?: number
+          draft_id?: string | null
+          id?: string
+          last_checked_at?: string | null
+          opportunity_id?: string
+          permalink?: string | null
+          posted_at?: string
+          reddit_comment_id?: string | null
+          removed_at?: string | null
+          score?: number | null
+          status?: Database["public"]["Enums"]["reddit_reply_status"]
+          thread_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reddit_replies_draft_id_fkey"
+            columns: ["draft_id"]
+            isOneToOne: false
+            referencedRelation: "reddit_drafts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reddit_replies_opportunity_id_fkey"
+            columns: ["opportunity_id"]
+            isOneToOne: false
+            referencedRelation: "reddit_opportunities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reddit_replies_thread_id_fkey"
+            columns: ["thread_id"]
+            isOneToOne: false
+            referencedRelation: "reddit_threads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      reddit_reply_checks: {
+        Row: {
+          checked_at: string
+          detail: string
+          id: string
+          outcome: string
+          reply_id: string
+          score: number | null
+        }
+        Insert: {
+          checked_at?: string
+          detail?: string
+          id?: string
+          outcome: string
+          reply_id: string
+          score?: number | null
+        }
+        Update: {
+          checked_at?: string
+          detail?: string
+          id?: string
+          outcome?: string
+          reply_id?: string
+          score?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reddit_reply_checks_reply_id_fkey"
+            columns: ["reply_id"]
+            isOneToOne: false
+            referencedRelation: "reddit_replies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      reddit_settings: {
+        Row: {
+          allow_subreddits: string[]
+          created_at: string
+          deny_subreddits: string[]
+          disclosure_line: string
+          enabled: boolean
+          keywords_per_sweep: number
+          last_sweep_at: string | null
+          max_links_per_reply: number
+          niche: string | null
+          paid_active: boolean
+          paid_checked_at: string | null
+          sweep_count: number
+          sweep_enabled: boolean
+          tone: string
+          topic_tags: string[]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          allow_subreddits?: string[]
+          created_at?: string
+          deny_subreddits?: string[]
+          disclosure_line?: string
+          enabled?: boolean
+          keywords_per_sweep?: number
+          last_sweep_at?: string | null
+          max_links_per_reply?: number
+          niche?: string | null
+          paid_active?: boolean
+          paid_checked_at?: string | null
+          sweep_count?: number
+          sweep_enabled?: boolean
+          tone?: string
+          topic_tags?: string[]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          allow_subreddits?: string[]
+          created_at?: string
+          deny_subreddits?: string[]
+          disclosure_line?: string
+          enabled?: boolean
+          keywords_per_sweep?: number
+          last_sweep_at?: string | null
+          max_links_per_reply?: number
+          niche?: string | null
+          paid_active?: boolean
+          paid_checked_at?: string | null
+          sweep_count?: number
+          sweep_enabled?: boolean
+          tone?: string
+          topic_tags?: string[]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      reddit_subreddits: {
+        Row: {
+          allows_self_promo: boolean | null
+          created_at: string
+          id: string
+          name: string
+          over_18: boolean
+          promo_banned: boolean
+          public_description: string
+          rules: Json
+          rules_checked_at: string | null
+          rules_source: string
+          subscribers: number | null
+          title: string
+          topic_tags: string[]
+          updated_at: string
+        }
+        Insert: {
+          allows_self_promo?: boolean | null
+          created_at?: string
+          id?: string
+          name: string
+          over_18?: boolean
+          promo_banned?: boolean
+          public_description?: string
+          rules?: Json
+          rules_checked_at?: string | null
+          rules_source?: string
+          subscribers?: number | null
+          title?: string
+          topic_tags?: string[]
+          updated_at?: string
+        }
+        Update: {
+          allows_self_promo?: boolean | null
+          created_at?: string
+          id?: string
+          name?: string
+          over_18?: boolean
+          promo_banned?: boolean
+          public_description?: string
+          rules?: Json
+          rules_checked_at?: string | null
+          rules_source?: string
+          subscribers?: number | null
+          title?: string
+          topic_tags?: string[]
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      reddit_sweeps: {
+        Row: {
+          ai_checks: number
+          cost_usd: number
+          error: string
+          finished_at: string | null
+          id: string
+          keywords_used: string[]
+          opportunities_created: number
+          reddit_queries: number
+          serp_queries: number
+          started_at: string
+          status: Database["public"]["Enums"]["reddit_sweep_status"]
+          threads_seen: number
+          trigger: string
+          user_id: string
+        }
+        Insert: {
+          ai_checks?: number
+          cost_usd?: number
+          error?: string
+          finished_at?: string | null
+          id?: string
+          keywords_used?: string[]
+          opportunities_created?: number
+          reddit_queries?: number
+          serp_queries?: number
+          started_at?: string
+          status?: Database["public"]["Enums"]["reddit_sweep_status"]
+          threads_seen?: number
+          trigger?: string
+          user_id: string
+        }
+        Update: {
+          ai_checks?: number
+          cost_usd?: number
+          error?: string
+          finished_at?: string | null
+          id?: string
+          keywords_used?: string[]
+          opportunities_created?: number
+          reddit_queries?: number
+          serp_queries?: number
+          started_at?: string
+          status?: Database["public"]["Enums"]["reddit_sweep_status"]
+          threads_seen?: number
+          trigger?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      reddit_thread_ai_citations: {
+        Row: {
+          checked_at: string
+          cited: boolean
+          engine: Database["public"]["Enums"]["reddit_ai_engine"]
+          id: string
+          query: string
+          snippet: string
+          thread_id: string
+        }
+        Insert: {
+          checked_at?: string
+          cited: boolean
+          engine: Database["public"]["Enums"]["reddit_ai_engine"]
+          id?: string
+          query: string
+          snippet?: string
+          thread_id: string
+        }
+        Update: {
+          checked_at?: string
+          cited?: boolean
+          engine?: Database["public"]["Enums"]["reddit_ai_engine"]
+          id?: string
+          query?: string
+          snippet?: string
+          thread_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reddit_thread_ai_citations_thread_id_fkey"
+            columns: ["thread_id"]
+            isOneToOne: false
+            referencedRelation: "reddit_threads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      reddit_thread_serp: {
+        Row: {
+          checked_at: string
+          country: string
+          device: string
+          id: string
+          position: number
+          query: string
+          thread_id: string
+        }
+        Insert: {
+          checked_at?: string
+          country?: string
+          device?: string
+          id?: string
+          position: number
+          query: string
+          thread_id: string
+        }
+        Update: {
+          checked_at?: string
+          country?: string
+          device?: string
+          id?: string
+          position?: number
+          query?: string
+          thread_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reddit_thread_serp_thread_id_fkey"
+            columns: ["thread_id"]
+            isOneToOne: false
+            referencedRelation: "reddit_threads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      reddit_thread_stats: {
+        Row: {
+          checked_at: string
+          id: string
+          num_comments: number
+          thread_id: string
+          up_votes: number
+        }
+        Insert: {
+          checked_at?: string
+          id?: string
+          num_comments: number
+          thread_id: string
+          up_votes: number
+        }
+        Update: {
+          checked_at?: string
+          id?: string
+          num_comments?: number
+          thread_id?: string
+          up_votes?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reddit_thread_stats_thread_id_fkey"
+            columns: ["thread_id"]
+            isOneToOne: false
+            referencedRelation: "reddit_threads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      reddit_threads: {
+        Row: {
+          author: string
+          body: string
+          created_at: string
+          hydrated_at: string | null
+          hydration_source: string
+          id: string
+          is_archived: boolean | null
+          is_locked: boolean
+          is_removed: boolean
+          num_comments: number
+          permalink: string
+          posted_at: string | null
+          reddit_id: string
+          subreddit: string
+          title: string
+          top_comments: Json
+          up_votes: number
+          updated_at: string
+        }
+        Insert: {
+          author?: string
+          body?: string
+          created_at?: string
+          hydrated_at?: string | null
+          hydration_source?: string
+          id?: string
+          is_archived?: boolean | null
+          is_locked?: boolean
+          is_removed?: boolean
+          num_comments?: number
+          permalink: string
+          posted_at?: string | null
+          reddit_id: string
+          subreddit: string
+          title?: string
+          top_comments?: Json
+          up_votes?: number
+          updated_at?: string
+        }
+        Update: {
+          author?: string
+          body?: string
+          created_at?: string
+          hydrated_at?: string | null
+          hydration_source?: string
+          id?: string
+          is_archived?: boolean | null
+          is_locked?: boolean
+          is_removed?: boolean
+          num_comments?: number
+          permalink?: string
+          posted_at?: string | null
+          reddit_id?: string
+          subreddit?: string
+          title?: string
+          top_comments?: Json
+          up_votes?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       subscriptions: {
         Row: {
           activated_at: string | null
@@ -857,6 +1485,74 @@ export type Database = {
         Args: { p_bucket: string; p_window_start: string }
         Returns: number
       }
+      reddit_apply_reply_check: {
+        Args: {
+          _detail: string
+          _outcome: string
+          _reply_id: string
+          _score: number
+        }
+        Returns: Database["public"]["Enums"]["reddit_reply_status"]
+      }
+      reddit_grant_credits: {
+        Args: { _credits: number; _period_end: string; _user_id: string }
+        Returns: number
+      }
+      reddit_record_reply: {
+        Args: {
+          _comment_id: string
+          _draft_id: string
+          _opportunity_id: string
+          _permalink: string
+          _user_id: string
+        }
+        Returns: string
+      }
+      reddit_refund_credit: {
+        Args: {
+          _amount: number
+          _draft_id: string
+          _note: string
+          _user_id: string
+        }
+        Returns: number
+      }
+      reddit_set_paid: {
+        Args: { _paid: boolean; _user_id: string }
+        Returns: undefined
+      }
+      reddit_spend_credit: {
+        Args: {
+          _amount: number
+          _draft_id: string
+          _note: string
+          _user_id: string
+        }
+        Returns: number
+      }
+      reddit_start_sweep: {
+        Args: {
+          _keywords: string[]
+          _min_interval: string
+          _trigger: string
+          _user_id: string
+        }
+        Returns: Json
+      }
+      reddit_upsert_opportunity: {
+        Args: {
+          _blocked_reason: string
+          _breakdown: Json
+          _channel: string
+          _keyword: string
+          _score: number
+          _sweep_id: string
+          _thread_id: string
+          _user_id: string
+        }
+        Returns: Json
+      }
+      reddit_upsert_thread: { Args: { _payload: Json }; Returns: string }
       refund_article_credit: { Args: { _user_id: string }; Returns: undefined }
       reset_article_credits:
         | {
@@ -893,6 +1589,27 @@ export type Database = {
         | "suspended"
       exchange_verify_method: "dns_txt" | "meta_tag" | "well_known"
       keyword_source: "library" | "discovered"
+      reddit_ai_engine:
+        | "chatgpt"
+        | "perplexity"
+        | "gemini"
+        | "google_ai_overview"
+      reddit_ledger_kind: "grant" | "spend" | "refund" | "bonus" | "adjust"
+      reddit_opportunity_status:
+        | "new"
+        | "saved"
+        | "drafted"
+        | "posted"
+        | "dismissed"
+        | "dead"
+        | "stale"
+      reddit_reply_status:
+        | "claimed"
+        | "posted"
+        | "confirmed"
+        | "removed"
+        | "not_found"
+      reddit_sweep_status: "running" | "ok" | "partial" | "failed"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -1047,6 +1764,30 @@ export const Constants = {
       ],
       exchange_verify_method: ["dns_txt", "meta_tag", "well_known"],
       keyword_source: ["library", "discovered"],
+      reddit_ai_engine: [
+        "chatgpt",
+        "perplexity",
+        "gemini",
+        "google_ai_overview",
+      ],
+      reddit_ledger_kind: ["grant", "spend", "refund", "bonus", "adjust"],
+      reddit_opportunity_status: [
+        "new",
+        "saved",
+        "drafted",
+        "posted",
+        "dismissed",
+        "dead",
+        "stale",
+      ],
+      reddit_reply_status: [
+        "claimed",
+        "posted",
+        "confirmed",
+        "removed",
+        "not_found",
+      ],
+      reddit_sweep_status: ["running", "ok", "partial", "failed"],
     },
   },
 } as const

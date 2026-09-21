@@ -8,6 +8,7 @@ import {
   RadarIcon,
   ConnectIcon,
   LinkIcon,
+  ThreadIcon,
 } from "@/components/dashboard/icons";
 
 type IconComponent = ComponentType<{ className?: string }>;
@@ -30,6 +31,7 @@ export const NAV: NavItem[] = [
   { title: "Calendar", icon: CalendarIcon, to: "/dashboard/calendar" },
   { title: "Rank", icon: RadarIcon, to: "/dashboard/visibility" },
   { title: "Backlinks", icon: LinkIcon, to: "/dashboard/backlinks" },
+  { title: "Reddit", icon: ThreadIcon, to: "/dashboard/reddit" },
   { title: "Integrations", icon: ConnectIcon, to: "/dashboard/integrations" },
 ];
 

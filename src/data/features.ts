@@ -571,15 +571,15 @@ export const FEATURES: Feature[] = [
     eyebrow: "Reddit marketing for AI search",
     headline: { lead: "Get into the threads", accent: "AI actually reads" },
     subhead:
-      "Rankbox finds the Reddit threads that rank on Google and feed AI answers, then helps you add a genuinely useful reply, so your brand is part of the conversations buyers and models trust.",
+      "Rankbox finds the Reddit threads that rank on Google and feed AI answers, drafts a genuinely useful reply that says who you are, and hands it to you to post. You join the conversations buyers and models read — under your own name.",
     metaTitle: "Reddit Marketing for AI Search Visibility | Rankbox",
     metaDescription:
-      "Find the Reddit threads that rank on Google and get quoted by ChatGPT and Perplexity, and join them with genuinely helpful, on-brand replies.",
+      "Find the Reddit threads that rank on Google and get quoted by ChatGPT and Perplexity, with a helpful, disclosed reply drafted for you to review and post yourself.",
     specs: [
-      { value: "Ranked", label: "threads already on Google's first page" },
-      { value: "AI-cited", label: "discussions answer engines pull from" },
-      { value: "Helpful-first", label: "reply drafts that add real value" },
-      { value: "You approve", label: "every reply before it is posted" },
+      { value: "Measured", label: "Google position, checked and dated" },
+      { value: "AI-checked", label: "your top keywords, asked of AI engines" },
+      { value: "Disclosed", label: "every draft says who you work for" },
+      { value: "You post", label: "from your own account, never ours" },
     ],
     problem: {
       title: "AI engines are reading Reddit. Are you in it?",
@@ -594,7 +594,7 @@ export const FEATURES: Feature[] = [
         "High-visibility threads surfaced for you",
         "Helpful, on-brand reply drafts that add real value",
         "Threads prioritized by Google rank and AI citations",
-        "Contributions that keep earning mentions for months",
+        "Every thread you join, re-measured every week",
       ],
     },
     benefitsTitle: "Be the helpful answer in the thread",
@@ -607,26 +607,26 @@ export const FEATURES: Feature[] = [
       },
       {
         title: "Helpful, not spammy",
-        body: "Contributions add genuine value, building trust instead of triggering removals.",
+        body: "Every draft answers the question first, says who you work for, and is checked against the subreddit's rules where we can read them.",
       },
       {
-        title: "Compounding mentions",
-        body: "Reddit threads have long shelf lives and keep feeding AI answers over time.",
+        title: "A dated record",
+        body: "Reddit threads have long shelf lives. Rankbox re-checks each one you join and keeps what it measured, with the date.",
       },
     ],
-    stepsTitle: "From thread to mention",
+    stepsTitle: "From thread to reply",
     steps: [
       {
         title: "Find the threads",
         body: "Rankbox surfaces relevant, high-ranking discussions in your space.",
       },
       {
-        title: "Contribute value",
-        body: "Helpful, on-brand replies put your product in the conversation.",
+        title: "Review the draft",
+        body: "One credit drafts a reply that answers first and discloses who you are. You edit it, and you post it.",
       },
       {
-        title: "Earn the mention",
-        body: "Useful contributions get upvoted and cited across search and AI.",
+        title: "Track what happened",
+        body: "We re-check the thread's Google position and whether AI engines cite it, and show you the dates.",
       },
     ],
     connects:
@@ -635,7 +635,7 @@ export const FEATURES: Feature[] = [
     faqs: [
       {
         q: "Will this get flagged as spam?",
-        a: "No. The focus is genuinely helpful contributions, which is what Reddit and AI engines reward.",
+        a: "Not by design. Every draft discloses who you are, answers the question first, and is checked against the subreddit's rules where we can read them — and Rankbox won't draft at all for subreddits that ban self-promotion. But moderators decide, and no tool can promise otherwise. You read every reply before it goes anywhere.",
       },
       {
         q: "Why does Reddit matter for AI search?",
@@ -643,11 +643,15 @@ export const FEATURES: Feature[] = [
       },
       {
         q: "Do I have to manage it manually?",
-        a: "Rankbox surfaces the opportunities so contributing is fast and on-brand.",
+        a: "You post every reply yourself, from your own account. Rankbox finds the thread, writes the draft and checks it. The posting and the judgement call are yours, and that's deliberate — Rankbox never holds your Reddit login.",
       },
       {
         q: "Should I say I work for the brand?",
-        a: "Yes. Reddit communities expect disclosure, and transparent, helpful replies earn more trust from readers and from AI engines alike.",
+        a: "Yes, and Rankbox insists on it: every draft includes your disclosure line, and it can't be switched off. Reddit communities expect it, and undisclosed promotion is what gets replies removed and accounts banned.",
+      },
+      {
+        q: "Is it part of the free trial?",
+        a: "No. Reddit presence opens with your first paid invoice and includes 30 reply drafts a month. Replies go out under your own name in threads that outlive a trial, so it isn't something we hand a throwaway account.",
       },
     ],
     ctaTitle: "Get into the conversations that matter",

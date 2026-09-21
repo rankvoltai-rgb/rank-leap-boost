@@ -101,7 +101,10 @@ const INCLUDED: { lead: string; rest: string }[] = [
   { lead: "Your brand voice,", rest: "scored for SEO and GEO before it ships" },
   { lead: "Auto-published", rest: "to your site, with images and internal links" },
   { lead: "Citation tracking", rest: "across ChatGPT, Perplexity, Gemini and Google" },
-  { lead: "Reddit presence,", rest: "helpful replies you approve" },
+  {
+    lead: "Reddit presence,",
+    rest: `${PLAN.redditRepliesPerMonth} reply drafts a month, posted by you`,
+  },
   { lead: "Unlimited", rest: "rewrites and team members" },
 ];
 

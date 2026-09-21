@@ -202,3 +202,65 @@ export async function requireExchangeEntitlement(supabase: unknown, userId: stri
   if (await hasExchangeEntitlement(supabase, userId)) return;
   throw new PaidPlanRequiredError();
 }
+
+/* ── Paid-only entitlement (Reddit presence) ─────────────────────────────── */
+
+/**
+ * Reddit presence sits behind the SAME predicate as the exchange, on purpose.
+ *
+ * The reasons differ — the exchange guards link equity; this guards a metered
+ * scraping bill and, more to the point, reputational output under a real
+ * person's name in threads that outlive any trial — but the rule is identical:
+ * `trialing` never qualifies, and `past_due` / `canceled` only do for an
+ * account that actually paid once. Sharing `subscriptionIsPaid` rather than
+ * restating it is what keeps the two gates from drifting apart.
+ */
+const REDDIT_PAID_MESSAGE =
+  "Reddit presence is part of the paid plan. It opens with your first paid invoice.";
+
+export type RedditAccessVerdict = "paid" | "trial" | "lapsed" | "none";
+
+/**
+ * Where an account stands with Reddit presence. Pure, so it can be pinned by a
+ * test. `tookPart` is whether the member ever switched the feature on: someone
+ * who did and then stopped paying keeps their history, read-only (`lapsed`);
+ * someone who never did just sees the pitch (`none`).
+ */
+export function redditAccessFor(
+  row: SubRow | null | undefined,
+  tookPart: boolean,
+  now = Date.now(),
+): RedditAccessVerdict {
+  if (subscriptionIsPaid(row, now)) return "paid";
+  if (row?.status === "trialing") return "trial";
+  return tookPart ? "lapsed" : "none";
+}
+
+/** Whether this user may run sweeps and draft replies. Paid plans only. */
+export async function hasRedditEntitlement(
+  supabase: unknown,
+  userId: string,
+  env: StripeEnv = getServerStripeEnv(),
+): Promise<boolean> {
+  return subscriptionIsPaid(await latestSubscription(supabase, userId, env));
+}
+
+/** The verdict for the page's gate, from the subscription itself — never a cached flag. */
+export async function loadRedditAccess(
+  supabase: unknown,
+  userId: string,
+  tookPart: boolean,
+  env: StripeEnv = getServerStripeEnv(),
+): Promise<RedditAccessVerdict> {
+  return redditAccessFor(await latestSubscription(supabase, userId, env), tookPart);
+}
+
+/** Throws unless the user is on a paid plan. */
+export async function requireRedditEntitlement(
+  supabase: unknown,
+  userId: string,
+  env: StripeEnv = getServerStripeEnv(),
+): Promise<void> {
+  if (await hasRedditEntitlement(supabase, userId, env)) return;
+  throw new PaidPlanRequiredError(REDDIT_PAID_MESSAGE);
+}

@@ -181,7 +181,10 @@ const RANKBOX_CELLS = {
     state: "yes",
     note: `${PLAN.backlinkCreditsPerMonth} backlink credits a month, included`,
   },
-  reddit: { state: "yes", note: "Finds and joins the threads your buyers actually read" },
+  reddit: {
+    state: "yes",
+    note: "Finds the threads your buyers read and drafts your reply — you post it",
+  },
   tracking: {
     state: "yes",
     note: "Tracks citations in ChatGPT, Perplexity, Gemini, and AI Overviews",

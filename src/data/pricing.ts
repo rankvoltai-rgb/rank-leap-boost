@@ -12,6 +12,14 @@
 export const TRIAL_DAYS = 7;
 
 /**
+ * The Stripe price the trial and the plan are both sold on, by lookup key —
+ * never a `price_…` id, so sandbox and live can share this one name. The
+ * server re-checks it against ALLOWED_PRICES; passing it from the client only
+ * says *which* of the prices we sell is wanted, never what it costs.
+ */
+export const PLAN_PRICE_LOOKUP_KEY = "business_monthly";
+
+/**
  * Articles a trialing subscriber may generate before their first payment.
  * Deliberately far below the monthly allowance: a trial that hands over all
  * 30 articles up front is worth stealing with a card that will decline.
@@ -23,6 +31,13 @@ export const PLAN = {
   sites: 1,
   articlesPerMonth: 30,
   backlinkCreditsPerMonth: 30,
+  /**
+   * Reddit reply drafts a month. Paid plans only, like backlink credits, and
+   * there is deliberately no trial allowance beside TRIAL_ARTICLE_CREDITS: a
+   * sweep spends real money before anyone has paid, and a reply goes out under
+   * a real person's name in a thread that outlives any trial.
+   */
+  redditRepliesPerMonth: 30,
   /** List price, billed monthly. Must match the `business_monthly` price in Stripe. */
   monthly: 49.5,
 } as const;
@@ -70,7 +85,7 @@ export const PRICING_FAQS: { q: string; a: string }[] = [
   },
   {
     q: "Is everything included in the free trial?",
-    a: `Everything except the backlink exchange, which opens with your first paid invoice. Research, writing, publishing, and citation tracking all work during the trial, with up to ${TRIAL_ARTICLE_CREDITS} articles. Backlinks wait for a paid plan so that throwaway accounts can't join the network.`,
+    a: `Everything except the backlink exchange and Reddit presence, which both open with your first paid invoice. Research, writing, publishing, and citation tracking all work during the trial, with up to ${TRIAL_ARTICLE_CREDITS} articles. Backlinks wait for a paid plan so that throwaway accounts can't join the network; Reddit presence waits because replies go out under your own name, in threads that outlive a trial.`,
   },
   {
     q: "Are there any add-ons, setup fees, or contracts?",

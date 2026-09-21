@@ -40,6 +40,7 @@ import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]
 import { Route as AuthenticatedDashboardIndexRouteImport } from './routes/_authenticated/dashboard.index'
 import { Route as AuthenticatedDashboardVisibilityRouteImport } from './routes/_authenticated/dashboard.visibility'
 import { Route as AuthenticatedDashboardSettingsRouteImport } from './routes/_authenticated/dashboard.settings'
+import { Route as AuthenticatedDashboardRedditRouteImport } from './routes/_authenticated/dashboard.reddit'
 import { Route as AuthenticatedDashboardIntegrationsRouteImport } from './routes/_authenticated/dashboard.integrations'
 import { Route as AuthenticatedDashboardCalendarRouteImport } from './routes/_authenticated/dashboard.calendar'
 import { Route as AuthenticatedDashboardBlogEngineRouteImport } from './routes/_authenticated/dashboard.blog-engine'
@@ -49,6 +50,7 @@ import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[
 import { Route as ApiPublicV1PingRouteImport } from './routes/api/public/v1/ping'
 import { Route as ApiPublicV1ArticlesRouteImport } from './routes/api/public/v1/articles'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
+import { Route as ApiPublicHooksRedditRunRouteImport } from './routes/api/public/hooks/reddit-run'
 import { Route as ApiPublicHooksExchangeRunRouteImport } from './routes/api/public/hooks/exchange-run'
 import { Route as ApiPublicHooksAutopilotRunRouteImport } from './routes/api/public/hooks/autopilot-run'
 import { Route as AuthenticatedDashboardEditorBlogIdRouteImport } from './routes/_authenticated/dashboard.editor.$blogId'
@@ -213,6 +215,12 @@ const AuthenticatedDashboardSettingsRoute =
     path: '/settings',
     getParentRoute: () => AuthenticatedDashboardRoute,
   } as any)
+const AuthenticatedDashboardRedditRoute =
+  AuthenticatedDashboardRedditRouteImport.update({
+    id: '/reddit',
+    path: '/reddit',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
 const AuthenticatedDashboardIntegrationsRoute =
   AuthenticatedDashboardIntegrationsRouteImport.update({
     id: '/integrations',
@@ -265,6 +273,11 @@ const ApiPublicPaymentsWebhookRoute =
     path: '/api/public/payments/webhook',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicHooksRedditRunRoute = ApiPublicHooksRedditRunRouteImport.update({
+  id: '/api/public/hooks/reddit-run',
+  path: '/api/public/hooks/reddit-run',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicHooksExchangeRunRoute =
   ApiPublicHooksExchangeRunRouteImport.update({
     id: '/api/public/hooks/exchange-run',
@@ -323,12 +336,14 @@ export interface FileRoutesByFullPath {
   '/dashboard/blog-engine': typeof AuthenticatedDashboardBlogEngineRoute
   '/dashboard/calendar': typeof AuthenticatedDashboardCalendarRoute
   '/dashboard/integrations': typeof AuthenticatedDashboardIntegrationsRoute
+  '/dashboard/reddit': typeof AuthenticatedDashboardRedditRoute
   '/dashboard/settings': typeof AuthenticatedDashboardSettingsRoute
   '/dashboard/visibility': typeof AuthenticatedDashboardVisibilityRoute
   '/dashboard/': typeof AuthenticatedDashboardIndexRoute
   '/dashboard/editor/$blogId': typeof AuthenticatedDashboardEditorBlogIdRoute
   '/api/public/hooks/autopilot-run': typeof ApiPublicHooksAutopilotRunRoute
   '/api/public/hooks/exchange-run': typeof ApiPublicHooksExchangeRunRoute
+  '/api/public/hooks/reddit-run': typeof ApiPublicHooksRedditRunRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/api/public/v1/articles': typeof ApiPublicV1ArticlesRouteWithChildren
   '/api/public/v1/ping': typeof ApiPublicV1PingRoute
@@ -367,12 +382,14 @@ export interface FileRoutesByTo {
   '/dashboard/blog-engine': typeof AuthenticatedDashboardBlogEngineRoute
   '/dashboard/calendar': typeof AuthenticatedDashboardCalendarRoute
   '/dashboard/integrations': typeof AuthenticatedDashboardIntegrationsRoute
+  '/dashboard/reddit': typeof AuthenticatedDashboardRedditRoute
   '/dashboard/settings': typeof AuthenticatedDashboardSettingsRoute
   '/dashboard/visibility': typeof AuthenticatedDashboardVisibilityRoute
   '/dashboard': typeof AuthenticatedDashboardIndexRoute
   '/dashboard/editor/$blogId': typeof AuthenticatedDashboardEditorBlogIdRoute
   '/api/public/hooks/autopilot-run': typeof ApiPublicHooksAutopilotRunRoute
   '/api/public/hooks/exchange-run': typeof ApiPublicHooksExchangeRunRoute
+  '/api/public/hooks/reddit-run': typeof ApiPublicHooksRedditRunRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/api/public/v1/articles': typeof ApiPublicV1ArticlesRouteWithChildren
   '/api/public/v1/ping': typeof ApiPublicV1PingRoute
@@ -414,12 +431,14 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/blog-engine': typeof AuthenticatedDashboardBlogEngineRoute
   '/_authenticated/dashboard/calendar': typeof AuthenticatedDashboardCalendarRoute
   '/_authenticated/dashboard/integrations': typeof AuthenticatedDashboardIntegrationsRoute
+  '/_authenticated/dashboard/reddit': typeof AuthenticatedDashboardRedditRoute
   '/_authenticated/dashboard/settings': typeof AuthenticatedDashboardSettingsRoute
   '/_authenticated/dashboard/visibility': typeof AuthenticatedDashboardVisibilityRoute
   '/_authenticated/dashboard/': typeof AuthenticatedDashboardIndexRoute
   '/_authenticated/dashboard/editor/$blogId': typeof AuthenticatedDashboardEditorBlogIdRoute
   '/api/public/hooks/autopilot-run': typeof ApiPublicHooksAutopilotRunRoute
   '/api/public/hooks/exchange-run': typeof ApiPublicHooksExchangeRunRoute
+  '/api/public/hooks/reddit-run': typeof ApiPublicHooksRedditRunRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/api/public/v1/articles': typeof ApiPublicV1ArticlesRouteWithChildren
   '/api/public/v1/ping': typeof ApiPublicV1PingRoute
@@ -461,12 +480,14 @@ export interface FileRouteTypes {
     | '/dashboard/blog-engine'
     | '/dashboard/calendar'
     | '/dashboard/integrations'
+    | '/dashboard/reddit'
     | '/dashboard/settings'
     | '/dashboard/visibility'
     | '/dashboard/'
     | '/dashboard/editor/$blogId'
     | '/api/public/hooks/autopilot-run'
     | '/api/public/hooks/exchange-run'
+    | '/api/public/hooks/reddit-run'
     | '/api/public/payments/webhook'
     | '/api/public/v1/articles'
     | '/api/public/v1/ping'
@@ -505,12 +526,14 @@ export interface FileRouteTypes {
     | '/dashboard/blog-engine'
     | '/dashboard/calendar'
     | '/dashboard/integrations'
+    | '/dashboard/reddit'
     | '/dashboard/settings'
     | '/dashboard/visibility'
     | '/dashboard'
     | '/dashboard/editor/$blogId'
     | '/api/public/hooks/autopilot-run'
     | '/api/public/hooks/exchange-run'
+    | '/api/public/hooks/reddit-run'
     | '/api/public/payments/webhook'
     | '/api/public/v1/articles'
     | '/api/public/v1/ping'
@@ -551,12 +574,14 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/blog-engine'
     | '/_authenticated/dashboard/calendar'
     | '/_authenticated/dashboard/integrations'
+    | '/_authenticated/dashboard/reddit'
     | '/_authenticated/dashboard/settings'
     | '/_authenticated/dashboard/visibility'
     | '/_authenticated/dashboard/'
     | '/_authenticated/dashboard/editor/$blogId'
     | '/api/public/hooks/autopilot-run'
     | '/api/public/hooks/exchange-run'
+    | '/api/public/hooks/reddit-run'
     | '/api/public/payments/webhook'
     | '/api/public/v1/articles'
     | '/api/public/v1/ping'
@@ -588,6 +613,7 @@ export interface RootRouteChildren {
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
   ApiPublicHooksAutopilotRunRoute: typeof ApiPublicHooksAutopilotRunRoute
   ApiPublicHooksExchangeRunRoute: typeof ApiPublicHooksExchangeRunRoute
+  ApiPublicHooksRedditRunRoute: typeof ApiPublicHooksRedditRunRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
   ApiPublicV1ArticlesRoute: typeof ApiPublicV1ArticlesRouteWithChildren
   ApiPublicV1PingRoute: typeof ApiPublicV1PingRoute
@@ -812,6 +838,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardSettingsRouteImport
       parentRoute: typeof AuthenticatedDashboardRoute
     }
+    '/_authenticated/dashboard/reddit': {
+      id: '/_authenticated/dashboard/reddit'
+      path: '/reddit'
+      fullPath: '/dashboard/reddit'
+      preLoaderRoute: typeof AuthenticatedDashboardRedditRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
     '/_authenticated/dashboard/integrations': {
       id: '/_authenticated/dashboard/integrations'
       path: '/integrations'
@@ -875,6 +908,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicPaymentsWebhookRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/hooks/reddit-run': {
+      id: '/api/public/hooks/reddit-run'
+      path: '/api/public/hooks/reddit-run'
+      fullPath: '/api/public/hooks/reddit-run'
+      preLoaderRoute: typeof ApiPublicHooksRedditRunRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/hooks/exchange-run': {
       id: '/api/public/hooks/exchange-run'
       path: '/api/public/hooks/exchange-run'
@@ -912,6 +952,7 @@ interface AuthenticatedDashboardRouteChildren {
   AuthenticatedDashboardBlogEngineRoute: typeof AuthenticatedDashboardBlogEngineRoute
   AuthenticatedDashboardCalendarRoute: typeof AuthenticatedDashboardCalendarRoute
   AuthenticatedDashboardIntegrationsRoute: typeof AuthenticatedDashboardIntegrationsRoute
+  AuthenticatedDashboardRedditRoute: typeof AuthenticatedDashboardRedditRoute
   AuthenticatedDashboardSettingsRoute: typeof AuthenticatedDashboardSettingsRoute
   AuthenticatedDashboardVisibilityRoute: typeof AuthenticatedDashboardVisibilityRoute
   AuthenticatedDashboardIndexRoute: typeof AuthenticatedDashboardIndexRoute
@@ -927,6 +968,7 @@ const AuthenticatedDashboardRouteChildren: AuthenticatedDashboardRouteChildren =
     AuthenticatedDashboardCalendarRoute: AuthenticatedDashboardCalendarRoute,
     AuthenticatedDashboardIntegrationsRoute:
       AuthenticatedDashboardIntegrationsRoute,
+    AuthenticatedDashboardRedditRoute: AuthenticatedDashboardRedditRoute,
     AuthenticatedDashboardSettingsRoute: AuthenticatedDashboardSettingsRoute,
     AuthenticatedDashboardVisibilityRoute:
       AuthenticatedDashboardVisibilityRoute,
@@ -1008,6 +1050,7 @@ const rootRouteChildren: RootRouteChildren = {
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
   ApiPublicHooksAutopilotRunRoute: ApiPublicHooksAutopilotRunRoute,
   ApiPublicHooksExchangeRunRoute: ApiPublicHooksExchangeRunRoute,
+  ApiPublicHooksRedditRunRoute: ApiPublicHooksRedditRunRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
   ApiPublicV1ArticlesRoute: ApiPublicV1ArticlesRouteWithChildren,
   ApiPublicV1PingRoute: ApiPublicV1PingRoute,

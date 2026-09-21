@@ -5,15 +5,17 @@
  * layer in src/lib/api.ts. Screens that have not been redesigned keep importing
  * `@/lib/api` directly and are unaffected by this module.
  *
- * Capabilities that do not exist server-side yet — draft persistence and trial
- * entitlement — are mock-only. In real mode they throw or no-op, which is the
- * seam phase 2 fills in. Onboarding's scan, content plan and commit are real in
- * both modes (mock mode commits to its local store).
+ * Capabilities that do not exist server-side yet are mock-only: in real mode
+ * they throw or no-op, which is the seam phase 2 fills in. Onboarding's scan,
+ * content plan and commit are real in both modes (mock mode commits to its
+ * local store). The trial is real in both: mock flips a local entitlement,
+ * real mode runs a Stripe checkout and reads the subscription row back.
  */
 import * as real from "@/lib/api";
 import * as mock from "@/lib/mock/store";
 import * as mockAi from "@/lib/mock/ai";
 import * as mockExchange from "@/lib/mock/exchange";
+import * as mockReddit from "@/lib/mock/reddit";
 import { IS_MOCK } from "@/lib/mock/mode";
 import { getSessionUser } from "@/lib/auth";
 import type {
@@ -32,6 +34,10 @@ import type {
   ExchangeSettingsPatch as ExchangeSettingsPatchInput,
   TargetInput as TargetInputData,
 } from "@/lib/exchange/types";
+import type {
+  RedditAccess as RedditAccessValue,
+  RedditSettingsPatch as RedditSettingsPatchInput,
+} from "@/lib/reddit/types";
 
 export { IS_MOCK };
 
@@ -198,8 +204,9 @@ export { TRIAL_DAYS } from "@/data/pricing";
  * Whether generation is unlocked.
  *
  * Mock reads the local entitlement. Real mode derives it from the subscription
- * row — phase 2 moves this server-side, inside generateBlogContent, because a
- * client-side check is bypassable.
+ * row. This is only what the UI shows — the check that actually withholds
+ * generation is `requireGenerationEntitlement`, inside the server function,
+ * because anything decided here is bypassable.
  */
 export async function hasGenerationEntitlement(): Promise<boolean> {
   if (IS_MOCK) return mock.hasActiveTrial();
@@ -211,9 +218,29 @@ export const getEntitlement: () => Entitlement = IS_MOCK
   ? mock.getEntitlement
   : () => ({ trialStartedAt: null, trialEndsAt: null });
 
+/**
+ * Mock-only, and deliberately so: there is no "start a trial" button to press
+ * server-side. In real mode the trial begins with a Stripe checkout carrying a
+ * trial period (see StartTrialDialog), and the entitlement follows from the
+ * subscription row rather than from a call like this one.
+ */
 export const startTrial: () => Promise<Entitlement> = IS_MOCK
   ? mock.startTrial
-  : () => phaseTwo("startTrial");
+  : () => {
+      throw new Error("Real mode starts the trial through Stripe checkout, not startTrial().");
+    };
+
+/**
+ * Settle a just-completed checkout so the trial is live by the time the dialog
+ * closes, instead of whenever Stripe's webhook lands. Idempotent — the webhook
+ * writes the same row.
+ */
+export async function confirmTrialCheckout(sessionId: string): Promise<void> {
+  if (IS_MOCK) return;
+  const { confirmCheckout } = await import("@/lib/payments.functions");
+  const result = await confirmCheckout({ data: { sessionId } });
+  if ("error" in result) throw new Error(result.error);
+}
 
 /* ---------- publishing integration ---------- */
 
@@ -379,6 +406,157 @@ export async function setPublishedUrl(data: { blogId: string; url: string }) {
 export const simulatePaidPlan: () => Promise<void> = IS_MOCK
   ? mockExchange.simulatePaidPlan
   : async () => undefined;
+
+/* ---------- reddit presence ---------- */
+
+export type {
+  AiCitationMeasurement,
+  ComplianceCheck,
+  ComplianceReport,
+  ComplianceState,
+  RedditAccess,
+  RedditBalance,
+  RedditBlockedReason,
+  RedditDraft,
+  RedditLedgerEntry,
+  RedditMention,
+  RedditOpportunity,
+  RedditOpportunityDetail,
+  RedditOverview,
+  RedditReply,
+  RedditReplyStatus,
+  RedditSettings,
+  RedditSettingsPatch,
+  RedditSubredditView,
+  RedditSweep,
+  RedditSweepResult,
+  RedditThreadView,
+  SerpMeasurement,
+} from "@/lib/reddit/types";
+export {
+  draftText,
+  isMeasuredReply,
+  MAX_DRAFT_CHARS,
+  MAX_DRAFT_REGENS,
+  REDDIT_AI_ENGINE_LABELS,
+  REDDIT_BLOCKED_COPY,
+  REDDIT_DRAFT_COST,
+} from "@/lib/reddit/types";
+
+/**
+ * Paid members only, like the exchange. Rankbox never authenticates to Reddit
+ * and never posts: these calls find threads, draft a reply and check it, and
+ * record what the MEMBER then did under their own account.
+ *
+ * Every read and write is a server function acting with the service role —
+ * the thread cache is shared across members, so nobody has direct table
+ * access to it. Mock mode runs the same scorer and the same compliance checker
+ * over a synthetic set of threads.
+ */
+export async function getRedditOverview() {
+  if (IS_MOCK) return mockReddit.getRedditOverview();
+  const { getRedditOverview: fn } = await import("@/lib/reddit.functions");
+  return fn();
+}
+
+export async function listRedditOpportunities() {
+  if (IS_MOCK) return mockReddit.listRedditOpportunities();
+  const { listRedditOpportunities: fn } = await import("@/lib/reddit.functions");
+  return fn();
+}
+
+export async function getRedditOpportunity(data: { id: string }) {
+  if (IS_MOCK) return mockReddit.getRedditOpportunity(data);
+  const { getRedditOpportunity: fn } = await import("@/lib/reddit.functions");
+  return fn({ data });
+}
+
+export async function listRedditMentions() {
+  if (IS_MOCK) return mockReddit.listRedditMentions();
+  const { listRedditMentions: fn } = await import("@/lib/reddit.functions");
+  return fn();
+}
+
+export async function listRedditLedger() {
+  if (IS_MOCK) return mockReddit.listRedditLedger();
+  const { listRedditLedger: fn } = await import("@/lib/reddit.functions");
+  return fn();
+}
+
+export async function enableReddit(data: RedditSettingsPatchInput) {
+  if (IS_MOCK) return mockReddit.enableReddit(data);
+  const { enableReddit: fn } = await import("@/lib/reddit.functions");
+  return fn({ data });
+}
+
+export async function runRedditSweep() {
+  if (IS_MOCK) return mockReddit.runRedditSweep();
+  const { runRedditSweep: fn } = await import("@/lib/reddit.functions");
+  return fn();
+}
+
+export async function generateRedditDraft(data: { opportunityId: string; instructions?: string }) {
+  if (IS_MOCK) return mockReddit.generateRedditDraft(data);
+  const { generateRedditDraft: fn } = await import("@/lib/reddit.functions");
+  return fn({ data });
+}
+
+export async function regenerateRedditDraft(data: { draftId: string; instructions: string }) {
+  if (IS_MOCK) return mockReddit.regenerateRedditDraft(data);
+  const { regenerateRedditDraft: fn } = await import("@/lib/reddit.functions");
+  return fn({ data });
+}
+
+export async function updateRedditDraft(data: { draftId: string; body: string }) {
+  if (IS_MOCK) return mockReddit.updateRedditDraft(data);
+  const { updateRedditDraft: fn } = await import("@/lib/reddit.functions");
+  return fn({ data });
+}
+
+export async function markRedditReplyPosted(data: {
+  opportunityId: string;
+  permalink?: string;
+  draftId?: string;
+}) {
+  if (IS_MOCK) return mockReddit.markRedditReplyPosted(data);
+  const { markRedditReplyPosted: fn } = await import("@/lib/reddit.functions");
+  return fn({ data });
+}
+
+export async function verifyRedditReply(data: { replyId: string }) {
+  if (IS_MOCK) return mockReddit.verifyRedditReply(data);
+  const { verifyRedditReply: fn } = await import("@/lib/reddit.functions");
+  return fn({ data });
+}
+
+export async function dismissRedditOpportunity(data: { id: string; reason?: string }) {
+  if (IS_MOCK) return mockReddit.dismissRedditOpportunity(data);
+  const { dismissRedditOpportunity: fn } = await import("@/lib/reddit.functions");
+  return fn({ data });
+}
+
+export async function restoreRedditOpportunity(data: { id: string }) {
+  if (IS_MOCK) return mockReddit.restoreRedditOpportunity(data);
+  const { restoreRedditOpportunity: fn } = await import("@/lib/reddit.functions");
+  return fn({ data });
+}
+
+export async function updateRedditSettings(data: RedditSettingsPatchInput) {
+  if (IS_MOCK) return mockReddit.updateRedditSettings(data);
+  const { updateRedditSettings: fn } = await import("@/lib/reddit.functions");
+  return fn({ data });
+}
+
+/** Mock-only review switches: view the page as another kind of account. No-ops in real mode. */
+export const setMockRedditAccess: (value: RedditAccessValue | null) => Promise<void> = IS_MOCK
+  ? mockReddit.setMockRedditAccess
+  : async () => undefined;
+export const setMockRedditProvider: (configured: boolean) => Promise<void> = IS_MOCK
+  ? mockReddit.setMockRedditProvider
+  : async () => undefined;
+export const getMockRedditSwitches = IS_MOCK
+  ? mockReddit.getMockRedditSwitches
+  : () => ({ access: null, provider: true });
 
 /* ---------- mock-only utilities ---------- */
 
