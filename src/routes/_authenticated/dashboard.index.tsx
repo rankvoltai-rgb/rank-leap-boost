@@ -109,7 +109,7 @@ function StatCell({
       <p
         className={cn(
           "text-[1.9rem] font-semibold leading-none tracking-tight tabular-nums",
-          accent ? "w-fit font-bold milk-shimmer" : "text-ink",
+          accent ? "font-bold text-black dark:text-white" : "text-ink",
           valueClassName,
         )}
       >
