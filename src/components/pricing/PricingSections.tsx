@@ -231,7 +231,7 @@ export function PlanCard() {
             <ul className="mt-6 space-y-3">
               {INCLUDED.map((item) => (
                 <li key={item.lead} className="flex items-start gap-3 text-sm">
-                  <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-success/15 text-success">
+                  <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand-blue/12 text-brand-blue">
                     <Check className="h-3 w-3" strokeWidth={3} />
                   </span>
                   <span className="leading-relaxed text-muted-foreground">

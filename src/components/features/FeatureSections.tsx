@@ -60,7 +60,16 @@ function Heading({
 /* The feature's icon on a white tile, sized in em so it sits inside the H1 the
    way the landing's rotating engine tile does. Decorative: the H1's text alone
    carries the meaning. */
-function IconTile({ icon: Icon, className }: { icon: LucideIcon; className?: string }) {
+function IconTile({
+  icon: Icon,
+  mark: Mark,
+  className,
+}: {
+  icon: LucideIcon;
+  /** A brand logo shown in place of the lucide icon, in its own colors. */
+  mark?: Feature["heroMark"];
+  className?: string;
+}) {
   return (
     <span
       aria-hidden
@@ -69,7 +78,11 @@ function IconTile({ icon: Icon, className }: { icon: LucideIcon; className?: str
         className,
       )}
     >
-      <Icon className="h-[50%] w-[50%] text-brand-blue" strokeWidth={2.4} />
+      {Mark ? (
+        <Mark className="h-[62%] w-[62%]" />
+      ) : (
+        <Icon className="h-[50%] w-[50%] text-brand-blue" strokeWidth={2.4} />
+      )}
     </span>
   );
 }
@@ -133,7 +146,7 @@ export function FeatureHero({ feature }: { feature: Feature }) {
               >
                 <span className="lg:block">{feature.headline.lead}</span>{" "}
                 <span className="whitespace-nowrap">
-                  <IconTile icon={Icon} className="mr-[0.22em]" />
+                  <IconTile icon={Icon} mark={feature.heroMark} className="mr-[0.22em]" />
                   {firstAccent}
                 </span>
                 {restAccent.length > 0 && ` ${restAccent.join(" ")}`}

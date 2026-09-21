@@ -1,3 +1,4 @@
+import type { ReactElement } from "react";
 import {
   Search,
   PenLine,
@@ -9,6 +10,7 @@ import {
   Gauge,
   type LucideIcon,
 } from "lucide-react";
+import { RedditMark } from "@/components/landing/ai-logos";
 
 export interface FeatureBenefit {
   title: string;
@@ -44,6 +46,12 @@ export interface Feature {
   name: string;
   tagline: string;
   icon: LucideIcon;
+  /**
+   * Optional brand logo for the H1 icon tile, where the feature is about a
+   * named third-party surface. When set it replaces `icon` in the tile only;
+   * `icon` still carries the feature everywhere else (nav, cards, chrome).
+   */
+  heroMark?: (props: { className?: string }) => ReactElement;
   /** Pill above the H1 — carries the page's primary keyword. */
   eyebrow: string;
   /**
@@ -559,6 +567,7 @@ export const FEATURES: Feature[] = [
     name: "Reddit Presence",
     tagline: "Show up helpfully in Reddit threads AI and Google read.",
     icon: MessageSquare,
+    heroMark: RedditMark,
     eyebrow: "Reddit marketing for AI search",
     headline: { lead: "Get into the threads", accent: "AI actually reads" },
     subhead:
