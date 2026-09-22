@@ -1,10 +1,13 @@
 import { useId, type ComponentType } from "react";
 import { cn } from "@/lib/utils";
 import type { EngineMarkName } from "@/data/ai-seo/engines";
-import geminiAsset from "@/assets/gemini.png.asset.json";
 import boundlessAsset from "@/assets/boundless.png.asset.json";
 
 /* Brand AI marks used in the hero "found everywhere" card. */
+
+/* 128px WebP: the mark is never shown above ~37px, so this covers 3x screens.
+   public/assets/gemini.png (960px) stays as the source for the OG card. */
+const GEMINI_SRC = "/assets/gemini.webp";
 
 export function ChatGPTMark({ className }: { className?: string }) {
   return (
@@ -30,7 +33,7 @@ export function ClaudeMark({ className }: { className?: string }) {
 
 export function GeminiMark({ className }: { className?: string }) {
   return (
-    <img src={geminiAsset.url} alt="" aria-hidden className={cn("object-contain", className)} />
+    <img src={GEMINI_SRC} alt="" aria-hidden className={cn("object-contain", className)} />
   );
 }
 

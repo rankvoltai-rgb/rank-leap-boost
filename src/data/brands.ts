@@ -10,19 +10,23 @@
  * For a specific asset (higher quality than a favicon), import it and set
  * `src`, which wins over `domain`:
  *
- *   import acme from "@/assets/logos/acme.png";
+ *   import acme from "@/assets/logos/acme.webp?no-inline";
  *   { name: "Acme", src: acme }
+ *
+ * Logos are 144px WebP (3x the largest 48px tile). `?no-inline` keeps Vite
+ * from base64-ing small files into the main JS bundle and every page's HTML;
+ * as separate hashed files they are cached for a year instead.
  *
  * An entry with neither renders a monogram tile, so the layout stays intact.
  *
  * NOTE: this is a public claim that the brand uses Rankbox. Only list real
  * customers.
  */
-import laravel from "@/assets/logos/laravel.jpeg";
-import brandPill from "@/assets/logos/brand-pill.jpeg";
-import mongodb from "@/assets/logos/mongodb.png";
-import brandSunburst from "@/assets/logos/brand-sunburst.jpeg";
-import brandCheck from "@/assets/logos/brand-check.jpeg";
+import laravel from "@/assets/logos/laravel.webp?no-inline";
+import brandPill from "@/assets/logos/brand-pill.webp?no-inline";
+import mongodb from "@/assets/logos/mongodb.webp?no-inline";
+import brandSunburst from "@/assets/logos/brand-sunburst.webp?no-inline";
+import brandCheck from "@/assets/logos/brand-check.webp?no-inline";
 
 export interface Brand {
   name: string;

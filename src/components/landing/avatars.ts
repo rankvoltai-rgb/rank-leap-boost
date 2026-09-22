@@ -6,10 +6,10 @@
  * testimonial copy.
  */
 export const AVATARS: string[] = [
-  "/assets/customer-1.png",
-  "/assets/customer-2.png",
-  "/assets/customer-3.png",
-  "/assets/customer-4.png",
-  "/assets/customer-5.png",
-  "/assets/customer-6.png",
+  "/assets/customer-1.webp",
+  "/assets/customer-2.webp",
+  "/assets/customer-3.webp",
+  "/assets/customer-4.webp",
+  "/assets/customer-5.webp",
+  "/assets/customer-6.webp",
 ];
