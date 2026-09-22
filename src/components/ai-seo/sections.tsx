@@ -13,7 +13,13 @@ import { Link } from "@tanstack/react-router";
 import { ArrowRight, Check, ChevronRight, RotateCcw, Zap } from "lucide-react";
 import { PixelField, CARD_PIXELS, UrlForm } from "@/components/landing/Hero";
 import { Reveal } from "@/components/landing/shared";
-import { ENGINES, type Engine, type EngineSlug } from "@/data/ai-seo/engines";
+import {
+  TIERS,
+  enginesInTier,
+  getEngine,
+  type Engine,
+  type EngineSlug,
+} from "@/data/ai-seo/engines";
 import type { ChecklistItem, EngineGuide, Faq, Source } from "@/data/ai-seo/types";
 import { TRIAL_DAYS } from "@/data/pricing";
 import { formatDate } from "@/lib/format-date";
@@ -24,15 +30,17 @@ import { EngineMark, EngineTile, Md } from "./kit";
 /* ---------- engine switcher ---------- */
 
 /**
- * The same five logos as the landing hero's "Cited across" badge: the current
- * engine opens out into a labelled pill, the others stay as tiles that lead to
- * their own guide. Switching engines is one click from the top of every guide.
+ * The current engine opens out into a labelled pill; its siblings stay as
+ * tiles that lead to their own guide. Siblings are the engine's own tier: on
+ * a frontier guide that's the landing hero's five "Cited across" logos, and
+ * the other engines never crowd in beside them.
  */
 export function EngineSwitcher({ active, className }: { active?: EngineSlug; className?: string }) {
+  const tier = (active && getEngine(active)?.tier) || "frontier";
   return (
     <nav aria-label="SEO guides by answer engine" className={className}>
       <ul className="flex flex-wrap items-center justify-center gap-1.5 lg:justify-start">
-        {ENGINES.map((e) => {
+        {enginesInTier(tier).map((e) => {
           if (e.slug === active) {
             return (
               <li key={e.slug}>
@@ -162,7 +170,12 @@ export function EngineHero({
               <div className="mt-8 flex flex-col items-center gap-3 lg:items-start">
                 <UrlForm url={url} onChange={setUrl} />
                 <p className="text-sm text-white/70">
-                  See if {engine.shortName} cites you · Free {TRIAL_DAYS}-day trial
+                  {/* Only the frontier engines are ones Rankbox monitors by name;
+                      the rest get a claim the product can keep. */}
+                  {engine.tier === "frontier"
+                    ? `See if ${engine.shortName} cites you`
+                    : "See where AI answers cite you"}{" "}
+                  · Free {TRIAL_DAYS}-day trial
                 </p>
               </div>
             </Reveal>
@@ -530,8 +543,43 @@ export function GuideCard({ engine, className }: { engine: Engine; className?: s
   );
 }
 
+const COUNT_WORDS = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight"];
+
+/** The other tier as a row of logo chips: one line, every guide one click away. */
+function TierStrip({ tier }: { tier: Engine["tier"] }) {
+  const engines = enginesInTier(tier);
+  return (
+    <nav
+      aria-label={TIERS[tier].label}
+      className="mt-6 flex flex-col gap-3 rounded-2xl border border-border bg-card px-5 py-4 sm:flex-row sm:items-center sm:gap-5"
+    >
+      <p className="shrink-0 text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
+        {TIERS[tier].label}
+      </p>
+      <ul className="flex flex-wrap gap-2">
+        {engines.map((e) => (
+          <li key={e.slug}>
+            <Link
+              to="/ai-seo/$engine"
+              params={{ engine: e.slug }}
+              className="group inline-flex h-9 items-center gap-2 rounded-full border border-border bg-background py-1 pl-1 pr-3.5 text-sm font-semibold text-ink transition-all hover:-translate-y-0.5 hover:border-ink/20 hover:shadow-1"
+            >
+              <span className="flex h-7 w-7 items-center justify-center rounded-full border border-border bg-white">
+                <EngineMark mark={e.mark} className="h-3.5 w-3.5" />
+              </span>
+              {e.shortName}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  );
+}
+
 export function OtherGuides({ current, guide }: { current: Engine; guide: EngineGuide }) {
-  const others = ENGINES.filter((e) => e.slug !== current.slug);
+  const siblings = enginesInTier(current.tier);
+  const others = siblings.filter((e) => e.slug !== current.slug);
+  const otherTier = current.tier === "frontier" ? "more" : "frontier";
   return (
     <section aria-labelledby="other-guides-title" className="border-t border-border bg-surface/60">
       <div className="mx-auto max-w-6xl px-5 py-16 sm:py-20">
@@ -550,19 +598,26 @@ export function OtherGuides({ current, guide }: { current: Engine; guide: Engine
           </div>
           <Link
             to="/ai-seo"
+            hash={current.tier === "frontier" ? undefined : "more-engines"}
             className="group inline-flex items-center gap-1.5 text-sm font-semibold text-ink"
           >
-            Compare all five engines
+            Compare all {COUNT_WORDS[siblings.length] ?? siblings.length} engines
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
           </Link>
         </div>
-        <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div
+          className={cn(
+            "mt-10 grid gap-4 sm:grid-cols-2",
+            others.length === 5 ? "lg:grid-cols-5" : "lg:grid-cols-4",
+          )}
+        >
           {others.map((e, i) => (
             <Reveal key={e.slug} delay={i * 0.05} className="h-full">
-              <GuideCard engine={e} />
+              <GuideCard engine={e} className={others.length === 5 ? "p-5" : undefined} />
             </Reveal>
           ))}
         </div>
+        <TierStrip tier={otherTier} />
 
         {guide.furtherReading.length > 0 && (
           <div className="mt-14">

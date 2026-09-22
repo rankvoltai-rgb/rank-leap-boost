@@ -1,8 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
 import { FEATURE_SLUGS } from "@/data/features";
+import { INTEGRATION_SLUGS } from "@/data/integrations";
 import { TOOL_SLUGS } from "@/data/tools";
-import { COMPETITOR_SLUGS } from "@/data/alternatives";
+import { ALTERNATIVES_UPDATED, COMPETITORS } from "@/data/alternatives";
+import { COMPARE_UPDATED, MATCHUPS } from "@/data/compare/matchups";
 import { PERSONA_SLUGS } from "@/data/personas";
 import { ENGINES } from "@/data/ai-seo/engines";
 import { GLOSSARY_UPDATED, TERMS } from "@/data/glossary/terms";
@@ -46,15 +48,34 @@ export const Route = createFileRoute("/sitemap.xml")({
             changefreq: "monthly" as const,
             priority: "0.7",
           })),
+          { path: "/integrations", changefreq: "monthly", priority: "0.8" },
+          ...INTEGRATION_SLUGS.map((slug) => ({
+            path: `/integrations/${slug}`,
+            changefreq: "monthly" as const,
+            priority: "0.7",
+          })),
           { path: "/use-cases", changefreq: "monthly", priority: "0.8" },
           ...PERSONA_SLUGS.map((slug) => ({
             path: `/use-cases/${slug}`,
             changefreq: "monthly" as const,
             priority: "0.8",
           })),
-          { path: "/alternatives", changefreq: "monthly", priority: "0.8" },
-          ...COMPETITOR_SLUGS.map((slug) => ({
-            path: `/alternatives/${slug}`,
+          {
+            path: "/alternatives",
+            lastmod: ALTERNATIVES_UPDATED,
+            changefreq: "monthly",
+            priority: "0.8",
+          },
+          ...COMPETITORS.map((c) => ({
+            path: `/alternatives/${c.slug}`,
+            lastmod: c.pricing.checkedOn,
+            changefreq: "monthly" as const,
+            priority: "0.8",
+          })),
+          { path: "/compare", lastmod: COMPARE_UPDATED, changefreq: "monthly", priority: "0.8" },
+          ...MATCHUPS.map((m) => ({
+            path: `/compare/${m.slug}`,
+            lastmod: m.updated,
             changefreq: "monthly" as const,
             priority: "0.7",
           })),

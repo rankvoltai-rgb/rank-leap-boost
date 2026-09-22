@@ -1,32 +1,54 @@
-import { useState, type MouseEvent } from "react";
 import {
-  Menu,
-  X,
-  ChevronDown,
-  ArrowRight,
-  BookOpen,
-  BookA,
-  Wrench,
-  FileText,
-  GitCompare,
-  type LucideIcon,
-} from "lucide-react";
-import { Link } from "@tanstack/react-router";
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type KeyboardEvent as ReactKeyboardEvent,
+  type MouseEvent,
+  type PointerEvent as ReactPointerEvent,
+} from "react";
+import { flushSync } from "react-dom";
+import { ChevronDown, Menu, X } from "lucide-react";
+import { Link, useRouterState } from "@tanstack/react-router";
+import { cn } from "@/lib/utils";
 import { Logo } from "./shared";
-import { FEATURES, FEATURE_GROUPS } from "@/data/features";
-import { COMPETITORS } from "@/data/alternatives";
-import { PERSONAS } from "@/data/personas";
-import { ENGINES, type Engine } from "@/data/ai-seo/engines";
-import { AI_MARKS } from "./ai-logos";
+import { MENU_SECTIONS, inSection, type MenuId } from "@/data/nav";
+import { FeaturesMenu, ResourcesMenu } from "./nav-menus";
+import { MobileNav, type TopLink } from "./nav-mobile";
 
 /* Sections of the landing page. The navbar is shared by every public page,
    so these always target "/" rather than a bare hash on the current page.
    Pricing is the exception: it has its own page. */
-const LINKS = [
+const LINKS: readonly (TopLink & { section?: string[] })[] = [
   { label: "Proof", to: "/", hash: "proof" },
-  { label: "Pricing", to: "/pricing" },
+  { label: "Pricing", to: "/pricing", section: ["/pricing"] },
   { label: "FAQ", to: "/", hash: "faq" },
-] as const;
+];
+
+const MENUS: { id: MenuId; label: string; width: string }[] = [
+  { id: "features", label: "Features", width: "w-[min(60rem,calc(100vw-2rem))]" },
+  { id: "resources", label: "Resources", width: "w-[min(56rem,calc(100vw-2rem))]" },
+];
+
+/* Long enough that sweeping the pointer across the bar doesn't flash a menu
+   open; short enough that reaching for one feels instant. */
+const OPEN_DELAY = 90;
+/* Long enough to cut the corner from a trigger to the far side of its panel. */
+const CLOSE_DELAY = 200;
+
+/* Where the panel sits: centred under the bar, just below it. The surface
+   behind the menus and the hairline over them share it. */
+const STAGE = "absolute inset-x-0 top-[calc(100%+0.5rem)] mx-auto";
+
+/* The panel's surface: the brand blue taken a step deeper, so white text on it
+   clears AA and the open menu separates from the hero it opens over. */
+const MENU_SURFACE = "bg-[color-mix(in_oklab,var(--brand-blue)_72%,var(--brand-blue-deep))]";
+
+const EASE = "ease-[cubic-bezier(0.22,1,0.36,1)]";
+
+const TOP_ITEM =
+  "relative flex h-9 items-center gap-1 whitespace-nowrap rounded-full px-3 text-sm font-medium text-white/80 transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70 md:px-2 lg:px-3.5";
 
 /* On the landing page itself the router treats "/" → "/" as a no-op, so the
    logo scrolls back to the top instead. */
@@ -36,512 +58,404 @@ function scrollHomeToTop(e: MouseEvent) {
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-/* ---------- Menu primitives (shared by both dropdowns) ---------- */
-
-function MenuColumnLabel({ children }: { children: string }) {
+/* Marks the top-level item for the section you're in. */
+function CurrentDot() {
   return (
-    <p className="px-2.5 pb-2 text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-white/60">
-      {children}
-    </p>
+    <span
+      aria-hidden
+      className="absolute bottom-0.5 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full bg-white"
+    />
   );
 }
 
-function MenuItem({
-  icon: Icon,
-  title,
-  description,
-  ...link
-}: {
-  icon: LucideIcon;
-  title: string;
-  description: string;
-} & ({ to: string; params?: Record<string, string> } | { href: string })) {
-  const className =
-    "group flex items-start gap-3 rounded-xl p-2.5 transition-colors hover:bg-white/10";
-  const body = (
-    <>
-      <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-white/20 bg-white/10 text-white transition-colors group-hover:border-white group-hover:bg-white group-hover:text-brand-blue">
-        <Icon className="h-4 w-4" />
-      </span>
-      <span className="min-w-0">
-        <span className="block text-sm font-semibold text-white">{title}</span>
-        <span className="mt-0.5 block text-xs leading-snug text-white/70">{description}</span>
-      </span>
-    </>
-  );
-  if ("href" in link) {
-    return (
-      <a href={link.href} role="menuitem" className={className}>
-        {body}
-      </a>
-    );
-  }
-  return (
-    <Link to={link.to} params={link.params} role="menuitem" className={className}>
-      {body}
-    </Link>
-  );
+/* Hover belongs to mice and pens; a tap goes through click instead. */
+const hoverOnly = (fn: () => void) => (e: ReactPointerEvent) => {
+  if (e.pointerType !== "touch") fn();
+};
+
+interface MenuState {
+  active: MenuId | null;
+  /* The menu shown last, so the surface keeps its size while it fades out. */
+  last: MenuId;
+  /* True while switching between two open menus: the only time the surface
+     animates its size. Opening from closed sizes it at once. */
+  morph: boolean;
 }
 
-/* A guide row: the engine's own logo on a white tile, since a line icon would
-   say nothing about which engine it is. */
-function EngineMenuItem({ engine }: { engine: Engine }) {
-  const Mark = AI_MARKS.find((m) => m.name === engine.mark)?.Mark;
-  return (
-    <Link
-      to="/ai-seo/$engine"
-      params={{ engine: engine.slug }}
-      role="menuitem"
-      className="group flex items-center gap-3 rounded-xl p-2 transition-colors hover:bg-white/10"
-    >
-      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-white shadow-sm transition-transform group-hover:scale-105">
-        {Mark && <Mark className="h-4 w-4" />}
-      </span>
-      <span className="min-w-0">
-        <span className="block truncate text-sm font-semibold text-white">
-          {engine.shortName} SEO
-        </span>
-        <span className="block truncate text-xs text-white/70">{engine.vendor}</span>
-      </span>
-    </Link>
-  );
-}
-
-/* A promo panel closing out the menu: a sample read plus a way in. */
-function MenuFeaturePanel() {
-  return (
-    <div className="hidden flex-col rounded-xl border border-white/20 bg-white/10 p-4 lg:flex">
-      <p className="text-sm font-semibold text-white">Score your site</p>
-      <p className="mt-1.5 text-xs leading-relaxed text-white/70">
-        See how often AI answers cite your brand today — and exactly what to publish next.
-      </p>
-      <div className="mt-4 rounded-lg border border-white/20 bg-white/10 p-3">
-        <div className="flex items-center justify-between gap-2">
-          <span className="truncate text-xs font-semibold text-white">yoursite.com</span>
-          <span className="shrink-0 text-[0.6rem] font-medium uppercase tracking-[0.14em] text-white/60">
-            Sample
-          </span>
-        </div>
-        <div className="mt-2.5 flex items-center justify-between text-[0.7rem] text-white/70">
-          <span>GEO Score</span>
-          <span className="font-semibold text-white">87 · A</span>
-        </div>
-        <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-white/20">
-          <div className="h-full w-[87%] rounded-full bg-white" />
-        </div>
-      </div>
-      <a
-        href="/auth"
-        role="menuitem"
-        className="group mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-white"
-      >
-        Start free
-        <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
-      </a>
-    </div>
-  );
+interface Pill {
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+  visible: boolean;
+  /* False when it appears from hidden, so it fades in where it lands instead
+     of sliding over from wherever it last was. */
+  slide: boolean;
 }
 
 export function Navbar() {
-  const [open, setOpen] = useState(false);
-  const [featuresOpen, setFeaturesOpen] = useState(false);
-  const [mobileFeaturesOpen, setMobileFeaturesOpen] = useState(false);
-  const [resourcesOpen, setResourcesOpen] = useState(false);
-  const [mobileResourcesOpen, setMobileResourcesOpen] = useState(false);
-  const menuOpen = featuresOpen || resourcesOpen;
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const [menu, setMenu] = useState<MenuState>({ active: null, last: "features", morph: false });
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [hovered, setHovered] = useState<string | null>(null);
+  const [pill, setPill] = useState<Pill | null>(null);
+  const [sizes, setSizes] = useState<Partial<Record<MenuId, { w: number; h: number }>>>({});
+  const [primed, setPrimed] = useState(false);
+
+  const headerRef = useRef<HTMLElement>(null);
+  const triggerRefs = useRef<Partial<Record<MenuId, HTMLButtonElement | null>>>({});
+  const panelRefs = useRef<Partial<Record<MenuId, HTMLDivElement | null>>>({});
+  const itemRefs = useRef<Record<string, HTMLElement | null>>({});
+  const timers = useRef<{ open?: number; close?: number }>({});
+  const lastPointer = useRef("mouse");
+
+  const active = menu.active;
+
+  const show = useCallback((id: MenuId | null) => {
+    setMenu((m) =>
+      m.active === id
+        ? m
+        : { active: id, last: id ?? m.last, morph: m.active !== null && id !== null },
+    );
+  }, []);
+
+  // Navigating closes everything.
+  const [seenPath, setSeenPath] = useState(pathname);
+  if (seenPath !== pathname) {
+    setSeenPath(pathname);
+    setMenu((m) => ({ ...m, active: null, morph: false }));
+    setMobileOpen(false);
+  }
+
+  const clearTimers = () => {
+    window.clearTimeout(timers.current.open);
+    window.clearTimeout(timers.current.close);
+  };
+  useEffect(() => {
+    const t = timers.current;
+    return () => {
+      window.clearTimeout(t.open);
+      window.clearTimeout(t.close);
+    };
+  }, []);
+
+  // Once a menu is open, moving to the other trigger switches at once; only
+  // the first opening waits out the intent delay.
+  const hoverOpen = (id: MenuId) => {
+    clearTimers();
+    setPrimed(true);
+    if (active) show(id);
+    else timers.current.open = window.setTimeout(() => show(id), OPEN_DELAY);
+  };
+  const scheduleClose = () => {
+    clearTimers();
+    timers.current.close = window.setTimeout(() => show(null), CLOSE_DELAY);
+  };
+  const cancelClose = () => window.clearTimeout(timers.current.close);
+
+  // Escape closes (handing focus back to the trigger if it was in the menu);
+  // so does pressing anywhere outside the header.
+  useEffect(() => {
+    if (!active) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== "Escape") return;
+      const focusInside = headerRef.current?.contains(document.activeElement);
+      show(null);
+      if (focusInside) triggerRefs.current[active]?.focus();
+    };
+    const onDown = (e: PointerEvent) => {
+      if (!headerRef.current?.contains(e.target as Node)) show(null);
+    };
+    document.addEventListener("keydown", onKey);
+    document.addEventListener("pointerdown", onDown);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.removeEventListener("pointerdown", onDown);
+    };
+  }, [active, show]);
+
+  // The surface takes the size of whichever menu is showing, so each menu is
+  // measured as it lays out.
+  useEffect(() => {
+    const measure = () => {
+      const next: Partial<Record<MenuId, { w: number; h: number }>> = {};
+      for (const { id } of MENUS) {
+        const el = panelRefs.current[id];
+        if (el) next[id] = { w: el.offsetWidth, h: el.offsetHeight };
+      }
+      setSizes(next);
+    };
+    const observer = new ResizeObserver(measure);
+    for (const { id } of MENUS) {
+      const el = panelRefs.current[id];
+      if (el) observer.observe(el);
+    }
+    return () => observer.disconnect();
+  }, []);
+
+  // The pill follows the pointer across the bar, and rests on the open
+  // menu's trigger while the pointer is inside that menu.
+  const pillKey = hovered ?? active;
+  useLayoutEffect(() => {
+    const el = pillKey ? itemRefs.current[pillKey] : null;
+    setPill((prev) =>
+      el
+        ? {
+            x: el.offsetLeft,
+            y: el.offsetTop,
+            w: el.offsetWidth,
+            h: el.offsetHeight,
+            visible: true,
+            slide: !!prev?.visible,
+          }
+        : prev && { ...prev, visible: false },
+    );
+  }, [pillKey]);
+
+  const closeMobile = useCallback(() => setMobileOpen(false), []);
+
+  const order = (id: MenuId) => MENUS.findIndex((m) => m.id === id);
+
+  // An open menu sits in place; the others wait off to the side they'd slide
+  // in from, so moving between menus reads as moving along the bar.
+  // Visibility flips at once on the way in, so a link can take focus in the
+  // same frame, and waits for the fade on the way out.
+  const panelState = (id: MenuId) => {
+    if (active === id) {
+      return "visible translate-x-0 translate-y-0 opacity-100 transition-[opacity,translate]";
+    }
+    return cn(
+      "invisible pointer-events-none opacity-0 transition-[opacity,translate,visibility]",
+      !active ? "-translate-y-1" : order(id) < order(active) ? "-translate-x-6" : "translate-x-6",
+    );
+  };
+
+  // Up and down arrows walk the menu's links; up from the first returns to
+  // the trigger.
+  const walkLinks = (e: ReactKeyboardEvent<HTMLDivElement>, id: MenuId) => {
+    if (e.key !== "ArrowDown" && e.key !== "ArrowUp") return;
+    const links = Array.from(e.currentTarget.querySelectorAll<HTMLElement>("a[href]"));
+    const i = links.indexOf(document.activeElement as HTMLElement);
+    if (i === -1) return;
+    e.preventDefault();
+    if (e.key === "ArrowUp" && i === 0) triggerRefs.current[id]?.focus();
+    else links[e.key === "ArrowDown" ? Math.min(i + 1, links.length - 1) : i - 1]?.focus();
+  };
+
+  const size = sizes[menu.last];
+  const stageStyle = size ? { width: size.w, height: size.h } : undefined;
+  const stageMotion = cn(
+    menu.morph
+      ? "transition-[opacity,translate,width,height] duration-300"
+      : "transition-[opacity,translate] duration-200",
+    EASE,
+    "motion-reduce:transition-none",
+    active ? "translate-y-0 opacity-100" : "-translate-y-1 opacity-0",
+  );
+
   return (
-    <header className="sticky top-0 z-50 bg-brand-blue">
-      {/* Frosted scrim over the page while a menu is open: the menus share the
-          hero's blue, so blurring and deepening what's behind them is what
-          lifts them off the hero. Purely visual — never takes the pointer. */}
+    <header ref={headerRef} className="sticky top-0 z-50 bg-brand-blue">
+      {/* Frosted scrim over the page while a menu is open, lifting the menu
+          off the hero it opens over. Purely visual — never takes the pointer. */}
       <div
         aria-hidden
-        className={`pointer-events-none fixed inset-x-0 bottom-0 top-16 hidden bg-brand-blue-deep/30 backdrop-blur-sm transition-opacity duration-200 md:block ${
-          menuOpen ? "opacity-100" : "opacity-0"
-        }`}
+        className={cn(
+          "pointer-events-none fixed inset-x-0 bottom-0 top-16 hidden bg-brand-blue-deep/30 backdrop-blur-sm transition-opacity duration-300 md:block",
+          active ? "opacity-100" : "opacity-0",
+        )}
       />
-      <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5">
-        <div className="flex shrink-0 items-center gap-3">
-          <Link to="/" onClick={scrollHomeToTop}>
-            <Logo inverted />
-          </Link>
-        </div>
-        <div className="hidden items-center gap-6 md:flex lg:gap-7">
+      <nav
+        aria-label="Main"
+        className="relative mx-auto flex h-16 max-w-6xl items-center justify-between px-5"
+      >
+        {/* The panel's surface, behind both menus: one card that reshapes
+            between them rather than two cards that swap. */}
+        <div
+          aria-hidden
+          style={stageStyle}
+          className={cn(
+            STAGE,
+            MENU_SURFACE,
+            "pointer-events-none hidden rounded-2xl shadow-[0_28px_70px_-20px_rgba(4,24,72,0.7)] md:block",
+            stageMotion,
+          )}
+        />
+        <Link to="/" onClick={scrollHomeToTop} className="relative shrink-0">
+          <Logo inverted />
+        </Link>
+        <div
+          className="hidden items-center gap-0.5 md:flex"
+          onPointerLeave={() => setHovered(null)}
+        >
+          <span
+            aria-hidden
+            style={
+              pill
+                ? {
+                    transform: `translate(${pill.x}px, ${pill.y}px)`,
+                    width: pill.w,
+                    height: pill.h,
+                  }
+                : undefined
+            }
+            className={cn(
+              "pointer-events-none absolute left-0 top-0 rounded-full bg-white/[0.13]",
+              pill?.slide
+                ? cn("transition-[transform,width,opacity] duration-300", EASE)
+                : "transition-opacity duration-150",
+              "motion-reduce:transition-none",
+              pill?.visible ? "opacity-100" : "opacity-0",
+            )}
+          />
+          {/* Bridges the gap between the bar and the panel. */}
           <div
-            className="relative"
-            onMouseEnter={() => setFeaturesOpen(true)}
-            onMouseLeave={() => setFeaturesOpen(false)}
-            onFocus={() => setFeaturesOpen(true)}
-            onBlur={(e) => {
-              if (!e.currentTarget.contains(e.relatedTarget as Node)) setFeaturesOpen(false);
-            }}
-          >
-            <Link
-              to="/features"
-              aria-haspopup="menu"
-              aria-expanded={featuresOpen}
-              className="flex items-center gap-1 text-sm font-medium text-white/80 transition-colors hover:text-white"
-            >
-              Features
-              <ChevronDown
-                className={`h-3.5 w-3.5 transition-transform duration-200 ${featuresOpen ? "rotate-180" : ""}`}
-              />
-            </Link>
-            {/* hover bridge so the menu stays open across the gap */}
-            <div className="absolute left-1/2 top-full h-7 w-full -translate-x-1/2" aria-hidden />
-            <div
-              role="menu"
-              className={`fixed left-1/2 top-[4.25rem] w-[min(64rem,calc(100vw-2rem))] -translate-x-1/2 rounded-2xl border border-white/25 bg-brand-blue p-4 shadow-2xl shadow-brand-blue-deep/50 transition-all duration-200 ${
-                featuresOpen
-                  ? "pointer-events-auto translate-y-0 opacity-100"
-                  : "pointer-events-none -translate-y-1 opacity-0"
-              }`}
-            >
-              <div className="grid grid-cols-2 gap-x-4 gap-y-1 lg:grid-cols-[1fr_1fr_1fr_15rem]">
-                {FEATURE_GROUPS.map((group) => (
-                  <div key={group}>
-                    <MenuColumnLabel>{group}</MenuColumnLabel>
-                    {FEATURES.filter((f) => f.group === group).map((f) => (
-                      <MenuItem
-                        key={f.slug}
-                        icon={f.icon}
-                        title={f.name}
-                        description={f.tagline}
-                        to="/features/$slug"
-                        params={{ slug: f.slug }}
-                      />
-                    ))}
-                  </div>
-                ))}
-                <div>
-                  <MenuColumnLabel>Who it&rsquo;s for</MenuColumnLabel>
-                  {PERSONAS.map((p) => (
-                    <MenuItem
-                      key={p.slug}
-                      icon={p.icon}
-                      title={p.name}
-                      description={p.tagline}
-                      to="/use-cases/$slug"
-                      params={{ slug: p.slug }}
-                    />
-                  ))}
-                  <Link
-                    to="/use-cases"
-                    role="menuitem"
-                    className="block rounded-xl px-2.5 py-2 text-sm font-semibold text-white/80 transition-colors hover:bg-white/10 hover:text-white"
-                  >
-                    All use cases →
-                  </Link>
-                </div>
-                <MenuFeaturePanel />
-              </div>
-              <Link
-                to="/features"
-                role="menuitem"
-                className="mt-2 flex items-center justify-center rounded-xl border-t border-white/20 px-2.5 py-3 text-sm font-semibold text-white transition-colors hover:text-white/75"
+            aria-hidden
+            onPointerEnter={hoverOnly(cancelClose)}
+            onPointerLeave={hoverOnly(scheduleClose)}
+            className={cn(
+              "absolute inset-x-0 top-full h-2",
+              active ? "pointer-events-auto" : "pointer-events-none",
+            )}
+          />
+          {MENUS.map(({ id, label, width }) => {
+            const open = active === id;
+            return (
+              <div
+                key={id}
+                onBlur={(e) => {
+                  if (open && !e.currentTarget.contains(e.relatedTarget as Node)) show(null);
+                }}
               >
-                View all features →
-              </Link>
-            </div>
-          </div>
-          <div
-            className="relative"
-            onMouseEnter={() => setResourcesOpen(true)}
-            onMouseLeave={() => setResourcesOpen(false)}
-            onFocus={() => setResourcesOpen(true)}
-            onBlur={(e) => {
-              if (!e.currentTarget.contains(e.relatedTarget as Node)) setResourcesOpen(false);
-            }}
-          >
-            <Link
-              to="/blog"
-              aria-haspopup="menu"
-              aria-expanded={resourcesOpen}
-              className="flex items-center gap-1 text-sm font-medium text-white/80 transition-colors hover:text-white"
-            >
-              Resources
-              <ChevronDown
-                className={`h-3.5 w-3.5 transition-transform duration-200 ${resourcesOpen ? "rotate-180" : ""}`}
-              />
-            </Link>
-            <div className="absolute left-1/2 top-full h-3 w-full -translate-x-1/2" aria-hidden />
-            <div
-              role="menu"
-              className={`absolute left-1/2 top-[calc(100%+0.5rem)] w-[min(52rem,calc(100vw-2rem))] -translate-x-1/2 rounded-2xl border border-white/25 bg-brand-blue p-3 shadow-2xl shadow-brand-blue-deep/50 transition-all duration-200 ${
-                resourcesOpen
-                  ? "pointer-events-auto translate-y-0 opacity-100"
-                  : "pointer-events-none -translate-y-1 opacity-0"
-              }`}
-            >
-              <div className="grid grid-cols-3 gap-x-3">
-                <div>
-                  <MenuColumnLabel>Learn</MenuColumnLabel>
-                  <MenuItem
-                    icon={BookOpen}
-                    title="Blog"
-                    description="Guides & GEO playbooks"
-                    to="/blog"
+                <button
+                  ref={(el) => {
+                    triggerRefs.current[id] = el;
+                    itemRefs.current[id] = el;
+                  }}
+                  type="button"
+                  aria-expanded={open}
+                  aria-controls={`nav-menu-${id}`}
+                  onPointerDown={(e) => {
+                    lastPointer.current = e.pointerType;
+                  }}
+                  onPointerEnter={(e) => {
+                    setHovered(id);
+                    if (e.pointerType !== "touch") hoverOpen(id);
+                  }}
+                  onPointerLeave={hoverOnly(scheduleClose)}
+                  onFocus={() => setPrimed(true)}
+                  onClick={(e) => {
+                    clearTimers();
+                    // Hover already opened it: clicking the label the pointer
+                    // rests on shouldn't slam it shut. Taps and keys toggle.
+                    if (open && e.detail > 0 && lastPointer.current !== "touch") return;
+                    show(open ? null : id);
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key !== "ArrowDown") return;
+                    e.preventDefault();
+                    flushSync(() => show(id));
+                    panelRefs.current[id]?.querySelector<HTMLElement>("a[href]")?.focus();
+                  }}
+                  className={cn(TOP_ITEM, open && "text-white")}
+                >
+                  {label}
+                  <ChevronDown
+                    className={cn(
+                      "h-3.5 w-3.5 opacity-70 transition-transform duration-300 motion-reduce:transition-none",
+                      open && "rotate-180",
+                    )}
                   />
-                  <MenuItem
-                    icon={BookA}
-                    title="Glossary"
-                    description="Every SEO & GEO term, defined"
-                    to="/glossary"
-                  />
-                  <MenuItem
-                    icon={Wrench}
-                    title="Free Tools"
-                    description="llms.txt, schema & more"
-                    to="/tools"
-                  />
-                  <MenuItem
-                    icon={FileText}
-                    title="Sample Output"
-                    description="Example AI articles"
-                    href="/#examples"
-                  />
-                </div>
-                <div>
-                  <MenuColumnLabel>Compare</MenuColumnLabel>
-                  <MenuItem
-                    icon={GitCompare}
-                    title="All comparisons"
-                    description="Honest side-by-sides"
-                    to="/alternatives"
-                  />
-                  {COMPETITORS.map((c) => (
-                    <MenuItem
-                      key={c.slug}
-                      icon={GitCompare}
-                      title={`vs ${c.name}`}
-                      description={c.category}
-                      to="/alternatives/$slug"
-                      params={{ slug: c.slug }}
-                    />
-                  ))}
-                </div>
-                <div>
-                  <MenuColumnLabel>AI SEO guides</MenuColumnLabel>
-                  {ENGINES.map((e) => (
-                    <EngineMenuItem key={e.slug} engine={e} />
-                  ))}
-                  <Link
-                    to="/ai-seo"
-                    role="menuitem"
-                    className="mt-1 block rounded-xl px-2.5 py-2 text-sm font-semibold text-white/80 transition-colors hover:bg-white/10 hover:text-white"
-                  >
-                    Compare all engines →
-                  </Link>
+                  {inSection(pathname, MENU_SECTIONS[id]) && <CurrentDot />}
+                </button>
+                <div
+                  id={`nav-menu-${id}`}
+                  ref={(el) => {
+                    panelRefs.current[id] = el;
+                  }}
+                  onPointerEnter={hoverOnly(cancelClose)}
+                  onPointerLeave={hoverOnly(scheduleClose)}
+                  onClick={(e) => {
+                    if (!(e.target as HTMLElement).closest("a")) return;
+                    clearTimers();
+                    show(null);
+                  }}
+                  onKeyDown={(e) => walkLinks(e, id)}
+                  className={cn(
+                    STAGE,
+                    width,
+                    "max-h-[calc(100dvh-5.5rem)] overflow-y-auto overflow-x-hidden rounded-2xl duration-200 ease-out motion-reduce:transition-none",
+                    panelState(id),
+                  )}
+                >
+                  {id === "features" ? <FeaturesMenu /> : <ResourcesMenu primed={primed} />}
                 </div>
               </div>
-            </div>
-          </div>
+            );
+          })}
           {LINKS.map((l) => (
             <Link
               key={l.label}
+              ref={(el) => {
+                itemRefs.current[l.label] = el;
+              }}
               to={l.to}
-              hash={"hash" in l ? l.hash : undefined}
-              className="text-sm font-medium text-white/80 transition-colors hover:text-white"
+              hash={l.hash}
+              onPointerEnter={() => setHovered(l.label)}
+              className={cn(TOP_ITEM, l.section && inSection(pathname, l.section) && "text-white")}
             >
               {l.label}
+              {l.section && inSection(pathname, l.section) && <CurrentDot />}
             </Link>
           ))}
         </div>
+        {/* Hairline and top highlight over the menus, so their tinted zones
+            can run right to the panel's edge without covering its border. */}
+        <div
+          aria-hidden
+          style={stageStyle}
+          className={cn(
+            STAGE,
+            "pointer-events-none hidden rounded-2xl border border-white/20 shadow-[inset_0_1px_0_rgba(255,255,255,0.14)] md:block",
+            stageMotion,
+          )}
+        />
         <div className="flex items-center gap-2">
           <a
             href="/auth"
-            className="hidden rounded-xl border border-white/30 bg-white/10 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-white/20 md:inline-flex"
+            className="hidden whitespace-nowrap rounded-xl border border-white/30 bg-white/10 px-3 py-2 text-sm font-semibold text-white transition-colors hover:bg-white/20 md:inline-flex lg:px-4"
           >
             Sign In
           </a>
           <a
             href="/auth"
-            className="hidden rounded-xl bg-white px-4 py-2 text-sm font-semibold text-brand-blue shadow-sm transition-all hover:-translate-y-0.5 hover:bg-white/90 hover:shadow-md md:inline-flex"
+            className="hidden whitespace-nowrap rounded-xl bg-white px-3 py-2 text-sm font-semibold text-brand-blue shadow-sm transition-all hover:-translate-y-0.5 hover:bg-white/90 hover:shadow-md md:inline-flex lg:px-4"
           >
             Get Started Free
           </a>
           <button
-            onClick={() => setOpen((v) => !v)}
-            className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-white/30 bg-white/10 text-white md:hidden"
-            aria-label="Toggle menu"
+            type="button"
+            onClick={() => setMobileOpen((v) => !v)}
+            aria-expanded={mobileOpen}
+            aria-controls="mobile-nav"
+            aria-label={mobileOpen ? "Close menu" : "Open menu"}
+            className="relative inline-flex h-10 w-10 items-center justify-center rounded-xl border border-white/30 bg-white/10 text-white md:hidden"
           >
-            {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+            <Menu
+              className={cn(
+                "absolute h-5 w-5 transition-all duration-200 motion-reduce:transition-none",
+                mobileOpen && "rotate-90 scale-50 opacity-0",
+              )}
+            />
+            <X
+              className={cn(
+                "absolute h-5 w-5 transition-all duration-200 motion-reduce:transition-none",
+                !mobileOpen && "-rotate-90 scale-50 opacity-0",
+              )}
+            />
           </button>
         </div>
       </nav>
-      {open && (
-        <div className="border-t border-white/15 bg-brand-blue px-5 py-4 md:hidden">
-          <div className="flex flex-col gap-1">
-            <button
-              type="button"
-              onClick={() => setMobileFeaturesOpen((v) => !v)}
-              aria-expanded={mobileFeaturesOpen}
-              className="flex items-center justify-between rounded-lg px-2 py-2.5 text-sm font-medium text-white/80 hover:bg-white/10 hover:text-white"
-            >
-              Features
-              <ChevronDown
-                className={`h-4 w-4 transition-transform duration-200 ${mobileFeaturesOpen ? "rotate-180" : ""}`}
-              />
-            </button>
-            {mobileFeaturesOpen && (
-              <div className="mb-1 ml-2 flex flex-col gap-0.5 border-l border-white/20 pl-3">
-                {FEATURES.map((f) => {
-                  const Icon = f.icon;
-                  return (
-                    <Link
-                      key={f.slug}
-                      to="/features/$slug"
-                      params={{ slug: f.slug }}
-                      onClick={() => setOpen(false)}
-                      className="flex items-center gap-2.5 rounded-lg px-2 py-2 text-sm text-white/80 hover:bg-white/10 hover:text-white"
-                    >
-                      <Icon className="h-4 w-4 shrink-0" />
-                      {f.name}
-                    </Link>
-                  );
-                })}
-                <Link
-                  to="/features"
-                  onClick={() => setOpen(false)}
-                  className="rounded-lg px-2 py-2 text-sm font-semibold text-white hover:bg-white/10"
-                >
-                  View all features →
-                </Link>
-                {/* Labelled, or "For marketers" reads as a ninth feature. */}
-                <p className="mt-3 px-2 pb-1 text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-white/60">
-                  Who it&rsquo;s for
-                </p>
-                {PERSONAS.map((p) => {
-                  const Icon = p.icon;
-                  return (
-                    <Link
-                      key={p.slug}
-                      to="/use-cases/$slug"
-                      params={{ slug: p.slug }}
-                      onClick={() => setOpen(false)}
-                      className="flex items-center gap-2.5 rounded-lg px-2 py-2 text-sm text-white/80 hover:bg-white/10 hover:text-white"
-                    >
-                      <Icon className="h-4 w-4 shrink-0" />
-                      For {p.nameLower}
-                    </Link>
-                  );
-                })}
-                <Link
-                  to="/use-cases"
-                  onClick={() => setOpen(false)}
-                  className="rounded-lg px-2 py-2 text-sm font-semibold text-white hover:bg-white/10"
-                >
-                  All use cases →
-                </Link>
-              </div>
-            )}
-            <button
-              type="button"
-              onClick={() => setMobileResourcesOpen((v) => !v)}
-              aria-expanded={mobileResourcesOpen}
-              className="flex items-center justify-between rounded-lg px-2 py-2.5 text-sm font-medium text-white/80 hover:bg-white/10 hover:text-white"
-            >
-              Resources
-              <ChevronDown
-                className={`h-4 w-4 transition-transform duration-200 ${mobileResourcesOpen ? "rotate-180" : ""}`}
-              />
-            </button>
-            {mobileResourcesOpen && (
-              <div className="mb-1 ml-2 flex flex-col gap-0.5 border-l border-white/20 pl-3">
-                <Link
-                  to="/blog"
-                  onClick={() => setOpen(false)}
-                  className="rounded-lg px-2 py-2 text-sm text-white/80 hover:bg-white/10 hover:text-white"
-                >
-                  Blog
-                </Link>
-                <Link
-                  to="/glossary"
-                  onClick={() => setOpen(false)}
-                  className="rounded-lg px-2 py-2 text-sm text-white/80 hover:bg-white/10 hover:text-white"
-                >
-                  Glossary
-                </Link>
-                <Link
-                  to="/tools"
-                  onClick={() => setOpen(false)}
-                  className="rounded-lg px-2 py-2 text-sm text-white/80 hover:bg-white/10 hover:text-white"
-                >
-                  Free Tools
-                </Link>
-                <a
-                  href="/#examples"
-                  onClick={() => setOpen(false)}
-                  className="rounded-lg px-2 py-2 text-sm text-white/80 hover:bg-white/10 hover:text-white"
-                >
-                  Sample Output
-                </a>
-                <Link
-                  to="/alternatives"
-                  onClick={() => setOpen(false)}
-                  className="rounded-lg px-2 py-2 text-sm text-white/80 hover:bg-white/10 hover:text-white"
-                >
-                  Comparisons
-                </Link>
-                {COMPETITORS.map((c) => (
-                  <Link
-                    key={c.slug}
-                    to="/alternatives/$slug"
-                    params={{ slug: c.slug }}
-                    onClick={() => setOpen(false)}
-                    className="rounded-lg px-2 py-2 pl-4 text-sm text-white/70 hover:bg-white/10 hover:text-white"
-                  >
-                    vs {c.name}
-                  </Link>
-                ))}
-                <Link
-                  to="/ai-seo"
-                  onClick={() => setOpen(false)}
-                  className="rounded-lg px-2 py-2 text-sm text-white/80 hover:bg-white/10 hover:text-white"
-                >
-                  AI SEO guides
-                </Link>
-                {ENGINES.map((e) => (
-                  <Link
-                    key={e.slug}
-                    to="/ai-seo/$engine"
-                    params={{ engine: e.slug }}
-                    onClick={() => setOpen(false)}
-                    className="rounded-lg px-2 py-2 pl-4 text-sm text-white/70 hover:bg-white/10 hover:text-white"
-                  >
-                    {e.shortName} SEO
-                  </Link>
-                ))}
-              </div>
-            )}
-            {LINKS.map((l) => (
-              <Link
-                key={l.label}
-                to={l.to}
-                hash={"hash" in l ? l.hash : undefined}
-                onClick={() => setOpen(false)}
-                className="rounded-lg px-2 py-2.5 text-sm font-medium text-white/80 hover:bg-white/10 hover:text-white"
-              >
-                {l.label}
-              </Link>
-            ))}
-            <a
-              href="/auth"
-              onClick={() => setOpen(false)}
-              className="mt-2 rounded-xl bg-white px-4 py-2.5 text-center text-sm font-semibold text-brand-blue"
-            >
-              Get Started Free
-            </a>
-            <a
-              href="/auth"
-              onClick={() => setOpen(false)}
-              className="rounded-xl border border-white/30 bg-white/10 px-4 py-2.5 text-center text-sm font-semibold text-white"
-            >
-              Sign In
-            </a>
-          </div>
-        </div>
-      )}
+      {mobileOpen && <MobileNav links={LINKS} onClose={closeMobile} />}
     </header>
   );
 }

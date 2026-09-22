@@ -15,7 +15,6 @@
  * lettermark as a fallback.
  */
 import { useCallback, useState, type ReactNode } from "react";
-import { motion } from "motion/react";
 import { Check, Minus, X } from "lucide-react";
 import { Mark } from "@/components/brand/Mark";
 import { brandIconUrlAt } from "@/lib/brand-icon";
@@ -211,33 +210,43 @@ export function CellBody({ cell, className }: { cell: Cell; className?: string }
   );
 }
 
-/* ---------- animated score bar ---------- */
+/* ---------- compact state mark ---------- */
 
-export function ScoreBar({
-  value,
-  tone,
-  delay = 0,
+/**
+ * The matrix badge at the size of a line of text, for the hero card and the
+ * hub table. Same three states and the same screen-reader labels, so a cell
+ * reads identically wherever it appears.
+ */
+export function FactDot({
+  state,
+  onDark = false,
+  className,
 }: {
-  value: number;
-  /** "us" gets the brand fill; "them" stays neutral so the read is instant. */
-  tone: "us" | "them";
-  delay?: number;
+  state: CellState;
+  onDark?: boolean;
+  className?: string;
 }) {
+  const s = CELL_STYLE[state];
+  const Icon = s.icon;
+  const tone = onDark
+    ? {
+        yes: "bg-white text-brand-blue",
+        partial: "bg-white/25 text-white",
+        no: "bg-white/10 text-white/60",
+      }[state]
+    : s.ring;
   return (
-    <div
+    <span
+      title={s.label}
       className={cn(
-        "h-1.5 w-full overflow-hidden rounded-full",
-        tone === "us" ? "bg-white/20" : "bg-white/10",
+        "mt-[0.1em] flex h-4 w-4 shrink-0 items-center justify-center rounded-full",
+        tone,
+        className,
       )}
     >
-      <motion.div
-        className={cn("h-full rounded-full", tone === "us" ? "bg-white" : "bg-white/35")}
-        initial={{ width: 0 }}
-        whileInView={{ width: `${value}%` }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.9, delay, ease: [0.22, 1, 0.36, 1] }}
-      />
-    </div>
+      <Icon className="h-2.5 w-2.5" strokeWidth={s.strokeWidth + 0.5} aria-hidden />
+      <span className="sr-only">{s.label}</span>
+    </span>
   );
 }
 

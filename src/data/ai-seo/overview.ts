@@ -22,6 +22,8 @@ export const OVERVIEW: {
   h1: string;
   subhead: string;
   shortAnswer: Md;
+  /** The second tier: engines and agents with a guide but no hero slot. */
+  more: { eyebrow: string; title: string; intro: Md; compareTitle: string };
   principlesTitle: string;
   principlesIntro: string;
   principles: { title: string; body: Md }[];
@@ -29,7 +31,7 @@ export const OVERVIEW: {
 } = {
   metaTitle: "AI SEO Guides: Get Cited by ChatGPT, Gemini, Claude & More",
   metaDescription:
-    "Technical AI SEO guides for ChatGPT, Google AI Overviews, Gemini, Claude and Perplexity — crawlers, indexes, robots.txt and tracking, compared.",
+    "Technical AI SEO guides for ChatGPT, Google AI Overviews, Gemini, Claude and Perplexity, plus Copilot, Grok, Meta AI, DeepSeek, Le Chat and Manus — compared.",
   keywords: [
     "AI SEO",
     "generative engine optimization",
@@ -42,18 +44,25 @@ export const OVERVIEW: {
   subhead:
     "ChatGPT, Google AI Overviews, Gemini, Claude and Perplexity each search a different index, send different crawlers and show citations differently. Pick your engine for its technical guide — or compare all five side by side.",
   shortAnswer:
-    "**AI SEO** — also called generative engine optimization (GEO) or LLM SEO — is the work of getting your pages retrieved, quoted and linked inside AI-generated answers. The foundation is shared with classic SEO: crawlable, indexed, trustworthy pages. What differs is each engine's plumbing: ChatGPT draws on Bing and OpenAI's own index, Claude on Brave Search, Perplexity on its own 200-billion-URL index, and Gemini and Google AI Overviews on Google's. Get crawler access right per engine, serve server-rendered HTML, and compete passage by passage for the sub-questions each engine searches.",
+    "**AI SEO** — also called generative engine optimization (GEO) or LLM SEO — is the work of getting your pages retrieved, quoted and linked inside AI-generated answers. The foundation is shared with classic SEO: crawlable, indexed, trustworthy pages. What differs is each engine's plumbing: ChatGPT draws on Bing and OpenAI's own index, Copilot on Bing's, Claude on Brave Search, Perplexity on its own 200-billion-URL index, and Gemini and Google AI Overviews on Google's. Get crawler access right per engine, serve server-rendered HTML, and compete passage by passage for the sub-questions each engine searches.",
+  more: {
+    eyebrow: "Beyond the frontier",
+    title: "Six more engines and agents that cite the web",
+    intro:
+      "Smaller audiences, different plumbing: **Copilot** grounds its answers in Bing, **Grok** searches X as well as the web, and **Manus** reads your site through a real browser. Each gets the same technical guide as the frontier five.",
+    compareTitle: "The six, side by side",
+  },
   principlesTitle: "Six things that hold on every engine",
   principlesIntro:
     "The engines disagree on indexes, crawlers and citation formats. They agree on these — so do them once and every guide gets easier.",
   principles: [
     {
       title: "Crawler access is per engine",
-      body: "Each vendor separates search from training: allow `OAI-SearchBot`, `Claude-SearchBot`, `PerplexityBot` and Googlebot, then decide on `GPTBot`, `ClaudeBot` and `Google-Extended` on their own terms. Check your CDN too — its AI-bot toggles override robots.txt.",
+      body: "Most vendors separate search from training: allow `OAI-SearchBot`, `Claude-SearchBot`, `PerplexityBot`, `Meta-WebIndexer`, Bingbot and Googlebot, then decide on `GPTBot`, `ClaudeBot` and `Google-Extended` on their own terms. Check your CDN too — its AI-bot toggles override robots.txt.",
     },
     {
-      title: "Only Google runs your JavaScript",
-      body: "OpenAI, Anthropic and Perplexity's fetchers read raw HTML. If the answer appears only after scripts run, four of five engines can't see it. Server-render or pre-render anything you want cited.",
+      title: "Don't make the answer wait for JavaScript",
+      body: "Google renders it and Manus drives a real Chromium browser, but OpenAI, Anthropic and Perplexity's fetchers read raw HTML, and Bing says not to rely on its rendering. If the answer appears only after scripts run, most engines can't see it. Server-render anything you want cited.",
     },
     {
       title: "Passages compete, not pages",
@@ -84,6 +93,10 @@ export const OVERVIEW: {
     {
       q: "Which AI engine should I optimize for first?",
       a: "Start with what they share: crawler access, server-rendered HTML and answer-first pages. Then weigh reach — Google's AI Overviews reach over 2.5 billion monthly users and ChatGPT 900 million weekly users — against where your buyers actually ask.",
+    },
+    {
+      q: "Should I optimize for Copilot, Grok, Meta AI, DeepSeek, Le Chat or Manus too?",
+      a: "Do the shared foundations first, then add the engines your buyers use. [Copilot](/ai-seo/copilot) runs on Bing, so Bing Webmaster Tools and IndexNow cover it; [Meta AI](/ai-seo/meta-ai) needs `Meta-WebIndexer` allowed; [Grok](/ai-seo/grok) and [DeepSeek](/ai-seo/deepseek) name no crawler, so server-rendered HTML is the whole technical job; [Le Chat](/ai-seo/mistral) draws on Brave Search; and [Manus](/ai-seo/manus) is an agent whose visits your CDN's bot rules can block.",
     },
     {
       q: "Does blocking AI training crawlers hurt my AI visibility?",

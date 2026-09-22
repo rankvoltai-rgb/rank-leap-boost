@@ -238,7 +238,13 @@ function Guide({ guide }: { guide: EngineGuide }) {
         </div>
 
         <OtherGuides current={engine} guide={guide} />
-        <BlogCta title={`See if ${engine.shortName} cites you today`} />
+        <BlogCta
+          title={
+            engine.tier === "frontier"
+              ? `See if ${engine.shortName} cites you today`
+              : "See where AI answers cite you today"
+          }
+        />
       </main>
       <Footer />
     </div>

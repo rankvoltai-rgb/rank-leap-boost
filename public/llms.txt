@@ -13,12 +13,18 @@
 
 ## AI SEO Guides
 
-- [AI SEO guides](/ai-seo): How ChatGPT, Google AI Overviews, Gemini, Claude and Perplexity find and cite sources, compared side by side — indexes, crawlers, JavaScript rendering, referrers and the biggest lever for each.
+- [AI SEO guides](/ai-seo): How ChatGPT, Google AI Overviews, Gemini, Claude and Perplexity — plus Copilot, Grok, Meta AI, DeepSeek, Le Chat and Manus — find and cite sources, compared side by side: indexes, crawlers, JavaScript rendering, referrers and the biggest lever for each.
 - [ChatGPT SEO](/ai-seo/chatgpt): Technical guide to ChatGPT search — query fan-out and the August 2026 site: shift, OAI-SearchBot vs GPTBot vs ChatGPT-User, Bing and IndexNow, and tracking utm_source=chatgpt.com.
 - [Google AI Overviews & AI Mode SEO](/ai-seo/google-ai-overviews): Eligibility (indexed, snippet-eligible, Search Console "Search generative AI" set to Include), query fan-out, snippet controls, and the Search Console generative AI report.
 - [Gemini SEO](/ai-seo/gemini): How the Gemini app grounds answers in the Google Search index, what Google-Extended really blocks, and why the Search Console AI opt-out doesn't cover Gemini.
 - [Claude SEO](/ai-seo/claude): Claude's web search runs on Brave Search; the ClaudeBot / Claude-SearchBot / Claude-User split; no JavaScript rendering; tracking claude.ai traffic.
 - [Perplexity SEO](/ai-seo/perplexity): Perplexity's own 200B-URL index and passage reranking, PerplexityBot vs Perplexity-User, freshness filtering, and Comet Plus.
+- [Microsoft Copilot SEO](/ai-seo/copilot): Copilot grounds answers in Bing's index; Bingbot, the noarchive and nocache tags, IndexNow, Bing Webmaster Tools' AI Performance report, and tracking Copilot traffic.
+- [Grok SEO](/ai-seo/grok): How Grok searches the web and X, why xAI documents no crawler, what Grok cites, what Grokipedia does and doesn't do, and measuring Grok when referrers are stripped.
+- [Meta AI SEO](/ai-seo/meta-ai): How Meta AI cites sources in WhatsApp, Facebook, Instagram and meta.ai; Meta-WebIndexer vs Meta-ExternalAgent, post search, and tracking Meta AI traffic.
+- [DeepSeek SEO](/ai-seo/deepseek): How DeepSeek's Smart Search finds and cites pages: an undisclosed third-party search API, no documented crawler, and how to measure it.
+- [Mistral Le Chat SEO](/ai-seo/mistral): How Le Chat (renamed Vibe in May 2026) cites pages from Brave Search results; the MistralAI-Index, MistralAI-User and MistralAI-Training bots.
+- [Manus SEO](/ai-seo/manus): How the Manus agent researches in a cloud Chromium browser, the Manus-User agent and its Web Bot Auth signature, why robots.txt won't stop it, and tracking agent traffic.
 
 ## AI Search Glossary
 
@@ -33,3 +39,30 @@
 - [AI share of voice](/glossary/ai-share-of-voice): How to measure how often AI answers cite you versus competitors.
 - [Prompt tracking](/glossary/prompt-tracking): Running a fixed panel of buyer prompts to see who AI engines cite.
 - [AI referral traffic](/glossary/ai-referral-traffic): Identifying visits from ChatGPT, Perplexity, Gemini, Claude and Copilot in analytics.
+
+## Comparisons
+
+Each comparison is checked against the other tool's own pricing page and docs, dated, and lists its sources. Rankbox facts describe what ships today.
+
+- [All comparisons](/alternatives): Rankbox beside RankPill, Outrank, SEObot, Koala AI, Byword, Writesonic, Frase, Surfer SEO, and Jasper in one table: price, cost per article, publishing, backlinks, and AI visibility, plus which tool fits which job.
+- [Rankbox vs RankPill](/alternatives/rankpill): Both write 30 articles a month for one site with 30 backlink credits and Reddit drafts; Rankbox is $49.50 a month, RankPill $99, with native CMS connectors.
+- [Rankbox vs Outrank](/alternatives/outrank): Both publish an article a day with a backlink exchange; Outrank is $99 with ten integrations and more volume, Rankbox is $49.50 and adds Reddit drafts.
+- [Rankbox vs SEObot](/alternatives/seobot): SEObot sells 9 articles for $49 up to 300 a month; Rankbox is 30 articles for $49.50.
+- [Rankbox vs Koala AI](/alternatives/koala-ai): Koala sells words with model multipliers and puts autopilot on its $99 plan; Rankbox sells 30 articles on autopilot.
+- [Rankbox vs Byword](/alternatives/byword): Byword is built for bulk and programmatic pages; Rankbox for one site, every day.
+- [Rankbox vs Writesonic](/alternatives/writesonic): Writesonic tracks AI visibility and gives a team fixes; Rankbox produces the content on autopilot.
+- [Rankbox vs Frase](/alternatives/frase): Frase adds an SEO/GEO editor and AI citation tracking; Rankbox adds backlinks, Reddit drafts, and more articles per dollar.
+- [Rankbox vs Surfer SEO](/alternatives/surfer-seo): Surfer scores drafts a person writes and tracks AI answers; Rankbox writes and delivers the article itself.
+- [Rankbox vs Jasper](/alternatives/jasper): Jasper helps a marketing team write across channels; Rankbox runs the article loop without an editor.
+
+## Head-to-head comparisons
+
+Two third-party tools at a time, run through the same rounds with a winner or a draw in each, dated list prices, and sources. Rankbox appears only as a disclosed third option and never in the scoring.
+
+- [All head-to-heads](/compare): Every pairing, filterable by category: AI writers, content optimization, AI visibility tracking and SEO suites.
+- [Surfer SEO vs Clearscope](/compare/surfer-seo-vs-clearscope): Surfer takes 4 of 7 rounds — scoring, AI drafts, keyword research and five-engine AI tracking; Clearscope takes team rollout, with unlimited users from $129.
+- [Surfer SEO vs Frase](/compare/surfer-seo-vs-frase): The rebuilt Frase takes drafting and publishing, content refreshes and small-team price; Surfer takes keyword and topic research; three rounds are draws.
+- [Jasper vs Writesonic](/compare/jasper-vs-writesonic): Jasper for governed, on-brand copy across every channel; Writesonic for SEO articles, WordPress publishing and AI search tracking on every plan.
+- [Koala AI vs Byword](/compare/koala-ai-vs-byword): Koala for Amazon affiliate content and the lowest entry price; Byword for programmatic templates, team seats and credits that never expire.
+- [Profound vs Peec AI](/compare/profound-vs-peec-ai): Profound for enterprise demand data, content agents and SOC 2; Peec AI for self-serve tracking from $95 and agency tiers with pooled credits.
+- [Semrush vs Ahrefs](/compare/semrush-vs-ahrefs): Semrush for daily rank tracking, bundled AI prompt tracking and marketing beyond SEO; Ahrefs for backlink data, API access from $129 and a free plan.

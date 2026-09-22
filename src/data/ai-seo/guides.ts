@@ -9,7 +9,7 @@ import type { EngineGuide, GuideBlock } from "./types";
 
 /* Each guide is its own chunk, loaded by the route that shows it — the text
    never rides along in the shared bundle, and one guide never pulls in the
-   other four. */
+   others. */
 const LOADERS: Record<EngineSlug, () => Promise<EngineGuide>> = {
   chatgpt: () => import("./content/chatgpt").then((m) => m.chatgpt),
   "google-ai-overviews": () =>
@@ -17,6 +17,12 @@ const LOADERS: Record<EngineSlug, () => Promise<EngineGuide>> = {
   gemini: () => import("./content/gemini").then((m) => m.gemini),
   claude: () => import("./content/claude").then((m) => m.claude),
   perplexity: () => import("./content/perplexity").then((m) => m.perplexity),
+  copilot: () => import("./content/copilot").then((m) => m.copilot),
+  grok: () => import("./content/grok").then((m) => m.grok),
+  "meta-ai": () => import("./content/meta-ai").then((m) => m.metaAi),
+  deepseek: () => import("./content/deepseek").then((m) => m.deepseek),
+  mistral: () => import("./content/mistral").then((m) => m.mistral),
+  manus: () => import("./content/manus").then((m) => m.manus),
 };
 
 export function loadGuide(slug: EngineSlug): Promise<EngineGuide> {

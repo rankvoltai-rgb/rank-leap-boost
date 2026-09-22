@@ -3,7 +3,7 @@
  * marks and tiles, and the evidence badge.
  */
 import { Rich } from "@/components/blog/NotionBlocks";
-import { AI_MARKS } from "@/components/landing/ai-logos";
+import { ENGINE_MARKS } from "@/components/landing/ai-logos";
 import type { Engine, EngineMarkName } from "@/data/ai-seo/engines";
 import type { Evidence, Md as MdText } from "@/data/ai-seo/types";
 import { parseInline } from "@/lib/inline-md";
@@ -18,8 +18,7 @@ export function Md({ text }: { text: MdText }) {
 /* ---------- engine marks ---------- */
 
 export function EngineMark({ mark, className }: { mark: EngineMarkName; className?: string }) {
-  const found = AI_MARKS.find((m) => m.name === mark) ?? AI_MARKS[0];
-  const Mark = found.Mark;
+  const Mark = ENGINE_MARKS[mark];
   return <Mark className={className} />;
 }
 

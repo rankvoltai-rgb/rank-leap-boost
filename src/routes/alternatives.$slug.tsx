@@ -1,7 +1,6 @@
 import { createFileRoute, notFound, Link } from "@tanstack/react-router";
 import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
-import { Pricing } from "@/components/landing/Pricing";
 import {
   AlternativeHero,
   ShortAnswer,
@@ -11,7 +10,7 @@ import {
   Battlegrounds,
   BetterWhen,
   Migration,
-  AlternativeProof,
+  Sources,
   AlternativeFAQ,
   OtherComparisons,
   AlternativeCTA,
@@ -68,11 +67,18 @@ export const Route = createFileRoute("/alternatives/$slug")({
                 mentions: {
                   "@type": "SoftwareApplication",
                   name: c.name,
+                  url: `https://${c.domain}`,
                   applicationCategory: "BusinessApplication",
                 },
-                /* Comparisons are opinion, so the page says whose. */
+                /* Comparisons are opinion, so the page says whose, and what
+                   it was checked against. */
                 publisher: { "@id": `${SITE}/#organization` },
                 dateModified: c.pricing.checkedOn,
+                citation: c.sources.map((src) => ({
+                  "@type": "CreativeWork",
+                  name: src.label,
+                  url: src.url,
+                })),
               },
               {
                 "@type": "SoftwareApplication",
@@ -129,9 +135,11 @@ export const Route = createFileRoute("/alternatives/$slug")({
   errorComponent: AlternativeError,
 });
 
-/* The landing's rhythm, rebuilt around one comparison. Section ids (top,
-   compare, proof, pricing, faq) match the landing so the shared navbar's
-   anchors keep working here. */
+/* The landing's rhythm, rebuilt around one comparison, in the order a
+   buyer's objections arrive. There is one pricing story (the cost section),
+   not a second copy of the landing's pricing block, and the page closes on
+   its sources: the thing that makes a comparison believable is that it can
+   be checked. */
 function AlternativePage() {
   const { slug } = Route.useParams();
   const competitor = getCompetitor(slug)!;
@@ -148,11 +156,8 @@ function AlternativePage() {
         <Battlegrounds competitor={competitor} />
         <BetterWhen competitor={competitor} />
         <Migration competitor={competitor} />
-        <AlternativeProof competitor={competitor} />
-        <div className="border-t border-border bg-surface/40">
-          <Pricing />
-        </div>
         <AlternativeFAQ competitor={competitor} />
+        <Sources competitor={competitor} />
         <OtherComparisons competitor={competitor} />
         <AlternativeCTA competitor={competitor} />
       </main>

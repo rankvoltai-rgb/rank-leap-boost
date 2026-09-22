@@ -7,8 +7,8 @@ import { Reveal, Eyebrow } from "@/components/landing/shared";
 import { BlogCta } from "@/components/blog/ArticleChrome";
 import { EngineMark, Md } from "@/components/ai-seo/kit";
 import { plainText } from "@/lib/inline-md";
-import { FaqList, ShortAnswer } from "@/components/ai-seo/sections";
-import { ENGINES, getEngine } from "@/data/ai-seo/engines";
+import { FaqList, GuideCard, ShortAnswer } from "@/components/ai-seo/sections";
+import { ENGINES, TIERS, enginesInTier, getEngine, type EngineTier } from "@/data/ai-seo/engines";
 import { loadGuides } from "@/data/ai-seo/guides";
 import { OVERVIEW, PROFILE_ROWS } from "@/data/ai-seo/overview";
 import { formatDate } from "@/lib/format-date";
@@ -18,6 +18,8 @@ const PAGE_URL = `${SITE}/ai-seo`;
 const UPDATED = ENGINES.map((e) => e.updated)
   .sort()
   .at(-1)!;
+const FRONTIER = enginesInTier("frontier");
+const MORE = enginesInTier("more");
 
 export const Route = createFileRoute("/ai-seo/")({
   /* Only the matrix rows travel: the hub never needs a guide's body text. */
@@ -127,10 +129,10 @@ function Hero() {
             Pick your engine
           </p>
           <ul className="mx-auto grid max-w-5xl grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
-            {ENGINES.map((e, i) => (
+            {FRONTIER.map((e, i) => (
               <li
                 key={e.slug}
-                className={i === ENGINES.length - 1 ? "col-span-2 sm:col-span-1" : ""}
+                className={i === FRONTIER.length - 1 ? "col-span-2 sm:col-span-1" : ""}
               >
                 <Link
                   to="/ai-seo/$engine"
@@ -171,9 +173,82 @@ function Hero() {
 
 /* Every cell comes from the engine's own guide, so this table can't drift from
    the pages it summarises. First column sticks on narrow screens so a row
-   never loses its label while scrolling across engines. */
-function Matrix() {
+   never loses its label while scrolling across engines. One table per tier:
+   eleven columns would be unreadable, and the frontier five read as a set. */
+function MatrixTable({ tier }: { tier: EngineTier }) {
   const { profiles } = Route.useLoaderData();
+  const rows = profiles.filter((g) => getEngine(g.slug)?.tier === tier);
+  return (
+    <>
+      <div className="mt-12 overflow-x-auto rounded-2xl border border-border bg-card shadow-2">
+        <table
+          className={`w-full table-fixed border-collapse text-left text-[0.86rem] ${
+            rows.length > 5 ? "min-w-[70rem]" : "min-w-[60rem]"
+          }`}
+        >
+          <caption className="sr-only">{TIERS[tier].label}, compared</caption>
+          <thead>
+            <tr className="border-b border-border">
+              <th
+                scope="col"
+                className="sticky left-0 z-10 w-44 bg-card px-4 py-4 text-xs font-semibold uppercase tracking-[0.1em] text-muted-foreground"
+              >
+                <span className="sr-only">Attribute</span>
+              </th>
+              {rows.map((g) => {
+                const e = getEngine(g.slug)!;
+                return (
+                  <th key={g.slug} scope="col" className="px-4 py-4 align-bottom">
+                    <Link
+                      to="/ai-seo/$engine"
+                      params={{ engine: g.slug }}
+                      className="group inline-flex items-center gap-2 font-semibold text-ink"
+                    >
+                      <span className="flex h-7 w-7 items-center justify-center rounded-lg border border-border bg-white">
+                        <EngineMark mark={e.mark} className="h-4 w-4" />
+                      </span>
+                      <span className="group-hover:text-volt">{e.shortName}</span>
+                    </Link>
+                  </th>
+                );
+              })}
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-border">
+            {PROFILE_ROWS.map((row) => (
+              <tr key={row.key}>
+                <th
+                  scope="row"
+                  className="sticky left-0 z-10 bg-card px-4 py-4 align-top text-[0.8rem] font-semibold text-ink shadow-[1px_0_0_var(--color-border)]"
+                >
+                  {row.label}
+                </th>
+                {rows.map((g) => (
+                  <td
+                    key={g.slug}
+                    className={
+                      row.mono
+                        ? "px-4 py-4 align-top font-mono text-[0.8rem] font-medium text-ink"
+                        : "px-4 py-4 align-top leading-relaxed text-ink/75"
+                    }
+                  >
+                    {g.profile[row.key]}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p className="mt-3 text-center text-xs text-muted-foreground">
+        Sourced from each vendor&rsquo;s documentation where it exists; each guide lists its
+        sources.
+      </p>
+    </>
+  );
+}
+
+function Matrix() {
   return (
     <section id="compare" aria-labelledby="compare-title" className="scroll-mt-20 py-20 sm:py-28">
       <div className="mx-auto max-w-6xl px-5">
@@ -192,65 +267,54 @@ function Matrix() {
         </Reveal>
 
         <Reveal delay={0.08}>
-          <div className="mt-12 overflow-x-auto rounded-2xl border border-border bg-card shadow-2">
-            <table className="w-full min-w-[60rem] table-fixed border-collapse text-left text-[0.86rem]">
-              <thead>
-                <tr className="border-b border-border">
-                  <th
-                    scope="col"
-                    className="sticky left-0 z-10 w-44 bg-card px-4 py-4 text-xs font-semibold uppercase tracking-[0.1em] text-muted-foreground"
-                  >
-                    <span className="sr-only">Attribute</span>
-                  </th>
-                  {profiles.map((g) => {
-                    const e = getEngine(g.slug)!;
-                    return (
-                      <th key={g.slug} scope="col" className="px-4 py-4 align-bottom">
-                        <Link
-                          to="/ai-seo/$engine"
-                          params={{ engine: g.slug }}
-                          className="group inline-flex items-center gap-2 font-semibold text-ink"
-                        >
-                          <span className="flex h-7 w-7 items-center justify-center rounded-lg border border-border bg-white">
-                            <EngineMark mark={e.mark} className="h-4 w-4" />
-                          </span>
-                          <span className="group-hover:text-volt">{e.shortName}</span>
-                        </Link>
-                      </th>
-                    );
-                  })}
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border">
-                {PROFILE_ROWS.map((row) => (
-                  <tr key={row.key}>
-                    <th
-                      scope="row"
-                      className="sticky left-0 z-10 bg-card px-4 py-4 align-top text-[0.8rem] font-semibold text-ink shadow-[1px_0_0_var(--color-border)]"
-                    >
-                      {row.label}
-                    </th>
-                    {profiles.map((g) => (
-                      <td
-                        key={g.slug}
-                        className={
-                          row.mono
-                            ? "px-4 py-4 align-top font-mono text-[0.8rem] font-medium text-ink"
-                            : "px-4 py-4 align-top leading-relaxed text-ink/75"
-                        }
-                      >
-                        {g.profile[row.key]}
-                      </td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <p className="mt-3 text-center text-xs text-muted-foreground">
-            Sourced from each vendor&rsquo;s documentation where it exists; each guide lists its
-            sources.
+          <MatrixTable tier="frontier" />
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
+/* ---------- beyond the frontier ---------- */
+
+/* The engines that aren't in the hero: smaller audiences, but each with
+   plumbing different enough to need its own guide. Cards first (the way in),
+   then the same matrix, so they're compared on exactly the frontier's terms. */
+function MoreEngines() {
+  return (
+    <section
+      id="more-engines"
+      aria-labelledby="more-engines-title"
+      className="scroll-mt-20 border-t border-border"
+    >
+      <div className="mx-auto max-w-6xl px-5 py-20 sm:py-28">
+        <Reveal className="mx-auto max-w-2xl text-center">
+          <Eyebrow className="mb-4">{OVERVIEW.more.eyebrow}</Eyebrow>
+          <h2
+            id="more-engines-title"
+            className="font-display text-balance text-3xl font-semibold tracking-tight text-ink sm:text-4xl"
+          >
+            {OVERVIEW.more.title}
+          </h2>
+          <p className="mt-4 text-balance text-lg text-muted-foreground">
+            <Md text={OVERVIEW.more.intro} />
           </p>
+        </Reveal>
+
+        <ul className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {MORE.map((e, i) => (
+            <li key={e.slug}>
+              <Reveal delay={(i % 3) * 0.05} className="h-full">
+                <GuideCard engine={e} />
+              </Reveal>
+            </li>
+          ))}
+        </ul>
+
+        <Reveal delay={0.08} className="mt-20">
+          <h3 className="text-center font-display text-balance text-2xl font-semibold tracking-tight text-ink sm:text-[1.7rem]">
+            {OVERVIEW.more.compareTitle}
+          </h3>
+          <MatrixTable tier="more" />
         </Reveal>
       </div>
     </section>
@@ -312,6 +376,7 @@ function AiSeoIndex() {
         </section>
 
         <Matrix />
+        <MoreEngines />
         <Principles />
 
         <section aria-labelledby="faq-title" className="py-20 sm:py-28">

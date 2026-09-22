@@ -26,7 +26,7 @@ export const claude: EngineGuide = {
     "Claude's fetcher reads raw HTML and PDF only. Content that appears after JavaScript runs is invisible to it.",
     "Brave's crawler has no user agent of its own and won't crawl what Googlebot is blocked from. Blocking Googlebot costs you Claude too.",
     "Claude adds the current year to 94% of its search queries and cites listicles heavily. Freshness is visible, and it matters.",
-    "Claude traffic arrives from `claude.ai` with no UTM tags. GA4's new AI Assistant channel doesn't name Claude, so give it a custom channel.",
+    "Claude traffic arrives from `claude.ai` with no UTM tags. GA4's AI Assistant channel definition doesn't list Claude, so check where it lands and add a custom channel if needed.",
   ],
 
   facts: [
@@ -355,7 +355,7 @@ export const claude: EngineGuide = {
       blocks: [
         {
           kind: "p",
-          text: "Clicks from Claude arrive with the referrer `claude.ai` and no UTM parameters. On 13 May 2026 GA4 added a default **AI Assistant** channel for referrers on Google's list of assistants — but Google's [channel documentation](https://support.google.com/analytics/answer/9756891) names ChatGPT, Gemini, DeepSeek, Copilot and Grok, not Claude. Check where your `claude.ai` sessions land; if they're still in Referral, add a custom channel above it with the regex below. Some app traffic loses its referrer entirely and lands in Direct.",
+          text: "Clicks from Claude arrive with the referrer `claude.ai` and no UTM parameters. On 13 May 2026 GA4 added a default **AI Assistant** channel for referrers on Google's list of assistants — but Google's [channel documentation](https://support.google.com/analytics/answer/9756891) names ChatGPT, Gemini, DeepSeek, Copilot and Grok, not Claude — even though Google's [launch note](https://support.google.com/analytics/answer/9164320) names it. Check where your `claude.ai` sessions land; if they're still in Referral, add a custom channel above it with the regex below. Some app traffic loses its referrer entirely and lands in Direct.",
         },
         {
           kind: "code",
@@ -538,7 +538,7 @@ export const claude: EngineGuide = {
     },
     {
       q: "How do I track traffic from Claude?",
-      a: "Clicks arrive from `claude.ai` with no UTM tags. Google doesn't list Claude in GA4's new AI Assistant channel, so build a custom channel on session source `claude.ai`. Server logs show `Claude-User` and `Claude-SearchBot` visits, which you can verify against Anthropic's published IP list.",
+      a: "Clicks arrive from `claude.ai` with no UTM tags. GA4's AI Assistant channel definition doesn't list Claude, though Google's launch note names it, so check where `claude.ai` sessions land and build a custom channel if they sit in Referral. Server logs show `Claude-User` and `Claude-SearchBot` visits, which you can verify against Anthropic's published IP list.",
     },
     {
       q: "Does llms.txt help with Claude?",

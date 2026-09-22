@@ -20,8 +20,10 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as UseCasesIndexRouteImport } from './routes/use-cases.index'
 import { Route as ToolsIndexRouteImport } from './routes/tools.index'
+import { Route as IntegrationsIndexRouteImport } from './routes/integrations.index'
 import { Route as GlossaryIndexRouteImport } from './routes/glossary.index'
 import { Route as FeaturesIndexRouteImport } from './routes/features.index'
+import { Route as CompareIndexRouteImport } from './routes/compare.index'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as AlternativesIndexRouteImport } from './routes/alternatives.index'
 import { Route as AiSeoIndexRouteImport } from './routes/ai-seo.index'
@@ -33,8 +35,10 @@ import { Route as LegalPrivacyRouteImport } from './routes/legal.privacy'
 import { Route as LegalDpaRouteImport } from './routes/legal.dpa'
 import { Route as LegalCookiesRouteImport } from './routes/legal.cookies'
 import { Route as LegalAcceptableUseRouteImport } from './routes/legal.acceptable-use'
+import { Route as IntegrationsSlugRouteImport } from './routes/integrations.$slug'
 import { Route as GlossaryTermRouteImport } from './routes/glossary.$term'
 import { Route as FeaturesSlugRouteImport } from './routes/features.$slug'
+import { Route as CompareSlugRouteImport } from './routes/compare.$slug'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as AlternativesSlugRouteImport } from './routes/alternatives.$slug'
 import { Route as AiSeoEngineRouteImport } from './routes/ai-seo.$engine'
@@ -114,6 +118,11 @@ const ToolsIndexRoute = ToolsIndexRouteImport.update({
   path: '/tools/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const IntegrationsIndexRoute = IntegrationsIndexRouteImport.update({
+  id: '/integrations/',
+  path: '/integrations/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const GlossaryIndexRoute = GlossaryIndexRouteImport.update({
   id: '/glossary/',
   path: '/glossary/',
@@ -122,6 +131,11 @@ const GlossaryIndexRoute = GlossaryIndexRouteImport.update({
 const FeaturesIndexRoute = FeaturesIndexRouteImport.update({
   id: '/features/',
   path: '/features/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CompareIndexRoute = CompareIndexRouteImport.update({
+  id: '/compare/',
+  path: '/compare/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BlogIndexRoute = BlogIndexRouteImport.update({
@@ -179,6 +193,11 @@ const LegalAcceptableUseRoute = LegalAcceptableUseRouteImport.update({
   path: '/acceptable-use',
   getParentRoute: () => LegalRoute,
 } as any)
+const IntegrationsSlugRoute = IntegrationsSlugRouteImport.update({
+  id: '/integrations/$slug',
+  path: '/integrations/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const GlossaryTermRoute = GlossaryTermRouteImport.update({
   id: '/glossary/$term',
   path: '/glossary/$term',
@@ -187,6 +206,11 @@ const GlossaryTermRoute = GlossaryTermRouteImport.update({
 const FeaturesSlugRoute = FeaturesSlugRouteImport.update({
   id: '/features/$slug',
   path: '/features/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CompareSlugRoute = CompareSlugRouteImport.update({
+  id: '/compare/$slug',
+  path: '/compare/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BlogSlugRoute = BlogSlugRouteImport.update({
@@ -341,8 +365,10 @@ export interface FileRoutesByFullPath {
   '/ai-seo/$engine': typeof AiSeoEngineRoute
   '/alternatives/$slug': typeof AlternativesSlugRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/compare/$slug': typeof CompareSlugRoute
   '/features/$slug': typeof FeaturesSlugRoute
   '/glossary/$term': typeof GlossaryTermRoute
+  '/integrations/$slug': typeof IntegrationsSlugRoute
   '/legal/acceptable-use': typeof LegalAcceptableUseRoute
   '/legal/cookies': typeof LegalCookiesRoute
   '/legal/dpa': typeof LegalDpaRoute
@@ -354,8 +380,10 @@ export interface FileRoutesByFullPath {
   '/ai-seo/': typeof AiSeoIndexRoute
   '/alternatives/': typeof AlternativesIndexRoute
   '/blog/': typeof BlogIndexRoute
+  '/compare/': typeof CompareIndexRoute
   '/features/': typeof FeaturesIndexRoute
   '/glossary/': typeof GlossaryIndexRoute
+  '/integrations/': typeof IntegrationsIndexRoute
   '/tools/': typeof ToolsIndexRoute
   '/use-cases/': typeof UseCasesIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -391,8 +419,10 @@ export interface FileRoutesByTo {
   '/ai-seo/$engine': typeof AiSeoEngineRoute
   '/alternatives/$slug': typeof AlternativesSlugRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/compare/$slug': typeof CompareSlugRoute
   '/features/$slug': typeof FeaturesSlugRoute
   '/glossary/$term': typeof GlossaryTermRoute
+  '/integrations/$slug': typeof IntegrationsSlugRoute
   '/legal/acceptable-use': typeof LegalAcceptableUseRoute
   '/legal/cookies': typeof LegalCookiesRoute
   '/legal/dpa': typeof LegalDpaRoute
@@ -404,8 +434,10 @@ export interface FileRoutesByTo {
   '/ai-seo': typeof AiSeoIndexRoute
   '/alternatives': typeof AlternativesIndexRoute
   '/blog': typeof BlogIndexRoute
+  '/compare': typeof CompareIndexRoute
   '/features': typeof FeaturesIndexRoute
   '/glossary': typeof GlossaryIndexRoute
+  '/integrations': typeof IntegrationsIndexRoute
   '/tools': typeof ToolsIndexRoute
   '/use-cases': typeof UseCasesIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -444,8 +476,10 @@ export interface FileRoutesById {
   '/ai-seo/$engine': typeof AiSeoEngineRoute
   '/alternatives/$slug': typeof AlternativesSlugRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/compare/$slug': typeof CompareSlugRoute
   '/features/$slug': typeof FeaturesSlugRoute
   '/glossary/$term': typeof GlossaryTermRoute
+  '/integrations/$slug': typeof IntegrationsSlugRoute
   '/legal/acceptable-use': typeof LegalAcceptableUseRoute
   '/legal/cookies': typeof LegalCookiesRoute
   '/legal/dpa': typeof LegalDpaRoute
@@ -457,8 +491,10 @@ export interface FileRoutesById {
   '/ai-seo/': typeof AiSeoIndexRoute
   '/alternatives/': typeof AlternativesIndexRoute
   '/blog/': typeof BlogIndexRoute
+  '/compare/': typeof CompareIndexRoute
   '/features/': typeof FeaturesIndexRoute
   '/glossary/': typeof GlossaryIndexRoute
+  '/integrations/': typeof IntegrationsIndexRoute
   '/tools/': typeof ToolsIndexRoute
   '/use-cases/': typeof UseCasesIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -497,8 +533,10 @@ export interface FileRouteTypes {
     | '/ai-seo/$engine'
     | '/alternatives/$slug'
     | '/blog/$slug'
+    | '/compare/$slug'
     | '/features/$slug'
     | '/glossary/$term'
+    | '/integrations/$slug'
     | '/legal/acceptable-use'
     | '/legal/cookies'
     | '/legal/dpa'
@@ -510,8 +548,10 @@ export interface FileRouteTypes {
     | '/ai-seo/'
     | '/alternatives/'
     | '/blog/'
+    | '/compare/'
     | '/features/'
     | '/glossary/'
+    | '/integrations/'
     | '/tools/'
     | '/use-cases/'
     | '/.mcp/invoke-tool/$tool'
@@ -547,8 +587,10 @@ export interface FileRouteTypes {
     | '/ai-seo/$engine'
     | '/alternatives/$slug'
     | '/blog/$slug'
+    | '/compare/$slug'
     | '/features/$slug'
     | '/glossary/$term'
+    | '/integrations/$slug'
     | '/legal/acceptable-use'
     | '/legal/cookies'
     | '/legal/dpa'
@@ -560,8 +602,10 @@ export interface FileRouteTypes {
     | '/ai-seo'
     | '/alternatives'
     | '/blog'
+    | '/compare'
     | '/features'
     | '/glossary'
+    | '/integrations'
     | '/tools'
     | '/use-cases'
     | '/.mcp/invoke-tool/$tool'
@@ -599,8 +643,10 @@ export interface FileRouteTypes {
     | '/ai-seo/$engine'
     | '/alternatives/$slug'
     | '/blog/$slug'
+    | '/compare/$slug'
     | '/features/$slug'
     | '/glossary/$term'
+    | '/integrations/$slug'
     | '/legal/acceptable-use'
     | '/legal/cookies'
     | '/legal/dpa'
@@ -612,8 +658,10 @@ export interface FileRouteTypes {
     | '/ai-seo/'
     | '/alternatives/'
     | '/blog/'
+    | '/compare/'
     | '/features/'
     | '/glossary/'
+    | '/integrations/'
     | '/tools/'
     | '/use-cases/'
     | '/.mcp/invoke-tool/$tool'
@@ -651,15 +699,19 @@ export interface RootRouteChildren {
   AiSeoEngineRoute: typeof AiSeoEngineRoute
   AlternativesSlugRoute: typeof AlternativesSlugRoute
   BlogSlugRoute: typeof BlogSlugRoute
+  CompareSlugRoute: typeof CompareSlugRoute
   FeaturesSlugRoute: typeof FeaturesSlugRoute
   GlossaryTermRoute: typeof GlossaryTermRoute
+  IntegrationsSlugRoute: typeof IntegrationsSlugRoute
   ToolsSlugRoute: typeof ToolsSlugRoute
   UseCasesSlugRoute: typeof UseCasesSlugRoute
   AiSeoIndexRoute: typeof AiSeoIndexRoute
   AlternativesIndexRoute: typeof AlternativesIndexRoute
   BlogIndexRoute: typeof BlogIndexRoute
+  CompareIndexRoute: typeof CompareIndexRoute
   FeaturesIndexRoute: typeof FeaturesIndexRoute
   GlossaryIndexRoute: typeof GlossaryIndexRoute
+  IntegrationsIndexRoute: typeof IntegrationsIndexRoute
   ToolsIndexRoute: typeof ToolsIndexRoute
   UseCasesIndexRoute: typeof UseCasesIndexRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -750,6 +802,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ToolsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/integrations/': {
+      id: '/integrations/'
+      path: '/integrations'
+      fullPath: '/integrations/'
+      preLoaderRoute: typeof IntegrationsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/glossary/': {
       id: '/glossary/'
       path: '/glossary'
@@ -762,6 +821,13 @@ declare module '@tanstack/react-router' {
       path: '/features'
       fullPath: '/features/'
       preLoaderRoute: typeof FeaturesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/compare/': {
+      id: '/compare/'
+      path: '/compare'
+      fullPath: '/compare/'
+      preLoaderRoute: typeof CompareIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/blog/': {
@@ -841,6 +907,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LegalAcceptableUseRouteImport
       parentRoute: typeof LegalRoute
     }
+    '/integrations/$slug': {
+      id: '/integrations/$slug'
+      path: '/integrations/$slug'
+      fullPath: '/integrations/$slug'
+      preLoaderRoute: typeof IntegrationsSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/glossary/$term': {
       id: '/glossary/$term'
       path: '/glossary/$term'
@@ -853,6 +926,13 @@ declare module '@tanstack/react-router' {
       path: '/features/$slug'
       fullPath: '/features/$slug'
       preLoaderRoute: typeof FeaturesSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/compare/$slug': {
+      id: '/compare/$slug'
+      path: '/compare/$slug'
+      fullPath: '/compare/$slug'
+      preLoaderRoute: typeof CompareSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/blog/$slug': {
@@ -1120,15 +1200,19 @@ const rootRouteChildren: RootRouteChildren = {
   AiSeoEngineRoute: AiSeoEngineRoute,
   AlternativesSlugRoute: AlternativesSlugRoute,
   BlogSlugRoute: BlogSlugRoute,
+  CompareSlugRoute: CompareSlugRoute,
   FeaturesSlugRoute: FeaturesSlugRoute,
   GlossaryTermRoute: GlossaryTermRoute,
+  IntegrationsSlugRoute: IntegrationsSlugRoute,
   ToolsSlugRoute: ToolsSlugRoute,
   UseCasesSlugRoute: UseCasesSlugRoute,
   AiSeoIndexRoute: AiSeoIndexRoute,
   AlternativesIndexRoute: AlternativesIndexRoute,
   BlogIndexRoute: BlogIndexRoute,
+  CompareIndexRoute: CompareIndexRoute,
   FeaturesIndexRoute: FeaturesIndexRoute,
   GlossaryIndexRoute: GlossaryIndexRoute,
+  IntegrationsIndexRoute: IntegrationsIndexRoute,
   ToolsIndexRoute: ToolsIndexRoute,
   UseCasesIndexRoute: UseCasesIndexRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,

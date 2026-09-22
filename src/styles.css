@@ -551,7 +551,37 @@
   animation: gradient-pan 2.8s linear infinite;
 }
 
+/* An article travelling down a connector line, from Rankbox out to a site.
+   Put it on an SVG line or path with pathLength="100": the dash is 5 units
+   long and slides from the start of the line to its end, fading at both. */
+@keyframes packet-travel {
+  0% {
+    stroke-dashoffset: 0;
+    opacity: 0;
+  }
+  12%,
+  82% {
+    opacity: 1;
+  }
+  100% {
+    stroke-dashoffset: -95;
+    opacity: 0;
+  }
+}
+
+@utility animate-packet {
+  stroke-dasharray: 5 95;
+  animation: packet-travel var(--packet-duration, 2.6s) ease-in-out infinite;
+  animation-delay: var(--packet-delay, 0s);
+  animation-fill-mode: backwards;
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .animate-packet {
+    animation: none;
+    opacity: 0;
+  }
+
   .animate-cell-pulse {
     animation: none;
     opacity: calc(var(--cell-opacity, 0.15) * 0.6);

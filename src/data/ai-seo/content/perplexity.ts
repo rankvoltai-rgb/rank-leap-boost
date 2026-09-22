@@ -118,7 +118,7 @@ export const perplexity: EngineGuide = {
             {
               value: "28.6%",
               label:
-                "of Perplexity's citations rank in Google's top 10 — the highest of any assistant (Bing: 16.6%)",
+                "of Perplexity's citations rank in Google's top 10 — the highest of any assistant (Bing: 14%)",
               source: {
                 name: "Ahrefs, Aug 2025",
                 href: "https://ahrefs.com/blog/ai-search-overlap/",
