@@ -53,20 +53,23 @@ export function Burst() {
  */
 function Progress({ active, onStep }: { active: Step; onStep: (step: Step) => void }) {
   return (
-    <nav aria-label="Setup progress">
+    <nav
+      aria-label="Setup progress"
+      className="w-full max-w-40 justify-self-center sm:w-auto sm:max-w-none"
+    >
       <ol className="flex items-center gap-1.5 sm:gap-2">
         {PARTS.map((part) => {
           const done = part.n < active;
           const current = part.n === active;
           return (
-            <li key={part.n}>
+            <li key={part.n} className="flex-1 sm:flex-none">
               <button
                 type="button"
                 disabled={!done}
                 onClick={() => onStep(part.n)}
                 aria-current={current ? "step" : undefined}
                 aria-label={`Step ${part.n}: ${part.title}${done ? " (done, edit)" : ""}`}
-                className="group flex w-12 flex-col gap-1.5 text-left disabled:cursor-default sm:w-24"
+                className="group flex w-full flex-col gap-1.5 py-3 text-left disabled:cursor-default sm:w-24 sm:py-0"
               >
                 <span
                   className={cn(
@@ -110,7 +113,7 @@ export function OnboardingShell({
   return (
     <div className="min-h-screen bg-background">
       <header className="sticky top-0 z-30 border-b border-border/70 bg-background/85 backdrop-blur-md">
-        <div className="mx-auto grid h-16 max-w-[1180px] grid-cols-[1fr_auto_1fr] items-center gap-4 px-5 lg:px-8">
+        <div className="mx-auto grid h-16 max-w-[1180px] grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 px-5 sm:grid-cols-[1fr_auto_1fr] sm:gap-4 lg:px-8">
           <a href="/" className="justify-self-start" aria-label="Rankbox home">
             <Logo />
           </a>

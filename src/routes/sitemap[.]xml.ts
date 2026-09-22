@@ -4,6 +4,7 @@ import { FEATURE_SLUGS } from "@/data/features";
 import { TOOL_SLUGS } from "@/data/tools";
 import { COMPETITOR_SLUGS } from "@/data/alternatives";
 import { PERSONA_SLUGS } from "@/data/personas";
+import { ENGINES } from "@/data/ai-seo/engines";
 
 const BASE_URL = "https://rankbox.xyz";
 
@@ -55,6 +56,20 @@ export const Route = createFileRoute("/sitemap.xml")({
             path: `/alternatives/${slug}`,
             changefreq: "monthly" as const,
             priority: "0.7",
+          })),
+          {
+            path: "/ai-seo",
+            lastmod: ENGINES.map((e) => e.updated)
+              .sort()
+              .at(-1),
+            changefreq: "monthly",
+            priority: "0.8",
+          },
+          ...ENGINES.map((e) => ({
+            path: `/ai-seo/${e.slug}`,
+            lastmod: e.updated,
+            changefreq: "monthly" as const,
+            priority: "0.8",
           })),
           { path: "/tools", changefreq: "weekly", priority: "0.8" },
           ...TOOL_SLUGS.map((slug) => ({

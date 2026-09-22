@@ -53,7 +53,7 @@ export function GrowTraffic() {
         </Reveal>
 
         {/* Featured split */}
-        <div className="mt-16 grid gap-6 lg:grid-cols-5">
+        <div className="mt-16 grid grid-cols-1 gap-6 lg:grid-cols-5">
           <Reveal className="lg:col-span-3">
             <Card
               title="Rank high on Google"
@@ -116,7 +116,7 @@ export function GrowTraffic() {
         </div>
 
         {/* Supporting capabilities */}
-        <div className="mt-6 grid gap-6 md:grid-cols-3">
+        <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-3">
           <Reveal delay={0.06}>
             <Card
               title="Fully customizable"

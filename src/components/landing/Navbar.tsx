@@ -15,6 +15,8 @@ import { Logo } from "./shared";
 import { FEATURES, FEATURE_GROUPS } from "@/data/features";
 import { COMPETITORS } from "@/data/alternatives";
 import { PERSONAS } from "@/data/personas";
+import { ENGINES, type Engine } from "@/data/ai-seo/engines";
+import { AI_MARKS } from "./ai-logos";
 
 /* Sections of the landing page. The navbar is shared by every public page,
    so these always target "/" rather than a bare hash on the current page.
@@ -76,6 +78,30 @@ function MenuItem({
   return (
     <Link to={link.to} params={link.params} role="menuitem" className={className}>
       {body}
+    </Link>
+  );
+}
+
+/* A guide row: the engine's own logo on a white tile, since a line icon would
+   say nothing about which engine it is. */
+function EngineMenuItem({ engine }: { engine: Engine }) {
+  const Mark = AI_MARKS.find((m) => m.name === engine.mark)?.Mark;
+  return (
+    <Link
+      to="/ai-seo/$engine"
+      params={{ engine: engine.slug }}
+      role="menuitem"
+      className="group flex items-center gap-3 rounded-xl p-2 transition-colors hover:bg-white/10"
+    >
+      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-white shadow-sm transition-transform group-hover:scale-105">
+        {Mark && <Mark className="h-4 w-4" />}
+      </span>
+      <span className="min-w-0">
+        <span className="block truncate text-sm font-semibold text-white">
+          {engine.shortName} SEO
+        </span>
+        <span className="block truncate text-xs text-white/70">{engine.vendor}</span>
+      </span>
     </Link>
   );
 }
@@ -240,13 +266,13 @@ export function Navbar() {
             <div className="absolute left-1/2 top-full h-3 w-full -translate-x-1/2" aria-hidden />
             <div
               role="menu"
-              className={`absolute left-1/2 top-[calc(100%+0.5rem)] w-[min(36rem,calc(100vw-2rem))] -translate-x-1/2 rounded-2xl border border-white/25 bg-brand-blue p-3 shadow-2xl shadow-brand-blue-deep/50 transition-all duration-200 ${
+              className={`absolute left-1/2 top-[calc(100%+0.5rem)] w-[min(52rem,calc(100vw-2rem))] -translate-x-1/2 rounded-2xl border border-white/25 bg-brand-blue p-3 shadow-2xl shadow-brand-blue-deep/50 transition-all duration-200 ${
                 resourcesOpen
                   ? "pointer-events-auto translate-y-0 opacity-100"
                   : "pointer-events-none -translate-y-1 opacity-0"
               }`}
             >
-              <div className="grid grid-cols-2 gap-x-3">
+              <div className="grid grid-cols-3 gap-x-3">
                 <div>
                   <MenuColumnLabel>Learn</MenuColumnLabel>
                   <MenuItem
@@ -286,6 +312,19 @@ export function Navbar() {
                       params={{ slug: c.slug }}
                     />
                   ))}
+                </div>
+                <div>
+                  <MenuColumnLabel>AI SEO guides</MenuColumnLabel>
+                  {ENGINES.map((e) => (
+                    <EngineMenuItem key={e.slug} engine={e} />
+                  ))}
+                  <Link
+                    to="/ai-seo"
+                    role="menuitem"
+                    className="mt-1 block rounded-xl px-2.5 py-2 text-sm font-semibold text-white/80 transition-colors hover:bg-white/10 hover:text-white"
+                  >
+                    Compare all engines →
+                  </Link>
                 </div>
               </div>
             </div>
@@ -439,6 +478,24 @@ export function Navbar() {
                     className="rounded-lg px-2 py-2 pl-4 text-sm text-white/70 hover:bg-white/10 hover:text-white"
                   >
                     vs {c.name}
+                  </Link>
+                ))}
+                <Link
+                  to="/ai-seo"
+                  onClick={() => setOpen(false)}
+                  className="rounded-lg px-2 py-2 text-sm text-white/80 hover:bg-white/10 hover:text-white"
+                >
+                  AI SEO guides
+                </Link>
+                {ENGINES.map((e) => (
+                  <Link
+                    key={e.slug}
+                    to="/ai-seo/$engine"
+                    params={{ engine: e.slug }}
+                    onClick={() => setOpen(false)}
+                    className="rounded-lg px-2 py-2 pl-4 text-sm text-white/70 hover:bg-white/10 hover:text-white"
+                  >
+                    {e.shortName} SEO
                   </Link>
                 ))}
               </div>

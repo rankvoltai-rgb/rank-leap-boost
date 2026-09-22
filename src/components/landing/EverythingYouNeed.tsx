@@ -54,7 +54,7 @@ export function EverythingYouNeed() {
           </p>
         </Reveal>
 
-        <div className="mt-16 grid auto-rows-fr gap-5 md:grid-cols-3 lg:gap-6">
+        <div className="mt-16 grid grid-cols-1 gap-5 md:auto-rows-fr md:grid-cols-3 lg:gap-6">
           {/* A — wide */}
           <Reveal className="md:col-span-2">
             <Tile

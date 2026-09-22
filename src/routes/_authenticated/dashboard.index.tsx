@@ -156,7 +156,9 @@ function QueueRow({ blog, action }: { blog: Blog; action: React.ReactNode }) {
         </div>
       </Td>
       <Td>
-        <Pill tone="neutral">{blog.keyword}</Pill>
+        <Pill tone="neutral" className="whitespace-nowrap">
+          {blog.keyword}
+        </Pill>
       </Td>
       <Td>
         <TrafficValue value={blog.traffic_estimate} />
@@ -537,7 +539,7 @@ function SystemConsole() {
             <button
               type="button"
               onClick={() => setTrialOpen(true)}
-              className="inline-flex h-9 shrink-0 items-center gap-1.5 rounded-lg bg-white px-4 text-sm font-semibold text-brand-blue transition-transform hover:-translate-y-0.5"
+              className="inline-flex h-9 w-full shrink-0 items-center justify-center gap-1.5 rounded-lg bg-white px-4 text-sm font-semibold text-brand-blue transition-transform hover:-translate-y-0.5 sm:w-auto"
             >
               Start free trial
             </button>

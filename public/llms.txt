@@ -10,3 +10,12 @@
 
 - [Free Tools](/tools): Free SEO and AI-search tools — no signup required.
 - [Get Recommended by ChatGPT](/tools/get-recommended-by-chatgpt): Free tool that generates a personalized LinkedIn + About-Me plan so AI engines find and recommend you.
+
+## AI SEO Guides
+
+- [AI SEO guides](/ai-seo): How ChatGPT, Google AI Overviews, Gemini, Claude and Perplexity find and cite sources, compared side by side — indexes, crawlers, JavaScript rendering, referrers and the biggest lever for each.
+- [ChatGPT SEO](/ai-seo/chatgpt): Technical guide to ChatGPT search — query fan-out and the August 2026 site: shift, OAI-SearchBot vs GPTBot vs ChatGPT-User, Bing and IndexNow, and tracking utm_source=chatgpt.com.
+- [Google AI Overviews & AI Mode SEO](/ai-seo/google-ai-overviews): Eligibility (indexed, snippet-eligible, Search Console "Search generative AI" set to Include), query fan-out, snippet controls, and the Search Console generative AI report.
+- [Gemini SEO](/ai-seo/gemini): How the Gemini app grounds answers in the Google Search index, what Google-Extended really blocks, and why the Search Console AI opt-out doesn't cover Gemini.
+- [Claude SEO](/ai-seo/claude): Claude's web search runs on Brave Search; the ClaudeBot / Claude-SearchBot / Claude-User split; no JavaScript rendering; tracking claude.ai traffic.
+- [Perplexity SEO](/ai-seo/perplexity): Perplexity's own 200B-URL index and passage reranking, PerplexityBot vs Perplexity-User, freshness filtering, and Comet Plus.

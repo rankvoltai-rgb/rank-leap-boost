@@ -231,12 +231,12 @@ function Articles() {
                 onClick={routing.markOpenedHere}
                 data-article-link={b.id}
                 title={b.title}
-                className="block max-w-[26rem] truncate font-medium text-ink outline-none focus-visible:underline"
+                className="block max-w-52 truncate font-medium text-ink outline-none focus-visible:underline sm:max-w-[26rem]"
               >
                 {b.title || "Untitled article"}
               </Link>
               {b.keyword && (
-                <p className="mt-0.5 max-w-[26rem] truncate text-xs text-muted-foreground">
+                <p className="mt-0.5 max-w-52 truncate text-xs text-muted-foreground sm:max-w-[26rem]">
                   {b.keyword}
                 </p>
               )}

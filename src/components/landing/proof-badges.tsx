@@ -7,7 +7,9 @@
  * column (ink on the page background).
  */
 import type { ReactNode } from "react";
+import { Link } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
+import { engineForMark } from "@/data/ai-seo/engines";
 import { AI_MARKS, GoogleMark } from "./ai-logos";
 
 type Tone = "onBlue" | "onLight";
@@ -49,6 +51,38 @@ function MarkTile({ Mark, title, tone }: { Mark: Mark; title: string; tone: Tone
   );
 }
 
+/**
+ * The same tile as a way in: each engine's logo opens its SEO guide. The tile
+ * is drawn at 20px to sit inside the badge, so its hit area is widened with an
+ * invisible pseudo-element (to the gap on each side, and well above and below)
+ * rather than by growing the tile. A small label names the destination.
+ */
+function MarkLink({ Mark, name, tone }: { Mark: Mark; name: string; tone: Tone }) {
+  const engine = engineForMark(name);
+  if (!engine) return <MarkTile Mark={Mark} title={name} tone={tone} />;
+  return (
+    <Link
+      to="/ai-seo/$engine"
+      params={{ engine: engine.slug }}
+      aria-label={`${engine.name} SEO guide`}
+      className={cn(
+        "group/mark relative flex h-5 w-5 items-center justify-center rounded-md bg-white transition-transform duration-200 before:absolute before:-inset-x-0.5 before:-inset-y-3 before:content-[''] hover:-translate-y-0.5 hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
+        tone === "onBlue"
+          ? "focus-visible:ring-white focus-visible:ring-offset-brand-blue"
+          : "ring-1 ring-border focus-visible:ring-volt",
+      )}
+    >
+      <Mark className="h-3.5 w-3.5" />
+      <span
+        aria-hidden
+        className="pointer-events-none absolute bottom-full left-1/2 z-10 mb-2 -translate-x-1/2 translate-y-1 whitespace-nowrap rounded-md bg-ink px-2 py-1 text-[0.65rem] font-semibold normal-case tracking-normal text-white opacity-0 shadow-lg transition-all duration-150 group-hover/mark:translate-y-0 group-hover/mark:opacity-100 group-focus-visible/mark:translate-y-0 group-focus-visible/mark:opacity-100"
+      >
+        {engine.shortName} SEO guide
+      </span>
+    </Link>
+  );
+}
+
 function LaurelBadge({ value, label, tone }: { value: ReactNode; label: string; tone: Tone }) {
   return (
     <div className={cn("flex items-center gap-1", tone === "onBlue" ? "text-white" : "text-ink")}>
@@ -76,11 +110,17 @@ export type ProofBadge = "cited" | "articles" | "google";
 export function ProofBadges({
   tone = "onBlue",
   badges = ["cited", "articles", "google"],
+  linked = false,
   className,
 }: {
   tone?: Tone;
   /** Which badges to show, in order. Onboarding shows the citation one alone. */
   badges?: ProofBadge[];
+  /**
+   * Make each engine logo a link to its SEO guide. The landing hero does;
+   * onboarding doesn't, since leaving mid-setup would lose the visitor.
+   */
+  linked?: boolean;
   /** Layout; defaults to the hero's wrapping row. */
   className?: string;
 }) {
@@ -89,9 +129,13 @@ export function ProofBadges({
       label: "Cited across",
       value: (
         <span className="flex items-center gap-1">
-          {AI_MARKS.map(({ name, Mark }) => (
-            <MarkTile key={name} Mark={Mark} title={name} tone={tone} />
-          ))}
+          {AI_MARKS.map(({ name, Mark }) =>
+            linked ? (
+              <MarkLink key={name} Mark={Mark} name={name} tone={tone} />
+            ) : (
+              <MarkTile key={name} Mark={Mark} title={name} tone={tone} />
+            ),
+          )}
         </span>
       ),
     },

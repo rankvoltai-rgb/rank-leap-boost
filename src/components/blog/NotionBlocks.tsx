@@ -168,7 +168,7 @@ function CodeLine({ line }: { line: string }) {
   return <span className="text-white/90">{line}</span>;
 }
 
-function CodeBlock({ block }: { block: NotionBlock }) {
+export function CodeBlock({ block }: { block: NotionBlock }) {
   const code = (block.richText ?? []).map((s) => s.text).join("");
   const [copied, setCopied] = useState(false);
   // The fence's info string: a language or, as in ```robots.txt, a file name.
@@ -213,7 +213,7 @@ function CodeBlock({ block }: { block: NotionBlock }) {
 
 /* ---------- table ---------- */
 
-function Table({ block }: { block: NotionBlock }) {
+export function Table({ block }: { block: NotionBlock }) {
   const rows = block.rows ?? [];
   if (!rows.length) return null;
   const [head, ...body] = block.hasColumnHeader ? rows : [null, ...rows];

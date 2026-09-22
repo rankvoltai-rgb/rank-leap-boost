@@ -23,6 +23,7 @@ import { Route as ToolsIndexRouteImport } from './routes/tools.index'
 import { Route as FeaturesIndexRouteImport } from './routes/features.index'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as AlternativesIndexRouteImport } from './routes/alternatives.index'
+import { Route as AiSeoIndexRouteImport } from './routes/ai-seo.index'
 import { Route as UseCasesSlugRouteImport } from './routes/use-cases.$slug'
 import { Route as ToolsSlugRouteImport } from './routes/tools.$slug'
 import { Route as LegalTermsRouteImport } from './routes/legal.terms'
@@ -34,6 +35,7 @@ import { Route as LegalAcceptableUseRouteImport } from './routes/legal.acceptabl
 import { Route as FeaturesSlugRouteImport } from './routes/features.$slug'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as AlternativesSlugRouteImport } from './routes/alternatives.$slug'
+import { Route as AiSeoEngineRouteImport } from './routes/ai-seo.$engine'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
@@ -125,6 +127,11 @@ const AlternativesIndexRoute = AlternativesIndexRouteImport.update({
   path: '/alternatives/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AiSeoIndexRoute = AiSeoIndexRouteImport.update({
+  id: '/ai-seo/',
+  path: '/ai-seo/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const UseCasesSlugRoute = UseCasesSlugRouteImport.update({
   id: '/use-cases/$slug',
   path: '/use-cases/$slug',
@@ -178,6 +185,11 @@ const BlogSlugRoute = BlogSlugRouteImport.update({
 const AlternativesSlugRoute = AlternativesSlugRouteImport.update({
   id: '/alternatives/$slug',
   path: '/alternatives/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AiSeoEngineRoute = AiSeoEngineRouteImport.update({
+  id: '/ai-seo/$engine',
+  path: '/ai-seo/$engine',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
@@ -314,6 +326,7 @@ export interface FileRoutesByFullPath {
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/dashboard': typeof AuthenticatedDashboardRouteWithChildren
+  '/ai-seo/$engine': typeof AiSeoEngineRoute
   '/alternatives/$slug': typeof AlternativesSlugRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/features/$slug': typeof FeaturesSlugRoute
@@ -325,6 +338,7 @@ export interface FileRoutesByFullPath {
   '/legal/terms': typeof LegalTermsRoute
   '/tools/$slug': typeof ToolsSlugRoute
   '/use-cases/$slug': typeof UseCasesSlugRoute
+  '/ai-seo/': typeof AiSeoIndexRoute
   '/alternatives/': typeof AlternativesIndexRoute
   '/blog/': typeof BlogIndexRoute
   '/features/': typeof FeaturesIndexRoute
@@ -360,6 +374,7 @@ export interface FileRoutesByTo {
   '/trust': typeof TrustRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
+  '/ai-seo/$engine': typeof AiSeoEngineRoute
   '/alternatives/$slug': typeof AlternativesSlugRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/features/$slug': typeof FeaturesSlugRoute
@@ -371,6 +386,7 @@ export interface FileRoutesByTo {
   '/legal/terms': typeof LegalTermsRoute
   '/tools/$slug': typeof ToolsSlugRoute
   '/use-cases/$slug': typeof UseCasesSlugRoute
+  '/ai-seo': typeof AiSeoIndexRoute
   '/alternatives': typeof AlternativesIndexRoute
   '/blog': typeof BlogIndexRoute
   '/features': typeof FeaturesIndexRoute
@@ -409,6 +425,7 @@ export interface FileRoutesById {
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRouteWithChildren
+  '/ai-seo/$engine': typeof AiSeoEngineRoute
   '/alternatives/$slug': typeof AlternativesSlugRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/features/$slug': typeof FeaturesSlugRoute
@@ -420,6 +437,7 @@ export interface FileRoutesById {
   '/legal/terms': typeof LegalTermsRoute
   '/tools/$slug': typeof ToolsSlugRoute
   '/use-cases/$slug': typeof UseCasesSlugRoute
+  '/ai-seo/': typeof AiSeoIndexRoute
   '/alternatives/': typeof AlternativesIndexRoute
   '/blog/': typeof BlogIndexRoute
   '/features/': typeof FeaturesIndexRoute
@@ -458,6 +476,7 @@ export interface FileRouteTypes {
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
     | '/dashboard'
+    | '/ai-seo/$engine'
     | '/alternatives/$slug'
     | '/blog/$slug'
     | '/features/$slug'
@@ -469,6 +488,7 @@ export interface FileRouteTypes {
     | '/legal/terms'
     | '/tools/$slug'
     | '/use-cases/$slug'
+    | '/ai-seo/'
     | '/alternatives/'
     | '/blog/'
     | '/features/'
@@ -504,6 +524,7 @@ export interface FileRouteTypes {
     | '/trust'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
+    | '/ai-seo/$engine'
     | '/alternatives/$slug'
     | '/blog/$slug'
     | '/features/$slug'
@@ -515,6 +536,7 @@ export interface FileRouteTypes {
     | '/legal/terms'
     | '/tools/$slug'
     | '/use-cases/$slug'
+    | '/ai-seo'
     | '/alternatives'
     | '/blog'
     | '/features'
@@ -552,6 +574,7 @@ export interface FileRouteTypes {
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
     | '/_authenticated/dashboard'
+    | '/ai-seo/$engine'
     | '/alternatives/$slug'
     | '/blog/$slug'
     | '/features/$slug'
@@ -563,6 +586,7 @@ export interface FileRouteTypes {
     | '/legal/terms'
     | '/tools/$slug'
     | '/use-cases/$slug'
+    | '/ai-seo/'
     | '/alternatives/'
     | '/blog/'
     | '/features/'
@@ -600,11 +624,13 @@ export interface RootRouteChildren {
   TrustRoute: typeof TrustRoute
   Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
+  AiSeoEngineRoute: typeof AiSeoEngineRoute
   AlternativesSlugRoute: typeof AlternativesSlugRoute
   BlogSlugRoute: typeof BlogSlugRoute
   FeaturesSlugRoute: typeof FeaturesSlugRoute
   ToolsSlugRoute: typeof ToolsSlugRoute
   UseCasesSlugRoute: typeof UseCasesSlugRoute
+  AiSeoIndexRoute: typeof AiSeoIndexRoute
   AlternativesIndexRoute: typeof AlternativesIndexRoute
   BlogIndexRoute: typeof BlogIndexRoute
   FeaturesIndexRoute: typeof FeaturesIndexRoute
@@ -719,6 +745,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AlternativesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/ai-seo/': {
+      id: '/ai-seo/'
+      path: '/ai-seo'
+      fullPath: '/ai-seo/'
+      preLoaderRoute: typeof AiSeoIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/use-cases/$slug': {
       id: '/use-cases/$slug'
       path: '/use-cases/$slug'
@@ -794,6 +827,13 @@ declare module '@tanstack/react-router' {
       path: '/alternatives/$slug'
       fullPath: '/alternatives/$slug'
       preLoaderRoute: typeof AlternativesSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ai-seo/$engine': {
+      id: '/ai-seo/$engine'
+      path: '/ai-seo/$engine'
+      fullPath: '/ai-seo/$engine'
+      preLoaderRoute: typeof AiSeoEngineRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/dashboard': {
@@ -1037,11 +1077,13 @@ const rootRouteChildren: RootRouteChildren = {
   Char91DotmcpChar93ListToolsRoute: Char91DotmcpChar93ListToolsRoute,
   Char91DotwellKnownChar93OauthProtectedResourceRoute:
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
+  AiSeoEngineRoute: AiSeoEngineRoute,
   AlternativesSlugRoute: AlternativesSlugRoute,
   BlogSlugRoute: BlogSlugRoute,
   FeaturesSlugRoute: FeaturesSlugRoute,
   ToolsSlugRoute: ToolsSlugRoute,
   UseCasesSlugRoute: UseCasesSlugRoute,
+  AiSeoIndexRoute: AiSeoIndexRoute,
   AlternativesIndexRoute: AlternativesIndexRoute,
   BlogIndexRoute: BlogIndexRoute,
   FeaturesIndexRoute: FeaturesIndexRoute,

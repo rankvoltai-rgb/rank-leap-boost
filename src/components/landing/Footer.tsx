@@ -5,6 +5,12 @@ import { PixelField } from "./Hero";
 import { FEATURES } from "@/data/features";
 import { COMPETITORS } from "@/data/alternatives";
 import { PERSONAS } from "@/data/personas";
+import { ENGINES } from "@/data/ai-seo/engines";
+
+// Trustpilot's 24-character business unit ID (Trustpilot Business → Integrations
+// → TrustBox). The widget rejects anything else — a domain gets a 400 and an
+// empty frame — so the TrustBox stays hidden until the real ID is set here.
+const TRUSTPILOT_BUSINESS_UNIT_ID = "";
 
 // Client-only TrustBox: the Trustpilot script replaces the div's contents with
 // an iframe after load. Rendering it only after mount keeps SSR and client
@@ -23,7 +29,7 @@ function TrustBox() {
     }
   }, [mounted]);
 
-  if (!mounted) return null;
+  if (!mounted || !/^[a-f0-9]{24}$/.test(TRUSTPILOT_BUSINESS_UNIT_ID)) return null;
 
   return (
     <div className="mt-8 flex justify-center">
@@ -32,7 +38,7 @@ function TrustBox() {
         className="trustpilot-widget"
         data-locale="en-US"
         data-template-id="56278e9abfbbba0bdcd568bc"
-        data-businessunit-id="rankbox.xyz"
+        data-businessunit-id={TRUSTPILOT_BUSINESS_UNIT_ID}
         data-style-height="52px"
         data-style-width="100%"
       >
@@ -81,8 +87,8 @@ export function Footer() {
     <footer className="relative overflow-hidden bg-brand-blue text-white">
       <PixelField seed={5} />
       <div className="relative mx-auto max-w-6xl px-5 py-14">
-        <div className="grid gap-10 md:grid-cols-[1.5fr_repeat(4,1fr)]">
-          <div>
+        <div className="grid grid-cols-2 gap-x-6 gap-y-10 md:grid-cols-3 md:gap-10 lg:grid-cols-[1.5fr_repeat(5,1fr)]">
+          <div className="col-span-2 md:col-span-3 lg:col-span-1">
             <Logo inverted />
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-white/70">
               The AI search growth engine for founders. Daily published articles engineered to get
@@ -155,6 +161,24 @@ export function Footer() {
                 <li key={t.slug}>
                   <Link to="/tools/$slug" params={{ slug: t.slug }} className={linkClass}>
                     {t.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <p className="text-sm font-semibold text-white">AI SEO Guides</p>
+            <ul className="mt-3 space-y-2">
+              <li>
+                <Link to="/ai-seo" className={linkClass}>
+                  All engines
+                </Link>
+              </li>
+              {ENGINES.map((e) => (
+                <li key={e.slug}>
+                  <Link to="/ai-seo/$engine" params={{ engine: e.slug }} className={linkClass}>
+                    {e.shortName} SEO
                   </Link>
                 </li>
               ))}

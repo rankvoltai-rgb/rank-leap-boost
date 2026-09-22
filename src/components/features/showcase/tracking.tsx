@@ -100,10 +100,10 @@ function Impact() {
   return (
     <div ref={ref} className="h-full">
       <Panel className="flex h-full flex-col">
-        <div className="grid grid-cols-3 gap-3">
+        <div className="flex flex-wrap justify-between gap-3 sm:grid sm:grid-cols-3">
           <div>
             <p className="text-[0.65rem] text-muted-foreground">AI citations</p>
-            <p className="flex items-baseline gap-1.5 text-xl font-semibold tracking-tight text-ink tabular-nums">
+            <p className="flex items-baseline gap-1.5 text-lg font-semibold tracking-tight text-ink sm:text-xl tabular-nums">
               {total}
               <span className="flex items-center gap-0.5 text-[0.65rem] font-semibold text-success">
                 <TrendingUp className="h-3 w-3" /> 62%
@@ -112,13 +112,13 @@ function Impact() {
           </div>
           <div>
             <p className="text-[0.65rem] text-muted-foreground">Prompts won</p>
-            <p className="text-xl font-semibold tracking-tight text-ink tabular-nums">
+            <p className="text-lg font-semibold tracking-tight text-ink sm:text-xl tabular-nums">
               23<span className="text-sm text-muted-foreground">/40</span>
             </p>
           </div>
           <div>
             <p className="text-[0.65rem] text-muted-foreground">Top engine</p>
-            <p className="text-xl font-semibold tracking-tight text-ink">Perplexity</p>
+            <p className="text-lg font-semibold tracking-tight text-ink sm:text-xl">Perplexity</p>
           </div>
         </div>
         <AreaChart

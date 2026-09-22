@@ -199,8 +199,8 @@ export function UrlForm({ url, onChange }: { url: string; onChange: (v: string) 
           autoComplete="url"
           value={url}
           onChange={(e) => onChange(e.target.value)}
-          placeholder="Enter your website URL"
-          className="w-full bg-transparent py-3 text-sm text-ink outline-none placeholder:text-muted-foreground"
+          placeholder="Your website URL"
+          className="w-full text-ellipsis bg-transparent py-3 text-sm text-ink outline-none placeholder:text-sm placeholder:text-muted-foreground"
           aria-label="Your website URL"
         />
       </div>
@@ -208,11 +208,11 @@ export function UrlForm({ url, onChange }: { url: string; onChange: (v: string) 
         type="submit"
         className="inline-flex h-12 shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-lg bg-brand-blue px-4 text-sm font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:bg-brand-blue/85 hover:shadow-md active:translate-y-0 sm:px-6"
       >
-        {/* "Free" is dropped on the narrowest phones so the button keeps its
-            place on the row instead of wrapping the field beneath it. */}
+        {/* "Free" and the arrow are dropped on the narrowest phones so the
+            button keeps its place on the row and the field keeps room to read. */}
         <span className="max-[420px]:hidden">Get Started Free</span>
         <span className="hidden max-[420px]:inline">Get Started</span>
-        <ArrowRight className="h-4 w-4 transition-transform group-focus-within:translate-x-0.5" />
+        <ArrowRight className="h-4 w-4 transition-transform group-focus-within:translate-x-0.5 max-[420px]:hidden" />
       </button>
     </form>
   );
@@ -259,7 +259,7 @@ export function Hero() {
                   text changes. Below lg the badges wrap, centred. */}
               <div className="mb-7 text-[2.4rem] sm:text-[3.5rem] lg:w-[8.09em] lg:max-w-full xl:text-[4rem]">
                 <div className="text-base">
-                  <ProofBadges />
+                  <ProofBadges linked />
                 </div>
               </div>
             </Reveal>

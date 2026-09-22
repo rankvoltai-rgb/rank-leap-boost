@@ -479,7 +479,7 @@ function CostCalculator() {
           <p className="text-sm text-muted-foreground">You'd keep</p>
           <p className="font-display mt-1 text-4xl font-bold tracking-tight text-success tabular-nums">
             {formatUsd(saving)}
-            <span className="ml-1.5 text-base font-semibold">every month</span>
+            <span className="ml-1.5 whitespace-nowrap text-base font-semibold">every month</span>
           </p>
           <p className="mt-2 text-sm text-muted-foreground">
             That's {formatUsd(saving * 12)} a year — before counting the research, publishing,

@@ -172,7 +172,7 @@ export function ErrorNote({ message }: { message: string }) {
 
 /* ---------- Two-column tool shell ---------- */
 export function ToolGrid({ children }: { children: ReactNode }) {
-  return <div className="grid gap-6 lg:grid-cols-2 lg:gap-8">{children}</div>;
+  return <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-8">{children}</div>;
 }
 
 export function Panel({ title, children }: { title?: string; children: ReactNode }) {
