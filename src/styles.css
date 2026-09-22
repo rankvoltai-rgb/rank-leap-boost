@@ -77,6 +77,8 @@
   --color-hero-black-elev: var(--hero-black-elev);
   --color-hero-black-elev-2: var(--hero-black-elev-2);
   --color-brand-blue-deep: var(--brand-blue-deep);
+  --color-nav: var(--nav);
+  --color-nav-accent: var(--nav-accent);
   --color-success: var(--success);
   --color-warning: var(--warning);
   --color-info: var(--info);
@@ -126,6 +128,14 @@
   /* Tints the frosted scrim behind the nav menus, so a menu in the hero's
      own blue still stands off the hero instead of merging into it. */
   --brand-blue-deep: #0c4ea8;
+  /* The dashboard rail. Deep ink, hue-matched to the brand so the blue it
+     carries reads as the same blue. White on the old #1877f2 rail reached
+     only 4.2:1 — under AA — and a saturated field beside a white page left
+     the blue meaning nothing. On ink, white clears 18:1 and the blue is free
+     to mark one thing: the page you're on. */
+  --nav: oklch(0.203 0.015 262);
+  /* That same blue lifted onto the ink, so a 17px icon drawn in it still reads. */
+  --nav-accent: oklch(0.715 0.145 258);
   /* Near-black hero field — softer than #000 under large type. */
   --hero-black: #0a0a0b;
   /* Opaque raised surfaces on the black field (cards, then insets within
@@ -615,6 +625,42 @@
     black calc(100% - 14px),
     transparent 100%
   );
+}
+
+/* ---------------- Dashboard navigation rail ---------------- */
+
+/* The rail's surface: flat ink, lifted by a cool halo at its crown and a
+   whisper of light down its inner right edge, so it reads as a panel standing
+   in front of the page rather than a hole cut out of it. */
+@utility bg-nav-sheen {
+  background-color: var(--nav);
+  background-image:
+    radial-gradient(
+      125% 30% at 50% -6%,
+      color-mix(in oklab, var(--nav-accent) 19%, transparent) 0%,
+      transparent 64%
+    ),
+    linear-gradient(180deg, color-mix(in oklab, white 5%, transparent) 0%, transparent 20%);
+  /* Cast onto the page, not into the rail: an inner highlight is invisible
+     against a white canvas, while a shadow makes the rail sit in front of it. */
+  box-shadow:
+    1px 0 0 color-mix(in oklab, var(--ink) 8%, transparent),
+    10px 0 30px -14px color-mix(in oklab, var(--ink) 32%, transparent);
+}
+
+/* The current item: a key raised a hair off the rail, lit along its top edge
+   and casting just enough shadow to sit above it. */
+@utility nav-key {
+  background-color: color-mix(in oklab, white 8%, transparent);
+  box-shadow:
+    inset 0 1px 0 color-mix(in oklab, white 11%, transparent),
+    0 1px 3px color-mix(in oklab, black 35%, transparent);
+}
+
+/* The accent bar on the rail's edge, with the bloom that makes it read as lit
+   rather than painted. */
+@utility nav-edge-glow {
+  box-shadow: 0 0 10px color-mix(in oklab, var(--nav-accent) 65%, transparent);
 }
 
 /* ---------------- Document editor (TipTap / Google-Docs style) ---------------- */

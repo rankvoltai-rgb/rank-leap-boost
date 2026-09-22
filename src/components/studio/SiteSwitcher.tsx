@@ -41,23 +41,24 @@ export function SiteSwitcher({
     <DropdownMenu>
       <DropdownMenuTrigger
         className={cn(
-          "group flex w-full items-center rounded-lg text-left outline-none transition-colors",
-          "focus-visible:ring-2 focus-visible:ring-white/70",
+          "group flex w-full items-center rounded-xl text-left outline-none",
+          "transition-[background-color,box-shadow] duration-150",
+          "focus-visible:ring-2 focus-visible:ring-nav-accent focus-visible:ring-offset-2 focus-visible:ring-offset-nav",
           collapsed
-            ? "justify-center p-1 hover:bg-white/10"
-            : "gap-2.5 bg-white/10 px-2.5 py-2 ring-1 ring-white/15 hover:bg-white/15",
+            ? "justify-center p-1.5 hover:bg-white/[0.08]"
+            : "gap-2.5 bg-white/[0.05] px-2 py-2 ring-1 ring-inset ring-white/10 hover:bg-white/[0.09] hover:ring-white/20",
         )}
         aria-label={`Current site: ${name}. Switch site`}
         title={collapsed ? name : undefined}
       >
-        <SiteMark site={site} className="ring-white/25" />
+        <SiteMark site={site} className="ring-white/20" />
         {!collapsed && (
           <>
             <span className="min-w-0 flex-1">
               <span className="block truncate text-sm font-semibold text-white">{name}</span>
-              {domain && <span className="block truncate text-xs text-white/60">{domain}</span>}
+              {domain && <span className="block truncate text-xs text-white/50">{domain}</span>}
             </span>
-            <ChevronsUpDown className="h-4 w-4 shrink-0 text-white/60 transition-colors group-hover:text-white" />
+            <ChevronsUpDown className="h-4 w-4 shrink-0 text-white/40 transition-colors group-hover:text-white/80" />
           </>
         )}
       </DropdownMenuTrigger>
