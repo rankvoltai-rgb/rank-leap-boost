@@ -1,14 +1,15 @@
 /**
  * The dashboard's fixed navigation.
  *
- * A deep ink rail that answers two questions without a trip anywhere else: at
- * the top, which site you're looking at (and every other one a click away —
- * see SiteSwitcher); at the bottom, who you are and what you're on. It
+ * A white rail that answers two questions without a trip anywhere
+ * else: at the top, which site you're looking at (and every other one a click
+ * away — see SiteSwitcher); at the bottom, who you are and what you're on. It
  * collapses to an icon rail from the handle on its own edge or with ⌘\, and
  * the choice is remembered per browser.
  *
- * The brand blue that used to fill this panel now marks the current page and
- * nothing else — see the note on --nav in styles.css for why.
+ * The panel used to be a solid #1877f2 field. It is white chrome now, and
+ * the brand blue marks the current page and nothing else — see the note on
+ * --nav in styles.css for why, and for the tokens that pitch this surface.
  */
 import { useCallback, useEffect, useState } from "react";
 import { useRouterState } from "@tanstack/react-router";
@@ -22,7 +23,7 @@ import { PLAN } from "@/data/pricing";
 import { getCurrentUser, getSubscription, listBlogs } from "@/lib/data";
 import { cn } from "@/lib/utils";
 import { SignOutIcon } from "./icons";
-import { NavScroller, NavSections, RailTooltip } from "./SidebarNav";
+import { NAV_FOCUS, NavScroller, NavSections, RailTooltip } from "./SidebarNav";
 import { useActiveSite } from "./site-context";
 import { useSignOut } from "./use-sign-out";
 import type { NavItem } from "./nav";
@@ -51,7 +52,19 @@ function planLabel(status: string | undefined, sites = 1): string {
   return "No plan yet";
 }
 
-/** Sign out, styled for the ink rail. Icon-only, so it always carries a label. */
+/**
+ * The brand at rail width. Same tile the full Logo wears, so collapsing the
+ * rail crops the wordmark rather than swapping the mark for a bare glyph.
+ */
+function RailMark() {
+  return (
+    <span className="border-nav-line flex h-8 w-8 items-center justify-center rounded-[10px] border bg-card shadow-sm">
+      <Mark className="text-nav-fg h-5 w-5" />
+    </span>
+  );
+}
+
+/** Sign out, styled for the rail. Icon-only, so it always carries a label. */
 function SignOutButton({ onClick }: { onClick: () => void }) {
   return (
     <RailTooltip label="Sign out">
@@ -60,9 +73,9 @@ function SignOutButton({ onClick }: { onClick: () => void }) {
         onClick={onClick}
         aria-label="Sign out"
         className={cn(
-          "grid h-8 w-8 shrink-0 place-items-center rounded-lg text-white/50 outline-none",
-          "transition-colors hover:bg-white/10 hover:text-white",
-          "focus-visible:ring-2 focus-visible:ring-nav-accent focus-visible:ring-offset-2 focus-visible:ring-offset-nav",
+          "text-nav-muted grid h-8 w-8 shrink-0 place-items-center rounded-lg outline-none",
+          "hover:bg-nav-hover hover:text-nav-fg transition-colors",
+          NAV_FOCUS,
         )}
       >
         <SignOutIcon className="h-4 w-4" />
@@ -137,11 +150,11 @@ export function Sidebar() {
         <div className="bg-nav-sheen flex h-full w-full flex-col overflow-hidden">
           <div
             className={cn(
-              "flex h-14 shrink-0 items-center border-b border-white/[0.07]",
+              "border-nav-line flex h-14 shrink-0 items-center border-b",
               collapsed ? "justify-center px-0" : "px-4",
             )}
           >
-            {collapsed ? <Mark className="h-6 w-6 text-white" /> : <Logo inverted />}
+            {collapsed ? <RailMark /> : <Logo />}
           </div>
 
           <div className={cn("shrink-0 pb-1 pt-3", collapsed ? "px-2" : "px-3")}>
@@ -152,14 +165,12 @@ export function Sidebar() {
             <NavSections id="rail" isActive={isActive} collapsed={collapsed} queued={queued} />
           </NavScroller>
 
-          <div
-            className={cn("shrink-0 border-t border-white/[0.07]", collapsed ? "px-2 py-3" : "p-3")}
-          >
+          <div className={cn("border-nav-line shrink-0 border-t", collapsed ? "px-2 py-3" : "p-3")}>
             {collapsed ? (
               <div className="flex flex-col items-center gap-1.5">
                 <RailTooltip label={name} hint={plan}>
                   <span className="block">
-                    <Avatar name={name} className="h-8 w-8 ring-1 ring-white/20" />
+                    <Avatar name={name} className="ring-nav-line h-8 w-8 ring-1" />
                     <span className="sr-only">{`${name} — ${plan}`}</span>
                   </span>
                 </RailTooltip>
@@ -167,10 +178,10 @@ export function Sidebar() {
               </div>
             ) : (
               <div className="flex items-center gap-2.5">
-                <Avatar name={name} className="h-8 w-8 shrink-0 ring-1 ring-white/20" />
+                <Avatar name={name} className="ring-nav-line h-8 w-8 shrink-0 ring-1" />
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm font-medium text-white">{name}</p>
-                  <p className="truncate text-xs text-white/50">{plan}</p>
+                  <p className="text-nav-fg truncate text-sm font-medium">{name}</p>
+                  <p className="text-nav-muted truncate text-xs">{plan}</p>
                 </div>
                 <SignOutButton onClick={signOut} />
               </div>
@@ -190,11 +201,11 @@ export function Sidebar() {
             aria-expanded={!collapsed}
             className={cn(
               "absolute -right-3 top-4 z-30 grid h-6 w-6 place-items-center rounded-full",
-              "border border-border bg-card text-muted-foreground/70 shadow-1 outline-none",
+              "border-nav-line text-nav-muted/70 border bg-card shadow-1 outline-none",
               "transition-[color,border-color,box-shadow] duration-200",
-              "hover:border-volt/40 hover:text-volt hover:shadow-2",
-              "group-hover/rail:text-muted-foreground",
-              "focus-visible:ring-2 focus-visible:ring-volt/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+              "hover:border-nav-accent/40 hover:text-nav-accent hover:shadow-2",
+              "group-hover/rail:text-nav-muted",
+              "focus-visible:ring-nav-accent/60 focus-visible:ring-offset-background focus-visible:ring-2 focus-visible:ring-offset-2",
             )}
           >
             {collapsed ? (

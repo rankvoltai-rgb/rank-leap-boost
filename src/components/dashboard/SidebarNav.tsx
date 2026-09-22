@@ -2,10 +2,13 @@
  * The dashboard navigation list, shared by the fixed rail and the mobile
  * drawer so both stay identical.
  *
- * The rail is deep ink and nearly everything on it is white at low alpha.
- * The brand blue is spent on one thing only — the page you're on — as a lit
- * bar on the rail's edge that glides from item to item, a blue icon, and a
- * key raised a hair off the surface. Ten destinations, one of them speaking.
+ * The rail is white and almost silent — hairlines, grey labels, grey icons.
+ * The brand blue is spent on one thing only: the page you're on, as a filled
+ * key that glides from item to item, ticked by a lit bar on the rail's edge.
+ * Ten destinations, one of them speaking.
+ *
+ * Nothing here names a colour. Every surface comes from the --nav-* tokens in
+ * styles.css, so the rail can be re-pitched there without touching this file.
  */
 import { useEffect, useRef, useState, type ReactElement, type ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
@@ -17,6 +20,10 @@ import { NAV_SECTIONS, type NavItem } from "./nav";
 // Fast enough to feel attached to the click, damped enough not to wobble.
 const GLIDE = { type: "spring", stiffness: 520, damping: 44, mass: 0.85 } as const;
 const INSTANT = { duration: 0 } as const;
+
+/** The ring drawn on a focused control anywhere on the rail. */
+export const NAV_FOCUS =
+  "focus-visible:ring-2 focus-visible:ring-nav-accent focus-visible:ring-offset-2 focus-visible:ring-offset-nav";
 
 /**
  * The label for an icon-only control. A collapsed rail is unreadable without
@@ -44,13 +51,14 @@ export function RailTooltip({
   return (
     <Tooltip>
       <TooltipTrigger asChild>{children}</TooltipTrigger>
+      {/* Dark on a white rail: a pale tooltip would vanish into it. */}
       <TooltipContent
         side={side}
         sideOffset={12}
-        className="border border-white/10 bg-nav px-2.5 py-1.5 text-xs font-medium text-white shadow-3"
+        className="bg-ink px-2.5 py-1.5 text-xs font-medium text-background shadow-3"
       >
         {label}
-        {hint && <span className="ml-2 text-white/45">{hint}</span>}
+        {hint && <span className="ml-2 text-background/50">{hint}</span>}
       </TooltipContent>
     </Tooltip>
   );
@@ -82,9 +90,9 @@ export function NavLink({
         className={cn(
           "group relative flex items-center rounded-[10px] text-sm font-medium outline-none",
           "transition-colors duration-150",
-          "focus-visible:ring-2 focus-visible:ring-nav-accent focus-visible:ring-offset-2 focus-visible:ring-offset-nav",
+          NAV_FOCUS,
           collapsed ? "justify-center px-0 py-2.5" : "gap-3 px-3 py-2",
-          active ? "text-white" : "text-white/60 hover:bg-white/[0.055] hover:text-white",
+          active ? "text-nav-key-fg" : "text-nav-fg-idle hover:bg-nav-hover hover:text-nav-fg",
         )}
       >
         {active && (
@@ -111,13 +119,16 @@ export function NavLink({
         <item.icon
           className={cn(
             "relative h-[1.05rem] w-[1.05rem] shrink-0 transition-colors duration-150",
-            active ? "text-nav-accent" : "text-white/45 group-hover:text-white/80",
+            active ? "text-nav-key-fg" : "text-nav-muted group-hover:text-nav-fg",
           )}
         />
         {/* Always rendered: it is the link's accessible name, and a tooltip
             is not a name. Collapsed, it is hidden from the eye only. */}
         <span
-          className={collapsed ? "sr-only" : "relative min-w-0 flex-1 truncate whitespace-nowrap"}
+          className={cn(
+            collapsed ? "sr-only" : "relative min-w-0 flex-1 truncate whitespace-nowrap",
+            active && "font-semibold",
+          )}
         >
           {item.title}
         </span>
@@ -129,8 +140,8 @@ export function NavLink({
                 : "relative rounded-full px-1.5 py-0.5 text-[0.68rem] font-semibold tabular-nums transition-colors duration-150",
               !collapsed &&
                 (active
-                  ? "bg-nav-accent/20 text-nav-accent"
-                  : "bg-white/10 text-white/65 group-hover:text-white"),
+                  ? "bg-nav-key-fg/25 text-nav-key-fg"
+                  : "bg-nav-hover text-nav-muted group-hover:text-nav-fg"),
             )}
           >
             {badge}
@@ -171,9 +182,9 @@ export function NavSections({
                 mean something. Collapsed, the break itself does that job. */}
             {index > 0 &&
               (collapsed ? (
-                <div className="mx-3 mb-3 h-px bg-white/10" aria-hidden />
+                <div className="bg-nav-line mx-3 mb-3 h-px" aria-hidden />
               ) : (
-                <p className="px-3 pb-2 text-[0.625rem] font-semibold uppercase tracking-[0.16em] text-white/40">
+                <p className="text-nav-muted px-3 pb-2 text-[0.625rem] font-semibold uppercase tracking-[0.16em]">
                   {section.label}
                 </p>
               ))}
@@ -199,7 +210,7 @@ export function NavSections({
 /**
  * The list's own scroller, for the short windows where ten items don't fit.
  *
- * The scrollbar is hidden — a grey thumb on a dark panel is noise — so the
+ * The scrollbar is hidden — a grey thumb beside grey labels is noise — so the
  * edge softens instead, and only on the side there is actually more to see.
  */
 export function NavScroller({ className, children }: { className?: string; children: ReactNode }) {
@@ -251,8 +262,8 @@ function ScrollEdge({ side, show }: { side: "top" | "bottom"; show: boolean }) {
       className={cn(
         "pointer-events-none absolute inset-x-0 h-8 transition-opacity duration-200",
         side === "top"
-          ? "top-0 bg-gradient-to-b from-nav to-transparent"
-          : "bottom-0 bg-gradient-to-t from-nav to-transparent",
+          ? "from-nav top-0 bg-gradient-to-b to-transparent"
+          : "from-nav bottom-0 bg-gradient-to-t to-transparent",
         show ? "opacity-100" : "opacity-0",
       )}
     />
