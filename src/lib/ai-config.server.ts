@@ -15,7 +15,7 @@
 import { createOpenAICompatible } from "@ai-sdk/openai-compatible";
 import { createClaudeCli, type LanguageModelV2 } from "./claude-cli.server";
 
-type ApiProvider = "cerebras" | "gemini" | "lovable";
+type ApiProvider = "alibaba" | "cerebras" | "gemini" | "lovable";
 export type AiProvider = ApiProvider | "claude-cli";
 
 /**
@@ -30,12 +30,23 @@ interface ProviderSpec {
   /** Env var holding the key. */
   keyVar: string;
   baseURL: string;
+  /** Env var that overrides baseURL, for vendors whose keys are per region. */
+  baseURLVar?: string;
   /** Used when AI_MODEL is unset. */
   defaultModel: string;
   headers: (key: string) => Record<string, string>;
 }
 
 const PROVIDERS: Record<ApiProvider, ProviderSpec> = {
+  alibaba: {
+    // Model Studio (DashScope), Qwen models. Keys only work in the region
+    // that issued them, so a non-Singapore account must set DASHSCOPE_BASE_URL.
+    keyVar: "DASHSCOPE_API_KEY",
+    baseURL: "https://dashscope-intl.aliyuncs.com/compatible-mode/v1",
+    baseURLVar: "DASHSCOPE_BASE_URL",
+    defaultModel: "qwen-plus",
+    headers: (key) => ({ Authorization: `Bearer ${key}` }),
+  },
   cerebras: {
     keyVar: "CEREBRAS_API_KEY",
     baseURL: "https://api.cerebras.ai/v1",
@@ -74,7 +85,7 @@ const PROVIDERS: Record<ApiProvider, ProviderSpec> = {
  * credentials; Cerebras returns payment_required until its account has billing
  * enabled, and a key being *present* is not proof it is *usable*.
  */
-const FALLBACK_ORDER: ApiProvider[] = ["gemini", "cerebras", "lovable"];
+const FALLBACK_ORDER: ApiProvider[] = ["gemini", "alibaba", "cerebras", "lovable"];
 
 function isApiProvider(value: string | undefined): value is ApiProvider {
   return !!value && value in PROVIDERS;
@@ -144,7 +155,7 @@ export function getAiClient(): {
   return {
     client: createOpenAICompatible({
       name: provider,
-      baseURL: spec.baseURL,
+      baseURL: (spec.baseURLVar && process.env[spec.baseURLVar]?.trim()) || spec.baseURL,
       headers: spec.headers(resolved.apiKey),
     }),
     provider,
