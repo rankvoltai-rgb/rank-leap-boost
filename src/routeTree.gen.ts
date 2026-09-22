@@ -20,6 +20,7 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as UseCasesIndexRouteImport } from './routes/use-cases.index'
 import { Route as ToolsIndexRouteImport } from './routes/tools.index'
+import { Route as GlossaryIndexRouteImport } from './routes/glossary.index'
 import { Route as FeaturesIndexRouteImport } from './routes/features.index'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as AlternativesIndexRouteImport } from './routes/alternatives.index'
@@ -32,6 +33,7 @@ import { Route as LegalPrivacyRouteImport } from './routes/legal.privacy'
 import { Route as LegalDpaRouteImport } from './routes/legal.dpa'
 import { Route as LegalCookiesRouteImport } from './routes/legal.cookies'
 import { Route as LegalAcceptableUseRouteImport } from './routes/legal.acceptable-use'
+import { Route as GlossaryTermRouteImport } from './routes/glossary.$term'
 import { Route as FeaturesSlugRouteImport } from './routes/features.$slug'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as AlternativesSlugRouteImport } from './routes/alternatives.$slug'
@@ -112,6 +114,11 @@ const ToolsIndexRoute = ToolsIndexRouteImport.update({
   path: '/tools/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const GlossaryIndexRoute = GlossaryIndexRouteImport.update({
+  id: '/glossary/',
+  path: '/glossary/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const FeaturesIndexRoute = FeaturesIndexRouteImport.update({
   id: '/features/',
   path: '/features/',
@@ -171,6 +178,11 @@ const LegalAcceptableUseRoute = LegalAcceptableUseRouteImport.update({
   id: '/acceptable-use',
   path: '/acceptable-use',
   getParentRoute: () => LegalRoute,
+} as any)
+const GlossaryTermRoute = GlossaryTermRouteImport.update({
+  id: '/glossary/$term',
+  path: '/glossary/$term',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const FeaturesSlugRoute = FeaturesSlugRouteImport.update({
   id: '/features/$slug',
@@ -330,6 +342,7 @@ export interface FileRoutesByFullPath {
   '/alternatives/$slug': typeof AlternativesSlugRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/features/$slug': typeof FeaturesSlugRoute
+  '/glossary/$term': typeof GlossaryTermRoute
   '/legal/acceptable-use': typeof LegalAcceptableUseRoute
   '/legal/cookies': typeof LegalCookiesRoute
   '/legal/dpa': typeof LegalDpaRoute
@@ -342,6 +355,7 @@ export interface FileRoutesByFullPath {
   '/alternatives/': typeof AlternativesIndexRoute
   '/blog/': typeof BlogIndexRoute
   '/features/': typeof FeaturesIndexRoute
+  '/glossary/': typeof GlossaryIndexRoute
   '/tools/': typeof ToolsIndexRoute
   '/use-cases/': typeof UseCasesIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -378,6 +392,7 @@ export interface FileRoutesByTo {
   '/alternatives/$slug': typeof AlternativesSlugRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/features/$slug': typeof FeaturesSlugRoute
+  '/glossary/$term': typeof GlossaryTermRoute
   '/legal/acceptable-use': typeof LegalAcceptableUseRoute
   '/legal/cookies': typeof LegalCookiesRoute
   '/legal/dpa': typeof LegalDpaRoute
@@ -390,6 +405,7 @@ export interface FileRoutesByTo {
   '/alternatives': typeof AlternativesIndexRoute
   '/blog': typeof BlogIndexRoute
   '/features': typeof FeaturesIndexRoute
+  '/glossary': typeof GlossaryIndexRoute
   '/tools': typeof ToolsIndexRoute
   '/use-cases': typeof UseCasesIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -429,6 +445,7 @@ export interface FileRoutesById {
   '/alternatives/$slug': typeof AlternativesSlugRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/features/$slug': typeof FeaturesSlugRoute
+  '/glossary/$term': typeof GlossaryTermRoute
   '/legal/acceptable-use': typeof LegalAcceptableUseRoute
   '/legal/cookies': typeof LegalCookiesRoute
   '/legal/dpa': typeof LegalDpaRoute
@@ -441,6 +458,7 @@ export interface FileRoutesById {
   '/alternatives/': typeof AlternativesIndexRoute
   '/blog/': typeof BlogIndexRoute
   '/features/': typeof FeaturesIndexRoute
+  '/glossary/': typeof GlossaryIndexRoute
   '/tools/': typeof ToolsIndexRoute
   '/use-cases/': typeof UseCasesIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -480,6 +498,7 @@ export interface FileRouteTypes {
     | '/alternatives/$slug'
     | '/blog/$slug'
     | '/features/$slug'
+    | '/glossary/$term'
     | '/legal/acceptable-use'
     | '/legal/cookies'
     | '/legal/dpa'
@@ -492,6 +511,7 @@ export interface FileRouteTypes {
     | '/alternatives/'
     | '/blog/'
     | '/features/'
+    | '/glossary/'
     | '/tools/'
     | '/use-cases/'
     | '/.mcp/invoke-tool/$tool'
@@ -528,6 +548,7 @@ export interface FileRouteTypes {
     | '/alternatives/$slug'
     | '/blog/$slug'
     | '/features/$slug'
+    | '/glossary/$term'
     | '/legal/acceptable-use'
     | '/legal/cookies'
     | '/legal/dpa'
@@ -540,6 +561,7 @@ export interface FileRouteTypes {
     | '/alternatives'
     | '/blog'
     | '/features'
+    | '/glossary'
     | '/tools'
     | '/use-cases'
     | '/.mcp/invoke-tool/$tool'
@@ -578,6 +600,7 @@ export interface FileRouteTypes {
     | '/alternatives/$slug'
     | '/blog/$slug'
     | '/features/$slug'
+    | '/glossary/$term'
     | '/legal/acceptable-use'
     | '/legal/cookies'
     | '/legal/dpa'
@@ -590,6 +613,7 @@ export interface FileRouteTypes {
     | '/alternatives/'
     | '/blog/'
     | '/features/'
+    | '/glossary/'
     | '/tools/'
     | '/use-cases/'
     | '/.mcp/invoke-tool/$tool'
@@ -628,12 +652,14 @@ export interface RootRouteChildren {
   AlternativesSlugRoute: typeof AlternativesSlugRoute
   BlogSlugRoute: typeof BlogSlugRoute
   FeaturesSlugRoute: typeof FeaturesSlugRoute
+  GlossaryTermRoute: typeof GlossaryTermRoute
   ToolsSlugRoute: typeof ToolsSlugRoute
   UseCasesSlugRoute: typeof UseCasesSlugRoute
   AiSeoIndexRoute: typeof AiSeoIndexRoute
   AlternativesIndexRoute: typeof AlternativesIndexRoute
   BlogIndexRoute: typeof BlogIndexRoute
   FeaturesIndexRoute: typeof FeaturesIndexRoute
+  GlossaryIndexRoute: typeof GlossaryIndexRoute
   ToolsIndexRoute: typeof ToolsIndexRoute
   UseCasesIndexRoute: typeof UseCasesIndexRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -724,6 +750,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ToolsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/glossary/': {
+      id: '/glossary/'
+      path: '/glossary'
+      fullPath: '/glossary/'
+      preLoaderRoute: typeof GlossaryIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/features/': {
       id: '/features/'
       path: '/features'
@@ -807,6 +840,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/legal/acceptable-use'
       preLoaderRoute: typeof LegalAcceptableUseRouteImport
       parentRoute: typeof LegalRoute
+    }
+    '/glossary/$term': {
+      id: '/glossary/$term'
+      path: '/glossary/$term'
+      fullPath: '/glossary/$term'
+      preLoaderRoute: typeof GlossaryTermRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/features/$slug': {
       id: '/features/$slug'
@@ -1081,12 +1121,14 @@ const rootRouteChildren: RootRouteChildren = {
   AlternativesSlugRoute: AlternativesSlugRoute,
   BlogSlugRoute: BlogSlugRoute,
   FeaturesSlugRoute: FeaturesSlugRoute,
+  GlossaryTermRoute: GlossaryTermRoute,
   ToolsSlugRoute: ToolsSlugRoute,
   UseCasesSlugRoute: UseCasesSlugRoute,
   AiSeoIndexRoute: AiSeoIndexRoute,
   AlternativesIndexRoute: AlternativesIndexRoute,
   BlogIndexRoute: BlogIndexRoute,
   FeaturesIndexRoute: FeaturesIndexRoute,
+  GlossaryIndexRoute: GlossaryIndexRoute,
   ToolsIndexRoute: ToolsIndexRoute,
   UseCasesIndexRoute: UseCasesIndexRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,

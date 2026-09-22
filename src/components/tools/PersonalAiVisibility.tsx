@@ -105,7 +105,10 @@ export function PersonalAiVisibility() {
   return (
     <div className="space-y-10">
       {/* Form */}
-      <form onSubmit={submit} className="grid gap-5 rounded-2xl border border-border bg-card p-6 sm:p-7">
+      <form
+        onSubmit={submit}
+        className="grid gap-5 rounded-2xl border border-border bg-card p-6 sm:p-7"
+      >
         <div className="grid gap-5 sm:grid-cols-2">
           <Field label="Your name">
             <TextInput
@@ -175,8 +178,8 @@ export function PersonalAiVisibility() {
                   Your personalized checklist is ready
                 </h3>
                 <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                  Enter your email to unlock your step-by-step visibility checklist and a ready-to-paste
-                  About-Me draft written just for you.
+                  Enter your email to unlock your step-by-step visibility checklist and a
+                  ready-to-paste About-Me draft written just for you.
                 </p>
                 <form onSubmit={unlock} className="mt-6 flex flex-col gap-3 sm:flex-row">
                   <TextInput
@@ -263,7 +266,15 @@ export function PersonalAiVisibility() {
                                       : "border-border bg-background text-transparent")
                                   }
                                 >
-                                  <svg viewBox="0 0 20 20" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                                  <svg
+                                    viewBox="0 0 20 20"
+                                    className="h-3.5 w-3.5"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="3"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                  >
                                     <path d="M4 10l4 4 8-8" />
                                   </svg>
                                 </span>
@@ -298,8 +309,8 @@ export function PersonalAiVisibility() {
                   Don't want to do this by hand?
                 </h2>
                 <p className="mx-auto mt-3 max-w-lg text-balance text-sm leading-relaxed text-background/70">
-                  Rankbox researches your buyers' questions and publishes citation-ready content daily —
-                  so AI engines find, understand, and recommend you on autopilot.
+                  Rankbox researches your buyers' questions and publishes citation-ready content
+                  daily — so AI engines find, understand, and recommend you on autopilot.
                 </p>
                 <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
                   <Link

@@ -166,6 +166,348 @@ export const writeMetaDescriptions = createServerFn({ method: "POST" })
     return options;
   });
 
+/* -------------------- AI FAQ Generator -------------------- */
+
+const FaqInput = z.object({ topic: z.string().trim().min(2).max(800) });
+
+export interface FaqPair {
+  q: string;
+  a: string;
+}
+
+export const generateFaq = createServerFn({ method: "POST" })
+  .inputValidator((d: unknown) => FaqInput.parse(d))
+  .handler(async ({ data }): Promise<FaqPair[]> => {
+    const json = await generateJson(
+      `You write FAQ sections that AI engines quote. For this page or topic: "${data.topic}", write 7 questions real buyers ask, each with a concise answer of 2-4 sentences: the direct answer first, then one supporting detail. No marketing fluff, no "great question". Return JSON: {"faqs":[{"q":"question?","a":"answer"}]}`,
+    ).catch(() => ({ faqs: [] }));
+    const faqs = asArray((json as { faqs?: unknown }).faqs)
+      .map((f): FaqPair => {
+        const rec = (f ?? {}) as { q?: unknown; a?: unknown };
+        return { q: str(rec.q), a: str(rec.a) };
+      })
+      .filter((f) => f.q && f.a)
+      .slice(0, 8);
+    if (!faqs.length)
+      throw new Error("Couldn't generate an FAQ. Please try a more specific topic.");
+    return faqs;
+  });
+
+/* -------------------- Blog Title Generator -------------------- */
+
+const TitleInput = z.object({
+  topic: z.string().trim().min(2).max(300),
+  keyword: z.string().trim().max(100).optional(),
+  tone: z.enum(["plain", "bold", "expert"]).default("plain"),
+});
+
+export interface TitleIdea {
+  title: string;
+  angle: string;
+}
+
+export const generateTitles = createServerFn({ method: "POST" })
+  .inputValidator((d: unknown) => TitleInput.parse(d))
+  .handler(async ({ data }): Promise<TitleIdea[]> => {
+    const toneNote = {
+      plain: "Plain and clear, no hype.",
+      bold: "Bold and punchy; strong verbs, a little attitude, never clickbait.",
+      expert: "Authoritative and specific, as a senior practitioner would write.",
+    }[data.tone];
+    const json = await generateJson(
+      `Write 10 blog post titles about "${data.topic}"${data.keyword ? ` that include the phrase "${data.keyword}" naturally, ideally near the start` : ""}. Tone: ${toneNote} Cover these angles, two each: "How-to", "List", "Question", "Contrarian", "Data-led". Keep every title under 60 characters. Return JSON: {"titles":[{"title":"...","angle":"How-to"}]}`,
+    ).catch(() => ({ titles: [] }));
+    const titles = asArray((json as { titles?: unknown }).titles)
+      .map((t): TitleIdea => {
+        const rec = (t ?? {}) as { title?: unknown; angle?: unknown };
+        return { title: str(rec.title), angle: str(rec.angle) || "Idea" };
+      })
+      .filter((t) => t.title)
+      .slice(0, 12);
+    if (!titles.length) throw new Error("Couldn't generate titles. Please try again.");
+    return titles;
+  });
+
+/* -------------------- AI Search Readiness Check -------------------- */
+
+const UrlInput = z.object({ url: z.string().trim().min(3).max(500) });
+
+export type ReadinessStatus = "pass" | "warn" | "fail" | "info";
+
+export interface ReadinessCheck {
+  id: string;
+  status: ReadinessStatus;
+  label: string;
+  detail?: string;
+  fix?: string;
+}
+
+export interface ReadinessReport {
+  url: string;
+  finalUrl: string;
+  score: number;
+  passed: number;
+  checks: ReadinessCheck[];
+  snapshot: {
+    title: string;
+    description: string;
+    h1s: string[];
+    canonical: string;
+    schemaTypes: string[];
+    wordCount: number;
+    llmsTxt: boolean;
+    robotsFound: boolean;
+    bots: { token: string; allowed: boolean }[];
+  };
+}
+
+export const checkAiReadiness = createServerFn({ method: "POST" })
+  .inputValidator((d: unknown) => UrlInput.parse(d))
+  .handler(async ({ data }): Promise<ReadinessReport> => {
+    const [
+      { safeFetchText, assertSafeUrl, UnsafeUrlError },
+      { parseRobots, checkRobots, AI_BOTS, SEARCH_BOTS },
+      { readHtmlSignals },
+    ] = await Promise.all([
+      import("./safe-fetch.server"),
+      import("./robots"),
+      import("./html-signals"),
+    ]);
+
+    // Per-IP throttle: three fetches per run against arbitrary hosts.
+    try {
+      const { getRequest } = await import("@tanstack/react-start/server");
+      const { rateLimitByIp } = await import("./rate-limit.server");
+      const req = getRequest();
+      if (req && (await rateLimitByIp(req))) {
+        throw new Error("Too many checks from your network right now. Please wait a minute.");
+      }
+    } catch (e) {
+      if (e instanceof Error && /Too many/.test(e.message)) throw e;
+    }
+
+    let target: URL;
+    try {
+      target = assertSafeUrl(data.url);
+    } catch (e) {
+      throw new Error(
+        e instanceof UnsafeUrlError ? e.message : "That doesn't look like a valid URL.",
+      );
+    }
+
+    const ua =
+      "Mozilla/5.0 (compatible; RankboxReadiness/1.0; +https://rankbox.xyz/tools/ai-search-readiness-check)";
+    const get = (url: string, maxBytes: number) =>
+      safeFetchText(url, {
+        maxBytes,
+        timeoutMs: 10_000,
+        userAgent: ua,
+        accept: "text/html,text/plain,*/*",
+      }).catch(() => null);
+
+    const [page, robots, llms] = await Promise.all([
+      get(target.toString(), 700 * 1024),
+      get(`${target.origin}/robots.txt`, 64 * 1024),
+      get(`${target.origin}/llms.txt`, 16 * 1024),
+    ]);
+
+    if (!page)
+      throw new Error("Couldn't reach that URL. Check it loads in a browser and try again.");
+
+    const html = page.body;
+    const isHtml = /html/i.test(page.contentType) || /<html/i.test(html.slice(0, 2000));
+    const s = readHtmlSignals(html);
+    const robotsFound =
+      !!robots && robots.status === 200 && !/<html/i.test(robots.body.slice(0, 500));
+    const robotsFile = parseRobots(robotsFound ? robots.body : "");
+    const llmsTxt =
+      !!llms &&
+      llms.status === 200 &&
+      !/<html/i.test(llms.body.slice(0, 500)) &&
+      llms.body.trim().length > 0;
+
+    const searchBots = [
+      ...SEARCH_BOTS.filter((b) => b.token === "Googlebot"),
+      ...AI_BOTS.filter((b) => b.role === "search" || b.role === "user"),
+    ];
+    const bots = searchBots.map((b) => ({
+      token: b.token,
+      allowed: checkRobots(robotsFile, b.token, "/").allowed,
+    }));
+    const blockedSearch = bots.filter((b) => !b.allowed).map((b) => b.token);
+    const training = AI_BOTS.filter((b) => b.role === "training").map((b) => ({
+      token: b.token,
+      allowed: checkRobots(robotsFile, b.token, "/").allowed,
+    }));
+
+    const noindex = /noindex/i.test(s.robotsMeta);
+    const checks: (ReadinessCheck & { weight: number })[] = [];
+
+    checks.push({
+      id: "response",
+      weight: 12,
+      status:
+        page.status >= 400 || !isHtml
+          ? "fail"
+          : noindex
+            ? "fail"
+            : page.status === 200
+              ? "pass"
+              : "warn",
+      label: noindex
+        ? "Page is marked noindex"
+        : `Page responded ${page.status}${isHtml ? "" : ", not HTML"}`,
+      detail: noindex
+        ? `robots meta: ${s.robotsMeta}`
+        : `Content-Type: ${page.contentType || "unknown"}`,
+      fix: noindex
+        ? "Remove noindex from the robots meta tag or engines will never list or cite the page."
+        : "The page must return 200 with an HTML body.",
+    });
+    checks.push({
+      id: "content",
+      weight: 10,
+      status: s.wordCount >= 150 ? "pass" : s.wordCount >= 50 ? "warn" : "fail",
+      label: `${s.wordCount.toLocaleString()} words visible without JavaScript`,
+      detail: "AI crawlers don't run JS; this is what they read.",
+      fix: "Render content on the server (SSR or prerender). A client-only app looks empty to every AI crawler.",
+    });
+    checks.push({
+      id: "bots",
+      weight: 15,
+      status: !robotsFound ? "pass" : blockedSearch.length ? "fail" : "pass",
+      label: !robotsFound
+        ? "No robots.txt — all crawlers allowed by default"
+        : blockedSearch.length
+          ? `robots.txt blocks ${blockedSearch.join(", ")}`
+          : "All AI search and live-fetch bots allowed",
+      detail: robotsFound
+        ? `${bots.filter((b) => b.allowed).length} of ${bots.length} search/live-fetch bots may read /`
+        : undefined,
+      fix: "Allow OAI-SearchBot, Claude-SearchBot, PerplexityBot and Googlebot. Blocking a search bot removes you from that engine's answers.",
+    });
+    checks.push({
+      id: "training",
+      weight: 0,
+      status: "info",
+      label: `${training.filter((t) => t.allowed).length} of ${training.length} training bots allowed`,
+      detail:
+        "Your call. Blocking GPTBot, ClaudeBot and Google-Extended keeps content out of future models without affecting search answers (except Gemini grounding).",
+    });
+    checks.push({
+      id: "llms",
+      weight: 6,
+      status: llmsTxt ? "pass" : "warn",
+      label: llmsTxt ? "llms.txt found" : "No llms.txt",
+      fix: "Publish an llms.txt at the domain root so assistants get a curated map of your best pages. Our generator writes it.",
+    });
+    checks.push({
+      id: "title",
+      weight: 10,
+      status: !s.title ? "fail" : s.title.length < 15 || s.title.length > 70 ? "warn" : "pass",
+      label: s.title ? `Title tag, ${s.title.length} characters` : "No title tag",
+      detail: s.title || undefined,
+      fix: "Write a 50–60 character title that states what the page is; distinctive words first.",
+    });
+    checks.push({
+      id: "description",
+      weight: 8,
+      status: !s.description
+        ? "fail"
+        : s.description.length < 50 || s.description.length > 170
+          ? "warn"
+          : "pass",
+      label: s.description
+        ? `Meta description, ${s.description.length} characters`
+        : "No meta description",
+      fix: "Add a 120–160 character description. It's the summary most AI tools show for your page.",
+    });
+    checks.push({
+      id: "h1",
+      weight: 8,
+      status: s.h1Count === 1 ? "pass" : s.h1Count === 0 ? "fail" : "warn",
+      label:
+        s.h1Count === 1 ? "Exactly one H1" : s.h1Count === 0 ? "No H1" : `${s.h1Count} H1 tags`,
+      detail:
+        s.headings
+          .filter((h) => h.level === 1)
+          .map((h) => h.text)
+          .join(" · ") || undefined,
+      fix: "One H1 that states the page's subject. Extractors use it as the title of any passage they cite.",
+    });
+    checks.push({
+      id: "schema",
+      weight: 10,
+      status: s.jsonLdBlocks && !s.jsonLdErrors ? "pass" : s.jsonLdBlocks ? "warn" : "fail",
+      label: s.jsonLdBlocks
+        ? `${s.jsonLdBlocks} JSON-LD block${s.jsonLdBlocks === 1 ? "" : "s"}${s.jsonLdErrors ? `, ${s.jsonLdErrors} invalid` : ""}`
+        : "No structured data",
+      detail: s.schemaTypes.length ? s.schemaTypes.join(", ") : undefined,
+      fix: "Add Organization (homepage) or Article (posts) JSON-LD. Our schema generator writes it.",
+    });
+    checks.push({
+      id: "canonical",
+      weight: 7,
+      status: s.canonical ? "pass" : "warn",
+      label: s.canonical ? "Canonical tag present" : "No canonical tag",
+      detail: s.canonical || undefined,
+      fix: 'Add <link rel="canonical"> so tracked and duplicate URLs consolidate to one.',
+    });
+    checks.push({
+      id: "og",
+      weight: 8,
+      status: s.og.title && s.og.image ? "pass" : s.og.title || s.og.image ? "warn" : "fail",
+      label:
+        s.og.title && s.og.image ? "Open Graph title and image set" : "Open Graph tags incomplete",
+      detail:
+        [
+          s.og.title ? "og:title" : null,
+          s.og.image ? "og:image" : null,
+          s.og.description ? "og:description" : null,
+        ]
+          .filter(Boolean)
+          .join(", ") || "none found",
+      fix: "Add og:title, og:description and a 1200×630 og:image. Chat apps and AI assistants use them for link cards.",
+    });
+    checks.push({
+      id: "langviewport",
+      weight: 6,
+      status: s.lang && s.viewport ? "pass" : s.lang || s.viewport ? "warn" : "fail",
+      label:
+        s.lang && s.viewport
+          ? `Language (${s.lang}) and viewport declared`
+          : !s.lang
+            ? "No lang attribute on <html>"
+            : "No viewport meta tag",
+      fix: 'Set <html lang="en"> and a viewport meta tag — both are basic signals of a well-formed page.',
+    });
+
+    const total = checks.reduce((n, c) => n + c.weight, 0);
+    const earned = checks.reduce(
+      (n, c) => n + (c.status === "pass" ? c.weight : c.status === "warn" ? c.weight / 2 : 0),
+      0,
+    );
+
+    return {
+      url: data.url,
+      finalUrl: page.url,
+      score: Math.round((earned / total) * 100),
+      passed: checks.filter((c) => c.status === "pass").length,
+      checks: checks.map(({ weight: _w, ...c }) => c),
+      snapshot: {
+        title: s.title,
+        description: s.description,
+        h1s: s.headings.filter((h) => h.level === 1).map((h) => h.text),
+        canonical: s.canonical,
+        schemaTypes: s.schemaTypes,
+        wordCount: s.wordCount,
+        llmsTxt,
+        robotsFound,
+        bots,
+      },
+    };
+  });
+
 /* -------------------- Personal AI Visibility Plan -------------------- */
 
 const PersonalPlanInput = z.object({

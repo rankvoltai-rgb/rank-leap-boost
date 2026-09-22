@@ -325,8 +325,8 @@ export const chatgpt: EngineGuide = {
               evidence: "observed",
             },
             {
-              title: "Sections of 120–180 words",
-              body: "SE Ranking found mid-length sections between headings performed best. Short enough to lift, long enough to carry context.",
+              title: "Sections with substance",
+              body: "SE Ranking found sections under 50 words averaged 2.7 citations, against 4.6 at 120–180 words and 5.7 above 180. Depth between headings helps; one-line sections don't.",
               evidence: "observed",
             },
           ],
@@ -453,7 +453,7 @@ export const chatgpt: EngineGuide = {
       id: "answer-first",
       title: "Put the answer in the first third",
       detail:
-        "Definitional opening sentences, question-shaped headings, sections of roughly 120–180 words.",
+        "Definitional opening sentences, question-shaped headings, and sections long enough to carry context — not one-liners.",
       impact: "high",
     },
     {

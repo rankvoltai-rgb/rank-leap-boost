@@ -64,9 +64,11 @@ const PRODUCT_LINKS = [
 ] as const;
 
 const TOOL_LINKS = [
-  { label: "llms.txt Generator", slug: "llms-txt-generator" },
+  { label: "AI Readiness Check", slug: "ai-search-readiness-check" },
   { label: "AI robots.txt Generator", slug: "ai-robots-txt-generator" },
+  { label: "llms.txt Generator", slug: "llms-txt-generator" },
   { label: "Schema Generator", slug: "schema-generator" },
+  { label: "Citation Readiness Checker", slug: "ai-citation-readiness-checker" },
   { label: "SERP Snippet Preview", slug: "serp-snippet-preview" },
 ] as const;
 
@@ -182,6 +184,11 @@ export function Footer() {
                   </Link>
                 </li>
               ))}
+              <li>
+                <Link to="/glossary" className={linkClass}>
+                  AI search glossary
+                </Link>
+              </li>
             </ul>
           </div>
 

@@ -5,6 +5,7 @@ import {
   ChevronDown,
   ArrowRight,
   BookOpen,
+  BookA,
   Wrench,
   FileText,
   GitCompare,
@@ -282,6 +283,12 @@ export function Navbar() {
                     to="/blog"
                   />
                   <MenuItem
+                    icon={BookA}
+                    title="Glossary"
+                    description="Every SEO & GEO term, defined"
+                    to="/glossary"
+                  />
+                  <MenuItem
                     icon={Wrench}
                     title="Free Tools"
                     description="llms.txt, schema & more"
@@ -447,6 +454,13 @@ export function Navbar() {
                   className="rounded-lg px-2 py-2 text-sm text-white/80 hover:bg-white/10 hover:text-white"
                 >
                   Blog
+                </Link>
+                <Link
+                  to="/glossary"
+                  onClick={() => setOpen(false)}
+                  className="rounded-lg px-2 py-2 text-sm text-white/80 hover:bg-white/10 hover:text-white"
+                >
+                  Glossary
                 </Link>
                 <Link
                   to="/tools"

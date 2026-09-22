@@ -5,6 +5,7 @@ import { TOOL_SLUGS } from "@/data/tools";
 import { COMPETITOR_SLUGS } from "@/data/alternatives";
 import { PERSONA_SLUGS } from "@/data/personas";
 import { ENGINES } from "@/data/ai-seo/engines";
+import { GLOSSARY_UPDATED, TERMS } from "@/data/glossary/terms";
 
 const BASE_URL = "https://rankbox.xyz";
 
@@ -70,6 +71,13 @@ export const Route = createFileRoute("/sitemap.xml")({
             lastmod: e.updated,
             changefreq: "monthly" as const,
             priority: "0.8",
+          })),
+          { path: "/glossary", lastmod: GLOSSARY_UPDATED, changefreq: "weekly", priority: "0.8" },
+          ...TERMS.map((t) => ({
+            path: `/glossary/${t.slug}`,
+            lastmod: t.updated,
+            changefreq: "monthly" as const,
+            priority: "0.7",
           })),
           { path: "/tools", changefreq: "weekly", priority: "0.8" },
           ...TOOL_SLUGS.map((slug) => ({

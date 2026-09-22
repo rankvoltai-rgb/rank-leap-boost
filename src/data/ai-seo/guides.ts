@@ -28,7 +28,8 @@ export function loadGuides(): Promise<EngineGuide[]> {
   return Promise.all(ENGINES.map((e) => LOADERS[e.slug]()));
 }
 
-function blockText(b: GuideBlock): string[] {
+/** A block's readable text, for word counts. Shared with the glossary. */
+export function guideBlockText(b: GuideBlock): string[] {
   switch (b.kind) {
     case "p":
     case "h3":
@@ -60,7 +61,7 @@ export function guideWordCount(g: EngineGuide): number {
   return countWords([
     g.shortAnswer,
     ...g.takeaways,
-    ...g.sections.flatMap((s) => [s.title, ...s.blocks.flatMap(blockText)]),
+    ...g.sections.flatMap((s) => [s.title, ...s.blocks.flatMap(guideBlockText)]),
     ...g.checklist.flatMap((c) => [c.title, c.detail]),
     ...g.faqs.flatMap((f) => [f.q, f.a]),
   ]);

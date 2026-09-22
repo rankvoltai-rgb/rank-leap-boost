@@ -19,3 +19,17 @@
 - [Gemini SEO](/ai-seo/gemini): How the Gemini app grounds answers in the Google Search index, what Google-Extended really blocks, and why the Search Console AI opt-out doesn't cover Gemini.
 - [Claude SEO](/ai-seo/claude): Claude's web search runs on Brave Search; the ClaudeBot / Claude-SearchBot / Claude-User split; no JavaScript rendering; tracking claude.ai traffic.
 - [Perplexity SEO](/ai-seo/perplexity): Perplexity's own 200B-URL index and passage reranking, PerplexityBot vs Perplexity-User, freshness filtering, and Comet Plus.
+
+## AI Search Glossary
+
+- [AI search glossary](/glossary): SEO, GEO, AEO and LLM search terms, each defined in one sentence, then explained with sourced answers to real questions, an original framework or worked example, and related terms.
+- [Generative engine optimization (GEO)](/glossary/generative-engine-optimization): What GEO is, GEO vs SEO, where the term comes from (Aggarwal et al., KDD 2024), how to measure it, and the Four-Gate Citation Model.
+- [Answer engine optimization (AEO)](/glossary/answer-engine-optimization): Structuring content so answer engines use it as the answer itself.
+- [LLM SEO](/glossary/llm-seo): Visibility in what large language models say, from training data and from live search.
+- [Query fan-out](/glossary/query-fan-out): How AI engines split one question into many sub-searches, with the Fan-Out Coverage Map worked example.
+- [Retrieval-augmented generation (RAG)](/glossary/retrieval-augmented-generation): How AI engines retrieve sources before writing an answer.
+- [AI crawlers](/glossary/ai-crawlers): Training, search and user-triggered bots, and how to control each.
+- [llms.txt](/glossary/llms-txt): What the proposed standard is, and whether AI engines use it.
+- [AI share of voice](/glossary/ai-share-of-voice): How to measure how often AI answers cite you versus competitors.
+- [Prompt tracking](/glossary/prompt-tracking): Running a fixed panel of buyer prompts to see who AI engines cite.
+- [AI referral traffic](/glossary/ai-referral-traffic): Identifying visits from ChatGPT, Perplexity, Gemini, Claude and Copilot in analytics.
