@@ -3,14 +3,9 @@ import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { RefreshCw } from "lucide-react";
-import {
-  getProfile,
-  getRedditOverview,
-  getSubscription,
-  IS_MOCK,
-  runRedditSweep,
-} from "@/lib/data";
+import { getRedditOverview, getSubscription, IS_MOCK, runRedditSweep } from "@/lib/data";
 import { Button, MetricStat, PageHeader, Panel, Tabs } from "@/components/dashboard/primitives";
+import { useActiveSite } from "@/components/dashboard/site-context";
 import { useArticleActions } from "@/components/dashboard/useArticleActions";
 import { MentionsTab } from "@/components/dashboard/reddit/MentionsTab";
 import { MockSwitches } from "@/components/dashboard/reddit/MockSwitches";
@@ -55,25 +50,30 @@ const SWEEP_REFUSALS: Record<string, string> = {
 };
 
 /**
- * Reddit presence. Paid members only.
+ * Reddit presence, for the site on screen. Paid members only.
  *
  * The gates, in order: no paid plan (trial or none) shows the pitch over a
  * static preview and asks the server for nothing; no discovery provider says
- * so rather than showing an empty table; a paid member who hasn't started gets
- * the setup card; a lapsed member sees their history read-only.
+ * so rather than showing an empty table; a paid site that hasn't started gets
+ * the setup card; a lapsed plan shows the site's history read-only.
+ *
+ * Each site has its own settings, threads, drafts and credits. The one thing
+ * that spans them is the owner's one-reply-per-thread rule, which the server
+ * enforces across every site they run.
  */
 function RedditPage() {
   const queryClient = useQueryClient();
   const navigate = useNavigate({ from: Route.fullPath });
   const { thread } = Route.useSearch();
+  const { site, siteId } = useActiveSite();
+  const brandName = site.brand_name?.trim() || "your product";
   const { data: overview, isError } = useQuery({
-    queryKey: ["reddit", "overview"],
-    queryFn: getRedditOverview,
+    queryKey: ["reddit", siteId, "overview"],
+    queryFn: () => getRedditOverview(siteId),
     refetchInterval: 30_000,
     retry: false,
   });
   const { data: subscription } = useQuery({ queryKey: ["subscription"], queryFn: getSubscription });
-  const { data: profile } = useQuery({ queryKey: ["profile"], queryFn: getProfile });
   const actions = useArticleActions({ openId: undefined, onOpen: () => undefined });
   const [tab, setTab] = useState<Tab>("opportunities");
   const [sweeping, setSweeping] = useState(false);
@@ -85,7 +85,7 @@ function RedditPage() {
   async function sweep() {
     setSweeping(true);
     try {
-      const result = await runRedditSweep();
+      const result = await runRedditSweep(siteId);
       if (result.started)
         toast.success(
           result.sweep.opportunitiesCreated > 0
@@ -168,7 +168,8 @@ function RedditPage() {
         {header}
         {switches}
         <RedditSetupCard
-          brandName={profile?.brand_name ?? "your product"}
+          key={siteId}
+          brandName={brandName}
           defaultNiche={overview.settings?.niche ?? ""}
           onDone={refresh}
         />
@@ -248,8 +249,9 @@ function RedditPage() {
       {tab === "mentions" && <MentionsTab onOpen={(id) => open(id)} />}
       {tab === "settings" && overview.settings && !lapsed && (
         <RedditSettings
+          key={siteId}
           settings={overview.settings}
-          brandName={profile?.brand_name ?? "your product"}
+          brandName={brandName}
           onChanged={refresh}
         />
       )}

@@ -6,84 +6,46 @@ import { TRIAL_ARTICLE_CREDITS } from "@/data/pricing";
 /**
  * Server-authoritative credit operations. Credit tables are SELECT-only for
  * users under RLS, and the underlying SECURITY DEFINER functions are no longer
- * executable by signed-in users. All writes flow through these functions, which
- * authenticate the caller (requireSupabaseAuth) and act with the service role —
- * so a user can never grant themselves credits via the Data API.
+ * executable by signed-in users. All writes flow through the server — these
+ * functions, generation (which spends as it writes) and the billing sync —
+ * which authenticate the caller and act with the service role, so a user can
+ * never grant themselves credits via the Data API.
+ *
+ * The pay-per-pack top-up that used to live here granted credits without a
+ * payment behind them and had no caller; it was removed rather than moved
+ * onto sites.
  */
 
-const CREDIT_PACKAGES: Record<string, { credits: number; amountCents: number }> = {
-  starter: { credits: 500, amountCents: 1900 },
-  growth: { credits: 1500, amountCents: 4900 },
-  scale: { credits: 5000, amountCents: 14900 },
-};
-
-/** Reserve one article credit for the signed-in user. Returns whether one was available. */
-export const consumeArticleCredit = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
-  .handler(async ({ context }): Promise<{ ok: boolean }> => {
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { data, error } = await supabaseAdmin.rpc("consume_article_credit", {
-      _user_id: context.userId,
-    });
-    if (error) throw new Error(error.message);
-    return { ok: Boolean(data) };
-  });
-
-/** Idempotently create the signed-in user's credit account (used at onboarding). */
+/**
+ * Idempotently create the account's first credit account, for its primary
+ * site, when onboarding commits. Studio sites never come through here: their
+ * accounts are opened by the billing sync that made them live, with the
+ * allowance they paid for.
+ */
 export const ensureCreditAccount = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .handler(async ({ context }): Promise<{ ok: true }> => {
+  .inputValidator((d: unknown) => z.object({ siteId: z.string().uuid() }).parse(d))
+  .handler(async ({ data, context }): Promise<{ ok: true }> => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { loadOwnedSite } = await import("@/lib/sites.server");
+    const site = await loadOwnedSite(context.userId, data.siteId);
+    if (site.kind !== "primary") return { ok: true };
+
     const { data: existing } = await supabaseAdmin
       .from("credit_accounts")
       .select("id")
-      .eq("user_id", context.userId)
+      .eq("site_id", site.id)
       .maybeSingle();
     if (!existing) {
-      const { error } = await supabaseAdmin
-        .from("credit_accounts")
-        .insert({
-          user_id: context.userId,
-          credits_used: 0,
-          // Pre-payment balance. The Stripe webhook sets the real allowance
-          // when a trial starts, and the full one on first payment.
-          credits_total: TRIAL_ARTICLE_CREDITS,
-        });
+      const { error } = await supabaseAdmin.from("credit_accounts").insert({
+        user_id: context.userId,
+        site_id: site.id,
+        credits_used: 0,
+        // Pre-payment balance. The Stripe webhook sets the real allowance
+        // when a trial starts, and the full one on first payment.
+        credits_total: TRIAL_ARTICLE_CREDITS,
+      });
       if (error) throw new Error(error.message);
     }
     return { ok: true };
-  });
-
-/** Add a server-validated credit package to the signed-in user's balance. */
-export const purchaseCreditPackage = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
-  .inputValidator((data: { packageId: string }) =>
-    z.object({ packageId: z.enum(["starter", "growth", "scale"]) }).parse(data),
-  )
-  .handler(async ({ data, context }): Promise<{ ok: true; credits: number }> => {
-    const pkg = CREDIT_PACKAGES[data.packageId];
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-
-    const { error: txErr } = await supabaseAdmin.from("credit_transactions").insert({
-      user_id: context.userId,
-      package: data.packageId,
-      credits: pkg.credits,
-      amount_cents: pkg.amountCents,
-    });
-    if (txErr) throw new Error(txErr.message);
-
-    const { data: acct } = await supabaseAdmin
-      .from("credit_accounts")
-      .select("credits_total")
-      .eq("user_id", context.userId)
-      .maybeSingle();
-    const currentTotal = (acct?.credits_total as number | undefined) ?? 30;
-
-    const { error: updErr } = await supabaseAdmin
-      .from("credit_accounts")
-      .update({ credits_total: currentTotal + pkg.credits })
-      .eq("user_id", context.userId);
-    if (updErr) throw new Error(updErr.message);
-
-    return { ok: true, credits: pkg.credits };
   });

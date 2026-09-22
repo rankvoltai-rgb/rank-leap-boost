@@ -16,6 +16,8 @@ import type {
 } from "@/lib/api";
 
 export const MOCK_USER_ID = "mock-user-0001";
+/** The demo account's one site. Studio sites added in mock mode get their own ids. */
+export const MOCK_SITE_ID = "mock-site-1";
 export const MOCK_USER_EMAIL = "founder@plannora.io";
 export const MOCK_USER_NAME = "Alex Rivera";
 
@@ -59,8 +61,14 @@ export const MOCK_SITE_META: SiteMeta = {
 };
 
 export const MOCK_PROFILE: Profile = {
-  id: "mock-profile-1",
+  id: MOCK_SITE_ID,
   user_id: MOCK_USER_ID,
+  kind: "primary",
+  status: "active",
+  billed_from: null,
+  removes_at: null,
+  archived_at: null,
+  created_at: "2026-06-01T00:00:00.000Z",
   brand_name: "Plannora",
   website_url: "https://plannora.io",
   product_description:
@@ -71,6 +79,7 @@ export const MOCK_PROFILE: Profile = {
 export const MOCK_SETTINGS: ContentSettings = {
   id: "mock-settings-1",
   user_id: MOCK_USER_ID,
+  site_id: MOCK_SITE_ID,
   tone: "Confident, practical",
   writing_style: "Balanced",
   audience: "Startup founders and small product teams (2–20 people)",
@@ -85,6 +94,7 @@ export const MOCK_SETTINGS: ContentSettings = {
 export const MOCK_CREDITS: CreditAccount = {
   id: "mock-credits-1",
   user_id: MOCK_USER_ID,
+  site_id: MOCK_SITE_ID,
   credits_used: 0,
   credits_total: 30,
 };
@@ -160,6 +170,7 @@ export const MOCK_DRAFT_KEYWORDS: DraftKeyword[] = KEYWORD_SEED.map(
 export const MOCK_KEYWORDS: Keyword[] = MOCK_DRAFT_KEYWORDS.map((k, i) => ({
   id: k.id,
   user_id: MOCK_USER_ID,
+  site_id: MOCK_SITE_ID,
   name: k.name,
   tag: k.intent,
   search_volume: k.search_volume,
@@ -363,6 +374,7 @@ export function draftTitleToBlog(t: DraftTitle, index: number): Blog {
   return {
     id: t.id,
     user_id: MOCK_USER_ID,
+    site_id: MOCK_SITE_ID,
     title: t.title,
     description: t.description,
     body: "",

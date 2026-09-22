@@ -125,10 +125,13 @@ export function PlanRail({
   keywords,
   titles,
   onStep,
+  proof = true,
 }: ProjectionInput & {
   brandName: string;
   logoUrl: string | null;
   onStep: (step: Step) => void;
+  /** The customer quote under the summary. Studio, inside a paid account, leaves it out. */
+  proof?: boolean;
 }) {
   const { planned, shown, traffic } = useProjection({ step, domain, keywords, titles });
   const searches = keywords.reduce((sum, k) => sum + k.search_volume, 0);
@@ -207,7 +210,7 @@ export function PlanRail({
         />
       </ul>
 
-      <ProofQuote />
+      {proof && <ProofQuote />}
     </div>
   );
 }

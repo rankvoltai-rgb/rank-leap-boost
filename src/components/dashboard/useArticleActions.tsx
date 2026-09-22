@@ -18,6 +18,7 @@ import {
 import { formatShortDate } from "@/lib/format-date";
 import { trafficScale, trafficTier, type TrafficTier } from "@/lib/traffic-tier";
 import { Confetti } from "@/components/dashboard/rewards";
+import { useSiteId } from "@/components/dashboard/site-context";
 import { CreditPaywallDialog } from "@/components/dashboard/CreditPaywallDialog";
 import { StartTrialDialog } from "@/components/dashboard/StartTrialDialog";
 import {
@@ -27,19 +28,23 @@ import {
   type QueuePatch,
 } from "@/components/dashboard/queue-plan";
 
-const ALL_KEY = ["blogs", "all"] as const;
+/** Every article on a site. The sidebar's queue count reads the same key, so they share one fetch. */
+export function allArticlesKey(siteId: string) {
+  return ["blogs", siteId] as const;
+}
 
-/** Every article, shared by the Overview, Articles and Calendar. */
+/** Every article on the active site, shared by the Overview, Articles and Calendar. */
 export function useAllArticles() {
+  const siteId = useSiteId();
   return useQuery({
-    queryKey: ALL_KEY,
-    queryFn: () => listBlogs(),
+    queryKey: allArticlesKey(siteId),
+    queryFn: () => listBlogs(siteId),
     // Follow articles being written — by this tab or by autopilot — through to done.
     refetchInterval: (q) => (q.state.data?.some((b) => b.status === "generating") ? 3000 : false),
   });
 }
 
-/** How an article's projected traffic ranks among this account's own articles. */
+/** How an article's projected traffic ranks among this site's own articles. */
 export function useTrafficTier(): (value: number) => TrafficTier {
   const { data: all } = useAllArticles();
   const scale = useMemo(() => trafficScale((all ?? []).map((b) => b.traffic_estimate ?? 0)), [all]);
@@ -96,6 +101,8 @@ export function useArticleActions({
   onOpen: (id: string) => void;
 }) {
   const queryClient = useQueryClient();
+  const siteId = useSiteId();
+  const allKey = allArticlesKey(siteId);
   const [writingIds, setWritingIds] = useState<ReadonlySet<string>>(() => new Set());
   const [confettiKey, setConfettiKey] = useState(0);
   const [paywallOpen, setPaywallOpen] = useState(false);
@@ -105,7 +112,10 @@ export function useArticleActions({
   openRef.current = openId;
 
   const { data: all = [] } = useAllArticles();
-  const { data: credits } = useQuery({ queryKey: ["credits"], queryFn: getCredits });
+  const { data: credits } = useQuery({
+    queryKey: ["credits", siteId],
+    queryFn: () => getCredits(siteId),
+  });
   const { data: subscription } = useQuery({ queryKey: ["subscription"], queryFn: getSubscription });
   const remaining = creditsRemaining(credits);
 
@@ -118,7 +128,8 @@ export function useArticleActions({
     }
     setWritingIds((prev) => new Set(prev).add(blog.id));
     try {
-      await generateBlogArticle(blog);
+      // The article's own site pays for it and lends it its brand.
+      await generateBlogArticle(blog.site_id, blog);
       // Hold "writing" until the list carries the finished text, so an open
       // panel goes straight from the placeholder to the article.
       await queryClient.invalidateQueries({ queryKey: ["blogs"] });
@@ -186,9 +197,9 @@ export function useArticleActions({
     { undoable = true }: { undoable?: boolean } = {},
   ) {
     if (patches.length === 0) return;
-    const before = queryClient.getQueryData<Blog[]>(ALL_KEY) ?? all;
+    const before = queryClient.getQueryData<Blog[]>(allKey) ?? all;
     const undo = inversePatches(before, patches);
-    queryClient.setQueryData<Blog[]>(ALL_KEY, applyPatches(before, patches));
+    queryClient.setQueryData<Blog[]>(allKey, applyPatches(before, patches));
     try {
       await Promise.all(patches.map(({ id, ...patch }) => updateBlog(id, patch)));
       toast.success(
@@ -211,7 +222,7 @@ export function useArticleActions({
 
   async function reschedule(blog: Blog, day: string) {
     if (blog.scheduled_date?.slice(0, 10) === day) return;
-    const current = queryClient.getQueryData<Blog[]>(ALL_KEY) ?? all;
+    const current = queryClient.getQueryData<Blog[]>(allKey) ?? all;
     await commitQueue(planMove(current, blog.id, day), `Moved to ${formatShortDate(day)}.`);
   }
 

@@ -1,19 +1,21 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 import {
   getCurrentUser,
-  getProfile,
   getSettings,
   getSubscription,
+  keepStudioSite,
   updateAutopilot,
   updateBlog,
-  updateProfile,
   updateSettings,
+  updateSite,
   type Blog,
+  type Site,
 } from "@/lib/data";
+import { PLAN } from "@/data/pricing";
 import { composeStyleBrief, STYLE_DEFAULTS } from "@/lib/style-brief";
 import { Button, PageHeader, Panel } from "@/components/dashboard/primitives";
 import { CheckIcon } from "@/components/dashboard/icons";
@@ -25,8 +27,16 @@ import {
   planFromTomorrow,
   type QueuePatch,
 } from "@/components/dashboard/queue-plan";
-import { useAllArticles, useArticleActions } from "@/components/dashboard/useArticleActions";
+import {
+  allArticlesKey,
+  useAllArticles,
+  useArticleActions,
+} from "@/components/dashboard/useArticleActions";
+import { SITES_QUERY_KEY, useActiveSite, useSiteId } from "@/components/dashboard/site-context";
 import { useSignOut } from "@/components/dashboard/use-sign-out";
+import { RemoveSiteDialog } from "@/components/studio/SiteDialogs";
+import { siteName } from "@/components/studio/SiteMark";
+import { formatDate } from "@/lib/format-date";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_authenticated/dashboard/settings")({
@@ -117,28 +127,52 @@ function useAutosaved<T extends Record<string, string>>(
 /* ── Page ───────────────────────────────────────────────────────── */
 
 function SettingsPage() {
+  const { site } = useActiveSite();
+  return (
+    <div className="space-y-8">
+      <PageHeader
+        title="Settings"
+        description="Teach autopilot your brand, decide how often it writes, and manage your account. Changes save as you go."
+      />
+      <SiteSettings key={site.id} site={site} />
+      <StudioSection site={site} />
+      <AccountSection />
+    </div>
+  );
+}
+
+/**
+ * Brand, writing and autopilot: everything that belongs to the site on screen.
+ * Keyed by the site, so switching sites flushes the last one's edits to it and
+ * starts the forms over — never one site's words saved onto another.
+ */
+function SiteSettings({ site }: { site: Site }) {
+  const siteId = site.id;
   const queryClient = useQueryClient();
-  const { data: profile } = useQuery({ queryKey: ["profile"], queryFn: getProfile });
-  const { data: settings } = useQuery({ queryKey: ["settings"], queryFn: getSettings });
+  const { data: settings } = useQuery({
+    queryKey: ["settings", siteId],
+    queryFn: () => getSettings(siteId),
+  });
 
   const brand = useAutosaved(
-    profile !== undefined
-      ? {
-          brand_name: profile?.brand_name ?? "",
-          website_url: profile?.website_url ?? "",
-          product_description: profile?.product_description ?? "",
-        }
-      : null,
+    useMemo(
+      () => ({
+        brand_name: site.brand_name ?? "",
+        website_url: site.website_url ?? "",
+        product_description: site.product_description ?? "",
+      }),
+      [site],
+    ),
     useCallback(
       async (v) => {
-        await updateProfile({
+        await updateSite(siteId, {
           brand_name: v.brand_name.trim(),
           website_url: v.website_url.trim(),
           product_description: v.product_description.trim(),
         });
-        void queryClient.invalidateQueries({ queryKey: ["profile"] });
+        void queryClient.invalidateQueries({ queryKey: SITES_QUERY_KEY });
       },
-      [queryClient],
+      [queryClient, siteId],
     ),
   );
 
@@ -153,7 +187,7 @@ function SettingsPage() {
       : null,
     useCallback(
       async (v) => {
-        await updateSettings({
+        await updateSettings(siteId, {
           audience: v.audience.trim(),
           tone: v.tone.trim(),
           writing_style: v.writing_style.trim(),
@@ -161,21 +195,88 @@ function SettingsPage() {
         });
         void queryClient.invalidateQueries({ queryKey: ["settings"] });
       },
-      [queryClient],
+      [queryClient, siteId],
     ),
   );
 
   return (
-    <div className="space-y-8">
-      <PageHeader
-        title="Settings"
-        description="Teach autopilot your brand, decide how often it writes, and manage your account. Changes save as you go."
-      />
+    <>
       <BrandSection form={brand} />
       <WritingSection form={writing} brand={brand.values} />
       <AutopilotSection />
-      <AccountSection />
-    </div>
+    </>
+  );
+}
+
+/* ── Studio ─────────────────────────────────────────────────────── */
+
+/**
+ * Where this site stands on the account. The primary is the plan itself and
+ * leaves only with it; a Studio site can be removed here as well as from
+ * Studio, on the same terms — it runs to the end of the period already paid
+ * for, then it's archived with everything kept.
+ */
+function StudioSection({ site }: { site: Site }) {
+  const queryClient = useQueryClient();
+  const [removing, setRemoving] = useState(false);
+  const [keeping, setKeeping] = useState(false);
+  const { data: subscription } = useQuery({ queryKey: ["subscription"], queryFn: getSubscription });
+
+  async function keep() {
+    setKeeping(true);
+    try {
+      await keepStudioSite({ siteId: site.id });
+      await queryClient.invalidateQueries({ queryKey: SITES_QUERY_KEY });
+      toast.success(`${siteName(site)} stays in Studio.`);
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Couldn't keep the site.");
+    } finally {
+      setKeeping(false);
+    }
+  }
+
+  return (
+    <Section title="Studio" description="How this site sits on your account.">
+      {site.kind === "primary" ? (
+        <Row
+          title="Your plan's own site"
+          description="Covered by your plan. It isn't removed on its own — cancelling your plan in billing ends it."
+        >
+          <p className="text-sm text-muted-foreground">
+            Running more sites?{" "}
+            <Link to="/dashboard/studio" className="font-medium text-ink hover:text-brand-blue">
+              Add them in Studio
+            </Link>
+            , each with the full plan of its own.
+          </p>
+        </Row>
+      ) : site.removes_at ? (
+        <Row
+          title={`Leaves Studio on ${formatDate(site.removes_at)}`}
+          description="It keeps running until then. Keeping it costs nothing — this period is already paid for."
+        >
+          <Button variant="ghost" onClick={() => void keep()} disabled={keeping}>
+            {keeping && <Loader2 className="h-4 w-4 animate-spin" />}
+            Keep this site
+          </Button>
+        </Row>
+      ) : (
+        <Row
+          title="Remove from Studio"
+          description="It runs to the end of the period you've paid for, then it's archived with its articles and settings kept. Restore it any time."
+        >
+          <Button variant="danger" onClick={() => setRemoving(true)}>
+            Remove from Studio…
+          </Button>
+          <RemoveSiteDialog
+            site={site}
+            periodEnd={subscription?.current_period_end ?? null}
+            open={removing}
+            onOpenChange={setRemoving}
+          />
+        </Row>
+      )}
+    </Section>
   );
 }
 
@@ -564,7 +665,11 @@ function Choice({
 
 function AutopilotSection() {
   const queryClient = useQueryClient();
-  const { data: settings } = useQuery({ queryKey: ["settings"], queryFn: getSettings });
+  const siteId = useSiteId();
+  const { data: settings } = useQuery({
+    queryKey: ["settings", siteId],
+    queryFn: () => getSettings(siteId),
+  });
   const { data: blogs = [] } = useAllArticles();
   const actions = useArticleActions({ openId: undefined, onOpen: () => undefined });
   const [busy, setBusy] = useState<"toggle" | "pace" | null>(null);
@@ -581,7 +686,7 @@ function AutopilotSection() {
   async function toggle(next: boolean) {
     setBusy("toggle");
     try {
-      await updateAutopilot({ autopilot_enabled: next });
+      await updateAutopilot(siteId, { autopilot_enabled: next });
       await queryClient.invalidateQueries({ queryKey: ["settings"] });
       toast.success(next ? "Autopilot is on." : "Autopilot paused.");
     } catch (err) {
@@ -592,8 +697,8 @@ function AutopilotSection() {
   }
 
   async function applyQueue(patches: QueuePatch[]) {
-    const current = queryClient.getQueryData<Blog[]>(["blogs", "all"]) ?? blogs;
-    queryClient.setQueryData<Blog[]>(["blogs", "all"], applyPatches(current, patches));
+    const current = queryClient.getQueryData<Blog[]>(allArticlesKey(siteId)) ?? blogs;
+    queryClient.setQueryData<Blog[]>(allArticlesKey(siteId), applyPatches(current, patches));
     await Promise.all(patches.map(({ id, ...patch }) => updateBlog(id, patch)));
   }
 
@@ -605,11 +710,11 @@ function AutopilotSection() {
     if (next === pace) return;
     setBusy("pace");
     const previous = pace;
-    const current = queryClient.getQueryData<Blog[]>(["blogs", "all"]) ?? blogs;
+    const current = queryClient.getQueryData<Blog[]>(allArticlesKey(siteId)) ?? blogs;
     const patches = planFromTomorrow(current, next);
     const undo = inversePatches(current, patches);
     try {
-      await updateAutopilot({ weekly_cadence: next });
+      await updateAutopilot(siteId, { weekly_cadence: next });
       await applyQueue(patches);
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: ["settings"] }),
@@ -623,7 +728,7 @@ function AutopilotSection() {
           action: {
             label: "Undo",
             onClick: async () => {
-              await updateAutopilot({ weekly_cadence: previous });
+              await updateAutopilot(siteId, { weekly_cadence: previous });
               await applyQueue(undo);
               void queryClient.invalidateQueries({ queryKey: ["settings"] });
               void queryClient.invalidateQueries({ queryKey: ["blogs"] });
@@ -729,9 +834,9 @@ function AutopilotSection() {
 /* ── Account ────────────────────────────────────────────────────── */
 
 function planLabel(status: string | undefined): string {
-  if (status === "trialing") return "Pro · free trial";
-  if (status === "active") return "Pro";
-  if (status === "past_due") return "Pro · payment due";
+  if (status === "trialing") return `${PLAN.name} · free trial`;
+  if (status === "active") return PLAN.name;
+  if (status === "past_due") return `${PLAN.name} · payment due`;
   return "No plan yet";
 }
 

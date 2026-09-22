@@ -5,6 +5,7 @@
 import { useState } from "react";
 import { toast } from "sonner";
 import { Button, Panel } from "@/components/dashboard/primitives";
+import { useSiteId } from "@/components/dashboard/site-context";
 import { updateRedditSettings, type RedditSettings as Settings } from "@/lib/data";
 import { isValidDisclosureLine, resolveDisclosure } from "@/lib/reddit/compliance";
 import { cn } from "@/lib/utils";
@@ -20,6 +21,7 @@ export function RedditSettings({
   brandName: string;
   onChanged: () => void;
 }) {
+  const siteId = useSiteId();
   const [form, setForm] = useState(settings);
   const [saving, setSaving] = useState(false);
   const set = <K extends keyof Settings>(key: K, value: Settings[K]) =>
@@ -31,7 +33,7 @@ export function RedditSettings({
   async function save() {
     setSaving(true);
     try {
-      await updateRedditSettings({
+      await updateRedditSettings(siteId, {
         sweepEnabled: form.sweepEnabled,
         niche: form.niche ?? "",
         topicTags: form.topicTags,

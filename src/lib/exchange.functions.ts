@@ -7,10 +7,16 @@
  * placements, so nothing here can be bypassed by calling the Data API. Every
  * write also re-checks the paid gate on the server; the page's gate is a
  * courtesy, this is the rule.
+ *
+ * Everything is per site. Each function takes the `siteId` the dashboard is
+ * showing and proves the caller owns it before anything else: reads accept
+ * any of the owner's sites, writes need the site to be live, and trade-side
+ * writes need it paid as well.
  */
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import type { SiteScope } from "@/lib/entitlement.server";
 import { EXCHANGE_CATEGORIES } from "@/lib/exchange/types";
 import type {
   ExchangeBlock,
@@ -23,6 +29,7 @@ import type {
   VerificationResult,
 } from "@/lib/exchange/types";
 
+const SiteId = z.string().uuid();
 const Domain = z.string().trim().min(3).max(253);
 const Url = z.string().trim().url().max(2048);
 const Anchor = z.string().trim().min(2).max(80);
@@ -46,6 +53,29 @@ const SettingsPatch = z.object({
   blockedCategories: z.array(CategoryId).max(EXCHANGE_CATEGORIES.length).optional(),
 });
 
+const SiteOnly = z.object({ siteId: SiteId });
+
+/** Reads: any site the caller owns. */
+async function readScope(userId: string, siteId: string): Promise<SiteScope> {
+  const { requireSiteScope } = await import("@/lib/sites.server");
+  return requireSiteScope(userId, siteId);
+}
+
+/** Writes: a live site the caller owns. */
+async function liveScope(userId: string, siteId: string): Promise<SiteScope> {
+  const { requireLiveSite } = await import("@/lib/sites.server");
+  await requireLiveSite(userId, siteId);
+  return { userId, siteId };
+}
+
+/** Trade-side writes: a live site the caller owns, on a paid plan. */
+async function paidScope(userId: string, siteId: string): Promise<SiteScope> {
+  const scope = await liveScope(userId, siteId);
+  const { requirePaid } = await import("@/lib/exchange/exchange.server");
+  await requirePaid(scope);
+  return scope;
+}
+
 /** Distinct, trimmed, case-insensitive; keeps the first spelling of each. */
 function dedupe(list: string[]): string[] {
   const seen = new Set<string>();
@@ -63,47 +93,59 @@ function dedupe(list: string[]): string[] {
 
 export const getExchangeOverview = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
-  .handler(async ({ context }): Promise<ExchangeOverview> => {
+  .inputValidator((d: unknown) => SiteOnly.parse(d))
+  .handler(async ({ data, context }): Promise<ExchangeOverview> => {
+    const scope = await readScope(context.userId, data.siteId);
     const { loadOverview } = await import("@/lib/exchange/exchange.server");
-    return loadOverview(context.userId);
+    return loadOverview(scope);
   });
 
 export const listTargets = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
-  .handler(async ({ context }): Promise<ExchangeTarget[]> => {
+  .inputValidator((d: unknown) => SiteOnly.parse(d))
+  .handler(async ({ data, context }): Promise<ExchangeTarget[]> => {
+    const { siteId } = await readScope(context.userId, data.siteId);
     const { listTargets: load } = await import("@/lib/exchange/exchange.server");
-    return load(context.userId);
+    return load(siteId);
   });
 
 export const listInboundPlacements = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
-  .handler(async ({ context }): Promise<InboundPlacement[]> => {
+  .inputValidator((d: unknown) => SiteOnly.parse(d))
+  .handler(async ({ data, context }): Promise<InboundPlacement[]> => {
+    const { siteId } = await readScope(context.userId, data.siteId);
     const { listInbound } = await import("@/lib/exchange/exchange.server");
-    return listInbound(context.userId);
+    return listInbound(siteId);
   });
 
 export const listHostedPlacements = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
-  .handler(async ({ context }): Promise<HostedPlacement[]> => {
+  .inputValidator((d: unknown) => SiteOnly.parse(d))
+  .handler(async ({ data, context }): Promise<HostedPlacement[]> => {
+    const { siteId } = await readScope(context.userId, data.siteId);
     const { listHosted } = await import("@/lib/exchange/exchange.server");
-    return listHosted(context.userId);
+    return listHosted(siteId);
   });
 
 export const listExchangeLedger = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
-  .handler(async ({ context }): Promise<LedgerEntry[]> => {
+  .inputValidator((d: unknown) => SiteOnly.parse(d))
+  .handler(async ({ data, context }): Promise<LedgerEntry[]> => {
+    const { siteId } = await readScope(context.userId, data.siteId);
     const { listLedger } = await import("@/lib/exchange/exchange.server");
-    return listLedger(context.userId);
+    return listLedger(siteId);
   });
 
 export const listExchangeBlocks = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
-  .handler(async ({ context }): Promise<ExchangeBlock[]> => {
+  .inputValidator((d: unknown) => SiteOnly.parse(d))
+  .handler(async ({ data: input, context }): Promise<ExchangeBlock[]> => {
+    const { siteId } = await readScope(context.userId, input.siteId);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data, error } = await supabaseAdmin
       .from("exchange_blocks")
       .select("id, domain, reason, created_at")
-      .eq("user_id", context.userId)
+      .eq("site_id", siteId)
       .order("created_at", { ascending: false });
     if (error) throw new Error(error.message);
     return (data ?? []).map((r) => ({
@@ -118,35 +160,35 @@ export const listExchangeBlocks = createServerFn({ method: "GET" })
 
 export const startDomainVerification = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => z.object({ domain: Domain }).parse(d))
+  .inputValidator((d: unknown) => z.object({ siteId: SiteId, domain: Domain }).parse(d))
   .handler(async ({ data, context }): Promise<ExchangeSite> => {
-    const { requirePaid } = await import("@/lib/exchange/exchange.server");
-    await requirePaid(context.userId);
+    const scope = await paidScope(context.userId, data.siteId);
     const { startVerification } = await import("@/lib/exchange/verify-site.server");
-    return startVerification(context.userId, data.domain);
+    return startVerification(scope, data.domain);
   });
 
 export const checkDomainVerification = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .handler(async ({ context }): Promise<VerificationResult> => {
-    const { requirePaid } = await import("@/lib/exchange/exchange.server");
-    await requirePaid(context.userId);
+  .inputValidator((d: unknown) => SiteOnly.parse(d))
+  .handler(async ({ data, context }): Promise<VerificationResult> => {
+    const { siteId } = await paidScope(context.userId, data.siteId);
     const { assertAiRateLimit } = await import("@/lib/rate-limit.server");
-    // Each check is three outbound fetches; the AI bucket's limit is the right size.
+    // Each check is three outbound fetches; the AI bucket's limit is the right
+    // size, and it is the owner's, however many sites they verify.
     await assertAiRateLimit(context.userId);
     const { checkVerification } = await import("@/lib/exchange/verify-site.server");
-    return checkVerification(context.userId);
+    return checkVerification(siteId);
   });
 
 /* ── Settings ──────────────────────────────────────────────────── */
 
 export const updateExchangeSettings = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => SettingsPatch.parse(d))
+  .inputValidator((d: unknown) => SettingsPatch.extend({ siteId: SiteId }).parse(d))
   .handler(async ({ data, context }): Promise<ExchangeSite> => {
-    const { requirePaid, loadSite, siteFromRow } = await import("@/lib/exchange/exchange.server");
-    await requirePaid(context.userId);
-    const site = await loadSite(context.userId);
+    const { siteId } = await paidScope(context.userId, data.siteId);
+    const { loadSite, siteFromRow } = await import("@/lib/exchange/exchange.server");
+    const site = await loadSite(siteId);
     if (!site) throw new Error("Add the domain you publish to first.");
     if (data.optedIn && site.status !== "verified") {
       throw new Error("Verify your domain before opting in.");
@@ -176,12 +218,11 @@ export const updateExchangeSettings = createServerFn({ method: "POST" })
 
 export const createTarget = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => TargetInput.parse(d))
+  .inputValidator((d: unknown) => TargetInput.extend({ siteId: SiteId }).parse(d))
   .handler(async ({ data, context }): Promise<ExchangeTarget> => {
-    const { requirePaid, requireVerifiedSite, targetFromRow } =
-      await import("@/lib/exchange/exchange.server");
-    await requirePaid(context.userId);
-    const site = await requireVerifiedSite(context.userId);
+    const { siteId } = await paidScope(context.userId, data.siteId);
+    const { requireVerifiedSite, targetFromRow } = await import("@/lib/exchange/exchange.server");
+    const site = await requireVerifiedSite(siteId);
     const { isOnDomain } = await import("@/lib/exchange/domain");
     if (!isOnDomain(data.url, site.domain)) {
       throw new Error(`Targets must be pages on ${site.domain}.`);
@@ -193,8 +234,10 @@ export const createTarget = createServerFn({ method: "POST" })
     const { count } = await supabaseAdmin
       .from("exchange_targets")
       .select("id", { count: "exact", head: true })
-      .eq("user_id", context.userId);
-    if ((count ?? 0) >= 25) throw new Error("You can have up to 25 targets. Remove one first.");
+      .eq("site_id", site.id);
+    if ((count ?? 0) >= 25) {
+      throw new Error("A site can have up to 25 targets. Remove one first.");
+    }
 
     const { data: row, error } = await supabaseAdmin
       .from("exchange_targets")
@@ -217,13 +260,12 @@ export const createTarget = createServerFn({ method: "POST" })
 export const updateTarget = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) =>
-    z.object({ id: z.string().uuid(), patch: TargetInput.partial() }).parse(d),
+    z.object({ siteId: SiteId, id: z.string().uuid(), patch: TargetInput.partial() }).parse(d),
   )
   .handler(async ({ data, context }): Promise<ExchangeTarget> => {
-    const { requirePaid, requireVerifiedSite, targetFromRow } =
-      await import("@/lib/exchange/exchange.server");
-    await requirePaid(context.userId);
-    const site = await requireVerifiedSite(context.userId);
+    const { siteId } = await paidScope(context.userId, data.siteId);
+    const { requireVerifiedSite, targetFromRow } = await import("@/lib/exchange/exchange.server");
+    const site = await requireVerifiedSite(siteId);
     const p = data.patch;
     if (p.url !== undefined) {
       const { isOnDomain } = await import("@/lib/exchange/domain");
@@ -248,6 +290,7 @@ export const updateTarget = createServerFn({ method: "POST" })
         ...(p.active !== undefined ? { active: p.active } : {}),
       })
       .eq("id", data.id)
+      .eq("site_id", site.id)
       .eq("user_id", context.userId)
       .select("*")
       .single();
@@ -262,14 +305,16 @@ export const updateTarget = createServerFn({ method: "POST" })
  */
 export const deleteTarget = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => z.object({ id: z.string().uuid() }).parse(d))
+  .inputValidator((d: unknown) => z.object({ siteId: SiteId, id: z.string().uuid() }).parse(d))
   .handler(async ({ data, context }): Promise<{ deleted: boolean }> => {
+    const { siteId } = await liveScope(context.userId, data.siteId);
     const { refundPlacement } = await import("@/lib/exchange/exchange.server");
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data: target } = await supabaseAdmin
       .from("exchange_targets")
       .select("id")
       .eq("id", data.id)
+      .eq("site_id", siteId)
       .eq("user_id", context.userId)
       .maybeSingle();
     if (!target) throw new Error("Target not found.");
@@ -301,9 +346,12 @@ export const deleteTarget = createServerFn({ method: "POST" })
 export const blockDomain = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) =>
-    z.object({ domain: Domain, reason: z.string().trim().max(200).default("") }).parse(d),
+    z
+      .object({ siteId: SiteId, domain: Domain, reason: z.string().trim().max(200).default("") })
+      .parse(d),
   )
   .handler(async ({ data, context }): Promise<ExchangeBlock> => {
+    const { siteId } = await liveScope(context.userId, data.siteId);
     const { normalizeDomain } = await import("@/lib/exchange/domain");
     const domain = normalizeDomain(data.domain);
     if (!domain) throw new Error("Enter a domain like example.com.");
@@ -311,8 +359,8 @@ export const blockDomain = createServerFn({ method: "POST" })
     const { data: row, error } = await supabaseAdmin
       .from("exchange_blocks")
       .upsert(
-        { user_id: context.userId, domain, reason: data.reason },
-        { onConflict: "user_id,domain" },
+        { user_id: context.userId, site_id: siteId, domain, reason: data.reason },
+        { onConflict: "site_id,domain" },
       )
       .select("id, domain, reason, created_at")
       .single();
@@ -322,14 +370,15 @@ export const blockDomain = createServerFn({ method: "POST" })
 
 export const unblockDomain = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => z.object({ domain: Domain }).parse(d))
+  .inputValidator((d: unknown) => z.object({ siteId: SiteId, domain: Domain }).parse(d))
   .handler(async ({ data, context }): Promise<{ ok: true }> => {
+    const { siteId } = await liveScope(context.userId, data.siteId);
     const { normalizeDomain } = await import("@/lib/exchange/domain");
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { error } = await supabaseAdmin
       .from("exchange_blocks")
       .delete()
-      .eq("user_id", context.userId)
+      .eq("site_id", siteId)
       .eq("domain", normalizeDomain(data.domain));
     if (error) throw new Error(error.message);
     return { ok: true };
@@ -338,7 +387,7 @@ export const unblockDomain = createServerFn({ method: "POST" })
 /* ── Hosted placements ─────────────────────────────────────────── */
 
 /**
- * Takes a link out of one of the member's own articles.
+ * Takes a link out of one of the site's own articles.
  *
  * A reserved or placed link is simply cancelled and the requester refunded. A
  * LIVE link is a promise already paid for: removing it returns the credits
@@ -347,14 +396,16 @@ export const unblockDomain = createServerFn({ method: "POST" })
  */
 export const removeHostedPlacement = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => z.object({ id: z.string().uuid() }).parse(d))
+  .inputValidator((d: unknown) => z.object({ siteId: SiteId, id: z.string().uuid() }).parse(d))
   .handler(async ({ data, context }): Promise<{ ok: true }> => {
+    const { siteId } = await liveScope(context.userId, data.siteId);
     const { refundPlacement, clawbackPlacement } = await import("@/lib/exchange/exchange.server");
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data: p } = await supabaseAdmin
       .from("exchange_placements")
       .select("id, status, host_blog_id, target_url, anchor_used")
       .eq("id", data.id)
+      .eq("host_site_id", siteId)
       .eq("host_user_id", context.userId)
       .maybeSingle();
     if (!p) throw new Error("Placement not found.");
@@ -370,7 +421,7 @@ export const removeHostedPlacement = createServerFn({ method: "POST" })
         .from("blogs")
         .select("body")
         .eq("id", p.host_blog_id)
-        .eq("user_id", context.userId)
+        .eq("site_id", siteId)
         .maybeSingle();
       if (blog?.body) {
         const { sameLink } = await import("@/lib/exchange/domain");
@@ -380,7 +431,11 @@ export const removeHostedPlacement = createServerFn({ method: "POST" })
             sameLink(href, p.target_url) ? text : whole,
         );
         if (body !== blog.body) {
-          await supabaseAdmin.from("blogs").update({ body }).eq("id", p.host_blog_id);
+          await supabaseAdmin
+            .from("blogs")
+            .update({ body })
+            .eq("id", p.host_blog_id)
+            .eq("site_id", siteId);
         }
       }
     }
@@ -389,11 +444,20 @@ export const removeHostedPlacement = createServerFn({ method: "POST" })
 
 /* ── Published URL (manual) ────────────────────────────────────── */
 
-/** The member pastes where an article went live; the cron verifies from there. */
+/**
+ * The member pastes where an article went live; the cron verifies from there.
+ * The page must be on this site's verified exchange domain or on the site's
+ * own website — the cron only ever settles a link seen on the verified one.
+ */
 export const setPublishedUrl = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => z.object({ blogId: z.string().uuid(), url: Url }).parse(d))
+  .inputValidator((d: unknown) =>
+    z.object({ siteId: SiteId, blogId: z.string().uuid(), url: Url }).parse(d),
+  )
   .handler(async ({ data, context }): Promise<{ ok: true }> => {
+    const { requireLiveSite } = await import("@/lib/sites.server");
+    const profile = await requireLiveSite(context.userId, data.siteId);
+    const siteId = profile.id;
     const { assertSafeUrl, UnsafeUrlError } = await import("@/lib/safe-fetch.server");
     try {
       assertSafeUrl(data.url);
@@ -402,13 +466,18 @@ export const setPublishedUrl = createServerFn({ method: "POST" })
       throw err;
     }
     const { loadSite } = await import("@/lib/exchange/exchange.server");
-    const { isOnDomain } = await import("@/lib/exchange/domain");
-    const site = await loadSite(context.userId);
-    if (!site || !isOnDomain(data.url, site.domain)) {
-      throw new Error(`The published URL must be on ${site?.domain ?? "your verified domain"}.`);
+    const { isOnDomain, normalizeDomain } = await import("@/lib/exchange/domain");
+    const site = await loadSite(siteId);
+    const domains = [
+      ...new Set([site?.domain ?? "", normalizeDomain(profile.website_url ?? "")]),
+    ].filter(Boolean);
+    if (!domains.some((d) => isOnDomain(data.url, d))) {
+      throw new Error(
+        `The published URL must be on ${domains.join(" or ") || "your site's domain"}.`,
+      );
     }
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { error } = await supabaseAdmin
+    const { data: updated, error } = await supabaseAdmin
       .from("blogs")
       .update({
         published_url: data.url,
@@ -416,7 +485,9 @@ export const setPublishedUrl = createServerFn({ method: "POST" })
         published_at: new Date().toISOString(),
       })
       .eq("id", data.blogId)
-      .eq("user_id", context.userId);
+      .eq("site_id", siteId)
+      .select("id");
     if (error) throw new Error(error.message);
+    if (!updated?.length) throw new Error("Article not found.");
     return { ok: true };
   });

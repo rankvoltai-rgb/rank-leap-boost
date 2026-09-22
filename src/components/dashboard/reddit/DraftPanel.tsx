@@ -12,6 +12,7 @@ import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { Check, Copy, ExternalLink, RefreshCw } from "lucide-react";
 import { Button, Panel } from "@/components/dashboard/primitives";
+import { useSiteId } from "@/components/dashboard/site-context";
 import {
   draftText,
   markRedditReplyPosted,
@@ -42,6 +43,7 @@ export function DraftPanel({
   readOnly: boolean;
   onChanged: () => void;
 }) {
+  const siteId = useSiteId();
   const [text, setText] = useState(draftText(draft));
   const [report, setReport] = useState(draft.compliance);
   const [copied, setCopied] = useState(false);
@@ -60,7 +62,7 @@ export function DraftPanel({
   useEffect(() => {
     if (readOnly || text === saved.current) return;
     const timer = setTimeout(() => {
-      updateRedditDraft({ draftId: draft.id, body: text })
+      updateRedditDraft(siteId, { draftId: draft.id, body: text })
         .then((d) => {
           saved.current = text;
           setReport(d.compliance);
@@ -68,7 +70,7 @@ export function DraftPanel({
         .catch(() => undefined);
     }, 600);
     return () => clearTimeout(timer);
-  }, [text, draft.id, readOnly]);
+  }, [text, draft.id, readOnly, siteId]);
 
   async function copy() {
     try {
@@ -82,7 +84,7 @@ export function DraftPanel({
   async function rewrite() {
     setBusy("rewrite");
     try {
-      await regenerateRedditDraft({ draftId: draft.id, instructions: "" });
+      await regenerateRedditDraft(siteId, { draftId: draft.id, instructions: "" });
       setCopied(false);
       onChanged();
     } catch (e) {
@@ -95,7 +97,7 @@ export function DraftPanel({
   async function posted(withLink: boolean) {
     setBusy("posted");
     try {
-      await markRedditReplyPosted({
+      await markRedditReplyPosted(siteId, {
         opportunityId: opportunity.id,
         draftId: draft.id,
         permalink: withLink ? permalink : undefined,
@@ -249,6 +251,7 @@ function ReplyRecord({
   opportunity: RedditOpportunity;
   onChanged: () => void;
 }) {
+  const siteId = useSiteId();
   const [permalink, setPermalink] = useState("");
   const [busy, setBusy] = useState(false);
   const status = REPLY_STATUS[reply.status];
@@ -293,7 +296,10 @@ function ReplyRecord({
               type="button"
               disabled={busy}
               onClick={() =>
-                void run(() => verifyRedditReply({ replyId: reply.id }), "Couldn't check that.")
+                void run(
+                  () => verifyRedditReply(siteId, { replyId: reply.id }),
+                  "Couldn't check that.",
+                )
               }
               className="font-medium text-muted-foreground underline underline-offset-2 hover:text-ink disabled:opacity-60"
             >
@@ -316,7 +322,7 @@ function ReplyRecord({
               disabled={busy || !permalink.trim()}
               onClick={() =>
                 void run(
-                  () => markRedditReplyPosted({ opportunityId: opportunity.id, permalink }),
+                  () => markRedditReplyPosted(siteId, { opportunityId: opportunity.id, permalink }),
                   "Couldn't save that link.",
                 )
               }

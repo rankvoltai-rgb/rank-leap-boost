@@ -2,14 +2,19 @@
  * Data access for the redesigned onboarding and dashboard.
  *
  * Delegates to the in-memory mock (VITE_MOCK_DATA=1) or to the real Supabase
- * layer in src/lib/api.ts. Screens that have not been redesigned keep importing
- * `@/lib/api` directly and are unaffected by this module.
+ * layer in src/lib/api.ts.
+ *
+ * Almost everything belongs to one SITE of the account (Studio lets an
+ * account run several), so almost every function here takes the site's id
+ * first — the dashboard's active site, from useSiteId(). The exceptions are
+ * account-wide: the site list, the subscription, the signed-in user, and
+ * Studio's own billing calls.
  *
  * Capabilities that do not exist server-side yet are mock-only: in real mode
- * they throw or no-op, which is the seam phase 2 fills in. Onboarding's scan,
- * content plan and commit are real in both modes (mock mode commits to its
- * local store). The trial is real in both: mock flips a local entitlement,
- * real mode runs a Stripe checkout and reads the subscription row back.
+ * they throw or no-op. Onboarding's scan, content plan and commit are real in
+ * both modes (mock mode commits to its local store). The trial is real in
+ * both: mock flips a local entitlement, real mode runs a Stripe checkout and
+ * reads the subscription row back.
  */
 import * as real from "@/lib/api";
 import * as mock from "@/lib/mock/store";
@@ -24,12 +29,15 @@ import type {
   CreditAccount,
   Keyword,
   Profile,
+  Site,
+  SiteDetails,
   Subscription,
 } from "@/lib/api";
 import * as localDraft from "@/lib/onboarding-draft";
 import type { DraftKeyword, DraftTitle } from "@/lib/mock/fixtures";
 import type { ContentPlanInput, PlannedArticle, SiteAnalysis, SiteMeta } from "@/lib/site-meta";
 import type { Entitlement, OnboardingDraft } from "@/lib/mock/store";
+import type { StudioQuote } from "@/lib/studio.server";
 import type {
   ExchangeSettingsPatch as ExchangeSettingsPatchInput,
   TargetInput as TargetInputData,
@@ -41,7 +49,17 @@ import type {
 
 export { IS_MOCK };
 
-export type { Blog, ContentSettings, CreditAccount, Keyword, Profile, Subscription };
+export type {
+  Blog,
+  ContentSettings,
+  CreditAccount,
+  Keyword,
+  Profile,
+  Site,
+  SiteDetails,
+  Subscription,
+  StudioQuote,
+};
 export type {
   ContentPlanInput,
   DraftKeyword,
@@ -60,9 +78,17 @@ function phaseTwo(name: string): never {
   );
 }
 
-/* ---------- reads ---------- */
+/* ---------- sites (account-wide) ---------- */
 
-export const getProfile = IS_MOCK ? mock.getProfile : real.getProfile;
+export const listSites = IS_MOCK ? mock.listSites : real.listSites;
+export const getSite = IS_MOCK ? mock.getSite : real.getSite;
+export const updateSite = IS_MOCK ? mock.updateSite : real.updateSite;
+export const listCreditAccounts = IS_MOCK ? mock.listCreditAccounts : real.listCreditAccounts;
+export const listBlogStatuses = IS_MOCK ? mock.listBlogStatuses : real.listBlogStatuses;
+export const listAllSettings = IS_MOCK ? mock.listAllSettings : real.listSettings;
+
+/* ---------- reads (per site) ---------- */
+
 export const getSettings = IS_MOCK ? mock.getSettings : real.getSettings;
 export const getCredits = IS_MOCK ? mock.getCredits : real.getCredits;
 export const getSubscription = IS_MOCK ? mock.getSubscription : real.getSubscription;
@@ -70,7 +96,7 @@ export const listBlogs = IS_MOCK ? mock.listBlogs : real.listBlogs;
 export const getBlog = IS_MOCK ? mock.getBlog : real.getBlog;
 export const listKeywords = IS_MOCK ? mock.listKeywords : real.listKeywords;
 
-/* ---------- writes ---------- */
+/* ---------- writes (per site) ---------- */
 
 export const updateBlog = IS_MOCK ? mock.updateBlog : real.updateBlog;
 export const deleteBlog = IS_MOCK ? mock.deleteBlog : real.deleteBlog;
@@ -82,7 +108,6 @@ export const addOpportunityToQueue = IS_MOCK
 export const addKeyword = IS_MOCK ? mock.addKeyword : real.addKeyword;
 export const deleteKeyword = IS_MOCK ? mock.deleteKeyword : real.deleteKeyword;
 export const updateSettings = IS_MOCK ? mock.updateSettings : real.updateSettings;
-export const updateProfile = IS_MOCK ? mock.updateProfile : real.updateProfile;
 export const updateAutopilot = IS_MOCK ? mock.updateAutopilot : real.updateAutopilot;
 
 /* ---------- gated generation ---------- */
@@ -90,23 +115,24 @@ export const updateAutopilot = IS_MOCK ? mock.updateAutopilot : real.updateAutop
 /**
  * Re-exported so callers catch the same class the mock throws.
  *
- * Real mode has no server-side gate yet (phase 2), so it never raises this and
- * falls through to the existing credits-only behaviour.
+ * Real mode's gate is server-side (requireGenerationEntitlement), whose errors
+ * arrive as plain messages; the mock throws this class directly.
  */
 export { TrialRequiredError } from "@/lib/errors";
 
 export const generateBlogArticle = IS_MOCK ? mock.generateBlogArticle : real.generateBlogArticle;
 
-export const purchaseCredits = IS_MOCK ? mock.purchaseCredits : real.purchaseCredits;
-
 /** The editor's AI actions (rewrite, expand, shorten, improve SEO) on a selection. */
-export async function editBlogSection(data: {
-  selection: string;
-  action: string;
-}): Promise<{ result: string }> {
+export async function editBlogSection(
+  siteId: string,
+  data: {
+    selection: string;
+    action: string;
+  },
+): Promise<{ result: string }> {
   if (IS_MOCK) return mockAi.editBlogSection(data);
   const { editBlogSection: fn } = await import("@/lib/ai.functions");
-  return fn({ data });
+  return fn({ data: { siteId, ...data } });
 }
 
 /** Stripe's customer-portal URL. Null in mock mode, which has no portal to open. */
@@ -189,12 +215,12 @@ export const clearOnboardingDraft: () => void = IS_MOCK
   : localDraft.clearLocalDraft;
 
 /**
- * Pushes a confirmed onboarding to the dashboard and the autopilot queue. Mock
- * mode reads the same draft from its store, where every change was saved.
+ * Pushes a confirmed plan to the dashboard and the autopilot queue. Without a
+ * site it sets up the account's primary site (onboarding); with one it fills
+ * in a site Studio has just added. Returns the site it wrote to.
  */
-export const commitOnboarding: (draft: OnboardingDraft) => Promise<void> = IS_MOCK
-  ? () => mock.commitOnboarding()
-  : real.commitOnboardingDraft;
+export const commitOnboarding: (draft: OnboardingDraft, siteId?: string) => Promise<string> =
+  IS_MOCK ? (draft, siteId) => mock.commitOnboarding(draft, siteId) : real.commitOnboardingDraft;
 
 /* ---------- trial entitlement ---------- */
 
@@ -242,6 +268,56 @@ export async function confirmTrialCheckout(sessionId: string): Promise<void> {
   if ("error" in result) throw new Error(result.error);
 }
 
+/* ---------- Studio (account-wide billing) ---------- */
+
+/** What adding one site costs today and monthly, or why it can't be added. */
+export async function getStudioQuote(): Promise<StudioQuote> {
+  if (IS_MOCK) return mock.getStudioQuote();
+  const { getStudioQuote: fn } = await import("@/lib/studio.functions");
+  return fn();
+}
+
+/** Charges for a new site and creates it. The plan is committed onto it afterwards. */
+export async function addStudioSite(data: {
+  url: string;
+  brandName: string;
+  description: string;
+  logoUrl: string | null;
+  prorationDate?: number;
+}): Promise<{ siteId: string }> {
+  if (IS_MOCK) return mock.addStudioSite(data);
+  const { addStudioSite: fn } = await import("@/lib/studio.functions");
+  return fn({ data });
+}
+
+export async function restoreStudioSite(data: {
+  siteId: string;
+  prorationDate?: number;
+}): Promise<{ siteId: string }> {
+  if (IS_MOCK) return mock.restoreStudioSite(data);
+  const { restoreStudioSite: fn } = await import("@/lib/studio.functions");
+  return fn({ data });
+}
+
+export async function removeStudioSite(data: { siteId: string }): Promise<{ removesAt: string }> {
+  if (IS_MOCK) return mock.removeStudioSite(data);
+  const { removeStudioSite: fn } = await import("@/lib/studio.functions");
+  return fn({ data });
+}
+
+export async function keepStudioSite(data: { siteId: string }): Promise<{ ok: true }> {
+  if (IS_MOCK) return mock.keepStudioSite(data);
+  const { keepStudioSite: fn } = await import("@/lib/studio.functions");
+  return fn({ data });
+}
+
+/** Ends the trial now and takes the first payment, which opens Studio. */
+export async function activatePlanNow(): Promise<{ status: string }> {
+  if (IS_MOCK) return mock.activatePlanNow();
+  const { activatePlanNow: fn } = await import("@/lib/studio.functions");
+  return fn();
+}
+
 /* ---------- publishing integration ---------- */
 
 /**
@@ -259,16 +335,16 @@ export interface IntegrationKey {
   created_at: string;
 }
 
-export async function listIntegrationKeys(): Promise<IntegrationKey[]> {
-  if (IS_MOCK) return mock.listApiKeys();
+export async function listIntegrationKeys(siteId: string): Promise<IntegrationKey[]> {
+  if (IS_MOCK) return mock.listApiKeys(siteId);
   const { listApiKeys } = await import("@/lib/api-keys.functions");
-  return listApiKeys();
+  return listApiKeys({ data: { siteId } });
 }
 
-export async function createApiKey(data: { name?: string } = {}) {
-  if (IS_MOCK) return mock.createApiKey(data);
+export async function createApiKey(siteId: string, data: { name?: string } = {}) {
+  if (IS_MOCK) return mock.createApiKey(siteId, data);
   const { createApiKey: fn } = await import("@/lib/api-keys.functions");
-  return fn({ data });
+  return fn({ data: { siteId, ...data } });
 }
 
 export async function revokeApiKey(data: { id: string }) {
@@ -277,7 +353,7 @@ export async function revokeApiKey(data: { id: string }) {
   return fn({ data });
 }
 
-export const connectIntegration: (name?: string) => Promise<unknown> = IS_MOCK
+export const connectIntegration: (siteId: string, name?: string) => Promise<unknown> = IS_MOCK
   ? mock.connectIntegration
   : () => phaseTwo("connectIntegration");
 
@@ -302,104 +378,111 @@ export type {
 export { EXCHANGE_CATEGORIES, tierCost } from "@/lib/exchange/types";
 
 /**
- * Paid members only. Every read and write is a server function acting with
- * the service role — placements name both parties, so members have no direct
- * table access. Mock mode runs the same scoring against a synthetic network.
+ * Paid members only, per site. Every read and write is a server function
+ * acting with the service role — placements name both parties, so members
+ * have no direct table access. Mock mode runs the same scoring against a
+ * synthetic network (one per account, whichever site is open).
  */
-export async function getExchangeOverview() {
+export async function getExchangeOverview(siteId: string) {
   if (IS_MOCK) return mockExchange.getExchangeOverview();
   const { getExchangeOverview: fn } = await import("@/lib/exchange.functions");
-  return fn();
+  return fn({ data: { siteId } });
 }
 
-export async function listExchangeTargets() {
+export async function listExchangeTargets(siteId: string) {
   if (IS_MOCK) return mockExchange.listTargets();
   const { listTargets: fn } = await import("@/lib/exchange.functions");
-  return fn();
+  return fn({ data: { siteId } });
 }
 
-export async function listInboundPlacements() {
+export async function listInboundPlacements(siteId: string) {
   if (IS_MOCK) return mockExchange.listInboundPlacements();
   const { listInboundPlacements: fn } = await import("@/lib/exchange.functions");
-  return fn();
+  return fn({ data: { siteId } });
 }
 
-export async function listHostedPlacements() {
+export async function listHostedPlacements(siteId: string) {
   if (IS_MOCK) return mockExchange.listHostedPlacements();
   const { listHostedPlacements: fn } = await import("@/lib/exchange.functions");
-  return fn();
+  return fn({ data: { siteId } });
 }
 
-export async function listExchangeLedger() {
+export async function listExchangeLedger(siteId: string) {
   if (IS_MOCK) return mockExchange.listExchangeLedger();
   const { listExchangeLedger: fn } = await import("@/lib/exchange.functions");
-  return fn();
+  return fn({ data: { siteId } });
 }
 
-export async function listExchangeBlocks() {
+export async function listExchangeBlocks(siteId: string) {
   if (IS_MOCK) return mockExchange.listExchangeBlocks();
   const { listExchangeBlocks: fn } = await import("@/lib/exchange.functions");
-  return fn();
+  return fn({ data: { siteId } });
 }
 
-export async function startDomainVerification(data: { domain: string }) {
+export async function startDomainVerification(siteId: string, data: { domain: string }) {
   if (IS_MOCK) return mockExchange.startDomainVerification(data);
   const { startDomainVerification: fn } = await import("@/lib/exchange.functions");
-  return fn({ data });
+  return fn({ data: { siteId, ...data } });
 }
 
-export async function checkDomainVerification() {
+export async function checkDomainVerification(siteId: string) {
   if (IS_MOCK) return mockExchange.checkDomainVerification();
   const { checkDomainVerification: fn } = await import("@/lib/exchange.functions");
-  return fn();
+  return fn({ data: { siteId } });
 }
 
-export async function updateExchangeSettings(data: ExchangeSettingsPatchInput) {
+export async function updateExchangeSettings(siteId: string, data: ExchangeSettingsPatchInput) {
   if (IS_MOCK) return mockExchange.updateExchangeSettings(data);
   const { updateExchangeSettings: fn } = await import("@/lib/exchange.functions");
-  return fn({ data });
+  return fn({ data: { siteId, ...data } });
 }
 
-export async function createExchangeTarget(data: TargetInputData) {
+export async function createExchangeTarget(siteId: string, data: TargetInputData) {
   if (IS_MOCK) return mockExchange.createTarget(data);
   const { createTarget: fn } = await import("@/lib/exchange.functions");
-  return fn({ data });
+  return fn({ data: { siteId, ...data } });
 }
 
-export async function updateExchangeTarget(data: { id: string; patch: Partial<TargetInputData> }) {
+export async function updateExchangeTarget(
+  siteId: string,
+  data: { id: string; patch: Partial<TargetInputData> },
+) {
   if (IS_MOCK) return mockExchange.updateTarget(data);
   const { updateTarget: fn } = await import("@/lib/exchange.functions");
-  return fn({ data });
+  return fn({ data: { siteId, ...data } });
 }
 
-export async function deleteExchangeTarget(data: { id: string }) {
+export async function deleteExchangeTarget(siteId: string, data: { id: string }) {
   if (IS_MOCK) return mockExchange.deleteTarget(data);
   const { deleteTarget: fn } = await import("@/lib/exchange.functions");
-  return fn({ data });
+  return fn({ data: { siteId, ...data } });
 }
 
-export async function blockExchangeDomain(data: { domain: string; reason?: string }) {
+export async function blockExchangeDomain(
+  siteId: string,
+  data: { domain: string; reason?: string },
+) {
   if (IS_MOCK) return mockExchange.blockDomain(data);
   const { blockDomain: fn } = await import("@/lib/exchange.functions");
-  return fn({ data });
+  return fn({ data: { siteId, ...data } });
 }
 
-export async function unblockExchangeDomain(data: { domain: string }) {
+export async function unblockExchangeDomain(siteId: string, data: { domain: string }) {
   if (IS_MOCK) return mockExchange.unblockDomain(data);
   const { unblockDomain: fn } = await import("@/lib/exchange.functions");
-  return fn({ data });
+  return fn({ data: { siteId, ...data } });
 }
 
-export async function removeHostedPlacement(data: { id: string }) {
+export async function removeHostedPlacement(siteId: string, data: { id: string }) {
   if (IS_MOCK) return mockExchange.removeHostedPlacement(data);
   const { removeHostedPlacement: fn } = await import("@/lib/exchange.functions");
-  return fn({ data });
+  return fn({ data: { siteId, ...data } });
 }
 
-export async function setPublishedUrl(data: { blogId: string; url: string }) {
+export async function setPublishedUrl(siteId: string, data: { blogId: string; url: string }) {
   if (IS_MOCK) return mockExchange.setPublishedUrl(data);
   const { setPublishedUrl: fn } = await import("@/lib/exchange.functions");
-  return fn({ data });
+  return fn({ data: { siteId, ...data } });
 }
 
 /** Mock-only: stands in for the first paid invoice. A no-op in real mode. */
@@ -444,107 +527,119 @@ export {
 } from "@/lib/reddit/types";
 
 /**
- * Paid members only, like the exchange. Rankbox never authenticates to Reddit
- * and never posts: these calls find threads, draft a reply and check it, and
- * record what the MEMBER then did under their own account.
+ * Paid members only, per site, like the exchange. Rankbox never authenticates
+ * to Reddit and never posts: these calls find threads, draft a reply and check
+ * it, and record what the MEMBER then did under their own account.
  *
  * Every read and write is a server function acting with the service role —
  * the thread cache is shared across members, so nobody has direct table
  * access to it. Mock mode runs the same scorer and the same compliance checker
- * over a synthetic set of threads.
+ * over a synthetic set of threads (one per account, whichever site is open).
  */
-export async function getRedditOverview() {
+export async function getRedditOverview(siteId: string) {
   if (IS_MOCK) return mockReddit.getRedditOverview();
   const { getRedditOverview: fn } = await import("@/lib/reddit.functions");
-  return fn();
+  return fn({ data: { siteId } });
 }
 
-export async function listRedditOpportunities() {
+export async function listRedditOpportunities(siteId: string) {
   if (IS_MOCK) return mockReddit.listRedditOpportunities();
   const { listRedditOpportunities: fn } = await import("@/lib/reddit.functions");
-  return fn();
+  return fn({ data: { siteId } });
 }
 
-export async function getRedditOpportunity(data: { id: string }) {
+export async function getRedditOpportunity(siteId: string, data: { id: string }) {
   if (IS_MOCK) return mockReddit.getRedditOpportunity(data);
   const { getRedditOpportunity: fn } = await import("@/lib/reddit.functions");
-  return fn({ data });
+  return fn({ data: { siteId, ...data } });
 }
 
-export async function listRedditMentions() {
+export async function listRedditMentions(siteId: string) {
   if (IS_MOCK) return mockReddit.listRedditMentions();
   const { listRedditMentions: fn } = await import("@/lib/reddit.functions");
-  return fn();
+  return fn({ data: { siteId } });
 }
 
-export async function listRedditLedger() {
+export async function listRedditLedger(siteId: string) {
   if (IS_MOCK) return mockReddit.listRedditLedger();
   const { listRedditLedger: fn } = await import("@/lib/reddit.functions");
-  return fn();
+  return fn({ data: { siteId } });
 }
 
-export async function enableReddit(data: RedditSettingsPatchInput) {
+export async function enableReddit(siteId: string, data: RedditSettingsPatchInput) {
   if (IS_MOCK) return mockReddit.enableReddit(data);
   const { enableReddit: fn } = await import("@/lib/reddit.functions");
-  return fn({ data });
+  return fn({ data: { siteId, ...data } });
 }
 
-export async function runRedditSweep() {
+export async function runRedditSweep(siteId: string) {
   if (IS_MOCK) return mockReddit.runRedditSweep();
   const { runRedditSweep: fn } = await import("@/lib/reddit.functions");
-  return fn();
+  return fn({ data: { siteId } });
 }
 
-export async function generateRedditDraft(data: { opportunityId: string; instructions?: string }) {
+export async function generateRedditDraft(
+  siteId: string,
+  data: { opportunityId: string; instructions?: string },
+) {
   if (IS_MOCK) return mockReddit.generateRedditDraft(data);
   const { generateRedditDraft: fn } = await import("@/lib/reddit.functions");
-  return fn({ data });
+  return fn({ data: { siteId, ...data } });
 }
 
-export async function regenerateRedditDraft(data: { draftId: string; instructions: string }) {
+export async function regenerateRedditDraft(
+  siteId: string,
+  data: { draftId: string; instructions: string },
+) {
   if (IS_MOCK) return mockReddit.regenerateRedditDraft(data);
   const { regenerateRedditDraft: fn } = await import("@/lib/reddit.functions");
-  return fn({ data });
+  return fn({ data: { siteId, ...data } });
 }
 
-export async function updateRedditDraft(data: { draftId: string; body: string }) {
+export async function updateRedditDraft(siteId: string, data: { draftId: string; body: string }) {
   if (IS_MOCK) return mockReddit.updateRedditDraft(data);
   const { updateRedditDraft: fn } = await import("@/lib/reddit.functions");
-  return fn({ data });
+  return fn({ data: { siteId, ...data } });
 }
 
-export async function markRedditReplyPosted(data: {
-  opportunityId: string;
-  permalink?: string;
-  draftId?: string;
-}) {
+export async function markRedditReplyPosted(
+  siteId: string,
+  data: {
+    opportunityId: string;
+    permalink?: string;
+    draftId?: string;
+  },
+) {
   if (IS_MOCK) return mockReddit.markRedditReplyPosted(data);
   const { markRedditReplyPosted: fn } = await import("@/lib/reddit.functions");
-  return fn({ data });
+  return fn({ data: { siteId, ...data } });
 }
 
-export async function verifyRedditReply(data: { replyId: string }) {
+export async function verifyRedditReply(siteId: string, data: { replyId: string }) {
   if (IS_MOCK) return mockReddit.verifyRedditReply(data);
   const { verifyRedditReply: fn } = await import("@/lib/reddit.functions");
-  return fn({ data });
+  return fn({ data: { siteId, ...data } });
 }
 
-export async function dismissRedditOpportunity(data: { id: string; reason?: string }) {
+export async function dismissRedditOpportunity(
+  siteId: string,
+  data: { id: string; reason?: string },
+) {
   if (IS_MOCK) return mockReddit.dismissRedditOpportunity(data);
   const { dismissRedditOpportunity: fn } = await import("@/lib/reddit.functions");
-  return fn({ data });
+  return fn({ data: { siteId, ...data } });
 }
 
-export async function restoreRedditOpportunity(data: { id: string }) {
+export async function restoreRedditOpportunity(siteId: string, data: { id: string }) {
   if (IS_MOCK) return mockReddit.restoreRedditOpportunity(data);
   const { restoreRedditOpportunity: fn } = await import("@/lib/reddit.functions");
-  return fn({ data });
+  return fn({ data: { siteId, ...data } });
 }
 
-export async function updateRedditSettings(data: RedditSettingsPatchInput) {
+export async function updateRedditSettings(siteId: string, data: RedditSettingsPatchInput) {
   if (IS_MOCK) return mockReddit.updateRedditSettings(data);
   const { updateRedditSettings: fn } = await import("@/lib/reddit.functions");
-  return fn({ data });
+  return fn({ data: { siteId, ...data } });
 }
 
 /** Mock-only review switches: view the page as another kind of account. No-ops in real mode. */

@@ -9,6 +9,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { Button, Panel } from "@/components/dashboard/primitives";
 import { ThreadIcon } from "@/components/dashboard/icons";
+import { useSiteId } from "@/components/dashboard/site-context";
 import { enableReddit, runRedditSweep } from "@/lib/data";
 import { isValidDisclosureLine, resolveDisclosure } from "@/lib/reddit/compliance";
 import { cn } from "@/lib/utils";
@@ -56,6 +57,7 @@ export function RedditSetupCard({
   defaultNiche: string;
   onDone: () => void;
 }) {
+  const siteId = useSiteId();
   const [line, setLine] = useState("Full disclosure: I work on {brand}.");
   const [niche, setNiche] = useState(defaultNiche);
   const [busy, setBusy] = useState(false);
@@ -64,8 +66,8 @@ export function RedditSetupCard({
   async function start() {
     setBusy(true);
     try {
-      await enableReddit({ disclosureLine: line, niche });
-      const result = await runRedditSweep();
+      await enableReddit(siteId, { disclosureLine: line, niche });
+      const result = await runRedditSweep(siteId);
       if (!result.started && result.reason !== "too_soon")
         toast.message("Set up. The first sweep will run shortly.");
       onDone();

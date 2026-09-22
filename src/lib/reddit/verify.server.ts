@@ -11,6 +11,7 @@
  * a moderator removes costs the member nothing and refunds nothing.
  */
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
+import type { SiteScope } from "@/lib/entitlement.server";
 import { apifyConfigured, fetchRedditComment, fetchRedditPosts } from "./apify.server";
 import { groupScrape, toRedditComment } from "./normalize";
 import type { RedditReplyStatus } from "./types";
@@ -38,15 +39,15 @@ async function apply(replyId: string, outcome: CheckOutcome, score: number | nul
 }
 
 /**
- * One check of one reply. `userId` scopes the lookup when a member asks for
- * it; the cron passes null and checks whatever is due.
+ * One check of one reply. `scope` limits the lookup to that site's replies
+ * when a member asks for it; the cron passes null and checks whatever is due.
  */
 export async function verifyReply(
   replyId: string,
-  userId: string | null,
+  scope: SiteScope | null,
 ): Promise<{ outcome: CheckOutcome; status: RedditReplyStatus | null }> {
   let query = supabaseAdmin.from("reddit_replies").select("*").eq("id", replyId);
-  if (userId) query = query.eq("user_id", userId);
+  if (scope) query = query.eq("site_id", scope.siteId).eq("user_id", scope.userId);
   const { data: reply } = await query.maybeSingle();
   if (!reply) throw new Error("That reply isn't on file.");
 

@@ -3,6 +3,7 @@ import { MetricCard, Panel } from "@/components/dashboard/primitives";
 import { LinkIcon, TrendIcon, PublishIcon, TargetIcon } from "@/components/dashboard/icons";
 import { listExchangeLedger, tierCost, type ExchangeOverview, type LedgerEntry } from "@/lib/data";
 import { formatShortDate } from "@/lib/format-date";
+import { useSiteId } from "@/components/dashboard/site-context";
 import { NetworkPulsePanel } from "./NetworkPulsePanel";
 import { plural } from "./format";
 
@@ -18,9 +19,10 @@ const KIND_LABEL: Record<LedgerEntry["kind"], string> = {
 };
 
 export function OverviewTab({ overview }: { overview: ExchangeOverview }) {
+  const siteId = useSiteId();
   const { data: ledger = [] } = useQuery({
-    queryKey: ["exchange", "ledger"],
-    queryFn: listExchangeLedger,
+    queryKey: ["exchange", siteId, "ledger"],
+    queryFn: () => listExchangeLedger(siteId),
   });
   const { balance, counts, site } = overview;
   const tier = site?.tier ?? 1;

@@ -1,5 +1,5 @@
 /**
- * The sweep: turning a member's tracked keywords into ranked Reddit threads.
+ * The sweep: turning a site's tracked keywords into ranked Reddit threads.
  *
  * Two channels, unioned on Reddit's own post id:
  *   A  Google's results for each keyword, keeping the Reddit threads. These
@@ -9,7 +9,8 @@
  *
  * Then: hydrate what we haven't loaded, read the rules of subreddits we
  * haven't seen, optionally ask the AI engines, score with the pure scorer, and
- * upsert one opportunity per thread.
+ * upsert one opportunity per thread, per site. The thread cache is shared by
+ * every site; the opportunities, the sweep log and its interval are the site's.
  *
  * Like the exchange's engine, this never throws. Every stage is its own
  * try/catch and spends against one running budget; a stage that fails or runs
@@ -18,6 +19,7 @@
  * as found-but-unloaded and says so on screen.
  */
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
+import type { SiteScope } from "@/lib/entitlement.server";
 import {
   apifyConfigured,
   askAiEngines,
@@ -139,12 +141,12 @@ function scoreInputOf(
 }
 
 /**
- * Scores a member's threads from what is stored and upserts the opportunities.
+ * Scores a site's threads from what is stored and upserts the opportunities.
  * Free: it reads our own tables and runs the pure scorer. Used by the sweep,
  * by a settings change (a new deny list re-ranks everything), and by the cron.
  */
 export async function scoreThreads(
-  userId: string,
+  scope: SiteScope,
   ctx: ScoreContext,
   threadIds: string[],
   meta: Map<string, { keyword: string; channel: string }>,
@@ -192,7 +194,7 @@ export async function scoreThreads(
     const { score, ...breakdown } = scoreOpportunity(input, ctx);
     const m = meta.get(thread.id);
     const { data, error } = await rpc.rpc("reddit_upsert_opportunity", {
-      _user_id: userId,
+      _site_id: scope.siteId,
       _thread_id: thread.id,
       _sweep_id: sweepId,
       _keyword: m?.keyword ?? "",
@@ -208,13 +210,13 @@ export async function scoreThreads(
   return { created, scored };
 }
 
-/** Re-rank everything a member already has. Free — nothing is fetched. */
-export async function rescoreOpportunities(userId: string): Promise<number> {
-  const [settings, brand] = await Promise.all([loadSettingsRow(userId), loadBrandContext(userId)]);
+/** Re-rank everything a site already has. Free — nothing is fetched. */
+export async function rescoreOpportunities(scope: SiteScope): Promise<number> {
+  const [settings, brand] = await Promise.all([loadSettingsRow(scope), loadBrandContext(scope)]);
   const { data } = await supabaseAdmin
     .from("reddit_opportunities")
     .select("thread_id, matched_keyword, channel")
-    .eq("user_id", userId)
+    .eq("site_id", scope.siteId)
     .in("status", ["new", "saved", "drafted", "dead"])
     .limit(1000);
   const rows = data ?? [];
@@ -222,7 +224,7 @@ export async function rescoreOpportunities(userId: string): Promise<number> {
     rows.map((r) => [r.thread_id, { keyword: r.matched_keyword, channel: r.channel }]),
   );
   const { scored } = await scoreThreads(
-    userId,
+    scope,
     scoreContextOf(settings, brand),
     rows.map((r) => r.thread_id),
     meta,
@@ -234,7 +236,7 @@ export async function rescoreOpportunities(userId: string): Promise<number> {
 /* ── The sweep ──────────────────────────────────────────────────── */
 
 export async function runSweep(
-  userId: string,
+  scope: SiteScope,
   trigger: "cron" | "manual",
 ): Promise<{ result: RedditSweepResult; report: SweepReport | null }> {
   const refuse = (reason: Extract<RedditSweepResult, { started: false }>["reason"]) => ({
@@ -243,20 +245,20 @@ export async function runSweep(
   });
 
   // Checked before the database is touched, so an unconfigured workspace
-  // doesn't burn a member's sweep interval on a run that could find nothing.
+  // doesn't burn a site's sweep interval on a run that could find nothing.
   if (!apifyConfigured()) return refuse("unconfigured");
 
-  const settings = await loadSettingsRow(userId);
+  const settings = await loadSettingsRow(scope);
   if (!settings?.enabled) return refuse("not_enabled");
 
-  const brand = await loadBrandContext(userId, 60);
+  const brand = await loadBrandContext(scope, 60);
   const keywords = brand.keywords.slice(0, settings.keywords_per_sweep);
   if (keywords.length === 0) return refuse("no_keywords");
 
   // The authority on whether money may be spent. It re-checks the paid flag
   // under a lock; everything above this line is courtesy.
   const started = await rpc.rpc("reddit_start_sweep", {
-    _user_id: userId,
+    _site_id: scope.siteId,
     _keywords: keywords,
     _trigger: trigger,
     _min_interval: trigger === "manual" ? MANUAL_INTERVAL : CRON_INTERVAL,
@@ -275,7 +277,7 @@ export async function runSweep(
   }
 
   const report = await sweep(
-    userId,
+    scope,
     verdict.sweep_id,
     settings,
     keywords,
@@ -301,7 +303,7 @@ export async function runSweep(
 }
 
 async function sweep(
-  userId: string,
+  scope: SiteScope,
   sweepId: string,
   settings: SettingsRow,
   keywords: string[],
@@ -545,7 +547,7 @@ async function sweep(
       const id = threadIdByReddit.get(f.redditId);
       if (id) meta.set(id, { keyword: f.keyword, channel: f.channel });
     }
-    const out = await scoreThreads(userId, ctx, [...meta.keys()], meta, sweepId);
+    const out = await scoreThreads(scope, ctx, [...meta.keys()], meta, sweepId);
     created = out.created;
   });
 

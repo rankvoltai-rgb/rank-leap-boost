@@ -18,7 +18,7 @@
 import { getSessionUser } from "./auth";
 import { isMockPaid } from "./exchange";
 import { MOCK_ANALYSIS } from "./fixtures";
-import { getProfile, getSettings, hasActiveTrial, listKeywords } from "./store";
+import { getPrimarySettings, getPrimarySite, hasActiveTrial, listPrimaryKeywords } from "./store";
 import {
   checkReply,
   isValidDisclosureLine,
@@ -561,7 +561,7 @@ function subredditView(name: string): RedditSubredditView {
 }
 
 async function scoreContext(settings: RedditSettings | null): Promise<ScoreContext> {
-  const [profile, keywords] = await Promise.all([getProfile(), listKeywords("library")]);
+  const [profile, keywords] = await Promise.all([getPrimarySite(), listPrimaryKeywords("library")]);
   return {
     niche: settings?.niche ?? MOCK_ANALYSIS.niche,
     topicTags: settings?.topicTags ?? [],
@@ -867,7 +867,7 @@ export async function listRedditLedger(): Promise<RedditLedgerEntry[]> {
 /* ── Writes ─────────────────────────────────────────────────────── */
 
 export async function enableReddit(patch: RedditSettingsPatch): Promise<RedditSettings> {
-  const [profile, content] = await Promise.all([getProfile(), getSettings()]);
+  const [profile, content] = await Promise.all([getPrimarySite(), getPrimarySettings()]);
   const brand = profile?.brand_name ?? "my product";
   const line = patch.disclosureLine ?? "Full disclosure: I work on {brand}.";
   if (!isValidDisclosureLine(line, brand))
@@ -951,7 +951,7 @@ async function complianceContextFor(
   s: MockRedditState,
   o: RedditOpportunity,
 ): Promise<ComplianceContext> {
-  const profile = await getProfile();
+  const profile = await getPrimarySite();
   return {
     brandName: profile?.brand_name ?? "my product",
     disclosureLine: s.settings?.disclosureLine ?? "Full disclosure: I work on {brand}.",
@@ -1203,7 +1203,7 @@ export async function updateRedditSettings(patch: RedditSettingsPatch): Promise<
   requirePaid(s0);
   if (!s0.settings) throw new Error("Set up Reddit presence first.");
   if (patch.disclosureLine !== undefined) {
-    const brand = (await getProfile())?.brand_name ?? "my product";
+    const brand = (await getPrimarySite())?.brand_name ?? "my product";
     if (!isValidDisclosureLine(patch.disclosureLine, brand))
       throw new Error("Your disclosure line has to name your brand and say you work on it.");
   }

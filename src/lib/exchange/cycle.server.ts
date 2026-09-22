@@ -4,7 +4,7 @@
  * Each stage is capped so one run can't blow the request budget, and each
  * item is its own try/catch so one bad site can't stall the rest:
  *
- *   1. paid       re-sync every site's paid flag from its subscription
+ *   1. paid       re-sync every site's paid flag from its owner's plan and its own billing
  *   2. discover   find the live URL of articles carrying placed links
  *   3. settle     verify placed links; a "live" verdict moves the credits
  *   4. recheck    re-verify live links; three failures over 72h charge back
@@ -101,12 +101,12 @@ export async function runExchangeCycle(): Promise<ExchangeCycleReport> {
   /* 1 ── paid flag: the webhook is the fast path, this is the backstop ──── */
   const { data: sites } = await supabaseAdmin
     .from("exchange_sites")
-    .select("user_id")
+    .select("id, user_id")
     .order("paid_checked_at", { ascending: true, nullsFirst: true })
     .limit(500);
   for (const s of sites ?? []) {
     await guard(async () => {
-      await syncPaidFlag(s.user_id);
+      await syncPaidFlag({ userId: s.user_id, siteId: s.id });
       report.paidSynced += 1;
     });
   }
@@ -321,16 +321,17 @@ async function recomputeStanding(): Promise<number> {
   const { data: sites } = await supabaseAdmin
     .from("exchange_sites")
     .select(
-      "id, user_id, status, verified_at, reputation, live_hosted_count, lost_hosted_count, authority_score, tier",
+      "id, status, verified_at, reputation, live_hosted_count, lost_hosted_count, authority_score, tier",
     )
     .in("status", ["verified", "suspended"])
     .limit(2000);
   let changed = 0;
   for (const s of sites ?? []) {
+    // The site's own articles: an owner's other sites say nothing about this one.
     const { data: blogs } = await supabaseAdmin
       .from("blogs")
       .select("seo_score")
-      .eq("user_id", s.user_id)
+      .eq("site_id", s.id)
       .eq("status", "finished")
       .limit(1000);
     const finished = blogs ?? [];

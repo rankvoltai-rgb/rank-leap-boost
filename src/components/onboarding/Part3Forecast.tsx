@@ -99,6 +99,9 @@ export function Part3Forecast({
   onConfirm,
   onBack,
   confirming,
+  confirmLabel = "Confirm plan",
+  queueNote = "published one a day once your trial starts",
+  footnote = "Nothing publishes until you start your trial. Edit or remove any article later.",
 }: {
   plan: ContentPlanInput;
   titles: DraftTitle[];
@@ -106,6 +109,10 @@ export function Part3Forecast({
   onConfirm: () => void;
   onBack: () => void;
   confirming: boolean;
+  /** Studio reuses this step for sites added to a paid plan, where "trial" is wrong. */
+  confirmLabel?: string;
+  queueNote?: string;
+  footnote?: string;
 }) {
   const [status, setStatus] = useState<"building" | "ready" | "failed">(
     titles.length ? "ready" : "building",
@@ -187,7 +194,7 @@ export function Part3Forecast({
             <Group
               icon={CalendarClock}
               title="Autopilot queue"
-              note={`${queue.length} articles, published one a day once your trial starts`}
+              note={`${queue.length} articles, ${queueNote}`}
             >
               {queue.map((t, i) => (
                 <ArticleRow key={t.id} t={t} when={`Day ${i + 1}`} />
@@ -197,14 +204,7 @@ export function Part3Forecast({
         </motion.div>
       )}
 
-      <ActionBar
-        onBack={onBack}
-        note={
-          <span className="hidden sm:inline">
-            Nothing publishes until you start your trial. Edit or remove any article later.
-          </span>
-        }
-      >
+      <ActionBar onBack={onBack} note={<span className="hidden sm:inline">{footnote}</span>}>
         <button
           type="button"
           onClick={onConfirm}
@@ -212,7 +212,7 @@ export function Part3Forecast({
           className={PRIMARY_BUTTON}
         >
           {confirming && <Loader2 className="h-4 w-4 animate-spin" />}
-          {confirming ? "Setting up…" : "Confirm plan"}
+          {confirming ? "Setting up…" : confirmLabel}
           {!confirming && <ArrowRight className="h-4 w-4" />}
         </button>
       </ActionBar>

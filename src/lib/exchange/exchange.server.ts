@@ -6,12 +6,21 @@
  * parties — so every read that joins the two sides of a trade, and every
  * write, comes through this module and projects only what the caller may see.
  *
- * HOST = the member whose article carries the link (earns).
- * REQUESTER = the member whose URL is linked to (spends).
+ * The exchange is per SITE: an exchange site's id is the Rankbox site id, and
+ * each site verifies its own domain, earns in its own articles and spends on
+ * its own pages. Functions here take the site id and trust it — the server
+ * functions prove the caller owns that site before they get here.
+ *
+ * HOST = the site whose article carries the link (earns).
+ * REQUESTER = the site whose URL is linked to (spends).
  */
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import type { Tables } from "@/integrations/supabase/types";
-import { hasExchangeEntitlement, PaidPlanRequiredError } from "@/lib/entitlement.server";
+import {
+  hasExchangeEntitlement,
+  requireExchangeEntitlement,
+  type SiteScope,
+} from "@/lib/entitlement.server";
 import { getServerStripeEnv } from "@/lib/stripe.server";
 import { tokens } from "./scoring";
 import type {
@@ -97,41 +106,45 @@ export function ledgerFromRow(r: LedgerRow): LedgerEntry {
 
 /* ── Loads ──────────────────────────────────────────────────────── */
 
-export async function loadSite(userId: string): Promise<SiteRow | null> {
+/** The site's exchange row — null until it has claimed a domain. */
+export async function loadSite(siteId: string): Promise<SiteRow | null> {
   const { data, error } = await supabaseAdmin
     .from("exchange_sites")
     .select("*")
-    .eq("user_id", userId)
+    .eq("id", siteId)
     .maybeSingle();
   if (error) throw new Error(error.message);
   return data;
 }
 
 /** The site, only if it is verified — what every trade-side write requires. */
-export async function requireVerifiedSite(userId: string): Promise<SiteRow> {
-  const site = await loadSite(userId);
+export async function requireVerifiedSite(siteId: string): Promise<SiteRow> {
+  const site = await loadSite(siteId);
   if (!site || site.status !== "verified") {
     throw new Error("Verify your domain first.");
   }
   return site;
 }
 
-/** Throws unless the member is on a paid plan; the exchange is not part of the trial. */
-export async function requirePaid(userId: string): Promise<void> {
-  if (!(await hasExchangeEntitlement(supabaseAdmin, userId))) throw new PaidPlanRequiredError();
+/**
+ * Throws unless the site is live on a paid plan; the exchange is not part of
+ * the trial, and a Studio site that has left the plan leaves the exchange.
+ */
+export async function requirePaid(scope: SiteScope): Promise<void> {
+  await requireExchangeEntitlement(supabaseAdmin, scope);
 }
 
 /**
- * Where this account stands with the exchange. `paid` is the server's own
+ * Where this site stands with the exchange. `paid` is the server's own
  * verdict, never the denormalised flag, so a member whose webhook is late
- * still sees the right gate.
+ * still sees the right gate. The trial is the owner's, not the site's.
  */
-export async function loadAccess(userId: string, site: SiteRow | null): Promise<ExchangeAccess> {
-  if (await hasExchangeEntitlement(supabaseAdmin, userId)) return "paid";
+export async function loadAccess(scope: SiteScope, site: SiteRow | null): Promise<ExchangeAccess> {
+  if (await hasExchangeEntitlement(supabaseAdmin, scope)) return "paid";
   const { data } = await supabaseAdmin
     .from("subscriptions")
     .select("status")
-    .eq("user_id", userId)
+    .eq("user_id", scope.userId)
     .eq("environment", getServerStripeEnv())
     .order("created_at", { ascending: false })
     .limit(1)
@@ -222,15 +235,16 @@ export async function networkPulse(
   };
 }
 
-export async function loadOverview(userId: string): Promise<ExchangeOverview> {
-  const site = await loadSite(userId);
+export async function loadOverview(scope: SiteScope): Promise<ExchangeOverview> {
+  const { siteId } = scope;
+  const site = await loadSite(siteId);
   const [access, account, pulse, inbound, hosted, targets] = await Promise.all([
-    loadAccess(userId, site),
-    supabaseAdmin.from("exchange_credit_accounts").select("*").eq("user_id", userId).maybeSingle(),
+    loadAccess(scope, site),
+    supabaseAdmin.from("exchange_credit_accounts").select("*").eq("site_id", siteId).maybeSingle(),
     networkPulse(site?.niche ?? null, site?.topic_tags ?? []),
-    supabaseAdmin.from("exchange_placements").select("status").eq("requester_user_id", userId),
-    supabaseAdmin.from("exchange_placements").select("status").eq("host_user_id", userId),
-    supabaseAdmin.from("exchange_targets").select("id").eq("user_id", userId).eq("active", true),
+    supabaseAdmin.from("exchange_placements").select("status").eq("requester_site_id", siteId),
+    supabaseAdmin.from("exchange_placements").select("status").eq("host_site_id", siteId),
+    supabaseAdmin.from("exchange_targets").select("id").eq("site_id", siteId).eq("active", true),
   ]);
   const pending = (rows: Array<{ status: PlacementStatus }>) =>
     rows.filter((r) => r.status === "reserved" || r.status === "placed").length;
@@ -252,14 +266,14 @@ export async function loadOverview(userId: string): Promise<ExchangeOverview> {
   };
 }
 
-/** Backlinks the member is receiving. The host is named by domain and tier only. */
-export async function listInbound(userId: string): Promise<InboundPlacement[]> {
+/** Backlinks the site is receiving. The host is named by domain and tier only. */
+export async function listInbound(siteId: string): Promise<InboundPlacement[]> {
   const { data, error } = await supabaseAdmin
     .from("exchange_placements")
     .select(
       "id, target_id, target_url, anchor_used, status, escrow_credits, host_url, reserved_at, placed_at, live_at, end_reason, host:exchange_sites!exchange_placements_host_site_id_fkey(domain, tier)",
     )
-    .eq("requester_user_id", userId)
+    .eq("requester_site_id", siteId)
     .order("reserved_at", { ascending: false })
     .limit(500);
   if (error) throw new Error(error.message);
@@ -283,14 +297,14 @@ export async function listInbound(userId: string): Promise<InboundPlacement[]> {
   });
 }
 
-/** Links the member is hosting in their own articles. */
-export async function listHosted(userId: string): Promise<HostedPlacement[]> {
+/** Links the site is hosting in its own articles. */
+export async function listHosted(siteId: string): Promise<HostedPlacement[]> {
   const { data, error } = await supabaseAdmin
     .from("exchange_placements")
     .select(
       "id, host_blog_id, target_url, anchor_used, status, escrow_credits, host_url, reserved_at, placed_at, live_at, last_checked_at, consecutive_failures, end_reason, requester:exchange_sites!exchange_placements_requester_site_id_fkey(domain), blog:blogs(title)",
     )
-    .eq("host_user_id", userId)
+    .eq("host_site_id", siteId)
     .order("reserved_at", { ascending: false })
     .limit(500);
   if (error) throw new Error(error.message);
@@ -317,22 +331,22 @@ export async function listHosted(userId: string): Promise<HostedPlacement[]> {
   });
 }
 
-export async function listLedger(userId: string, limit = 50): Promise<LedgerEntry[]> {
+export async function listLedger(siteId: string, limit = 50): Promise<LedgerEntry[]> {
   const { data, error } = await supabaseAdmin
     .from("exchange_ledger")
     .select("*")
-    .eq("user_id", userId)
+    .eq("site_id", siteId)
     .order("created_at", { ascending: false })
     .limit(limit);
   if (error) throw new Error(error.message);
   return (data ?? []).map(ledgerFromRow);
 }
 
-export async function listTargets(userId: string): Promise<ExchangeTarget[]> {
+export async function listTargets(siteId: string): Promise<ExchangeTarget[]> {
   const { data, error } = await supabaseAdmin
     .from("exchange_targets")
     .select("*")
-    .eq("user_id", userId)
+    .eq("site_id", siteId)
     .order("created_at", { ascending: true });
   if (error) throw new Error(error.message);
   return (data ?? []).map(targetFromRow);
@@ -375,11 +389,15 @@ export async function clawbackPlacement(placementId: string, reason: string): Pr
   return Boolean(data);
 }
 
-/** Re-sync the denormalised paid flag from the subscription itself. */
-export async function syncPaidFlag(userId: string): Promise<boolean> {
-  const paid = await hasExchangeEntitlement(supabaseAdmin, userId);
+/**
+ * Re-sync the site's denormalised paid flag from the owner's subscription and
+ * the site's own billing state — an archived Studio site drops out of the
+ * pool while the owner's other sites keep trading.
+ */
+export async function syncPaidFlag(scope: SiteScope): Promise<boolean> {
+  const paid = await hasExchangeEntitlement(supabaseAdmin, scope);
   const { error } = await (supabaseAdmin as unknown as Rpc).rpc("exchange_set_paid", {
-    _user_id: userId,
+    _site_id: scope.siteId,
     _paid: paid,
   });
   if (error) throw new Error(error.message);

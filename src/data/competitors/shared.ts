@@ -18,7 +18,7 @@
  *    ships, one flag upgrades every page at once.
  */
 import type { LucideIcon } from "lucide-react";
-import { PLAN, formatUsd } from "../pricing";
+import { PLAN, STUDIO, formatUsd } from "../pricing";
 import { PUBLISH_PLATFORMS } from "../platforms";
 
 /* ------------------------------------------------------------------ */
@@ -227,6 +227,8 @@ export const SHIPPED = {
   citationTracking: false,
   /** Inviting teammates to one account. */
   teamInvites: false,
+  /** More than one site per account, billed per site. Follows STUDIO.live. */
+  studio: STUDIO.live,
 } as const;
 
 /** "A", "A and B", "A, B, and C". */
@@ -341,10 +343,15 @@ export const RANKBOX_CELLS = {
   seats: SHIPPED.teamInvites
     ? { state: "yes", note: "Invite your whole team at no extra cost" }
     : { state: "partial", note: "One login per account today; team invites are not available yet" },
-  sites: {
-    state: "partial",
-    note: `${PLAN.sites} website per plan; more than one means talking to us`,
-  },
+  sites: SHIPPED.studio
+    ? {
+        state: "yes",
+        note: `One site on the plan; add more with ${STUDIO.name} at ${formatUsd(STUDIO.monthlyPerSite)} a month each, every one with the full plan`,
+      }
+    : {
+        state: "partial",
+        note: `${PLAN.sites} website per plan; more than one means talking to us`,
+      },
 } satisfies Record<string, Cell>;
 
 /** Rankbox's row of the hero card and the hub table. */

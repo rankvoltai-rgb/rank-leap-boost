@@ -11,6 +11,7 @@ import { useQuery } from "@tanstack/react-query";
 import { ExternalLink } from "lucide-react";
 import { EmptyState, Panel } from "@/components/dashboard/primitives";
 import { ThreadIcon } from "@/components/dashboard/icons";
+import { useSiteId } from "@/components/dashboard/site-context";
 import {
   isMeasuredReply,
   listRedditMentions,
@@ -74,9 +75,10 @@ function timelineOf(m: RedditMention): TimelineEvent[] {
 }
 
 export function MentionsTab({ onOpen }: { onOpen: (opportunityId: string) => void }) {
+  const siteId = useSiteId();
   const { data: mentions } = useQuery({
-    queryKey: ["reddit", "mentions"],
-    queryFn: listRedditMentions,
+    queryKey: ["reddit", siteId, "mentions"],
+    queryFn: () => listRedditMentions(siteId),
     refetchInterval: 15_000,
   });
 

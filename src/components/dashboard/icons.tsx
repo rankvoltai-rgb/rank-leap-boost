@@ -242,6 +242,18 @@ export function CardIcon({ className }: IconProps) {
   );
 }
 
+// Studio — one site in front of the others, the one you're on marked live.
+export function StudioIcon({ className }: IconProps) {
+  return (
+    <Svg className={className}>
+      <path d="M8 6.5V5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v7.5a2 2 0 0 1-2 2h-1.5" />
+      <rect x="3" y="6.5" width="14.5" height="12" rx="2" />
+      <path d="M3 10h14.5" />
+      <Node cx={10.25} cy={14.25} />
+    </Svg>
+  );
+}
+
 // Settings — control sliders, lighter than a literal gear.
 export function ControlsIcon({ className }: IconProps) {
   return (

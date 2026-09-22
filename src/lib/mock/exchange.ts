@@ -687,6 +687,7 @@ export function hostLinkForArticle(blog: {
   ).map((n, i) => ({
     targetId: `net-${i}`,
     requesterSiteId: `net-site-${i}`,
+    requesterOwnerId: `net-owner-${i}`,
     requesterDomain: n.domain,
     url: `https://${n.domain}${n.target.path}`,
     anchors: n.target.anchors,

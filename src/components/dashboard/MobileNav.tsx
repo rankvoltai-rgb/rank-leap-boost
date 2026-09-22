@@ -3,6 +3,7 @@ import { useRouterState } from "@tanstack/react-router";
 import { Menu } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
 import { Logo } from "@/components/landing/shared";
+import { SiteSwitcher } from "@/components/studio/SiteSwitcher";
 import { NavSections } from "./SidebarNav";
 import { SignOutIcon } from "./icons";
 import { useSignOut } from "./use-sign-out";
@@ -30,6 +31,9 @@ export function MobileNav() {
         <SheetTitle className="sr-only">Navigation</SheetTitle>
         <div className="flex h-14 items-center border-b border-white/15 px-5">
           <Logo inverted />
+        </div>
+        <div className="px-3 pt-3">
+          <SiteSwitcher onNavigate={() => setOpen(false)} />
         </div>
         <nav className="py-4">
           <NavSections isActive={isActive} onNavigate={() => setOpen(false)} />

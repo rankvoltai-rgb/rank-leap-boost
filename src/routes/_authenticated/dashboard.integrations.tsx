@@ -17,6 +17,7 @@ import { ConfirmDialog } from "@/components/dashboard/article-parts";
 import { useAllArticles, useArticleActions } from "@/components/dashboard/useArticleActions";
 import { isEntitled } from "@/components/dashboard/autopilot-state";
 import { SubscriptionGate } from "@/components/dashboard/SubscriptionGate";
+import { useSiteId } from "@/components/dashboard/site-context";
 import {
   delivery,
   keyStatus,
@@ -48,12 +49,21 @@ function plural(n: number, one: string, many = `${one}s`): string {
 
 /* ── Page ───────────────────────────────────────────────────────── */
 
+/**
+ * Keys belong to one site. Keyed by it, so a key shown once for one site is
+ * never left on screen under another's.
+ */
 function Integrations() {
+  const siteId = useSiteId();
+  return <SiteIntegrations key={siteId} siteId={siteId} />;
+}
+
+function SiteIntegrations({ siteId }: { siteId: string }) {
   const queryClient = useQueryClient();
   const { data: blogs = [] } = useAllArticles();
   const { data: keys = [], isLoading } = useQuery({
-    queryKey: ["api-keys"],
-    queryFn: listIntegrationKeys,
+    queryKey: ["api-keys", siteId],
+    queryFn: () => listIntegrationKeys(siteId),
     // While any key waits for its first request, keep watching for it — the
     // page turns live the moment the site calls in.
     refetchInterval: (q) =>
@@ -90,7 +100,7 @@ function Integrations() {
     }
     setBusy("create");
     try {
-      const result = await createApiKey({ name });
+      const result = await createApiKey(siteId, { name });
       setFresh({ id: result.id, raw: result.raw });
       await queryClient.invalidateQueries({ queryKey: ["api-keys"] });
     } catch (err) {
@@ -107,7 +117,7 @@ function Integrations() {
     }
     setBusy(key.id);
     try {
-      const result = await createApiKey({ name: key.name });
+      const result = await createApiKey(siteId, { name: key.name });
       setReplacement({ old: key, raw: result.raw });
       await queryClient.invalidateQueries({ queryKey: ["api-keys"] });
     } catch (err) {
@@ -616,8 +626,8 @@ function PlatformSetup({ platform, onUseApi }: { platform: Platform; onUseApi: (
       <div className="flex flex-col justify-center gap-3 rounded-card bg-secondary/50 p-5">
         <p className="text-sm font-semibold text-ink">Connect today with the API</p>
         <p className="text-sm text-muted-foreground">
-          Any {platform.name} site can pull its articles from Rankbox now. A developer can set it
-          up in a few minutes.
+          Any {platform.name} site can pull its articles from Rankbox now. A developer can set it up
+          in a few minutes.
         </p>
         <div>
           <Button variant="brand" onClick={onUseApi}>

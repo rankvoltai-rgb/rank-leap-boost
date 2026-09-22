@@ -1,19 +1,16 @@
 /**
- * Proving the member controls the domain they publish to. Three ways, any one
- * passes; the result says exactly what we saw so a failed check is fixable.
+ * Proving the member controls the domain this site publishes to. Three ways,
+ * any one passes; the result says exactly what we saw so a failed check is
+ * fixable. The domain is suggested from the site's own website.
  */
 import { useState } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 import { Button, Panel, Pill } from "@/components/dashboard/primitives";
 import { CheckIcon } from "@/components/dashboard/icons";
-import {
-  checkDomainVerification,
-  getProfile,
-  startDomainVerification,
-  type ExchangeSite,
-} from "@/lib/data";
+import { useActiveSite } from "@/components/dashboard/site-context";
+import { checkDomainVerification, startDomainVerification, type ExchangeSite } from "@/lib/data";
 import { cn } from "@/lib/utils";
 import { inputClass } from "./format";
 import { CopyRow } from "./shared";
@@ -38,8 +35,9 @@ export function VerifyDomainCard({
   onChange: () => void;
 }) {
   const queryClient = useQueryClient();
-  const { data: profile } = useQuery({ queryKey: ["profile"], queryFn: getProfile });
-  const suggested = profile?.website_url?.replace(/^https?:\/\//i, "").replace(/\/.*$/, "") ?? "";
+  const { siteId, site: rankboxSite } = useActiveSite();
+  const suggested =
+    rankboxSite.website_url?.replace(/^https?:\/\//i, "").replace(/\/.*$/, "") ?? "";
   const [domain, setDomain] = useState(site?.domain ?? "");
   const [method, setMethod] = useState<Method>("dns_txt");
   const [busy, setBusy] = useState<"start" | "check" | null>(null);
@@ -52,7 +50,7 @@ export function VerifyDomainCard({
     setBusy("start");
     setResult(null);
     try {
-      await startDomainVerification({ domain: value });
+      await startDomainVerification(siteId, { domain: value });
       setEditing(false);
       await queryClient.invalidateQueries({ queryKey: ["exchange"] });
       onChange();
@@ -66,7 +64,7 @@ export function VerifyDomainCard({
   async function check() {
     setBusy("check");
     try {
-      const r = await checkDomainVerification();
+      const r = await checkDomainVerification(siteId);
       setResult(r);
       if (r.ok) {
         toast.success("Domain verified.");
@@ -88,8 +86,8 @@ export function VerifyDomainCard({
         <div>
           <h2 className="text-sm font-semibold text-ink">Verify your domain</h2>
           <p className="mt-0.5 max-w-lg text-xs leading-relaxed text-muted-foreground">
-            Every link in the exchange is earned by a verified site and points at one. One account
-            per domain, and nothing happens until this passes.
+            Every link in the exchange is earned by a verified site and points at one. One site per
+            domain, and nothing happens until this passes.
           </p>
         </div>
         {site && (

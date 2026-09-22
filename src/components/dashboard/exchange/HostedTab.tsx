@@ -1,5 +1,5 @@
 /**
- * Supply: the links the member's own articles carry for other members.
+ * Supply: the links this site's articles carry for other members.
  */
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
@@ -9,6 +9,7 @@ import { Loader2 } from "lucide-react";
 import { Button, EmptyState, Panel, Pill } from "@/components/dashboard/primitives";
 import { PublishIcon } from "@/components/dashboard/icons";
 import { ConfirmDialog } from "@/components/dashboard/article-parts";
+import { useSiteId } from "@/components/dashboard/site-context";
 import {
   blockExchangeDomain,
   listHostedPlacements,
@@ -30,10 +31,11 @@ export function HostedTab({
   overview: ExchangeOverview;
   readOnly?: boolean;
 }) {
+  const siteId = useSiteId();
   const queryClient = useQueryClient();
   const { data: hosted = [], isLoading } = useQuery({
-    queryKey: ["exchange", "hosted"],
-    queryFn: listHostedPlacements,
+    queryKey: ["exchange", siteId, "hosted"],
+    queryFn: () => listHostedPlacements(siteId),
     refetchInterval: 30_000,
   });
   const [removing, setRemoving] = useState<HostedPlacement | null>(null);
@@ -43,14 +45,14 @@ export function HostedTab({
 
   async function refresh() {
     await Promise.all([
-      queryClient.invalidateQueries({ queryKey: ["exchange", "hosted"] }),
-      queryClient.invalidateQueries({ queryKey: ["exchange", "overview"] }),
+      queryClient.invalidateQueries({ queryKey: ["exchange", siteId, "hosted"] }),
+      queryClient.invalidateQueries({ queryKey: ["exchange", siteId, "overview"] }),
     ]);
   }
 
   async function remove(p: HostedPlacement) {
     try {
-      await removeHostedPlacement({ id: p.id });
+      await removeHostedPlacement(siteId, { id: p.id });
       toast.success(p.status === "live" ? "Link removed. The credits went back." : "Link removed.");
       await refresh();
     } catch (err) {
@@ -60,9 +62,12 @@ export function HostedTab({
 
   async function block(p: HostedPlacement) {
     try {
-      await blockExchangeDomain({ domain: p.targetDomain, reason: "blocked from a hosted link" });
-      toast.success(`${p.targetDomain} blocked. You won't be matched with it again.`);
-      await queryClient.invalidateQueries({ queryKey: ["exchange", "blocks"] });
+      await blockExchangeDomain(siteId, {
+        domain: p.targetDomain,
+        reason: "blocked from a hosted link",
+      });
+      toast.success(`${p.targetDomain} blocked. This site won't be matched with it again.`);
+      await queryClient.invalidateQueries({ queryKey: ["exchange", siteId, "blocks"] });
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Couldn't block that domain.");
     }
@@ -247,13 +252,14 @@ function PasteUrlDialog({
   onClose: () => void;
   onSaved: () => Promise<void>;
 }) {
+  const siteId = useSiteId();
   const [url, setUrl] = useState("");
   const [busy, setBusy] = useState(false);
   async function save() {
     if (!placement.blogId) return;
     setBusy(true);
     try {
-      await setPublishedUrl({ blogId: placement.blogId, url: url.trim() });
+      await setPublishedUrl(siteId, { blogId: placement.blogId, url: url.trim() });
       toast.success("Got it. We'll check the page within the day and settle the credits.");
       await onSaved();
     } catch (err) {

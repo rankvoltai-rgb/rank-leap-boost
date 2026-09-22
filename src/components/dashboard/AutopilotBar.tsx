@@ -14,6 +14,7 @@ import {
 import { Button, Panel } from "@/components/dashboard/primitives";
 import { isOverdue } from "@/components/dashboard/article-stages";
 import { engineState, type EngineState } from "@/components/dashboard/autopilot-state";
+import { useSiteId } from "@/components/dashboard/site-context";
 import {
   paceLabel,
   parseDateKey,
@@ -63,7 +64,11 @@ export function AutopilotBar({
   onCommitQueue: (patches: QueuePatch[], message: string) => Promise<void>;
 }) {
   const queryClient = useQueryClient();
-  const { data: settings, isLoading } = useQuery({ queryKey: ["settings"], queryFn: getSettings });
+  const siteId = useSiteId();
+  const { data: settings, isLoading } = useQuery({
+    queryKey: ["settings", siteId],
+    queryFn: () => getSettings(siteId),
+  });
   const [busy, setBusy] = useState<"toggle" | "replan" | null>(null);
 
   const perWeek = settings?.weekly_cadence ?? 7;
@@ -86,7 +91,7 @@ export function AutopilotBar({
   async function setEnabled(enabled: boolean, { quiet = false } = {}) {
     setBusy("toggle");
     try {
-      await updateAutopilot({ autopilot_enabled: enabled });
+      await updateAutopilot(siteId, { autopilot_enabled: enabled });
       await queryClient.invalidateQueries({ queryKey: ["settings"] });
       if (quiet) return;
       if (enabled) toast.success("Autopilot is back on.");

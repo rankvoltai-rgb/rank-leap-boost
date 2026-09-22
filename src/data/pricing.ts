@@ -42,6 +42,28 @@ export const PLAN = {
   monthly: 49.5,
 } as const;
 
+/**
+ * Studio: more than one site under one account, for agencies and founders
+ * running several brands. Every extra site is one more unit of a second line
+ * on the same subscription — billed at the plan's own price, with the plan's
+ * full allowance of its own. It is bought from inside the dashboard, once the
+ * plan is paid; onboarding never offers it.
+ */
+export const STUDIO_PRICE_LOOKUP_KEY = "studio_site_monthly";
+
+export const STUDIO = {
+  name: "Studio",
+  /** Per additional site, billed monthly. Must match the `studio_site_monthly` price in Stripe. */
+  monthlyPerSite: 49.5,
+  /**
+   * Whether the public site says so. The dashboard's Studio works as soon as
+   * the Stripe price exists; the marketing pages (pricing FAQ, agency page,
+   * comparisons) keep describing one site per plan until this is flipped, so
+   * nothing public claims a feature before it can actually be bought.
+   */
+  live: false,
+} as const;
+
 /** $99 → "$99", 49.5 → "$49.50", 4500 → "$4,500". */
 export function formatUsd(n: number): string {
   const whole = Number.isInteger(n);
@@ -101,7 +123,9 @@ export const PRICING_FAQS: { q: string; a: string }[] = [
   },
   {
     q: "What if I run more than one website?",
-    a: `Each plan covers ${PLAN.sites} website, with its own research, content plan, and publishing schedule. Running several sites? Email us and we'll work out the right setup with you.`,
+    a: STUDIO.live
+      ? `Add them from your dashboard with ${STUDIO.name}, once your plan is paid. Each extra site is ${formatUsd(STUDIO.monthlyPerSite)} a month on the same invoice, with the full plan of its own: ${PLAN.articlesPerMonth} articles, ${PLAN.backlinkCreditsPerMonth} backlink credits, and ${PLAN.redditRepliesPerMonth} Reddit replies a month, and its own research, content plan, and publishing schedule. Remove a site any time; it runs to the end of the period you've paid for.`
+      : `Each plan covers ${PLAN.sites} website, with its own research, content plan, and publishing schedule. Running several sites? Email us and we'll work out the right setup with you.`,
   },
   {
     q: "How do I pay?",

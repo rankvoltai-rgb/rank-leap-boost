@@ -11,7 +11,6 @@ import { createCheckoutSession } from "@/lib/payments.functions";
  */
 interface StripeEmbeddedCheckoutProps {
   priceId: string;
-  quantity?: number;
   /**
    * Where Stripe sends the browser once payment succeeds. Omit it together
    * with an `onComplete` to keep the page put — the form is then replaced in
@@ -25,7 +24,6 @@ interface StripeEmbeddedCheckoutProps {
 
 export function StripeEmbeddedCheckout({
   priceId,
-  quantity,
   returnUrl,
   onComplete,
 }: StripeEmbeddedCheckoutProps) {
@@ -54,7 +52,7 @@ export function StripeEmbeddedCheckout({
 
   const fetchClientSecret = async (): Promise<string> => {
     const result = await createCheckoutSession({
-      data: { priceId, quantity, ...(returnUrl && { returnUrl }) },
+      data: { priceId, ...(returnUrl && { returnUrl }) },
     });
     if ("error" in result) throw new Error(result.error);
     if (!result.clientSecret) throw new Error("Stripe did not return a client secret");

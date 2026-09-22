@@ -1,9 +1,10 @@
 /**
  * The dashboard's fixed navigation.
  *
- * Blue chrome, grouped sections, and a footer that answers "who am I and what
- * am I on" without a trip to billing. It collapses to an icon rail, and the
- * choice is remembered per browser.
+ * Blue chrome, grouped sections, and two answers without a trip anywhere
+ * else: at the top, which site you're looking at (and every other one a click
+ * away — see SiteSwitcher); at the bottom, who you are and what you're on. It
+ * collapses to an icon rail, and the choice is remembered per browser.
  */
 import { useEffect, useState } from "react";
 import { useRouterState } from "@tanstack/react-router";
@@ -11,11 +12,13 @@ import { useQuery } from "@tanstack/react-query";
 import { ChevronsLeft, ChevronsRight } from "lucide-react";
 import { Avatar, Logo } from "@/components/landing/shared";
 import { Mark } from "@/components/brand/Mark";
-import { getCurrentUser, getProfile, getSubscription, listBlogs } from "@/lib/data";
-import { brandIconUrl } from "@/lib/brand-icon";
+import { SiteSwitcher } from "@/components/studio/SiteSwitcher";
+import { PLAN } from "@/data/pricing";
+import { getCurrentUser, getSubscription, listBlogs } from "@/lib/data";
 import { cn } from "@/lib/utils";
 import { SignOutIcon } from "./icons";
 import { NavSections } from "./SidebarNav";
+import { useActiveSite } from "./site-context";
 import { useSignOut } from "./use-sign-out";
 import type { NavItem } from "./nav";
 
@@ -30,40 +33,24 @@ function storedCollapsed(): boolean {
   }
 }
 
-/** What the account is on right now, from the subscription itself. */
-function planLabel(status: string | undefined): string {
-  if (status === "trialing") return "Pro plan · trial";
-  if (status === "active") return "Pro plan";
-  if (status === "past_due") return "Pro plan · payment due";
-  return "No plan yet";
-}
-
 /**
- * The account's website favicon, contained on a white disc so dark marks
- * still read on the blue sidebar. Falls back to initials when there's no
- * website yet or the icon won't load.
+ * What the account is on right now, from the subscription itself — and, once
+ * it runs more than one, how many sites (the ones you can open, leaving or not).
  */
-function SiteAvatar({ name, favicon }: { name: string; favicon: string | null }) {
-  const [failed, setFailed] = useState(false);
-  if (!favicon || failed) {
-    return <Avatar name={name} className="h-8 w-8 shrink-0 ring-1 ring-white/25" />;
+function planLabel(status: string | undefined, sites = 1): string {
+  if (status === "trialing") return `${PLAN.name} · trial`;
+  if (status === "active") {
+    return sites > 1 ? `${PLAN.name} · ${sites} sites` : `${PLAN.name} plan`;
   }
-  return (
-    <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-white ring-1 ring-white/25">
-      <img
-        src={favicon}
-        alt=""
-        onError={() => setFailed(true)}
-        className="h-5 w-5 rounded-sm object-contain"
-      />
-    </span>
-  );
+  if (status === "past_due") return `${PLAN.name} · payment due`;
+  return "No plan yet";
 }
 
 export function Sidebar() {
   const path = useRouterState({ select: (s) => s.location.pathname });
   const [collapsed, setCollapsed] = useState(false);
   const signOut = useSignOut();
+  const { siteId, sites } = useActiveSite();
 
   // Read after mount: the server render has no localStorage, and disagreeing
   // with it would trip a hydration mismatch.
@@ -81,11 +68,12 @@ export function Sidebar() {
     });
   };
 
-  const { data: blogs = [] } = useQuery({ queryKey: ["blogs"], queryFn: () => listBlogs() });
+  const { data: blogs = [] } = useQuery({
+    queryKey: ["blogs", siteId],
+    queryFn: () => listBlogs(siteId),
+  });
   const { data: user } = useQuery({ queryKey: ["auth", "user"], queryFn: getCurrentUser });
   const { data: subscription } = useQuery({ queryKey: ["subscription"], queryFn: getSubscription });
-  const { data: profile } = useQuery({ queryKey: ["profile"], queryFn: getProfile });
-  const favicon = profile?.website_url ? brandIconUrl(profile.website_url) : null;
 
   const queued = blogs.filter((b) => b.status === "scheduled" || b.status === "generating").length;
   const isActive = (item: NavItem) =>
@@ -105,11 +93,11 @@ export function Sidebar() {
           collapsed ? "justify-center px-0" : "px-5",
         )}
       >
-        {collapsed ? (
-          <Mark className="h-6 w-6 text-white" />
-        ) : (
-          <Logo inverted />
-        )}
+        {collapsed ? <Mark className="h-6 w-6 text-white" /> : <Logo inverted />}
+      </div>
+
+      <div className={cn("shrink-0 pt-3", collapsed ? "px-2" : "px-3")}>
+        <SiteSwitcher collapsed={collapsed} />
       </div>
 
       <nav className="flex-1 overflow-y-auto py-4">
@@ -118,13 +106,14 @@ export function Sidebar() {
 
       <div className="border-t border-white/15 p-3">
         <div className={cn("flex items-center gap-2.5", collapsed && "justify-center")}>
-          {/* Keyed so a new website gets a fresh load instead of a stale failure. */}
-          <SiteAvatar key={favicon ?? "none"} name={name} favicon={favicon} />
+          <Avatar name={name} className="h-8 w-8 shrink-0 ring-1 ring-white/25" />
           {!collapsed && (
             <>
               <div className="min-w-0 flex-1">
                 <p className="truncate text-sm font-medium text-white">{name}</p>
-                <p className="truncate text-xs text-white/60">{planLabel(subscription?.status)}</p>
+                <p className="truncate text-xs text-white/60">
+                  {planLabel(subscription?.status, sites.length)}
+                </p>
               </div>
               <button
                 type="button"

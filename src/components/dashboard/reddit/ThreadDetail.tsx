@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import { ExternalLink } from "lucide-react";
 import { Sheet, SheetContent, SheetDescription, SheetTitle } from "@/components/ui/sheet";
 import { Button, Panel } from "@/components/dashboard/primitives";
+import { useSiteId } from "@/components/dashboard/site-context";
 import {
   dismissRedditOpportunity,
   generateRedditDraft,
@@ -47,9 +48,10 @@ export function ThreadDetail({
   onClose: () => void;
 }) {
   const queryClient = useQueryClient();
+  const siteId = useSiteId();
   const { data: detail } = useQuery({
-    queryKey: ["reddit", "opportunity", opportunityId],
-    queryFn: () => getRedditOpportunity({ id: opportunityId as string }),
+    queryKey: ["reddit", siteId, "opportunity", opportunityId],
+    queryFn: () => getRedditOpportunity(siteId, { id: opportunityId as string }),
     enabled: opportunityId !== null,
     refetchInterval: 15_000,
   });
@@ -100,6 +102,7 @@ function Body({
   onChanged: () => void;
   onClose: () => void;
 }) {
+  const siteId = useSiteId();
   const [writing, setWriting] = useState(false);
   const thread = opportunity.thread;
   const blocked = opportunity.blockedReason;
@@ -109,7 +112,7 @@ function Body({
   async function write() {
     setWriting(true);
     try {
-      await generateRedditDraft({ opportunityId: opportunity.id });
+      await generateRedditDraft(siteId, { opportunityId: opportunity.id });
       onChanged();
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Couldn't draft a reply.");
@@ -121,8 +124,8 @@ function Body({
   async function dismiss() {
     try {
       if (opportunity.status === "dismissed")
-        await restoreRedditOpportunity({ id: opportunity.id });
-      else await dismissRedditOpportunity({ id: opportunity.id });
+        await restoreRedditOpportunity(siteId, { id: opportunity.id });
+      else await dismissRedditOpportunity(siteId, { id: opportunity.id });
       onChanged();
       onClose();
     } catch (e) {

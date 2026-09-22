@@ -44,11 +44,13 @@ import { PublishingSchedule } from "@/components/dashboard/PublishingSchedule";
 import { ContentGaps } from "@/components/dashboard/ContentGaps";
 import { engineState, type EngineState } from "@/components/dashboard/autopilot-state";
 import { paceLabel } from "@/components/dashboard/queue-plan";
+import { useSiteId } from "@/components/dashboard/site-context";
+import { allArticlesKey } from "@/components/dashboard/useArticleActions";
 import { firstNameOf } from "@/lib/auth";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_authenticated/dashboard/")({
-  component: SystemConsole,
+  component: Overview,
 });
 
 const MONTHLY_GOAL = 30; // articles per month target
@@ -216,7 +218,16 @@ function AutopilotStatus({ state, perWeek }: { state: EngineState | null; perWee
   );
 }
 
-function SystemConsole() {
+/**
+ * Keyed by site: switching sites starts the page over, so the other site's
+ * published count never reads as a new article going live.
+ */
+function Overview() {
+  const siteId = useSiteId();
+  return <SystemConsole key={siteId} siteId={siteId} />;
+}
+
+function SystemConsole({ siteId }: { siteId: string }) {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const [busyId, setBusyId] = useState<string | null>(null);
@@ -241,32 +252,38 @@ function SystemConsole() {
     if (params.get("checkout") === "success") {
       toast.success("You're all set — autopilot is live and your trial is active! 🚀");
       setConfettiKey((k) => k + 1);
-      window.history.replaceState({}, "", window.location.pathname);
+      // Only the flag goes: `site` stays, so a refresh reopens the same site.
+      params.delete("checkout");
+      const rest = params.toString();
+      window.history.replaceState({}, "", window.location.pathname + (rest ? `?${rest}` : ""));
     }
   }, []);
 
   const { data: allBlogs = [] } = useQuery({
-    queryKey: ["blogs", "all"],
-    queryFn: () => listBlogs(),
+    queryKey: allArticlesKey(siteId),
+    queryFn: () => listBlogs(siteId),
   });
   const { data: opportunities = [] } = useQuery({
-    queryKey: ["blogs", "opportunity"],
-    queryFn: () => listBlogs("opportunity"),
+    queryKey: ["blogs", siteId, "opportunity"],
+    queryFn: () => listBlogs(siteId, "opportunity"),
   });
   const { data: scheduled = [] } = useQuery({
-    queryKey: ["blogs", "scheduled"],
-    queryFn: () => listBlogs("scheduled"),
+    queryKey: ["blogs", siteId, "scheduled"],
+    queryFn: () => listBlogs(siteId, "scheduled"),
   });
   const { data: generating = [] } = useQuery({
-    queryKey: ["blogs", "generating"],
-    queryFn: () => listBlogs("generating"),
+    queryKey: ["blogs", siteId, "generating"],
+    queryFn: () => listBlogs(siteId, "generating"),
   });
   const finishedQuery = useQuery({
-    queryKey: ["blogs", "finished"],
-    queryFn: () => listBlogs("finished"),
+    queryKey: ["blogs", siteId, "finished"],
+    queryFn: () => listBlogs(siteId, "finished"),
   });
   const finished = finishedQuery.data ?? [];
-  const { data: credits } = useQuery({ queryKey: ["credits"], queryFn: getCredits });
+  const { data: credits } = useQuery({
+    queryKey: ["credits", siteId],
+    queryFn: () => getCredits(siteId),
+  });
   const { data: firstName = "" } = useQuery({
     queryKey: ["auth", "first-name"],
     queryFn: async () => {
@@ -275,10 +292,13 @@ function SystemConsole() {
     },
   });
   const { data: subscription } = useQuery({ queryKey: ["subscription"], queryFn: getSubscription });
-  const { data: settings } = useQuery({ queryKey: ["settings"], queryFn: getSettings });
+  const { data: settings } = useQuery({
+    queryKey: ["settings", siteId],
+    queryFn: () => getSettings(siteId),
+  });
   const { data: integrationKeys, isLoading: integrationsLoading } = useQuery({
-    queryKey: ["api-keys"],
-    queryFn: listIntegrationKeys,
+    queryKey: ["api-keys", siteId],
+    queryFn: () => listIntegrationKeys(siteId),
   });
   // A key existing isn't a connection; a site using it is.
   const connection = siteStatus(integrationKeys);
@@ -333,7 +353,7 @@ function SystemConsole() {
     }
     setBusyId(blog.id);
     try {
-      await generateBlogArticle(blog);
+      await generateBlogArticle(blog.site_id, blog);
       toast.success(`"${blog.title}" is ready.`);
       queryClient.invalidateQueries({ queryKey: ["blogs"] });
       queryClient.invalidateQueries({ queryKey: ["credits"] });

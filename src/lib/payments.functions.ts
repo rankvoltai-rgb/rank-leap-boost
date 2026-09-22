@@ -51,7 +51,7 @@ const ALLOWED_PRICES: Record<string, { trialDays: number }> = {
 
 export const createCheckoutSession = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: { priceId: string; quantity?: number; returnUrl?: string }) => {
+  .inputValidator((data: { priceId: string; returnUrl?: string }) => {
     if (!/^[a-zA-Z0-9_-]+$/.test(data.priceId)) throw new Error("Invalid priceId");
     if (!(data.priceId in ALLOWED_PRICES)) throw new Error("Unknown priceId");
     return data;
@@ -87,7 +87,10 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
       const trialDays = isRecurring ? ALLOWED_PRICES[data.priceId].trialDays : undefined;
 
       const session = await stripe.checkout.sessions.create({
-        line_items: [{ price: stripePrice.id, quantity: data.quantity || 1 }],
+        // Always one: the plan covers one site, and every extra site is a
+        // unit of the Studio line (src/lib/studio.server.ts), never a
+        // quantity a checkout caller could choose.
+        line_items: [{ price: stripePrice.id, quantity: 1 }],
         mode: isRecurring ? "subscription" : "payment",
         ui_mode: "embedded_page",
         // No return URL means the checkout was opened inside a dialog that

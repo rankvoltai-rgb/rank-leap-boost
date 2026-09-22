@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { signInWithProvider } from "@/lib/auth";
-import { getProfile } from "@/lib/data";
+import { listSites } from "@/lib/data";
 
 function GoogleIcon() {
   return (
@@ -35,13 +35,7 @@ function GitHubIcon() {
   );
 }
 
-function SocialButton({
-  children,
-  onClick,
-}: {
-  children: ReactNode;
-  onClick: () => void;
-}) {
+function SocialButton({ children, onClick }: { children: ReactNode; onClick: () => void }) {
   return (
     <button
       type="button"
@@ -83,8 +77,8 @@ export function SocialButtons() {
     try {
       const outcome = await signInWithProvider("google", window.location.origin + "/onboarding");
       if (outcome === "redirected") return;
-      const profile = await getProfile();
-      navigate({ to: profile ? "/dashboard" : "/onboarding" });
+      const sites = await listSites();
+      navigate({ to: sites.length > 0 ? "/dashboard" : "/onboarding" });
     } catch {
       toast.error("Could not sign in with Google. Please try again.");
     }

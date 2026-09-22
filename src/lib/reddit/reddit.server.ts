@@ -4,14 +4,18 @@
  * Everything here runs with the service role. Members have SELECT-only RLS on
  * their own rows and NO access at all to the shared tables — reddit_threads,
  * reddit_subreddits and the three measurement logs are a cache of public data
- * that every member's sweeps feed and draw on. So every read that touches
- * them comes through this module, and every exported reader takes `userId` as
- * its FIRST argument and starts from that member's own reddit_opportunities.
+ * that every site's sweeps feed and draw on. So every read that touches
+ * them comes through this module, and every exported reader takes a `scope`
+ * as its FIRST argument and starts from that site's own reddit_opportunities.
  *
- * That shape is the tenant boundary. RLS cannot leak these tables, because
- * members have no grant on them; a join written carelessly here could. Keep
- * the rule: nothing is read from a shared table except by ids that came from
- * a row already filtered to `userId`.
+ * That shape is the tenant boundary, and the tenant is a site: two sites of one
+ * owner never see each other's opportunities, drafts or credits. RLS cannot
+ * leak the shared tables, because members have no grant on them; a join
+ * written carelessly here could. Keep the rule: nothing is read from a shared
+ * table except by ids that came from a row already filtered to `scope.siteId`.
+ * A scope is never built from what a caller sends: the server functions
+ * resolve it against the caller's own sites (src/lib/sites.server.ts), and the
+ * cron reads it from reddit_settings.
  */
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import type { Tables } from "@/integrations/supabase/types";
@@ -19,7 +23,9 @@ import {
   hasRedditEntitlement,
   loadRedditAccess,
   PaidPlanRequiredError,
+  type SiteScope,
 } from "@/lib/entitlement.server";
+import { requireLiveSite } from "@/lib/sites.server";
 import { readRules } from "./rules";
 import type { ScoreContext } from "./scoring";
 import {
@@ -263,12 +269,24 @@ function fail(error: { message: string } | null): void {
 
 /* ── Gate ───────────────────────────────────────────────────────── */
 
-/** Throws unless the member is on a paid plan. Reddit presence is not part of the trial. */
-export async function requirePaid(userId: string): Promise<void> {
-  if (!(await hasRedditEntitlement(supabaseAdmin, userId)))
+/** Throws unless the site is live on a paid plan. Reddit presence is not part of the trial. */
+export async function requirePaid(scope: SiteScope): Promise<void> {
+  if (!(await hasRedditEntitlement(supabaseAdmin, scope)))
     throw new PaidPlanRequiredError(
       "Reddit presence is part of the paid plan. It opens with your first paid invoice.",
     );
+}
+
+/**
+ * The guard for anything that writes or spends: the caller owns the site, the
+ * site is live, and it is on a paid plan — in that order. Returns the scope
+ * to act in.
+ */
+export async function requirePaidSite(userId: string, siteId: string): Promise<SiteScope> {
+  await requireLiveSite(userId, siteId);
+  const scope = { userId, siteId };
+  await requirePaid(scope);
+  return scope;
 }
 
 /**
@@ -281,17 +299,17 @@ export function providerConfigured(): boolean {
 
 /* ── Loads ──────────────────────────────────────────────────────── */
 
-export async function loadSettingsRow(userId: string): Promise<SettingsRow | null> {
+export async function loadSettingsRow(scope: SiteScope): Promise<SettingsRow | null> {
   const { data, error } = await supabaseAdmin
     .from("reddit_settings")
     .select("*")
-    .eq("user_id", userId)
+    .eq("site_id", scope.siteId)
     .maybeSingle();
   fail(error);
   return data;
 }
 
-/** Who is replying — what the scorer and the checker need to know about the brand. */
+/** Who is replying — what the scorer and the checker need to know about the site's brand. */
 export interface BrandContext {
   brandName: string;
   productDescription: string;
@@ -301,22 +319,22 @@ export interface BrandContext {
   keywords: string[];
 }
 
-export async function loadBrandContext(userId: string, keywordLimit = 60): Promise<BrandContext> {
+export async function loadBrandContext(scope: SiteScope, keywordLimit = 60): Promise<BrandContext> {
   const [profile, content, keywords] = await Promise.all([
     supabaseAdmin
       .from("profiles")
       .select("brand_name, product_description")
-      .eq("user_id", userId)
+      .eq("id", scope.siteId)
       .maybeSingle(),
     supabaseAdmin
       .from("content_settings")
       .select("tone, audience, brand_voice")
-      .eq("user_id", userId)
+      .eq("site_id", scope.siteId)
       .maybeSingle(),
     supabaseAdmin
       .from("keywords")
       .select("name, search_volume")
-      .eq("user_id", userId)
+      .eq("site_id", scope.siteId)
       .order("search_volume", { ascending: false })
       .limit(keywordLimit),
   ]);
@@ -342,9 +360,9 @@ export function scoreContextOf(settings: SettingsRow | null, brand: BrandContext
 }
 
 /**
- * Turns a member's opportunity rows into views. The ONLY place the shared
+ * Turns a site's opportunity rows into views. The ONLY place the shared
  * tables are read for display: every id queried below came from `rows`, which
- * the caller has already filtered to one member.
+ * the caller has already filtered to one site.
  */
 async function hydrateOpportunities(rows: OpportunityRow[]): Promise<RedditOpportunity[]> {
   if (rows.length === 0) return [];
@@ -413,11 +431,11 @@ async function hydrateOpportunities(rows: OpportunityRow[]): Promise<RedditOppor
   return out;
 }
 
-export async function loadOverview(userId: string): Promise<RedditOverview> {
-  const settings = await loadSettingsRow(userId);
-  const access = await loadRedditAccess(supabaseAdmin, userId, Boolean(settings?.enabled));
+export async function loadOverview(scope: SiteScope): Promise<RedditOverview> {
+  const settings = await loadSettingsRow(scope);
+  const access = await loadRedditAccess(supabaseAdmin, scope, Boolean(settings?.enabled));
 
-  // An unpaid account gets the shape of the feature and none of its contents,
+  // An unpaid site gets the shape of the feature and none of its contents,
   // and costs us nothing to tell so.
   if (access === "trial" || access === "none")
     return {
@@ -430,16 +448,20 @@ export async function loadOverview(userId: string): Promise<RedditOverview> {
     };
 
   const [account, opps, replies, sweep] = await Promise.all([
-    supabaseAdmin.from("reddit_credit_accounts").select("*").eq("user_id", userId).maybeSingle(),
+    supabaseAdmin
+      .from("reddit_credit_accounts")
+      .select("*")
+      .eq("site_id", scope.siteId)
+      .maybeSingle(),
     supabaseAdmin
       .from("reddit_opportunities")
       .select("status, blocked_reason")
-      .eq("user_id", userId),
-    supabaseAdmin.from("reddit_replies").select("status").eq("user_id", userId),
+      .eq("site_id", scope.siteId),
+    supabaseAdmin.from("reddit_replies").select("status").eq("site_id", scope.siteId),
     supabaseAdmin
       .from("reddit_sweeps")
       .select("*")
-      .eq("user_id", userId)
+      .eq("site_id", scope.siteId)
       .order("started_at", { ascending: false })
       .limit(1)
       .maybeSingle(),
@@ -473,19 +495,25 @@ export async function loadOverview(userId: string): Promise<RedditOverview> {
   };
 }
 
-/** True for paid and lapsed: a lapsed member keeps their history, read-only. */
-export async function canRead(userId: string): Promise<boolean> {
-  const settings = await loadSettingsRow(userId);
-  const access = await loadRedditAccess(supabaseAdmin, userId, Boolean(settings?.enabled));
+/**
+ * True for paid and lapsed: a lapsed site — the plan ended, or the site was
+ * removed or archived — keeps its history, read-only.
+ */
+export async function canRead(scope: SiteScope): Promise<boolean> {
+  const settings = await loadSettingsRow(scope);
+  const access = await loadRedditAccess(supabaseAdmin, scope, Boolean(settings?.enabled));
   return access === "paid" || access === "lapsed";
 }
 
-export async function listOpportunities(userId: string, limit = 200): Promise<RedditOpportunity[]> {
-  if (!(await canRead(userId))) return [];
+export async function listOpportunities(
+  scope: SiteScope,
+  limit = 200,
+): Promise<RedditOpportunity[]> {
+  if (!(await canRead(scope))) return [];
   const { data, error } = await supabaseAdmin
     .from("reddit_opportunities")
     .select("*")
-    .eq("user_id", userId)
+    .eq("site_id", scope.siteId)
     .order("score", { ascending: false })
     .limit(limit);
   fail(error);
@@ -493,14 +521,14 @@ export async function listOpportunities(userId: string, limit = 200): Promise<Re
 }
 
 export async function loadOpportunityRow(
-  userId: string,
+  scope: SiteScope,
   id: string,
 ): Promise<OpportunityRow | null> {
   const { data, error } = await supabaseAdmin
     .from("reddit_opportunities")
     .select("*")
     .eq("id", id)
-    .eq("user_id", userId)
+    .eq("site_id", scope.siteId)
     .maybeSingle();
   fail(error);
   return data;
@@ -528,11 +556,11 @@ async function repliesWithChecks(rows: ReplyRow[]): Promise<RedditReply[]> {
 }
 
 export async function getOpportunity(
-  userId: string,
+  scope: SiteScope,
   id: string,
 ): Promise<RedditOpportunityDetail | null> {
-  if (!(await canRead(userId))) return null;
-  const row = await loadOpportunityRow(userId, id);
+  if (!(await canRead(scope))) return null;
+  const row = await loadOpportunityRow(scope, id);
   if (!row) return null;
 
   const [views, drafts, replies] = await Promise.all([
@@ -541,14 +569,14 @@ export async function getOpportunity(
       .from("reddit_drafts")
       .select("*")
       .eq("opportunity_id", id)
-      .eq("user_id", userId)
+      .eq("site_id", scope.siteId)
       .order("created_at", { ascending: false })
       .limit(5),
     supabaseAdmin
       .from("reddit_replies")
       .select("*")
       .eq("opportunity_id", id)
-      .eq("user_id", userId)
+      .eq("site_id", scope.siteId)
       .order("posted_at", { ascending: false }),
   ]);
   fail(drafts.error);
@@ -566,12 +594,12 @@ export async function getOpportunity(
   };
 }
 
-export async function listMentions(userId: string): Promise<RedditMention[]> {
-  if (!(await canRead(userId))) return [];
+export async function listMentions(scope: SiteScope): Promise<RedditMention[]> {
+  if (!(await canRead(scope))) return [];
   const { data: replyRows, error } = await supabaseAdmin
     .from("reddit_replies")
     .select("*")
-    .eq("user_id", userId)
+    .eq("site_id", scope.siteId)
     .order("posted_at", { ascending: false })
     .limit(100);
   fail(error);
@@ -580,7 +608,11 @@ export async function listMentions(userId: string): Promise<RedditMention[]> {
   const oppIds = [...new Set(replyRows.map((r) => r.opportunity_id))];
   const threadIds = [...new Set(replyRows.map((r) => r.thread_id))];
   const [opps, serps, stats, replies] = await Promise.all([
-    supabaseAdmin.from("reddit_opportunities").select("*").in("id", oppIds).eq("user_id", userId),
+    supabaseAdmin
+      .from("reddit_opportunities")
+      .select("*")
+      .in("id", oppIds)
+      .eq("site_id", scope.siteId),
     supabaseAdmin
       .from("reddit_thread_serp")
       .select("*")
@@ -627,12 +659,12 @@ export async function listMentions(userId: string): Promise<RedditMention[]> {
   return out;
 }
 
-export async function listLedger(userId: string, limit = 50): Promise<RedditLedgerEntry[]> {
-  if (!(await canRead(userId))) return [];
+export async function listLedger(scope: SiteScope, limit = 50): Promise<RedditLedgerEntry[]> {
+  if (!(await canRead(scope))) return [];
   const { data, error } = await supabaseAdmin
     .from("reddit_ledger")
     .select("*")
-    .eq("user_id", userId)
+    .eq("site_id", scope.siteId)
     .order("created_at", { ascending: false })
     .limit(limit);
   fail(error);
@@ -640,11 +672,8 @@ export async function listLedger(userId: string, limit = 50): Promise<RedditLedg
 }
 
 /** What a draft must be checked against, for one opportunity. */
-export async function loadComplianceInputs(userId: string, opportunity: RedditOpportunity) {
-  const [settings, brand] = await Promise.all([
-    loadSettingsRow(userId),
-    loadBrandContext(userId, 1),
-  ]);
+export async function loadComplianceInputs(scope: SiteScope, opportunity: RedditOpportunity) {
+  const [settings, brand] = await Promise.all([loadSettingsRow(scope), loadBrandContext(scope, 1)]);
   const sub = opportunity.subredditInfo;
   return {
     settings,

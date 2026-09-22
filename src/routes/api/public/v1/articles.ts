@@ -9,8 +9,9 @@ import {
   unauthorized,
 } from "@/lib/public-api.server";
 
-// Lists the authenticated user's finished (publishable) articles. Plugins poll
-// this with ?since=<iso> to fetch only what changed since their last sync.
+// Lists the finished (publishable) articles of the key's site — never another
+// site on the same account. Plugins poll this with ?since=<iso> to fetch only
+// what changed since their last sync.
 export const Route = createFileRoute("/api/public/v1/articles")({
   server: {
     handlers: {
@@ -24,7 +25,7 @@ export const Route = createFileRoute("/api/public/v1/articles")({
           const { resolveApiKeyUser } = await import("@/lib/api-keys.server");
           const auth = await resolveApiKeyUser(request);
           if (!auth.ok) return auth.reason === "no-plan" ? subscriptionRequired() : unauthorized();
-          const { userId } = auth;
+          const { userId, siteId } = auth;
 
           const userBlock = await rateLimitByUser(userId);
           if (userBlock) return userBlock;
@@ -40,6 +41,7 @@ export const Route = createFileRoute("/api/public/v1/articles")({
           let query = supabaseAdmin
             .from("blogs")
             .select(ARTICLE_COLUMNS)
+            .eq("site_id", siteId)
             .eq("user_id", userId)
             .eq("status", "finished")
             .order("updated_at", { ascending: true })

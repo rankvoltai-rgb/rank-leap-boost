@@ -93,6 +93,11 @@ export interface MatchContext {
 export interface Candidate {
   targetId: string;
   requesterSiteId: string;
+  /**
+   * The requester's account. With Studio one owner can run several sites, and
+   * an article never links two of them (see reserveForArticle).
+   */
+  requesterOwnerId: string;
   requesterDomain: string;
   url: string;
   anchors: string[];

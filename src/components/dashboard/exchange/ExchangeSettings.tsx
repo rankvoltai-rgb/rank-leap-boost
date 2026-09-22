@@ -1,6 +1,7 @@
 /**
- * How the member takes part: whether their articles host links at all, how
- * many, what they refuse to link to, and what their site is about.
+ * How this site takes part: whether its articles host links at all, how
+ * many, what it refuses to link to, and what it is about. All of it is per
+ * site — another site on the account has its own.
  */
 import { useEffect, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -8,6 +9,7 @@ import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 import { Button, Panel } from "@/components/dashboard/primitives";
 import { Switch } from "@/components/ui/switch";
+import { useSiteId } from "@/components/dashboard/site-context";
 import {
   blockExchangeDomain,
   EXCHANGE_CATEGORIES,
@@ -73,14 +75,15 @@ export function ExchangeSettings({
   site: ExchangeSite;
   onChanged: () => void;
 }) {
+  const siteId = useSiteId();
   const queryClient = useQueryClient();
   const [busy, setBusy] = useState<string | null>(null);
   const [niche, setNiche] = useState(site.niche ?? "");
   const [tags, setTags] = useState<string[]>(site.topicTags);
   const [dirty, setDirty] = useState(false);
   const { data: blocks = [] } = useQuery({
-    queryKey: ["exchange", "blocks"],
-    queryFn: listExchangeBlocks,
+    queryKey: ["exchange", siteId, "blocks"],
+    queryFn: () => listExchangeBlocks(siteId),
   });
   const [blockDraft, setBlockDraft] = useState("");
 
@@ -93,13 +96,13 @@ export function ExchangeSettings({
 
   async function patch(
     key: string,
-    data: Parameters<typeof updateExchangeSettings>[0],
+    data: Parameters<typeof updateExchangeSettings>[1],
     done?: string,
   ) {
     setBusy(key);
     try {
-      await updateExchangeSettings(data);
-      await queryClient.invalidateQueries({ queryKey: ["exchange", "overview"] });
+      await updateExchangeSettings(siteId, data);
+      await queryClient.invalidateQueries({ queryKey: ["exchange", siteId, "overview"] });
       onChanged();
       if (done) toast.success(done);
     } catch (err) {
@@ -114,9 +117,9 @@ export function ExchangeSettings({
     if (!d) return;
     setBusy("block");
     try {
-      await blockExchangeDomain({ domain: d });
+      await blockExchangeDomain(siteId, { domain: d });
       setBlockDraft("");
-      await queryClient.invalidateQueries({ queryKey: ["exchange", "blocks"] });
+      await queryClient.invalidateQueries({ queryKey: ["exchange", siteId, "blocks"] });
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Couldn't block that domain.");
     } finally {
@@ -126,8 +129,8 @@ export function ExchangeSettings({
 
   async function removeBlock(domain: string) {
     try {
-      await unblockExchangeDomain({ domain });
-      await queryClient.invalidateQueries({ queryKey: ["exchange", "blocks"] });
+      await unblockExchangeDomain(siteId, { domain });
+      await queryClient.invalidateQueries({ queryKey: ["exchange", siteId, "blocks"] });
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Couldn't unblock that domain.");
     }

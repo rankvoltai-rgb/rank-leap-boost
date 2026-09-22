@@ -3,8 +3,11 @@
  * the mock store. Client-safe: nothing here imports a server module.
  *
  * Two words are used consistently across the feature:
- *   HOST      — the member whose article carries the link. They earn.
- *   REQUESTER — the member whose URL is linked to. They spend.
+ *   HOST      — the site whose article carries the link. It earns.
+ *   REQUESTER — the site whose URL is linked to. It spends.
+ *
+ * Everything below is per SITE: an account running several sites has an
+ * exchange presence, a balance and a block list for each.
  */
 
 export type ExchangeSiteStatus = "unverified" | "verifying" | "verified" | "suspended";
@@ -21,8 +24,8 @@ export type LedgerKind =
   | "adjust";
 
 /**
- * Whether the exchange is open to this account, and if not, why.
- *   paid    — an active paid plan; the exchange is open
+ * Whether the exchange is open to this site, and if not, why.
+ *   paid    — a live site on an active paid plan; the exchange is open
  *   trial   — trialing; the exchange unlocks with the first paid invoice
  *   lapsed  — took part before, no longer paying; links stay live, credits held
  *   none    — no plan at all
@@ -102,7 +105,7 @@ export interface HostedPlacement {
   endReason: string | null;
 }
 
-/** A domain the member refuses to link to or be linked from. */
+/** A domain this site refuses to link to or be linked from. */
 export interface ExchangeBlock {
   id: string;
   domain: string;

@@ -10,9 +10,9 @@ import {
   unauthorized,
 } from "@/lib/public-api.server";
 
-// GET returns a single finished article owned by the authenticated key holder.
-// PATCH lets the plugin report where it published that article, which is how
-// the backlink exchange learns the page to verify hosted links on.
+// GET returns a single finished article of the key's site. PATCH lets the
+// plugin report where it published that article, which is how the backlink
+// exchange learns the page to verify hosted links on.
 export const Route = createFileRoute("/api/public/v1/articles/$id")({
   server: {
     handlers: {
@@ -26,7 +26,7 @@ export const Route = createFileRoute("/api/public/v1/articles/$id")({
           const { resolveApiKeyUser } = await import("@/lib/api-keys.server");
           const auth = await resolveApiKeyUser(request);
           if (!auth.ok) return auth.reason === "no-plan" ? subscriptionRequired() : unauthorized();
-          const { userId } = auth;
+          const { userId, siteId } = auth;
 
           const userBlock = await rateLimitByUser(userId);
           if (userBlock) return userBlock;
@@ -35,6 +35,7 @@ export const Route = createFileRoute("/api/public/v1/articles/$id")({
           const { data, error } = await supabaseAdmin
             .from("blogs")
             .select(ARTICLE_COLUMNS)
+            .eq("site_id", siteId)
             .eq("user_id", userId)
             .eq("status", "finished")
             .eq("id", params.id)
@@ -61,7 +62,7 @@ export const Route = createFileRoute("/api/public/v1/articles/$id")({
           const { resolveApiKeyUser } = await import("@/lib/api-keys.server");
           const auth = await resolveApiKeyUser(request);
           if (!auth.ok) return auth.reason === "no-plan" ? subscriptionRequired() : unauthorized();
-          const { userId } = auth;
+          const { userId, siteId } = auth;
 
           const userBlock = await rateLimitByUser(userId);
           if (userBlock) return userBlock;
@@ -82,20 +83,26 @@ export const Route = createFileRoute("/api/public/v1/articles/$id")({
             throw err;
           }
 
-          // The URL must be on the account's own site: a leaked key must not
-          // be able to point an article — and the links verified on it — at
-          // somebody else's page.
+          // The URL must be on the key's own site: a leaked key must not be
+          // able to point an article — and the links verified on it — at
+          // somebody else's page, nor at another site on the same account.
+          // Either the site's exchange domain, once its ownership is proven
+          // (a suspended site proved it too, and needs its pages verified to
+          // heal), or the website the site itself is set up with.
           const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
           const { isOnDomain, normalizeDomain } = await import("@/lib/exchange/domain");
           const [{ data: site }, { data: profile }] = await Promise.all([
             supabaseAdmin
               .from("exchange_sites")
               .select("domain")
+              .eq("id", siteId)
               .eq("user_id", userId)
+              .in("status", ["verified", "suspended"])
               .maybeSingle(),
             supabaseAdmin
               .from("profiles")
               .select("website_url")
+              .eq("id", siteId)
               .eq("user_id", userId)
               .maybeSingle(),
           ]);
@@ -115,6 +122,7 @@ export const Route = createFileRoute("/api/public/v1/articles/$id")({
               published_url_source: "plugin",
               published_at: new Date().toISOString(),
             })
+            .eq("site_id", siteId)
             .eq("user_id", userId)
             .eq("status", "finished")
             .eq("id", params.id)

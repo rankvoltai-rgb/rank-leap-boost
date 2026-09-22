@@ -8,6 +8,7 @@ import {
   RadarIcon,
   ConnectIcon,
   LinkIcon,
+  StudioIcon,
   ThreadIcon,
 } from "@/components/dashboard/icons";
 
@@ -35,7 +36,10 @@ export const NAV: NavItem[] = [
   { title: "Integrations", icon: ConnectIcon, to: "/dashboard/integrations" },
 ];
 
+// Account-wide pages. Studio is where more sites are added; it lives here,
+// never in onboarding, which only ever sets up the first site.
 export const NAV_FOOTER: NavItem[] = [
+  { title: "Studio", icon: StudioIcon, to: "/dashboard/studio" },
   { title: "Plan & Billing", icon: CardIcon, to: "/dashboard/billing" },
   { title: "Settings", icon: ControlsIcon, to: "/dashboard/settings" },
 ];

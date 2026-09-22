@@ -1,11 +1,11 @@
 /**
  * The Reddit presence cron. Run it daily; the sweep stage paces itself weekly.
  *
- * Stages, each capped and each wrapped so one bad account can't stop the rest:
+ * Stages, each capped and each wrapped so one bad site can't stop the rest:
  *
- *   1. paid      re-sync the paid flag. The webhook is the fast path; this is
- *                the backstop that stops a lapsed account being swept if a
- *                webhook was missed.
+ *   1. paid      re-sync each site's paid flag. The webhook is the fast path;
+ *                this is the backstop that stops a lapsed plan — or a Studio
+ *                site that was removed — being swept if a webhook was missed.
  *   2. budget    add up what the last 30 days cost. Over the ceiling, every
  *                stage that SPENDS is skipped — a kill switch, not a throttle.
  *   3. sweeps    paid, enabled, and not swept in six days. Oldest first.
@@ -13,7 +13,7 @@
  *   5. threads   re-measure threads that have a live reply in them.
  *   6. age out   found a month ago and never acted on → stale.
  *
- * Verifying and ageing out keep running for a lapsed account. They keep an
+ * Verifying and ageing out keep running for a lapsed site. They keep an
  * existing mention's history honest and they stop nothing; only stages 3–5
  * spend at Apify, and only stage 3 is gated on the paid flag — a member who
  * leaves still deserves to know if their comment was removed.
@@ -85,15 +85,18 @@ export async function runRedditCycle(): Promise<RedditCycleReport> {
   };
 
   /* 1 ── paid flag: the webhook is the fast path, this is the backstop ──── */
-  const { data: accounts } = await supabaseAdmin
+  const { data: sites } = await supabaseAdmin
     .from("reddit_settings")
-    .select("user_id")
+    .select("site_id, user_id")
     .order("paid_checked_at", { ascending: true, nullsFirst: true })
     .limit(PAID_SYNC_CAP);
-  for (const a of accounts ?? [])
+  for (const site of sites ?? [])
     await guard(async () => {
-      const paid = await hasRedditEntitlement(supabaseAdmin, a.user_id);
-      await rpc.rpc("reddit_set_paid", { _user_id: a.user_id, _paid: paid });
+      const paid = await hasRedditEntitlement(supabaseAdmin, {
+        userId: site.user_id,
+        siteId: site.site_id,
+      });
+      await rpc.rpc("reddit_set_paid", { _site_id: site.site_id, _paid: paid });
       report.paidSynced += 1;
     });
 
@@ -115,7 +118,7 @@ export async function runRedditCycle(): Promise<RedditCycleReport> {
   if (maySpend) {
     const { data: due } = await supabaseAdmin
       .from("reddit_settings")
-      .select("user_id")
+      .select("site_id, user_id")
       .eq("paid_active", true)
       .eq("enabled", true)
       .eq("sweep_enabled", true)
@@ -126,7 +129,7 @@ export async function runRedditCycle(): Promise<RedditCycleReport> {
       await guard(async () => {
         // reddit_start_sweep re-checks the paid flag under a lock, so a row
         // that went stale between the select and here is still refused.
-        const { result } = await runSweep(d.user_id, "cron");
+        const { result } = await runSweep({ userId: d.user_id, siteId: d.site_id }, "cron");
         if (result.started) report.sweepsRun += 1;
         else report.sweepsRefused += 1;
       });

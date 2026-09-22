@@ -1,5 +1,6 @@
 /**
- * Demand: the pages the member wants links pointed at, and what has arrived.
+ * Demand: the pages on this site the member wants links pointed at, and what
+ * has arrived.
  */
 import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -8,6 +9,7 @@ import { Loader2 } from "lucide-react";
 import { Button, EmptyState, Panel, Pill } from "@/components/dashboard/primitives";
 import { AddIcon, TargetIcon } from "@/components/dashboard/icons";
 import { ConfirmDialog } from "@/components/dashboard/article-parts";
+import { useSiteId } from "@/components/dashboard/site-context";
 import {
   createExchangeTarget,
   deleteExchangeTarget,
@@ -44,14 +46,15 @@ export function TargetsTab({
   overview: ExchangeOverview;
   readOnly?: boolean;
 }) {
+  const siteId = useSiteId();
   const queryClient = useQueryClient();
   const { data: targets = [], isLoading } = useQuery({
-    queryKey: ["exchange", "targets"],
-    queryFn: listExchangeTargets,
+    queryKey: ["exchange", siteId, "targets"],
+    queryFn: () => listExchangeTargets(siteId),
   });
   const { data: inbound = [] } = useQuery({
-    queryKey: ["exchange", "inbound"],
-    queryFn: listInboundPlacements,
+    queryKey: ["exchange", siteId, "inbound"],
+    queryFn: () => listInboundPlacements(siteId),
     refetchInterval: 30_000,
   });
   const [editing, setEditing] = useState<ExchangeTarget | "new" | null>(null);
@@ -60,14 +63,14 @@ export function TargetsTab({
 
   async function refresh() {
     await Promise.all([
-      queryClient.invalidateQueries({ queryKey: ["exchange", "targets"] }),
-      queryClient.invalidateQueries({ queryKey: ["exchange", "overview"] }),
+      queryClient.invalidateQueries({ queryKey: ["exchange", siteId, "targets"] }),
+      queryClient.invalidateQueries({ queryKey: ["exchange", siteId, "overview"] }),
     ]);
   }
 
   async function toggle(t: ExchangeTarget) {
     try {
-      await updateExchangeTarget({ id: t.id, patch: { active: !t.active } });
+      await updateExchangeTarget(siteId, { id: t.id, patch: { active: !t.active } });
       await refresh();
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Couldn't update the target.");
@@ -76,7 +79,7 @@ export function TargetsTab({
 
   async function remove(t: ExchangeTarget) {
     try {
-      const r = await deleteExchangeTarget({ id: t.id });
+      const r = await deleteExchangeTarget(siteId, { id: t.id });
       toast.success(
         r.deleted ? "Target removed." : "Target paused — its live links stay where they are.",
       );
@@ -286,6 +289,7 @@ function TargetForm({
   onCancel: () => void;
   onSaved: () => Promise<void>;
 }) {
+  const siteId = useSiteId();
   const isEdit = "id" in initial;
   const [url, setUrl] = useState(initial.url);
   const [anchors, setAnchors] = useState<string[]>(initial.anchors);
@@ -307,8 +311,8 @@ function TargetForm({
         maxNewLinksPerMonth: perMonth,
         active: "active" in initial ? initial.active : true,
       };
-      if (isEdit) await updateExchangeTarget({ id: initial.id, patch: data });
-      else await createExchangeTarget(data);
+      if (isEdit) await updateExchangeTarget(siteId, { id: initial.id, patch: data });
+      else await createExchangeTarget(siteId, data);
       toast.success(
         isEdit ? "Target updated." : "Target added. The matcher will place it as hosts come up.",
       );

@@ -3,7 +3,7 @@ import { ArrowRight, Loader2 } from "lucide-react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { signInWithPassword, signUpWithPassword } from "@/lib/auth";
-import { getProfile } from "@/lib/data";
+import { listSites } from "@/lib/data";
 import { IS_MOCK } from "@/lib/mock/mode";
 import { DEMO_EMAIL, DEMO_PASSWORD } from "@/lib/mock/auth";
 import { Logo, Reveal } from "@/components/landing/shared";
@@ -58,8 +58,8 @@ export function AuthSplit() {
         return;
       }
       await signInWithPassword({ email, password });
-      const profile = await getProfile();
-      navigate({ to: profile ? "/dashboard" : "/onboarding" });
+      const sites = await listSites();
+      navigate({ to: sites.length > 0 ? "/dashboard" : "/onboarding" });
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Authentication failed.");
       setLoading(false);
@@ -85,9 +85,8 @@ export function AuthSplit() {
             </Reveal>
             <Reveal delay={0.06}>
               <p className="mt-4 text-base leading-relaxed text-muted-foreground">
-                Automatically research, write, and publish SEO-optimized articles
-                that rank on Google and get cited by AI so you grow traffic
-                without lifting a finger.
+                Automatically research, write, and publish SEO-optimized articles that rank on
+                Google and get cited by AI so you grow traffic without lifting a finger.
               </p>
             </Reveal>
 

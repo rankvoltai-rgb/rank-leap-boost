@@ -20,6 +20,7 @@ function candidate(over: Partial<Candidate> = {}): Candidate {
   return {
     targetId: "t1",
     requesterSiteId: "s-req",
+    requesterOwnerId: "u-req",
     requesterDomain: "acme.example",
     url: "https://acme.example/project-management-guide",
     anchors: ["project management guide", "how to manage projects", "project planning basics"],

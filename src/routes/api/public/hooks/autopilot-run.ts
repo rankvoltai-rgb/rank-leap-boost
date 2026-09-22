@@ -1,8 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 /**
- * Cron-triggered endpoint. Generates the next due article for every user with
- * autopilot enabled, paced by their weekly cadence.
+ * Cron-triggered endpoint. Generates the next due article for every site with
+ * autopilot enabled, paced by that site's weekly cadence.
  *
  * Requires AUTOPILOT_CRON_SECRET, supplied as `Authorization: Bearer <secret>`
  * or `?secret=`. This was previously unauthenticated: any anonymous POST

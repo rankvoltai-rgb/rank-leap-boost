@@ -39,7 +39,9 @@ export function subscriptionRequired(): Response {
   return jsonResponse(
     {
       error:
-        "This Rankbox account has no active plan, so it can't sync articles. Start or renew it at https://rankbox.xyz/dashboard/billing.",
+        // A key belongs to one site, and that site can stop on its own (a
+        // Studio site removed from the account) while the plan runs on.
+        "This site isn't active on a Rankbox plan, so it can't sync articles. Check the plan, and the site in Studio, at https://rankbox.xyz/dashboard/billing.",
       code: "subscription_required",
     },
     402,

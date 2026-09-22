@@ -12,7 +12,7 @@
  * normal day, so every path here catches and returns rather than throws.
  */
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
-import { hasExchangeEntitlement } from "@/lib/entitlement.server";
+import { hasExchangeEntitlement, type SiteScope } from "@/lib/entitlement.server";
 import { loadSite, refundPlacement } from "./exchange.server";
 import type { OutboundLink } from "./link-insert";
 import { findCandidates, type ArticleForMatching } from "./matcher.server";
@@ -34,34 +34,40 @@ type Rpc = {
 const rpc = () => supabaseAdmin as unknown as Rpc;
 
 /**
- * Picks and escrows up to the host's per-article allowance of links, each
- * from a different member. Empty when the host isn't taking part, isn't
+ * Picks and escrows up to the host site's per-article allowance of links,
+ * each to a different site. Empty when the host site isn't taking part, isn't
  * paying, or nothing in the network belongs in this article.
+ *
+ * `host` is the site the article is being written for, and whose it is.
  */
 export async function reserveForArticle(
-  hostUserId: string,
+  host: SiteScope,
   article: ArticleForMatching,
 ): Promise<Reservation[]> {
   try {
     if (!article.id) return [];
-    const site = await loadSite(hostUserId);
-    if (!site || site.status !== "verified" || !site.opted_in || !site.paid_active) return [];
-    // The flag is the fast path; the subscription is the truth.
-    if (!(await hasExchangeEntitlement(supabaseAdmin, hostUserId))) return [];
+    const site = await loadSite(host.siteId);
+    if (!site || site.user_id !== host.userId) return [];
+    if (site.status !== "verified" || !site.opted_in || !site.paid_active) return [];
+    // The flag is the fast path; the subscription and the site's own billing are the truth.
+    if (!(await hasExchangeEntitlement(supabaseAdmin, host))) return [];
 
     const wanted = Math.max(0, Math.min(2, site.max_links_per_article));
     if (wanted === 0) return [];
 
     const ranked = await findCandidates(site, article);
     const reservations: Reservation[] = [];
-    const takenSites = new Set<string>();
+    // One link per requesting owner, not just per site: two sites of one
+    // Studio account in one article is a footprint. The reserve function
+    // refuses it too; skipping here saves the round trip.
+    const takenOwners = new Set<string>();
 
     for (const r of ranked) {
       if (reservations.length >= wanted) break;
-      if (takenSites.has(r.candidate.requesterSiteId)) continue;
+      if (takenOwners.has(r.candidate.requesterOwnerId)) continue;
       const { data, error } = await rpc().rpc("exchange_reserve_placement", {
         _target_id: r.candidate.targetId,
-        _host_user_id: hostUserId,
+        _host_user_id: host.userId,
         _host_site_id: site.id,
         _host_blog_id: article.id,
         _anchor: r.anchor,
@@ -74,7 +80,7 @@ export async function reserveForArticle(
       }
       // NULL is the function saying "no" — a lost race or a re-checked rule.
       if (typeof data !== "string" || !data) continue;
-      takenSites.add(r.candidate.requesterSiteId);
+      takenOwners.add(r.candidate.requesterOwnerId);
       reservations.push({
         placementId: data,
         link: {

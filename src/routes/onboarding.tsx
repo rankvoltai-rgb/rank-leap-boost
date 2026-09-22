@@ -1,7 +1,7 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { Onboarding } from "@/components/onboarding";
 import { getSessionUser } from "@/lib/auth";
-import { getProfile } from "@/lib/data";
+import { listSites } from "@/lib/data";
 import { IS_MOCK } from "@/lib/mock/mode";
 
 export const Route = createFileRoute("/onboarding")({
@@ -25,8 +25,8 @@ export const Route = createFileRoute("/onboarding")({
       throw redirect({ to: "/auth", search: { url: search.url } });
     }
     // OAuth sends returning users here too; anyone who already finished
-    // onboarding goes on to the dashboard.
-    if (!IS_MOCK && user && (await getProfile())) {
+    // onboarding — who has at least one site — goes on to the dashboard.
+    if (!IS_MOCK && user && (await listSites()).length > 0) {
       throw redirect({ to: "/dashboard" });
     }
   },

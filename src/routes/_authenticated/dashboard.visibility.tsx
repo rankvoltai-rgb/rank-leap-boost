@@ -23,6 +23,7 @@ import { VisitsChart } from "@/components/dashboard/VisitsChart";
 import { isOverdue, type Stage } from "@/components/dashboard/article-stages";
 import { isEntitled } from "@/components/dashboard/autopilot-state";
 import { SubscriptionGate } from "@/components/dashboard/SubscriptionGate";
+import { useSiteId } from "@/components/dashboard/site-context";
 import {
   buildMarket,
   buildMoves,
@@ -84,14 +85,15 @@ function RankPage() {
   );
   const actions = useArticleActions({ openId: article, onOpen: routing.open });
 
+  const siteId = useSiteId();
   const { data: blogs = [], isLoading: loadingBlogs } = useAllArticles();
   const { data: kwLibrary = [], isLoading: loadingLibrary } = useQuery({
-    queryKey: ["keywords", "library"],
-    queryFn: () => listKeywords("library"),
+    queryKey: ["keywords", siteId, "library"],
+    queryFn: () => listKeywords(siteId, "library"),
   });
   const { data: kwDiscovered = [], isLoading: loadingDiscovered } = useQuery({
-    queryKey: ["keywords", "discovered"],
-    queryFn: () => listKeywords("discovered"),
+    queryKey: ["keywords", siteId, "discovered"],
+    queryFn: () => listKeywords(siteId, "discovered"),
   });
   const loading = loadingBlogs || loadingLibrary || loadingDiscovered;
 
@@ -131,7 +133,7 @@ function RankPage() {
   async function plan(row: MarketRow) {
     setPlanning(row.key);
     try {
-      const blog = await createBlog({
+      const blog = await createBlog(siteId, {
         title: titleFromKeyword(row.keyword),
         keyword: row.keyword,
         description: "",

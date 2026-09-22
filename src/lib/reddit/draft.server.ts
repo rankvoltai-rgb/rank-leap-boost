@@ -18,6 +18,7 @@
 import { generateText } from "ai";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { activeModelId, createAiProvider } from "@/lib/ai-gateway.server";
+import type { SiteScope } from "@/lib/entitlement.server";
 import {
   checkReply,
   mechanicalFailures,
@@ -76,7 +77,8 @@ function refusalFor(opportunity: RedditOpportunity, hasStandingReply: boolean): 
   if (opportunity.blockedReason) return REDDIT_BLOCKED_COPY[opportunity.blockedReason];
   if (opportunity.thread.isLocked || opportunity.thread.isRemoved || opportunity.thread.isArchived)
     return "This thread can't be replied to any more.";
-  if (hasStandingReply) return "You've already replied in this thread. One reply per thread.";
+  if (hasStandingReply)
+    return "You've already replied in this thread, from this site or another of yours. One reply per thread.";
   return null;
 }
 
@@ -189,20 +191,28 @@ async function compose(
   return { body, report };
 }
 
-async function hasStandingReply(userId: string, threadId: string): Promise<boolean> {
+/**
+ * Whether this PERSON already has a reply standing in the thread — from any of
+ * their sites, not just the one drafting. Keyed by the owner on purpose: it is
+ * one Reddit account posting whatever brand it speaks for, and two replies from
+ * it in one thread is the pattern that gets accounts actioned. The same rule
+ * is enforced in SQL (reddit_replies_one_per_thread, reddit_record_reply).
+ */
+async function hasStandingReply(ownerId: string, threadId: string): Promise<boolean> {
   const { data } = await supabaseAdmin
     .from("reddit_replies")
     .select("id")
-    .eq("user_id", userId)
+    .eq("user_id", ownerId)
     .eq("thread_id", threadId)
     .in("status", [...STANDING_REPLY_STATUSES])
     .limit(1);
   return (data ?? []).length > 0;
 }
 
-async function spend(userId: string, note: string): Promise<void> {
+/** Credits are the site's: each site has its own monthly balance. */
+async function spend(scope: SiteScope, note: string): Promise<void> {
   const { data, error } = await rpc.rpc("reddit_spend_credit", {
-    _user_id: userId,
+    _site_id: scope.siteId,
     _amount: REDDIT_DRAFT_COST,
     _draft_id: null,
     _note: note,
@@ -212,9 +222,9 @@ async function spend(userId: string, note: string): Promise<void> {
   if (data === null || data === undefined) throw new RedditCreditsExhaustedError();
 }
 
-async function refund(userId: string, note: string): Promise<void> {
+async function refund(scope: SiteScope, note: string): Promise<void> {
   await rpc.rpc("reddit_refund_credit", {
-    _user_id: userId,
+    _site_id: scope.siteId,
     _amount: REDDIT_DRAFT_COST,
     _draft_id: null,
     _note: note,
@@ -222,32 +232,35 @@ async function refund(userId: string, note: string): Promise<void> {
 }
 
 export async function writeDraft(
-  userId: string,
+  scope: SiteScope,
   opportunityId: string,
   instructions = "",
 ): Promise<RedditDraft> {
-  const detail = await getOpportunity(userId, opportunityId);
+  const detail = await getOpportunity(scope, opportunityId);
   if (!detail) throw new DraftRefusedError("That thread isn't in your list any more.");
   const { opportunity } = detail;
 
-  const refusal = refusalFor(opportunity, await hasStandingReply(userId, opportunity.threadId));
+  const refusal = refusalFor(
+    opportunity,
+    await hasStandingReply(scope.userId, opportunity.threadId),
+  );
   if (refusal) throw new DraftRefusedError(refusal);
 
   const [{ settings, context }, brand] = await Promise.all([
-    loadComplianceInputs(userId, opportunity),
-    loadBrandContext(userId, 12),
+    loadComplianceInputs(scope, opportunity),
+    loadBrandContext(scope, 12),
   ]);
   if (!context.brandName)
     throw new DraftRefusedError(
-      "Add your brand name in Settings first — every reply has to say who you are.",
+      "Add this site's brand name in Settings first — every reply has to say who you are.",
     );
 
-  await spend(userId, `reply draft · r/${opportunity.thread.subreddit}`);
+  await spend(scope, `reply draft · r/${opportunity.thread.subreddit}`);
   let composed: Awaited<ReturnType<typeof compose>>;
   try {
     composed = await compose(opportunity, brand, context, settings?.tone ?? "", instructions);
   } catch (e) {
-    await refund(userId, "refund — the draft could not be written");
+    await refund(scope, "refund — the draft could not be written");
     throw new Error(
       e instanceof Error && e.message
         ? `Couldn't write that reply: ${e.message}`
@@ -258,7 +271,8 @@ export async function writeDraft(
   const { data, error } = await supabaseAdmin
     .from("reddit_drafts")
     .insert({
-      user_id: userId,
+      user_id: scope.userId,
+      site_id: scope.siteId,
       opportunity_id: opportunityId,
       body: composed.body,
       model: activeModelId(),
@@ -269,7 +283,7 @@ export async function writeDraft(
     .select("*")
     .single();
   if (error || !data) {
-    await refund(userId, "refund — the draft could not be saved");
+    await refund(scope, "refund — the draft could not be saved");
     throw new Error(error?.message ?? "Couldn't save that draft.");
   }
 
@@ -277,13 +291,14 @@ export async function writeDraft(
     .from("reddit_opportunities")
     .update({ status: "drafted" })
     .eq("id", opportunityId)
-    .eq("user_id", userId)
+    .eq("site_id", scope.siteId)
+    .eq("user_id", scope.userId)
     .in("status", ["new", "saved"]);
   return draftFromRow(data);
 }
 
 export async function rewriteDraft(
-  userId: string,
+  scope: SiteScope,
   draftId: string,
   instructions: string,
 ): Promise<RedditDraft> {
@@ -291,7 +306,7 @@ export async function rewriteDraft(
     .from("reddit_drafts")
     .select("*")
     .eq("id", draftId)
-    .eq("user_id", userId)
+    .eq("site_id", scope.siteId)
     .maybeSingle();
   if (!prev) throw new DraftRefusedError("That draft no longer exists.");
   if (prev.regen_count >= MAX_DRAFT_REGENS)
@@ -299,22 +314,22 @@ export async function rewriteDraft(
       "That's the limit for rewrites on one reply. Edit it by hand from here.",
     );
 
-  const detail = await getOpportunity(userId, prev.opportunity_id);
+  const detail = await getOpportunity(scope, prev.opportunity_id);
   if (!detail) throw new DraftRefusedError("That thread isn't in your list any more.");
   const refusal = refusalFor(
     detail.opportunity,
-    await hasStandingReply(userId, detail.opportunity.threadId),
+    await hasStandingReply(scope.userId, detail.opportunity.threadId),
   );
   if (refusal) throw new DraftRefusedError(refusal);
 
   // The first rewrite of a draft that failed its checks is on us.
   const free = prev.regen_count === 0 && !prev.compliance_pass;
   const [{ settings, context }, brand] = await Promise.all([
-    loadComplianceInputs(userId, detail.opportunity),
-    loadBrandContext(userId, 12),
+    loadComplianceInputs(scope, detail.opportunity),
+    loadBrandContext(scope, 12),
   ]);
 
-  if (!free) await spend(userId, `reply rewrite · r/${detail.opportunity.thread.subreddit}`);
+  if (!free) await spend(scope, `reply rewrite · r/${detail.opportunity.thread.subreddit}`);
   let composed: Awaited<ReturnType<typeof compose>>;
   try {
     composed = await compose(
@@ -325,7 +340,7 @@ export async function rewriteDraft(
       instructions,
     );
   } catch (e) {
-    if (!free) await refund(userId, "refund — the rewrite could not be written");
+    if (!free) await refund(scope, "refund — the rewrite could not be written");
     throw new Error(
       e instanceof Error ? `Couldn't rewrite that: ${e.message}` : "Couldn't rewrite that.",
     );
@@ -343,11 +358,12 @@ export async function rewriteDraft(
       credits_spent: prev.credits_spent + (free ? 0 : REDDIT_DRAFT_COST),
     })
     .eq("id", draftId)
-    .eq("user_id", userId)
+    .eq("site_id", scope.siteId)
+    .eq("user_id", scope.userId)
     .select("*")
     .single();
   if (error || !data) {
-    if (!free) await refund(userId, "refund — the rewrite could not be saved");
+    if (!free) await refund(scope, "refund — the rewrite could not be saved");
     throw new Error(error?.message ?? "Couldn't save that rewrite.");
   }
   return draftFromRow(data);
@@ -355,7 +371,7 @@ export async function rewriteDraft(
 
 /** Free. Stores the member's edit and re-runs the pure checker on it. */
 export async function saveDraftEdit(
-  userId: string,
+  scope: SiteScope,
   draftId: string,
   body: string,
 ): Promise<RedditDraft> {
@@ -363,13 +379,13 @@ export async function saveDraftEdit(
     .from("reddit_drafts")
     .select("*")
     .eq("id", draftId)
-    .eq("user_id", userId)
+    .eq("site_id", scope.siteId)
     .maybeSingle();
   if (!prev) throw new DraftRefusedError("That draft no longer exists.");
-  const detail = await getOpportunity(userId, prev.opportunity_id);
+  const detail = await getOpportunity(scope, prev.opportunity_id);
   if (!detail) throw new DraftRefusedError("That thread isn't in your list any more.");
 
-  const { context } = await loadComplianceInputs(userId, detail.opportunity);
+  const { context } = await loadComplianceInputs(scope, detail.opportunity);
   const report = checkReply(body, context);
   const { data, error } = await supabaseAdmin
     .from("reddit_drafts")
@@ -379,7 +395,8 @@ export async function saveDraftEdit(
       compliance_pass: report.pass,
     })
     .eq("id", draftId)
-    .eq("user_id", userId)
+    .eq("site_id", scope.siteId)
+    .eq("user_id", scope.userId)
     .select("*")
     .single();
   if (error || !data) throw new Error(error?.message ?? "Couldn't save that edit.");

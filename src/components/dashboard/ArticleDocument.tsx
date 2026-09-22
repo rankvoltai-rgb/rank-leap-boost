@@ -296,7 +296,8 @@ export function ArticleDocument({
     }
     setAiBusy(action);
     try {
-      const { result } = await editBlogSection({ selection, action });
+      // Rewritten in the voice of the site the article belongs to.
+      const { result } = await editBlogSection(blog.site_id, { selection, action });
       const text = result?.trim();
       if (text) editor.chain().focus().insertContentAt({ from, to }, text).run();
     } catch (err) {

@@ -12,7 +12,7 @@ import {
   PublishingLoop,
 } from "@/components/integrations/IntegrationSections";
 import { INTEGRATIONS, getIntegration, isAddon } from "@/data/integrations";
-import { PLAN } from "@/data/pricing";
+import { formatUsd, PLAN, STUDIO } from "@/data/pricing";
 
 const SITE = "https://rankbox.xyz";
 const TITLE = "Integrations — WordPress, Shopify, Webflow & More | Rankbox";
@@ -60,7 +60,9 @@ const HUB_FAQS = [
   },
   {
     q: "How many sites can I connect?",
-    a: `Each Rankbox plan covers ${PLAN.sites === 1 ? "one website" : `${PLAN.sites} websites`}, with its own content plan and publishing schedule. Running several sites? Get in touch and we'll set it up with you.`,
+    a: STUDIO.live
+      ? `Every site on your account connects with its own publishing key and gets its own content plan and schedule. Your plan covers one; add more with ${STUDIO.name} at ${formatUsd(STUDIO.monthlyPerSite)} a month each.`
+      : `Each Rankbox plan covers ${PLAN.sites === 1 ? "one website" : `${PLAN.sites} websites`}, with its own content plan and publishing schedule. Running several sites? Get in touch and we'll set it up with you.`,
   },
 ];
 

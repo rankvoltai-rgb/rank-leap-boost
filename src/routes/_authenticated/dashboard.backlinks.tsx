@@ -4,6 +4,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getExchangeOverview, getSubscription } from "@/lib/data";
 import { PageHeader, Panel, Tabs } from "@/components/dashboard/primitives";
 import { useArticleActions } from "@/components/dashboard/useArticleActions";
+import { useSiteId } from "@/components/dashboard/site-context";
 import { ExchangeGate } from "@/components/dashboard/exchange/ExchangeGate";
 import { VerifyDomainCard } from "@/components/dashboard/exchange/VerifyDomainCard";
 import { NetworkPulsePanel } from "@/components/dashboard/exchange/NetworkPulsePanel";
@@ -19,18 +20,26 @@ export const Route = createFileRoute("/_authenticated/dashboard/backlinks")({
 type Tab = "overview" | "get" | "give" | "settings";
 
 /**
- * The backlink exchange. Paid members only.
+ * The backlink exchange. Paid members only, per site: each site verifies its
+ * own domain, hosts in its own articles and earns and spends its own credits.
  *
  * Three gates before the tabs: no paid plan (trial or none) shows the pitch
- * over the live network; a paid member without a verified domain gets the
- * verification card; a lapsed member sees everything read-only, with their
- * links intact and their credits held.
+ * over the live network; a paid site without a verified domain gets the
+ * verification card; a lapsed site shows everything read-only, with its
+ * links intact and its credits held.
  */
 function BacklinksPage() {
+  const siteId = useSiteId();
+  // Keyed by site so a half-edited form or an open dialog never carries over
+  // to the next site, where saving it would write to the wrong one.
+  return <SiteBacklinks key={siteId} siteId={siteId} />;
+}
+
+function SiteBacklinks({ siteId }: { siteId: string }) {
   const queryClient = useQueryClient();
   const { data: overview } = useQuery({
-    queryKey: ["exchange", "overview"],
-    queryFn: getExchangeOverview,
+    queryKey: ["exchange", siteId, "overview"],
+    queryFn: () => getExchangeOverview(siteId),
     refetchInterval: 30_000,
   });
   const { data: subscription } = useQuery({ queryKey: ["subscription"], queryFn: getSubscription });

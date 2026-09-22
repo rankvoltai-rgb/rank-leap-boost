@@ -23,6 +23,7 @@ export type Database = {
           last_used_at: string | null
           name: string
           revoked_at: string | null
+          site_id: string
           updated_at: string
           user_id: string
         }
@@ -34,6 +35,7 @@ export type Database = {
           last_used_at?: string | null
           name?: string
           revoked_at?: string | null
+          site_id: string
           updated_at?: string
           user_id: string
         }
@@ -45,10 +47,19 @@ export type Database = {
           last_used_at?: string | null
           name?: string
           revoked_at?: string | null
+          site_id?: string
           updated_at?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "api_keys_site_fkey"
+            columns: ["site_id", "user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id", "user_id"]
+          },
+        ]
       }
       blogs: {
         Row: {
@@ -66,6 +77,7 @@ export type Database = {
           queue_position: number | null
           scheduled_date: string | null
           seo_score: number
+          site_id: string
           status: Database["public"]["Enums"]["blog_status"]
           tags: string[]
           title: string
@@ -88,6 +100,7 @@ export type Database = {
           queue_position?: number | null
           scheduled_date?: string | null
           seo_score?: number
+          site_id: string
           status?: Database["public"]["Enums"]["blog_status"]
           tags?: string[]
           title: string
@@ -110,6 +123,7 @@ export type Database = {
           queue_position?: number | null
           scheduled_date?: string | null
           seo_score?: number
+          site_id?: string
           status?: Database["public"]["Enums"]["blog_status"]
           tags?: string[]
           title?: string
@@ -117,7 +131,15 @@ export type Database = {
           updated_at?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "blogs_site_fkey"
+            columns: ["site_id", "user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id", "user_id"]
+          },
+        ]
       }
       content_settings: {
         Row: {
@@ -127,6 +149,7 @@ export type Database = {
           created_at: string
           id: string
           last_autopilot_run: string | null
+          site_id: string
           status_online: boolean
           tone: string
           updated_at: string
@@ -141,6 +164,7 @@ export type Database = {
           created_at?: string
           id?: string
           last_autopilot_run?: string | null
+          site_id: string
           status_online?: boolean
           tone?: string
           updated_at?: string
@@ -155,6 +179,7 @@ export type Database = {
           created_at?: string
           id?: string
           last_autopilot_run?: string | null
+          site_id?: string
           status_online?: boolean
           tone?: string
           updated_at?: string
@@ -162,7 +187,15 @@ export type Database = {
           weekly_cadence?: number
           writing_style?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "content_settings_site_fkey"
+            columns: ["site_id", "user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id", "user_id"]
+          },
+        ]
       }
       credit_accounts: {
         Row: {
@@ -171,6 +204,7 @@ export type Database = {
           credits_used: number
           id: string
           period_end: string | null
+          site_id: string
           updated_at: string
           user_id: string
         }
@@ -180,6 +214,7 @@ export type Database = {
           credits_used?: number
           id?: string
           period_end?: string | null
+          site_id: string
           updated_at?: string
           user_id: string
         }
@@ -189,10 +224,19 @@ export type Database = {
           credits_used?: number
           id?: string
           period_end?: string | null
+          site_id?: string
           updated_at?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "credit_accounts_site_fkey"
+            columns: ["site_id", "user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id", "user_id"]
+          },
+        ]
       }
       credit_transactions: {
         Row: {
@@ -230,6 +274,7 @@ export type Database = {
           domain: string
           id: string
           reason: string
+          site_id: string
           user_id: string
         }
         Insert: {
@@ -237,6 +282,7 @@ export type Database = {
           domain: string
           id?: string
           reason?: string
+          site_id: string
           user_id: string
         }
         Update: {
@@ -244,9 +290,18 @@ export type Database = {
           domain?: string
           id?: string
           reason?: string
+          site_id?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "exchange_blocks_site_fkey"
+            columns: ["site_id", "user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id", "user_id"]
+          },
+        ]
       }
       exchange_credit_accounts: {
         Row: {
@@ -257,6 +312,7 @@ export type Database = {
           lifetime_earned: number
           lifetime_spent: number
           period_end: string | null
+          site_id: string
           updated_at: string
           user_id: string
         }
@@ -268,6 +324,7 @@ export type Database = {
           lifetime_earned?: number
           lifetime_spent?: number
           period_end?: string | null
+          site_id: string
           updated_at?: string
           user_id: string
         }
@@ -279,10 +336,19 @@ export type Database = {
           lifetime_earned?: number
           lifetime_spent?: number
           period_end?: string | null
+          site_id?: string
           updated_at?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "exchange_credit_accounts_site_fkey"
+            columns: ["site_id", "user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id", "user_id"]
+          },
+        ]
       }
       exchange_ledger: {
         Row: {
@@ -293,6 +359,7 @@ export type Database = {
           kind: Database["public"]["Enums"]["exchange_ledger_kind"]
           note: string
           placement_id: string | null
+          site_id: string
           user_id: string
         }
         Insert: {
@@ -303,6 +370,7 @@ export type Database = {
           kind: Database["public"]["Enums"]["exchange_ledger_kind"]
           note?: string
           placement_id?: string | null
+          site_id: string
           user_id: string
         }
         Update: {
@@ -313,6 +381,7 @@ export type Database = {
           kind?: Database["public"]["Enums"]["exchange_ledger_kind"]
           note?: string
           placement_id?: string | null
+          site_id?: string
           user_id?: string
         }
         Relationships: [
@@ -322,6 +391,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "exchange_placements"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "exchange_ledger_site_fkey"
+            columns: ["site_id", "user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id", "user_id"]
           },
         ]
       }
@@ -566,6 +642,13 @@ export type Database = {
             referencedRelation: "exchange_sites"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "exchange_sites_site_fkey"
+            columns: ["id", "user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id", "user_id"]
+          },
         ]
       }
       exchange_targets: {
@@ -634,6 +717,7 @@ export type Database = {
           intent: string | null
           name: string
           search_volume: number
+          site_id: string
           source: Database["public"]["Enums"]["keyword_source"]
           tag: string | null
           traffic_estimate: number
@@ -646,6 +730,7 @@ export type Database = {
           intent?: string | null
           name: string
           search_volume?: number
+          site_id: string
           source?: Database["public"]["Enums"]["keyword_source"]
           tag?: string | null
           traffic_estimate?: number
@@ -658,41 +743,65 @@ export type Database = {
           intent?: string | null
           name?: string
           search_volume?: number
+          site_id?: string
           source?: Database["public"]["Enums"]["keyword_source"]
           tag?: string | null
           traffic_estimate?: number
           trend?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "keywords_site_fkey"
+            columns: ["site_id", "user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id", "user_id"]
+          },
+        ]
       }
       profiles: {
         Row: {
+          archived_at: string | null
           avatar_url: string | null
+          billed_from: string | null
           brand_name: string | null
           created_at: string
           id: string
+          kind: string
           product_description: string | null
+          removes_at: string | null
+          status: string
           updated_at: string
           user_id: string
           website_url: string | null
         }
         Insert: {
+          archived_at?: string | null
           avatar_url?: string | null
+          billed_from?: string | null
           brand_name?: string | null
           created_at?: string
           id?: string
+          kind?: string
           product_description?: string | null
+          removes_at?: string | null
+          status?: string
           updated_at?: string
           user_id: string
           website_url?: string | null
         }
         Update: {
+          archived_at?: string | null
           avatar_url?: string | null
+          billed_from?: string | null
           brand_name?: string | null
           created_at?: string
           id?: string
+          kind?: string
           product_description?: string | null
+          removes_at?: string | null
+          status?: string
           updated_at?: string
           user_id?: string
           website_url?: string | null
@@ -724,6 +833,7 @@ export type Database = {
           id: string
           lifetime_spent: number
           period_end: string | null
+          site_id: string
           updated_at: string
           user_id: string
         }
@@ -733,6 +843,7 @@ export type Database = {
           id?: string
           lifetime_spent?: number
           period_end?: string | null
+          site_id: string
           updated_at?: string
           user_id: string
         }
@@ -742,10 +853,19 @@ export type Database = {
           id?: string
           lifetime_spent?: number
           period_end?: string | null
+          site_id?: string
           updated_at?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "reddit_credit_accounts_site_fkey"
+            columns: ["site_id", "user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id", "user_id"]
+          },
+        ]
       }
       reddit_drafts: {
         Row: {
@@ -759,6 +879,7 @@ export type Database = {
           model: string
           opportunity_id: string
           regen_count: number
+          site_id: string
           updated_at: string
           user_id: string
         }
@@ -773,6 +894,7 @@ export type Database = {
           model?: string
           opportunity_id: string
           regen_count?: number
+          site_id: string
           updated_at?: string
           user_id: string
         }
@@ -787,6 +909,7 @@ export type Database = {
           model?: string
           opportunity_id?: string
           regen_count?: number
+          site_id?: string
           updated_at?: string
           user_id?: string
         }
@@ -797,6 +920,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "reddit_opportunities"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reddit_drafts_site_fkey"
+            columns: ["site_id", "user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id", "user_id"]
           },
         ]
       }
@@ -809,6 +939,7 @@ export type Database = {
           id: string
           kind: Database["public"]["Enums"]["reddit_ledger_kind"]
           note: string
+          site_id: string
           user_id: string
         }
         Insert: {
@@ -819,6 +950,7 @@ export type Database = {
           id?: string
           kind: Database["public"]["Enums"]["reddit_ledger_kind"]
           note?: string
+          site_id: string
           user_id: string
         }
         Update: {
@@ -829,6 +961,7 @@ export type Database = {
           id?: string
           kind?: Database["public"]["Enums"]["reddit_ledger_kind"]
           note?: string
+          site_id?: string
           user_id?: string
         }
         Relationships: [
@@ -838,6 +971,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "reddit_drafts"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reddit_ledger_site_fkey"
+            columns: ["site_id", "user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id", "user_id"]
           },
         ]
       }
@@ -852,6 +992,7 @@ export type Database = {
           last_scored_at: string
           matched_keyword: string
           score: number
+          site_id: string
           status: Database["public"]["Enums"]["reddit_opportunity_status"]
           sweep_id: string | null
           thread_id: string
@@ -867,6 +1008,7 @@ export type Database = {
           last_scored_at?: string
           matched_keyword?: string
           score?: number
+          site_id: string
           status?: Database["public"]["Enums"]["reddit_opportunity_status"]
           sweep_id?: string | null
           thread_id: string
@@ -882,12 +1024,20 @@ export type Database = {
           last_scored_at?: string
           matched_keyword?: string
           score?: number
+          site_id?: string
           status?: Database["public"]["Enums"]["reddit_opportunity_status"]
           sweep_id?: string | null
           thread_id?: string
           user_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "reddit_opportunities_site_fkey"
+            columns: ["site_id", "user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id", "user_id"]
+          },
           {
             foreignKeyName: "reddit_opportunities_sweep_id_fkey"
             columns: ["sweep_id"]
@@ -917,6 +1067,7 @@ export type Database = {
           reddit_comment_id: string | null
           removed_at: string | null
           score: number | null
+          site_id: string
           status: Database["public"]["Enums"]["reddit_reply_status"]
           thread_id: string
           user_id: string
@@ -933,6 +1084,7 @@ export type Database = {
           reddit_comment_id?: string | null
           removed_at?: string | null
           score?: number | null
+          site_id: string
           status?: Database["public"]["Enums"]["reddit_reply_status"]
           thread_id: string
           user_id: string
@@ -949,6 +1101,7 @@ export type Database = {
           reddit_comment_id?: string | null
           removed_at?: string | null
           score?: number | null
+          site_id?: string
           status?: Database["public"]["Enums"]["reddit_reply_status"]
           thread_id?: string
           user_id?: string
@@ -967,6 +1120,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "reddit_opportunities"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reddit_replies_site_fkey"
+            columns: ["site_id", "user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id", "user_id"]
           },
           {
             foreignKeyName: "reddit_replies_thread_id_fkey"
@@ -1025,6 +1185,7 @@ export type Database = {
           niche: string | null
           paid_active: boolean
           paid_checked_at: string | null
+          site_id: string
           sweep_count: number
           sweep_enabled: boolean
           tone: string
@@ -1044,6 +1205,7 @@ export type Database = {
           niche?: string | null
           paid_active?: boolean
           paid_checked_at?: string | null
+          site_id: string
           sweep_count?: number
           sweep_enabled?: boolean
           tone?: string
@@ -1063,6 +1225,7 @@ export type Database = {
           niche?: string | null
           paid_active?: boolean
           paid_checked_at?: string | null
+          site_id?: string
           sweep_count?: number
           sweep_enabled?: boolean
           tone?: string
@@ -1070,7 +1233,15 @@ export type Database = {
           updated_at?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "reddit_settings_site_fkey"
+            columns: ["site_id", "user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id", "user_id"]
+          },
+        ]
       }
       reddit_subreddits: {
         Row: {
@@ -1134,6 +1305,7 @@ export type Database = {
           opportunities_created: number
           reddit_queries: number
           serp_queries: number
+          site_id: string
           started_at: string
           status: Database["public"]["Enums"]["reddit_sweep_status"]
           threads_seen: number
@@ -1150,6 +1322,7 @@ export type Database = {
           opportunities_created?: number
           reddit_queries?: number
           serp_queries?: number
+          site_id: string
           started_at?: string
           status?: Database["public"]["Enums"]["reddit_sweep_status"]
           threads_seen?: number
@@ -1166,13 +1339,22 @@ export type Database = {
           opportunities_created?: number
           reddit_queries?: number
           serp_queries?: number
+          site_id?: string
           started_at?: string
           status?: Database["public"]["Enums"]["reddit_sweep_status"]
           threads_seen?: number
           trigger?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "reddit_sweeps_site_fkey"
+            columns: ["site_id", "user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id", "user_id"]
+          },
+        ]
       }
       reddit_thread_ai_citations: {
         Row: {
@@ -1345,6 +1527,21 @@ export type Database = {
         }
         Relationships: []
       }
+      studio_locks: {
+        Row: {
+          until: string
+          user_id: string
+        }
+        Insert: {
+          until: string
+          user_id: string
+        }
+        Update: {
+          until?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       subscriptions: {
         Row: {
           activated_at: string | null
@@ -1363,6 +1560,7 @@ export type Database = {
           status: string
           stripe_customer_id: string
           stripe_subscription_id: string
+          studio_sites: number
           updated_at: string | null
           user_id: string
         }
@@ -1383,6 +1581,7 @@ export type Database = {
           status?: string
           stripe_customer_id: string
           stripe_subscription_id: string
+          studio_sites?: number
           updated_at?: string | null
           user_id: string
         }
@@ -1403,6 +1602,7 @@ export type Database = {
           status?: string
           stripe_customer_id?: string
           stripe_subscription_id?: string
+          studio_sites?: number
           updated_at?: string | null
           user_id?: string
         }
@@ -1440,13 +1640,13 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      consume_article_credit: { Args: { _user_id: string }; Returns: boolean }
+      consume_article_credit: { Args: { _site_id: string }; Returns: boolean }
       exchange_clawback_placement: {
         Args: { _placement_id: string; _reason: string }
         Returns: boolean
       }
       exchange_grant_credits: {
-        Args: { _credits: number; _period_end: string; _user_id: string }
+        Args: { _credits: number; _period_end: string; _site_id: string }
         Returns: number
       }
       exchange_mark_placed: {
@@ -1474,7 +1674,7 @@ export type Database = {
         Returns: string
       }
       exchange_set_paid: {
-        Args: { _paid: boolean; _user_id: string }
+        Args: { _paid: boolean; _site_id: string }
         Returns: undefined
       }
       exchange_settle_placement: {
@@ -1495,7 +1695,7 @@ export type Database = {
         Returns: Database["public"]["Enums"]["reddit_reply_status"]
       }
       reddit_grant_credits: {
-        Args: { _credits: number; _period_end: string; _user_id: string }
+        Args: { _credits: number; _period_end: string; _site_id: string }
         Returns: number
       }
       reddit_record_reply: {
@@ -1504,7 +1704,7 @@ export type Database = {
           _draft_id: string
           _opportunity_id: string
           _permalink: string
-          _user_id: string
+          _site_id: string
         }
         Returns: string
       }
@@ -1513,12 +1713,12 @@ export type Database = {
           _amount: number
           _draft_id: string
           _note: string
-          _user_id: string
+          _site_id: string
         }
         Returns: number
       }
       reddit_set_paid: {
-        Args: { _paid: boolean; _user_id: string }
+        Args: { _paid: boolean; _site_id: string }
         Returns: undefined
       }
       reddit_spend_credit: {
@@ -1526,7 +1726,7 @@ export type Database = {
           _amount: number
           _draft_id: string
           _note: string
-          _user_id: string
+          _site_id: string
         }
         Returns: number
       }
@@ -1534,8 +1734,8 @@ export type Database = {
         Args: {
           _keywords: string[]
           _min_interval: string
+          _site_id: string
           _trigger: string
-          _user_id: string
         }
         Returns: Json
       }
@@ -1546,23 +1746,23 @@ export type Database = {
           _channel: string
           _keyword: string
           _score: number
+          _site_id: string
           _sweep_id: string
           _thread_id: string
-          _user_id: string
         }
         Returns: Json
       }
       reddit_upsert_thread: { Args: { _payload: Json }; Returns: string }
-      refund_article_credit: { Args: { _user_id: string }; Returns: undefined }
-      reset_article_credits:
-        | {
-            Args: { _period_end: string; _user_id: string }
-            Returns: undefined
-          }
-        | {
-            Args: { _credits: number; _period_end: string; _user_id: string }
-            Returns: undefined
-          }
+      refund_article_credit: { Args: { _site_id: string }; Returns: undefined }
+      reset_article_credits: {
+        Args: { _credits: number; _period_end: string; _site_id: string }
+        Returns: undefined
+      }
+      studio_acquire_lock: {
+        Args: { _seconds: number; _user_id: string }
+        Returns: boolean
+      }
+      studio_release_lock: { Args: { _user_id: string }; Returns: undefined }
     }
     Enums: {
       blog_status: "opportunity" | "scheduled" | "generating" | "finished"

@@ -16,7 +16,7 @@
  *    consolidates, and puts a number only on our own plan.
  */
 import { Megaphone, Rocket, Building2, type LucideIcon } from "lucide-react";
-import { PLAN, TRIAL_DAYS, formatUsd } from "./pricing";
+import { PLAN, STUDIO, TRIAL_DAYS, formatUsd } from "./pricing";
 
 /** A product fact in the band under the hero. Facts, never results. */
 export interface PersonaSpec {
@@ -507,7 +507,12 @@ export const PERSONAS: Persona[] = [
       "Rankbox is an AI search growth engine agencies run on a per-client basis. Each client site gets its own plan: answer-space research, source-backed drafts in that client's voice, SEO and GEO scoring, publishing to their CMS, and reporting on which AI answers cite them. Plans cover one site each and team members are unlimited, so a pod can work across every account without per-seat costs.",
 
     specs: [
-      { value: "1 plan", label: "per client site, priced the same each time" },
+      STUDIO.live
+        ? {
+            value: formatUsd(STUDIO.monthlyPerSite),
+            label: "per extra client site, all in one account",
+          }
+        : { value: "1 plan", label: "per client site, priced the same each time" },
       { value: "Unlimited", label: "team members, no per-seat fee" },
       { value: `${PLAN.articlesPerMonth}/mo`, label: "published articles per account" },
       { value: "Per-client", label: "brand voice, topic map, and reporting" },
@@ -574,7 +579,9 @@ export const PERSONAS: Persona[] = [
       {
         when: "Kickoff",
         title: "Spin up the account",
-        body: "One plan per client site. Point it at their domain and it learns their category and their voice.",
+        body: STUDIO.live
+          ? "Add the client's site in Studio. Point it at their domain and it learns their category and their voice."
+          : "One plan per client site. Point it at their domain and it learns their category and their voice.",
       },
       {
         when: "Week 1",
@@ -611,7 +618,9 @@ export const PERSONAS: Persona[] = [
         detail: "The service line you can't currently sell because you can't deliver it",
       },
     ],
-    stackNote: `Plans cover ${PLAN.sites} site each, so a book of clients is one plan per client site. Running several accounts? Email us and we'll work out the right setup with you.`,
+    stackNote: STUDIO.live
+      ? `Your plan covers your first site; every other client site is ${formatUsd(STUDIO.monthlyPerSite)} a month through ${STUDIO.name}, on the same account and the same invoice.`
+      : `Plans cover ${PLAN.sites} site each, so a book of clients is one plan per client site. Running several accounts? Email us and we'll work out the right setup with you.`,
 
     picksTitle: "The parts that carry a client book",
     picksIntro:
@@ -641,7 +650,9 @@ export const PERSONAS: Persona[] = [
     faqs: [
       {
         q: "Can one plan cover all my clients?",
-        a: `No, and we'd rather say so plainly: each plan covers ${PLAN.sites} website, with its own research, topic map, voice, and publishing schedule. A book of clients means one plan per client site. If you're running several, email us and we'll work out the right setup with you.`,
+        a: STUDIO.live
+          ? `One account covers all of them, but not one price: your plan includes one site, and ${STUDIO.name} adds each other client site for ${formatUsd(STUDIO.monthlyPerSite)} a month. Every site gets its own research, topic map, voice, and publishing schedule, and the full ${PLAN.articlesPerMonth} articles a month. Your clients' sites never trade backlinks with each other.`
+          : `No, and we'd rather say so plainly: each plan covers ${PLAN.sites} website, with its own research, topic map, voice, and publishing schedule. A book of clients means one plan per client site. If you're running several, email us and we'll work out the right setup with you.`,
       },
       {
         q: "Can my whole team work across accounts?",

@@ -9,6 +9,7 @@ import { EmptyState, Pill } from "@/components/dashboard/primitives";
 import { DataTable, Td, Tr } from "@/components/dashboard/data-table";
 import { ThreadIcon } from "@/components/dashboard/icons";
 import { ProgressRing } from "@/components/dashboard/rewards";
+import { useSiteId } from "@/components/dashboard/site-context";
 import { listRedditOpportunities, REDDIT_BLOCKED_COPY, type RedditOpportunity } from "@/lib/data";
 import { fitPercent } from "@/lib/reddit/scoring";
 import { cn } from "@/lib/utils";
@@ -42,10 +43,11 @@ export function OpportunitiesTab({
   action?: React.ReactNode;
   onOpen: (id: string) => void;
 }) {
+  const siteId = useSiteId();
   const [filter, setFilter] = useState<OpportunityFilter>("open");
   const { data: all } = useQuery({
-    queryKey: ["reddit", "opportunities"],
-    queryFn: listRedditOpportunities,
+    queryKey: ["reddit", siteId, "opportunities"],
+    queryFn: () => listRedditOpportunities(siteId),
     refetchInterval: 30_000,
   });
 

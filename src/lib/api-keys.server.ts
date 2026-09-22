@@ -37,17 +37,20 @@ export function extractApiKey(request: Request): string | null {
 }
 
 export type ApiKeyAuth =
-  | { ok: true; userId: string }
+  /** The key's owner and the one site it syncs; every read and write is scoped to that site. */
+  | { ok: true; userId: string; siteId: string }
   /** Missing, malformed, unknown, or revoked. */
   | { ok: false; reason: "invalid" }
-  /** A real key whose account has no trial or plan. */
+  /** A real key whose site may not generate: no trial or plan, or the site isn't live. */
   | { ok: false; reason: "no-plan" };
 
 /**
- * Resolve the owner of an incoming API key. A valid, non-revoked key only
- * authenticates while its account has a trial or plan. Bumps last_used_at on
- * success only, so the dashboard never shows a lapsed site as syncing.
- * Uses the service-role client because the request is unauthenticated HTTP.
+ * Resolve the owner and site of an incoming API key. A valid, non-revoked key
+ * only authenticates while its site is entitled — the account has a trial or
+ * plan and the site is live (a removed or archived Studio site stops syncing).
+ * Bumps last_used_at on success only, so the dashboard never shows a lapsed
+ * site as syncing. Uses the service-role client because the request is
+ * unauthenticated HTTP.
  */
 export async function resolveApiKeyUser(request: Request): Promise<ApiKeyAuth> {
   const raw = extractApiKey(request);
@@ -58,15 +61,15 @@ export async function resolveApiKeyUser(request: Request): Promise<ApiKeyAuth> {
 
   const { data, error } = await supabaseAdmin
     .from("api_keys")
-    .select("id, user_id, revoked_at")
+    .select("id, user_id, site_id, revoked_at")
     .eq("key_hash", hash)
     .maybeSingle();
 
   if (error || !data || data.revoked_at) return { ok: false, reason: "invalid" };
 
-  const userId = data.user_id as string;
+  const scope = { userId: data.user_id as string, siteId: data.site_id as string };
   const { hasGenerationEntitlement } = await import("@/lib/entitlement.server");
-  if (!(await hasGenerationEntitlement(supabaseAdmin, userId))) {
+  if (!(await hasGenerationEntitlement(supabaseAdmin, scope))) {
     return { ok: false, reason: "no-plan" };
   }
 
@@ -76,7 +79,7 @@ export async function resolveApiKeyUser(request: Request): Promise<ApiKeyAuth> {
     .update({ last_used_at: new Date().toISOString() })
     .eq("id", data.id);
 
-  return { ok: true, userId };
+  return { ok: true, ...scope };
 }
 
 /** Stable, human-friendly slug derived from a title plus a short id suffix. */

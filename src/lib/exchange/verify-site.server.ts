@@ -1,10 +1,11 @@
 /**
- * Proving a member controls the domain they publish to.
+ * Proving a member controls the domain a site publishes to.
  *
  * Nothing in the exchange happens for an unverified domain: a link earned by
- * a site nobody owns is worth nothing, and two accounts must not both earn
- * from one site. Three methods, any one of which passes, all fetched through
- * the SSRF-guarded client:
+ * a site nobody owns is worth nothing, and two Rankbox sites — of one account
+ * or of two — must not both earn from one domain. Each site verifies its own.
+ * Three methods, any one of which passes, all fetched through the
+ * SSRF-guarded client:
  *
  *   dns_txt     a TXT record at _rankbox.<domain>
  *   well_known  https://<domain>/.well-known/rankbox-verification containing the token
@@ -14,7 +15,7 @@
  * no resolver API; it is a fixed, public host, so the guard is happy with it.
  */
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
-import { hasExchangeEntitlement } from "@/lib/entitlement.server";
+import { hasExchangeEntitlement, type SiteScope } from "@/lib/entitlement.server";
 import { safeFetchText } from "@/lib/safe-fetch.server";
 import { normalizeDomain } from "./domain";
 import { loadSite, siteFromRow, type SiteRow } from "./exchange.server";
@@ -29,15 +30,20 @@ export const VERIFY_WELL_KNOWN_PATH = "/.well-known/rankbox-verification";
 const MAX_ATTEMPTS = 200;
 
 /**
- * Claims a domain for the member. A verified site keeps its status when the
- * domain is unchanged; a different domain starts verification over.
+ * Claims a domain for one of the member's sites. A verified site keeps its
+ * status when the domain is unchanged; a different domain starts verification
+ * over. The exchange row is created with the site's own id — that is what
+ * ties it to the site.
  */
-export async function startVerification(userId: string, rawDomain: string): Promise<ExchangeSite> {
+export async function startVerification(
+  scope: SiteScope,
+  rawDomain: string,
+): Promise<ExchangeSite> {
   const domain = normalizeDomain(rawDomain);
   if (!domain) throw new Error("Enter the domain you publish to, like example.com.");
 
-  const existing = await loadSite(userId);
-  const paid = await hasExchangeEntitlement(supabaseAdmin, userId);
+  const existing = await loadSite(scope.siteId);
+  const paid = await hasExchangeEntitlement(supabaseAdmin, scope);
 
   if (existing && existing.domain === domain) {
     if (existing.paid_active !== paid) {
@@ -67,7 +73,7 @@ export async function startVerification(userId: string, rawDomain: string): Prom
         .single()
     : await supabaseAdmin
         .from("exchange_sites")
-        .insert({ user_id: userId, ...patch })
+        .insert({ id: scope.siteId, user_id: scope.userId, ...patch })
         .select("*")
         .single();
   if (result.error) throw new Error(result.error.message);
@@ -193,8 +199,8 @@ async function probeMeta(domain: string, token: string): Promise<Probe> {
  * Runs every method and marks the site verified on the first that passes.
  * On failure the reason says exactly what was seen, so the member can fix it.
  */
-export async function checkVerification(userId: string): Promise<VerificationResult> {
-  const site = await loadSite(userId);
+export async function checkVerification(siteId: string): Promise<VerificationResult> {
+  const site = await loadSite(siteId);
   if (!site) return { ok: false, reason: "Add the domain you publish to first." };
   if (site.status === "verified") return { ok: true, method: site.verify_method ?? undefined };
   if (site.status === "suspended") {
@@ -240,11 +246,23 @@ async function markVerified(
     .eq("id", site.id);
   if (error) {
     await supabaseAdmin.from("exchange_sites").update({ status: "unverified" }).eq("id", site.id);
-    // The partial unique index: one verified owner per domain.
+    // The partial unique index: one verified site per domain.
     if (/exchange_sites_verified_domain_key/.test(error.message) || error.code === "23505") {
+      // Naming the owner's own other site gives nothing away; anyone else's stays anonymous.
+      const { data: mine } = await supabaseAdmin
+        .from("exchange_sites")
+        .select("id")
+        .eq("domain", site.domain)
+        .eq("status", "verified")
+        .eq("user_id", site.user_id)
+        .neq("id", site.id)
+        .limit(1)
+        .maybeSingle();
       return {
         ok: false,
-        reason: `${site.domain} is already verified by another Rankbox account. If that's you, verify it from that account, or contact support.`,
+        reason: mine
+          ? `${site.domain} is already verified for another of your sites. A domain trades from one site only — use it from that site.`
+          : `${site.domain} is already verified by another Rankbox account. If that's you, verify it from that account, or contact support.`,
       };
     }
     throw new Error(error.message);

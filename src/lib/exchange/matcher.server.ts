@@ -6,6 +6,10 @@
  * caps, balances — is resolved here in one pass over the placements that
  * involve the host; and the ranking is the pure scorer the mock uses too.
  *
+ * Balances, keywords and blocks all belong to a site. The one rule that is
+ * about a person rather than a site stays on the owner: no site ever links to
+ * another site of its own owner.
+ *
  * This module PROPOSES. It never reserves: exchange_reserve_placement is the
  * authority, and re-checks every rule under a row lock.
  */
@@ -71,6 +75,7 @@ export async function findCandidates(
     )
     .eq("active", true)
     .neq("site_id", host.id)
+    // Never another site of the host's own owner — that is a private link network.
     .neq("user_id", host.user_id)
     .eq("site.status", "verified")
     .eq("site.opted_in", true)
@@ -83,7 +88,6 @@ export async function findCandidates(
   if (rows.length === 0) return [];
 
   const targetIds = rows.map((r) => r.id);
-  const requesterUsers = [...new Set(rows.map((r) => r.user_id))];
   const requesterSites = [...new Set(rows.map((r) => r.site_id))];
 
   const [
@@ -110,18 +114,20 @@ export async function findCandidates(
       .limit(5000),
     supabaseAdmin
       .from("exchange_credit_accounts")
-      .select("user_id, balance")
-      .in("user_id", requesterUsers),
+      .select("site_id, balance")
+      .in("site_id", requesterSites),
     supabaseAdmin
       .from("keywords")
-      .select("user_id, name")
-      .in("user_id", requesterUsers)
+      .select("site_id, name")
+      .in("site_id", requesterSites)
       .limit(3000),
-    supabaseAdmin.from("exchange_blocks").select("domain").eq("user_id", host.user_id),
+    // Domains the host site refuses to link to.
+    supabaseAdmin.from("exchange_blocks").select("domain").eq("site_id", host.id),
+    // Requester sites that refuse a link from the host's domain.
     supabaseAdmin
       .from("exchange_blocks")
-      .select("user_id")
-      .in("user_id", requesterUsers)
+      .select("site_id")
+      .in("site_id", requesterSites)
       .eq("domain", host.domain),
     supabaseAdmin
       .from("exchange_placements")
@@ -163,30 +169,31 @@ export async function findCandidates(
     usedAnchors.set(p.target_id, [...(usedAnchors.get(p.target_id) ?? []), p.anchor_used]);
   }
 
-  const balance = new Map((accounts.data ?? []).map((a) => [a.user_id, a.balance]));
-  const keywordsByUser = new Map<string, string[]>();
+  const balance = new Map((accounts.data ?? []).map((a) => [a.site_id, a.balance]));
+  const keywordsBySite = new Map<string, string[]>();
   for (const k of keywords.data ?? []) {
-    keywordsByUser.set(k.user_id, [...(keywordsByUser.get(k.user_id) ?? []), k.name]);
+    keywordsBySite.set(k.site_id, [...(keywordsBySite.get(k.site_id) ?? []), k.name]);
   }
   const blockedDomains = new Set((hostBlocks.data ?? []).map((b) => b.domain));
-  const blockingUsers = new Set((theirBlocks.data ?? []).map((b) => b.user_id));
+  const blockingSites = new Set((theirBlocks.data ?? []).map((b) => b.site_id));
 
   const candidates: Candidate[] = [];
   for (const r of rows) {
     const site = r.site;
     if (!site) continue;
-    if (blockedDomains.has(site.domain) || blockingUsers.has(r.user_id)) continue;
+    if (blockedDomains.has(site.domain) || blockingSites.has(r.site_id)) continue;
     if (site.domain === host.domain) continue;
     // No direct reciprocity: their site links to ours, so ours may not link to theirs.
     if (linkedToHost.has(site.id)) continue;
     if (cooledDown.has(site.id)) continue;
     if (host.is_house && linkedFromHost.has(site.id)) continue;
-    if ((balance.get(r.user_id) ?? 0) < cost) continue;
+    if ((balance.get(r.site_id) ?? 0) < cost) continue;
     if ((velocity.get(r.id) ?? 0) >= r.max_new_links_per_month) continue;
 
     candidates.push({
       targetId: r.id,
       requesterSiteId: site.id,
+      requesterOwnerId: r.user_id,
       requesterDomain: site.domain,
       url: r.url,
       anchors: r.anchors ?? [],
@@ -199,11 +206,10 @@ export async function findCandidates(
       lastPlacedAt: r.last_placed_at,
       liveCount: r.live_count,
       everLinkedFromHost: linkedFromHost.has(site.id),
-      requesterKeywords: (keywordsByUser.get(r.user_id) ?? []).slice(0, 40),
+      requesterKeywords: (keywordsBySite.get(r.site_id) ?? []).slice(0, 40),
       usedAnchors: usedAnchors.get(r.id) ?? [],
     });
   }
-  _requesterSitesUnused(requesterSites);
 
   const ctx: MatchContext = {
     hostSiteId: host.id,
@@ -217,7 +223,3 @@ export async function findCandidates(
   };
   return rankCandidates(candidates, ctx, now).slice(0, limit);
 }
-
-// Kept for symmetry with requesterUsers; the site list is what a future
-// per-site block table would key on.
-function _requesterSitesUnused(_sites: string[]) {}

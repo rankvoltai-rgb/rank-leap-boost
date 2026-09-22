@@ -69,7 +69,11 @@ const AnalyzeInput = z.object({
   full_name: z.string().optional(),
 });
 
+const SiteId = z.string().uuid();
+
 const BlogInput = z.object({
+  /** The site the article is for: its brand brief, its credits, its exchange row. */
+  siteId: SiteId,
   title: z.string().trim().min(1),
   keyword: z.string().optional(),
   description: z.string().optional(),
@@ -78,11 +82,16 @@ const BlogInput = z.object({
   blogId: z.string().uuid().optional(),
 });
 
-async function loadStyleContext(supabase: unknown, userId: string) {
+/**
+ * One site's brand brief. Read through the caller's own RLS client, so a site
+ * id that isn't theirs reads nothing and writes an unbranded brief rather
+ * than someone else's.
+ */
+async function loadStyleContext(supabase: unknown, siteId: string) {
   const client = supabase as SupabaseClientLike;
   const [{ data: settings }, { data: profile }] = await Promise.all([
-    client.from("content_settings").select("*").eq("user_id", userId).maybeSingle(),
-    client.from("profiles").select("*").eq("user_id", userId).maybeSingle(),
+    client.from("content_settings").select("*").eq("site_id", siteId).maybeSingle(),
+    client.from("profiles").select("*").eq("id", siteId).maybeSingle(),
   ]);
   const { composeStyleBrief } = await import("./style-brief");
   const text = (v: unknown) => (typeof v === "string" ? v : null);
@@ -415,12 +424,52 @@ export const generateBlogContent = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => BlogInput.parse(d))
   .handler(async ({ data, context }) => {
-    // Server-side trial gate. This function is a plain POST endpoint, so a UI
-    // check alone is bypassable, and credits are granted during onboarding
-    // before any payment — a credits check does not stand in for this.
-    await requireGenerationEntitlement(context.supabase, context.userId);
+    const scope = { userId: context.userId, siteId: data.siteId };
+    // Server-side trial gate, per site. This function is a plain POST
+    // endpoint, so a UI check alone is bypassable, and credits are granted
+    // during onboarding before any payment — a credits check does not stand
+    // in for this.
+    await requireGenerationEntitlement(context.supabase, scope);
     await assertAiRateLimit(context.userId);
-    const style = await loadStyleContext(context.supabase, context.userId);
+
+    // The article must be this site's: its credit, its brand brief and any
+    // exchange link placed in it all belong to the site named here.
+    if (data.blogId) {
+      const { data: blog } = await (
+        context.supabase as unknown as {
+          from: (t: string) => {
+            select: (c: string) => {
+              eq: (
+                c: string,
+                v: string,
+              ) => { maybeSingle: () => PromiseLike<{ data: { site_id: string } | null }> };
+            };
+          };
+        }
+      )
+        .from("blogs")
+        .select("site_id")
+        .eq("id", data.blogId)
+        .maybeSingle();
+      if (!blog || blog.site_id !== data.siteId) {
+        throw new Error("That article isn't on this site.");
+      }
+    }
+
+    // The article's credit is spent here, before writing, and given back if
+    // the writing fails — the same order autopilot uses. The site's balance
+    // is the only one it can touch: the gate above proved the site is theirs.
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: reservedCredit, error: creditError } = await supabaseAdmin.rpc(
+      "consume_article_credit",
+      { _site_id: data.siteId },
+    );
+    if (creditError) throw new Error(creditError.message);
+    if (!reservedCredit) {
+      throw new Error("This site has used all its articles for this billing period.");
+    }
+
+    const style = await loadStyleContext(context.supabase, data.siteId);
     const { writeArticle } = await import("./article.server");
 
     // The backlink exchange: one link for another member, if the network has
@@ -429,7 +478,7 @@ export const generateBlogContent = createServerFn({ method: "POST" })
     const { reserveForArticle, settleReservations, releaseReservations } =
       await import("./exchange/engine.server");
     const reserved = data.blogId
-      ? await reserveForArticle(context.userId, {
+      ? await reserveForArticle(scope, {
           id: data.blogId,
           title: data.title,
           keyword: data.keyword ?? null,
@@ -444,6 +493,7 @@ export const generateBlogContent = createServerFn({ method: "POST" })
       return article;
     } catch (err) {
       await releaseReservations(reserved, "generation failed");
+      await supabaseAdmin.rpc("refund_article_credit", { _site_id: data.siteId });
       throw err;
     }
   });
@@ -461,11 +511,13 @@ const ACTIONS: Record<string, string> = {
 
 export const editBlogSection = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: { selection: string; action: string }) => d)
+  .inputValidator((d: unknown) =>
+    z.object({ siteId: SiteId, selection: z.string(), action: z.string() }).parse(d),
+  )
   .handler(async ({ data, context }) => {
     await assertAiRateLimit(context.userId);
     const gateway = createAiProvider();
-    const style = await loadStyleContext(context.supabase, context.userId);
+    const style = await loadStyleContext(context.supabase, data.siteId);
     const instruction = ACTIONS[data.action] ?? ACTIONS.ai_suggest;
     const { text } = await generateText({
       model: model(gateway),
@@ -476,11 +528,13 @@ export const editBlogSection = createServerFn({ method: "POST" })
 
 export const discoverKeywords = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: { seed?: string }) => d)
+  .inputValidator((d: unknown) =>
+    z.object({ siteId: SiteId, seed: z.string().optional() }).parse(d),
+  )
   .handler(async ({ data, context }) => {
     await assertAiRateLimit(context.userId);
     const gateway = createAiProvider();
-    const style = await loadStyleContext(context.supabase, context.userId);
+    const style = await loadStyleContext(context.supabase, data.siteId);
     const json = await generateJson(
       gateway,
       `${style}\n\nGenerate SEO keyword opportunities${data.seed ? ` around "${data.seed}"` : " based on the brand and product context"}. Return JSON: {"keywords":[{"name":"keyword","tag":"High Intent","search_volume":1200,"traffic_estimate":300,"intent":"Transactional","trend":"High"}]}`,
@@ -527,11 +581,13 @@ export const analyzeWebsite = createServerFn({ method: "POST" })
 
 export const generateBlogStrategy = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: { existingTitles?: string[] }) => d)
+  .inputValidator((d: unknown) =>
+    z.object({ siteId: SiteId, existingTitles: z.array(z.string()).optional() }).parse(d),
+  )
   .handler(async ({ data, context }) => {
     await assertAiRateLimit(context.userId);
     const gateway = createAiProvider();
-    const style = await loadStyleContext(context.supabase, context.userId);
+    const style = await loadStyleContext(context.supabase, data.siteId);
     const avoid = data.existingTitles?.length
       ? `\n\nDo NOT repeat any of these existing titles:\n${data.existingTitles.join("\n")}`
       : "";

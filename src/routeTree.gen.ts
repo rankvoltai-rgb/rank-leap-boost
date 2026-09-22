@@ -55,12 +55,14 @@ import { Route as AuthenticatedDashboardBlogEngineRouteImport } from './routes/_
 import { Route as AuthenticatedDashboardBillingRouteImport } from './routes/_authenticated/dashboard.billing'
 import { Route as AuthenticatedDashboardBacklinksRouteImport } from './routes/_authenticated/dashboard.backlinks'
 import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
+import { Route as AuthenticatedDashboardStudioIndexRouteImport } from './routes/_authenticated/dashboard.studio.index'
 import { Route as ApiPublicV1PingRouteImport } from './routes/api/public/v1/ping'
 import { Route as ApiPublicV1ArticlesRouteImport } from './routes/api/public/v1/articles'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
 import { Route as ApiPublicHooksRedditRunRouteImport } from './routes/api/public/hooks/reddit-run'
 import { Route as ApiPublicHooksExchangeRunRouteImport } from './routes/api/public/hooks/exchange-run'
 import { Route as ApiPublicHooksAutopilotRunRouteImport } from './routes/api/public/hooks/autopilot-run'
+import { Route as AuthenticatedDashboardStudioNewRouteImport } from './routes/_authenticated/dashboard.studio.new'
 import { Route as AuthenticatedDashboardEditorBlogIdRouteImport } from './routes/_authenticated/dashboard.editor.$blogId'
 import { Route as ApiPublicV1ArticlesIdRouteImport } from './routes/api/public/v1/articles.$id'
 
@@ -305,6 +307,12 @@ const Char91DotmcpChar93InvokeToolToolRoute =
     path: '/.mcp/invoke-tool/$tool',
     getParentRoute: () => rootRouteImport,
   } as any)
+const AuthenticatedDashboardStudioIndexRoute =
+  AuthenticatedDashboardStudioIndexRouteImport.update({
+    id: '/studio/',
+    path: '/studio/',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
 const ApiPublicV1PingRoute = ApiPublicV1PingRouteImport.update({
   id: '/api/public/v1/ping',
   path: '/api/public/v1/ping',
@@ -337,6 +345,12 @@ const ApiPublicHooksAutopilotRunRoute =
     id: '/api/public/hooks/autopilot-run',
     path: '/api/public/hooks/autopilot-run',
     getParentRoute: () => rootRouteImport,
+  } as any)
+const AuthenticatedDashboardStudioNewRoute =
+  AuthenticatedDashboardStudioNewRouteImport.update({
+    id: '/studio/new',
+    path: '/studio/new',
+    getParentRoute: () => AuthenticatedDashboardRoute,
   } as any)
 const AuthenticatedDashboardEditorBlogIdRoute =
   AuthenticatedDashboardEditorBlogIdRouteImport.update({
@@ -397,12 +411,14 @@ export interface FileRoutesByFullPath {
   '/dashboard/visibility': typeof AuthenticatedDashboardVisibilityRoute
   '/dashboard/': typeof AuthenticatedDashboardIndexRoute
   '/dashboard/editor/$blogId': typeof AuthenticatedDashboardEditorBlogIdRoute
+  '/dashboard/studio/new': typeof AuthenticatedDashboardStudioNewRoute
   '/api/public/hooks/autopilot-run': typeof ApiPublicHooksAutopilotRunRoute
   '/api/public/hooks/exchange-run': typeof ApiPublicHooksExchangeRunRoute
   '/api/public/hooks/reddit-run': typeof ApiPublicHooksRedditRunRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/api/public/v1/articles': typeof ApiPublicV1ArticlesRouteWithChildren
   '/api/public/v1/ping': typeof ApiPublicV1PingRoute
+  '/dashboard/studio/': typeof AuthenticatedDashboardStudioIndexRoute
   '/api/public/v1/articles/$id': typeof ApiPublicV1ArticlesIdRoute
 }
 export interface FileRoutesByTo {
@@ -451,12 +467,14 @@ export interface FileRoutesByTo {
   '/dashboard/visibility': typeof AuthenticatedDashboardVisibilityRoute
   '/dashboard': typeof AuthenticatedDashboardIndexRoute
   '/dashboard/editor/$blogId': typeof AuthenticatedDashboardEditorBlogIdRoute
+  '/dashboard/studio/new': typeof AuthenticatedDashboardStudioNewRoute
   '/api/public/hooks/autopilot-run': typeof ApiPublicHooksAutopilotRunRoute
   '/api/public/hooks/exchange-run': typeof ApiPublicHooksExchangeRunRoute
   '/api/public/hooks/reddit-run': typeof ApiPublicHooksRedditRunRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/api/public/v1/articles': typeof ApiPublicV1ArticlesRouteWithChildren
   '/api/public/v1/ping': typeof ApiPublicV1PingRoute
+  '/dashboard/studio': typeof AuthenticatedDashboardStudioIndexRoute
   '/api/public/v1/articles/$id': typeof ApiPublicV1ArticlesIdRoute
 }
 export interface FileRoutesById {
@@ -508,12 +526,14 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/visibility': typeof AuthenticatedDashboardVisibilityRoute
   '/_authenticated/dashboard/': typeof AuthenticatedDashboardIndexRoute
   '/_authenticated/dashboard/editor/$blogId': typeof AuthenticatedDashboardEditorBlogIdRoute
+  '/_authenticated/dashboard/studio/new': typeof AuthenticatedDashboardStudioNewRoute
   '/api/public/hooks/autopilot-run': typeof ApiPublicHooksAutopilotRunRoute
   '/api/public/hooks/exchange-run': typeof ApiPublicHooksExchangeRunRoute
   '/api/public/hooks/reddit-run': typeof ApiPublicHooksRedditRunRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/api/public/v1/articles': typeof ApiPublicV1ArticlesRouteWithChildren
   '/api/public/v1/ping': typeof ApiPublicV1PingRoute
+  '/_authenticated/dashboard/studio/': typeof AuthenticatedDashboardStudioIndexRoute
   '/api/public/v1/articles/$id': typeof ApiPublicV1ArticlesIdRoute
 }
 export interface FileRouteTypes {
@@ -565,12 +585,14 @@ export interface FileRouteTypes {
     | '/dashboard/visibility'
     | '/dashboard/'
     | '/dashboard/editor/$blogId'
+    | '/dashboard/studio/new'
     | '/api/public/hooks/autopilot-run'
     | '/api/public/hooks/exchange-run'
     | '/api/public/hooks/reddit-run'
     | '/api/public/payments/webhook'
     | '/api/public/v1/articles'
     | '/api/public/v1/ping'
+    | '/dashboard/studio/'
     | '/api/public/v1/articles/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -619,12 +641,14 @@ export interface FileRouteTypes {
     | '/dashboard/visibility'
     | '/dashboard'
     | '/dashboard/editor/$blogId'
+    | '/dashboard/studio/new'
     | '/api/public/hooks/autopilot-run'
     | '/api/public/hooks/exchange-run'
     | '/api/public/hooks/reddit-run'
     | '/api/public/payments/webhook'
     | '/api/public/v1/articles'
     | '/api/public/v1/ping'
+    | '/dashboard/studio'
     | '/api/public/v1/articles/$id'
   id:
     | '__root__'
@@ -675,12 +699,14 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/visibility'
     | '/_authenticated/dashboard/'
     | '/_authenticated/dashboard/editor/$blogId'
+    | '/_authenticated/dashboard/studio/new'
     | '/api/public/hooks/autopilot-run'
     | '/api/public/hooks/exchange-run'
     | '/api/public/hooks/reddit-run'
     | '/api/public/payments/webhook'
     | '/api/public/v1/articles'
     | '/api/public/v1/ping'
+    | '/_authenticated/dashboard/studio/'
     | '/api/public/v1/articles/$id'
   fileRoutesById: FileRoutesById
 }
@@ -1047,6 +1073,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Char91DotmcpChar93InvokeToolToolRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/dashboard/studio/': {
+      id: '/_authenticated/dashboard/studio/'
+      path: '/studio'
+      fullPath: '/dashboard/studio/'
+      preLoaderRoute: typeof AuthenticatedDashboardStudioIndexRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
     '/api/public/v1/ping': {
       id: '/api/public/v1/ping'
       path: '/api/public/v1/ping'
@@ -1089,6 +1122,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicHooksAutopilotRunRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/dashboard/studio/new': {
+      id: '/_authenticated/dashboard/studio/new'
+      path: '/studio/new'
+      fullPath: '/dashboard/studio/new'
+      preLoaderRoute: typeof AuthenticatedDashboardStudioNewRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
     '/_authenticated/dashboard/editor/$blogId': {
       id: '/_authenticated/dashboard/editor/$blogId'
       path: '/editor/$blogId'
@@ -1117,6 +1157,8 @@ interface AuthenticatedDashboardRouteChildren {
   AuthenticatedDashboardVisibilityRoute: typeof AuthenticatedDashboardVisibilityRoute
   AuthenticatedDashboardIndexRoute: typeof AuthenticatedDashboardIndexRoute
   AuthenticatedDashboardEditorBlogIdRoute: typeof AuthenticatedDashboardEditorBlogIdRoute
+  AuthenticatedDashboardStudioNewRoute: typeof AuthenticatedDashboardStudioNewRoute
+  AuthenticatedDashboardStudioIndexRoute: typeof AuthenticatedDashboardStudioIndexRoute
 }
 
 const AuthenticatedDashboardRouteChildren: AuthenticatedDashboardRouteChildren =
@@ -1135,6 +1177,9 @@ const AuthenticatedDashboardRouteChildren: AuthenticatedDashboardRouteChildren =
     AuthenticatedDashboardIndexRoute: AuthenticatedDashboardIndexRoute,
     AuthenticatedDashboardEditorBlogIdRoute:
       AuthenticatedDashboardEditorBlogIdRoute,
+    AuthenticatedDashboardStudioNewRoute: AuthenticatedDashboardStudioNewRoute,
+    AuthenticatedDashboardStudioIndexRoute:
+      AuthenticatedDashboardStudioIndexRoute,
   }
 
 const AuthenticatedDashboardRouteWithChildren =
