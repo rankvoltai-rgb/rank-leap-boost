@@ -61,7 +61,7 @@ export const STUDIO = {
    * comparisons) keep describing one site per plan until this is flipped, so
    * nothing public claims a feature before it can actually be bought.
    */
-  live: false,
+  live: true,
 } as const;
 
 /** $99 → "$99", 49.5 → "$49.50", 4500 → "$4,500". */
