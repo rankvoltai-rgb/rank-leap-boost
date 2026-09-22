@@ -452,6 +452,58 @@ function QueryFanOut() {
   );
 }
 
+/* ---------- 5. What a cheap SEO retainer buys, in hours ---------- */
+
+/**
+ * Average hourly rates from Ahrefs' survey of 439 SEO providers. The hours
+ * are the budget divided by the rate, nothing more, so the figure can't drift
+ * from its source: change a rate here and the bar follows.
+ */
+const BUDGET = 300;
+const RATES: { who: string; rate: number }[] = [
+  { who: "Freelancer", rate: 71.59 },
+  { who: "Agency", rate: 98.9 },
+  { who: "Consultant", rate: 171.18 },
+];
+
+function RetainerHours() {
+  const rows = RATES.map((r) => ({ ...r, hours: BUDGET / r.rate }));
+  const max = Math.max(...rows.map((r) => r.hours));
+  return (
+    <div className="rounded-2xl border border-border bg-card p-4 shadow-1 sm:p-5">
+      <p className="text-sm font-semibold text-ink">Hours of work a ${BUDGET}/month budget buys</p>
+      <p className="mt-0.5 text-xs text-muted-foreground">
+        At each provider type's average hourly rate
+      </p>
+      <div className="mt-5 space-y-4">
+        {rows.map((r) => (
+          <div
+            key={r.who}
+            title={`${r.who}: ${r.hours.toFixed(1)} hours at $${r.rate.toFixed(2)}/hour`}
+            className="grid grid-cols-[5.5rem_minmax(0,1fr)] items-center gap-3"
+          >
+            <div>
+              <p className="text-xs font-semibold text-ink">{r.who}</p>
+              <p className="text-[0.65rem] tabular-nums text-muted-foreground">
+                ${r.rate.toFixed(2)}/hr
+              </p>
+            </div>
+            <div className="flex items-center gap-2 border-l border-ink/15">
+              <span
+                className="block h-5 rounded-r bg-volt"
+                style={{ width: `${(r.hours / max) * 82}%` }}
+              />
+              <span className="shrink-0 text-xs font-bold tabular-nums text-ink">
+                {r.hours.toFixed(1)} h
+              </span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 /* ---------- registry ---------- */
 
 const FIGURES: Record<string, () => ReactNode> = {
@@ -459,6 +511,7 @@ const FIGURES: Record<string, () => ReactNode> = {
   "citable-page": CitablePage,
   "prompt-panel": PromptPanel,
   "query-fan-out": QueryFanOut,
+  "retainer-hours": RetainerHours,
 };
 
 export function ArticleFigure({
