@@ -77,7 +77,7 @@ function CodeBlock({ snippet }: { snippet: Snippet }) {
   );
 }
 
-function StepSnippet({ snippet }: { snippet: Snippet }) {
+export function StepSnippet({ snippet }: { snippet: Snippet }) {
   return snippet.kind === "url" ? (
     <CopyField value={snippet.value} />
   ) : (

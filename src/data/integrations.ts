@@ -16,6 +16,7 @@
  * flag; these pages describe the add-ons as available.
  */
 import type { PlatformId } from "@/data/platforms";
+import { AI_TOOLS } from "@/data/ai-integrations";
 
 export type IntegrationKind = "plugin" | "app" | "api" | "mcp";
 
@@ -717,20 +718,20 @@ export const INTEGRATIONS: Integration[] = [
     name: "MCP server",
     kind: "mcp",
     category: "Developers & AI",
-    tagline: "Research and plan content with Rankbox from Claude, ChatGPT, or Cursor.",
+    tagline: `Research and plan content with Rankbox from Claude, ChatGPT, Lovable, Cursor, and ${AI_TOOLS.length - 4} more AI tools.`,
     eyebrow: "Rankbox MCP server",
     headline: { lead: "Use Rankbox in", accent: "your AI assistant" },
     subhead:
       "Add the Rankbox MCP server as a custom connector, then ask your assistant for AI search questions, content briefs, and meta descriptions without leaving the chat.",
-    metaTitle: "Rankbox MCP Server for Claude, ChatGPT & Cursor",
+    metaTitle: "Rankbox MCP Server for Claude, ChatGPT, Lovable & More",
     metaDescription:
-      "Connect the Rankbox MCP server to Claude, ChatGPT, or Cursor and generate AI search questions, SEO content briefs, and meta descriptions from the chat.",
+      "Connect the Rankbox MCP server to Claude, ChatGPT, Lovable, Cursor, or any MCP client for AI search questions, SEO content briefs, and meta descriptions.",
     source: "a custom connector in your assistant",
     specs: [
       { value: "3", label: "tools your assistant can call" },
       { value: "1 URL", label: "to add as a custom connector" },
       { value: "Remote", label: "server, nothing to install locally" },
-      { value: "3 apps", label: "Claude, ChatGPT, and Cursor" },
+      { value: String(AI_TOOLS.length), label: "AI tools with a setup guide" },
     ],
     highlightsTitle: "Your research desk, inside the chat",
     highlights: [
@@ -754,11 +755,11 @@ export const INTEGRATIONS: Integration[] = [
       },
       {
         title: "Add a custom connector",
-        body: "In Claude, ChatGPT, or Cursor, add a custom connector or MCP server and paste the URL.",
+        body: "In Claude, ChatGPT, Lovable, Cursor, or any tool that takes a remote MCP server, add it and paste the URL. Each tool has its own guide.",
       },
       {
-        title: "Sign in and ask",
-        body: "Sign in with your Rankbox account when asked, then ask for a brief, questions, or meta descriptions.",
+        title: "Ask for what you need",
+        body: "Ask for a brief, the questions people ask AI, or meta descriptions. Your assistant calls the right Rankbox tool.",
       },
     ],
     fields: {
@@ -783,15 +784,15 @@ export const INTEGRATIONS: Integration[] = [
     faqs: [
       {
         q: "Which assistants work with it?",
-        a: "Any assistant that supports remote MCP servers as custom connectors, including Claude, ChatGPT, and Cursor.",
+        a: `Any tool that can add a remote MCP server by URL. ${AI_TOOLS.length} have step-by-step guides, including Claude, ChatGPT, Lovable, Bolt, v0, Replit, Cursor, and n8n.`,
       },
       {
         q: "Does it publish to my site?",
         a: "No. The MCP server is for research and planning. Publishing runs through your site's integration or the REST API.",
       },
       {
-        q: "Do I need a Rankbox account?",
-        a: "Yes. You sign in with it when you add the connector, so the tools run on your account.",
+        q: "Does it cost extra?",
+        a: "No. The MCP server comes with every Rankbox plan, including the free trial.",
       },
       {
         q: "Is it different from autopilot?",

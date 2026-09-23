@@ -3,7 +3,6 @@ import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
 import {
   ConnectionStatus,
-  Directory,
   HubHero,
   IntegrationCTA,
   IntegrationFAQ,
@@ -12,19 +11,21 @@ import {
   PublishingLoop,
 } from "@/components/integrations/IntegrationSections";
 import { INTEGRATIONS, getIntegration, isAddon } from "@/data/integrations";
+import { AiToolsBand, ConnectorDirectory } from "@/components/integrations/AiToolSections";
+import { AI_TOOLS, publicSlug } from "@/data/ai-integrations";
+import { CONNECTORS } from "@/data/connectors";
 import { formatUsd, PLAN, STUDIO } from "@/data/pricing";
 
 const SITE = "https://rankbox.xyz";
-const TITLE = "Integrations — WordPress, Shopify, Webflow & More | Rankbox";
-const DESCRIPTION =
-  "Connect Rankbox to WordPress, Shopify, Webflow, Framer, or Square Online and publish fresh, optimized articles as native posts. Or pull them from the REST API.";
+const TITLE = "Integrations: WordPress, Shopify, Claude, Lovable & More | Rankbox";
+const DESCRIPTION = `Publish Rankbox articles to WordPress, Shopify, Webflow, Framer, or Square Online, and use Rankbox's SEO research in Claude, ChatGPT, Lovable, Cursor, and ${AI_TOOLS.length - 4} more AI tools.`;
 
 const ADDONS = INTEGRATIONS.filter(isAddon);
 
 const HUB_SPECS = [
   { value: String(ADDONS.length), label: "platforms with a native app or plugin" },
+  { value: String(AI_TOOLS.length), label: "AI tools, each with a setup guide" },
   { value: "Any", label: "other stack, through the REST API" },
-  { value: "1 key", label: "per site, revocable any time" },
   { value: "Included", label: "with every Rankbox plan" },
 ];
 
@@ -37,6 +38,14 @@ const HUB_FAQS = [
   {
     q: "Which platforms does Rankbox publish to?",
     a: `${platformList} each have a Rankbox app or plugin. Any other site can pull articles from the REST API.`,
+  },
+  {
+    q: "Which AI tools work with Rankbox?",
+    a: `${AI_TOOLS.length} have their own setup guide, including Claude, ChatGPT, Lovable, Bolt, v0, Replit, Cursor, Claude Code, and n8n. Anything else that can add a remote MCP server by URL works too.`,
+  },
+  {
+    q: "What do AI tools get from Rankbox?",
+    a: "Three research tools: the questions people ask AI engines about a topic, an SEO content brief for a keyword, and meta descriptions for a page. Your AI tool calls them when you ask.",
   },
   {
     q: "Do integrations cost extra?",
@@ -98,11 +107,11 @@ export const Route = createFileRoute("/integrations/")({
             {
               "@type": "ItemList",
               "@id": `${SITE}/integrations#list`,
-              itemListElement: INTEGRATIONS.map((i, n) => ({
+              itemListElement: CONNECTORS.map((c, n) => ({
                 "@type": "ListItem",
                 position: n + 1,
-                name: i.name,
-                url: `${SITE}/integrations/${i.slug}`,
+                name: c.name,
+                url: `${SITE}/integrations/${publicSlug(c)}`,
               })),
             },
             {
@@ -141,7 +150,8 @@ function IntegrationsIndex() {
       <main>
         <HubHero />
         <IntegrationSpecs specs={HUB_SPECS} label="Integrations at a glance" />
-        <Directory />
+        <ConnectorDirectory />
+        <AiToolsBand />
         <PublishingLoop />
         <ConnectionStatus integration={getIntegration("wordpress")} />
         <KeySecurity />

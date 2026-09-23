@@ -2,6 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
 import { FEATURE_SLUGS } from "@/data/features";
 import { INTEGRATION_SLUGS } from "@/data/integrations";
+import { AI_TOOL_SLUGS } from "@/data/ai-integrations";
+import { CONNECTORS_CHECKED } from "@/data/connectors";
 import { TOOL_SLUGS } from "@/data/tools";
 import { ALTERNATIVES_UPDATED, COMPETITORS } from "@/data/alternatives";
 import { COMPARE_UPDATED, MATCHUPS } from "@/data/compare/matchups";
@@ -53,6 +55,12 @@ export const Route = createFileRoute("/sitemap.xml")({
             path: `/integrations/${slug}`,
             changefreq: "monthly" as const,
             priority: "0.7",
+          })),
+          ...AI_TOOL_SLUGS.map((slug) => ({
+            path: `/integrations/${slug}`,
+            lastmod: CONNECTORS_CHECKED,
+            changefreq: "monthly" as const,
+            priority: "0.6",
           })),
           { path: "/use-cases", changefreq: "monthly", priority: "0.8" },
           ...PERSONA_SLUGS.map((slug) => ({

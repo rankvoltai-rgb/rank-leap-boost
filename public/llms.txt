@@ -6,6 +6,12 @@
 
 - [Home](/): What Rankbox does, how it works, proof, sample articles, pricing, and FAQ.
 
+## Integrations
+
+- [Integrations](/integrations): Every way to connect Rankbox: WordPress, Shopify, Webflow, Framer and Square Online for publishing, the REST API, and 49 AI tools through the MCP server.
+- [MCP server](/integrations/mcp): Add https://rankbox.xyz/mcp to any MCP client to get AI search questions, SEO content briefs, and meta descriptions.
+- [Rankbox for Claude](/integrations/claude), [ChatGPT](/integrations/chatgpt), [Lovable](/integrations/lovable), [Cursor](/integrations/cursor), [Claude Code](/integrations/claude-code): Setup guides for connecting the MCP server, one page per AI tool.
+
 ## Free Tools
 
 - [Free Tools](/tools): Free SEO and AI-search tools — no signup required.

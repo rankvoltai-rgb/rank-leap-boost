@@ -6,12 +6,11 @@
  * its own copy; the routes stitch them together. The directory's own pieces
  * (hub hero, filterable grid, the publishing loop) live at the bottom.
  */
-import { useState, type ReactNode } from "react";
+import type { ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
 import {
   ArrowRight,
   ChevronRight,
-  Code2,
   Newspaper,
   FileCheck2,
   KeyRound,
@@ -32,16 +31,15 @@ import { cn } from "@/lib/utils";
 import { TRIAL_DAYS } from "@/data/pricing";
 import {
   INTEGRATIONS,
-  INTEGRATION_CATEGORIES,
   KIND_LABEL,
   ctaLabel,
   isAddon,
   relatedIntegrations,
   type Integration,
-  type IntegrationCategory,
   type IntegrationFAQ as FAQ,
   type IntegrationSpec,
 } from "@/data/integrations";
+import { AI_TOOLS } from "@/data/ai-integrations";
 import {
   ConnectionLockup,
   FieldMap,
@@ -55,7 +53,7 @@ import {
 
 /* ---------- shared bits ---------- */
 
-function Heading({
+export function Heading({
   id,
   eyebrow,
   title,
@@ -82,9 +80,9 @@ function Heading({
   );
 }
 
-const TRIAL_NOTE = `Included with every plan · Free ${TRIAL_DAYS}-day trial`;
+export const TRIAL_NOTE = `Included with every plan · Free ${TRIAL_DAYS}-day trial`;
 
-function HeroButtons({ primary, secondary }: { primary: ReactNode; secondary: ReactNode }) {
+export function HeroButtons({ primary, secondary }: { primary: ReactNode; secondary: ReactNode }) {
   return (
     <div className="flex flex-col items-center gap-3 sm:flex-row lg:justify-start">
       {primary}
@@ -93,12 +91,12 @@ function HeroButtons({ primary, secondary }: { primary: ReactNode; secondary: Re
   );
 }
 
-const heroPrimary =
+export const heroPrimary =
   "inline-flex w-full items-center justify-center gap-2 rounded-xl bg-white px-6 py-3.5 text-sm font-semibold text-brand-blue shadow-sm transition-all hover:-translate-y-0.5 hover:bg-white/90 hover:shadow-md sm:w-auto";
-const heroSecondary =
+export const heroSecondary =
   "inline-flex w-full items-center justify-center gap-2 rounded-xl border border-white/30 bg-white/10 px-5 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-white/20 sm:w-auto";
 
-function Breadcrumb({ current }: { current?: string }) {
+export function Breadcrumb({ current }: { current?: string }) {
   return (
     <nav aria-label="Breadcrumb" className="mb-6 flex justify-center lg:justify-start">
       <ol className="flex items-center gap-1.5 text-xs font-medium text-white/65">
@@ -138,9 +136,7 @@ function Breadcrumb({ current }: { current?: string }) {
 
 export function IntegrationHero({ integration }: { integration: Integration }) {
   const note =
-    integration.kind === "mcp"
-      ? "Sign in with your Rankbox account · Nothing to install"
-      : TRIAL_NOTE;
+    integration.kind === "mcp" ? "Included with every plan · Nothing to install" : TRIAL_NOTE;
   return (
     <section
       id="top"
@@ -339,7 +335,7 @@ export function IntegrationSetup({ integration }: { integration: Integration }) 
           <Reveal delay={0.2} className="mt-10 flex flex-wrap items-center gap-4">
             <a
               href="/auth"
-              className="inline-flex items-center gap-2 rounded-xl bg-ink px-6 py-3.5 text-sm font-semibold text-background shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
+              className="inline-flex items-center gap-2 rounded-xl bg-cta px-6 py-3.5 text-sm font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:bg-cta-hover hover:shadow-md"
             >
               {ctaLabel(integration)} <ArrowRight className="h-4 w-4" />
             </a>
@@ -672,13 +668,11 @@ export function IntegrationCTA({ integration }: { integration?: Integration }) {
               </p>
               <a
                 href="/auth"
-                className="mt-8 inline-flex items-center justify-center gap-2 rounded-xl bg-white px-6 py-3.5 text-sm font-semibold text-ink transition-transform hover:-translate-y-0.5"
+                className="mt-8 inline-flex items-center justify-center gap-2 rounded-xl bg-cta px-6 py-3.5 text-sm font-semibold text-white transition-all hover:-translate-y-0.5 hover:bg-cta-hover"
               >
                 {copy.cta} <ArrowRight className="h-4 w-4" />
               </a>
-              <p className="mt-3 text-sm text-background/60">
-                {integration?.kind === "mcp" ? "Sign in with your Rankbox account" : TRIAL_NOTE}
-              </p>
+              <p className="mt-3 text-sm text-background/60">{TRIAL_NOTE}</p>
             </div>
           </div>
         </Reveal>
@@ -708,7 +702,7 @@ export function HubHero() {
             </Reveal>
             <Reveal delay={0.05}>
               <span className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-3 py-1.5 text-xs font-semibold text-white backdrop-blur">
-                {platforms} platforms · REST API · MCP server
+                {platforms} platforms · {AI_TOOLS.length} AI tools · REST API
               </span>
             </Reveal>
             <Reveal delay={0.1}>
@@ -716,14 +710,14 @@ export function HubHero() {
                 id="integrations-title"
                 className="font-display text-balance text-[2.35rem] font-bold leading-[1.06] tracking-tight sm:text-[3.25rem] xl:text-[3.6rem]"
               >
-                Publish to the site you already have
+                Your site and your AI tools, connected
               </h1>
             </Reveal>
             <Reveal delay={0.16}>
               <p className="mx-auto mt-6 max-w-lg text-[1.05rem] leading-relaxed text-white/80 lg:mx-0">
-                Install the Rankbox app or plugin for your platform, paste one key, and every
-                article autopilot writes arrives as a native post, in your design and on your
-                schedule.
+                Every article autopilot writes publishes to your site as a native post, and
+                Rankbox&rsquo;s research works inside Claude, ChatGPT, Lovable, Cursor, and the
+                other AI tools you already use.
               </p>
             </Reveal>
             <Reveal delay={0.22} className="mt-8 flex flex-col items-center gap-3 lg:items-start">
@@ -747,104 +741,6 @@ export function HubHero() {
             <Orbit />
           </Reveal>
         </div>
-      </div>
-    </section>
-  );
-}
-
-type Filter = "All" | IntegrationCategory;
-
-export function Directory() {
-  const [filter, setFilter] = useState<Filter>("All");
-  const shown = INTEGRATIONS.filter((i) => filter === "All" || i.category === filter);
-  const filters: Filter[] = ["All", ...INTEGRATION_CATEGORIES];
-
-  return (
-    <section
-      id="directory"
-      aria-labelledby="directory-title"
-      className="scroll-mt-16 py-24 sm:py-28"
-    >
-      <div className="mx-auto max-w-6xl px-5">
-        <Heading
-          id="directory-title"
-          eyebrow="Directory"
-          title="Pick your platform"
-          intro="Each integration publishes the same finished articles. Choose the one that matches where your site runs."
-        />
-
-        <Reveal delay={0.06} className="mt-10 flex justify-center">
-          <div
-            role="group"
-            aria-label="Filter integrations"
-            className="flex max-w-full gap-1 overflow-x-auto rounded-xl border border-border bg-card p-1 shadow-elevation"
-          >
-            {filters.map((f) => {
-              const count =
-                f === "All"
-                  ? INTEGRATIONS.length
-                  : INTEGRATIONS.filter((i) => i.category === f).length;
-              return (
-                <button
-                  key={f}
-                  type="button"
-                  aria-pressed={filter === f}
-                  onClick={() => setFilter(f)}
-                  className={cn(
-                    "flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-lg px-3.5 py-2 text-sm font-medium transition-colors",
-                    filter === f
-                      ? "bg-ink text-background"
-                      : "text-muted-foreground hover:bg-secondary hover:text-ink",
-                  )}
-                >
-                  {f}
-                  <span
-                    className={cn(
-                      "text-xs tabular-nums",
-                      filter === f ? "text-background/60" : "text-muted-foreground/70",
-                    )}
-                  >
-                    {count}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-        </Reveal>
-
-        <ul className="mt-10 grid gap-3 sm:grid-cols-2 sm:gap-5 lg:grid-cols-4 lg:gap-6">
-          {shown.map((i) => (
-            <li key={i.slug}>
-              <IntegrationCard integration={i} />
-            </li>
-          ))}
-          {(filter === "All" || filter === "Developers & AI") && (
-            <li>
-              <Link
-                to="/integrations/$slug"
-                params={{ slug: "api" }}
-                className="group flex h-full flex-col justify-between rounded-2xl border border-dashed border-ink/20 p-5 transition-colors sm:p-6 hover:border-ink/40 hover:bg-card"
-              >
-                <div>
-                  <span className="flex h-12 w-12 items-center justify-center rounded-[25%] border border-dashed border-ink/25 text-muted-foreground">
-                    <Code2 className="h-5 w-5" />
-                  </span>
-                  <h3 className="mt-5 text-base font-semibold text-ink">
-                    Don&rsquo;t see your platform?
-                  </h3>
-                  <p className="mt-2.5 text-sm leading-relaxed text-muted-foreground">
-                    Next.js, Astro, Hugo, or a CMS of your own. If it can make an HTTPS request, it
-                    can pull finished articles from the REST API.
-                  </p>
-                </div>
-                <span className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-ink">
-                  Use the API
-                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-                </span>
-              </Link>
-            </li>
-          )}
-        </ul>
       </div>
     </section>
   );

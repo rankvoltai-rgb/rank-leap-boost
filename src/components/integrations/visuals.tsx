@@ -25,6 +25,8 @@ import {
 import { cn } from "@/lib/utils";
 import { Mark } from "@/components/brand/Mark";
 import { IntegrationLogo } from "@/components/dashboard/integration-logos";
+import { ConnectorLogo } from "@/components/dashboard/connector-logo";
+import { getAiTool } from "@/data/ai-integrations";
 import {
   Chip,
   Label,
@@ -112,7 +114,7 @@ export function RankboxTile({
 }
 
 /** Dashed line with an article travelling along it, left to right. */
-function Connector({ className }: { className?: string }) {
+export function Connector({ className }: { className?: string }) {
   return (
     <svg
       viewBox="0 0 56 12"
@@ -178,6 +180,25 @@ const ORBIT = INTEGRATIONS.map((integration, i) => {
   };
 });
 
+/*
+ * The inner ring: AI tools, one in each gap between the outer spokes so no
+ * logo sits on a line. Smaller and unlabelled; the outer ring names things.
+ */
+const INNER_R = 22;
+const INNER = ["claude", "chatgpt", "lovable", "bolt", "v0", "replit", "cursor"]
+  .map((id) => getAiTool(id))
+  .filter((t) => t !== undefined)
+  .slice(0, INTEGRATIONS.length)
+  .map((tool, i) => {
+    const step = 360 / INTEGRATIONS.length;
+    const angle = ((-90 + step / 2 + step * i) * Math.PI) / 180;
+    return {
+      tool,
+      x: Number((50 + INNER_R * Math.cos(angle)).toFixed(2)),
+      y: Number((50 + INNER_R * Math.sin(angle)).toFixed(2)),
+    };
+  });
+
 export function Orbit({ className }: { className?: string }) {
   return (
     <div className={cn("relative mx-auto aspect-square w-full max-w-[27rem]", className)}>
@@ -238,6 +259,24 @@ export function Orbit({ className }: { className?: string }) {
       <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
         <RankboxTile className="h-20 w-20 shadow-elevation-lg ring-8 ring-white/10 sm:h-24 sm:w-24" />
       </div>
+
+      {INNER.map(({ tool, x, y }) => (
+        <Link
+          key={tool.id}
+          to="/integrations/$slug"
+          params={{ slug: tool.id }}
+          aria-label={`Rankbox for ${tool.name}`}
+          title={tool.name}
+          style={{ left: `${x}%`, top: `${y}%` }}
+          className="group absolute -translate-x-1/2 -translate-y-1/2 rounded-[30%] focus-visible:outline-none"
+        >
+          <span className="block rounded-[30%] bg-white/10 p-1 ring-1 ring-white/20 backdrop-blur transition-transform duration-300 group-hover:scale-110 group-focus-visible:ring-2 group-focus-visible:ring-white">
+            <span aria-hidden>
+              <ConnectorLogo connector={tool} className="h-7 w-7 sm:h-8 sm:w-8" />
+            </span>
+          </span>
+        </Link>
+      ))}
 
       {ORBIT.map(({ integration, x, y }) => (
         <Link
@@ -448,13 +487,13 @@ const BRIEF_OUTLINE = [
 ];
 
 /** An assistant calling the Rankbox MCP server for a brief. */
-function McpWindow({ className }: { className?: string }) {
+export function McpWindow({ className, appName }: { className?: string; appName?: string }) {
   const [ref, inView] = useInView<HTMLDivElement>();
   // 0 asked → 1 tool running → 2 brief back.
   const stage = useCycle(3, 1800, 2, inView);
   return (
     <div ref={ref} className={cn("flex flex-col", className)}>
-      <ProductWindow title="Assistant · Rankbox connector" className="flex-1">
+      <ProductWindow title={`${appName ?? "Assistant"} · Rankbox connector`} className="flex-1">
         <div className="flex flex-1 flex-col gap-3.5 p-5">
           <p className="ml-auto max-w-[85%] rounded-2xl rounded-br-md bg-secondary px-3.5 py-2.5 text-[0.8rem] text-ink">
             Build me a content brief for &ldquo;kanban vs scrum&rdquo;.
