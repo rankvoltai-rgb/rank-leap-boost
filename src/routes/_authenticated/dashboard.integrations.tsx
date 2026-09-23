@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useRef, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -16,8 +16,16 @@ import { IntegrationLogo } from "@/components/dashboard/integration-logos";
 import { ConfirmDialog } from "@/components/dashboard/article-parts";
 import { useAllArticles, useArticleActions } from "@/components/dashboard/useArticleActions";
 import { isEntitled } from "@/components/dashboard/autopilot-state";
-import { SubscriptionGate } from "@/components/dashboard/SubscriptionGate";
 import { useSiteId } from "@/components/dashboard/site-context";
+import {
+  ConnectorLibrary,
+  ConnectorSheet,
+  CopyField,
+  McpFooter,
+  McpSetup,
+  useCopy,
+  type TileStatus,
+} from "@/components/dashboard/connector-library";
 import {
   delivery,
   keyStatus,
@@ -28,11 +36,20 @@ import {
   type KeyStatus,
   type SiteStatus,
 } from "@/components/dashboard/connection-model";
-import { PUBLISH_PLATFORMS, type Platform, type PlatformId } from "@/data/platforms";
+import { PUBLISH_PLATFORMS, type Platform } from "@/data/platforms";
+import { getConnector, type Connector, type ConnectorCategory } from "@/data/connectors";
 import { formatShortDate } from "@/lib/format-date";
 import { cn } from "@/lib/utils";
 
+interface IntegrationsSearch {
+  /** The connector whose overlay is open, so it can be linked to and survives a reload. */
+  connector?: string;
+}
+
 export const Route = createFileRoute("/_authenticated/dashboard/integrations")({
+  validateSearch: (search: Record<string, unknown>): IntegrationsSearch => ({
+    connector: typeof search.connector === "string" ? search.connector : undefined,
+  }),
   component: Integrations,
 });
 
@@ -40,8 +57,6 @@ export const Route = createFileRoute("/_authenticated/dashboard/integrations")({
 // instructions are right no matter which environment renders them.
 const API_BASE = "https://rankbox.xyz";
 const API_ROOT = `${API_BASE}/api/public/v1`;
-
-type Choice = PlatformId | "custom";
 
 function plural(n: number, one: string, many = `${one}s`): string {
   return `${n} ${n === 1 ? one : many}`;
@@ -58,8 +73,16 @@ function Integrations() {
   return <SiteIntegrations key={siteId} siteId={siteId} />;
 }
 
+const TILE_STATUS: Record<Exclude<KeyStatus, "revoked">, NonNullable<TileStatus>> = {
+  live: { tone: "success", label: "Connected" },
+  idle: { tone: "warning", label: "Idle" },
+  waiting: { tone: "neutral", label: "Waiting" },
+};
+
 function SiteIntegrations({ siteId }: { siteId: string }) {
   const queryClient = useQueryClient();
+  const navigate = useNavigate({ from: Route.fullPath });
+  const { connector: openId } = Route.useSearch();
   const { data: blogs = [] } = useAllArticles();
   const { data: keys = [], isLoading } = useQuery({
     queryKey: ["api-keys", siteId],
@@ -80,28 +103,59 @@ function SiteIntegrations({ siteId }: { siteId: string }) {
   const sent = delivery(blogs, synced);
   const active = keys.filter((k) => !k.revoked_at);
 
-  const setupRef = useRef<HTMLElement>(null);
-  const [choice, setChoice] = useState<Choice | null>(null);
+  const libraryRef = useRef<HTMLDivElement>(null);
+  const [category, setCategory] = useState<ConnectorCategory | "all">("all");
   // The key made in setup, held only for this visit: it's shown once, never again.
-  const [fresh, setFresh] = useState<{ id: string; raw: string } | null>(null);
+  // Tied to the connector it was made in, so another overlay never shows it.
+  const [fresh, setFresh] = useState<{ connector: string; id: string; raw: string } | null>(null);
   const [replacement, setReplacement] = useState<{ old: IntegrationKey; raw: string } | null>(null);
   const [revokeTarget, setRevokeTarget] = useState<IntegrationKey | null>(null);
   const [busy, setBusy] = useState<string | null>(null);
 
-  function goToSetup(pick?: Choice) {
-    if (pick) setChoice(pick);
-    setupRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  const open = getConnector(openId);
+
+  function setOpen(id: string | undefined) {
+    void navigate({
+      search: (prev) => ({ ...prev, connector: id }),
+      replace: true,
+      resetScroll: false,
+    });
   }
 
-  async function createKey(name: string) {
+  // The trial dialog is its own modal; close the overlay first so the two
+  // never fight over focus.
+  function startTrial() {
+    setOpen(undefined);
+    actions.openTrial();
+  }
+
+  function goToSites() {
+    setCategory("website");
+    libraryRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  /** How a connector's own keys are doing: the best of them, like the site as a whole. */
+  function statusFor(c: Connector): TileStatus {
+    if (c.kind === "mcp") return null;
+    const own = active.filter((k) =>
+      c.kind === "site" ? platformOf(k) === c.platformId : platformOf(k) === null,
+    );
+    const states = own.map((k) => keyStatus(k));
+    for (const s of ["live", "idle", "waiting"] as const) {
+      if (states.includes(s)) return TILE_STATUS[s];
+    }
+    return null;
+  }
+
+  async function createKey(connectorId: string, name: string) {
     if (locked) {
-      actions.openTrial();
+      startTrial();
       return;
     }
     setBusy("create");
     try {
       const result = await createApiKey(siteId, { name });
-      setFresh({ id: result.id, raw: result.raw });
+      setFresh({ connector: connectorId, id: result.id, raw: result.raw });
       await queryClient.invalidateQueries({ queryKey: ["api-keys"] });
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Couldn't create a key.");
@@ -112,7 +166,7 @@ function SiteIntegrations({ siteId }: { siteId: string }) {
 
   async function replace(key: IntegrationKey) {
     if (locked) {
-      actions.openTrial();
+      startTrial();
       return;
     }
     setBusy(key.id);
@@ -142,8 +196,8 @@ function SiteIntegrations({ siteId }: { siteId: string }) {
     }
   }
 
-  const freshKey = fresh ? keys.find((k) => k.id === fresh.id) : undefined;
-  const chosen = PUBLISH_PLATFORMS.find((p) => p.id === choice);
+  const openFresh = fresh && open && fresh.connector === open.id ? fresh : null;
+  const freshKey = openFresh ? keys.find((k) => k.id === openFresh.id) : undefined;
 
   return (
     <div className="space-y-8">
@@ -151,68 +205,75 @@ function SiteIntegrations({ siteId }: { siteId: string }) {
 
       <PageHeader
         title="Integrations"
-        description="Connect your site and every article autopilot writes appears on it automatically — then see that it did."
+        description="Publish every article to your site automatically, and bring Rankbox's research into the AI tools you already use."
       />
 
-      <SubscriptionGate
+      <StatusHero
+        loading={isLoading}
+        status={status}
+        synced={synced}
+        sent={sent}
         locked={locked}
-        className="space-y-8"
-        title="Publish straight to your site"
-        description="Connect your site once and every article autopilot writes appears there on its own."
-        points={[
-          "Works with any site today through the API",
-          "Live status for every article that reaches your site",
-          "Keys you can replace or revoke any time",
-        ]}
-        onStartTrial={actions.openTrial}
-      >
-        <StatusHero
-          loading={isLoading}
-          status={status}
-          synced={synced}
-          sent={sent}
-          locked={locked}
-          onSetup={() => goToSetup()}
-          onStartTrial={actions.openTrial}
-        />
+        onSetup={goToSites}
+        onStartTrial={startTrial}
+      />
 
-        {active.length > 0 && (
-          <Connections
-            keys={keys}
-            blogs={blogs}
-            busy={busy}
-            onReplace={(k) => void replace(k)}
-            onRevoke={setRevokeTarget}
+      {active.length > 0 && (
+        <Connections
+          keys={keys}
+          blogs={blogs}
+          busy={busy}
+          onReplace={(k) => void replace(k)}
+          onRevoke={setRevokeTarget}
+        />
+      )}
+
+      <div ref={libraryRef} className="scroll-mt-6">
+        <ConnectorLibrary
+          category={category}
+          onCategory={setCategory}
+          statusFor={statusFor}
+          onOpen={(c) => setOpen(c.id)}
+        />
+      </div>
+
+      <ConnectorSheet
+        connector={open}
+        open={!!open}
+        onOpenChange={(o) => !o && setOpen(undefined)}
+        status={open ? statusFor(open) : null}
+        wide={open?.kind !== "mcp"}
+        footer={
+          open &&
+          (open.kind === "mcp" ? (
+            <McpFooter connector={open} />
+          ) : (
+            <>
+              <p className="text-xs text-muted-foreground">
+                Your site never gives Rankbox a password — just a key you can revoke.
+              </p>
+              <Button variant="ghost" onClick={() => setOpen(undefined)}>
+                Done
+              </Button>
+            </>
+          ))
+        }
+      >
+        {open?.kind === "mcp" && <McpSetup connector={open} />}
+        {open && open.kind !== "mcp" && (
+          <SiteSetup
+            key={open.id}
+            connector={open}
+            creating={busy === "create"}
+            locked={locked}
+            fresh={openFresh}
+            freshKey={freshKey}
+            onCreate={(name) => void createKey(open.id, name)}
+            onReset={() => setFresh(null)}
+            onStartTrial={startTrial}
           />
         )}
-
-        <section ref={setupRef} className="scroll-mt-6 space-y-4">
-          <SectionHeading
-            title={active.length > 0 ? "Connect another site" : "Connect your site"}
-            description="Where does your site run?"
-          />
-          <PlatformPicker choice={choice} onChoose={setChoice} />
-          {chosen && !chosen.addonLive && (
-            <PlatformSetup platform={chosen} onUseApi={() => setChoice("custom")} />
-          )}
-          {(choice === "custom" || chosen?.addonLive) && (
-            <ApiSetup
-              key={choice}
-              platform={chosen?.addonLive ? chosen : undefined}
-              creating={busy === "create"}
-              locked={locked}
-              fresh={fresh}
-              freshKey={freshKey}
-              onCreate={(name) => void createKey(name)}
-              onReset={() => setFresh(null)}
-              onStartTrial={actions.openTrial}
-            />
-          )}
-        </section>
-
-        <DeveloperApi />
-        <AssistantCard />
-      </SubscriptionGate>
+      </ConnectorSheet>
 
       {/* A replaced key is shown once, next to the one step left: retire the old one. */}
       <ConfirmDialog
@@ -534,54 +595,51 @@ function Connections({
 
 /* ── Setup ──────────────────────────────────────────────────────── */
 
-function PlatformPicker({
-  choice,
-  onChoose,
+/**
+ * A website connector's overlay. A platform whose add-on hasn't shipped says
+ * so and offers the API, which works for any site today; the API connector
+ * goes straight to the key flow and adds the reference.
+ */
+function SiteSetup({
+  connector,
+  creating,
+  locked,
+  fresh,
+  freshKey,
+  onCreate,
+  onReset,
+  onStartTrial,
 }: {
-  choice: Choice | null;
-  onChoose: (c: Choice) => void;
+  connector: Connector;
+  creating: boolean;
+  locked: boolean;
+  fresh: { id: string; raw: string } | null;
+  freshKey: IntegrationKey | undefined;
+  onCreate: (name: string) => void;
+  onReset: () => void;
+  onStartTrial: () => void;
 }) {
-  const tile =
-    "flex flex-col items-start gap-3 rounded-card border bg-card p-4 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
+  const platform = PUBLISH_PLATFORMS.find((p) => p.id === connector.platformId);
+  // A key made here stays on screen if the overlay is reopened this visit.
+  const [useApi, setUseApi] = useState(!platform || platform.addonLive || !!fresh);
+
+  if (platform && !useApi) {
+    return <PlatformSetup platform={platform} onUseApi={() => setUseApi(true)} />;
+  }
   return (
-    <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
-      {PUBLISH_PLATFORMS.map((p) => (
-        <button
-          key={p.id}
-          type="button"
-          aria-pressed={choice === p.id}
-          onClick={() => onChoose(p.id)}
-          className={cn(
-            tile,
-            choice === p.id ? "border-cta ring-1 ring-cta" : "border-border hover:border-ink/20",
-          )}
-        >
-          <IntegrationLogo id={p.id} title={false} className="h-10 w-10" />
-          <div>
-            <p className="text-sm font-semibold text-ink">{p.name}</p>
-            <p className="text-xs text-muted-foreground">
-              {p.addonLive ? `${p.addon === "app" ? "App" : "Plugin"} available` : "Coming soon"}
-            </p>
-          </div>
-        </button>
-      ))}
-      <button
-        type="button"
-        aria-pressed={choice === "custom"}
-        onClick={() => onChoose("custom")}
-        className={cn(
-          tile,
-          choice === "custom" ? "border-cta ring-1 ring-cta" : "border-border hover:border-ink/20",
-        )}
-      >
-        <span className="grid h-10 w-10 place-items-center rounded-[25%] bg-ink font-mono text-sm font-semibold text-background">
-          {"{ }"}
-        </span>
-        <div>
-          <p className="text-sm font-semibold text-ink">Any site</p>
-          <p className="text-xs font-medium text-success">Available now · API</p>
-        </div>
-      </button>
+    <div className="space-y-8">
+      <ApiSetup
+        platform={platform?.addonLive ? platform : undefined}
+        defaultName={platform ? `${platform.name} site` : "My website"}
+        creating={creating}
+        locked={locked}
+        fresh={fresh}
+        freshKey={freshKey}
+        onCreate={onCreate}
+        onReset={onReset}
+        onStartTrial={onStartTrial}
+      />
+      {connector.kind === "api" && <ApiReference />}
     </div>
   );
 }
@@ -602,16 +660,13 @@ function PlatformSetup({ platform, onUseApi }: { platform: Platform; onUseApi: (
     "New articles appear on your site on their own.",
   ];
   return (
-    <Panel className="grid grid-cols-1 gap-6 p-5 sm:p-6 md:grid-cols-2">
+    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
       <div className="space-y-3">
-        <div className="flex items-center gap-3">
-          <IntegrationLogo id={platform.id} title={false} className="h-9 w-9" />
-          <div>
-            <p className="text-sm font-semibold text-ink">
-              The Rankbox {platform.addon} for {platform.name}
-            </p>
-            <Pill tone="neutral">Coming soon</Pill>
-          </div>
+        <div className="flex flex-wrap items-center gap-2">
+          <p className="text-sm font-semibold text-ink">
+            The Rankbox {platform.addon} for {platform.name}
+          </p>
+          <Pill tone="neutral">Coming soon</Pill>
         </div>
         <p className="text-sm text-muted-foreground">Here's how it'll work once it ships:</p>
         <ol className="space-y-2">
@@ -637,7 +692,7 @@ function PlatformSetup({ platform, onUseApi }: { platform: Platform; onUseApi: (
           </Button>
         </div>
       </div>
-    </Panel>
+    </div>
   );
 }
 
@@ -648,6 +703,7 @@ function PlatformSetup({ platform, onUseApi }: { platform: Platform; onUseApi: (
  */
 function ApiSetup({
   platform,
+  defaultName,
   creating,
   locked,
   fresh,
@@ -657,6 +713,8 @@ function ApiSetup({
   onStartTrial,
 }: {
   platform?: Platform;
+  /** Named after the platform, so the connection shows its logo later. */
+  defaultName: string;
   creating: boolean;
   locked: boolean;
   fresh: { id: string; raw: string } | null;
@@ -665,12 +723,12 @@ function ApiSetup({
   onReset: () => void;
   onStartTrial: () => void;
 }) {
-  // Named after the platform, so the connection shows its logo later.
-  const [name, setName] = useState(platform ? `${platform.name} site` : "My website");
+  const [name, setName] = useState(defaultName);
   const connected = !!freshKey?.last_used_at;
 
   return (
-    <Panel className="p-5 sm:p-6">
+    <div>
+      <h3 className="mb-4 text-sm font-semibold text-ink">Set it up</h3>
       <ol className="space-y-6">
         <SetupStep n={1} title="Create a key for this site" done={!!fresh}>
           {fresh ? (
@@ -699,7 +757,7 @@ function ApiSetup({
               className="flex flex-wrap gap-2"
               onSubmit={(e) => {
                 e.preventDefault();
-                onCreate(name.trim() || "My website");
+                onCreate(name.trim() || defaultName);
               }}
             >
               <label className="sr-only" htmlFor="key-name">
@@ -773,7 +831,7 @@ function ApiSetup({
           )}
         </SetupStep>
       </ol>
-    </Panel>
+    </div>
   );
 }
 
@@ -835,15 +893,15 @@ const FIELDS = [
   "updated_at",
 ];
 
-function DeveloperApi() {
+function ApiReference() {
   return (
     <section className="space-y-3">
       <SectionHeading
-        title="Developer API"
+        title="Reference"
         description="Read-only, and your site never hands Rankbox a password — just a key it can revoke."
       />
       <Panel className="divide-y divide-border">
-        <div className="grid grid-cols-1 gap-4 p-5 sm:grid-cols-2">
+        <div className="grid grid-cols-1 gap-4 p-4 sm:grid-cols-2">
           <div>
             <p className="mb-1.5 text-xs font-medium text-muted-foreground">Base URL</p>
             <CopyField value={API_ROOT} />
@@ -884,63 +942,7 @@ function DeveloperApi() {
   );
 }
 
-function AssistantCard() {
-  return (
-    <section className="space-y-3">
-      <SectionHeading
-        title="Use Rankbox in your AI assistant"
-        description="Research and plan content without leaving the chat."
-      />
-      <Panel className="grid grid-cols-1 gap-5 p-5 sm:grid-cols-2 sm:p-6">
-        <div className="space-y-3">
-          <p className="text-sm text-muted-foreground">
-            Add Rankbox's MCP server to Claude, ChatGPT or Cursor as a custom connector. You get
-            three tools:
-          </p>
-          <ul className="space-y-1.5 text-sm text-ink">
-            <li>Find the questions people ask AI about a topic</li>
-            <li>Build a content brief for a keyword</li>
-            <li>Write meta descriptions</li>
-          </ul>
-        </div>
-        <div className="self-center">
-          <p className="mb-1.5 text-xs font-medium text-muted-foreground">Server URL</p>
-          <CopyField value={`${API_BASE}/mcp`} />
-        </div>
-      </Panel>
-    </section>
-  );
-}
-
 /* ── Small pieces ───────────────────────────────────────────────── */
-
-function useCopy() {
-  const [copied, setCopied] = useState(false);
-  async function copy(value: string) {
-    try {
-      await navigator.clipboard.writeText(value);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 1600);
-    } catch {
-      toast.error("Couldn't copy to the clipboard.");
-    }
-  }
-  return { copied, copy };
-}
-
-function CopyField({ value }: { value: string }) {
-  const { copied, copy } = useCopy();
-  return (
-    <div className="flex items-stretch gap-2">
-      <code className="min-w-0 flex-1 truncate rounded-lg border border-border bg-secondary px-3 py-2 font-mono text-xs text-ink">
-        {value}
-      </code>
-      <Button variant="ghost" onClick={() => void copy(value)} className="w-[4.5rem] shrink-0">
-        {copied ? <CheckIcon className="h-4 w-4 text-success" /> : "Copy"}
-      </Button>
-    </div>
-  );
-}
 
 /** A secret shown once: full value, one tap to copy, and a loud border so it isn't missed. */
 function SecretField({ value }: { value: string }) {
