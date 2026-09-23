@@ -14,7 +14,7 @@ const chart: PriceChart = {
     { name: "Outrank", value: 99, note: "30 articles" },
     { name: "BabyLoveGrowth", value: 99, note: "30 articles" },
     { name: "SEObot", value: 199, note: "50 articles, the plan that covers 30" },
-    { name: "RankPill", value: 99, note: "30 articles", reference: true },
+    { name: "RankPill", value: 99, note: "30 articles; $49.50 first month", reference: true },
   ],
 };
 

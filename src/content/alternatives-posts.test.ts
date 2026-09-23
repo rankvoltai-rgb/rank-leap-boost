@@ -7,8 +7,14 @@
  * testing we didn't do, or a Rankbox feature claimed before it ships should
  * fail here rather than in production. Every post must also score 100 on the
  * same SEO checks the article writer optimizes to.
+ *
+ * They must also not read as one template with the name swapped. Google's
+ * spam policies call "many pages generated for the primary purpose of
+ * manipulating search rankings" scaled content abuse, and a set of posts that
+ * share their structure, their sentences, and bolted-on keyword phrases looks
+ * like exactly that. The last block below measures it.
  */
-import { readFileSync, readdirSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { parseFrontmatter } from "@/lib/markdown-blocks";
 import { analyzeArticle } from "@/lib/seo-analysis";
@@ -174,11 +180,112 @@ describe.each(POSTS.map((p) => [p.slug, p] as const))("%s", (slug, { data, body 
     for (const bar of chart.bars) expect(body, bar.name).toContain(bar.name);
   });
 
+  it("uses its keyword where it reads naturally, at a readable length", () => {
+    // "Among X alternatives, Y is..." exists only to raise keyword density.
+    const name = competitor.name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const forced = new RegExp(
+      `(^|[.!?]\\s+|\\n)(Among|Of all the|Of the|Of these|Unlike most)( these| the)? ${name} alternatives`,
+      "gi",
+    );
+    expect(prose(body).match(forced) ?? [], "forced keyword openers").toHaveLength(0);
+    const words = analyzeArticle({ title: data.title, keyword, description: data.description, body })
+      .metrics.words;
+    expect(words).toBeLessThanOrEqual(4400);
+  });
+
+  it("shows the competitor's pricing page as captured on the day prices were checked", () => {
+    const shots = [...body.matchAll(/\]\((\/images\/blog\/[a-z0-9-]+-pricing-\d{4}-\d{2}-\d{2}\.webp)/g)].map(
+      (m) => m[1],
+    );
+    expect(shots.length, "embed the pricing screenshot").toBeGreaterThanOrEqual(1);
+    for (const src of shots) expect(existsSync(`public${src}`), src).toBe(true);
+    expect(shots[0]).toContain(`/${competitor.slug}-pricing-`);
+  });
+
   it("answers five questions and lists its references", () => {
     const faq = section(body, /Frequently Asked Questions/);
     expect([...faq.matchAll(/^### .+\?$/gm)].length).toBe(5);
     const refs = section(body, /^## References$/);
     const links = [...refs.matchAll(/^\d+\. \[[^\]]+\]\((https:\/\/[^)]+)\)/gm)];
     expect(links.length).toBeGreaterThanOrEqual(8);
+  });
+});
+
+/* ------------------------------------------------------------------ */
+/* Across posts: nine pages, not one template                          */
+/* ------------------------------------------------------------------ */
+
+/** Prose sentences with the post's own competitor name swapped for "X". Headings and tables excluded. */
+function templateSentences(slug: string, body: string): Set<string> {
+  const name = competitorOf(slug)!.name;
+  const lines = prose(body)
+    .split("\n")
+    .filter((l) => l.trim() && !/^(#|\||!\[)/.test(l.trim()));
+  return new Set(
+    lines
+      .join("\n")
+      .split(/(?<=[.!?])\s+|\n+/)
+      .map((s) => s.replaceAll(name, "X").replace(/[*_]/g, "").replace(/\s+/g, " ").trim())
+      .filter((s) => s.split(" ").length >= 8),
+  );
+}
+
+/** Every run of eight words in a post's prose, for measuring overlap between two posts. */
+function shingles(body: string): Set<string> {
+  const text = prose(body)
+    .split("\n")
+    .filter((l) => !/^(#|\||!\[)/.test(l.trim()))
+    .join(" ");
+  const words = text.toLowerCase().match(/[a-z0-9$.,'%-]+/g) ?? [];
+  const out = new Set<string>();
+  for (let i = 0; i + 8 <= words.length; i++) out.add(words.slice(i, i + 8).join(" "));
+  return out;
+}
+
+/** A post's section headings, name-swapped and without numbers, minus the ones every article needs. */
+function sectionHeadings(slug: string, body: string): Set<string> {
+  const name = competitorOf(slug)!.name;
+  return new Set(
+    [...body.matchAll(/^## (.+)$/gm)]
+      .map((m) => m[1].replaceAll(name, "X").replace(/\d+/g, "N").toLowerCase().trim())
+      .filter((h) => !/^(key takeaways|frequently asked questions|references)$/.test(h)),
+  );
+}
+
+describe("alternatives posts, compared with each other", () => {
+  const pairs = POSTS.flatMap((a, i) => POSTS.slice(i + 1).map((b) => [a, b] as const));
+
+  it("share no more than 8% of their wording with any other post", () => {
+    const sets = new Map(POSTS.map((p) => [p.slug, shingles(p.body)]));
+    const over = pairs
+      .map(([a, b]) => {
+        const x = sets.get(a.slug)!;
+        const y = sets.get(b.slug)!;
+        let shared = 0;
+        for (const s of x) if (y.has(s)) shared++;
+        return { pair: `${a.slug} / ${b.slug}`, pct: Math.round((shared / Math.min(x.size, y.size)) * 1000) / 10 };
+      })
+      .filter((r) => r.pct > 8);
+    expect(over).toEqual([]);
+  });
+
+  it("don't repeat the same sentence with only the name swapped", () => {
+    const seen = new Map<string, string[]>();
+    for (const p of POSTS) {
+      for (const s of templateSentences(p.slug, p.body)) seen.set(s, [...(seen.get(s) ?? []), p.slug]);
+    }
+    const repeated = [...seen].filter(([, slugs]) => slugs.length >= 3).map(([s]) => s);
+    expect(repeated).toEqual([]);
+  });
+
+  it("each have their own structure", () => {
+    const heads = new Map(POSTS.map((p) => [p.slug, sectionHeadings(p.slug, p.body)]));
+    const same = pairs
+      .map(([a, b]) => {
+        const shared = [...heads.get(a.slug)!].filter((h) => heads.get(b.slug)!.has(h));
+        return { pair: `${a.slug} / ${b.slug}`, shared };
+      })
+      .filter((r) => r.shared.length > 2);
+    expect(same).toEqual([]);
   });
 });

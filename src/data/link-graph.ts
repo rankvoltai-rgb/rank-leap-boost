@@ -269,39 +269,39 @@ const POST_CARDS: Record<string, Titled> = {
     blurb: "The free tools to set up first, the few paid ones worth buying, and the red flags.",
   },
   "rankpill-alternatives": {
-    title: "9 Best RankPill Alternatives in 2026 (Prices Checked)",
+    title: "9 RankPill Alternatives in 2026: Prices and Terms Compared",
     blurb: "Cheaper autopilots, bigger plans, and what 30 articles a month really costs.",
   },
   "outrank-alternatives": {
-    title: "10 Best Outrank Alternatives in 2026 (Prices Checked)",
+    title: "10 Best Outrank Alternatives in 2026 (Full Costs Checked)",
     blurb: "Cheaper autopilots, longer articles, AI tracking, and when Outrank still wins.",
   },
   "frase-alternatives": {
-    title: "9 Best Frase Alternatives in 2026 (Prices Checked)",
+    title: "9 Best Frase Alternatives in 2026, Matched by Job",
     blurb: "Editors, cheaper optimizers, an autopilot, and when Frase still wins.",
   },
   "surfer-seo-alternatives": {
-    title: "9 Best Surfer SEO Alternatives in 2026 (Prices Checked)",
+    title: "9 Surfer SEO Alternatives in 2026, With or Without an Editor",
     blurb: "Cheaper editors, all-in-one tools, and an option with no editor at all.",
   },
   "koala-ai-alternatives": {
-    title: "9 Best Koala AI Alternatives in 2026 (Prices Checked)",
+    title: "9 Best Koala AI Alternatives, Priced per Article (2026)",
     blurb: "Fixed-price article plans, cheaper autopilots, and when Koala still wins.",
   },
   "seobot-alternatives": {
-    title: "9 Best SEObot Alternatives in 2026 (Prices Checked)",
+    title: "9 Best SEObot Alternatives in 2026, Priced Per Article",
     blurb: "Flat 30-article plans, AI tracking, programmatic SEO, and when SEObot wins.",
   },
   "byword-alternatives": {
-    title: "9 Best Byword Alternatives in 2026 (Prices Checked)",
+    title: "9 Byword Alternatives for Bulk SEO Content in 2026",
     blurb: "Cheaper bulk writers, daily autopilots, and when Byword still wins.",
   },
   "jasper-alternatives": {
-    title: "9 Best Jasper Alternatives in 2026 (Prices Checked)",
+    title: "9 Best Jasper Alternatives in 2026, Picked by Job",
     blurb: "Alternatives by job: SEO articles, channel copy, cheap team seats.",
   },
   "writesonic-alternatives": {
-    title: "10 Best Writesonic Alternatives in 2026 (Prices Checked)",
+    title: "10 Writesonic Alternatives in 2026: Writers and AI Trackers",
     blurb: "AI writers for articles, AI visibility trackers, and when Writesonic wins.",
   },
 };

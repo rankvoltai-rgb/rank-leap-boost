@@ -11,7 +11,7 @@ const chart: PriceChart = {
     { name: "SEOTakeoff", value: 69, note: "30 articles, $9 first month" },
     { name: "Arvow", value: 69, note: "Solo, 1,000 credits" },
     { name: "RankYak", value: 99, note: "30 articles, up to 5,000 words" },
-    { name: "RankPill", value: 99, note: "30 articles" },
+    { name: "RankPill", value: 99, note: "30 articles; $49.50 first month" },
     { name: "BabyLoveGrowth", value: 99, note: "30 articles, 10 AI prompts" },
     { name: "Byword", value: 99, note: "Starter, 25 articles" },
     { name: "SEObot", value: 199, note: "50 articles, the plan that covers 30" },

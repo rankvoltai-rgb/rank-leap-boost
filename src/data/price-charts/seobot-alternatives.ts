@@ -11,7 +11,7 @@ const chart: PriceChart = {
     { name: "Arvow", value: 69, note: "Solo, 1,000 credits" },
     { name: "Outrank", value: 99, note: "30 articles" },
     { name: "RankYak", value: 99, note: "30 articles" },
-    { name: "RankPill", value: 99, note: "30 articles" },
+    { name: "RankPill", value: 99, note: "30 articles; $49.50 first month" },
     { name: "BabyLoveGrowth", value: 99, note: "30 articles" },
     { name: "Byword", value: 99, note: "Starter, 25 articles" },
     { name: "SEObot", value: 199, note: "50 articles, the plan that covers 30", reference: true },
