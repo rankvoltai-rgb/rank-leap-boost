@@ -1,7 +1,7 @@
 {
-  "name": "@rankvolt/api-client",
+  "name": "@rankbox/api-client",
   "version": "0.1.0",
-  "description": "Typed client for the Rankvolt public API (/api/public/v1/*). Shared by the Framer, Webflow, and Shopify plugins.",
+  "description": "Typed client for the Rankbox public API (/api/public/v1/*). Shared by the Framer, Webflow, and Shopify plugins.",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",

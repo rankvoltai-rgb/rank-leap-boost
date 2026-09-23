@@ -6,7 +6,19 @@ import reactRefresh from "eslint-plugin-react-refresh";
 import tseslint from "typescript-eslint";
 
 export default tseslint.config(
-  { ignores: ["dist", ".output", ".vinxi", "packages"] },
+  // The plugin packages are linted too — they are browser React apps, which is
+  // exactly what the shared config below targets. Only their build output and
+  // their own installed dependencies are skipped.
+  {
+    ignores: [
+      "dist",
+      ".output",
+      ".vinxi",
+      "packages/**/dist",
+      "packages/**/node_modules",
+      "packages/**/package-lock.json",
+    ],
+  },
   {
     extends: [js.configs.recommended, ...tseslint.configs.recommended],
     files: ["**/*.{ts,tsx}"],

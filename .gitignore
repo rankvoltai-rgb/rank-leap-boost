@@ -39,3 +39,6 @@ dist-ssr
 
 # Vercel project link and local build output; Vercel builds from source.
 .vercel
+
+# Packed Framer plugin, produced by `npm run pack`.
+plugin.zip

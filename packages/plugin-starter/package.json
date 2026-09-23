@@ -1,7 +1,7 @@
 {
-  "name": "@rankvolt/plugin-starter",
+  "name": "@rankbox/plugin-starter",
   "version": "0.1.0",
-  "description": "Shared React + Vite shell every Rankvolt CMS plugin forks: connect an API key, list finished articles, and publish. Swap the publish step for the platform SDK.",
+  "description": "Shared React + Vite shell every Rankbox CMS plugin forks: connect an API key, list finished articles, and publish. Swap the publish step for the platform SDK.",
   "private": true,
   "type": "module",
   "scripts": {
@@ -10,7 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@rankvolt/api-client": "file:../api-client",
+    "@rankbox/api-client": "file:../api-client",
     "react": "^19.2.0",
     "react-dom": "^19.2.0"
   },

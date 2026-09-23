@@ -16,7 +16,7 @@ import { useRouterState } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { Avatar, Logo } from "@/components/landing/shared";
+import { Avatar } from "@/components/landing/shared";
 import { Mark } from "@/components/brand/Mark";
 import { SiteSwitcher } from "@/components/studio/SiteSwitcher";
 import { PLAN } from "@/data/pricing";
@@ -53,14 +53,20 @@ function planLabel(status: string | undefined, sites = 1): string {
 }
 
 /**
- * The brand at rail width. Same tile the full Logo wears, so collapsing the
- * rail crops the wordmark rather than swapping the mark for a bare glyph.
+ * The brand at rail width. The mark stands alone here, untiled, so collapsing
+ * the rail crops the wordmark rather than changing how the mark itself reads.
  */
 function RailMark() {
+  return <Mark className="text-nav-fg h-6 w-6" />;
+}
+
+/** The brand at full width: the same bare mark, plus the wordmark. */
+function RailBrand() {
   return (
-    <span className="border-nav-line flex h-8 w-8 items-center justify-center rounded-[10px] border bg-card shadow-sm">
-      <Mark className="text-nav-fg h-5 w-5" />
-    </span>
+    <div className="flex items-center gap-2.5">
+      <Mark className="text-nav-fg h-6 w-6" />
+      <span className="text-nav-fg text-[1.2rem] font-semibold tracking-tight">Rankbox</span>
+    </div>
   );
 }
 
@@ -154,7 +160,7 @@ export function Sidebar() {
               collapsed ? "justify-center px-0" : "px-4",
             )}
           >
-            {collapsed ? <RailMark /> : <Logo />}
+            {collapsed ? <RailMark /> : <RailBrand />}
           </div>
 
           <div className={cn("shrink-0 pb-1 pt-3", collapsed ? "px-2" : "px-3")}>

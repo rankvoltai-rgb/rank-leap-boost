@@ -1,12 +1,12 @@
 import { useState } from "react";
-import type { PublishedArticle } from "@rankvolt/api-client";
+import type { PublishedArticle } from "@rankbox/api-client";
 import {
   DEFAULT_BASE_URL,
   clearConnection,
   loadConnection,
   makeClient,
   saveConnection,
-} from "./rankvolt";
+} from "./rankbox";
 
 export function App() {
   const initial = loadConnection();
@@ -21,8 +21,8 @@ export function App() {
   const [selected, setSelected] = useState<Set<string>>(new Set());
 
   async function connect() {
-    if (!apiKey.trim().startsWith("rv_")) {
-      setError("Enter a valid Rankvolt API key (starts with rv_).");
+    if (!apiKey.trim().startsWith("rv_live_")) {
+      setError("Enter a valid Rankbox API key (starts with rv_live_).");
       return;
     }
     setBusy(true);
@@ -62,7 +62,6 @@ export function App() {
   // Platform forks replace this with the CMS write-back (see the Framer plugin).
   function publish() {
     const chosen = articles.filter((a) => selected.has(a.id));
-    // eslint-disable-next-line no-alert
     alert(
       `Starter stub: would publish ${chosen.length} article(s):\n` +
         chosen.map((a) => `• ${a.title}`).join("\n"),
@@ -73,13 +72,13 @@ export function App() {
     return (
       <main className="app">
         <header className="header">
-          <span className="logo">⚡ Rankvolt</span>
+          <span className="logo">⚡ Rankbox</span>
           <span className="tag">Plugin Starter</span>
         </header>
         <section className="card">
           <h2>Enter your API Key</h2>
           <label>
-            Rankvolt API key
+            Rankbox API key
             <input
               type="password"
               value={apiKey}
@@ -90,7 +89,7 @@ export function App() {
           <p className="muted small">
             Get your API key at{" "}
             <a href={`${baseUrl}/dashboard/integrations`} target="_blank" rel="noreferrer">
-              Rankvolt → Integrations
+              Rankbox → Integrations
             </a>
             .
           </p>
@@ -114,7 +113,7 @@ export function App() {
   return (
     <main className="app">
       <header className="header">
-        <span className="logo">⚡ Rankvolt</span>
+        <span className="logo">⚡ Rankbox</span>
         <span className="tag">{brand ?? "Connected"}</span>
         <button className="ghost push" onClick={disconnect}>
           Disconnect
@@ -131,7 +130,7 @@ export function App() {
         {error && <p className="error">{error}</p>}
         {articles.length === 0 ? (
           <p className="muted">
-            No finished articles yet. Generate some in the Rankvolt blog engine, then reconnect.
+            No finished articles yet. Generate some in the Rankbox blog engine, then reconnect.
           </p>
         ) : (
           <ul className="list">

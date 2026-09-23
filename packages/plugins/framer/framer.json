@@ -1,6 +1,6 @@
 {
-  "id": "rankvolt-articles",
-  "name": "Rankvolt",
-  "modes": ["canvas", "collection"],
+  "id": "REPLACE_WITH_FRAMER_PLUGIN_ID",
+  "name": "Rankbox",
+  "modes": ["canvas", "configureManagedCollection", "syncManagedCollection"],
   "icon": "/icon.png"
 }

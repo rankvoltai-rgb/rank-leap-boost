@@ -7,6 +7,6 @@ const apiClientSrc = fileURLToPath(new URL("../api-client/src/index.ts", import.
 
 export default defineConfig({
   plugins: [react()],
-  resolve: { alias: { "@rankvolt/api-client": apiClientSrc } },
+  resolve: { alias: { "@rankbox/api-client": apiClientSrc } },
   server: { port: 5180 },
 });

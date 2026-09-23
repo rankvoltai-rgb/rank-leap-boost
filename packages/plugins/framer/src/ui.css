@@ -1,0 +1,186 @@
+/*
+ * Every colour here is a Framer token from framer-plugin/framer.css, so the
+ * plugin follows the editor into dark mode with no theme code of its own.
+ * Hardcoding a colour is what breaks that, so there are none.
+ */
+
+:root {
+  --rb-gap: 10px;
+  --rb-radius: 8px;
+}
+
+.rb-root {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 12px;
+  gap: var(--rb-gap);
+  overflow: hidden;
+}
+
+.rb-scroll {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--rb-gap);
+  /* Room for the sticky footer's shadow. */
+  padding-bottom: 2px;
+}
+
+.rb-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rb-gap);
+}
+
+.rb-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.rb-spread {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.rb-title {
+  font-weight: 600;
+  color: var(--framer-color-text);
+}
+
+.rb-muted {
+  color: var(--framer-color-text-secondary);
+}
+
+.rb-faint {
+  color: var(--framer-color-text-tertiary);
+}
+
+.rb-card {
+  background: var(--framer-color-bg-secondary);
+  border-radius: var(--rb-radius);
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.rb-divider {
+  height: 1px;
+  background: var(--framer-color-divider);
+  margin: 2px 0;
+}
+
+.rb-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--framer-color-divider);
+}
+
+.rb-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.rb-label {
+  font-weight: 600;
+  color: var(--framer-color-text);
+}
+
+/* Framer styles native controls, so the plugin uses them rather than
+   reimplementing inputs and buttons that would then need their own theming. */
+.rb-input {
+  width: 100%;
+}
+
+.rb-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.rb-check input {
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.rb-preview {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 10px;
+  color: var(--framer-color-text-tertiary);
+  word-break: break-all;
+  line-height: 1.4;
+}
+
+.rb-progress {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--framer-color-bg-tertiary);
+  overflow: hidden;
+}
+
+.rb-progress span {
+  display: block;
+  height: 100%;
+  background: var(--framer-color-tint);
+  transition: width 120ms linear;
+}
+
+.rb-error {
+  background: var(--framer-color-bg-secondary);
+  border-radius: var(--rb-radius);
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.rb-center {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-align: center;
+  padding: 16px 8px;
+}
+
+.rb-mark {
+  width: 28px;
+  height: 28px;
+  color: var(--framer-color-text);
+}
+
+.rb-link {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  color: var(--framer-color-tint);
+  cursor: pointer;
+  text-align: left;
+  width: fit-content;
+}
+
+.rb-link:hover {
+  text-decoration: underline;
+}
+
+.rb-badge {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: var(--framer-color-bg-tertiary);
+  color: var(--framer-color-text-secondary);
+  white-space: nowrap;
+}

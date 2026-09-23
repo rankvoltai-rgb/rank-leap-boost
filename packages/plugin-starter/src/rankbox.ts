@@ -1,13 +1,13 @@
-import { RankvoltClient } from "@rankvolt/api-client";
+import { RankboxClient } from "@rankbox/api-client";
 
 // Shared connection + sync state for any plugin built on this starter. A fork
 // keeps this file as-is and only changes where the articles get written (the
 // platform CMS).
-const KEY_STORAGE = "rankvolt.apiKey";
-const BASE_STORAGE = "rankvolt.baseUrl";
-const CURSOR_STORAGE = "rankvolt.since";
+const KEY_STORAGE = "rankbox.apiKey";
+const BASE_STORAGE = "rankbox.baseUrl";
+const CURSOR_STORAGE = "rankbox.since";
 
-export const DEFAULT_BASE_URL = "https://rankvolt.top";
+export const DEFAULT_BASE_URL = "https://rankbox.xyz";
 
 export function loadConnection(): { apiKey: string; baseUrl: string } {
   return {
@@ -33,6 +33,6 @@ export function saveCursor(since: string | null): void {
   if (since) localStorage.setItem(CURSOR_STORAGE, since);
 }
 
-export function makeClient(apiKey: string, baseUrl: string): RankvoltClient {
-  return new RankvoltClient({ apiKey, baseUrl });
+export function makeClient(apiKey: string, baseUrl: string): RankboxClient {
+  return new RankboxClient({ apiKey, baseUrl });
 }

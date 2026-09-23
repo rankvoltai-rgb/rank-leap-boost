@@ -6,10 +6,20 @@ import { defineConfig } from "vitest/config";
 // Lovable plugins, none of which a test run needs.
 export default defineConfig({
   resolve: {
-    alias: { "@": fileURLToPath(new URL("./src", import.meta.url)) },
+    alias: {
+      "@": fileURLToPath(new URL("./src", import.meta.url)),
+      // The plugin packages import the shared client by name; point it at
+      // source so a test run needs no build step.
+      "@rankbox/api-client": fileURLToPath(
+        new URL("./packages/api-client/src/index.ts", import.meta.url),
+      ),
+    },
   },
   test: {
-    include: ["src/**/*.test.ts"],
+    // packages/** covers the CMS plugins, whose logic is written DOM-free
+    // precisely so it can run here rather than needing a Framer runtime.
+    include: ["src/**/*.test.ts", "packages/**/src/**/*.test.ts"],
+    exclude: ["**/node_modules/**", "**/dist/**"],
     environment: "node",
   },
 });

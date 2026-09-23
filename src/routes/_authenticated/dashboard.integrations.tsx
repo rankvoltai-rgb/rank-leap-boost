@@ -587,9 +587,11 @@ function PlatformPicker({
 }
 
 function addonStore(platform: Platform): string {
-  return platform.id === "wordpress"
-    ? "the WordPress plugin directory"
-    : `the ${platform.name} ${platform.addon === "app" ? "App Store" : "plugin marketplace"}`;
+  // Each store's actual name — these must match what /integrations/{slug} says,
+  // since both describe the same install step.
+  if (platform.id === "wordpress") return "the WordPress plugin directory";
+  if (platform.id === "framer") return "the Framer Marketplace";
+  return `the ${platform.name} ${platform.addon === "app" ? "App Store" : "plugin marketplace"}`;
 }
 
 /** A platform whose add-on hasn't shipped: say so plainly, and offer the route that works today. */

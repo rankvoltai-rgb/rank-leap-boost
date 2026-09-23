@@ -1,24 +1,27 @@
 {
-  "name": "rankvolt-framer-plugin",
+  "name": "rankbox-framer-plugin",
   "version": "0.1.0",
   "private": true,
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
-    "pack": "framer-plugin-tools pack"
+    "build": "tsc --noEmit && vite build",
+    "typecheck": "tsc --noEmit",
+    "pack": "npm run build && framer-plugin-tools pack"
   },
   "dependencies": {
     "@rankvolt/api-client": "file:../../api-client",
-    "framer-plugin": "^3",
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0"
+    "framer-plugin": "^3.10.3",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
-    "@types/react": "^19.2.0",
-    "@types/react-dom": "^19.2.0",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^5.0.4",
+    "framer-plugin-tools": "^1.2.2",
     "typescript": "^5.8.3",
-    "vite": "^7.3.1"
+    "vite": "^7.3.1",
+    "vite-plugin-framer": "^1.1.1"
   }
 }

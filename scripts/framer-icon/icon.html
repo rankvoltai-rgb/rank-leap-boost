@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      /* 90x90 source for a 30x30 display slot. Framer rounds the corners
+         itself, so the tile is square and fully opaque — a transparent mark
+         would vanish against Framer's dark chrome. */
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        width: 90px;
+        height: 90px;
+        overflow: hidden;
+      }
+      .tile {
+        width: 90px;
+        height: 90px;
+        /* Rankbox brand blue, from src/styles.css --brand-blue. */
+        background: #1877f2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      svg {
+        width: 56px;
+        height: 56px;
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="tile">
+      <!-- The Rankbox mark, matching public/mark.svg. -->
+      <svg viewBox="0 0 24 24">
+        <path
+          d="M2.6 2.6 Q12 6.9 21.4 2.6 Q17.1 12 21.4 21.4 Q12 17.1 2.6 21.4 Q6.9 12 2.6 2.6 Z"
+          fill="#ffffff"
+          stroke="#ffffff"
+          stroke-width="1.6"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </div>
+  </body>
+</html>

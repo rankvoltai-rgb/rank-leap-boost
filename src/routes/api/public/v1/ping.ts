@@ -10,6 +10,11 @@ import {
 // Lightweight key-validation endpoint. Plugins call this on setup to confirm
 // the pasted Rankbox API key works and to show the brand name of the site it
 // connects — a key belongs to one site, not to the whole account.
+//
+// It also returns the site's website and logo. The CMS plugins use those to
+// build Organization structured data, and to warn about a domain mismatch
+// before PATCH /articles/:id rejects a published_url that isn't on the site's
+// own domain. Both fields are additive and may be null.
 export const Route = createFileRoute("/api/public/v1/ping")({
   server: {
     handlers: {
@@ -31,7 +36,7 @@ export const Route = createFileRoute("/api/public/v1/ping")({
           const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
           const { data: profile } = await supabaseAdmin
             .from("profiles")
-            .select("brand_name")
+            .select("brand_name, website_url, avatar_url")
             .eq("id", siteId)
             .eq("user_id", userId)
             .maybeSingle();
@@ -40,6 +45,8 @@ export const Route = createFileRoute("/api/public/v1/ping")({
             ok: true,
             service: "Rankbox",
             brand_name: (profile?.brand_name as string) ?? null,
+            website_url: (profile?.website_url as string) ?? null,
+            logo_url: (profile?.avatar_url as string) ?? null,
           });
         } catch (err) {
           console.error("v1/ping failed", err);
