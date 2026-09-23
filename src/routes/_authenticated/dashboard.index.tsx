@@ -100,7 +100,6 @@ function StatCell({
   value,
   icon,
   hint,
-  accent,
   meter,
   valueClassName,
 }: {
@@ -108,14 +107,13 @@ function StatCell({
   value: React.ReactNode;
   icon?: React.ReactNode;
   hint?: React.ReactNode;
-  accent?: boolean;
   /** A progress meter between the figure and the hint. */
   meter?: React.ReactNode;
   /** Renders the value at text size — for statuses rather than figures. */
   valueClassName?: string;
 }) {
   return (
-    <div className={cn("flex flex-col gap-3 bg-card p-5", accent && "volt-glow")}>
+    <div className="flex flex-col gap-3 bg-card p-5">
       <div className="flex items-center gap-2 text-muted-foreground">
         {icon}
         <span className="text-sm font-medium">{label}</span>
@@ -605,7 +603,6 @@ function SystemConsole({ siteId }: { siteId: string }) {
             value={<CountUp value={estimatedTraffic} />}
             icon={<ChartIcon className="h-4 w-4" />}
             hint="Est. monthly organic visitors"
-            accent
           />
           <StatCell
             label="Published"
