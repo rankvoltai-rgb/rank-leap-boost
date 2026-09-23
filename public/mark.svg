@@ -1,8 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-  <style>
-    path { fill: #0a0a0a; stroke: #0a0a0a; }
-    @media (prefers-color-scheme: dark) { path { fill: #fff; stroke: #fff; } }
-  </style>
+  <!-- Rankbox brand blue, from --brand-blue in src/styles.css. It reads on a
+       light tab strip and a dark one alike, so there is no scheme override. -->
   <path d="M2.6 2.6 Q12 6.9 21.4 2.6 Q17.1 12 21.4 21.4 Q12 17.1 2.6 21.4 Q6.9 12 2.6 2.6 Z"
+        fill="#1877f2" stroke="#1877f2"
         stroke-width="1.6" stroke-linejoin="round"/>
 </svg>

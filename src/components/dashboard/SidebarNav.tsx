@@ -3,9 +3,9 @@
  * drawer so both stay identical.
  *
  * The rail is white and almost silent — hairlines, grey labels, grey icons.
- * The brand blue is spent on one thing only: the page you're on, as a filled
- * key that glides from item to item, ticked by a lit bar on the rail's edge.
- * Ten destinations, one of them speaking.
+ * The brand blue is spent on two things: the mark at the head, and the page
+ * you're on, as a filled key that glides from item to item, ticked by a lit
+ * bar on the rail's edge. Ten destinations, one of them speaking.
  *
  * Nothing here names a colour. Every surface comes from the --nav-* tokens in
  * styles.css, so the rail can be re-pitched there without touching this file.
@@ -14,6 +14,7 @@ import { useEffect, useRef, useState, type ReactElement, type ReactNode } from "
 import { Link } from "@tanstack/react-router";
 import { LayoutGroup, motion, useReducedMotion } from "motion/react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { Mark } from "@/components/brand/Mark";
 import { cn } from "@/lib/utils";
 import { NAV_SECTIONS, type NavItem } from "./nav";
 
@@ -24,6 +25,23 @@ const INSTANT = { duration: 0 } as const;
 /** The ring drawn on a focused control anywhere on the rail. */
 export const NAV_FOCUS =
   "focus-visible:ring-2 focus-visible:ring-nav-accent focus-visible:ring-offset-2 focus-visible:ring-offset-nav";
+
+/**
+ * The brand at the head of the rail and the drawer. The mark carries the blue;
+ * the wordmark stays in the rail's own ink, so the two never compete.
+ *
+ * `markOnly` is the collapsed icon rail, where the mark stands alone, untiled,
+ * so collapsing crops the wordmark rather than changing how the mark reads.
+ */
+export function NavBrand({ markOnly = false }: { markOnly?: boolean }) {
+  if (markOnly) return <Mark className="text-brand-blue h-6 w-6" />;
+  return (
+    <div className="flex items-center gap-2.5">
+      <Mark className="text-brand-blue h-6 w-6" />
+      <span className="text-nav-fg text-[1.2rem] font-semibold tracking-tight">Rankbox</span>
+    </div>
+  );
+}
 
 /**
  * The label for an icon-only control. A collapsed rail is unreadable without

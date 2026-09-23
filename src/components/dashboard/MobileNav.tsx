@@ -2,8 +2,9 @@
  * The same rail, as a drawer, for screens with no room for one.
  *
  * It is laid out as a column rather than a page with a pinned footer: on a
- * short phone the list scrolls under the header and the sign-out row stays
- * reachable, instead of the last item hiding behind it.
+ * short phone the list scrolls under the header and the account corner — the
+ * site switcher and the sign-out row — stays reachable, instead of the last
+ * item hiding behind it.
  */
 import { useState } from "react";
 import { useRouterState } from "@tanstack/react-router";
@@ -11,9 +12,8 @@ import { Menu } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { Logo } from "@/components/landing/shared";
 import { SiteSwitcher } from "@/components/studio/SiteSwitcher";
-import { NAV_FOCUS, NavScroller, NavSections } from "./SidebarNav";
+import { NAV_FOCUS, NavBrand, NavScroller, NavSections } from "./SidebarNav";
 import { SignOutIcon } from "./icons";
 import { useSignOut } from "./use-sign-out";
 import type { NavItem } from "./nav";
@@ -42,15 +42,15 @@ export function MobileNav() {
         <TooltipProvider>
           <div className="flex h-full flex-col">
             <div className="flex h-14 shrink-0 items-center border-nav-line border-b px-4">
-              <Logo />
+              <NavBrand />
             </div>
-            <div className="shrink-0 px-3 pb-1 pt-3">
-              <SiteSwitcher onNavigate={close} />
-            </div>
-            <NavScroller className="py-4">
+            <NavScroller className="pb-4 pt-3">
               <NavSections id="drawer" isActive={isActive} onNavigate={close} />
             </NavScroller>
-            <div className="shrink-0 border-nav-line border-t p-3">
+            {/* The same account corner as the rail: the site you're in, then
+                the way out. */}
+            <div className="shrink-0 space-y-2.5 border-nav-line border-t p-3">
+              <SiteSwitcher onNavigate={close} />
               <button
                 type="button"
                 onClick={signOut}

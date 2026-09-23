@@ -1,14 +1,15 @@
 /**
  * The dashboard's fixed navigation.
  *
- * A white rail that answers two questions without a trip anywhere
- * else: at the top, which site you're looking at (and every other one a click
- * away — see SiteSwitcher); at the bottom, who you are and what you're on. It
- * collapses to an icon rail from the handle on its own edge or with ⌘\, and
- * the choice is remembered per browser.
+ * A white rail with the brand at the head, the ten destinations in the
+ * middle, and the account at the foot: which site you're looking at (and every
+ * other one a click away — see SiteSwitcher) sitting directly above who you
+ * are and what you're on, so everything about this account is in one corner.
+ * It collapses to an icon rail from the handle on its own edge or with ⌘\,
+ * and the choice is remembered per browser.
  *
- * The panel used to be a solid #1877f2 field. It is white chrome now, and
- * the brand blue marks the current page and nothing else — see the note on
+ * The panel used to be a solid #1877f2 field. It is white chrome now, and the
+ * brand blue is spent on the mark and the current page — see the note on
  * --nav in styles.css for why, and for the tokens that pitch this surface.
  */
 import { useCallback, useEffect, useState } from "react";
@@ -17,13 +18,12 @@ import { useQuery } from "@tanstack/react-query";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Avatar } from "@/components/landing/shared";
-import { Mark } from "@/components/brand/Mark";
 import { SiteSwitcher } from "@/components/studio/SiteSwitcher";
 import { PLAN } from "@/data/pricing";
 import { getCurrentUser, getSubscription, listBlogs } from "@/lib/data";
 import { cn } from "@/lib/utils";
 import { SignOutIcon } from "./icons";
-import { NAV_FOCUS, NavScroller, NavSections, RailTooltip } from "./SidebarNav";
+import { NAV_FOCUS, NavBrand, NavScroller, NavSections, RailTooltip } from "./SidebarNav";
 import { useActiveSite } from "./site-context";
 import { useSignOut } from "./use-sign-out";
 import type { NavItem } from "./nav";
@@ -50,24 +50,6 @@ function planLabel(status: string | undefined, sites = 1): string {
   }
   if (status === "past_due") return `${PLAN.name} · payment due`;
   return "No plan yet";
-}
-
-/**
- * The brand at rail width. The mark stands alone here, untiled, so collapsing
- * the rail crops the wordmark rather than changing how the mark itself reads.
- */
-function RailMark() {
-  return <Mark className="text-nav-fg h-6 w-6" />;
-}
-
-/** The brand at full width: the same bare mark, plus the wordmark. */
-function RailBrand() {
-  return (
-    <div className="flex items-center gap-2.5">
-      <Mark className="text-nav-fg h-6 w-6" />
-      <span className="text-nav-fg text-[1.2rem] font-semibold tracking-tight">Rankbox</span>
-    </div>
-  );
 }
 
 /** Sign out, styled for the rail. Icon-only, so it always carries a label. */
@@ -160,18 +142,23 @@ export function Sidebar() {
               collapsed ? "justify-center px-0" : "px-4",
             )}
           >
-            {collapsed ? <RailMark /> : <RailBrand />}
+            <NavBrand markOnly={collapsed} />
           </div>
 
-          <div className={cn("shrink-0 pb-1 pt-3", collapsed ? "px-2" : "px-3")}>
-            <SiteSwitcher collapsed={collapsed} />
-          </div>
-
-          <NavScroller className="py-4">
+          <NavScroller className="pb-4 pt-3">
             <NavSections id="rail" isActive={isActive} collapsed={collapsed} queued={queued} />
           </NavScroller>
 
-          <div className={cn("border-nav-line shrink-0 border-t", collapsed ? "px-2 py-3" : "p-3")}>
+          {/* The account corner: the site you're in, then the person you're
+              signed in as. Both answer "whose dashboard is this", so they sit
+              together rather than at opposite ends of the rail. */}
+          <div
+            className={cn(
+              "border-nav-line shrink-0 space-y-2.5 border-t",
+              collapsed ? "px-2 py-3" : "p-3",
+            )}
+          >
+            <SiteSwitcher collapsed={collapsed} />
             {collapsed ? (
               <div className="flex flex-col items-center gap-1.5">
                 <RailTooltip label={name} hint={plan}>

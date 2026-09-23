@@ -1,6 +1,6 @@
 /**
- * The site switcher at the top of the sidebar: which site you're looking at,
- * and every other one a click away.
+ * The site switcher at the foot of the sidebar, above the account: which site
+ * you're looking at, and every other one a click away.
  *
  * It is also where Studio introduces itself to a single-site account — quietly,
  * as the last item of a menu they opened themselves, never as a prompt. The
@@ -65,7 +65,9 @@ export function SiteSwitcher({
 
       <DropdownMenuContent
         align="start"
-        side={collapsed ? "right" : "bottom"}
+        // It sits at the foot of the rail, so the list opens upward over the
+        // navigation rather than off the bottom of the window.
+        side={collapsed ? "right" : "top"}
         sideOffset={8}
         className="w-72 p-1.5"
       >
