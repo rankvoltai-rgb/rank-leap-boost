@@ -75,7 +75,7 @@ export interface QuestionGroup {
 
 export async function generateAiQuestions(topic: string): Promise<QuestionGroup[]> {
   const json = await generateJson(
-    `You are an expert in generative engine optimization. For the topic "${topic}", list the real questions people ask AI assistants (ChatGPT, Perplexity, Gemini, Google AI Overviews). Group them by intent: "Informational", "Commercial", "Comparison", and "Transactional". Provide 4-6 specific, natural questions per group. Return JSON: {"groups":[{"intent":"Informational","questions":["question?"]}]}`,
+    `You are an expert in generative engine optimization. For the topic "${topic}", list the real questions people ask AI assistants (ChatGPT, Perplexity, Gemini, Google AI Overviews). Group them by intent: "Informational", "Commercial", "Comparison", and "Transactional". Provide 4-6 specific, natural questions per group. Return JSON with exactly four group objects, one per intent: {"groups":[{"intent":"Informational","questions":["question?"]},{"intent":"Commercial","questions":["question?"]},{"intent":"Comparison","questions":["question?"]},{"intent":"Transactional","questions":["question?"]}]}`,
   ).catch(() => ({ groups: [] }));
   const groups = asArray((json as { groups?: unknown }).groups)
     .map((g): QuestionGroup => {
@@ -102,7 +102,7 @@ export interface ContentBrief {
 
 export async function generateContentBrief(keyword: string): Promise<ContentBrief> {
   const json = await generateJson(
-    `You are a senior SEO content strategist. Build a content brief for the target keyword "${keyword}" that can rank on Google and get cited by AI engines. Return JSON: {"title":"working H1 under 60 chars","outline":[{"heading":"H2 heading","points":["point to cover"]}],"questions":["question the article must answer"],"entities":["entity or term to mention"]}. Provide 6-9 outline sections (2-4 points each), 6-8 questions, and 8-12 entities.`,
+    `You are a senior SEO content strategist. Build a content brief for the target keyword "${keyword}" that can rank on Google and get cited by AI engines. The current year is ${new Date().getFullYear()}; never reference an earlier year as current. Return JSON: {"title":"working H1 under 60 chars","outline":[{"heading":"H2 heading","points":["point to cover"]}],"questions":["question the article must answer"],"entities":["entity or term to mention"]}. Provide 6-9 outline sections (2-4 points each), 6-8 questions, and 8-12 entities.`,
   ).catch(() => null);
   const rec = (json ?? {}) as {
     title?: unknown;

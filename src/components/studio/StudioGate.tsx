@@ -77,8 +77,19 @@ export function StudioGate({
   return compact ? body : <Panel className="p-5">{body}</Panel>;
 }
 
-/** Ends the trial now, after saying exactly what that charges. */
-function ActivateNow() {
+/**
+ * Ends the trial now, after saying exactly what that charges. Billing reuses
+ * it, so there is one confirm-and-charge flow, not two that can drift.
+ */
+export function ActivateNow({
+  label = "Start paid plan now",
+  successMessage = "Your plan is active. Studio is open.",
+  className,
+}: {
+  label?: string;
+  successMessage?: string;
+  className?: string;
+} = {}) {
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -90,7 +101,7 @@ function ActivateNow() {
       if (status !== "active")
         throw new Error("The payment is still being confirmed. Check back in a minute.");
       await queryClient.invalidateQueries();
-      toast.success("Your plan is active. Studio is open.");
+      toast.success(successMessage);
       setOpen(false);
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Couldn't start your paid plan.");
@@ -101,8 +112,8 @@ function ActivateNow() {
 
   return (
     <>
-      <Button variant="brand" onClick={() => setOpen(true)} className="shrink-0">
-        Start paid plan now
+      <Button variant="brand" onClick={() => setOpen(true)} className={cn("shrink-0", className)}>
+        {label}
       </Button>
       <AlertDialog open={open} onOpenChange={(next) => !busy && setOpen(next)}>
         <AlertDialogContent>
