@@ -2,8 +2,6 @@
  * /integrations: a directory people search, not scroll.
  *
  *   hero       search first: type a tool, see it, press Enter, you're there
- *   two ways   the whole model in one glance: publish to a site, or research
- *              inside an AI tool
  *   directory  everything, grouped, with a category rail on desktop; fully
  *              server-rendered so every page is linked before any script runs
  *
@@ -11,7 +9,7 @@
  */
 import { useId, useMemo, useRef, useState } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
-import { ArrowRight, Check, Search, X } from "lucide-react";
+import { ArrowRight, Search, X } from "lucide-react";
 import { Reveal } from "@/components/landing/shared";
 import { PixelField } from "@/components/landing/Hero";
 import { ConnectorLogo } from "@/components/dashboard/connector-logo";
@@ -264,96 +262,6 @@ function HeroSearch({ query, onQuery }: { query: string; onQuery: (q: string) =>
   );
 }
 
-/* ---------- Two ways to connect ---------- */
-
-const PUBLISH_POINTS = [
-  "Articles land as native posts, in your theme",
-  "Your site pulls them in: Rankbox never needs a password",
-  "Live status for every article that arrives",
-];
-
-const AI_POINTS = [
-  `${AI_TOOLS.length} AI tools, each with a verified setup guide`,
-  "One URL to add, nothing to install",
-  "AI search questions, content briefs, meta descriptions",
-];
-
-export function TwoWays({ onBrowse }: { onBrowse: (anchor: string) => void }) {
-  const sites = CONNECTORS.filter((c) => c.kind === "site" || c.kind === "api");
-  const ai = ["claude", "chatgpt", "lovable", "cursor", "bolt", "v0", "replit", "n8n"]
-    .map((id) => getConnector(id))
-    .filter((c): c is Connector => c !== undefined);
-  const cards = [
-    {
-      id: "publish",
-      eyebrow: "Publishing",
-      title: "Publish to your website",
-      body: "Connect your site once and every article autopilot writes appears on it, on schedule.",
-      points: PUBLISH_POINTS,
-      logos: sites,
-      action: { label: "Browse publishing", anchor: "dir-website" },
-    },
-    {
-      id: "research",
-      eyebrow: "AI tools",
-      title: "Research inside your AI tools",
-      body: "Add Rankbox's MCP server and your assistant, app builder, or coding agent can plan content with it.",
-      points: AI_POINTS,
-      logos: ai,
-      action: { label: "Browse AI tools", anchor: "dir-builder" },
-    },
-  ];
-  return (
-    <section aria-labelledby="two-ways-title" className="py-24 sm:py-32">
-      <div className="mx-auto max-w-6xl px-5">
-        <Heading
-          id="two-ways-title"
-          eyebrow="Two ways to connect"
-          title="Rankbox fits into how you already work"
-          intro="Publishing puts Rankbox's articles on your site. AI tools put its research in your hands. Most teams use both."
-        />
-        <div className="mt-16 grid gap-5 lg:grid-cols-2 lg:gap-6">
-          {cards.map((card, i) => (
-            <Reveal key={card.id} delay={i * 0.08} className="h-full">
-              <article className="flex h-full flex-col rounded-3xl border border-border bg-card p-7 shadow-elevation sm:p-8">
-                <div className="flex -space-x-2">
-                  {card.logos.map((c) => (
-                    <span key={c.id} className="rounded-[25%] ring-4 ring-card">
-                      <ConnectorLogo connector={c} className="h-10 w-10" />
-                    </span>
-                  ))}
-                </div>
-                <p className="mt-7 text-xs font-semibold uppercase tracking-wide text-cta">
-                  {card.eyebrow}
-                </p>
-                <h3 className="font-display mt-2 text-2xl font-semibold tracking-tight text-ink">
-                  {card.title}
-                </h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{card.body}</p>
-                <ul className="mt-6 flex-1 space-y-2.5">
-                  {card.points.map((p) => (
-                    <li key={p} className="flex gap-2.5 text-sm text-ink">
-                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-success" />
-                      {p}
-                    </li>
-                  ))}
-                </ul>
-                <button
-                  type="button"
-                  onClick={() => onBrowse(card.action.anchor)}
-                  className="mt-8 inline-flex items-center gap-1.5 self-start text-sm font-semibold text-cta transition-colors hover:text-cta-hover"
-                >
-                  {card.action.label} <ArrowRight className="h-4 w-4" />
-                </button>
-              </article>
-            </Reveal>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
 /* ---------- Directory ---------- */
 
 export function Directory({
@@ -579,5 +487,3 @@ export function HubCTA() {
     </section>
   );
 }
-
-export { scrollToDirectory };

@@ -12,8 +12,6 @@ import {
   Directory,
   HubCTA,
   HubSearchHero,
-  TwoWays,
-  scrollToDirectory,
   type DirectoryFilter,
 } from "@/components/integrations/HubSections";
 import { INTEGRATIONS, isAddon } from "@/data/integrations";
@@ -148,8 +146,8 @@ export const Route = createFileRoute("/integrations/")({
   component: IntegrationsIndex,
 });
 
-/* Search first, then the model (publish or research), then everything, then
-   how publishing works and why it's safe, before the FAQ and the close. */
+/* Search first, then everything, then how publishing works and why it's
+   safe, before the FAQ and the close. */
 function IntegrationsIndex() {
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState<DirectoryFilter>("all");
@@ -159,14 +157,6 @@ function IntegrationsIndex() {
       <main>
         <HubSearchHero query={query} onQuery={setQuery} />
         <IntegrationSpecs specs={HUB_SPECS} label="Integrations at a glance" />
-        <TwoWays
-          onBrowse={(anchor) => {
-            setQuery("");
-            setFilter("all");
-            // Let the full grid render before scrolling to a group in it.
-            requestAnimationFrame(() => scrollToDirectory(anchor));
-          }}
-        />
         <Directory query={query} onQuery={setQuery} filter={filter} onFilter={setFilter} />
         <PublishingLoop />
         <KeySecurity />
