@@ -147,7 +147,7 @@ export function VerifyDomainCard({
                 className={cn(
                   "rounded-full border px-3 py-1 text-xs font-medium transition-colors",
                   method === m.id
-                    ? "border-ink bg-ink text-background"
+                    ? "border-cta bg-cta text-white"
                     : "border-border bg-card text-muted-foreground hover:border-ink/20 hover:text-ink",
                 )}
               >

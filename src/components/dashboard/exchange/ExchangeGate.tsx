@@ -78,7 +78,7 @@ export function ExchangeGate({
         ) : (
           <Link
             to="/dashboard/billing"
-            className="mt-6 inline-flex w-full items-center justify-center rounded-lg bg-ink px-3.5 py-2 text-sm font-medium text-background transition-colors hover:bg-ink/90"
+            className="mt-6 inline-flex w-full items-center justify-center rounded-lg bg-cta px-3.5 py-2 text-sm font-medium text-white transition-colors hover:bg-cta-hover"
           >
             {trial ? "See your plan" : "Manage your plan"}
           </Link>

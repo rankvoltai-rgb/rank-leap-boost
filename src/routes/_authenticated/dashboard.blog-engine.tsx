@@ -8,6 +8,7 @@ import { AiSignalFlames, DifficultyBar } from "@/components/dashboard/signals";
 import { ArticleIcon, VoltMark } from "@/components/dashboard/icons";
 import { TrafficValue } from "@/components/dashboard/traffic";
 import { ArticlePanel } from "@/components/dashboard/ArticlePanel";
+import { AutopilotBar } from "@/components/dashboard/AutopilotBar";
 import {
   useAllArticles,
   useArticleActions,
@@ -385,6 +386,17 @@ function Articles() {
       <PageHeader
         title="Articles"
         description="Everything autopilot writes for you, from first idea to published."
+      />
+
+      {/* Says why anything is overdue, and carries the one fix for it. */}
+      <AutopilotBar
+        articles={all}
+        subscription={actions.subscription}
+        credits={actions.credits}
+        remaining={actions.remaining}
+        onStartTrial={actions.openTrial}
+        onUpgrade={actions.openPaywall}
+        onCommitQueue={actions.commitQueue}
       />
 
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">

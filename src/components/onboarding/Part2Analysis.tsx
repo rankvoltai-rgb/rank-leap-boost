@@ -501,7 +501,7 @@ export function Part2Analysis({
             <button
               type="button"
               onClick={addKeyword}
-              className="inline-flex h-8 shrink-0 items-center rounded-lg bg-ink px-3 text-xs font-semibold text-background transition-opacity hover:opacity-85"
+              className="inline-flex h-8 shrink-0 items-center rounded-lg bg-cta px-3 text-xs font-semibold text-white transition-colors hover:bg-cta-hover"
             >
               Add
             </button>

@@ -90,9 +90,10 @@ function Billing() {
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-3">
         <StatCard
           label="Plan"
-          value={subscription ? PLAN.name : "—"}
+          value={subscription ? PLAN.name : "No plan yet"}
           hint={`${formatUsd(PLAN.monthly)} / month · 1 site`}
-          emphasis
+          // The green "live" dot is only true once there is a plan to be live.
+          emphasis={!!subscription}
         />
         <StatCard
           label="Studio"
@@ -105,7 +106,9 @@ function Billing() {
           hint={
             subscription?.current_period_end
               ? `${subscription.cancel_at_period_end ? "Ends" : "Renews"} ${formatShortDate(subscription.current_period_end)}`
-              : "Auto-renews"
+              : subscription
+                ? "Auto-renews"
+                : "Nothing billed yet"
           }
         />
       </div>
@@ -131,23 +134,33 @@ function Billing() {
               </p>
             ) : (
               <p className="max-w-md text-sm text-muted-foreground">
-                No active subscription found. Start your free trial from the dashboard to unlock the
-                full engine.
+                You're not on a plan yet. Start your free trial to turn autopilot on — no charge
+                today, and you can cancel in one click.
               </p>
             )}
           </div>
-          <Button onClick={manage} disabled={opening || !subscription}>
-            {opening ? (
-              <>
-                <Loader2 className="h-4 w-4 animate-spin" /> Opening…
-              </>
-            ) : (
-              <>
-                <CardIcon className="h-4 w-4" /> Manage subscription
-                <ExternalLink className="h-3.5 w-3.5" />
-              </>
-            )}
-          </Button>
+          {!isLoading && !subscription ? (
+            <Link
+              to="/dashboard"
+              hash="start-trial"
+              className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-cta px-3.5 py-2 text-sm font-medium text-white transition-colors hover:bg-cta-hover"
+            >
+              Start free trial <ArrowRight className="h-3.5 w-3.5" />
+            </Link>
+          ) : (
+            <Button onClick={manage} disabled={opening || !subscription}>
+              {opening ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" /> Opening…
+                </>
+              ) : (
+                <>
+                  <CardIcon className="h-4 w-4" /> Manage subscription
+                  <ExternalLink className="h-3.5 w-3.5" />
+                </>
+              )}
+            </Button>
+          )}
         </div>
       </Panel>
 

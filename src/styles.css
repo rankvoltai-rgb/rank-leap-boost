@@ -73,6 +73,9 @@
   --color-ink: var(--ink);
   --color-volt: var(--volt);
   --color-brand-blue: var(--brand-blue);
+  --color-cta: var(--cta);
+  --color-cta-hover: var(--cta-hover);
+  --color-cta-soft: var(--cta-soft);
   --color-hero-black: var(--hero-black);
   --color-hero-black-elev: var(--hero-black-elev);
   --color-hero-black-elev-2: var(--hero-black-elev-2);
@@ -112,8 +115,11 @@
   --card-foreground: oklch(0.18 0.02 255);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.18 0.02 255);
-  --primary: oklch(0.17 0.02 255);
-  --primary-foreground: oklch(0.99 0.003 255);
+  /* Calls to action are blue, always. Ink is for text; it never fills a
+     button. shadcn's primitives (switch, checkbox, progress) read --primary,
+     so pointing it at the CTA blue keeps them on-brand too. */
+  --primary: var(--cta);
+  --primary-foreground: oklch(1 0 0);
   --secondary: oklch(0.965 0.005 250);
   --secondary-foreground: oklch(0.2 0.02 255);
   --muted: oklch(0.965 0.005 250);
@@ -134,6 +140,13 @@
   /* Tints the frosted scrim behind the nav menus, so a menu in the hero's
      own blue still stands off the hero instead of merging into it. */
   --brand-blue-deep: #0c4ea8;
+  /* The fill behind a call to action. #1877f2 under white label text sits at
+     4.2:1 — just short of AA for 14px type. One step deeper clears it (4.7:1)
+     and is indistinguishable from the brand blue beside it. */
+  --cta: #166fe5;
+  --cta-hover: #1161cc;
+  /* The quiet tint behind a selected chip or a highlighted row. */
+  --cta-soft: color-mix(in oklab, var(--brand-blue) 9%, var(--card));
   /* The dashboard rail. The whole surface is described here, so re-pitching
      it — white, tinted, deep blue, ink — is an edit to these eight lines and
      nothing else. The rail used to be a #1877f2 field, where white text sat
@@ -239,8 +252,8 @@
   --card-foreground: oklch(0.984 0.003 247.858);
   --popover: oklch(0.208 0.042 265.755);
   --popover-foreground: oklch(0.984 0.003 247.858);
-  --primary: oklch(0.929 0.013 255.508);
-  --primary-foreground: oklch(0.208 0.042 265.755);
+  --primary: var(--cta);
+  --primary-foreground: oklch(1 0 0);
   --secondary: oklch(0.279 0.041 260.031);
   --secondary-foreground: oklch(0.984 0.003 247.858);
   --muted: oklch(0.279 0.041 260.031);

@@ -48,9 +48,7 @@ export function Tabs<T extends string>({
             onClick={() => onChange(t.id)}
             className={cn(
               "flex flex-1 items-center justify-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium transition-all",
-              active
-                ? "bg-brand-blue text-white shadow-sm"
-                : "text-muted-foreground hover:text-ink",
+              active ? "bg-cta text-white shadow-sm" : "text-muted-foreground hover:text-ink",
             )}
           >
             {t.label}
@@ -277,7 +275,7 @@ export function MetricStat({
 
 const PILL_TONES: Record<string, string> = {
   neutral: "border-border bg-secondary text-muted-foreground",
-  ink: "border-transparent bg-ink text-background",
+  ink: "border-transparent bg-cta text-white",
   success: "border-success/20 bg-success/10 text-success",
   warning: "border-warning/30 bg-warning/15 text-ink",
   info: "border-info/20 bg-info/10 text-info",
@@ -315,11 +313,14 @@ export function Button({
   children: ReactNode;
   variant?: "solid" | "brand" | "ghost" | "danger";
 } & React.ButtonHTMLAttributes<HTMLButtonElement>) {
+  // A call to action is blue — never ink. Ink is for text. `solid` and `brand`
+  // are the same fill; both names stay so existing call sites keep reading.
+  const primary =
+    "bg-cta text-white shadow-[0_1px_2px_color-mix(in_oklab,var(--cta)_35%,transparent)] hover:bg-cta-hover active:translate-y-px";
   const variants = {
-    solid: "bg-ink text-background hover:bg-ink/90",
-    // Reserved for writing — the product's paid, magic action.
-    brand: "bg-brand-blue text-white hover:bg-brand-blue/90",
-    ghost: "border border-border bg-card text-ink hover:bg-secondary",
+    solid: primary,
+    brand: primary,
+    ghost: "border border-border bg-card text-ink hover:border-ink/15 hover:bg-secondary",
     danger:
       "border border-border bg-card text-muted-foreground hover:border-destructive/40 hover:bg-destructive/10 hover:text-destructive",
   };

@@ -52,7 +52,7 @@ export function ContentGaps({
             {shown.map((gap) => {
               const busy = busyId === gap.id;
               return (
-                <li key={gap.id} className="flex items-start gap-3 px-5 py-3.5">
+                <li key={gap.id} className="flex items-center gap-3 px-5 py-3.5">
                   <button
                     type="button"
                     onClick={() => onQueue(gap)}
@@ -60,16 +60,16 @@ export function ContentGaps({
                     title="Add to queue"
                     aria-label={`Add "${gap.title}" to the queue`}
                     className={cn(
-                      "group mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full border border-border text-muted-foreground transition-colors",
-                      "hover:border-brand-blue hover:bg-brand-blue hover:text-white disabled:opacity-60",
+                      "group grid h-7 w-7 shrink-0 place-items-center rounded-full border border-cta/30 bg-cta-soft text-cta transition-colors",
+                      "hover:border-cta hover:bg-cta hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-60",
                     )}
                   >
                     {busy ? (
-                      <Loader2 className="h-3 w-3 animate-spin" />
+                      <Loader2 className="h-3.5 w-3.5 animate-spin" />
                     ) : (
                       <>
-                        <Plus className="h-3 w-3 group-hover:hidden" />
-                        <Check className="hidden h-3 w-3 group-hover:block" />
+                        <Plus className="h-3.5 w-3.5 group-hover:hidden" strokeWidth={2.5} />
+                        <Check className="hidden h-3.5 w-3.5 group-hover:block" strokeWidth={2.5} />
                       </>
                     )}
                   </button>
@@ -93,7 +93,7 @@ export function ContentGaps({
         <button
           type="button"
           onClick={() => setShowAll((v) => !v)}
-          className="flex w-full items-center justify-center gap-1.5 border-t border-border px-5 py-3 text-sm font-medium text-brand-blue transition-colors hover:bg-secondary/60"
+          className="flex w-full items-center justify-center gap-1.5 border-t border-border px-5 py-3 text-sm font-medium text-cta transition-colors hover:bg-secondary/60"
         >
           {showAll ? "Show less" : `View all ${gaps.length}`}
           <ChevronDown className={cn("h-4 w-4 transition-transform", showAll && "rotate-180")} />

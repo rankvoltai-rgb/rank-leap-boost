@@ -72,7 +72,7 @@ export function PublishingSchedule({ blogs }: { blogs: Blog[] }) {
               aria-pressed={active}
               className={cn(
                 "flex flex-col items-center gap-1 rounded-card px-1 py-2 transition-colors",
-                active ? "bg-brand-blue text-white" : "text-muted-foreground hover:bg-secondary",
+                active ? "bg-cta text-white" : "text-muted-foreground hover:bg-secondary",
               )}
             >
               <span className="text-[0.65rem] font-medium uppercase">

@@ -13,7 +13,7 @@
  * --nav in styles.css for why, and for the tokens that pitch this surface.
  */
 import { useCallback, useEffect, useState } from "react";
-import { useRouterState } from "@tanstack/react-router";
+import { Link, useRouterState } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -125,6 +125,8 @@ export function Sidebar() {
     item.exact ? path === item.to : path === item.to || path.startsWith(`${item.to}/`);
   const name = user?.fullName?.trim() || user?.email || "Your account";
   const plan = planLabel(subscription?.status, sites.length);
+  // Loaded and not on a plan: the rail carries the way in, on every page.
+  const needsPlan = subscription === null;
 
   return (
     <TooltipProvider delayDuration={150} skipDelayDuration={400}>
@@ -158,6 +160,19 @@ export function Sidebar() {
               collapsed ? "px-2 py-3" : "p-3",
             )}
           >
+            {needsPlan && !collapsed && (
+              <Link
+                to="/dashboard"
+                hash="start-trial"
+                className={cn(
+                  "flex items-center justify-center gap-1.5 rounded-lg bg-cta px-3 py-2 text-sm font-semibold text-white",
+                  "shadow-[0_1px_2px_color-mix(in_oklab,var(--cta)_35%,transparent)] transition-colors hover:bg-cta-hover",
+                  NAV_FOCUS,
+                )}
+              >
+                Start free trial
+              </Link>
+            )}
             <SiteSwitcher collapsed={collapsed} />
             {collapsed ? (
               <div className="flex flex-col items-center gap-1.5">

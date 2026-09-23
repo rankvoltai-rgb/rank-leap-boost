@@ -96,7 +96,7 @@ function StudioPage() {
           block ? undefined : (
             <Link
               to="/dashboard/studio/new"
-              className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-ink px-3.5 py-2 text-sm font-medium text-background transition-colors hover:bg-ink/90"
+              className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-cta px-3.5 py-2 text-sm font-medium text-white transition-colors hover:bg-cta-hover"
             >
               <Plus className="h-4 w-4" /> Add a site
             </Link>

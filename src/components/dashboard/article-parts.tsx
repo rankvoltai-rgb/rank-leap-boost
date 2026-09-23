@@ -299,7 +299,7 @@ function ToolbarButton({
       onClick={onClick}
       className={cn(
         "grid h-8 w-8 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-secondary hover:text-ink",
-        active && "bg-ink text-background hover:bg-ink hover:text-background",
+        active && "bg-cta-soft text-cta hover:bg-cta-soft hover:text-cta",
       )}
     >
       {children}

@@ -553,7 +553,7 @@ function PlatformPicker({
           onClick={() => onChoose(p.id)}
           className={cn(
             tile,
-            choice === p.id ? "border-ink ring-1 ring-ink" : "border-border hover:border-ink/20",
+            choice === p.id ? "border-cta ring-1 ring-cta" : "border-border hover:border-ink/20",
           )}
         >
           <IntegrationLogo id={p.id} title={false} className="h-10 w-10" />
@@ -571,7 +571,7 @@ function PlatformPicker({
         onClick={() => onChoose("custom")}
         className={cn(
           tile,
-          choice === "custom" ? "border-ink ring-1 ring-ink" : "border-border hover:border-ink/20",
+          choice === "custom" ? "border-cta ring-1 ring-cta" : "border-border hover:border-ink/20",
         )}
       >
         <span className="grid h-10 w-10 place-items-center rounded-[25%] bg-ink font-mono text-sm font-semibold text-background">
@@ -795,7 +795,7 @@ function SetupStep({
       <span
         className={cn(
           "grid h-6 w-6 shrink-0 place-items-center rounded-full text-xs font-semibold",
-          done ? "bg-success text-white" : "bg-ink text-background",
+          done ? "bg-success text-white" : "bg-cta text-white",
         )}
       >
         {done ? <CheckIcon className="h-3.5 w-3.5" /> : n}

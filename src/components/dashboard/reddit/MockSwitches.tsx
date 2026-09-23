@@ -25,7 +25,7 @@ export function MockSwitches({ onChanged }: { onChanged: () => void }) {
     cn(
       "rounded-full border px-2.5 py-0.5 text-[0.7rem] font-medium transition-colors",
       active
-        ? "border-ink bg-ink text-background"
+        ? "border-cta bg-cta text-white"
         : "border-border bg-card text-muted-foreground hover:text-ink",
     );
   return (

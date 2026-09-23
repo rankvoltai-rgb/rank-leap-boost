@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -11,7 +11,7 @@ import {
   ChartIcon,
   TargetIcon,
   CardIcon,
-  CalendarIcon,
+  ConnectIcon,
   PulseIcon,
 } from "@/components/dashboard/icons";
 import {
@@ -38,6 +38,7 @@ import { CreditPaywallDialog } from "@/components/dashboard/CreditPaywallDialog"
 import { StartTrialDialog } from "@/components/dashboard/StartTrialDialog";
 import { CountUp } from "@/components/ui/count-up";
 import { PlatformLogos } from "@/components/dashboard/platforms";
+import { Meter, NextStepCard, type LaunchStep } from "@/components/dashboard/NextStep";
 import { TrafficValue } from "@/components/dashboard/traffic";
 import { lastSync, siteStatus, timeAgo } from "@/components/dashboard/connection-model";
 import { PublishingSchedule } from "@/components/dashboard/PublishingSchedule";
@@ -68,19 +69,27 @@ function timeGreeting() {
   return "Good evening";
 }
 
+/** Large blue call to action, for a `Link` — `Button` covers the rest. */
+const CTA_LINK =
+  "inline-flex h-11 items-center justify-center gap-2 rounded-lg bg-cta px-5 text-[0.95rem] font-semibold text-white shadow-[0_1px_2px_color-mix(in_oklab,var(--cta)_35%,transparent)] transition-colors hover:bg-cta-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2";
+const CTA_BUTTON = "h-11 px-5 text-[0.95rem] font-semibold";
+
 function AlgorithmLogos() {
   return (
-    <div className="flex flex-wrap items-center gap-1.5">
-      {AI_ALGORITHM_MARKS.map(({ name, Mark }) => (
-        <span
-          key={name}
-          title={name}
-          aria-label={name}
-          className="grid h-8 w-8 place-items-center rounded-lg border border-border bg-card"
-        >
-          <Mark className="h-4 w-4" />
-        </span>
-      ))}
+    <div className="flex flex-wrap items-center gap-2.5">
+      <div className="flex items-center -space-x-1.5">
+        {AI_ALGORITHM_MARKS.map(({ name, Mark }) => (
+          <span
+            key={name}
+            title={name}
+            aria-label={name}
+            className="grid h-7 w-7 place-items-center rounded-full border border-border bg-card ring-2 ring-card"
+          >
+            <Mark className="h-3.5 w-3.5" />
+          </span>
+        ))}
+      </div>
+      <p className="text-xs text-muted-foreground">Written to get cited in AI answers</p>
     </div>
   );
 }
@@ -92,6 +101,7 @@ function StatCell({
   icon,
   hint,
   accent,
+  meter,
   valueClassName,
 }: {
   label: React.ReactNode;
@@ -99,24 +109,26 @@ function StatCell({
   icon?: React.ReactNode;
   hint?: React.ReactNode;
   accent?: boolean;
+  /** A progress meter between the figure and the hint. */
+  meter?: React.ReactNode;
   /** Renders the value at text size — for statuses rather than figures. */
   valueClassName?: string;
 }) {
   return (
-    <div className={cn("flex flex-col gap-2.5 bg-card p-5", accent && "volt-glow")}>
+    <div className={cn("flex flex-col gap-3 bg-card p-5", accent && "volt-glow")}>
       <div className="flex items-center gap-2 text-muted-foreground">
         {icon}
         <span className="text-sm font-medium">{label}</span>
       </div>
       <p
         className={cn(
-          "text-[1.9rem] font-semibold leading-none tracking-tight tabular-nums",
-          accent ? "font-bold text-black dark:text-white" : "text-ink",
+          "text-[1.9rem] font-semibold leading-none tracking-tight tabular-nums text-ink",
           valueClassName,
         )}
       >
         {value}
       </p>
+      {meter}
       {hint && <p className="mt-auto text-xs text-muted-foreground">{hint}</p>}
     </div>
   );
@@ -152,15 +164,18 @@ function QueueRow({ blog, action }: { blog: Blog; action: React.ReactNode }) {
           <span className="grid h-7 w-7 shrink-0 place-items-center rounded-lg border border-border bg-secondary text-muted-foreground">
             <ArticleIcon className="h-3.5 w-3.5" />
           </span>
-          <span className="block max-w-[260px] truncate font-medium text-ink" title={blog.title}>
+          <span className="block max-w-[340px] truncate font-medium text-ink" title={blog.title}>
             {blog.title}
           </span>
         </div>
       </Td>
       <Td>
-        <Pill tone="neutral" className="whitespace-nowrap">
+        <span
+          className="block max-w-[220px] truncate text-muted-foreground"
+          title={blog.keyword ?? undefined}
+        >
           {blog.keyword}
-        </Pill>
+        </span>
       </Td>
       <Td>
         <TrafficValue value={blog.traffic_estimate} />
@@ -182,7 +197,7 @@ const OFFLINE_REASON: Record<Exclude<EngineState, "running">, string> = {
 /** Autopilot on or off at a glance; opens the switch in Settings. */
 function AutopilotStatus({ state, perWeek }: { state: EngineState | null; perWeek: number }) {
   const online = state === "running";
-  const label = state === null ? "" : online ? "Online" : "Offline";
+  const label = state === null ? "" : online ? "On" : "Off";
   const detail =
     state === null
       ? undefined
@@ -308,6 +323,15 @@ function SystemConsole({ siteId }: { siteId: string }) {
     !!subscription && ["trialing", "active", "past_due"].includes(subscription.status);
   const [paywallOpen, setPaywallOpen] = useState(false);
   const [trialOpen, setTrialOpen] = useState(false);
+
+  // Links elsewhere in the dashboard (the rail, Billing) land here with
+  // #start-trial to open the trial straight away. The hash is spent on arrival.
+  const hash = useRouterState({ select: (s) => s.location.hash });
+  useEffect(() => {
+    if (hash !== "start-trial" || subscription === undefined) return;
+    if (!hasEntitlement) setTrialOpen(true);
+    navigate({ to: "/dashboard", hash: "", replace: true });
+  }, [hash, subscription, hasEntitlement, navigate]);
   // Set when Generate was blocked, so the article runs itself once the trial starts.
   const [pendingBlog, setPendingBlog] = useState<Blog | null>(null);
 
@@ -407,6 +431,132 @@ function SystemConsole({ siteId }: { siteId: string }) {
   const shownQueue = showAllQueue ? visibleQueue : visibleQueue.slice(0, QUEUE_PREVIEW);
   const hiddenCount = visibleQueue.length - shownQueue.length;
 
+  // The launch checklist. Trial first: it's what lets anything publish, and the
+  // queue is already full of work waiting on it.
+  const connected = connection === "live" || connection === "stale";
+  const steps: LaunchStep[] = [
+    { id: "trial", label: `Start your ${TRIAL_DAYS}-day free trial`, done: hasEntitlement },
+    { id: "connect", label: "Connect your site", done: connected },
+    { id: "publish", label: "Publish your first article", done: finished.length > 0 },
+  ];
+  const stepNo = steps.findIndex((s) => !s.done) + 1;
+  const eyebrow = `Next step · ${stepNo} of ${steps.length}`;
+  const readyCount = queue.length + opportunities.length;
+  const nextUp = scheduled[0] ?? null;
+  // Held back until everything it reads has loaded, so it never flashes the
+  // wrong step at someone who has already done it.
+  const settled = subscription !== undefined && !integrationsLoading && finishedQuery.isSuccess;
+
+  let nextStep: React.ReactNode = null;
+  if (settled && !hasEntitlement) {
+    nextStep = (
+      <NextStepCard
+        eyebrow={eyebrow}
+        title={
+          readyCount > 0
+            ? `Put your ${readyCount} ready articles to work`
+            : "Turn on autopilot and start ranking"
+        }
+        body={
+          estimatedTraffic > 0
+            ? `They're projected to bring an estimated ${estimatedTraffic.toLocaleString()} visitors a month. Start your trial and autopilot writes and publishes them for you.`
+            : "Start your trial and autopilot researches, writes and publishes for you."
+        }
+        aside={<AlgorithmLogos />}
+        action={
+          <Button className={CTA_BUTTON} onClick={() => setTrialOpen(true)}>
+            <RocketIcon className="h-4 w-4" /> Start free trial
+          </Button>
+        }
+        note="No charge today · cancel in one click"
+        steps={steps}
+      />
+    );
+  } else if (settled && outOfCredits) {
+    nextStep = (
+      <NextStepCard
+        eyebrow="Credits used up"
+        title="You've used every article this cycle"
+        body="Upgrade to keep publishing today, or autopilot picks back up when your plan renews."
+        action={
+          <Button className={CTA_BUTTON} onClick={() => setPaywallOpen(true)}>
+            <RocketIcon className="h-4 w-4" /> Upgrade
+          </Button>
+        }
+      />
+    );
+  } else if (settled && !connected) {
+    nextStep = (
+      <NextStepCard
+        eyebrow={eyebrow}
+        title={
+          connection === "waiting"
+            ? "Finish connecting your site"
+            : "Connect your site so articles publish themselves"
+        }
+        body={
+          connection === "waiting"
+            ? "Your key is ready. Add it to your site and Rankbox confirms the first sync here."
+            : "Link your site once. From then on, every finished article goes live without you."
+        }
+        aside={<PlatformLogos size="h-6 w-6" />}
+        action={
+          <Link to="/dashboard/integrations" className={CTA_LINK}>
+            <ConnectIcon className="h-4 w-4" />
+            {connection === "waiting" ? "Finish setup" : "Connect your site"}
+          </Link>
+        }
+        steps={steps}
+      />
+    );
+  } else if (settled && finished.length === 0) {
+    nextStep = (
+      <NextStepCard
+        eyebrow={eyebrow}
+        title="Write your first article"
+        body={
+          nextUp
+            ? `Next in the queue: "${nextUp.title}". Generate it now to see what autopilot writes for you.`
+            : "Pick a content gap below and autopilot takes it from there."
+        }
+        action={
+          nextUp ? (
+            <Button
+              className={CTA_BUTTON}
+              onClick={() => generateNow(nextUp)}
+              disabled={busyId === nextUp.id}
+            >
+              {busyId === nextUp.id ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <VoltMark className="h-4 w-4" />
+              )}
+              Generate now
+            </Button>
+          ) : (
+            <Link to="/dashboard/blog-engine" className={CTA_LINK}>
+              Browse ideas
+            </Link>
+          )
+        }
+        steps={steps}
+      />
+    );
+  } else if (settled && autopilot === "paused") {
+    nextStep = (
+      <NextStepCard
+        eyebrow="Autopilot paused"
+        title="Autopilot isn't writing right now"
+        body="Your queue is waiting. Turn autopilot back on and it picks up where it left off."
+        action={
+          <Link to="/dashboard/settings" hash="autopilot" className={CTA_LINK}>
+            Turn autopilot on
+          </Link>
+        }
+      />
+    );
+  }
+
   return (
     <div className="space-y-6">
       <Confetti fireKey={confettiKey} />
@@ -428,7 +578,7 @@ function SystemConsole({ siteId }: { siteId: string }) {
         subscription={subscription}
       />
 
-      {/* Greeting, then the one action worth taking right now. */}
+      {/* Greeting, and whether the engine is running. */}
       <header className="flex flex-wrap items-end justify-between gap-4">
         <div className="min-w-0">
           <p className="text-sm text-muted-foreground">{dateLine}</p>
@@ -439,26 +589,19 @@ function SystemConsole({ siteId }: { siteId: string }) {
           <p className="mt-1.5 text-sm text-muted-foreground">
             {finished.length > 0
               ? `Your articles are working for you — ${finished.length} published so far.`
-              : "Your autopilot engine is building your traffic — sit back and watch it grow."}
+              : "Here's your traffic engine. One step at a time, it runs itself."}
           </p>
         </div>
-        <div className="flex items-center gap-2">
-          <Link
-            to="/dashboard/calendar"
-            className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-card px-3.5 py-2 text-sm font-medium text-ink transition-colors hover:bg-secondary"
-          >
-            <CalendarIcon className="h-4 w-4" />
-            Calendar
-          </Link>
-          <AutopilotStatus state={autopilot} perWeek={settings?.weekly_cadence ?? 7} />
-        </div>
+        <AutopilotStatus state={autopilot} perWeek={settings?.weekly_cadence ?? 7} />
       </header>
 
-      {/* Stats + AI engines — one consolidated, hairline-divided panel */}
+      {nextStep}
+
+      {/* The numbers, in one hairline-divided panel. */}
       <Panel className="overflow-hidden">
         <div className="grid grid-cols-2 gap-px bg-border lg:grid-cols-4">
           <StatCell
-            label="Projected Traffic"
+            label="Projected traffic"
             value={<CountUp value={estimatedTraffic} />}
             icon={<ChartIcon className="h-4 w-4" />}
             hint="Est. monthly organic visitors"
@@ -473,11 +616,13 @@ function SystemConsole({ siteId }: { siteId: string }) {
               </>
             }
             icon={<TargetIcon className="h-4 w-4" />}
+            meter={<Meter value={finished.length} max={MONTHLY_GOAL} label="Monthly goal" />}
             hint={`${Math.round((finished.length / MONTHLY_GOAL) * 100)}% of monthly goal`}
           />
           <StatCell
-            label={<PlatformLogos />}
-            valueClassName="text-[1.35rem]"
+            label="Your site"
+            icon={<ConnectIcon className="h-4 w-4" />}
+            valueClassName="whitespace-nowrap text-lg sm:text-[1.35rem]"
             value={
               <span className="inline-flex items-center gap-2">
                 <span
@@ -488,7 +633,7 @@ function SystemConsole({ siteId }: { siteId: string }) {
                       : connection === "stale"
                         ? "bg-warning"
                         : connection === "waiting"
-                          ? "bg-brand-blue"
+                          ? "bg-cta"
                           : "bg-muted-foreground/40",
                   )}
                 />
@@ -503,9 +648,12 @@ function SystemConsole({ siteId }: { siteId: string }) {
                 >
                   {integrationsLoading
                     ? "—"
-                    : { live: "Live", stale: "Not syncing", waiting: "Waiting", none: "Offline" }[
-                        connection
-                      ]}
+                    : {
+                        live: "Live",
+                        stale: "Not syncing",
+                        waiting: "Waiting",
+                        none: "Not connected",
+                      }[connection]}
                 </span>
               </span>
             }
@@ -515,7 +663,7 @@ function SystemConsole({ siteId }: { siteId: string }) {
               ) : (
                 <Link
                   to="/dashboard/integrations"
-                  className="font-medium text-volt underline-offset-2 hover:underline"
+                  className="font-medium text-cta underline-offset-2 hover:underline"
                 >
                   {connection === "none"
                     ? "Connect your site →"
@@ -527,90 +675,65 @@ function SystemConsole({ siteId }: { siteId: string }) {
             }
           />
           <StatCell
-            label="Article Credits"
+            label="Article credits"
             value={remainingCredits === null ? "—" : remainingCredits.toLocaleString()}
             icon={<CardIcon className="h-4 w-4" />}
-            hint="remaining this cycle"
+            meter={
+              credits ? (
+                <Meter
+                  value={remainingCredits ?? 0}
+                  max={credits.credits_total}
+                  label="Credits remaining"
+                />
+              ) : undefined
+            }
+            hint={credits ? `of ${credits.credits_total} left this cycle` : "remaining this cycle"}
           />
         </div>
-        <div className="flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-border px-5 py-4">
-          <p className="text-sm font-medium text-ink">Optimized for AI answer engines</p>
-          <AlgorithmLogos />
-          <p className="ml-auto text-xs text-muted-foreground">
-            Written to get cited across leading AI engines
-          </p>
-        </div>
-
-        {/* Only until the trial exists — it disappears once subscribed. */}
-        {!hasEntitlement && (
-          <div className="flex flex-wrap items-center gap-x-5 gap-y-3 border-t border-border bg-brand-blue px-5 py-4 text-white">
-            <span className="grid h-9 w-9 shrink-0 place-items-center rounded-card bg-white/15">
-              <RocketIcon className="h-4.5 w-4.5" />
-            </span>
-            <div className="min-w-0 flex-1">
-              <p className="text-sm font-semibold">
-                Start your {TRIAL_DAYS}-day free trial to publish these articles
-              </p>
-              <p className="mt-0.5 text-xs text-white/75">
-                {queue.length + opportunities.length} articles are queued and ready. No charge
-                today.
-              </p>
-            </div>
-            <button
-              type="button"
-              onClick={() => setTrialOpen(true)}
-              className="inline-flex h-9 w-full shrink-0 items-center justify-center gap-1.5 rounded-lg bg-white px-4 text-sm font-semibold text-brand-blue transition-transform hover:-translate-y-0.5 sm:w-auto"
-            >
-              Start free trial
-            </button>
-          </div>
-        )}
       </Panel>
-
-      {outOfCredits && (
-        <Panel className="flex flex-wrap items-center justify-between gap-3 border-destructive/30 bg-destructive/5 p-4 sm:p-5">
-          <div className="flex items-start gap-3">
-            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-card bg-destructive/10 text-destructive">
-              <RocketIcon className="h-5 w-5" />
-            </span>
-            <div>
-              <h3 className="text-sm font-semibold text-ink">You're out of article credits</h3>
-              <p className="mt-0.5 text-sm text-muted-foreground">
-                You've used all {MONTHLY_GOAL} articles this month. Upgrade to keep publishing
-                today.
-              </p>
-            </div>
-          </div>
-          <Button onClick={() => setPaywallOpen(true)}>
-            <RocketIcon className="h-4 w-4" /> Upgrade
-          </Button>
-        </Panel>
-      )}
 
       {/* The queue: what autopilot writes next, in order. */}
       <Panel className="overflow-hidden">
         <div className="flex flex-wrap items-center gap-3 px-5 py-4">
           <PulseIcon className="h-4 w-4 text-muted-foreground" />
           <h2 className="text-base font-semibold text-ink">Autopilot queue</h2>
-          <span className="rounded-full bg-secondary px-2 py-0.5 text-[0.65rem] font-semibold tabular-nums text-muted-foreground">
-            {queue.length}
-          </span>
           <div className="ml-auto flex items-center gap-2">
-            <select
-              value={queueFilter}
-              onChange={(e) => setQueueFilter(e.target.value as QueueFilter)}
+            <div
+              role="radiogroup"
               aria-label="Filter the queue"
-              className="rounded-lg border border-border bg-card px-2.5 py-1.5 text-xs font-medium text-ink outline-none transition-colors hover:bg-secondary focus:ring-2 focus:ring-ring"
+              className="flex items-center gap-0.5 rounded-lg border border-border bg-card p-0.5"
             >
-              <option value="all">All</option>
-              <option value="scheduled">Scheduled</option>
-              <option value="generating">Writing</option>
-            </select>
+              {(
+                [
+                  { id: "all", label: "All", count: queue.length },
+                  { id: "scheduled", label: "Scheduled", count: scheduled.length },
+                  { id: "generating", label: "Writing", count: generating.length },
+                ] as const
+              ).map((f) => {
+                const on = queueFilter === f.id;
+                return (
+                  <button
+                    key={f.id}
+                    type="button"
+                    role="radio"
+                    aria-checked={on}
+                    onClick={() => setQueueFilter(f.id)}
+                    className={cn(
+                      "inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-medium transition-colors",
+                      on ? "bg-cta-soft text-cta" : "text-muted-foreground hover:text-ink",
+                    )}
+                  >
+                    {f.label}
+                    <span className="tabular-nums opacity-70">{f.count}</span>
+                  </button>
+                );
+              })}
+            </div>
             <Link
               to="/dashboard/blog-engine"
-              className="rounded-lg px-2.5 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-ink"
+              className="hidden rounded-lg px-2.5 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-ink sm:inline-flex"
             >
-              See all
+              Open Articles
             </Link>
           </div>
         </div>
@@ -635,22 +758,24 @@ function SystemConsole({ siteId }: { siteId: string }) {
                         <Button
                           variant="ghost"
                           onClick={() => generateNow(blog)}
+                          title="Write this article now"
                           disabled={busyId === blog.id}
                           // White at rest; blue on hover, press, and while this row is writing.
                           className={cn(
-                            "whitespace-nowrap hover:border-brand-blue hover:bg-brand-blue hover:text-white focus-visible:border-brand-blue focus-visible:bg-brand-blue focus-visible:text-white active:border-brand-blue active:bg-brand-blue active:text-white",
-                            busyId === blog.id && "border-brand-blue bg-brand-blue text-white",
+                            "group/gen h-8 whitespace-nowrap px-3 text-[0.8rem] hover:border-cta hover:bg-cta hover:text-white focus-visible:border-cta focus-visible:bg-cta focus-visible:text-white active:border-cta active:bg-cta active:text-white",
+                            busyId === blog.id && "border-cta bg-cta text-white",
                           )}
                         >
                           {busyId === blog.id ? (
                             <Loader2 className="h-4 w-4 animate-spin" />
                           ) : (
-                            <VoltMark className="h-4 w-4" />
+                            <VoltMark className="h-4 w-4 text-cta group-hover/gen:text-white group-focus-visible/gen:text-white" />
                           )}
                           Generate now
                         </Button>
                         <Button
                           variant="danger"
+                          className="h-8 w-8 px-0"
                           title="Remove from queue"
                           aria-label="Remove from queue"
                           onClick={() => remove(blog)}
@@ -671,7 +796,7 @@ function SystemConsole({ siteId }: { siteId: string }) {
           <button
             type="button"
             onClick={() => setShowAllQueue((v) => !v)}
-            className="flex w-full items-center justify-center gap-1.5 border-t border-border px-5 py-3 text-sm font-medium text-brand-blue transition-colors hover:bg-secondary/60"
+            className="flex w-full items-center justify-center gap-1.5 border-t border-border px-5 py-3 text-sm font-medium text-cta transition-colors hover:bg-secondary/60"
           >
             {showAllQueue ? "Show less" : `View all ${visibleQueue.length}`}
             <ChevronDown
