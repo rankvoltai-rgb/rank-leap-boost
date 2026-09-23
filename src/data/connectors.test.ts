@@ -1,3 +1,4 @@
+import { readdirSync, statSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import {
   CATEGORIES,
@@ -95,5 +96,21 @@ describe("connector search", () => {
   it("doesn't shadow a real connector with a not-supported note", () => {
     expect(unsupportedMatch("webflow")).toBeUndefined();
     expect(unsupportedMatch("framer")).toBeUndefined();
+  });
+});
+
+describe("connector icons", () => {
+  const dir = "src/assets/connectors";
+  const files = readdirSync(dir).filter((f) => f.endsWith(".webp"));
+
+  it("names every icon after a connector that exists", () => {
+    const ids = new Set(CONNECTORS.map((c) => c.id));
+    for (const f of files) expect(ids.has(f.replace(/\.webp$/, "")), f).toBe(true);
+  });
+
+  // They load lazily and cache for a year, but a stray full-size PNG would
+  // still cost every first visit.
+  it("keeps every icon small", () => {
+    for (const f of files) expect(statSync(`${dir}/${f}`).size, f).toBeLessThan(8 * 1024);
   });
 });

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { cn } from "@/lib/utils";
 import type { Connector } from "@/data/connectors";
 import { IntegrationLogo } from "@/components/dashboard/integration-logos";
@@ -6,13 +7,56 @@ import { ChatGPTMark, CopilotMark } from "@/components/landing/ai-logos";
 import { VoltMark } from "@/components/dashboard/icons";
 
 /**
- * A connector's app icon, drawn the way IntegrationLogo draws the publishing
- * platforms: the brand's color as the tile, its mark in white. One system for
- * the whole library, so sixty logos read as a set and none shouts louder.
+ * A connector's app icon: the tool's own official icon where we have one,
+ * otherwise a drawn mark.
  *
- * Tools with no published mark get their initials on their brand color rather
- * than a guessed-at copy of their logo.
+ * The official icons were fetched once from each maker's site and are shipped
+ * as 96px WebP files in src/assets/connectors (about 1.7KB each, 67KB for all
+ * forty). Nothing is fetched from a third party at runtime. Vite gives each
+ * file a content hash, so production serves them with a one-year immutable
+ * cache, and they load lazily, so a visitor only downloads the icons on screen.
+ * `?no-inline` keeps them out of the JS bundle, which small assets otherwise
+ * get base64-inlined into.
+ *
+ * To add or refresh one, drop `<connector id>.webp` (96x96) into that folder.
+ * A tool whose icon is a bare mark on transparency rather than a full app
+ * icon also goes in BARE_MARKS, so it gets padding on a white tile.
  */
+const ICONS: Record<string, string> = Object.fromEntries(
+  Object.entries(
+    import.meta.glob<string>("/src/assets/connectors/*.webp", {
+      eager: true,
+      query: "?no-inline",
+      import: "default",
+    }),
+  ).map(([path, url]) => [path.slice(path.lastIndexOf("/") + 1, -".webp".length), url]),
+);
+
+/** Connectors that share another's icon: Codex is OpenAI's, like ChatGPT. */
+const SHARED_ICON: Record<string, string> = { codex: "chatgpt" };
+
+const BARE_MARKS = new Set([
+  "augment",
+  "base44",
+  "chatgpt",
+  "claude-code",
+  "continue",
+  "copilot-studio",
+  "devin-desktop",
+  "dify",
+  "dyad",
+  "figma-make",
+  "gumloop",
+  "jetbrains",
+  "librechat",
+  "lovable",
+  "macaly",
+  "open-webui",
+  "shopify",
+  "wordpress",
+  "zed",
+]);
+
 const TILE = "shrink-0 rounded-[25%] ring-1 ring-black/5 dark:ring-white/15";
 
 // Pure black tiles use the page's near-black so they sit with the rest of the UI.
@@ -32,6 +76,46 @@ export function ConnectorLogo({
   connector: Connector;
   className?: string;
 }) {
+  // Falls back to the drawn mark if the file ever fails to load.
+  const [failed, setFailed] = useState(false);
+  const icon = SHARED_ICON[connector.id] ?? connector.id;
+  const src = ICONS[icon];
+  if (!src || failed) return <DrawnMark connector={connector} className={className} />;
+
+  const bare = BARE_MARKS.has(icon);
+  return (
+    <span
+      role="img"
+      aria-label={connector.name}
+      className={cn(
+        TILE,
+        "grid place-items-center overflow-hidden bg-white",
+        "h-10 w-10",
+        className,
+      )}
+    >
+      <img
+        src={src}
+        alt=""
+        width={96}
+        height={96}
+        loading="lazy"
+        decoding="async"
+        draggable={false}
+        onError={() => setFailed(true)}
+        className={cn("object-contain", bare ? "h-[68%] w-[68%]" : "h-full w-full")}
+      />
+    </span>
+  );
+}
+
+/**
+ * The drawn fallback, in the style IntegrationLogo uses for the publishing
+ * platforms: the brand's color as the tile, its mark in white. Tools with no
+ * published mark get their initials on their brand color rather than a
+ * guessed-at copy of their logo.
+ */
+function DrawnMark({ connector, className }: { connector: Connector; className?: string }) {
   const { mark, name } = connector;
   const size = cn("h-10 w-10", className);
 
