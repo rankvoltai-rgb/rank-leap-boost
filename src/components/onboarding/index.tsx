@@ -34,43 +34,11 @@ import { Part1Profile, type Part1Value } from "./Part1Profile";
 import { Part2Analysis, type Part2Value } from "./Part2Analysis";
 import { Part3Forecast } from "./Part3Forecast";
 import { PlanRail, ProjectionStrip } from "./TrafficProjection";
+import { emptyDraft, normalizeDraft } from "./draft";
 
-function emptyDraft(url: string): OnboardingDraft {
-  return {
-    step: 1,
-    url,
-    brandName: "",
-    description: "",
-    logoUrl: null,
-    firstName: "",
-    niche: "",
-    audience: "",
-    brandTone: "",
-    geo: "",
-    services: [],
-    competitors: [],
-    semanticClusters: [],
-    aiVisibility: [],
-    missingOpportunities: [],
-    keywords: [],
-    analyzedUrl: "",
-    titles: [],
-    confirmedAt: null,
-  };
-}
-
-/**
- * The saved draft, if it can be resumed.
- *
- * Drafts saved before the scan read real sites have no `analyzedUrl`; their
- * brand details and keywords are placeholders, so those restart from step 1
- * with only the URL carried over.
- */
+/** The saved draft, repaired, if it can be resumed (see normalizeDraft). */
 function restorableDraft(): OnboardingDraft | null {
-  const saved = getOnboardingDraft();
-  if (!saved || saved.step === "done") return null;
-  if (typeof saved.analyzedUrl !== "string") return emptyDraft(saved.url);
-  return saved;
+  return normalizeDraft(getOnboardingDraft());
 }
 
 export function Onboarding({ searchUrl }: { searchUrl?: string }) {

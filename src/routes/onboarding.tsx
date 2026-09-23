@@ -1,7 +1,7 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { Onboarding } from "@/components/onboarding";
 import { getSessionUser } from "@/lib/auth";
-import { listSites } from "@/lib/data";
+import { clearOnboardingDraft, listSites } from "@/lib/data";
 import { IS_MOCK } from "@/lib/mock/mode";
 
 export const Route = createFileRoute("/onboarding")({
@@ -48,9 +48,39 @@ export const Route = createFileRoute("/onboarding")({
     ],
   }),
   component: OnboardingRoute,
+  errorComponent: OnboardingError,
 });
 
 function OnboardingRoute() {
   const { url } = Route.useSearch();
   return <Onboarding searchUrl={url} />;
+}
+
+/**
+ * Onboarding's own error screen. Progress lives in this browser, so the one
+ * recovery the root screen can't offer is dropping it and starting clean.
+ */
+function OnboardingError({ error }: { error: Error }) {
+  console.error(error);
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-background px-4">
+      <div className="max-w-md text-center">
+        <h1 className="text-xl font-semibold tracking-tight text-ink">Setup hit a snag</h1>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Something in your saved progress didn't load. Start over and you'll be set up in a couple
+          of minutes.
+        </p>
+        <button
+          type="button"
+          onClick={() => {
+            clearOnboardingDraft();
+            window.location.assign("/onboarding");
+          }}
+          className="mt-6 inline-flex items-center justify-center rounded-lg bg-cta px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-cta-hover"
+        >
+          Start over
+        </button>
+      </div>
+    </div>
+  );
 }
