@@ -47,7 +47,26 @@ function extractJson(text: string): unknown {
   throw new Error("AI response JSON was incomplete.");
 }
 
+/** Thrown by the rate limit, so the handlers' fallbacks don't swallow it. */
+class FreeAiRateLimited extends Error {}
+
+/** A handler's fallback for a failed model call, except when it was the rate limit. */
+function unlessLimited<T>(fallback: T) {
+  return (err: unknown): T => {
+    if (err instanceof FreeAiRateLimited) throw err;
+    return fallback;
+  };
+}
+
 async function generateJson(prompt: string): Promise<unknown> {
+  // Every free tool's model call comes through here, so one guard covers them.
+  const { getRequest } = await import("@tanstack/react-start/server");
+  const { assertFreeAiRateLimit } = await import("./rate-limit.server");
+  try {
+    await assertFreeAiRateLimit(getRequest());
+  } catch (err) {
+    throw new FreeAiRateLimited(err instanceof Error ? err.message : "Too many requests.");
+  }
   const gateway = createAiProvider();
   const { text } = await generateText({
     model: model(gateway),
@@ -86,7 +105,7 @@ export const generateAiQuestions = createServerFn({ method: "POST" })
   .handler(async ({ data }): Promise<QuestionGroup[]> => {
     const json = await generateJson(
       `You are an expert in generative engine optimization. For the topic "${data.topic}", list the real questions people ask AI assistants (ChatGPT, Perplexity, Gemini, Google AI Overviews). Group them by intent: "Informational", "Commercial", "Comparison", and "Transactional". Provide 4-6 specific, natural questions per group. Return JSON with exactly four group objects, one per intent: {"groups":[{"intent":"Informational","questions":["question?"]},{"intent":"Commercial","questions":["question?"]},{"intent":"Comparison","questions":["question?"]},{"intent":"Transactional","questions":["question?"]}]}`,
-    ).catch(() => ({ groups: [] }));
+    ).catch(unlessLimited({ groups: [] as unknown[] }));
     const groups = asArray((json as { groups?: unknown }).groups)
       .map((g): QuestionGroup => {
         const rec = (g ?? {}) as { intent?: unknown; questions?: unknown };
@@ -121,7 +140,7 @@ export const generateContentBrief = createServerFn({ method: "POST" })
   .handler(async ({ data }): Promise<ContentBrief> => {
     const json = await generateJson(
       `You are a senior SEO content strategist. Build a content brief for the target keyword "${data.keyword}" that can rank on Google and get cited by AI engines. The current year is ${new Date().getFullYear()}; never reference an earlier year as current. Return JSON: {"title":"working H1 under 60 chars","outline":[{"heading":"H2 heading","points":["point to cover"]}],"questions":["question the article must answer"],"entities":["entity or term to mention"]}. Provide 6-9 outline sections (2-4 points each), 6-8 questions, and 8-12 entities.`,
-    ).catch(() => null);
+    ).catch(unlessLimited(null));
     const rec = (json ?? {}) as {
       title?: unknown;
       outline?: unknown;
@@ -156,7 +175,7 @@ export const writeMetaDescriptions = createServerFn({ method: "POST" })
   .handler(async ({ data }): Promise<string[]> => {
     const json = await generateJson(
       `Write 3 compelling, click-worthy meta descriptions for a web page about: "${data.topic}". Each must be 120-160 characters, written in active voice, and include a clear value or call to action. Return JSON: {"options":["meta description"]}`,
-    ).catch(() => ({ options: [] }));
+    ).catch(unlessLimited({ options: [] as unknown[] }));
     const options = strList((json as { options?: unknown }).options, 3).filter(
       (o) => o.length >= 40,
     );
@@ -180,7 +199,7 @@ export const generateFaq = createServerFn({ method: "POST" })
   .handler(async ({ data }): Promise<FaqPair[]> => {
     const json = await generateJson(
       `You write FAQ sections that AI engines quote. For this page or topic: "${data.topic}", write 7 questions real buyers ask, each with a concise answer of 2-4 sentences: the direct answer first, then one supporting detail. No marketing fluff, no "great question". Return JSON: {"faqs":[{"q":"question?","a":"answer"}]}`,
-    ).catch(() => ({ faqs: [] }));
+    ).catch(unlessLimited({ faqs: [] as unknown[] }));
     const faqs = asArray((json as { faqs?: unknown }).faqs)
       .map((f): FaqPair => {
         const rec = (f ?? {}) as { q?: unknown; a?: unknown };
@@ -216,7 +235,7 @@ export const generateTitles = createServerFn({ method: "POST" })
     }[data.tone];
     const json = await generateJson(
       `Write 10 blog post titles about "${data.topic}"${data.keyword ? ` that include the phrase "${data.keyword}" naturally, ideally near the start` : ""}. Tone: ${toneNote} Cover these angles, two each: "How-to", "List", "Question", "Contrarian", "Data-led". Keep every title under 60 characters. Return JSON: {"titles":[{"title":"...","angle":"How-to"}]}`,
-    ).catch(() => ({ titles: [] }));
+    ).catch(unlessLimited({ titles: [] as unknown[] }));
     const titles = asArray((json as { titles?: unknown }).titles)
       .map((t): TitleIdea => {
         const rec = (t ?? {}) as { title?: unknown; angle?: unknown };
@@ -556,7 +575,7 @@ Return JSON with this exact shape:
 }
 
 Rules: 3 headlines. 4 checklist sections using exactly those section names. 3-4 specific, actionable items per section, each personalized to "${data.name}" and "${data.role}" where natural. Keep every "task" and "why" concise and jargon-light.`,
-    ).catch(() => null);
+    ).catch(unlessLimited(null));
 
     const rec = (json ?? {}) as {
       headlines?: unknown;

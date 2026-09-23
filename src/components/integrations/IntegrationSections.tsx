@@ -242,7 +242,11 @@ export function IntegrationSpecs({ specs, label }: { specs: IntegrationSpec[]; l
 
 export function IntegrationHighlights({ integration }: { integration: Integration }) {
   return (
-    <section aria-labelledby="highlights-title" className="py-24 sm:py-32">
+    <section
+      id="overview"
+      aria-labelledby="highlights-title"
+      className="scroll-mt-28 py-24 sm:py-32"
+    >
       <div className="mx-auto max-w-6xl px-5">
         <Heading
           id="highlights-title"
@@ -302,7 +306,7 @@ export function IntegrationSetup({ integration }: { integration: Integration }) 
     <section
       id="setup"
       aria-labelledby="setup-title"
-      className="scroll-mt-20 border-t border-border bg-surface/40 py-24 sm:py-32"
+      className="scroll-mt-28 border-t border-border bg-surface/40 py-24 sm:py-32"
     >
       <div className="mx-auto grid max-w-6xl items-start gap-14 px-5 lg:grid-cols-2 lg:gap-16">
         <div>
@@ -375,7 +379,7 @@ const STATUSES = [
 
 export function ConnectionStatus({ integration }: { integration?: Integration }) {
   return (
-    <section aria-labelledby="status-title" className="py-24 sm:py-32">
+    <section id="status" aria-labelledby="status-title" className="scroll-mt-28 py-24 sm:py-32">
       <div className="mx-auto grid max-w-6xl items-center gap-14 px-5 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
         <Reveal y={24} className="order-2 min-w-0 lg:order-1">
           <StatusSample integration={integration} />
@@ -485,7 +489,11 @@ export function IntegrationFAQ({
   faqs: FAQ[];
 }) {
   return (
-    <section id="faq" aria-labelledby="faq-title" className="border-t border-border py-24 sm:py-32">
+    <section
+      id="faq"
+      aria-labelledby="faq-title"
+      className="scroll-mt-28 border-t border-border py-24 sm:py-32"
+    >
       <div className="mx-auto max-w-3xl px-5">
         <Heading id="faq-title" eyebrow="FAQ" title={title} intro={intro} />
         <Reveal delay={0.08} className="mt-14">
@@ -640,17 +648,21 @@ export function IntegrationCTA({ integration }: { integration?: Integration }) {
     <section aria-labelledby="cta-title" className="py-24 sm:py-32">
       <div className="mx-auto max-w-6xl px-5">
         <Reveal>
-          <div className="relative overflow-hidden rounded-3xl border border-border bg-ink px-6 py-14 text-center sm:px-12 sm:py-16">
-            <div className="pointer-events-none absolute inset-0 bg-gridlines opacity-[0.07]" />
+          <div className="relative overflow-hidden rounded-3xl bg-brand-blue px-6 py-14 text-center sm:px-12 sm:py-16">
+            <PixelField />
             <div className="relative">
               <div className="mb-7 flex justify-center">
                 {integration ? (
                   <ConnectionLockup integration={integration} />
                 ) : (
                   <span className="flex items-center -space-x-2">
-                    <RankboxTile className="relative z-10 h-12 w-12 ring-4 ring-ink" />
+                    <RankboxTile className="relative z-10 h-12 w-12 ring-4 ring-brand-blue" />
                     {INTEGRATIONS.map((i) => (
-                      <span key={i.slug} aria-hidden className="rounded-[25%] ring-4 ring-ink">
+                      <span
+                        key={i.slug}
+                        aria-hidden
+                        className="rounded-[25%] ring-4 ring-brand-blue"
+                      >
                         <IntegrationGlyph integration={i} className="h-10 w-10" />
                       </span>
                     ))}
@@ -659,20 +671,17 @@ export function IntegrationCTA({ integration }: { integration?: Integration }) {
               </div>
               <h2
                 id="cta-title"
-                className="font-display mx-auto max-w-2xl text-balance text-3xl font-semibold tracking-tight text-background sm:text-4xl"
+                className="font-display mx-auto max-w-2xl text-balance text-3xl font-semibold tracking-tight text-white sm:text-4xl"
               >
                 {copy.title}
               </h2>
-              <p className="mx-auto mt-4 max-w-xl text-balance text-base text-background/70">
+              <p className="mx-auto mt-4 max-w-xl text-balance text-base text-white/80">
                 {copy.body}
               </p>
-              <a
-                href="/auth"
-                className="mt-8 inline-flex items-center justify-center gap-2 rounded-xl bg-cta px-6 py-3.5 text-sm font-semibold text-white transition-all hover:-translate-y-0.5 hover:bg-cta-hover"
-              >
+              <a href="/auth" className={cn(heroPrimary, "mt-8 w-auto")}>
                 {copy.cta} <ArrowRight className="h-4 w-4" />
               </a>
-              <p className="mt-3 text-sm text-background/60">{TRIAL_NOTE}</p>
+              <p className="mt-3 text-sm text-white/70">{TRIAL_NOTE}</p>
             </div>
           </div>
         </Reveal>

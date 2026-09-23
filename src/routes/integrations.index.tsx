@@ -1,17 +1,22 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
+import { useState } from "react";
 import {
-  ConnectionStatus,
-  HubHero,
-  IntegrationCTA,
   IntegrationFAQ,
   IntegrationSpecs,
   KeySecurity,
   PublishingLoop,
 } from "@/components/integrations/IntegrationSections";
-import { INTEGRATIONS, getIntegration, isAddon } from "@/data/integrations";
-import { AiToolsBand, ConnectorDirectory } from "@/components/integrations/AiToolSections";
+import {
+  Directory,
+  HubCTA,
+  HubSearchHero,
+  TwoWays,
+  scrollToDirectory,
+  type DirectoryFilter,
+} from "@/components/integrations/HubSections";
+import { INTEGRATIONS, isAddon } from "@/data/integrations";
 import { AI_TOOLS, publicSlug } from "@/data/ai-integrations";
 import { CONNECTORS } from "@/data/connectors";
 import { formatUsd, PLAN, STUDIO } from "@/data/pricing";
@@ -143,24 +148,34 @@ export const Route = createFileRoute("/integrations/")({
   component: IntegrationsIndex,
 });
 
+/* Search first, then the model (publish or research), then everything, then
+   how publishing works and why it's safe, before the FAQ and the close. */
 function IntegrationsIndex() {
+  const [query, setQuery] = useState("");
+  const [filter, setFilter] = useState<DirectoryFilter>("all");
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
       <main>
-        <HubHero />
+        <HubSearchHero query={query} onQuery={setQuery} />
         <IntegrationSpecs specs={HUB_SPECS} label="Integrations at a glance" />
-        <ConnectorDirectory />
-        <AiToolsBand />
+        <TwoWays
+          onBrowse={(anchor) => {
+            setQuery("");
+            setFilter("all");
+            // Let the full grid render before scrolling to a group in it.
+            requestAnimationFrame(() => scrollToDirectory(anchor));
+          }}
+        />
+        <Directory query={query} onQuery={setQuery} filter={filter} onFilter={setFilter} />
         <PublishingLoop />
-        <ConnectionStatus integration={getIntegration("wordpress")} />
         <KeySecurity />
         <IntegrationFAQ
           title="Integration questions"
-          intro="How connecting your site works, what it costs, and what it can touch."
+          intro="How connecting works, what it costs, and what Rankbox can touch."
           faqs={HUB_FAQS}
         />
-        <IntegrationCTA />
+        <HubCTA />
       </main>
       <Footer />
     </div>

@@ -25,6 +25,10 @@ import type { IntegrationFAQ, IntegrationPoint, IntegrationSpec } from "@/data/i
 
 type AiCategory = Exclude<ConnectorCategory, "website" | "developer">;
 
+export function aiCategoryOf(c: Connector): AiCategory {
+  return c.category as AiCategory;
+}
+
 /** Every named AI tool with a page. "Any MCP client" is the /integrations/mcp page. */
 export const AI_TOOLS: Connector[] = CONNECTORS.filter(
   (c) => c.kind === "mcp" && c.id !== "any-mcp",
@@ -55,6 +59,12 @@ export const ANOTHER: Record<AiCategory, string> = {
 
 export function anotherLabel(c: Connector): string {
   return ANOTHER[c.category as AiCategory] ?? "tool";
+}
+
+/** "an AI assistant", "a coding agent": the kind of tool, ready for a sentence. */
+export function kindWithArticle(c: Connector): string {
+  const kind = anotherLabel(c);
+  return `${/^[aeiou]/i.test(kind) ? "an" : "a"} ${kind}`;
 }
 
 /* ── Framing by kind of tool ───────────────────────────────────── */
@@ -179,6 +189,29 @@ export interface AiToolPage {
   faqs: IntegrationFAQ[];
 }
 
+/** Where the tool uses Rankbox, for the facts band. */
+export function surfaceOf(c: Connector): { value: string; label: string } {
+  const hasCommand = c.steps.some((s) => s.snippet?.kind === "command");
+  switch (c.category) {
+    case "builder":
+      return { value: "In the builder", label: "while it builds your app" };
+    case "coding":
+      return hasCommand
+        ? { value: "Terminal", label: "from the agent in your terminal" }
+        : { value: "Editor", label: "from the agent in your editor" };
+    case "automation":
+      return { value: "Workflows", label: "as a step in any workflow" };
+    default:
+      return { value: "In chat", label: "right inside the conversation" };
+  }
+}
+
+/** How setup is done, in the fewest words: "1 command", "3 steps". */
+export function setupValue(c: Connector): string {
+  if (c.steps.length === 1 && c.steps[0].snippet?.kind === "command") return "1 command";
+  return `${c.steps.length} ${c.steps.length === 1 ? "step" : "steps"}`;
+}
+
 /** A step list read as one answer: "Open Connectors… Then paste…". */
 function stepsAsSentence(c: Connector): string {
   const steps = c.steps.map((s) => s.text.replace(/[.:]$/, ""));
@@ -188,6 +221,7 @@ function stepsAsSentence(c: Connector): string {
 
 export function aiToolPage(c: Connector): AiToolPage {
   const copy = COPY[categoryOf(c)];
+  const surface = surfaceOf(c);
   const n = c.steps.length;
   const faqs: IntegrationFAQ[] = [
     { q: `How do I connect Rankbox to ${c.name}?`, a: stepsAsSentence(c) },
@@ -217,9 +251,9 @@ export function aiToolPage(c: Connector): AiToolPage {
     headline: { lead: "Rankbox for", accent: c.name },
     subhead: `${c.tagline} Add Rankbox's MCP server once and ${c.name} can research topics, brief articles, and write meta descriptions for you.`,
     specs: [
-      { value: "3", label: `research tools in ${c.name}` },
-      { value: String(n), label: n === 1 ? "step to connect" : "steps to connect" },
-      { value: "MCP", label: "remote server, one URL" },
+      { value: setupValue(c), label: "to connect" },
+      { value: surface.value, label: surface.label },
+      { value: "3", label: "research tools it can call" },
       { value: "Included", label: "with every Rankbox plan" },
     ],
     uses: copy.uses(c.name),

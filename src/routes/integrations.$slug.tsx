@@ -16,12 +16,19 @@ import { getIntegration, isAddon, publishes } from "@/data/integrations";
 import { aiToolPage, getAiTool } from "@/data/ai-integrations";
 import { MCP_URL } from "@/data/connectors";
 import {
-  AiToolCTA,
-  AiToolHero,
-  AiToolSetup,
-  AiToolUses,
-  RelatedAiTools,
-} from "@/components/integrations/AiToolSections";
+  ToolBiggerPicture,
+  ToolCTA,
+  ToolHero,
+  ToolHowItWorks,
+  ToolPrivacy,
+  ToolRelated,
+  ToolSetup,
+  ToolSubNav,
+  ToolTryIt,
+  ToolUseCases,
+} from "@/components/integrations/ToolPage";
+import { SubNav } from "@/components/integrations/SubNav";
+import { IntegrationGlyph } from "@/components/integrations/visuals";
 
 const SITE = "https://rankbox.xyz";
 
@@ -129,6 +136,18 @@ function IntegrationPage() {
       <Navbar />
       <main>
         <IntegrationHero integration={integration} />
+        <SubNav
+          title={
+            isAddon(integration) ? `Rankbox for ${integration.name}` : `Rankbox ${integration.name}`
+          }
+          mark={<IntegrationGlyph integration={integration} className="h-6 w-6" />}
+          links={[
+            { id: "overview", label: "Overview" },
+            { id: "setup", label: "Setup" },
+            ...(publishes(integration) ? [{ id: "status", label: "Status" }] : []),
+            { id: "faq", label: "FAQ" },
+          ]}
+        />
         <IntegrationSpecs
           specs={integration.specs}
           label={`Rankbox for ${integration.name} at a glance`}
@@ -200,17 +219,22 @@ function AiToolPage({ slug }: { slug: string }) {
     <div className="min-h-screen bg-background">
       <Navbar />
       <main>
-        <AiToolHero tool={tool} page={page} />
+        <ToolHero tool={tool} page={page} />
+        <ToolSubNav tool={tool} />
         <IntegrationSpecs specs={page.specs} label={`Rankbox for ${tool.name} at a glance`} />
-        <AiToolUses tool={tool} page={page} />
-        <AiToolSetup tool={tool} />
+        <ToolHowItWorks tool={tool} />
+        <ToolTryIt tool={tool} />
+        <ToolUseCases tool={tool} />
+        <ToolSetup tool={tool} />
+        <ToolBiggerPicture tool={tool} />
+        <ToolPrivacy tool={tool} />
         <IntegrationFAQ
           title={`Rankbox and ${tool.name}`}
           intro={`Connecting, plans, privacy, and what the tools can do in ${tool.name}.`}
           faqs={page.faqs}
         />
-        <RelatedAiTools tool={tool} />
-        <AiToolCTA tool={tool} />
+        <ToolRelated tool={tool} />
+        <ToolCTA tool={tool} />
       </main>
       <Footer />
     </div>

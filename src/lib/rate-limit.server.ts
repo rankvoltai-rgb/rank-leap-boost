@@ -84,6 +84,22 @@ export async function assertAiRateLimit(userId: string): Promise<void> {
   }
 }
 
+/**
+ * Per-IP guard for the free, sign-up-free AI tools (/tools and the live demos
+ * on the integration pages). Each call is a paid model call, and these are the
+ * only AI endpoints anyone can reach without an account, so they get their own
+ * small bucket rather than the public API's generous one.
+ */
+export async function assertFreeAiRateLimit(request: Request | null | undefined): Promise<void> {
+  const ip = request ? clientIp(request) : null;
+  if (!ip) return;
+  const count = await hit(`free-ai:${ip}`);
+  if (count === null) return; // store unavailable — fail open, as above
+  if (count > limitFromEnv("FREE_AI_IP_RATE_LIMIT", 6)) {
+    throw new Error("You've run a lot of these in the last minute. Wait a moment and try again.");
+  }
+}
+
 /** Per-user guard (caps one account across all its keys). 429 Response, or null. */
 export async function rateLimitByUser(userId: string): Promise<Response | null> {
   const count = await hit(`user:${userId}`);
