@@ -7,6 +7,7 @@ import {
   PersonaHero,
   PersonaSpecs,
   PersonaPains,
+  PersonaHandoff,
   PersonaTopics,
   PersonaWorkflow,
   PersonaStack,
@@ -124,12 +125,13 @@ export const Route = createFileRoute("/use-cases/$slug")({
   errorComponent: PersonaError,
 });
 
-/* The landing's rhythm, rebuilt around one seat: blue hero with the ownership
-   split, the jobs this reader recognises, how a week runs, what it replaces,
-   the features that carry it, then the landing's pricing, FAQ, and closing
-   CTA. Business pages add a sample topic map after the pains; pages without
-   proof of their own skip it. The body bands alternate from whatever is
-   present, so neither choice leaves two tints touching. Section ids (top,
+/* The landing's rhythm, rebuilt around one seat: blue hero with this page's
+   own scene, the jobs this reader recognises, who does what, how a week runs,
+   what it replaces, the features that carry it, then the landing's pricing,
+   FAQ, and closing CTA. Business pages add a sample topic map after the
+   ownership split; pages without proof of their own skip it. The body bands
+   alternate from whatever is present, so neither choice leaves two tints
+   touching. Section ids (top,
    proof, pricing, faq) match the landing so the shared navbar's anchors keep
    working here. */
 type BodySection = ComponentType<{ persona: Persona; tint?: boolean }>;
@@ -137,6 +139,7 @@ type BodySection = ComponentType<{ persona: Persona; tint?: boolean }>;
 function bodyFor(persona: Persona): BodySection[] {
   return [
     PersonaPains,
+    PersonaHandoff,
     ...(persona.topics ? [PersonaTopics] : []),
     PersonaWorkflow,
     PersonaStack,

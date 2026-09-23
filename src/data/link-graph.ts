@@ -268,6 +268,42 @@ const POST_CARDS: Record<string, Titled> = {
     title: "Cheap SEO in 2026: What Works and What's a Scam",
     blurb: "The free tools to set up first, the few paid ones worth buying, and the red flags.",
   },
+  "rankpill-alternatives": {
+    title: "9 Best RankPill Alternatives in 2026 (Prices Checked)",
+    blurb: "Cheaper autopilots, bigger plans, and what 30 articles a month really costs.",
+  },
+  "outrank-alternatives": {
+    title: "10 Best Outrank Alternatives in 2026 (Prices Checked)",
+    blurb: "Cheaper autopilots, longer articles, AI tracking, and when Outrank still wins.",
+  },
+  "frase-alternatives": {
+    title: "9 Best Frase Alternatives in 2026 (Prices Checked)",
+    blurb: "Editors, cheaper optimizers, an autopilot, and when Frase still wins.",
+  },
+  "surfer-seo-alternatives": {
+    title: "9 Best Surfer SEO Alternatives in 2026 (Prices Checked)",
+    blurb: "Cheaper editors, all-in-one tools, and an option with no editor at all.",
+  },
+  "koala-ai-alternatives": {
+    title: "9 Best Koala AI Alternatives in 2026 (Prices Checked)",
+    blurb: "Fixed-price article plans, cheaper autopilots, and when Koala still wins.",
+  },
+  "seobot-alternatives": {
+    title: "9 Best SEObot Alternatives in 2026 (Prices Checked)",
+    blurb: "Flat 30-article plans, AI tracking, programmatic SEO, and when SEObot wins.",
+  },
+  "byword-alternatives": {
+    title: "9 Best Byword Alternatives in 2026 (Prices Checked)",
+    blurb: "Cheaper bulk writers, daily autopilots, and when Byword still wins.",
+  },
+  "jasper-alternatives": {
+    title: "9 Best Jasper Alternatives in 2026 (Prices Checked)",
+    blurb: "Alternatives by job: SEO articles, channel copy, cheap team seats.",
+  },
+  "writesonic-alternatives": {
+    title: "10 Best Writesonic Alternatives in 2026 (Prices Checked)",
+    blurb: "AI writers for articles, AI visibility trackers, and when Writesonic wins.",
+  },
 };
 
 /** @internal For link-graph.test.ts, which checks these against the real data. */
@@ -470,6 +506,9 @@ export const TOPICS: Topic[] = [
       e("claude"),
       e("perplexity"),
       e("gemini"),
+      b("koala-ai-alternatives"),
+      b("byword-alternatives"),
+      b("jasper-alternatives"),
       b("how-to-get-cited-by-chatgpt"),
       u("marketers"),
       u("ecommerce"),
@@ -507,6 +546,8 @@ export const TOPICS: Topic[] = [
       t("ai-citation-readiness-checker"),
       e("google-ai-overviews"),
       a("surfer-seo"),
+      b("frase-alternatives"),
+      b("surfer-seo-alternatives"),
       a("frase"),
       c("surfer-seo-vs-clearscope"),
       c("surfer-seo-vs-frase"),
@@ -536,6 +577,10 @@ export const TOPICS: Topic[] = [
       u("solo-founders"),
       u("seo-agencies"),
       b("cheap-seo"),
+      b("rankpill-alternatives"),
+      b("outrank-alternatives"),
+      b("byword-alternatives"),
+      b("seobot-alternatives"),
       t("sitemap-generator"),
       t("redirect-generator"),
       t("open-graph-generator"),
@@ -573,6 +618,7 @@ export const TOPICS: Topic[] = [
       e("deepseek"),
       e("mistral"),
       e("manus"),
+      b("writesonic-alternatives"),
       b("how-to-get-cited-by-chatgpt"),
       b("how-to-show-up-in-google-ai-overviews"),
       t("ai-visibility-prompt-generator"),
@@ -691,6 +737,15 @@ export const TOPICS: Topic[] = [
     pages: [
       "/pricing",
       b("cheap-seo"),
+      b("rankpill-alternatives"),
+      b("outrank-alternatives"),
+      b("frase-alternatives"),
+      b("surfer-seo-alternatives"),
+      b("koala-ai-alternatives"),
+      b("seobot-alternatives"),
+      b("byword-alternatives"),
+      b("jasper-alternatives"),
+      b("writesonic-alternatives"),
       u("solo-founders"),
       u("marketers"),
       u("seo-agencies"),
@@ -785,7 +840,9 @@ export function crossLinks(path: string, exclude: readonly string[] = []): Cross
   if (topics.length === 0) return null;
 
   const skip = new Set([path, ...exclude]);
-  const claimChecked = CLAIM_CHECKED.includes(own);
+  // The "best X alternatives" posts compare real products, so they follow the
+  // comparison sections' rule and never suggest a feature that hasn't shipped.
+  const claimChecked = CLAIM_CHECKED.includes(own) || /^\/blog\/[a-z0-9-]+-alternatives$/.test(path);
   const cards: string[] = [];
   const terms: string[] = [];
   const perSection = new Map<Section, number>();

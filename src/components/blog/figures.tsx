@@ -9,6 +9,8 @@ import type { ReactNode } from "react";
 import { Bot, Check, Search } from "lucide-react";
 import { ChatGPTMark, GoogleMark } from "@/components/landing/ai-logos";
 import { cn } from "@/lib/utils";
+import { PRICE_CHARTS, type PriceChart } from "@/data/blog-figures";
+import { formatUsd } from "@/data/pricing";
 
 /* ---------- shared bits ---------- */
 
@@ -504,6 +506,67 @@ function RetainerHours() {
   );
 }
 
+/* ---------- 6. What each alternative costs a month ---------- */
+
+/**
+ * One chart per "best X alternatives" post, drawn from src/data/blog-figures.ts
+ * and placed with `figure:price-chart/<post-slug>`. Rankbox is drawn in the
+ * brand colour and the tool the post is about as the reference bar.
+ */
+function PriceChartFigure({ chart }: { chart: PriceChart }) {
+  const max = Math.max(...chart.bars.map((b) => b.value));
+  return (
+    <div className="rounded-2xl border border-border bg-card p-4 shadow-1 sm:p-5">
+      <p className="text-sm font-semibold text-ink">{chart.title}</p>
+      <p className="mt-0.5 text-xs text-muted-foreground">{chart.subtitle}</p>
+      <div className="mt-5 space-y-3.5">
+        {chart.bars.map((b) => (
+          <div
+            key={b.name}
+            title={`${b.name}: ${formatUsd(b.value)} a month, ${b.note}`}
+            className="grid grid-cols-[6.5rem_minmax(0,1fr)] items-center gap-3 sm:grid-cols-[8rem_minmax(0,1fr)]"
+          >
+            <div className="min-w-0">
+              <p
+                className={cn(
+                  "text-xs font-semibold leading-tight",
+                  b.rankbox ? "text-brand-blue" : "text-ink",
+                )}
+              >
+                {b.name}
+              </p>
+              <p className="mt-0.5 line-clamp-2 text-[0.65rem] leading-tight text-muted-foreground">
+                {b.note}
+              </p>
+            </div>
+            <div className="flex items-center gap-2 border-l border-ink/15">
+              <span
+                className={cn(
+                  "block h-4 rounded-r",
+                  b.rankbox ? "bg-brand-blue" : b.reference ? "bg-ink/45" : "bg-ink/15",
+                )}
+                style={{ width: `${Math.max(2, (b.value / max) * 78)}%` }}
+              />
+              <span className="shrink-0 text-xs font-bold tabular-nums text-ink">
+                {formatUsd(b.value)}
+              </span>
+            </div>
+          </div>
+        ))}
+      </div>
+      <p className="mt-4 text-[0.65rem] text-muted-foreground">
+        List prices billed monthly, from each vendor's pricing page on{" "}
+        {new Date(`${chart.checkedOn}T12:00:00`).toLocaleDateString("en-GB", {
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+        })}
+        .
+      </p>
+    </div>
+  );
+}
+
 /* ---------- registry ---------- */
 
 const FIGURES: Record<string, () => ReactNode> = {
@@ -513,6 +576,14 @@ const FIGURES: Record<string, () => ReactNode> = {
   "query-fan-out": QueryFanOut,
   "retainer-hours": RetainerHours,
 };
+
+/** A fixed figure by id, or a data-driven one ("price-chart/<post-slug>"). */
+function figureFor(id: string): (() => ReactNode) | undefined {
+  if (FIGURES[id]) return FIGURES[id];
+  const [kind, key] = id.split("/");
+  const chart = kind === "price-chart" && key ? PRICE_CHARTS[key] : undefined;
+  return chart ? () => <PriceChartFigure chart={chart} /> : undefined;
+}
 
 export function ArticleFigure({
   id,
@@ -525,7 +596,7 @@ export function ArticleFigure({
   caption?: ReactNode;
   number?: number;
 }) {
-  const Figure = FIGURES[id];
+  const Figure = figureFor(id);
   if (!Figure) return null;
   return (
     <figure className="my-10">

@@ -56,7 +56,8 @@ import {
   heroPrimary,
   heroSecondary,
 } from "./IntegrationSections";
-import { Connector as FlowLine, McpWindow, RankboxTile } from "./visuals";
+import { Connector as FlowLine, RankboxTile } from "./visuals";
+import { ToolHeroVisual } from "./stages";
 import { Playground } from "./Playground";
 import { SubNav } from "./SubNav";
 
@@ -156,7 +157,7 @@ export function ToolHero({ tool, page }: { tool: Connector; page: AiToolPage }) 
               <div className="pointer-events-none absolute -inset-12">
                 <PixelField pixels={CARD_PIXELS} seed={7} />
               </div>
-              <McpWindow appName={tool.name} className="relative lg:min-h-[28.5rem]" />
+              <ToolHeroVisual tool={tool} />
             </div>
           </Reveal>
         </div>

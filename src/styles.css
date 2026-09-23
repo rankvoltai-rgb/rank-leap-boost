@@ -613,7 +613,28 @@
   animation-fill-mode: backwards;
 }
 
+/* One bar of a voice waveform (the voice-agent integration heroes). Give each
+   bar its own --bar-duration and --bar-delay so the wave never lines up. */
+@keyframes voice-bar {
+  0%,
+  100% {
+    transform: scaleY(0.3);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+@utility animate-voice-bar {
+  animation: voice-bar var(--bar-duration, 0.9s) ease-in-out infinite;
+  animation-delay: var(--bar-delay, 0s);
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .animate-voice-bar {
+    animation: none;
+  }
+
   .animate-packet {
     animation: none;
     opacity: 0;

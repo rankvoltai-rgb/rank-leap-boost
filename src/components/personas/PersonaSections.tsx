@@ -4,13 +4,14 @@
  * alternating surfaces, dark closing CTA) with a body that answers "is this
  * built for someone in my job?"
  *
- * Three sections here exist only on these pages, because they answer the
- * objections a persona page actually has to clear:
+ * The hero's right half is a scene of its own on every page (hero-scenes.tsx),
+ * so no two heroes look alike. Three sections here exist only on these pages,
+ * because they answer the objections a persona page actually has to clear:
  *
- *   HandoffPanel  — what runs itself, and what never stops being the reader's.
- *   PersonaStack  — the line items this consolidates, with a price only on ours.
- *   PersonaTopics — business pages: what it would write for a shop like yours,
- *                   and the integrations it would land through.
+ *   PersonaHandoff — what runs itself, and what never stops being the reader's.
+ *   PersonaStack   — the line items this consolidates, with a price only on ours.
+ *   PersonaTopics  — business pages: what it would write for a shop like yours,
+ *                    and the integrations it would land through.
  *
  * The body sections take `tint`, and the route alternates it, so the page's
  * rhythm holds whether or not a page carries topics or proof.
@@ -45,6 +46,7 @@ import { PixelField, CARD_PIXELS, UrlForm, TrustRow } from "@/components/landing
 import { TESTIMONIALS } from "@/components/landing/Testimonials";
 import { Chip, Letter, ProductWindow, type Tone } from "@/components/features/showcase/kit";
 import { IntegrationGlyph } from "@/components/integrations/visuals";
+import { PersonaScene } from "./hero-scenes";
 import { cn } from "@/lib/utils";
 import { getFeature } from "@/data/features";
 import { getIntegration } from "@/data/integrations";
@@ -106,85 +108,6 @@ function IconTile({ persona, className }: { persona: Persona; className?: string
 }
 
 /* ---------- 1. Hero ---------- */
-
-/**
- * The ownership split, as the hero's product panel. Nothing else on the site
- * says out loud what stays the customer's job, and on a page that exists to
- * make someone picture their own week, that is the most persuasive thing we
- * have — it is the difference between "this replaces you" and "this replaces
- * the part of the job you resent".
- */
-function HandoffPanel({ persona }: { persona: Persona }) {
-  return (
-    <div className="overflow-hidden rounded-3xl border border-border bg-card shadow-elevation-lg">
-      <div className="flex items-center justify-between gap-3 border-b border-border bg-surface/60 px-5 py-3.5">
-        <p className="text-sm font-semibold text-ink">Who does what</p>
-        <span className="rounded-full border border-border bg-card px-2.5 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
-          {persona.name}
-        </span>
-      </div>
-
-      <div className="grid gap-px bg-border sm:grid-cols-2">
-        <div className="bg-card p-5">
-          <div className="flex items-center gap-2">
-            <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-brand-blue text-white">
-              <Sparkles className="h-3.5 w-3.5" strokeWidth={2.4} />
-            </span>
-            <p className="text-[0.7rem] font-bold uppercase tracking-[0.12em] text-ink">
-              {persona.handoff.runsTitle}
-            </p>
-          </div>
-          <ul className="mt-4 space-y-3.5">
-            {persona.handoff.runs.map((l) => (
-              <li key={l.label}>
-                <div className="flex items-center gap-2">
-                  <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-success/15 text-success">
-                    <Check className="h-2.5 w-2.5" strokeWidth={3.5} aria-hidden />
-                  </span>
-                  <p className="text-[0.82rem] font-semibold text-ink">{l.label}</p>
-                </div>
-                <p className="ml-6 mt-0.5 text-[0.72rem] leading-snug text-muted-foreground">
-                  {l.detail}
-                </p>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        <div className="bg-surface/50 p-5">
-          <div className="flex items-center gap-2">
-            <span className="flex h-7 w-7 items-center justify-center rounded-lg border border-border bg-card text-ink">
-              <UserRound className="h-3.5 w-3.5" strokeWidth={2.4} />
-            </span>
-            <p className="text-[0.7rem] font-bold uppercase tracking-[0.12em] text-ink">
-              {persona.handoff.keepsTitle}
-            </p>
-          </div>
-          <ul className="mt-4 space-y-3.5">
-            {persona.handoff.keeps.map((l) => (
-              <li key={l.label}>
-                <div className="flex items-center gap-2">
-                  <span
-                    aria-hidden
-                    className="h-1.5 w-1.5 shrink-0 rounded-full bg-volt ring-4 ring-volt/15"
-                  />
-                  <p className="text-[0.82rem] font-semibold text-ink">{l.label}</p>
-                </div>
-                <p className="ml-3.5 mt-0.5 text-[0.72rem] leading-snug text-muted-foreground">
-                  {l.detail}
-                </p>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-
-      <p className="border-t border-border bg-card px-5 py-3 text-[0.72rem] leading-snug text-muted-foreground">
-        Auto-publish is a switch. Leave it off and nothing goes live without you.
-      </p>
-    </div>
-  );
-}
 
 export function PersonaHero({ persona }: { persona: Persona }) {
   const [url, setUrl] = useState("");
@@ -269,14 +192,14 @@ export function PersonaHero({ persona }: { persona: Persona }) {
             </Reveal>
           </div>
 
-          {/* RIGHT — what you hand over, and what you don't */}
+          {/* RIGHT — this page's own scene, played on the reader's surface */}
           <Reveal delay={0.34} y={28} className="mx-auto w-full min-w-0 max-w-lg lg:mx-0">
             <div className="relative">
               <div className="pointer-events-none absolute -inset-12">
                 <PixelField pixels={CARD_PIXELS} seed={7} />
               </div>
               <div className="relative">
-                <HandoffPanel persona={persona} />
+                <PersonaScene persona={persona} />
               </div>
             </div>
           </Reveal>
@@ -359,6 +282,90 @@ export function PersonaPains({ persona, tint = false }: BodyProps) {
               </div>
             </Reveal>
           ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ---------- 3a. Who does what ---------- */
+
+/**
+ * The ownership split. Nothing else on the site says out loud what stays the
+ * customer's job, and on a page that exists to make someone picture their own
+ * week, that is the most persuasive thing we have — it is the difference
+ * between "this replaces you" and "this replaces the part of the job you
+ * resent". It follows the pains, as the answer to them; the hero plays the
+ * same split as a scene.
+ */
+export function PersonaHandoff({ persona, tint = false }: BodyProps) {
+  const { handoff } = persona;
+  return (
+    <section aria-labelledby="handoff-title" className={cn("py-24 sm:py-32", band(tint))}>
+      <div className="mx-auto max-w-6xl px-5">
+        <Heading
+          id="handoff-title"
+          eyebrow="Who does what"
+          title="What you hand over, and what stays yours"
+          intro="Auto-publish is a switch. Leave it off and nothing goes live without you."
+        />
+
+        <div className="mx-auto mt-14 grid max-w-5xl gap-5 md:grid-cols-2">
+          <Reveal className="h-full">
+            <div className="h-full rounded-2xl border border-border bg-card p-6 shadow-elevation sm:p-7">
+              <div className="flex items-center gap-2.5">
+                <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-blue text-white">
+                  <Sparkles className="h-4 w-4" strokeWidth={2.4} />
+                </span>
+                <h3 className="text-[0.72rem] font-bold uppercase tracking-[0.12em] text-ink">
+                  {handoff.runsTitle}
+                </h3>
+              </div>
+              <ul className="mt-6 space-y-5">
+                {handoff.runs.map((l) => (
+                  <li key={l.label} className="flex gap-3">
+                    <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-success/15 text-success">
+                      <Check className="h-3 w-3" strokeWidth={3.5} aria-hidden />
+                    </span>
+                    <div>
+                      <p className="font-semibold text-ink">{l.label}</p>
+                      <p className="mt-0.5 text-sm leading-relaxed text-muted-foreground">
+                        {l.detail}
+                      </p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </Reveal>
+
+          <Reveal delay={0.06} className="h-full">
+            <div className="h-full rounded-2xl border border-border bg-surface/60 p-6 sm:p-7">
+              <div className="flex items-center gap-2.5">
+                <span className="flex h-8 w-8 items-center justify-center rounded-lg border border-border bg-card text-ink">
+                  <UserRound className="h-4 w-4" strokeWidth={2.4} />
+                </span>
+                <h3 className="text-[0.72rem] font-bold uppercase tracking-[0.12em] text-ink">
+                  {handoff.keepsTitle}
+                </h3>
+              </div>
+              <ul className="mt-6 space-y-5">
+                {handoff.keeps.map((l) => (
+                  <li key={l.label} className="flex gap-3">
+                    <span aria-hidden className="flex h-5 w-5 shrink-0 items-center justify-center">
+                      <span className="h-1.5 w-1.5 rounded-full bg-volt ring-4 ring-volt/15" />
+                    </span>
+                    <div>
+                      <p className="font-semibold text-ink">{l.label}</p>
+                      <p className="mt-0.5 text-sm leading-relaxed text-muted-foreground">
+                        {l.detail}
+                      </p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </Reveal>
         </div>
       </div>
     </section>
