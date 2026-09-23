@@ -95,8 +95,10 @@ const PRODUCT: FooterSection = {
   links: [
     { label: "Pricing", to: "/pricing" },
     { label: "Integrations", to: "/integrations" },
+    { label: "Changelog", to: "/changelog" },
     { label: "Proof", to: "/", hash: "proof" },
     { label: "FAQ", to: "/", hash: "faq" },
+    { label: "About", to: "/about" },
     { label: "Contact", href: `mailto:${LEGAL_CONTACT}` },
     { label: "Sign in", href: "/auth" },
   ],

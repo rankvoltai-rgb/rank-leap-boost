@@ -7,13 +7,13 @@ import { Reveal, Eyebrow } from "@/components/landing/shared";
 import { PixelField, UrlForm, TrustRow } from "@/components/landing/Hero";
 import { FinalCTA } from "@/components/landing/FinalCTA";
 import { Pricing } from "@/components/landing/Pricing";
-import { PERSONAS, type Persona } from "@/data/personas";
+import { PERSONAS, PERSONA_GROUPS, personasIn, type Persona } from "@/data/personas";
 import { PLAN, TRIAL_DAYS, formatUsd } from "@/data/pricing";
 
 const SITE = "https://rankbox.xyz";
-const TITLE = "Who Rankbox Is For: Marketers, Founders & Agencies";
+const TITLE = "Who Rankbox Is For: Use Cases by Role and Business";
 const DESCRIPTION =
-  "The same AI search growth engine, written for the seat you sit in — a marketer holding the content number, a solo founder with no team, or an agency delivering GEO across a client book.";
+  "The same AI search growth engine, written for your seat or your business: marketers, solo founders, SEO agencies, e-commerce stores, SaaS companies, and local businesses.";
 
 /** The claim the index makes once, rather than on every card. */
 const PILLARS = [
@@ -111,9 +111,9 @@ function UseCasesHero() {
         </Reveal>
         <Reveal delay={0.14}>
           <p className="mx-auto mt-6 max-w-2xl text-balance text-[1.05rem] leading-relaxed text-white/80">
-            A marketer holding a content number alone, a founder with no team at all, and an agency
-            delivering across a book of clients want the same engine for three different reasons.
-            Pick the seat you actually sit in.
+            A marketer with no writers, a founder with no team, an agency with a client book. A
+            store, a software product, a shop on the high street. Same engine, very different weeks.
+            Find yours by the seat you sit in or the business you run.
           </p>
         </Reveal>
         <Reveal delay={0.2} className="mt-8 flex w-full flex-col items-center gap-3">
@@ -128,6 +128,13 @@ function UseCasesHero() {
       </div>
     </section>
   );
+}
+
+/** A label as it reads mid-list: "The final edit" → "the final edit", with
+ *  names left alone ("Your Google Business Profile" → "your Google Business
+ *  Profile"). Only the first letter moves, and only on an ordinary word. */
+function midSentence(label: string): string {
+  return /^[A-Z][a-z]/.test(label) ? label[0].toLowerCase() + label.slice(1) : label;
 }
 
 /* A preview of the page behind it: the persona's own handoff lines, so the
@@ -147,9 +154,9 @@ function PersonaCard({ persona }: { persona: Persona }) {
         <ArrowRight className="h-4 w-4 text-muted-foreground transition-all group-hover:translate-x-0.5 group-hover:text-ink" />
       </div>
 
-      <h3 className="mt-5 font-display text-lg font-semibold tracking-tight text-ink">
+      <h4 className="mt-5 font-display text-lg font-semibold tracking-tight text-ink">
         Rankbox for {persona.nameLower}
-      </h3>
+      </h4>
       <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{persona.tagline}</p>
 
       <p className="mt-6 text-[0.65rem] font-bold uppercase tracking-[0.12em] text-muted-foreground">
@@ -170,11 +177,11 @@ function PersonaCard({ persona }: { persona: Persona }) {
         <UserRound className="mt-px h-3.5 w-3.5 shrink-0 text-volt" aria-hidden />
         <span>
           <span className="font-semibold text-ink">Still yours: </span>
-          {persona.handoff.keeps.map((k) => k.label.toLowerCase()).join(", ")}.
+          {persona.handoff.keeps.map((k) => midSentence(k.label)).join(", ")}.
         </span>
       </p>
 
-      <span className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-ink">
+      <span className="mt-auto inline-flex items-center gap-1.5 pt-6 text-sm font-semibold text-ink">
         See the full page
         <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
       </span>
@@ -198,7 +205,7 @@ function UseCasesIndex() {
                 id="method-title"
                 className="font-display text-balance text-2xl font-semibold tracking-tight text-ink sm:text-3xl"
               >
-                Three pages, one honest product
+                {PERSONAS.length} pages, one honest product
               </h2>
             </Reveal>
             <div className="mt-12 grid gap-5 md:grid-cols-3">
@@ -230,14 +237,31 @@ function UseCasesIndex() {
               </h2>
               <p className="mt-4 text-balance text-lg text-muted-foreground">
                 Each page runs the same four questions: what you hand over, what stays yours, how it
-                lands in your week, and what it takes off the invoice.
+                lands in your week, and what it takes off the invoice. Business pages add what it
+                would write for you, and where it would publish.
               </p>
             </Reveal>
-            <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
-              {PERSONAS.map((p, i) => (
-                <Reveal key={p.slug} delay={(i % 3) * 0.06}>
-                  <PersonaCard persona={p} />
-                </Reveal>
+            <div className="mt-14 space-y-14">
+              {PERSONA_GROUPS.map((g) => (
+                <div key={g.id} aria-labelledby={`group-${g.id}`} role="group">
+                  <Reveal className="mb-5 flex items-center gap-4">
+                    <h3
+                      id={`group-${g.id}`}
+                      className="shrink-0 text-[0.7rem] font-bold uppercase tracking-[0.14em] text-ink"
+                    >
+                      {g.label}
+                    </h3>
+                    <span aria-hidden className="h-px flex-1 bg-border" />
+                    <p className="shrink-0 text-xs text-muted-foreground">{g.blurb}</p>
+                  </Reveal>
+                  <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
+                    {personasIn(g.id).map((p, i) => (
+                      <Reveal key={p.slug} delay={(i % 3) * 0.06}>
+                        <PersonaCard persona={p} />
+                      </Reveal>
+                    ))}
+                  </div>
+                </div>
               ))}
             </div>
             <Reveal delay={0.12}>

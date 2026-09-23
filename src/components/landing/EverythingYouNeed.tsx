@@ -1,3 +1,5 @@
+import { Link } from "@tanstack/react-router";
+import { ArrowUpRight } from "lucide-react";
 import { Reveal, Eyebrow, BrandMark } from "./shared";
 
 const TAGS = [
@@ -8,22 +10,45 @@ const TAGS = [
   "Citation Tracking", "Multi Sites", "Team Members", "AI Assistant",
 ];
 
+/* Tags with a feature page of their own link to it; the rest stay labels. */
+const TAG_LINKS: Record<string, string> = {
+  "Answer-Space Map": "/features/answer-space-research",
+  "Brand Voice": "/features/brand-voice",
+  "SEO/GEO Score": "/features/seo-geo-score",
+};
+
+/* Each tile is one feature, and its title links to that feature's page. The
+   link is stretched over the whole tile, so the tile clicks through while
+   the title stays the anchor text. */
 function Tile({
   title,
+  href,
   body,
   children,
   className = "",
 }: {
   title: string;
+  href: string;
   body: string;
   children: React.ReactNode;
   className?: string;
 }) {
   return (
     <div
-      className={`flex flex-col rounded-2xl border border-border bg-card p-6 shadow-elevation transition-all hover:-translate-y-1 hover:shadow-elevation-lg sm:p-7 ${className}`}
+      className={`group relative flex flex-col rounded-2xl border border-border bg-card p-6 shadow-elevation transition-all hover:-translate-y-1 hover:shadow-elevation-lg sm:p-7 ${className}`}
     >
-      <h3 className="text-base font-semibold text-ink">{title}</h3>
+      <h3 className="text-base font-semibold text-ink">
+        <Link
+          to={href}
+          className="inline-flex items-center gap-1.5 after:absolute after:inset-0 after:rounded-2xl focus-visible:outline-none focus-visible:after:ring-2 focus-visible:after:ring-volt"
+        >
+          {title}
+          <ArrowUpRight
+            aria-hidden
+            className="h-4 w-4 text-muted-foreground transition-all group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-volt"
+          />
+        </Link>
+      </h3>
       <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{body}</p>
       <div className="mt-5 flex-1 rounded-xl border border-border bg-surface/60 p-3">{children}</div>
     </div>
@@ -59,6 +84,7 @@ export function EverythingYouNeed() {
           <Reveal className="md:col-span-2">
             <Tile
               title="Growth Automation"
+              href="/features/auto-publishing"
               body="Automate research, writing, linking, and publishing. Set it once and watch traffic and citations compound."
               className="h-full"
             >
@@ -77,6 +103,7 @@ export function EverythingYouNeed() {
           <Reveal delay={0.06} className="md:row-span-2">
             <Tile
               title="Citation-Ready Writer"
+              href="/features/citation-ready-writer"
               body="AI drafts deeply researched long-form articles in your brand voice — structured for Google and AI answer engines."
               className="h-full"
             >
@@ -102,6 +129,7 @@ export function EverythingYouNeed() {
           <Reveal delay={0.12}>
             <Tile
               title="Answer-Space Research"
+              href="/features/answer-space-research"
               body="Find the high-intent questions your buyers ask AI and search. Sorted by volume and intent."
               className="h-full"
             >
@@ -125,6 +153,7 @@ export function EverythingYouNeed() {
           <Reveal delay={0.18}>
             <Tile
               title="Authority Backlinks"
+              href="/features/authority-backlinks"
               body="Earn high-quality backlinks from verified sites in your niche. Grow domain authority fast."
               className="h-full"
             >
@@ -148,6 +177,7 @@ export function EverythingYouNeed() {
           <Reveal delay={0.12} className="md:col-span-2">
             <Tile
               title="Citation Tracking"
+              href="/features/citation-tracking"
               body="See where your brand surfaces across ChatGPT, Perplexity, Claude, and Google AI Overviews — then double down on what gets you quoted."
               className="h-full"
             >
@@ -172,6 +202,7 @@ export function EverythingYouNeed() {
           <Reveal delay={0.18}>
             <Tile
               title="Reddit Presence"
+              href="/features/reddit-presence"
               body="Surface helpfully on Reddit threads ranking in Google and AI search."
               className="h-full"
             >
@@ -196,11 +227,21 @@ export function EverythingYouNeed() {
               Plus everything else you need to scale your content
             </p>
             <div className="mx-auto flex max-w-3xl flex-wrap justify-center gap-2.5">
-              {TAGS.map((t) => (
-                <span key={t} className="rounded-full border border-border bg-card px-3 py-1 text-xs text-muted-foreground">
-                  {t}
-                </span>
-              ))}
+              {TAGS.map((t) =>
+                TAG_LINKS[t] ? (
+                  <Link
+                    key={t}
+                    to={TAG_LINKS[t]}
+                    className="rounded-full border border-border bg-card px-3 py-1 text-xs text-ink/80 underline decoration-border underline-offset-2 transition-colors hover:border-ink/25 hover:text-ink"
+                  >
+                    {t}
+                  </Link>
+                ) : (
+                  <span key={t} className="rounded-full border border-border bg-card px-3 py-1 text-xs text-muted-foreground">
+                    {t}
+                  </span>
+                ),
+              )}
               <span className="rounded-full bg-ink px-3 py-1 text-xs font-medium text-background">+ much more</span>
             </div>
           </div>

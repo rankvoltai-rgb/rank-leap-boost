@@ -8,6 +8,7 @@ import {
   BookOpen,
   FileText,
   GitCompare,
+  History,
   Swords,
   Wrench,
   type LucideIcon,
@@ -19,7 +20,7 @@ export type MenuId = "features" | "resources";
 /** Paths each menu covers, so its trigger can mark the section you're in. */
 export const MENU_SECTIONS: Record<MenuId, string[]> = {
   features: ["/features", "/use-cases", "/integrations"],
-  resources: ["/blog", "/glossary", "/tools", "/alternatives", "/compare", "/ai-seo"],
+  resources: ["/blog", "/glossary", "/tools", "/alternatives", "/compare", "/ai-seo", "/changelog"],
 };
 
 export function inSection(pathname: string, paths: readonly string[]) {
@@ -59,6 +60,12 @@ export const LEARN_LINKS: NavEntry[] = [
     title: "Sample Output",
     description: "Example AI articles",
     target: { href: "/#examples" },
+  },
+  {
+    icon: History,
+    title: "Changelog",
+    description: "What we shipped, dated",
+    target: { to: "/changelog" },
   },
 ];
 

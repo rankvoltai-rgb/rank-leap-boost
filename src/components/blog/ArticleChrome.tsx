@@ -3,6 +3,7 @@
  * contents, sharing, the side-rail offer, the author card and the closing CTA.
  */
 import { useEffect, useMemo, useState, type MouseEvent, type RefObject } from "react";
+import { Link } from "@tanstack/react-router";
 import { ArrowRight, Check, ChevronDown, Link2 } from "lucide-react";
 import { PixelField, UrlForm } from "@/components/landing/Hero";
 import { AI_MARKS } from "@/components/landing/ai-logos";
@@ -10,6 +11,7 @@ import { Reveal } from "@/components/landing/shared";
 import { AuthorMark } from "@/components/blog/PostCards";
 import type { TocEntry } from "@/lib/article-outline";
 import { TRIAL_DAYS } from "@/data/pricing";
+import { isTeamAuthor } from "@/data/company";
 import { cn } from "@/lib/utils";
 
 /* Clearance for the sticky navbar (h-16) plus breathing room, used both for
@@ -261,7 +263,7 @@ export function RailCta() {
         </p>
         <a
           href="/auth"
-          className="group mt-5 flex items-center justify-center gap-2 rounded-xl bg-ink px-4 py-2.5 text-sm font-semibold text-background transition-transform hover:-translate-y-0.5"
+          className="group mt-5 flex items-center justify-center gap-2 rounded-xl bg-cta px-4 py-2.5 text-sm font-semibold text-white transition-all hover:-translate-y-0.5 hover:bg-cta-hover"
         >
           Start free trial
           <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
@@ -280,8 +282,7 @@ const TEAM_BIO =
   "The team behind Rankbox. We study how ChatGPT, Perplexity, Gemini, and Google AI Overviews choose their sources, and publish what we learn so you can put it to work.";
 
 export function AuthorCard({ author }: { author: string }) {
-  // Posts written before the rename still carry the old brand as their author.
-  const team = /^(rankbox|rankvolt)( team)?$/i.test(author.trim());
+  const team = isTeamAuthor(author);
   return (
     <div className="flex gap-4 rounded-2xl border border-border bg-card p-5 shadow-1 sm:p-6">
       <AuthorMark className="h-12 w-12" />
@@ -290,7 +291,18 @@ export function AuthorCard({ author }: { author: string }) {
           Written by
         </p>
         <p className="mt-1 font-semibold text-ink">{author}</p>
-        {team && <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{TEAM_BIO}</p>}
+        {team && (
+          <>
+            <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{TEAM_BIO}</p>
+            <Link
+              to="/about"
+              className="group mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-cta transition-colors hover:text-cta-hover"
+            >
+              Who we are and how we work
+              <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 motion-reduce:transition-none" />
+            </Link>
+          </>
+        )}
       </div>
     </div>
   );

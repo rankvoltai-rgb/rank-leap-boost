@@ -14,6 +14,7 @@ import {
   TableOfContents,
 } from "@/components/blog/ArticleChrome";
 import { CoverArt } from "@/components/blog/CoverArt";
+import { ExploreMore } from "@/components/ExploreMore";
 import { AuthorMark, PostCard, PostStamp } from "@/components/blog/PostCards";
 import { getPost, postsQuery, relatedPosts } from "@/lib/blog";
 import {
@@ -24,6 +25,7 @@ import {
   tableOfContents,
 } from "@/lib/article-outline";
 import { formatDate } from "@/lib/format-date";
+import { AUTHOR_ORG, isTeamAuthor } from "@/data/company";
 import type { PostFull, PostMeta } from "@/lib/notion.server";
 
 const SITE = "https://rankbox.xyz";
@@ -85,7 +87,12 @@ export const Route = createFileRoute("/blog/$slug")({
                   ? { keywords: post.tags.join(", "), articleSection: post.tags[0] }
                   : {}),
                 inLanguage: "en",
-                author: { "@type": "Organization", name: post.author || "Rankbox", url: SITE },
+                // Brand-signed posts credit the company, pointing at the page
+                // that says who it is; a named author is a person.
+                author:
+                  !post.author || isTeamAuthor(post.author)
+                    ? AUTHOR_ORG
+                    : { "@type": "Person", name: post.author },
                 publisher: { "@type": "Organization", name: "Rankbox", url: SITE },
                 mainEntityOfPage: url,
               },
@@ -229,7 +236,16 @@ function Article({ post, related }: { post: PostFull; related: PostMeta[] }) {
                 <div className="flex items-center gap-3">
                   <AuthorMark className="h-10 w-10" />
                   <div className="text-sm leading-tight">
-                    <p className="font-semibold text-ink">{post.author}</p>
+                    {isTeamAuthor(post.author) ? (
+                      <Link
+                        to="/about"
+                        className="font-semibold text-ink underline decoration-border underline-offset-4 transition-colors hover:decoration-ink"
+                      >
+                        {post.author}
+                      </Link>
+                    ) : (
+                      <p className="font-semibold text-ink">{post.author}</p>
+                    )}
                     <p className="mt-1 text-xs text-muted-foreground">
                       <PostStamp post={meta} />
                       {post.updated && <> · Updated {formatDate(post.updated)}</>}
@@ -319,6 +335,7 @@ function Article({ post, related }: { post: PostFull; related: PostMeta[] }) {
         </section>
       )}
 
+      <ExploreMore path={`/blog/${post.slug}`} />
       <BlogCta />
     </Shell>
   );

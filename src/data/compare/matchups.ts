@@ -177,14 +177,16 @@ export function getCategory(id: CategoryId): Category {
 /**
  * The next comparisons to read: the same shortlist first (same category),
  * then anything sharing a contender, then the rest — people weighing two
- * tools are usually weighing three.
+ * tools are usually weighing three. Ties go to the matchups listed after this
+ * one, wrapping round, so the last in the list is suggested as often as the
+ * first.
  */
 export function relatedMatchups(m: Matchup, limit = 3): Matchup[] {
   const shares = (o: Matchup) => [o.a, o.b].some((p) => p === m.a || p === m.b);
   const rank = (o: Matchup) => (o.category === m.category ? 0 : shares(o) ? 1 : 2);
-  return MATCHUPS.filter((o) => o.slug !== m.slug)
-    .sort((x, y) => rank(x) - rank(y))
-    .slice(0, limit);
+  const at = MATCHUPS.findIndex((o) => o.slug === m.slug);
+  const after = [...MATCHUPS.slice(at + 1), ...MATCHUPS.slice(0, at)];
+  return after.sort((x, y) => rank(x) - rank(y)).slice(0, limit);
 }
 
 /** Every matchup a product appears in. */

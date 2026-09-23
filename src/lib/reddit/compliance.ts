@@ -61,7 +61,7 @@ export function isValidDisclosureLine(line: string, brandName: string): boolean 
 const DISCLOSURE_PHRASE =
   /\b(?:full\s+disclosure|disclosure|disclaimer|i\s+work\s+(?:on|at|for|with)|i\s*['’]?m\s+(?:the\s+|a\s+|one\s+of\s+the\s+)?(?:co[-\s]?)?(?:founder|developer|dev|maker|creator|builder|owner|ceo|cto|employee|engineer)|i\s+am\s+(?:the\s+|a\s+|one\s+of\s+the\s+)?(?:co[-\s]?)?(?:founder|developer|dev|maker|creator|builder|owner|ceo|cto|employee|engineer)|i\s+(?:built|made|created|founded|run|started|co[-\s]?founded)|i\s*['’]?m\s+(?:with|from|affiliated)|i\s+am\s+(?:with|from|affiliated)|affiliated\s+with|my\s+(?:company|product|startup|tool|app|team|employer)|we\s+(?:built|make|made)|biased)\b/i;
 
-const MARKETING_VOICE: Array<{ pattern: RegExp; word: string }> = [
+export const MARKETING_VOICE: Array<{ pattern: RegExp; word: string }> = [
   { pattern: /\bgame[-\s]?chang(?:er|ing)\b/i, word: "game-changer" },
   { pattern: /\brevolution(?:ary|i[sz]e[sd]?|i[sz]ing)\b/i, word: "revolutionary" },
   { pattern: /\b(?:10|ten)\s*x\b/i, word: "10x" },

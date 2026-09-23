@@ -10,6 +10,8 @@ import { COMPARE_UPDATED, MATCHUPS } from "@/data/compare/matchups";
 import { PERSONA_SLUGS } from "@/data/personas";
 import { ENGINES } from "@/data/ai-seo/engines";
 import { GLOSSARY_UPDATED, TERMS } from "@/data/glossary/terms";
+import { ABOUT_UPDATED } from "@/data/company";
+import { CHANGELOG, CHANGELOG_UPDATED } from "@/data/changelog";
 
 const BASE_URL = "https://rankbox.xyz";
 
@@ -44,6 +46,7 @@ export const Route = createFileRoute("/sitemap.xml")({
         const entries: SitemapEntry[] = [
           { path: "/", changefreq: "weekly", priority: "1.0" },
           { path: "/pricing", changefreq: "monthly", priority: "0.9" },
+          { path: "/about", lastmod: ABOUT_UPDATED, changefreq: "monthly", priority: "0.7" },
           { path: "/features", changefreq: "weekly", priority: "0.8" },
           ...FEATURE_SLUGS.map((slug) => ({
             path: `/features/${slug}`,
@@ -107,6 +110,18 @@ export const Route = createFileRoute("/sitemap.xml")({
             lastmod: t.updated,
             changefreq: "monthly" as const,
             priority: "0.7",
+          })),
+          {
+            path: "/changelog",
+            lastmod: CHANGELOG_UPDATED,
+            changefreq: "weekly",
+            priority: "0.7",
+          },
+          ...CHANGELOG.map((e) => ({
+            path: `/changelog/${e.slug}`,
+            lastmod: e.date,
+            changefreq: "monthly" as const,
+            priority: "0.6",
           })),
           { path: "/tools", changefreq: "weekly", priority: "0.8" },
           ...TOOL_SLUGS.map((slug) => ({

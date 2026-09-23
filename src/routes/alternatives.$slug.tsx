@@ -16,6 +16,7 @@ import {
   AlternativeCTA,
 } from "@/components/alternatives/AlternativeSections";
 import { ComparisonMatrix } from "@/components/alternatives/ComparisonMatrix";
+import { ExploreMore } from "@/components/ExploreMore";
 import { competitorH1, getCompetitor } from "@/data/alternatives";
 import { PLAN } from "@/data/pricing";
 
@@ -158,6 +159,7 @@ function AlternativePage() {
         <Migration competitor={competitor} />
         <AlternativeFAQ competitor={competitor} />
         <Sources competitor={competitor} />
+        <ExploreMore path={`/alternatives/${competitor.slug}`} />
         <OtherComparisons competitor={competitor} />
         <AlternativeCTA competitor={competitor} />
       </main>

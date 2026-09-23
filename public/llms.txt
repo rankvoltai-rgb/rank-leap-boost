@@ -5,6 +5,8 @@
 ## Pages
 
 - [Home](/): What Rankbox does, how it works, proof, sample articles, pricing, and FAQ.
+- [About](/about): Who makes Rankbox (Autusus LLC), when it started (2026, as Rankvolt), the editorial standards behind its guides, glossary and comparisons, and how to contact the company.
+- [Changelog](/changelog): Every Rankbox release, dated, each marked live, rolling out or coming soon: Studio (several sites on one account), the connector library for 49 AI tools, the backlink exchange, Reddit Presence, and the Framer plugin. Also as RSS at /changelog/rss.xml.
 
 ## Integrations
 

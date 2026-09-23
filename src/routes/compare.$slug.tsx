@@ -23,7 +23,9 @@ import {
   type Matchup,
 } from "@/data/compare/matchups";
 import type { MatchupEntry } from "@/data/compare/types";
+import { ExploreMore } from "@/components/ExploreMore";
 import { plainText } from "@/lib/inline-md";
+import { AUTHOR_ORG } from "@/data/company";
 
 const SITE = "https://rankbox.xyz";
 
@@ -102,7 +104,7 @@ export const Route = createFileRoute("/compare/$slug")({
                 inLanguage: "en",
                 mainEntityOfPage: { "@id": `${url}#webpage` },
                 /* Comparisons are opinion, so the page says whose. */
-                author: { "@type": "Organization", name: "Rankbox", url: SITE },
+                author: AUTHOR_ORG,
                 publisher: { "@type": "Organization", name: "Rankbox", url: SITE },
                 hasPart: entry.rounds.map((r, i) => ({
                   "@type": "CreativeWork",
@@ -180,6 +182,7 @@ function MatchupView({ matchup, entry }: { matchup: Matchup; entry: MatchupEntry
         <ThirdOption matchup={matchup} entry={entry} />
         <MatchupFaq matchup={matchup} entry={entry} />
         <RelatedMatchups matchup={matchup} />
+        <ExploreMore path={`/compare/${matchup.slug}`} />
         <CompareCta />
       </main>
       <Footer />

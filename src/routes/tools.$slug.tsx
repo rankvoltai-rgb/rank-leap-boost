@@ -4,6 +4,7 @@ import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
 import { Reveal } from "@/components/landing/shared";
 import { BlogCta } from "@/components/blog/ArticleChrome";
+import { ExploreMore } from "@/components/ExploreMore";
 import { FaqList } from "@/components/ai-seo/sections";
 import { KindBadge, ToolCard, ToolIconTile } from "@/components/tools/hub";
 import { KIND_LABEL, getTool, getToolCategory, relatedTools } from "@/data/tools";
@@ -249,6 +250,7 @@ function ToolPage() {
           </div>
         </section>
 
+        <ExploreMore path={`/tools/${tool.slug}`} />
         <BlogCta title="Want this on autopilot?" />
       </main>
       <Footer />

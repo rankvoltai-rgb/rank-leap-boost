@@ -11,6 +11,8 @@ import { Testimonials } from "@/components/landing/Testimonials";
 import { FinalCTA } from "@/components/landing/FinalCTA";
 import { FAQ, FAQS } from "@/components/landing/FAQ";
 import { Footer } from "@/components/landing/Footer";
+import { organizationNode } from "@/data/company";
+import { PLAN } from "@/data/pricing";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -37,12 +39,7 @@ export const Route = createFileRoute("/")({
         children: JSON.stringify({
           "@context": "https://schema.org",
           "@graph": [
-            {
-              "@type": "Organization",
-              "@id": "https://rankbox.xyz/#organization",
-              name: "Rankbox",
-              url: "https://rankbox.xyz/",
-            },
+            organizationNode(),
             {
               "@type": "WebSite",
               "@id": "https://rankbox.xyz/#website",
@@ -58,7 +55,7 @@ export const Route = createFileRoute("/")({
               brand: { "@id": "https://rankbox.xyz/#organization" },
               offers: {
                 "@type": "Offer",
-                price: "99",
+                price: String(PLAN.monthly),
                 priceCurrency: "USD",
                 url: "https://rankbox.xyz/",
               },

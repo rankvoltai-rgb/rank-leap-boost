@@ -952,9 +952,17 @@ export const INSTANT_TOOLS = TOOLS.filter((t) => t.kind === "instant");
 export const AI_TOOLS = TOOLS.filter((t) => t.kind === "ai");
 export const FEATURED_TOOLS = TOOLS.filter((t) => t.featured);
 
-/** Same category, excluding the tool itself. */
+/**
+ * Same category, starting after the tool itself and wrapping round, then
+ * featured tools from other categories. Starting from the tool's own position
+ * spreads the links: every tool in a category is suggested by the ones before
+ * it, where always taking the first few left the tail of the list linked from
+ * nowhere but /tools.
+ */
 export function relatedTools(tool: Tool, limit = 3): Tool[] {
-  const same = TOOLS.filter((t) => t.category === tool.category && t.slug !== tool.slug);
+  const category = TOOLS.filter((t) => t.category === tool.category);
+  const at = category.findIndex((t) => t.slug === tool.slug);
+  const same = [...category.slice(at + 1), ...category.slice(0, at)];
   const others = TOOLS.filter((t) => t.category !== tool.category && t.featured);
   return [...same, ...others].slice(0, limit);
 }

@@ -1,3 +1,4 @@
+import type { ComponentType } from "react";
 import { createFileRoute, notFound, Link } from "@tanstack/react-router";
 import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
@@ -6,6 +7,7 @@ import {
   PersonaHero,
   PersonaSpecs,
   PersonaPains,
+  PersonaTopics,
   PersonaWorkflow,
   PersonaStack,
   PersonaPicks,
@@ -14,8 +16,10 @@ import {
   PersonaFAQ,
   PersonaCTA,
 } from "@/components/personas/PersonaSections";
-import { getPersona, personaH1 } from "@/data/personas";
+import { ExploreMore } from "@/components/ExploreMore";
+import { getPersona, personaH1, type Persona } from "@/data/personas";
 import { PLAN } from "@/data/pricing";
+import { cn } from "@/lib/utils";
 
 const SITE = "https://rankbox.xyz";
 
@@ -123,27 +127,46 @@ export const Route = createFileRoute("/use-cases/$slug")({
 /* The landing's rhythm, rebuilt around one seat: blue hero with the ownership
    split, the jobs this reader recognises, how a week runs, what it replaces,
    the features that carry it, then the landing's pricing, FAQ, and closing
-   CTA. Section ids (top, proof, pricing, faq) match the landing so the shared
-   navbar's anchors keep working here. */
+   CTA. Business pages add a sample topic map after the pains; pages without
+   proof of their own skip it. The body bands alternate from whatever is
+   present, so neither choice leaves two tints touching. Section ids (top,
+   proof, pricing, faq) match the landing so the shared navbar's anchors keep
+   working here. */
+type BodySection = ComponentType<{ persona: Persona; tint?: boolean }>;
+
+function bodyFor(persona: Persona): BodySection[] {
+  return [
+    PersonaPains,
+    ...(persona.topics ? [PersonaTopics] : []),
+    PersonaWorkflow,
+    PersonaStack,
+    PersonaPicks,
+    ...(persona.proof.length > 0 ? [PersonaProof] : []),
+  ];
+}
+
 function PersonaPage() {
   const { slug } = Route.useParams();
   const persona = getPersona(slug)!;
+  const body = bodyFor(persona);
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
       <main>
         <PersonaHero persona={persona} />
         <PersonaSpecs persona={persona} />
-        <PersonaPains persona={persona} />
-        <PersonaWorkflow persona={persona} />
-        <PersonaStack persona={persona} />
-        <PersonaPicks persona={persona} />
-        <PersonaProof persona={persona} />
-        <div className="border-t border-border bg-surface/40">
+        {body.map((Section, i) => (
+          <Section key={i} persona={persona} tint={i % 2 === 1} />
+        ))}
+        <div className={cn(body.length % 2 === 1 && "border-t border-border bg-surface/40")}>
           <Pricing />
         </div>
         <OtherPersonas persona={persona} />
         <PersonaFAQ persona={persona} />
+        <ExploreMore
+          path={`/use-cases/${persona.slug}`}
+          exclude={persona.picks.map((p) => `/features/${p.featureSlug}`)}
+        />
         <PersonaCTA persona={persona} />
       </main>
       <Footer />

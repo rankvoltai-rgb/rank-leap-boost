@@ -13,6 +13,7 @@ import {
   FeatureFAQ,
   FeatureCTA,
 } from "@/components/features/FeatureSections";
+import { ExploreMore } from "@/components/ExploreMore";
 import { featureH1, getFeature } from "@/data/features";
 
 const SITE = "https://rankbox.xyz";
@@ -123,6 +124,7 @@ function FeaturePage() {
         <FeatureHowItWorks feature={feature} />
         <FeatureEngine feature={feature} />
         <FeatureProof feature={feature} />
+        <ExploreMore path={`/features/${feature.slug}`} />
         <div className="border-t border-border bg-surface/40">
           <Pricing />
         </div>

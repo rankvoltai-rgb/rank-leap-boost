@@ -6,13 +6,13 @@
  *
  * Mounted only while open, so each opening starts with every section closed.
  */
-import { useEffect, useState, type ReactNode } from "react";
+import { Fragment, useEffect, useState, type ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
 import { ArrowRight, ChevronDown, type LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { FEATURES, FEATURE_GROUPS } from "@/data/features";
 import { NAV_COMPETITORS } from "@/data/alternatives";
-import { PERSONAS } from "@/data/personas";
+import { PERSONA_GROUPS, personasIn } from "@/data/personas";
 import { PUBLISH_PLATFORMS } from "@/data/platforms";
 import { enginesInTier } from "@/data/ai-seo/engines";
 import { IntegrationLogo } from "@/components/dashboard/integration-logos";
@@ -182,15 +182,21 @@ export function MobileNav({ links, onClose }: { links: readonly TopLink[]; onClo
               ))}
             </div>
           ))}
-          <GroupLabel>Who it&rsquo;s for</GroupLabel>
-          {PERSONAS.map((p) => (
-            <Row
-              key={p.slug}
-              target={{ to: "/use-cases/$slug", params: { slug: p.slug } }}
-              icon={<IconTile icon={p.icon} />}
-            >
-              For {p.nameLower}
-            </Row>
+          {/* Fragments, not wrappers: GroupLabel's first:pt-1 would read a
+              wrapper as its parent and drop the gap above each group. */}
+          {PERSONA_GROUPS.map((g) => (
+            <Fragment key={g.id}>
+              <GroupLabel>Who it&rsquo;s for · {g.label.toLowerCase()}</GroupLabel>
+              {personasIn(g.id).map((p) => (
+                <Row
+                  key={p.slug}
+                  target={{ to: "/use-cases/$slug", params: { slug: p.slug } }}
+                  icon={<IconTile icon={p.icon} />}
+                >
+                  For {p.nameLower}
+                </Row>
+              ))}
+            </Fragment>
           ))}
           <GroupLabel>Publish anywhere</GroupLabel>
           <Row

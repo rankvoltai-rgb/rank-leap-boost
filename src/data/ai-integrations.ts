@@ -262,10 +262,20 @@ export function aiToolPage(c: Connector): AiToolPage {
   };
 }
 
-/** Other tools of the same kind, popular ones first. */
+/**
+ * Other tools of the same kind: two popular ones, then the tools that follow
+ * this one in the directory, wrapping round. Filling every slot with the
+ * popular ones first left most of a large category linked from nowhere but
+ * the hub; walking on from the page's own position means every tool is
+ * suggested by the few before it.
+ */
 export function relatedAiTools(c: Connector, count = 6): Connector[] {
-  const same = AI_TOOLS.filter((t) => t.id !== c.id && t.category === c.category);
-  return [...same.filter((t) => t.popular), ...same.filter((t) => !t.popular)].slice(0, count);
+  const category = AI_TOOLS.filter((t) => t.category === c.category);
+  const at = category.findIndex((t) => t.id === c.id);
+  const after = [...category.slice(at + 1), ...category.slice(0, at)];
+  const popular = after.filter((t) => t.popular).slice(0, 2);
+  const rest = after.filter((t) => !popular.includes(t));
+  return [...popular, ...rest].slice(0, count);
 }
 
 export function categoryLabel(c: Connector): string {

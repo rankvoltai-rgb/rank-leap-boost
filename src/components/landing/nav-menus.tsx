@@ -13,7 +13,7 @@ import { ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { FEATURES, FEATURE_GROUPS } from "@/data/features";
 import { NAV_COMPETITORS } from "@/data/alternatives";
-import { PERSONAS } from "@/data/personas";
+import { PERSONA_GROUPS, personasIn, type Persona } from "@/data/personas";
 import { PUBLISH_PLATFORMS } from "@/data/platforms";
 import { TOOLS } from "@/data/tools";
 import { TIERS, enginesInTier, type Engine } from "@/data/ai-seo/engines";
@@ -225,10 +225,32 @@ function ScoreCard() {
   );
 }
 
+/** A rail row: the page's short name under its group's heading. The full
+ *  name rides on the link for screen readers and on hover. */
+function PersonaItem({ persona }: { persona: Persona }) {
+  const Icon = persona.icon;
+  return (
+    <NavLink
+      target={{ to: "/use-cases/$slug", params: { slug: persona.slug } }}
+      aria-label={`Rankbox for ${persona.nameLower}`}
+      title={persona.name}
+      className={cn(
+        "group flex min-w-0 items-center gap-1.5 rounded-lg px-2 py-1.5 transition-colors hover:bg-white/10 data-[status=active]:bg-white/10",
+        FOCUS_RING,
+      )}
+    >
+      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-white/10 text-white ring-1 ring-inset ring-white/20 transition-colors group-hover:bg-white group-hover:text-brand-blue group-data-[status=active]:bg-white group-data-[status=active]:text-brand-blue">
+        <Icon className="h-3 w-3" />
+      </span>
+      <span className="truncate text-[0.8rem] font-semibold text-white">{persona.shortName}</span>
+    </NavLink>
+  );
+}
+
 export function FeaturesMenu() {
   return (
     <>
-      <div className="grid lg:grid-cols-[minmax(0,1fr)_17rem]">
+      <div className="grid lg:grid-cols-[minmax(0,1fr)_18rem]">
         <div className="grid grid-cols-2 gap-x-2 p-3">
           {FEATURE_GROUPS.map((group) => (
             <div key={group}>
@@ -254,22 +276,19 @@ export function FeaturesMenu() {
           <ColumnLabel action={<LabelLink to="/use-cases">All use cases</LabelLink>}>
             Who it&rsquo;s for
           </ColumnLabel>
-          <div className="mb-3 grid grid-cols-3 gap-0.5 lg:grid-cols-1">
-            {PERSONAS.map((p) => {
-              const Icon = p.icon;
-              return (
-                <CompactItem
-                  key={p.slug}
-                  icon={
-                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-white/10 text-white ring-1 ring-inset ring-white/20 transition-colors group-hover:bg-white group-hover:text-brand-blue">
-                      <Icon className="h-3.5 w-3.5" />
-                    </span>
-                  }
-                  title={p.name}
-                  target={{ to: "/use-cases/$slug", params: { slug: p.slug } }}
-                />
-              );
-            })}
+          {/* Two short columns, one per group, so six pages stay as tall as
+              three did and the rail never outgrows the feature columns. */}
+          <div className="mb-3 grid grid-cols-2 gap-x-0.5">
+            {PERSONA_GROUPS.map((g) => (
+              <div key={g.id} className="min-w-0">
+                <p className="px-2 pb-1 pt-1.5 text-[0.6rem] font-medium uppercase tracking-[0.14em] text-white/55">
+                  {g.label}
+                </p>
+                {personasIn(g.id).map((p) => (
+                  <PersonaItem key={p.slug} persona={p} />
+                ))}
+              </div>
+            ))}
           </div>
           <ScoreCard />
         </div>

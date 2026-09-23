@@ -13,6 +13,7 @@ import {
   TheMath,
   TrialTimeline,
 } from "@/components/pricing/PricingSections";
+import { ExploreMore } from "@/components/ExploreMore";
 import { PLAN, PRICING_FAQS, TRIAL_DAYS, formatUsd } from "@/data/pricing";
 
 const SITE = "https://rankbox.xyz";
@@ -103,6 +104,7 @@ function PricingPage() {
         <TheMath />
         <IncludedFeatures />
         <PricingProof />
+        <ExploreMore path="/pricing" />
         <PricingFAQ />
         <PricingFinalCTA />
       </main>

@@ -29,6 +29,7 @@ import {
 } from "@/components/integrations/ToolPage";
 import { SubNav } from "@/components/integrations/SubNav";
 import { IntegrationGlyph } from "@/components/integrations/visuals";
+import { ExploreMore } from "@/components/ExploreMore";
 
 const SITE = "https://rankbox.xyz";
 
@@ -172,6 +173,7 @@ function IntegrationPage() {
           faqs={integration.faqs}
         />
         <RelatedIntegrations integration={integration} />
+        <ExploreMore path={`/integrations/${integration.slug}`} />
         <IntegrationCTA integration={integration} />
       </main>
       <Footer />
@@ -234,6 +236,7 @@ function AiToolPage({ slug }: { slug: string }) {
           faqs={page.faqs}
         />
         <ToolRelated tool={tool} />
+        <ExploreMore path={`/integrations/${tool.id}`} />
         <ToolCTA tool={tool} />
       </main>
       <Footer />

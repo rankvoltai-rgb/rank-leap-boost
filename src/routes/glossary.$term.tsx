@@ -23,10 +23,12 @@ import {
   originalAnchor,
 } from "@/components/glossary/entry";
 import { SITE, termUrl } from "@/components/glossary/shared";
+import { ExploreMore } from "@/components/ExploreMore";
 import { entryReadingMinutes, entryWordCount, hasEntry, loadEntry } from "@/data/glossary/entries";
 import { getCategory, getTerm, type GlossaryTerm } from "@/data/glossary/terms";
 import type { GlossaryEntry } from "@/data/glossary/types";
 import { plainText } from "@/lib/inline-md";
+import { AUTHOR_ORG } from "@/data/company";
 
 /* The original element sits after this many question sections: far enough in
    that the basics come first, early enough that most readers reach it. */
@@ -99,7 +101,7 @@ export const Route = createFileRoute("/glossary/$term")({
                 articleSection: category.name,
                 inLanguage: "en",
                 mainEntityOfPage: { "@id": `${url}#webpage` },
-                author: { "@type": "Organization", name: "Rankbox", url: SITE },
+                author: AUTHOR_ORG,
                 publisher: { "@type": "Organization", name: "Rankbox", url: SITE },
                 hasPart: {
                   "@type": "CreativeWork",
@@ -226,6 +228,14 @@ function Term({ term, entry }: { term: GlossaryTerm; entry: GlossaryEntry }) {
           </aside>
         </div>
 
+        <ExploreMore
+          path={`/glossary/${term.slug}`}
+          exclude={[
+            `/features/${entry.product.feature}`,
+            ...(entry.tool ? [`/tools/${entry.tool}`] : []),
+            ...(entry.further ?? []).map((f) => f.href),
+          ]}
+        />
         <BlogCta title="See which AI answers cite you today" />
       </main>
       <Footer />

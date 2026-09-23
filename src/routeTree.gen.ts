@@ -16,6 +16,7 @@ import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as McpRouteImport } from './routes/mcp'
 import { Route as LegalRouteImport } from './routes/legal'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as UseCasesIndexRouteImport } from './routes/use-cases.index'
@@ -24,6 +25,7 @@ import { Route as IntegrationsIndexRouteImport } from './routes/integrations.ind
 import { Route as GlossaryIndexRouteImport } from './routes/glossary.index'
 import { Route as FeaturesIndexRouteImport } from './routes/features.index'
 import { Route as CompareIndexRouteImport } from './routes/compare.index'
+import { Route as ChangelogIndexRouteImport } from './routes/changelog.index'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as AlternativesIndexRouteImport } from './routes/alternatives.index'
 import { Route as AiSeoIndexRouteImport } from './routes/ai-seo.index'
@@ -39,6 +41,8 @@ import { Route as IntegrationsSlugRouteImport } from './routes/integrations.$slu
 import { Route as GlossaryTermRouteImport } from './routes/glossary.$term'
 import { Route as FeaturesSlugRouteImport } from './routes/features.$slug'
 import { Route as CompareSlugRouteImport } from './routes/compare.$slug'
+import { Route as ChangelogRssDotxmlRouteImport } from './routes/changelog.rss[.]xml'
+import { Route as ChangelogSlugRouteImport } from './routes/changelog.$slug'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as AlternativesSlugRouteImport } from './routes/alternatives.$slug'
 import { Route as AiSeoEngineRouteImport } from './routes/ai-seo.$engine'
@@ -101,6 +105,11 @@ const AuthRoute = AuthRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
   id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
@@ -138,6 +147,11 @@ const FeaturesIndexRoute = FeaturesIndexRouteImport.update({
 const CompareIndexRoute = CompareIndexRouteImport.update({
   id: '/compare/',
   path: '/compare/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ChangelogIndexRoute = ChangelogIndexRouteImport.update({
+  id: '/changelog/',
+  path: '/changelog/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BlogIndexRoute = BlogIndexRouteImport.update({
@@ -213,6 +227,16 @@ const FeaturesSlugRoute = FeaturesSlugRouteImport.update({
 const CompareSlugRoute = CompareSlugRouteImport.update({
   id: '/compare/$slug',
   path: '/compare/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ChangelogRssDotxmlRoute = ChangelogRssDotxmlRouteImport.update({
+  id: '/changelog/rss.xml',
+  path: '/changelog/rss.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ChangelogSlugRoute = ChangelogSlugRouteImport.update({
+  id: '/changelog/$slug',
+  path: '/changelog/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BlogSlugRoute = BlogSlugRouteImport.update({
@@ -366,6 +390,7 @@ const ApiPublicV1ArticlesIdRoute = ApiPublicV1ArticlesIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
   '/legal': typeof LegalRouteWithChildren
   '/mcp': typeof McpRoute
@@ -379,6 +404,8 @@ export interface FileRoutesByFullPath {
   '/ai-seo/$engine': typeof AiSeoEngineRoute
   '/alternatives/$slug': typeof AlternativesSlugRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/changelog/$slug': typeof ChangelogSlugRoute
+  '/changelog/rss.xml': typeof ChangelogRssDotxmlRoute
   '/compare/$slug': typeof CompareSlugRoute
   '/features/$slug': typeof FeaturesSlugRoute
   '/glossary/$term': typeof GlossaryTermRoute
@@ -394,6 +421,7 @@ export interface FileRoutesByFullPath {
   '/ai-seo/': typeof AiSeoIndexRoute
   '/alternatives/': typeof AlternativesIndexRoute
   '/blog/': typeof BlogIndexRoute
+  '/changelog/': typeof ChangelogIndexRoute
   '/compare/': typeof CompareIndexRoute
   '/features/': typeof FeaturesIndexRoute
   '/glossary/': typeof GlossaryIndexRoute
@@ -423,6 +451,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
   '/legal': typeof LegalRouteWithChildren
   '/mcp': typeof McpRoute
@@ -435,6 +464,8 @@ export interface FileRoutesByTo {
   '/ai-seo/$engine': typeof AiSeoEngineRoute
   '/alternatives/$slug': typeof AlternativesSlugRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/changelog/$slug': typeof ChangelogSlugRoute
+  '/changelog/rss.xml': typeof ChangelogRssDotxmlRoute
   '/compare/$slug': typeof CompareSlugRoute
   '/features/$slug': typeof FeaturesSlugRoute
   '/glossary/$term': typeof GlossaryTermRoute
@@ -450,6 +481,7 @@ export interface FileRoutesByTo {
   '/ai-seo': typeof AiSeoIndexRoute
   '/alternatives': typeof AlternativesIndexRoute
   '/blog': typeof BlogIndexRoute
+  '/changelog': typeof ChangelogIndexRoute
   '/compare': typeof CompareIndexRoute
   '/features': typeof FeaturesIndexRoute
   '/glossary': typeof GlossaryIndexRoute
@@ -481,6 +513,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
   '/legal': typeof LegalRouteWithChildren
   '/mcp': typeof McpRoute
@@ -494,6 +527,8 @@ export interface FileRoutesById {
   '/ai-seo/$engine': typeof AiSeoEngineRoute
   '/alternatives/$slug': typeof AlternativesSlugRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/changelog/$slug': typeof ChangelogSlugRoute
+  '/changelog/rss.xml': typeof ChangelogRssDotxmlRoute
   '/compare/$slug': typeof CompareSlugRoute
   '/features/$slug': typeof FeaturesSlugRoute
   '/glossary/$term': typeof GlossaryTermRoute
@@ -509,6 +544,7 @@ export interface FileRoutesById {
   '/ai-seo/': typeof AiSeoIndexRoute
   '/alternatives/': typeof AlternativesIndexRoute
   '/blog/': typeof BlogIndexRoute
+  '/changelog/': typeof ChangelogIndexRoute
   '/compare/': typeof CompareIndexRoute
   '/features/': typeof FeaturesIndexRoute
   '/glossary/': typeof GlossaryIndexRoute
@@ -540,6 +576,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/about'
     | '/auth'
     | '/legal'
     | '/mcp'
@@ -553,6 +590,8 @@ export interface FileRouteTypes {
     | '/ai-seo/$engine'
     | '/alternatives/$slug'
     | '/blog/$slug'
+    | '/changelog/$slug'
+    | '/changelog/rss.xml'
     | '/compare/$slug'
     | '/features/$slug'
     | '/glossary/$term'
@@ -568,6 +607,7 @@ export interface FileRouteTypes {
     | '/ai-seo/'
     | '/alternatives/'
     | '/blog/'
+    | '/changelog/'
     | '/compare/'
     | '/features/'
     | '/glossary/'
@@ -597,6 +637,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/about'
     | '/auth'
     | '/legal'
     | '/mcp'
@@ -609,6 +650,8 @@ export interface FileRouteTypes {
     | '/ai-seo/$engine'
     | '/alternatives/$slug'
     | '/blog/$slug'
+    | '/changelog/$slug'
+    | '/changelog/rss.xml'
     | '/compare/$slug'
     | '/features/$slug'
     | '/glossary/$term'
@@ -624,6 +667,7 @@ export interface FileRouteTypes {
     | '/ai-seo'
     | '/alternatives'
     | '/blog'
+    | '/changelog'
     | '/compare'
     | '/features'
     | '/glossary'
@@ -654,6 +698,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/_authenticated'
+    | '/about'
     | '/auth'
     | '/legal'
     | '/mcp'
@@ -667,6 +712,8 @@ export interface FileRouteTypes {
     | '/ai-seo/$engine'
     | '/alternatives/$slug'
     | '/blog/$slug'
+    | '/changelog/$slug'
+    | '/changelog/rss.xml'
     | '/compare/$slug'
     | '/features/$slug'
     | '/glossary/$term'
@@ -682,6 +729,7 @@ export interface FileRouteTypes {
     | '/ai-seo/'
     | '/alternatives/'
     | '/blog/'
+    | '/changelog/'
     | '/compare/'
     | '/features/'
     | '/glossary/'
@@ -713,6 +761,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AboutRoute: typeof AboutRoute
   AuthRoute: typeof AuthRoute
   LegalRoute: typeof LegalRouteWithChildren
   McpRoute: typeof McpRoute
@@ -725,6 +774,8 @@ export interface RootRouteChildren {
   AiSeoEngineRoute: typeof AiSeoEngineRoute
   AlternativesSlugRoute: typeof AlternativesSlugRoute
   BlogSlugRoute: typeof BlogSlugRoute
+  ChangelogSlugRoute: typeof ChangelogSlugRoute
+  ChangelogRssDotxmlRoute: typeof ChangelogRssDotxmlRoute
   CompareSlugRoute: typeof CompareSlugRoute
   FeaturesSlugRoute: typeof FeaturesSlugRoute
   GlossaryTermRoute: typeof GlossaryTermRoute
@@ -734,6 +785,7 @@ export interface RootRouteChildren {
   AiSeoIndexRoute: typeof AiSeoIndexRoute
   AlternativesIndexRoute: typeof AlternativesIndexRoute
   BlogIndexRoute: typeof BlogIndexRoute
+  ChangelogIndexRoute: typeof ChangelogIndexRoute
   CompareIndexRoute: typeof CompareIndexRoute
   FeaturesIndexRoute: typeof FeaturesIndexRoute
   GlossaryIndexRoute: typeof GlossaryIndexRoute
@@ -800,6 +852,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated': {
       id: '/_authenticated'
       path: ''
@@ -854,6 +913,13 @@ declare module '@tanstack/react-router' {
       path: '/compare'
       fullPath: '/compare/'
       preLoaderRoute: typeof CompareIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/changelog/': {
+      id: '/changelog/'
+      path: '/changelog'
+      fullPath: '/changelog/'
+      preLoaderRoute: typeof ChangelogIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/blog/': {
@@ -959,6 +1025,20 @@ declare module '@tanstack/react-router' {
       path: '/compare/$slug'
       fullPath: '/compare/$slug'
       preLoaderRoute: typeof CompareSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/changelog/rss.xml': {
+      id: '/changelog/rss.xml'
+      path: '/changelog/rss.xml'
+      fullPath: '/changelog/rss.xml'
+      preLoaderRoute: typeof ChangelogRssDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/changelog/$slug': {
+      id: '/changelog/$slug'
+      path: '/changelog/$slug'
+      fullPath: '/changelog/$slug'
+      preLoaderRoute: typeof ChangelogSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/blog/$slug': {
@@ -1232,6 +1312,7 @@ const ApiPublicV1ArticlesRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AboutRoute: AboutRoute,
   AuthRoute: AuthRoute,
   LegalRoute: LegalRouteWithChildren,
   McpRoute: McpRoute,
@@ -1245,6 +1326,8 @@ const rootRouteChildren: RootRouteChildren = {
   AiSeoEngineRoute: AiSeoEngineRoute,
   AlternativesSlugRoute: AlternativesSlugRoute,
   BlogSlugRoute: BlogSlugRoute,
+  ChangelogSlugRoute: ChangelogSlugRoute,
+  ChangelogRssDotxmlRoute: ChangelogRssDotxmlRoute,
   CompareSlugRoute: CompareSlugRoute,
   FeaturesSlugRoute: FeaturesSlugRoute,
   GlossaryTermRoute: GlossaryTermRoute,
@@ -1254,6 +1337,7 @@ const rootRouteChildren: RootRouteChildren = {
   AiSeoIndexRoute: AiSeoIndexRoute,
   AlternativesIndexRoute: AlternativesIndexRoute,
   BlogIndexRoute: BlogIndexRoute,
+  ChangelogIndexRoute: ChangelogIndexRoute,
   CompareIndexRoute: CompareIndexRoute,
   FeaturesIndexRoute: FeaturesIndexRoute,
   GlossaryIndexRoute: GlossaryIndexRoute,

@@ -14,8 +14,21 @@
  *    job. A page that implies the work disappears sells a refund.
  * 3. No invented third-party prices. The stack section names what Rankbox
  *    consolidates, and puts a number only on our own plan.
+ *
+ * Pages come in two groups. "By role" pages are written to a seat (marketer,
+ * founder, agency); "By business" pages to what the reader sells and where,
+ * and each of those carries a sample topic map and the integrations that fit.
+ * The rules above are enforced by personas.test.ts.
  */
-import { Megaphone, Rocket, Building2, type LucideIcon } from "lucide-react";
+import {
+  AppWindow,
+  Building2,
+  Megaphone,
+  Rocket,
+  ShoppingBag,
+  Store,
+  type LucideIcon,
+} from "lucide-react";
 import { PLAN, STUDIO, TRIAL_DAYS, formatUsd } from "./pricing";
 
 /** A product fact in the band under the hero. Facts, never results. */
@@ -60,6 +73,42 @@ export interface PersonaFAQ {
   a: string;
 }
 
+/** Which way a page slices the audience: by the reader's seat, or their business. */
+export type PersonaGroup = "role" | "business";
+
+export const PERSONA_GROUPS: { id: PersonaGroup; label: string; blurb: string }[] = [
+  { id: "role", label: "By role", blurb: "Written to the seat you sit in." },
+  { id: "business", label: "By business", blurb: "Written to what you sell, and where." },
+];
+
+/** One intent on the sample topic map, with the questions that sit under it. */
+export interface TopicCluster {
+  /** Where the customer is: "Before they buy". */
+  stage: string;
+  /** The chip beside it: "Buying". */
+  intent: string;
+  questions: string[];
+}
+
+/**
+ * What Rankbox would write for a fictional business of this kind, shown in a
+ * window labelled Sample. Questions only: a volume or a score beside them
+ * would be invented data. The brands are the ones the integration pages use,
+ * so a reader who clicks through meets the same shop on the other side.
+ */
+export interface PersonaTopics {
+  title: string;
+  intro: string;
+  brand: string;
+  domain: string;
+  clusters: TopicCluster[];
+  /** Under the window: says it's fictional, and whose map yours would be. */
+  note: string;
+  platformsTitle: string;
+  /** Integration slugs (src/data/integrations.ts), best fit first. */
+  platforms: { slug: string; why: string }[];
+}
+
 export interface Persona {
   slug: string;
   /** Plural, as it appears in nav and cards: "Marketers". */
@@ -70,8 +119,14 @@ export interface Persona {
    * "Rankbox for <them>".
    */
   nameLower: string;
-  /** Singular, for mid-sentence use: "a marketer". */
+  /**
+   * The navbar rail's label, where two columns leave room for about ten
+   * characters: "Founders". Its group heading supplies the rest.
+   */
+  shortName: string;
+  /** Singular, for mid-sentence use: "marketer", read as "a marketer". */
   role: string;
+  group: PersonaGroup;
   icon: LucideIcon;
   /** One line under the name in cards and menus. */
   tagline: string;
@@ -122,7 +177,14 @@ export interface Persona {
   picksIntro: string;
   picks: PersonaPick[];
 
-  /** Names from the landing TESTIMONIALS, closest seat first. */
+  /** Business pages only. Rendered between the pains and the workflow. */
+  topics?: PersonaTopics;
+
+  /**
+   * Names from the landing TESTIMONIALS, closest seat first. Empty hides the
+   * section: a quote written about one kind of business is never borrowed to
+   * vouch for another.
+   */
   proof: string[];
   proofTitle: string;
 
@@ -137,7 +199,9 @@ export const PERSONAS: Persona[] = [
     slug: "marketers",
     name: "Marketers",
     nameLower: "marketers",
+    shortName: "Marketers",
     role: "marketer",
+    group: "role",
     icon: Megaphone,
     tagline: "Own the content number without owning a content team.",
 
@@ -312,7 +376,9 @@ export const PERSONAS: Persona[] = [
     slug: "solo-founders",
     name: "Solo founders",
     nameLower: "solo founders",
+    shortName: "Founders",
     role: "solo founder",
+    group: "role",
     icon: Rocket,
     tagline: "Content marketing that runs while you build the product.",
 
@@ -491,7 +557,9 @@ export const PERSONAS: Persona[] = [
     slug: "seo-agencies",
     name: "SEO agencies",
     nameLower: "SEO agencies",
+    shortName: "Agencies",
     role: "agency",
+    group: "role",
     icon: Building2,
     tagline: "Add GEO to every retainer without adding writers.",
 
@@ -674,10 +742,736 @@ export const PERSONAS: Persona[] = [
     ctaTitle: "Put GEO on the retainer",
     ctaBody: `Run one account through it first. ${TRIAL_DAYS} days free, no card to start, cancel in one click.`,
   },
+
+  /* ---------------------------------------------------------------- */
+  {
+    slug: "ecommerce",
+    name: "E-commerce stores",
+    nameLower: "e-commerce stores",
+    shortName: "E-commerce",
+    role: "store owner",
+    group: "business",
+    icon: ShoppingBag,
+    tagline: "Answer the buying questions your product pages can't.",
+
+    eyebrow: "AI SEO and blog content for e-commerce",
+    headline: { lead: "Answer the buyer", accent: "before the cart" },
+    subhead:
+      "Shoppers now ask ChatGPT which one to buy before they reach your store. Rankbox finds those buying questions, writes sourced guides and comparisons in your brand voice, and publishes them as native posts on your Shopify or Square Online blog.",
+    metaTitle: "Rankbox for E-commerce: AI SEO for Online Stores",
+    metaDescription:
+      "Buying guides, comparisons, and how-tos on your Shopify or Square Online blog, every day. Rankbox researches, writes, and scores each for Google and AI answers.",
+
+    shortAnswer:
+      "Rankbox is an AI search growth engine for online stores. It maps the buying questions shoppers ask ChatGPT, Perplexity, and Google about your category, writes source-backed guides and comparisons in your brand voice, scores each one for SEO and AI citation, and publishes them as native blog posts on Shopify, Square Online, or WordPress. It writes to your blog and nothing else, and the store owner checks what each article says about their products.",
+
+    specs: [
+      { value: "Native", label: "blog posts on Shopify and Square Online" },
+      { value: "Blog only", label: "never your products, orders, or customers" },
+      { value: `${PLAN.articlesPerMonth}/mo`, label: "buying guides, comparisons, and how-tos" },
+      { value: "100+", label: "languages, for every market you ship to" },
+    ],
+
+    handoff: {
+      runsTitle: "Rankbox runs this",
+      runs: [
+        {
+          label: "Buying-question research",
+          detail: "What shoppers ask AI before they pick a product in your category.",
+        },
+        {
+          label: "Guides and comparisons",
+          detail: "Sourced articles in your brand voice, not reworded product descriptions.",
+        },
+        {
+          label: "Publishing to your store",
+          detail: "Native posts on your Shopify or Square Online blog, in your theme.",
+        },
+        {
+          label: "Authority off the site",
+          detail: "Backlink credits and Reddit presence, working on the domain in the background.",
+        },
+      ],
+      keepsTitle: "You keep this",
+      keeps: [
+        {
+          label: "Product truth",
+          detail: "Specs, stock, and prices only you can vouch for.",
+        },
+        {
+          label: "Merchandising",
+          detail: "Which collections the content should point at this season.",
+        },
+        {
+          label: "The final read",
+          detail: "Publish hidden, check it, then switch it on.",
+        },
+        {
+          label: "The storefront",
+          detail: "Products, checkout, and orders are never touched.",
+        },
+      ],
+    },
+
+    painsTitle: "Why the store blog stalled",
+    painsIntro:
+      "Product pages answer “what is it?”. Shoppers now ask AI “which one should I get?”, and a product page was never built to answer that.",
+    pains: [
+      {
+        pain: "The blog is three posts and a holiday announcement.",
+        fix: "Posts go live on a schedule that keeps going through launch weeks, sale weeks, and stockouts.",
+      },
+      {
+        pain: "Shoppers ask ChatGPT which one to buy. It names other stores.",
+        fix: "Research goes after the buying and comparison questions answer engines field in your category.",
+      },
+      {
+        pain: "You know the range cold, but a proper buying guide eats a whole day.",
+        fix: "Drafts arrive researched and sourced. You add what only you know about the products, then approve.",
+      },
+      {
+        pain: "Every content app wants access to your whole store.",
+        fix: "The Shopify and Square apps write blog posts and nothing else. They never read your products, customers, or orders.",
+      },
+    ],
+
+    workflowTitle: "From store URL to first guide",
+    workflowIntro: "One setup session. After that it runs beside the store, not inside it.",
+    steps: [
+      {
+        when: "Day 1",
+        title: "Add the app",
+        body: "Connect Rankbox to your Shopify or Square Online blog and choose where posts land.",
+      },
+      {
+        when: "Day 1",
+        title: "Approve the buying questions",
+        body: "Rankbox reads your store and category, then ranks what shoppers ask. Keep what fits your range.",
+      },
+      {
+        when: "Every day",
+        title: "Guides arrive on the blog",
+        body: "A sourced, scored article publishes to your blog, either visible or held back until you've read it.",
+      },
+      {
+        when: "Every season",
+        title: "Reshape the map",
+        body: "Add a new collection's questions, cut a discontinued line, and the queue reorders around it.",
+      },
+    ],
+
+    stackTitle: "What the store stops paying for separately",
+    stackIntro: "Most store blogs run on a freelancer, an SEO app, and good intentions.",
+    stack: [
+      {
+        label: "Freelance blog writers",
+        detail: "Per-post rates, briefs, and a revision round for every guide",
+      },
+      { label: "An SEO research app", detail: "Keyword and question research for the category" },
+      { label: "An on-page SEO checker", detail: "Grading each post before it goes live" },
+      {
+        label: "Link-building outreach",
+        detail: "Chasing mentions for a domain that's mostly product pages",
+      },
+      {
+        label: "Your Sunday afternoons",
+        detail: "The blog post that was always next week's job",
+      },
+    ],
+    stackNote: STUDIO.live
+      ? `One plan covers ${PLAN.sites} store: ${PLAN.articlesPerMonth} published articles a month, ${PLAN.backlinkCreditsPerMonth} backlink credits, and the Shopify and Square apps. Running a second storefront? ${STUDIO.name} adds each extra site for ${formatUsd(STUDIO.monthlyPerSite)} a month.`
+      : `One plan covers ${PLAN.sites} store: ${PLAN.articlesPerMonth} published articles a month, ${PLAN.backlinkCreditsPerMonth} backlink credits, and the Shopify and Square apps.`,
+
+    picksTitle: "The parts a store leans on hardest",
+    picksIntro:
+      "The engine is the same for everyone. These four do the heavy lifting behind a shop.",
+    picks: [
+      {
+        featureSlug: "answer-space-research",
+        why: "Surfaces the “which one should I buy?” questions a product page can't rank for, before you spend a day writing.",
+      },
+      {
+        featureSlug: "citation-ready-writer",
+        why: "Buying guides built the way answer engines lift them: a direct answer first, sourced claims underneath.",
+      },
+      {
+        featureSlug: "auto-publishing",
+        why: "Native posts in the Shopify or Square Online blog you choose, live or held for review, with no copy-pasting.",
+      },
+      {
+        featureSlug: "reddit-presence",
+        why: "Shoppers ask Reddit before they buy, and AI engines read those threads. Rankbox finds them and drafts a helpful reply for you to post.",
+      },
+    ],
+
+    proof: [],
+    proofTitle: "Stores running it as the whole blog",
+
+    topics: {
+      title: "What it would write for a store like yours",
+      intro:
+        "A product page answers one question. The questions around it are where shoppers decide, and each one is an article.",
+      brand: "Fernwood Coffee",
+      domain: "fernwoodcoffee.com",
+      clusters: [
+        {
+          stage: "Before they buy",
+          intent: "Buying",
+          questions: [
+            "Which roast is best for espresso at home?",
+            "What are the best beans for cold brew?",
+            "Is single-origin coffee worth the price?",
+          ],
+        },
+        {
+          stage: "Weighing options",
+          intent: "Comparing",
+          questions: [
+            "Light vs dark roast: what actually changes?",
+            "Whole bean vs pre-ground: how much fresher?",
+            "Chemex or V60 for a first pour-over?",
+          ],
+        },
+        {
+          stage: "After the order",
+          intent: "How-to",
+          questions: [
+            "How do you dial in a pour-over at home?",
+            "How much coffee per cup of water?",
+            "How should you store coffee so it stays fresh?",
+          ],
+        },
+        {
+          stage: "When it goes wrong",
+          intent: "Fixing",
+          questions: [
+            "Why does my coffee taste sour?",
+            "Why is my cold brew bitter?",
+            "How long do roasted beans stay fresh?",
+          ],
+        },
+      ],
+      note: "A sample map for Fernwood Coffee, a fictional roaster. Yours is built from your own store and category, and nothing is written until you approve it.",
+      platformsTitle: "Lands as native posts where you already sell",
+      platforms: [
+        { slug: "shopify", why: "Posts in the blog you pick, published visible or hidden." },
+        { slug: "square", why: "Posts on your Square Online site's blog, live or as drafts." },
+        { slug: "wordpress", why: "For WooCommerce stores: native posts in your theme." },
+      ],
+    },
+
+    faqs: [
+      {
+        q: "Does Rankbox touch my products or orders?",
+        a: "No. The Shopify and Square apps only create and update the blog posts Rankbox sends. They never read your products, customers, or orders.",
+      },
+      {
+        q: "Will it write my product descriptions?",
+        a: "No. It writes the articles around them: buying guides, comparisons, how-tos, and care guides. A product page says what an item is. These answer which one to buy and how to get the most from it, which is the question shoppers now ask AI.",
+      },
+      {
+        q: "My store isn't on Shopify or Square. Can I still use it?",
+        a: "Yes. The WordPress plugin covers WooCommerce stores, there are apps for Webflow and Framer, and the REST API works with anything custom, including a headless storefront.",
+      },
+      {
+        q: "Can I check posts before customers see them?",
+        a: "Yes. On Shopify, publish posts hidden and switch them on when you're ready. On Square Online, hold them as drafts. Either way you can rewrite any article as many times as you like first.",
+      },
+      {
+        q: "What if a guide gets a detail about my products wrong?",
+        a: "Drafts are researched and source-backed, but you know your stock, specs, and prices better than any research pass. That's why the final read stays with you. Keep auto-publish off, or publish hidden, and nothing about your products goes live until you've checked it.",
+      },
+    ],
+    ctaTitle: "Give your store a blog that keeps up",
+    ctaBody: `Paste your store's URL and see the buying questions it's sitting on. ${TRIAL_DAYS} days free, no card to start.`,
+  },
+
+  /* ---------------------------------------------------------------- */
+  {
+    slug: "saas",
+    name: "SaaS companies",
+    nameLower: "SaaS companies",
+    shortName: "SaaS",
+    role: "SaaS team",
+    group: "business",
+    icon: AppWindow,
+    tagline: "Content for buyers who ask AI which tool to use.",
+
+    eyebrow: "AI search and content marketing for SaaS",
+    headline: { lead: "Grow on content", accent: "not on ad spend" },
+    subhead:
+      "Buyers ask ChatGPT for the best tool in your category and get a shortlist before they reach your pricing page. Rankbox maps those questions, writes sourced comparisons and how-tos in your voice, and ships them to Webflow, Framer, WordPress, or your own stack.",
+    metaTitle: "Rankbox for SaaS: AI Search & Content Marketing",
+    metaDescription:
+      "Comparisons, alternatives, and how-tos your buyers ask ChatGPT about, written in your voice and shipped to Webflow, Framer, WordPress, or any stack via API.",
+
+    shortAnswer:
+      "Rankbox is an AI search growth engine for SaaS companies that need category content without a content team. It maps the questions buyers ask ChatGPT, Perplexity, and Google, including comparisons, alternatives, use cases, and how-tos. It writes source-backed articles in your product's voice, scores them for SEO and AI citation, and publishes to Webflow, Framer, WordPress, or any stack through a REST API. Positioning, product claims, and the final edit stay with your team.",
+
+    specs: [
+      { value: `${PLAN.articlesPerMonth}/mo`, label: "published articles, research included" },
+      { value: "3 CMS apps", label: "Webflow, Framer, and WordPress" },
+      { value: "REST API", label: "HTML or Markdown for any stack" },
+      { value: "MCP", label: "server for the AI tools you already use" },
+    ],
+
+    handoff: {
+      runsTitle: "Rankbox runs this",
+      runs: [
+        {
+          label: "Category question research",
+          detail: "Comparisons, alternatives, and “how do I” questions buyers put to AI.",
+        },
+        {
+          label: "Sourced drafts",
+          detail: "Articles on the problem your product solves, written in your voice.",
+        },
+        {
+          label: "Shipping to your stack",
+          detail: "Into your CMS collection, or pulled by your own code through the API.",
+        },
+        {
+          label: "Off-site authority",
+          detail: "Backlink credits and Reddit presence where your category gets discussed.",
+        },
+      ],
+      keepsTitle: "You keep this",
+      keeps: [
+        { label: "Positioning", detail: "The category story and what you're built against." },
+        {
+          label: "Product truth",
+          detail: "Features, limits, and roadmap claims only you can vouch for.",
+        },
+        {
+          label: "Competitor claims",
+          detail: "Checked by someone who has actually used the other tool.",
+        },
+        { label: "The final edit", detail: "Rewrite any draft as many times as you like." },
+      ],
+    },
+
+    painsTitle: "Why content keeps losing to the roadmap",
+    painsIntro:
+      "Every SaaS team agrees content matters. It's just never more urgent than the next release.",
+    pains: [
+      {
+        pain: "The blog gets a post whenever someone has a free afternoon.",
+        fix: "Cadence stops depending on who's free. Articles publish on a schedule the release train can't bump.",
+      },
+      {
+        pain: "Buyers ask ChatGPT for the best tool in your category. You're not in the answer.",
+        fix: "Research goes after the comparison and alternatives questions answer engines field about your category.",
+      },
+      {
+        pain: "The docs explain the product. Nothing explains the problem.",
+        fix: "Use-case and how-to articles get drafted from the questions buyers actually ask, then wait for your team's edit.",
+      },
+      {
+        pain: "Your site is custom-built, and every content plugin assumes WordPress.",
+        fix: "Pull finished articles through the REST API as HTML or Markdown, with slugs and meta, into whatever you built.",
+      },
+    ],
+
+    workflowTitle: "How it fits a product team's week",
+    workflowIntro: "Engineering touches it once, if at all. Marketing owns it from there.",
+    steps: [
+      {
+        when: "Day 1",
+        title: "Connect your site",
+        body: "Install the Webflow, Framer, or WordPress app, or have an engineer wire up the API in an afternoon.",
+      },
+      {
+        when: "Day 1",
+        title: "Approve the map",
+        body: "Rankbox reads your product and category, then ranks the comparison, alternative, and how-to questions around it.",
+      },
+      {
+        when: "Every day",
+        title: "Drafts arrive scored",
+        body: "A sourced article in your voice, graded for SEO and GEO, waiting in the editor or live on your CMS.",
+      },
+      {
+        when: "Every release",
+        title: "Feed the map",
+        body: "Ship a feature, add its use cases to the topic map, and the queue reorders around them.",
+      },
+    ],
+
+    stackTitle: "What it takes off the content budget",
+    stackIntro: "The usual early-stage SaaS content setup, before anyone is hired to own it.",
+    stack: [
+      {
+        label: "A content agency retainer",
+        detail: "Briefs, drafts, and a monthly call about the briefs",
+      },
+      {
+        label: "Freelance technical writers",
+        detail: "Per-article rates for how-tos and comparisons",
+      },
+      {
+        label: "SEO research tool seats",
+        detail: "Keyword and question research for the category",
+      },
+      { label: "On-page grading", detail: "A checklist someone runs before each post, sometimes" },
+      {
+        label: "Copy-paste publishing",
+        detail: "Moving drafts from a doc into the CMS, fixing formatting as you go",
+      },
+    ],
+    stackNote: `One plan covers ${PLAN.sites} site with ${PLAN.articlesPerMonth} published articles a month, research, scoring, publishing, and ${PLAN.backlinkCreditsPerMonth} backlink credits. The API and the MCP server are included, not sold as add-ons.`,
+
+    picksTitle: "The parts a SaaS team leans on hardest",
+    picksIntro:
+      "The engine runs the same either way. These four matter most in a crowded category.",
+    picks: [
+      {
+        featureSlug: "answer-space-research",
+        why: "Finds the “X vs Y”, “alternatives to”, and “how do I” questions where buyers build a shortlist, ranked before anyone writes.",
+      },
+      {
+        featureSlug: "citation-ready-writer",
+        why: "Structured the way answer engines lift a passage: a direct answer first, sourced claims underneath.",
+      },
+      {
+        featureSlug: "seo-geo-score",
+        why: "A pre-publish bar the whole team can see, so quality doesn't depend on who drafted the piece.",
+      },
+      {
+        featureSlug: "reddit-presence",
+        why: "Buyers ask Reddit for honest tool picks, and AI engines read those threads. Rankbox finds them and drafts a disclosed reply for you to post.",
+      },
+    ],
+
+    proof: [],
+    proofTitle: "SaaS teams running it as the content function",
+
+    topics: {
+      title: "What it would write for a product like yours",
+      intro:
+        "Buyers build a shortlist long before a demo. These are the questions they build it from, and each one is an article.",
+      brand: "Plannora",
+      domain: "plannora.io",
+      clusters: [
+        {
+          stage: "Choosing a tool",
+          intent: "Buying",
+          questions: [
+            "What's the best planning tool for a small team?",
+            "What should a team planner actually include?",
+            "Is a shared calendar enough to plan projects?",
+          ],
+        },
+        {
+          stage: "Weighing options",
+          intent: "Comparing",
+          questions: [
+            "Kanban vs Gantt: which fits a small team?",
+            "Planning app or spreadsheet: when to switch?",
+            "Free vs paid planners: what actually changes?",
+          ],
+        },
+        {
+          stage: "Getting it done",
+          intent: "How-to",
+          questions: [
+            "How do you run a weekly planning meeting?",
+            "How do you plan a product launch timeline?",
+            "How do you estimate a project without guessing?",
+          ],
+        },
+        {
+          stage: "When it goes wrong",
+          intent: "Fixing",
+          questions: [
+            "Why do team projects always run late?",
+            "How do you stop scope creep mid-project?",
+            "What do you do when priorities keep changing?",
+          ],
+        },
+      ],
+      note: "A sample map for Plannora, a fictional planning app. Yours is built from your own product and category, and nothing is written until you approve it.",
+      platformsTitle: "Ships to the stack you already run",
+      platforms: [
+        { slug: "webflow", why: "Items in the CMS collection you choose, in your template." },
+        { slug: "framer", why: "Items in your Framer CMS, laid out by your own page." },
+        { slug: "api", why: "HTML or Markdown with slugs and meta, for any build." },
+      ],
+    },
+
+    faqs: [
+      {
+        q: "Our marketing site is custom-built. Does that work?",
+        a: "Yes. The REST API returns finished articles as HTML and Markdown with their slug, meta description, and tags, so any build can pull and render them. Webflow, Framer, and WordPress have apps instead, if that's where your marketing site lives.",
+      },
+      {
+        q: "Will it write about our competitors?",
+        a: "Comparison and alternatives questions matter a lot in SaaS, so they'll show up on your topic map. You choose which to approve, and anything that makes a claim about another product should be checked by someone who has used it before it publishes.",
+      },
+      {
+        q: "Can it write about our own product?",
+        a: "It writes researched, source-backed explainers and how-tos around the problem you solve. It hasn't used your product, so anything that depends on your own UI, API, or roadmap needs a pass from someone who has.",
+      },
+      {
+        q: "Where do articles end up on our site?",
+        a: "Wherever you point them. On Webflow and Framer, that's the CMS collection you choose. On WordPress, it's posts. With the API, it's any route you like: a blog, a guides section, or a resource hub.",
+      },
+      {
+        q: "What does the MCP server add?",
+        a: "It lets AI assistants like Claude, ChatGPT, and Cursor call Rankbox's research tools directly: questions people ask AI about a topic, content briefs, and meta descriptions. It's included with the plan.",
+      },
+    ],
+    ctaTitle: "Let content ship on its own release train",
+    ctaBody: `Paste your product's URL and see the questions buyers ask AI about your category. ${TRIAL_DAYS} days free, no card to start.`,
+  },
+
+  /* ---------------------------------------------------------------- */
+  {
+    slug: "local-businesses",
+    name: "Local businesses",
+    nameLower: "local businesses",
+    shortName: "Local",
+    role: "local business",
+    group: "business",
+    icon: Store,
+    tagline: "A blog that answers customers' questions while you work.",
+
+    eyebrow: "Blog content and local SEO for small businesses",
+    headline: { lead: "A blog that runs", accent: "while you work" },
+    subhead:
+      "You're running the business, not a content calendar. Rankbox finds what customers ask Google and ChatGPT about what you do, writes helpful, sourced articles in your voice, and publishes them to your Square Online, WordPress, or Webflow site without costing you an evening.",
+    metaTitle: "Rankbox for Local Businesses: A Blog That Runs Itself",
+    metaDescription:
+      "Helpful articles about what you do, written in your voice and published to your Square Online, WordPress, or Webflow site. For owners with no time to blog.",
+
+    shortAnswer:
+      "Rankbox is an AI search growth engine that small local businesses use as their whole blog. It finds the questions customers ask Google and ChatGPT about what the business does, writes sourced, helpful articles in the owner's voice, scores them for search and AI answers, and publishes them to Square Online, WordPress, Webflow, or Framer. It does not manage Google Business Profile listings, reviews, or directory listings; those stay with the owner.",
+
+    specs: [
+      { value: "Native", label: "posts on Square Online, WordPress, or Webflow" },
+      { value: "Minutes", label: "from your URL to a list of topics" },
+      { value: `${PLAN.articlesPerMonth}/mo`, label: "helpful articles, written and published" },
+      { value: "No card", label: `to start — ${TRIAL_DAYS}-day free trial` },
+    ],
+
+    handoff: {
+      runsTitle: "Rankbox runs this",
+      runs: [
+        {
+          label: "Knowing what to write",
+          detail: "The questions customers ask about what you do, found for you.",
+        },
+        {
+          label: "Writing it in your voice",
+          detail: "Sourced, helpful articles that sound like you, not a template.",
+        },
+        {
+          label: "Posting it",
+          detail: "Published to your site's blog on a schedule, or held as drafts.",
+        },
+        {
+          label: "A few good links",
+          detail: "Backlink credits, so your site is more than a menu and a map.",
+        },
+      ],
+      keepsTitle: "You keep this",
+      keeps: [
+        {
+          label: "Your Google Business Profile",
+          detail: "Hours, photos, and reviews. Rankbox doesn't manage listings.",
+        },
+        {
+          label: "Local knowledge",
+          detail: "Your neighbourhood, your regulars, your way of doing things.",
+        },
+        {
+          label: "What you'll stand behind",
+          detail: "Prices, promises, and anything about your own service.",
+        },
+        {
+          label: "The day job",
+          detail: "Serving customers, the reason the blog never got written.",
+        },
+      ],
+    },
+
+    painsTitle: "Why the website went quiet",
+    painsIntro:
+      "Nobody opens a bakery, a salon, or a plumbing business to write blog posts. So the site still says what it said the week it launched.",
+    pains: [
+      {
+        pain: "The last blog post is from the week the site launched.",
+        fix: "Articles publish on a schedule that doesn't wait for a quiet afternoon.",
+      },
+      {
+        pain: "Customers ask the same questions every day, and the answers only live in your head.",
+        fix: "The questions people ask online about what you do become helpful, sourced articles on your own site.",
+      },
+      {
+        pain: "People ask ChatGPT for recommendations now, not just Google.",
+        fix: "Every article is written and scored for how AI answers read a page, not only for a search listing.",
+      },
+      {
+        pain: "Agencies and freelance writers are priced for much bigger businesses.",
+        fix: `One plan at ${formatUsd(PLAN.monthly)} a month for ${PLAN.articlesPerMonth} published articles. No contract, and you can cancel in one click.`,
+      },
+    ],
+
+    workflowTitle: "What it asks of you",
+    workflowIntro: "About ten minutes once, then a glance whenever you feel like it.",
+    steps: [
+      {
+        when: "Minute 1",
+        title: "Paste your website",
+        body: "Rankbox reads your site, works out what you do and who you do it for, and learns how you talk about it.",
+      },
+      {
+        when: "Minute 10",
+        title: "Pick your topics",
+        body: "A list of real customer questions comes back. Tick the ones that fit and skip the rest.",
+      },
+      {
+        when: "Day 1",
+        title: "Connect your site",
+        body: "Add the Square app, or the plugin for WordPress, Webflow, or Framer. Articles publish from then on.",
+      },
+      {
+        when: "Any time",
+        title: "Read, or don't",
+        body: "Keep new posts as drafts to check first, or let them publish on their own schedule.",
+      },
+    ],
+
+    stackTitle: "What you don't have to hire",
+    stackIntro: "The usual ways a small business gets a blog, and why most of them end up empty.",
+    stack: [
+      { label: "A marketing agency", detail: "A monthly retainer and a monthly report" },
+      { label: "A freelance writer", detail: "Per-post rates, plus explaining your trade to them" },
+      { label: "An SEO plugin", detail: "Settings pages nobody has opened since launch" },
+      {
+        label: "Canned blog content",
+        detail: "Generic posts that could be about any business, anywhere",
+      },
+      { label: "Doing it yourself", detail: "Late nights after close, until it stops" },
+    ],
+    stackNote: STUDIO.live
+      ? `One plan covers ${PLAN.sites} website: research, writing, publishing, and ${PLAN.backlinkCreditsPerMonth} backlink credits a month. Each location has its own site? ${STUDIO.name} adds each extra site for ${formatUsd(STUDIO.monthlyPerSite)} a month.`
+      : `One plan covers ${PLAN.sites} website: research, writing, publishing, and ${PLAN.backlinkCreditsPerMonth} backlink credits a month. Cancel in one click and everything already published stays on your site.`,
+
+    picksTitle: "The parts that matter when you're busy",
+    picksIntro: "No marketing team means nobody to hand things to. These four are why that's fine.",
+    picks: [
+      {
+        featureSlug: "auto-publishing",
+        why: "The blog keeps going through the busy season without you remembering it exists.",
+      },
+      {
+        featureSlug: "brand-voice",
+        why: "Learned from your own site, so posts sound like the person behind the counter, not a template.",
+      },
+      {
+        featureSlug: "answer-space-research",
+        why: "Finds the questions customers ask about what you do, so you never have to decide what to write.",
+      },
+      {
+        featureSlug: "authority-backlinks",
+        why: "A small local site rarely gets linked to. This works on that in the background.",
+      },
+    ],
+
+    proof: [],
+    proofTitle: "Local businesses running it as the whole blog",
+
+    topics: {
+      title: "What it would write for a business like yours",
+      intro:
+        "Customers ask the same things at the counter every day. They ask Google and ChatGPT too, and each question is an article.",
+      brand: "Rye & Rise Bakery",
+      domain: "ryeandrise.com",
+      clusters: [
+        {
+          stage: "Before they order",
+          intent: "Buying",
+          questions: [
+            "How far ahead should you order a birthday cake?",
+            "How many pastries for an office breakfast?",
+            "What should you ask a wedding cake baker?",
+          ],
+        },
+        {
+          stage: "Weighing options",
+          intent: "Comparing",
+          questions: [
+            "Rye vs whole wheat: what's the difference?",
+            "Sourdough vs yeasted bread: what changes?",
+            "Buttercream vs fondant: which travels better?",
+          ],
+        },
+        {
+          stage: "At home",
+          intent: "How-to",
+          questions: [
+            "How do you revive a stale loaf?",
+            "How should you freeze sourdough?",
+            "How do you reheat croissants so they stay flaky?",
+          ],
+        },
+        {
+          stage: "Curious customers",
+          intent: "Explaining",
+          questions: [
+            "How long does sourdough keep?",
+            "What makes a croissant flaky?",
+            "Why does sourdough taste sour?",
+          ],
+        },
+      ],
+      note: "A sample map for Rye & Rise, a fictional bakery. Yours is built from your own site and trade, and nothing is written until you approve it.",
+      platformsTitle: "Posts to the site you already have",
+      platforms: [
+        { slug: "square", why: "Posts on your Square Online site's blog, live or as drafts." },
+        { slug: "wordpress", why: "Native posts in your theme, published or held as drafts." },
+        { slug: "webflow", why: "Items in your blog collection, laid out by your template." },
+      ],
+    },
+
+    faqs: [
+      {
+        q: "Does this manage my Google Business Profile or reviews?",
+        a: "No. Rankbox writes and publishes articles on your website. Your Google Business Profile, reviews, and directory listings stay with you. They matter a lot for local search, and they need your hand on them.",
+      },
+      {
+        q: "I take payments with Square. Does the app see my sales?",
+        a: "No. The Square app only creates and updates blog posts on your Square Online site. It never reads your items, orders, or customers. If your website runs somewhere else, connect that platform instead.",
+      },
+      {
+        q: "I'm not a writer. Will it sound like me?",
+        a: "It learns your voice from the pages already on your site, and you can rewrite any article before it goes live, as many times as you like. Keep posts as drafts and nothing publishes until you've read it.",
+      },
+      {
+        q: "How much of my time does this take?",
+        a: "About ten minutes to set up. After that, none, unless you want to read drafts before they go live.",
+      },
+      {
+        q: "What kinds of business is this for?",
+        a: "Any business whose customers ask questions before they buy: bakeries, cafés, salons, clinics, trades, studios, and shops. If people ask “how”, “how long”, or “which one” about what you do, there's something worth writing.",
+      },
+    ],
+    ctaTitle: "Let the website keep up with you",
+    ctaBody: `Paste your website and see the questions your customers are already asking. ${TRIAL_DAYS} days free, no card to start.`,
+  },
 ];
 
 export function getPersona(slug: string): Persona | undefined {
   return PERSONAS.find((p) => p.slug === slug);
+}
+
+export function personasIn(group: PersonaGroup): Persona[] {
+  return PERSONAS.filter((p) => p.group === group);
+}
+
+/** "a marketer", "an agency". */
+export function withArticle(role: string): string {
+  return `${/^[aeiou]/i.test(role) ? "an" : "a"} ${role}`;
 }
 
 /** The H1 as one plain string, for schema and anywhere the lockup can't run. */

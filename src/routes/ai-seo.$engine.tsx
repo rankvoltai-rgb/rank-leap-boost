@@ -23,6 +23,7 @@ import {
   SourceList,
   Takeaways,
 } from "@/components/ai-seo/sections";
+import { ExploreMore } from "@/components/ExploreMore";
 import { getEngine } from "@/data/ai-seo/engines";
 import { guideReadingMinutes, guideWordCount, loadGuide } from "@/data/ai-seo/guides";
 import type { EngineGuide } from "@/data/ai-seo/types";
@@ -238,6 +239,10 @@ function Guide({ guide }: { guide: EngineGuide }) {
         </div>
 
         <OtherGuides current={engine} guide={guide} />
+        <ExploreMore
+          path={`/ai-seo/${engine.slug}`}
+          exclude={guide.furtherReading.map((r) => r.href)}
+        />
         <BlogCta
           title={
             engine.tier === "frontier"

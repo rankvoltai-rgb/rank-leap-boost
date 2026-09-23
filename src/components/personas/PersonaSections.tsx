@@ -4,15 +4,29 @@
  * alternating surfaces, dark closing CTA) with a body that answers "is this
  * built for someone in my job?"
  *
- * Two sections here exist only on these pages, because they answer the two
+ * Three sections here exist only on these pages, because they answer the
  * objections a persona page actually has to clear:
  *
- *   HandoffPanel — what runs itself, and what never stops being the reader's.
- *   PersonaStack — the line items this consolidates, with a price only on ours.
+ *   HandoffPanel  — what runs itself, and what never stops being the reader's.
+ *   PersonaStack  — the line items this consolidates, with a price only on ours.
+ *   PersonaTopics — business pages: what it would write for a shop like yours,
+ *                   and the integrations it would land through.
+ *
+ * The body sections take `tint`, and the route alternates it, so the page's
+ * rhythm holds whether or not a page carries topics or proof.
  */
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { ArrowRight, ArrowDown, Check, ChevronRight, Sparkles, UserRound } from "lucide-react";
+import {
+  ArrowRight,
+  ArrowDown,
+  Check,
+  ChevronRight,
+  MessageCircleQuestion,
+  Search,
+  Sparkles,
+  UserRound,
+} from "lucide-react";
 import {
   Accordion,
   AccordionContent,
@@ -29,12 +43,25 @@ import {
 } from "@/components/landing/shared";
 import { PixelField, CARD_PIXELS, UrlForm, TrustRow } from "@/components/landing/Hero";
 import { TESTIMONIALS } from "@/components/landing/Testimonials";
+import { Chip, Letter, ProductWindow, type Tone } from "@/components/features/showcase/kit";
+import { IntegrationGlyph } from "@/components/integrations/visuals";
 import { cn } from "@/lib/utils";
 import { getFeature } from "@/data/features";
+import { getIntegration } from "@/data/integrations";
 import { PLAN, TRIAL_DAYS, formatUsd } from "@/data/pricing";
-import { PERSONAS, type Persona } from "@/data/personas";
+import { PERSONA_GROUPS, personasIn, withArticle, type Persona } from "@/data/personas";
 
 /* ---------- shared bits ---------- */
+
+/** A body section's background. Tinted bands carry the border between them. */
+function band(tint: boolean) {
+  return tint ? "border-t border-border bg-surface/40" : undefined;
+}
+
+interface BodyProps {
+  persona: Persona;
+  tint?: boolean;
+}
 
 function Heading({
   id,
@@ -296,9 +323,9 @@ export function PersonaSpecs({ persona }: { persona: Persona }) {
 /* A ledger rather than a before/after two-up: the reader's line sits on the
    left in their own words, ours answers it on the right, and the pairing is
    what does the work. */
-export function PersonaPains({ persona }: { persona: Persona }) {
+export function PersonaPains({ persona, tint = false }: BodyProps) {
   return (
-    <section aria-labelledby="pains-title" className="py-24 sm:py-32">
+    <section aria-labelledby="pains-title" className={cn("py-24 sm:py-32", band(tint))}>
       <div className="mx-auto max-w-6xl px-5">
         <Heading
           id="pains-title"
@@ -338,16 +365,125 @@ export function PersonaPains({ persona }: { persona: Persona }) {
   );
 }
 
+/* ---------- 3b. Sample topic map (business pages) ---------- */
+
+/* By position, not by label: the four clusters always run buy → compare →
+   use → fix, and a page can word its intents however suits the trade. */
+const CLUSTER_TONES: Tone[] = ["success", "volt", "muted", "warning"];
+
+/**
+ * The page's proof that it understands this kind of business: a sample
+ * answer-space map for a fictional shop in the trade, then the integrations
+ * those articles would land through. Nothing on it is a number — the
+ * research surface has volumes, but a volume beside a fictional question is
+ * invented data.
+ */
+export function PersonaTopics({ persona, tint = false }: BodyProps) {
+  const topics = persona.topics;
+  if (!topics) return null;
+  const count = topics.clusters.reduce((n, c) => n + c.questions.length, 0);
+
+  return (
+    <section
+      id="topics"
+      aria-labelledby="topics-title"
+      className={cn("py-24 sm:py-32", band(tint))}
+    >
+      <div className="mx-auto max-w-6xl px-5">
+        <Heading
+          id="topics-title"
+          eyebrow="Sample topic map"
+          title={topics.title}
+          intro={topics.intro}
+        />
+
+        <Reveal delay={0.06} y={24} className="mt-14">
+          <ProductWindow title="Answer-space research" icon={Search}>
+            <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-b border-border px-5 py-4">
+              <div className="flex min-w-0 items-center gap-3">
+                <Letter domain={topics.domain} />
+                <div className="min-w-0">
+                  <p className="truncate text-sm font-semibold text-ink">{topics.brand}</p>
+                  <p className="truncate font-mono text-[0.7rem] text-muted-foreground">
+                    {topics.domain}
+                  </p>
+                </div>
+              </div>
+              <p className="text-xs text-muted-foreground">
+                {count} questions · {topics.clusters.length} stages · awaiting approval
+              </p>
+            </div>
+
+            <div className="grid gap-px bg-border md:grid-cols-2 lg:grid-cols-4">
+              {topics.clusters.map((c, i) => (
+                <div key={c.stage} className="flex flex-col bg-card p-5">
+                  <div className="flex items-center justify-between gap-3">
+                    <h3 className="text-sm font-semibold text-ink">{c.stage}</h3>
+                    <Chip tone={CLUSTER_TONES[i % CLUSTER_TONES.length]}>{c.intent}</Chip>
+                  </div>
+                  <ul className="mt-4 space-y-2">
+                    {c.questions.map((q) => (
+                      <li
+                        key={q}
+                        className="flex gap-2.5 rounded-lg border border-border bg-surface/60 px-3 py-2.5 text-[0.8rem] leading-snug text-ink"
+                      >
+                        <MessageCircleQuestion
+                          aria-hidden
+                          className="mt-px h-3.5 w-3.5 shrink-0 text-muted-foreground"
+                        />
+                        {q}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </ProductWindow>
+          <p className="mx-auto mt-5 max-w-2xl text-balance text-center text-xs leading-relaxed text-muted-foreground">
+            {topics.note}
+          </p>
+        </Reveal>
+
+        <Reveal delay={0.1} className="mt-16">
+          <p className="text-center text-[0.7rem] font-bold uppercase tracking-[0.14em] text-muted-foreground">
+            {topics.platformsTitle}
+          </p>
+          <div className="mx-auto mt-5 grid max-w-5xl gap-4 sm:grid-cols-3">
+            {topics.platforms.map(({ slug, why }) => {
+              const integration = getIntegration(slug);
+              if (!integration) return null;
+              return (
+                <Link
+                  key={slug}
+                  to="/integrations/$slug"
+                  params={{ slug }}
+                  className="group flex h-full items-start gap-3.5 rounded-2xl border border-border bg-card p-5 transition-all hover:-translate-y-1 hover:shadow-elevation-lg"
+                >
+                  <IntegrationGlyph integration={integration} className="h-10 w-10" />
+                  <div className="min-w-0 flex-1">
+                    <p className="flex items-center gap-1 font-semibold text-ink">
+                      {integration.name}
+                      <ArrowRight className="h-3.5 w-3.5 text-muted-foreground transition-all group-hover:translate-x-0.5 group-hover:text-ink" />
+                    </p>
+                    <p className="mt-1 text-sm leading-snug text-muted-foreground">{why}</p>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
 /* ---------- 4. Workflow rail ---------- */
 
 /* Vertical, with the timeline label on the rail: these steps are a narrative
    about someone's week, and a week reads down the page, not across it. */
-export function PersonaWorkflow({ persona }: { persona: Persona }) {
+export function PersonaWorkflow({ persona, tint = true }: BodyProps) {
   return (
-    <section
-      aria-labelledby="workflow-title"
-      className="border-t border-border bg-surface/40 py-24 sm:py-32"
-    >
+    <section aria-labelledby="workflow-title" className={cn("py-24 sm:py-32", band(tint))}>
       <div className="mx-auto max-w-6xl px-5">
         <Heading
           id="workflow-title"
@@ -402,9 +538,9 @@ export function PersonaWorkflow({ persona }: { persona: Persona }) {
 /* Deliberately priceless on the left. Putting invented market rates next to
    another company's job title is how a page like this stops being credible;
    the only number here is our own. */
-export function PersonaStack({ persona }: { persona: Persona }) {
+export function PersonaStack({ persona, tint = false }: BodyProps) {
   return (
-    <section aria-labelledby="stack-title" className="py-24 sm:py-32">
+    <section aria-labelledby="stack-title" className={cn("py-24 sm:py-32", band(tint))}>
       <div className="mx-auto max-w-6xl px-5">
         <Heading
           id="stack-title"
@@ -490,12 +626,9 @@ export function PersonaStack({ persona }: { persona: Persona }) {
 
 /* ---------- 6. The features that carry this seat ---------- */
 
-export function PersonaPicks({ persona }: { persona: Persona }) {
+export function PersonaPicks({ persona, tint = true }: BodyProps) {
   return (
-    <section
-      aria-labelledby="picks-title"
-      className="border-t border-border bg-surface/40 py-24 sm:py-32"
-    >
+    <section aria-labelledby="picks-title" className={cn("py-24 sm:py-32", band(tint))}>
       <div className="mx-auto max-w-6xl px-5">
         <Heading
           id="picks-title"
@@ -551,14 +684,14 @@ export function PersonaPicks({ persona }: { persona: Persona }) {
 
 /* ---------- 7. Proof ---------- */
 
-export function PersonaProof({ persona }: { persona: Persona }) {
+export function PersonaProof({ persona, tint = false }: BodyProps) {
   const picks = persona.proof
     .map((name) => TESTIMONIALS.find((t) => t.n === name))
     .filter((t): t is (typeof TESTIMONIALS)[number] => Boolean(t));
   const [lead, ...rest] = picks;
 
   return (
-    <section id="proof" aria-labelledby="proof-title" className="py-24 sm:py-32">
+    <section id="proof" aria-labelledby="proof-title" className={cn("py-24 sm:py-32", band(tint))}>
       <div className="mx-auto max-w-6xl px-5">
         <Heading
           id="proof-title"
@@ -629,13 +762,13 @@ export function PersonaProof({ persona }: { persona: Persona }) {
 
 /* ---------- 8. The other seats ---------- */
 
+/* Every page, in its group, with this one marked rather than dropped: the
+   reader sees the whole map and where they're standing on it, and two groups
+   of three keep the grid even however many pages each group grows to. */
 export function OtherPersonas({ persona }: { persona: Persona }) {
-  const others = PERSONAS.filter((p) => p.slug !== persona.slug);
-  if (others.length === 0) return null;
-
   return (
     /* bg-card, not the usual surface tint: on the page this band follows the
-       pricing block, which the route already wraps in surface/40. */
+       pricing block, which the route usually wraps in surface/40. */
     <section
       aria-labelledby="others-title"
       className="border-t border-border bg-card py-20 sm:py-24"
@@ -651,35 +784,79 @@ export function OtherPersonas({ persona }: { persona: Persona }) {
           </h2>
         </Reveal>
 
-        <div className="mt-12 grid gap-5 sm:grid-cols-2">
-          {others.map((p, i) => {
-            const Icon = p.icon;
-            return (
-              <Reveal key={p.slug} delay={i * 0.06}>
-                <Link
-                  to="/use-cases/$slug"
-                  params={{ slug: p.slug }}
-                  className="group flex h-full items-start gap-4 rounded-2xl border border-border bg-background p-6 transition-all hover:-translate-y-1 hover:shadow-elevation-lg"
-                >
-                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-ink text-background transition-colors group-hover:bg-brand-blue">
-                    <Icon className="h-4 w-4" />
-                  </span>
-                  <div className="min-w-0">
-                    <p className="font-display text-lg font-semibold tracking-tight text-ink">
-                      Rankbox for {p.nameLower}
-                    </p>
-                    <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
-                      {p.tagline}
-                    </p>
-                  </div>
-                  <ArrowRight className="mt-1 h-4 w-4 shrink-0 text-muted-foreground transition-all group-hover:translate-x-0.5 group-hover:text-ink" />
-                </Link>
+        <div className="mt-12 space-y-10">
+          {PERSONA_GROUPS.map((g) => (
+            <div key={g.id}>
+              <Reveal className="mb-4 flex items-baseline gap-3">
+                <h3 className="text-[0.7rem] font-bold uppercase tracking-[0.14em] text-ink">
+                  {g.label}
+                </h3>
+                <p className="text-xs text-muted-foreground">{g.blurb}</p>
               </Reveal>
-            );
-          })}
+              <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {personasIn(g.id).map((p, i) => (
+                  <li key={p.slug}>
+                    <Reveal delay={i * 0.05} className="h-full">
+                      <SeatCard persona={p} current={p.slug === persona.slug} />
+                    </Reveal>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
       </div>
     </section>
+  );
+}
+
+function SeatCard({ persona, current }: { persona: Persona; current: boolean }) {
+  const Icon = persona.icon;
+  const body = (
+    <>
+      <span
+        className={cn(
+          "flex h-10 w-10 shrink-0 items-center justify-center rounded-xl transition-colors",
+          current ? "bg-brand-blue text-white" : "bg-ink text-background group-hover:bg-brand-blue",
+        )}
+      >
+        <Icon className="h-4 w-4" />
+      </span>
+      <div className="min-w-0 flex-1">
+        <p className="flex items-center gap-2 font-display text-base font-semibold tracking-tight text-ink">
+          {persona.name}
+          {current && (
+            <span className="rounded-full bg-brand-blue/10 px-2 py-0.5 font-sans text-[0.6rem] font-bold uppercase tracking-[0.1em] text-brand-blue">
+              You&rsquo;re here
+            </span>
+          )}
+        </p>
+        <p className="mt-1 text-sm leading-snug text-muted-foreground">{persona.tagline}</p>
+      </div>
+      {!current && (
+        <ArrowRight className="mt-1 h-4 w-4 shrink-0 text-muted-foreground transition-all group-hover:translate-x-0.5 group-hover:text-ink" />
+      )}
+    </>
+  );
+
+  if (current) {
+    return (
+      <div
+        aria-current="page"
+        className="flex h-full items-start gap-4 rounded-2xl border border-brand-blue/35 bg-brand-blue/[0.04] p-5 ring-1 ring-brand-blue/15"
+      >
+        {body}
+      </div>
+    );
+  }
+  return (
+    <Link
+      to="/use-cases/$slug"
+      params={{ slug: persona.slug }}
+      className="group flex h-full items-start gap-4 rounded-2xl border border-border bg-background p-5 transition-all hover:-translate-y-1 hover:shadow-elevation-lg"
+    >
+      {body}
+    </Link>
   );
 }
 
@@ -693,7 +870,7 @@ export function PersonaFAQ({ persona }: { persona: Persona }) {
           id="faq-title"
           eyebrow="FAQ"
           title={`Questions ${persona.nameLower} ask first`}
-          intro={`The things worth knowing before you run Rankbox as ${persona.role === "agency" ? "an" : "a"} ${persona.role}.`}
+          intro={`The things worth knowing before you run Rankbox as ${withArticle(persona.role)}.`}
         />
         <Reveal delay={0.08} className="mt-14">
           <Accordion
