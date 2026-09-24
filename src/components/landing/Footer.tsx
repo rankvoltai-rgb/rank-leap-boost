@@ -18,6 +18,7 @@ import { COMPETITORS } from "@/data/alternatives";
 import { PERSONAS } from "@/data/personas";
 import { TOOLS } from "@/data/tools";
 import { enginesInTier } from "@/data/ai-seo/engines";
+import { LAUNCH_BADGES } from "@/data/launch-badges";
 import { LEGAL_CONTACT } from "@/components/legal/legal-ui";
 
 /*
@@ -302,6 +303,123 @@ function Section({ section }: { section: FooterSection }) {
   );
 }
 
+/* ---------- Launch badges ---------- */
+
+const BADGE_HOLD_MS = 4000;
+/* The strip's duration-600. */
+const BADGE_SLIDE_MS = 600;
+
+/* Built once: React 19 rewrites innerHTML whenever this object is new, even
+   with the same string, which would rebuild every badge (and drop keyboard
+   focus from it) on each step of the rotation. */
+const BADGE_HTML = LAUNCH_BADGES.map((b) => ({ __html: b.html }));
+
+/** The launch-directory badges, one at a time, each sliding in from the
+ *  right. Every badge is in the server-rendered HTML, since the directories'
+ *  crawlers look for their link there; the ones not showing wait beside it,
+ *  clipped. The first is repeated at the end of the strip so the loop always
+ *  moves left: once the copy is showing, the strip jumps back to the original
+ *  with the transition off. Hover or focus holds the current badge. */
+function LaunchBadges() {
+  const ref = useRef<HTMLDivElement>(null);
+  const [index, setIndex] = useState(0);
+  const [animate, setAnimate] = useState(true);
+  const [inView, setInView] = useState(false);
+  const [held, setHeld] = useState(false);
+  const count = LAUNCH_BADGES.length;
+  const slides = count > 1 ? [...LAUNCH_BADGES, LAUNCH_BADGES[0]] : LAUNCH_BADGES;
+
+  // Rotates only while the footer is near the screen. The badges lazy-load,
+  // so one would arrive blank mid-slide; fetching their images once here
+  // warms the cache without touching the embed code.
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    let warmed = false;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setInView(entry.isIntersecting);
+        if (entry.isIntersecting && !warmed) {
+          warmed = true;
+          el.querySelectorAll("img").forEach((img) => {
+            new Image().src = img.src;
+          });
+        }
+      },
+      { rootMargin: "200px" },
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!inView || held || count < 2 || index >= count) return;
+    const id = window.setTimeout(() => setIndex((i) => i + 1), BADGE_HOLD_MS);
+    return () => window.clearTimeout(id);
+  }, [inView, held, index, count]);
+
+  // On the copy: jump back to the original once the slide has finished.
+  useEffect(() => {
+    if (index < count) return;
+    const id = window.setTimeout(() => {
+      setAnimate(false);
+      setIndex(0);
+    }, BADGE_SLIDE_MS);
+    return () => window.clearTimeout(id);
+  }, [index, count]);
+
+  // Turn the transition back on only after the jump has painted.
+  useEffect(() => {
+    if (animate) return;
+    let id = requestAnimationFrame(() => {
+      id = requestAnimationFrame(() => setAnimate(true));
+    });
+    return () => cancelAnimationFrame(id);
+  }, [animate]);
+
+  if (count === 0) return null;
+
+  return (
+    <div className="pt-6 md:mt-auto md:pt-0">
+      {/* overflow-clip, not hidden: tabbing to a waiting badge would scroll a
+          hidden-overflow box to it and knock the strip out of line. Each
+          slide pads the badge so the clip leaves room for its focus ring;
+          the negative margin keeps the badge level with the links above. */}
+      <div
+        ref={ref}
+        role="group"
+        aria-label="Rankbox on launch directories"
+        onMouseEnter={() => setHeld(true)}
+        onMouseLeave={() => setHeld(false)}
+        onFocus={() => setHeld(true)}
+        onBlur={() => setHeld(false)}
+        className="-m-1 w-39 overflow-clip opacity-50 grayscale transition-[opacity,filter] duration-300 focus-within:opacity-100 focus-within:grayscale-0 hover:opacity-100 hover:grayscale-0 motion-reduce:transition-none"
+      >
+        <div
+          className={cn(
+            "flex",
+            animate &&
+              "transition-transform duration-600 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none",
+          )}
+          style={{ transform: `translateX(-${index * 100}%)` }}
+        >
+          {slides.map((badge, i) => (
+            // The embed's own sizes are overridden here, never in its code:
+            // every badge shows at the same 40px height.
+            <div
+              key={i === count ? "loop" : badge.name}
+              inert={i === count}
+              onFocus={() => setIndex(i)}
+              className="w-full shrink-0 p-1 [&_a]:inline-block [&_a]:rounded-md [&_a]:align-top [&_a]:focus-visible:outline-none [&_a]:focus-visible:ring-2 [&_a]:focus-visible:ring-white/80 [&_img]:block [&_img]:h-10! [&_img]:w-auto! [&_img]:max-w-full [&_img]:object-contain"
+              dangerouslySetInnerHTML={BADGE_HTML[i % count]}
+            />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /* ---------- Ask AI ---------- */
 
 /* Deliberately a plain question. Some "summarize with AI" buttons slip in
@@ -531,11 +649,14 @@ export function Footer() {
           aria-label="Footer"
           className="grid md:grid-cols-3 md:gap-x-8 md:gap-y-12 md:py-14 lg:grid-cols-5"
         >
-          {COLUMNS.map((column) => (
-            <div key={column[0].title} className="md:space-y-10">
+          {/* Columns are flex so the badges can drop to the foot of the last
+              one, level with the bottom of the tallest. */}
+          {COLUMNS.map((column, i) => (
+            <div key={column[0].title} className="md:flex md:flex-col md:gap-10">
               {column.map((section) => (
                 <Section key={section.title} section={section} />
               ))}
+              {i === COLUMNS.length - 1 && <LaunchBadges />}
             </div>
           ))}
         </nav>
