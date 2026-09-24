@@ -42,4 +42,10 @@ export const LAUNCH_BADGES: LaunchBadge[] = [
 <img src="https://toolfame.com/badge-light.svg" alt="Featured on toolfame.com" style="height: 54px; width: auto;" />
 </a>`,
   },
+  {
+    name: "ProductFame",
+    html: `<a href="https://productfame.com" target="_blank" rel="noopener noreferrer">
+  <img src="https://productfame.com/badges/featured-light.svg" alt="Featured on ProductFame" width="245" height="54" />
+</a>`,
+  },
 ];
