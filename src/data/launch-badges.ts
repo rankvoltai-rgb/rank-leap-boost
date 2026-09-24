@@ -36,4 +36,10 @@ export const LAUNCH_BADGES: LaunchBadge[] = [
     name: "Solver Tools",
     html: `<a target="_blank" href="https://solvertools.com/tool/rankbox"><img src="https://solvertools.com/assets/images/badge.png" alt="Solver Tools" height="54" loading="lazy"></a>`,
   },
+  {
+    name: "Toolfame",
+    html: `<a href="https://toolfame.com/item/rankbox" target="_blank" rel="noopener noreferrer">
+<img src="https://toolfame.com/badge-light.svg" alt="Featured on toolfame.com" style="height: 54px; width: auto;" />
+</a>`,
+  },
 ];
