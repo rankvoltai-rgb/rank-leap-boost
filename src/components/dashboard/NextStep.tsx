@@ -43,7 +43,7 @@ export function NextStepCard({
 }) {
   const current = steps?.find((s) => !s.done)?.id;
   return (
-    <Panel className="overflow-hidden border-cta/25 shadow-[0_1px_2px_color-mix(in_oklab,var(--cta)_8%,transparent),0_12px_32px_-18px_color-mix(in_oklab,var(--cta)_35%,transparent)]">
+    <Panel className="overflow-hidden border-cta/25">
       <div className="flex flex-col gap-6 bg-[image:var(--gradient-surface)] p-6 sm:p-7 lg:flex-row lg:items-center">
         <div className="min-w-0 flex-1">
           <p className="text-xs font-semibold uppercase tracking-[0.12em] text-cta">{eyebrow}</p>
