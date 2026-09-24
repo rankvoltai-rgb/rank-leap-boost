@@ -384,7 +384,9 @@ function LaunchBadges() {
       {/* overflow-clip, not hidden: tabbing to a waiting badge would scroll a
           hidden-overflow box to it and knock the strip out of line. Each
           slide pads the badge so the clip leaves room for its focus ring;
-          the negative margin keeps the badge level with the links above. */}
+          the negative margin keeps the badge level with the links above.
+          Sized for the widest badge at 40px tall (Smol Launch, 167px), which
+          still fits the narrowest desktop column (171px at 1024px). */}
       <div
         ref={ref}
         role="group"
@@ -393,7 +395,7 @@ function LaunchBadges() {
         onMouseLeave={() => setHeld(false)}
         onFocus={() => setHeld(true)}
         onBlur={() => setHeld(false)}
-        className="-m-1 w-39 overflow-clip opacity-50 grayscale transition-[opacity,filter] duration-300 focus-within:opacity-100 focus-within:grayscale-0 hover:opacity-100 hover:grayscale-0 motion-reduce:transition-none"
+        className="-m-1 w-45 overflow-clip opacity-50 grayscale transition-[opacity,filter] duration-300 focus-within:opacity-100 focus-within:grayscale-0 hover:opacity-100 hover:grayscale-0 motion-reduce:transition-none"
       >
         <div
           className={cn(

@@ -48,4 +48,10 @@ export const LAUNCH_BADGES: LaunchBadge[] = [
   <img src="https://productfame.com/badges/featured-light.svg" alt="Featured on ProductFame" width="245" height="54" />
 </a>`,
   },
+  {
+    name: "Smol Launch",
+    html: `<a href="https://smollaunch.com" target="_blank" rel="noopener">
+  <img src="https://smollaunch.com/badges/featured.svg" alt="Rankbox — Featured on Smol Launch" loading="lazy" width="250" height="60" />
+</a>`,
+  },
 ];
