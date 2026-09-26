@@ -422,6 +422,38 @@ function LaunchBadges() {
   );
 }
 
+/* ---------- Preferred source ---------- */
+
+/* Google's deep link for picking a site as a preferred source in Top Stories.
+   It takes a bare domain or subdomain, never a path. The badge is Google's own
+   English asset (light, @2x) from its publisher guide, not redrawn. */
+const PREFERRED_SOURCE_URL = "https://www.google.com/preferences/source?q=rankbox.xyz";
+
+function PreferredSource() {
+  return (
+    <a
+      href={PREFERRED_SOURCE_URL}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Add Rankbox as a preferred source on Google (opens google.com in a new tab)"
+      className={cn(
+        "mt-6 inline-block rounded-lg transition-transform duration-200 hover:-translate-y-0.5 motion-reduce:transition-none motion-reduce:hover:translate-y-0",
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80 focus-visible:ring-offset-2 focus-visible:ring-offset-brand-blue",
+      )}
+    >
+      <img
+        src="/assets/google-preferred-source.webp"
+        alt="Add as a preferred source on Google"
+        width={177}
+        height={56}
+        loading="lazy"
+        decoding="async"
+        className="block h-14 w-auto"
+      />
+    </a>
+  );
+}
+
 /* ---------- Ask AI ---------- */
 
 /* Deliberately a plain question. Some "summarize with AI" buttons slip in
@@ -642,6 +674,7 @@ export function Footer() {
               The AI search growth engine for founders. Daily articles engineered to get you cited
               by AI and ranked on Google.
             </p>
+            <PreferredSource />
             <TrustBox />
           </div>
           <AskAI />
