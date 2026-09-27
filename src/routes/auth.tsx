@@ -1,10 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { AuthSplit } from "@/components/auth/AuthSplit";
+import { safeRedirectPath } from "@/lib/safe-redirect";
 
 export const Route = createFileRoute("/auth")({
-  // Forwarded from the landing hero so the URL survives into onboarding.
-  validateSearch: (search: Record<string, unknown>): { url?: string } => ({
+  // url: forwarded from the landing hero so it survives into onboarding.
+  // redirect: where to go after signing in instead of onboarding — used by
+  // /oauth/consent, which needs its authorization_id back.
+  validateSearch: (search: Record<string, unknown>): { url?: string; redirect?: string } => ({
     url: typeof search.url === "string" ? search.url : undefined,
+    redirect: safeRedirectPath(search.redirect),
   }),
   head: () => ({
     meta: [

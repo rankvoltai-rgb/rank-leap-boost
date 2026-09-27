@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ArrowRight, Loader2 } from "lucide-react";
-import { Link, useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate, useSearch } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { signInWithPassword, signUpWithPassword } from "@/lib/auth";
 import { listSites } from "@/lib/data";
@@ -42,6 +42,7 @@ function Field({
 
 export function AuthSplit() {
   const navigate = useNavigate();
+  const { redirect } = useSearch({ from: "/auth" });
   const [loading, setLoading] = useState(false);
   const [mode, setMode] = useState<"signup" | "login">("signup");
   const [name, setName] = useState("");
@@ -53,11 +54,16 @@ export function AuthSplit() {
     setLoading(true);
     try {
       if (mode === "signup") {
-        await signUpWithPassword({ email, password, fullName: name });
-        navigate({ to: "/onboarding" });
+        await signUpWithPassword({ email, password, fullName: name, returnPath: redirect });
+        if (redirect) window.location.assign(redirect);
+        else navigate({ to: "/onboarding" });
         return;
       }
       await signInWithPassword({ email, password });
+      if (redirect) {
+        window.location.assign(redirect);
+        return;
+      }
       const sites = await listSites();
       navigate({ to: sites.length > 0 ? "/dashboard" : "/onboarding" });
     } catch (err) {
@@ -92,7 +98,7 @@ export function AuthSplit() {
 
             <Reveal delay={0.12}>
               <div className="mt-7">
-                <SocialButtons />
+                <SocialButtons returnPath={redirect} />
               </div>
             </Reveal>
 

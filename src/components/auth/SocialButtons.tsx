@@ -70,13 +70,20 @@ function ComingSoonButton({ children, label }: { children: ReactNode; label: str
  * "soon" tile: it is off in Supabase, so a live button would only ever error.
  * Apple was removed outright — it needs a paid developer account.
  */
-export function SocialButtons() {
+export function SocialButtons({ returnPath }: { returnPath?: string }) {
   const navigate = useNavigate();
 
   async function signInWithGoogle() {
     try {
-      const outcome = await signInWithProvider("google", window.location.origin + "/onboarding");
+      const outcome = await signInWithProvider(
+        "google",
+        window.location.origin + (returnPath ?? "/onboarding"),
+      );
       if (outcome === "redirected") return;
+      if (returnPath) {
+        window.location.assign(returnPath);
+        return;
+      }
       const sites = await listSites();
       navigate({ to: sites.length > 0 ? "/dashboard" : "/onboarding" });
     } catch {

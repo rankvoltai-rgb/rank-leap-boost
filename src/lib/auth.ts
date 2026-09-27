@@ -39,6 +39,8 @@ export async function signUpWithPassword(input: {
   email: string;
   password: string;
   fullName: string;
+  /** Where the confirmation email's link lands. Defaults to onboarding. */
+  returnPath?: string;
 }): Promise<void> {
   if (IS_MOCK) {
     await mockAuth.signUp(input);
@@ -49,7 +51,7 @@ export async function signUpWithPassword(input: {
     email: input.email,
     password: input.password,
     options: {
-      emailRedirectTo: `${window.location.origin}/onboarding`,
+      emailRedirectTo: `${window.location.origin}${input.returnPath ?? "/onboarding"}`,
       data: { full_name: input.fullName },
     },
   });
@@ -96,4 +98,56 @@ export async function signOut(): Promise<void> {
   if (IS_MOCK) return mockAuth.signOut();
   const { supabase } = await import("@/integrations/supabase/client");
   await supabase.auth.signOut();
+}
+
+/**
+ * An app (Claude, ChatGPT, Cursor…) asking to use someone's Rankbox account
+ * through Supabase's OAuth server. Supabase sends the browser to
+ * /oauth/consent?authorization_id=… and the page reads the request from here.
+ * "done" means this person already approved this app, so there is nothing to
+ * ask: the browser just goes back to the app.
+ */
+export type OAuthRequest =
+  | {
+      kind: "consent";
+      /** Chosen by whoever registered the app; Rankbox doesn't verify it. */
+      appName: string;
+      /** Where the browser goes after a decision — the one part an impostor can't fake. */
+      redirectUri: string;
+      email: string;
+      scopes: string[];
+    }
+  | { kind: "done"; redirectUrl: string };
+
+const NO_MOCK_OAUTH = "Connecting an app needs a real Rankbox account, not mock mode.";
+
+export async function getOAuthRequest(authorizationId: string): Promise<OAuthRequest> {
+  if (IS_MOCK) throw new Error(NO_MOCK_OAUTH);
+  const { supabase } = await import("@/integrations/supabase/client");
+  const { data, error } = await supabase.auth.oauth.getAuthorizationDetails(authorizationId);
+  if (error) throw error;
+  if (!("authorization_id" in data)) return { kind: "done", redirectUrl: data.redirect_url };
+  return {
+    kind: "consent",
+    appName: data.client.name.trim() || "An app",
+    redirectUri: data.redirect_uri,
+    email: data.user.email,
+    scopes: data.scope.split(/\s+/).filter(Boolean),
+  };
+}
+
+/** Records the decision and returns the URL that takes the browser back to the app. */
+export async function answerOAuthRequest(
+  authorizationId: string,
+  decision: "approve" | "deny",
+): Promise<string> {
+  if (IS_MOCK) throw new Error(NO_MOCK_OAUTH);
+  const { supabase } = await import("@/integrations/supabase/client");
+  const options = { skipBrowserRedirect: true };
+  const { data, error } =
+    decision === "approve"
+      ? await supabase.auth.oauth.approveAuthorization(authorizationId, options)
+      : await supabase.auth.oauth.denyAuthorization(authorizationId, options);
+  if (error) throw error;
+  return data.redirect_url;
 }

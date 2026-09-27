@@ -69,6 +69,14 @@ export const requireSupabaseAuth = createMiddleware({ type: 'function' }).server
       throw new Error('Unauthorized: No user ID found in token');
     }
 
+    // Tokens Supabase's OAuth server issued to a connected app (Claude, ChatGPT…)
+    // carry client_id. They are only good for the MCP server, never for the app's
+    // own server functions — otherwise any app someone approves could act as them
+    // here. Hand edit: Lovable generated this file, but we no longer regenerate it.
+    if ((data.claims as { client_id?: unknown }).client_id != null) {
+      throw new Error('Unauthorized: App tokens cannot call Rankbox server functions');
+    }
+
     return next({
       context: {
         supabase,

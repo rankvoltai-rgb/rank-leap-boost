@@ -31,6 +31,7 @@ import { Route as AlternativesIndexRouteImport } from './routes/alternatives.ind
 import { Route as AiSeoIndexRouteImport } from './routes/ai-seo.index'
 import { Route as UseCasesSlugRouteImport } from './routes/use-cases.$slug'
 import { Route as ToolsSlugRouteImport } from './routes/tools.$slug'
+import { Route as OauthConsentRouteImport } from './routes/oauth.consent'
 import { Route as LegalTermsRouteImport } from './routes/legal.terms'
 import { Route as LegalRefundsRouteImport } from './routes/legal.refunds'
 import { Route as LegalPrivacyRouteImport } from './routes/legal.privacy'
@@ -177,6 +178,11 @@ const UseCasesSlugRoute = UseCasesSlugRouteImport.update({
 const ToolsSlugRoute = ToolsSlugRouteImport.update({
   id: '/tools/$slug',
   path: '/tools/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OauthConsentRoute = OauthConsentRouteImport.update({
+  id: '/oauth/consent',
+  path: '/oauth/consent',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LegalTermsRoute = LegalTermsRouteImport.update({
@@ -416,6 +422,7 @@ export interface FileRoutesByFullPath {
   '/legal/privacy': typeof LegalPrivacyRoute
   '/legal/refunds': typeof LegalRefundsRoute
   '/legal/terms': typeof LegalTermsRoute
+  '/oauth/consent': typeof OauthConsentRoute
   '/tools/$slug': typeof ToolsSlugRoute
   '/use-cases/$slug': typeof UseCasesSlugRoute
   '/ai-seo/': typeof AiSeoIndexRoute
@@ -476,6 +483,7 @@ export interface FileRoutesByTo {
   '/legal/privacy': typeof LegalPrivacyRoute
   '/legal/refunds': typeof LegalRefundsRoute
   '/legal/terms': typeof LegalTermsRoute
+  '/oauth/consent': typeof OauthConsentRoute
   '/tools/$slug': typeof ToolsSlugRoute
   '/use-cases/$slug': typeof UseCasesSlugRoute
   '/ai-seo': typeof AiSeoIndexRoute
@@ -539,6 +547,7 @@ export interface FileRoutesById {
   '/legal/privacy': typeof LegalPrivacyRoute
   '/legal/refunds': typeof LegalRefundsRoute
   '/legal/terms': typeof LegalTermsRoute
+  '/oauth/consent': typeof OauthConsentRoute
   '/tools/$slug': typeof ToolsSlugRoute
   '/use-cases/$slug': typeof UseCasesSlugRoute
   '/ai-seo/': typeof AiSeoIndexRoute
@@ -602,6 +611,7 @@ export interface FileRouteTypes {
     | '/legal/privacy'
     | '/legal/refunds'
     | '/legal/terms'
+    | '/oauth/consent'
     | '/tools/$slug'
     | '/use-cases/$slug'
     | '/ai-seo/'
@@ -662,6 +672,7 @@ export interface FileRouteTypes {
     | '/legal/privacy'
     | '/legal/refunds'
     | '/legal/terms'
+    | '/oauth/consent'
     | '/tools/$slug'
     | '/use-cases/$slug'
     | '/ai-seo'
@@ -724,6 +735,7 @@ export interface FileRouteTypes {
     | '/legal/privacy'
     | '/legal/refunds'
     | '/legal/terms'
+    | '/oauth/consent'
     | '/tools/$slug'
     | '/use-cases/$slug'
     | '/ai-seo/'
@@ -780,6 +792,7 @@ export interface RootRouteChildren {
   FeaturesSlugRoute: typeof FeaturesSlugRoute
   GlossaryTermRoute: typeof GlossaryTermRoute
   IntegrationsSlugRoute: typeof IntegrationsSlugRoute
+  OauthConsentRoute: typeof OauthConsentRoute
   ToolsSlugRoute: typeof ToolsSlugRoute
   UseCasesSlugRoute: typeof UseCasesSlugRoute
   AiSeoIndexRoute: typeof AiSeoIndexRoute
@@ -955,6 +968,13 @@ declare module '@tanstack/react-router' {
       path: '/tools/$slug'
       fullPath: '/tools/$slug'
       preLoaderRoute: typeof ToolsSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/oauth/consent': {
+      id: '/oauth/consent'
+      path: '/oauth/consent'
+      fullPath: '/oauth/consent'
+      preLoaderRoute: typeof OauthConsentRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/legal/terms': {
@@ -1332,6 +1352,7 @@ const rootRouteChildren: RootRouteChildren = {
   FeaturesSlugRoute: FeaturesSlugRoute,
   GlossaryTermRoute: GlossaryTermRoute,
   IntegrationsSlugRoute: IntegrationsSlugRoute,
+  OauthConsentRoute: OauthConsentRoute,
   ToolsSlugRoute: ToolsSlugRoute,
   UseCasesSlugRoute: UseCasesSlugRoute,
   AiSeoIndexRoute: AiSeoIndexRoute,
