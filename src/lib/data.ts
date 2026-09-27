@@ -122,6 +122,10 @@ export { TrialRequiredError } from "@/lib/errors";
 
 export const generateBlogArticle = IS_MOCK ? mock.generateBlogArticle : real.generateBlogArticle;
 
+/** After an article is marked finished: push it to Webflow if the site has it connected. */
+export const publishToConnectedPlatforms: (siteId: string, blogId: string) => Promise<void> =
+  IS_MOCK ? async () => {} : real.publishToConnectedPlatforms;
+
 /** The editor's AI actions (rewrite, expand, shorten, improve SEO) on a selection. */
 export async function editBlogSection(
   siteId: string,
@@ -356,6 +360,88 @@ export async function revokeApiKey(data: { id: string }) {
 export const connectIntegration: (siteId: string, name?: string) => Promise<unknown> = IS_MOCK
   ? mock.connectIntegration
   : () => phaseTwo("connectIntegration");
+
+/* ---------- Webflow (server-side publishing through Webflow OAuth) ---------- */
+
+export type {
+  FieldMap as WebflowFieldMap,
+  WebflowCollectionOption,
+  WebflowField,
+  WebflowFieldsResult,
+  WebflowSiteOption,
+  WebflowStatus,
+  SyncResult as WebflowSyncResult,
+} from "@/lib/webflow.functions";
+
+// Mock mode has no Webflow: the overlay shows it as not switched on.
+const MOCK_WEBFLOW_STATUS: import("@/lib/webflow.functions").WebflowStatus = {
+  configured: false,
+  connection: null,
+  counts: { inWebflow: 0, notYet: 0, editedInWebflow: 0 },
+};
+
+function noWebflowInMock(): never {
+  throw new Error("Webflow isn't available with mock data.");
+}
+
+export async function getWebflowStatus(siteId: string) {
+  if (IS_MOCK) return MOCK_WEBFLOW_STATUS;
+  const { getWebflowStatus: fn } = await import("@/lib/webflow.functions");
+  return fn({ data: { siteId } });
+}
+
+/** Where to send the browser to authorize Webflow. */
+export async function startWebflowConnect(siteId: string) {
+  if (IS_MOCK) noWebflowInMock();
+  const { startWebflowConnect: fn } = await import("@/lib/webflow.functions");
+  return fn({ data: { siteId } });
+}
+
+export async function listWebflowSites(siteId: string) {
+  if (IS_MOCK) noWebflowInMock();
+  const { listWebflowSites: fn } = await import("@/lib/webflow.functions");
+  return fn({ data: { siteId } });
+}
+
+export async function listWebflowCollections(siteId: string, webflowSiteId: string) {
+  if (IS_MOCK) noWebflowInMock();
+  const { listWebflowCollections: fn } = await import("@/lib/webflow.functions");
+  return fn({ data: { siteId, webflowSiteId } });
+}
+
+export async function getWebflowFields(
+  siteId: string,
+  webflowSiteId: string,
+  collectionId: string,
+) {
+  if (IS_MOCK) noWebflowInMock();
+  const { getWebflowFields: fn } = await import("@/lib/webflow.functions");
+  return fn({ data: { siteId, webflowSiteId, collectionId } });
+}
+
+export async function saveWebflowSetup(data: {
+  siteId: string;
+  webflowSiteId: string;
+  collectionId: string;
+  fieldMap: import("@/lib/webflow.functions").FieldMap;
+  publishMode: "live" | "draft";
+}) {
+  if (IS_MOCK) noWebflowInMock();
+  const { saveWebflowSetup: fn } = await import("@/lib/webflow.functions");
+  return fn({ data });
+}
+
+export async function syncWebflowNow(siteId: string) {
+  if (IS_MOCK) noWebflowInMock();
+  const { syncWebflowNow: fn } = await import("@/lib/webflow.functions");
+  return fn({ data: { siteId } });
+}
+
+export async function disconnectWebflow(siteId: string) {
+  if (IS_MOCK) noWebflowInMock();
+  const { disconnectWebflow: fn } = await import("@/lib/webflow.functions");
+  return fn({ data: { siteId } });
+}
 
 /* ---------- backlink exchange ---------- */
 

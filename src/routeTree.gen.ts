@@ -61,6 +61,7 @@ import { Route as AuthenticatedDashboardBillingRouteImport } from './routes/_aut
 import { Route as AuthenticatedDashboardBacklinksRouteImport } from './routes/_authenticated/dashboard.backlinks'
 import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
 import { Route as AuthenticatedDashboardStudioIndexRouteImport } from './routes/_authenticated/dashboard.studio.index'
+import { Route as ApiPublicWebflowCallbackRouteImport } from './routes/api/public/webflow/callback'
 import { Route as ApiPublicV1PingRouteImport } from './routes/api/public/v1/ping'
 import { Route as ApiPublicV1ArticlesRouteImport } from './routes/api/public/v1/articles'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
@@ -343,6 +344,12 @@ const AuthenticatedDashboardStudioIndexRoute =
     path: '/studio/',
     getParentRoute: () => AuthenticatedDashboardRoute,
   } as any)
+const ApiPublicWebflowCallbackRoute =
+  ApiPublicWebflowCallbackRouteImport.update({
+    id: '/api/public/webflow/callback',
+    path: '/api/public/webflow/callback',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicV1PingRoute = ApiPublicV1PingRouteImport.update({
   id: '/api/public/v1/ping',
   path: '/api/public/v1/ping',
@@ -453,6 +460,7 @@ export interface FileRoutesByFullPath {
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/api/public/v1/articles': typeof ApiPublicV1ArticlesRouteWithChildren
   '/api/public/v1/ping': typeof ApiPublicV1PingRoute
+  '/api/public/webflow/callback': typeof ApiPublicWebflowCallbackRoute
   '/dashboard/studio/': typeof AuthenticatedDashboardStudioIndexRoute
   '/api/public/v1/articles/$id': typeof ApiPublicV1ArticlesIdRoute
 }
@@ -514,6 +522,7 @@ export interface FileRoutesByTo {
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/api/public/v1/articles': typeof ApiPublicV1ArticlesRouteWithChildren
   '/api/public/v1/ping': typeof ApiPublicV1PingRoute
+  '/api/public/webflow/callback': typeof ApiPublicWebflowCallbackRoute
   '/dashboard/studio': typeof AuthenticatedDashboardStudioIndexRoute
   '/api/public/v1/articles/$id': typeof ApiPublicV1ArticlesIdRoute
 }
@@ -578,6 +587,7 @@ export interface FileRoutesById {
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/api/public/v1/articles': typeof ApiPublicV1ArticlesRouteWithChildren
   '/api/public/v1/ping': typeof ApiPublicV1PingRoute
+  '/api/public/webflow/callback': typeof ApiPublicWebflowCallbackRoute
   '/_authenticated/dashboard/studio/': typeof AuthenticatedDashboardStudioIndexRoute
   '/api/public/v1/articles/$id': typeof ApiPublicV1ArticlesIdRoute
 }
@@ -642,6 +652,7 @@ export interface FileRouteTypes {
     | '/api/public/payments/webhook'
     | '/api/public/v1/articles'
     | '/api/public/v1/ping'
+    | '/api/public/webflow/callback'
     | '/dashboard/studio/'
     | '/api/public/v1/articles/$id'
   fileRoutesByTo: FileRoutesByTo
@@ -703,6 +714,7 @@ export interface FileRouteTypes {
     | '/api/public/payments/webhook'
     | '/api/public/v1/articles'
     | '/api/public/v1/ping'
+    | '/api/public/webflow/callback'
     | '/dashboard/studio'
     | '/api/public/v1/articles/$id'
   id:
@@ -766,6 +778,7 @@ export interface FileRouteTypes {
     | '/api/public/payments/webhook'
     | '/api/public/v1/articles'
     | '/api/public/v1/ping'
+    | '/api/public/webflow/callback'
     | '/_authenticated/dashboard/studio/'
     | '/api/public/v1/articles/$id'
   fileRoutesById: FileRoutesById
@@ -812,6 +825,7 @@ export interface RootRouteChildren {
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
   ApiPublicV1ArticlesRoute: typeof ApiPublicV1ArticlesRouteWithChildren
   ApiPublicV1PingRoute: typeof ApiPublicV1PingRoute
+  ApiPublicWebflowCallbackRoute: typeof ApiPublicWebflowCallbackRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -1180,6 +1194,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardStudioIndexRouteImport
       parentRoute: typeof AuthenticatedDashboardRoute
     }
+    '/api/public/webflow/callback': {
+      id: '/api/public/webflow/callback'
+      path: '/api/public/webflow/callback'
+      fullPath: '/api/public/webflow/callback'
+      preLoaderRoute: typeof ApiPublicWebflowCallbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/v1/ping': {
       id: '/api/public/v1/ping'
       path: '/api/public/v1/ping'
@@ -1372,6 +1393,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
   ApiPublicV1ArticlesRoute: ApiPublicV1ArticlesRouteWithChildren,
   ApiPublicV1PingRoute: ApiPublicV1PingRoute,
+  ApiPublicWebflowCallbackRoute: ApiPublicWebflowCallbackRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

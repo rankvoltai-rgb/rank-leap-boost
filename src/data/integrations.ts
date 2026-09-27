@@ -369,12 +369,15 @@ export const INTEGRATIONS: Integration[] = [
     setup: [
       {
         title: "Install the app",
-        body: "Add Rankbox from the Webflow Marketplace and authorize it for your site.",
+        body: "Add Rankbox from the Webflow Marketplace and choose the sites it may publish to. Webflow's own sign-in connects the two, so there's no key to paste.",
       },
-      PASTE_KEY,
       {
-        title: "Map your collection",
-        body: "Choose your blog collection and match its fields. New articles arrive as CMS items from then on.",
+        title: "Choose your collection",
+        body: "Pick your blog's CMS collection in your Rankbox dashboard, and whether new articles go live or wait as drafts.",
+      },
+      {
+        title: "Map your fields once",
+        body: "Match the body, summary, tags and date to your collection's fields. New articles arrive as CMS items from then on.",
       },
     ],
     fields: {
@@ -386,6 +389,7 @@ export const INTEGRATIONS: Integration[] = [
         { from: "Article body", to: "The rich text field you choose" },
         { from: "Meta description", to: "The summary field you choose" },
         { from: "Tags", to: "The text field you choose" },
+        { from: "Publish date", to: "The date field you choose" },
         LIVE_URL_ROW,
       ],
     },
@@ -418,6 +422,10 @@ export const INTEGRATIONS: Integration[] = [
       {
         q: "What if my collection has extra fields?",
         a: "They're left as they are. The app only fills the fields you mapped.",
+      },
+      {
+        q: "What if I edit an article in Webflow?",
+        a: "Your edit stays. Once an item has been changed in Webflow, Rankbox leaves it alone and never writes over it.",
       },
       {
         q: "Does it count toward my CMS item limit?",

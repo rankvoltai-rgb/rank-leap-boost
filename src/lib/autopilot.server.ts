@@ -159,6 +159,18 @@ export async function runAutopilot(): Promise<{ processed: number; skipped: numb
         .update({ last_autopilot_run: new Date().toISOString() })
         .eq("site_id", row.site_id);
       processed += 1;
+      // Straight into the site's Webflow collection, if it has one. Guarded on
+      // its own: a Webflow problem is recorded on the connection, and must not
+      // reach the catch below and roll back an article that is written and paid.
+      try {
+        const { publishArticle } = await import("@/lib/webflow/publish.server");
+        await publishArticle(scope, blog.id);
+      } catch (err) {
+        console.error(
+          "autopilot: webflow publish failed",
+          err instanceof Error ? err.message : err,
+        );
+      }
     } catch {
       // Roll the article back to scheduled and refund the reserved credit.
       await client.from("blogs").update({ status: "scheduled" }).eq("id", blog.id);

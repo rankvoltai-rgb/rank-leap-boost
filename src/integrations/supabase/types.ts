@@ -1635,6 +1635,152 @@ export type Database = {
         }
         Relationships: []
       }
+      webflow_connections: {
+        Row: {
+          access_token_enc: string | null
+          collection_id: string | null
+          collection_name: string | null
+          collection_slug: string | null
+          created_at: string
+          field_map: Json
+          id: string
+          last_error: string | null
+          last_published_at: string | null
+          publish_mode: string
+          scope: string | null
+          site_id: string
+          status: string
+          summary_is_rich: boolean
+          updated_at: string
+          user_id: string
+          webflow_domain: string | null
+          webflow_site_id: string | null
+          webflow_site_name: string | null
+        }
+        Insert: {
+          access_token_enc?: string | null
+          collection_id?: string | null
+          collection_name?: string | null
+          collection_slug?: string | null
+          created_at?: string
+          field_map?: Json
+          id?: string
+          last_error?: string | null
+          last_published_at?: string | null
+          publish_mode?: string
+          scope?: string | null
+          site_id: string
+          status?: string
+          summary_is_rich?: boolean
+          updated_at?: string
+          user_id: string
+          webflow_domain?: string | null
+          webflow_site_id?: string | null
+          webflow_site_name?: string | null
+        }
+        Update: {
+          access_token_enc?: string | null
+          collection_id?: string | null
+          collection_name?: string | null
+          collection_slug?: string | null
+          created_at?: string
+          field_map?: Json
+          id?: string
+          last_error?: string | null
+          last_published_at?: string | null
+          publish_mode?: string
+          scope?: string | null
+          site_id?: string
+          status?: string
+          summary_is_rich?: boolean
+          updated_at?: string
+          user_id?: string
+          webflow_domain?: string | null
+          webflow_site_id?: string | null
+          webflow_site_name?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "webflow_connections_site_fkey"
+            columns: ["site_id", "user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id", "user_id"]
+          },
+        ]
+      }
+      webflow_items: {
+        Row: {
+          blog_id: string
+          collection_id: string
+          connection_id: string
+          content_hash: string
+          created_at: string
+          id: string
+          is_draft: boolean
+          item_id: string
+          last_error: string | null
+          live_url: string | null
+          locked_at: string | null
+          pushed_at: string
+          slug: string
+          state: string
+          user_id: string
+          webflow_updated_at: string | null
+        }
+        Insert: {
+          blog_id: string
+          collection_id: string
+          connection_id: string
+          content_hash: string
+          created_at?: string
+          id?: string
+          is_draft?: boolean
+          item_id: string
+          last_error?: string | null
+          live_url?: string | null
+          locked_at?: string | null
+          pushed_at?: string
+          slug: string
+          state?: string
+          user_id: string
+          webflow_updated_at?: string | null
+        }
+        Update: {
+          blog_id?: string
+          collection_id?: string
+          connection_id?: string
+          content_hash?: string
+          created_at?: string
+          id?: string
+          is_draft?: boolean
+          item_id?: string
+          last_error?: string | null
+          live_url?: string | null
+          locked_at?: string | null
+          pushed_at?: string
+          slug?: string
+          state?: string
+          user_id?: string
+          webflow_updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "webflow_items_blog_id_fkey"
+            columns: ["blog_id"]
+            isOneToOne: false
+            referencedRelation: "blogs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "webflow_items_connection_id_fkey"
+            columns: ["connection_id"]
+            isOneToOne: false
+            referencedRelation: "webflow_connections"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never

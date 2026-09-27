@@ -510,6 +510,21 @@ export async function updateAutopilot(
 /* ---------------- Blog engine ---------------- */
 
 /**
+ * Push a just-finished article to the platforms the site publishes to
+ * (Webflow today). A no-op for a site without one. Never throws: a publishing
+ * problem is recorded on the connection and shown in Integrations, and must
+ * not turn a finished article into an error.
+ */
+export async function publishToConnectedPlatforms(siteId: string, blogId: string): Promise<void> {
+  try {
+    const { publishFinishedArticle } = await import("@/lib/webflow.functions");
+    await publishFinishedArticle({ data: { siteId, blogId } });
+  } catch {
+    // Shown on the Webflow connection in Integrations.
+  }
+}
+
+/**
  * Generate full article content for a blog and mark it finished.
  *
  * The credit is spent by the server, in the same call that writes the
@@ -541,6 +556,7 @@ export async function generateBlogArticle(siteId: string, blog: Blog): Promise<B
       status: "finished",
     };
     await updateBlog(blog.id, patch);
+    void publishToConnectedPlatforms(siteId, blog.id);
     return { ...blog, ...patch } as Blog;
   } catch (err) {
     await updateBlog(blog.id, { status: blog.status });

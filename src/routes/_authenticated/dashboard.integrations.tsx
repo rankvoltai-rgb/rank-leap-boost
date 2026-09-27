@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
@@ -39,16 +39,25 @@ import {
 import { PUBLISH_PLATFORMS, type Platform } from "@/data/platforms";
 import { getConnector, type Connector, type ConnectorCategory } from "@/data/connectors";
 import { formatShortDate } from "@/lib/format-date";
+import { WebflowSetup } from "@/components/dashboard/webflow-setup";
+import { useWebflowStatus } from "@/components/dashboard/webflow-status";
+import type { WebflowStatus } from "@/lib/data";
 import { cn } from "@/lib/utils";
 
 interface IntegrationsSearch {
   /** The connector whose overlay is open, so it can be linked to and survives a reload. */
   connector?: string;
+  /**
+   * Webflow flow state: `install` when arriving from the Webflow app's install
+   * URL, or how OAuth ended when the callback sends the browser back here.
+   */
+  webflow?: string;
 }
 
 export const Route = createFileRoute("/_authenticated/dashboard/integrations")({
   validateSearch: (search: Record<string, unknown>): IntegrationsSearch => ({
     connector: typeof search.connector === "string" ? search.connector : undefined,
+    webflow: typeof search.webflow === "string" ? search.webflow : undefined,
   }),
   component: Integrations,
 });
@@ -82,8 +91,9 @@ const TILE_STATUS: Record<Exclude<KeyStatus, "revoked">, NonNullable<TileStatus>
 function SiteIntegrations({ siteId }: { siteId: string }) {
   const queryClient = useQueryClient();
   const navigate = useNavigate({ from: Route.fullPath });
-  const { connector: openId } = Route.useSearch();
+  const { connector: openId, webflow: webflowFlow } = Route.useSearch();
   const { data: blogs = [] } = useAllArticles();
+  const { data: webflow } = useWebflowStatus(siteId);
   const { data: keys = [], isLoading } = useQuery({
     queryKey: ["api-keys", siteId],
     queryFn: () => listIntegrationKeys(siteId),
@@ -134,9 +144,31 @@ function SiteIntegrations({ siteId }: { siteId: string }) {
     libraryRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
+  // Back from Webflow's consent screen: say how it went, once, then drop the flag.
+  // `install` stays: it's what keeps the Webflow setup open for this visit.
+  useEffect(() => {
+    const outcome = WEBFLOW_OUTCOMES[webflowFlow ?? ""];
+    if (!outcome) return;
+    if (outcome.ok) toast.success(outcome.text);
+    else toast.error(outcome.text);
+    void navigate({
+      search: (prev) => ({ ...prev, webflow: "install" }),
+      replace: true,
+      resetScroll: false,
+    });
+  }, [webflowFlow, navigate]);
+
   /** How a connector's own keys are doing: the best of them, like the site as a whole. */
   function statusFor(c: Connector): TileStatus {
     if (c.kind === "mcp") return null;
+    // Webflow publishes through its own connection, not a key.
+    const wf = webflow?.connection;
+    if (c.platformId === "webflow" && wf) {
+      if (!wf.connected) return wf.lastError ? { tone: "warning", label: "Reconnect" } : null;
+      if (wf.status === "error") return { tone: "warning", label: "Needs attention" };
+      if (wf.status === "setup") return { tone: "neutral", label: "Finish setup" };
+      return { tone: "success", label: "Connected" };
+    }
     const own = active.filter((k) =>
       c.kind === "site" ? platformOf(k) === c.platformId : platformOf(k) === null,
     );
@@ -214,6 +246,7 @@ function SiteIntegrations({ siteId }: { siteId: string }) {
         synced={synced}
         sent={sent}
         locked={locked}
+        webflow={webflow}
         onSetup={goToSites}
         onStartTrial={startTrial}
       />
@@ -250,7 +283,9 @@ function SiteIntegrations({ siteId }: { siteId: string }) {
           ) : (
             <>
               <p className="text-xs text-muted-foreground">
-                Your site never gives Rankbox a password — just a key you can revoke.
+                {open.platformId === "webflow" && (webflowFlow || webflow?.connection)
+                  ? "Rankbox never sees your Webflow password. Disconnect any time."
+                  : "Your site never gives Rankbox a password — just a key you can revoke."}
               </p>
               <Button variant="ghost" onClick={() => setOpen(undefined)}>
                 Done
@@ -263,6 +298,8 @@ function SiteIntegrations({ siteId }: { siteId: string }) {
         {open && open.kind !== "mcp" && (
           <SiteSetup
             key={open.id}
+            siteId={siteId}
+            webflowFlow={!!webflowFlow || !!webflow?.connection}
             connector={open}
             creating={busy === "create"}
             locked={locked}
@@ -332,10 +369,11 @@ const DOT: Record<SiteStatus, string> = {
 
 function StatusHero({
   loading,
-  status,
+  status: keyed,
   synced,
   sent,
   locked,
+  webflow,
   onSetup,
   onStartTrial,
 }: {
@@ -344,10 +382,17 @@ function StatusHero({
   synced: string | null;
   sent: ReturnType<typeof delivery>;
   locked: boolean;
+  webflow: WebflowStatus | undefined;
   onSetup: () => void;
   onStartTrial: () => void;
 }) {
   if (loading) return <div className="skeleton h-[118px] rounded-card" />;
+
+  // Webflow pushes articles itself: no key, no sync to wait for. When that's
+  // how this site publishes, it's what the hero describes.
+  const wf = webflow?.connection;
+  const viaWebflow = keyed === "none" && !!wf?.connected && wf.status !== "setup";
+  const status: SiteStatus = viaWebflow ? (wf.status === "error" ? "stale" : "live") : keyed;
 
   const copy: Record<SiteStatus, { title: string; detail: string }> = {
     none: {
@@ -391,7 +436,22 @@ function StatusHero({
             : ""
         }. Start your free trial to turn syncing back on.`,
       }
-    : copy[status];
+    : viaWebflow
+      ? {
+          title:
+            wf.status === "error"
+              ? "Publishing to Webflow needs attention"
+              : "Your site is connected through Webflow",
+          detail:
+            wf.status === "error"
+              ? (wf.lastError ?? "The last article couldn't be published. Open Webflow below.")
+              : `New articles go into ${wf.collectionName ?? "your collection"} the moment they're written.${
+                  webflow!.counts.notYet
+                    ? ` ${plural(webflow!.counts.notYet, "published article isn't", "published articles aren't")} in Webflow yet.`
+                    : ""
+                }`,
+        }
+      : copy[status];
   const dot = paused ? DOT.stale : DOT[status];
 
   return (
@@ -601,6 +661,8 @@ function Connections({
  * goes straight to the key flow and adds the reference.
  */
 function SiteSetup({
+  siteId,
+  webflowFlow,
   connector,
   creating,
   locked,
@@ -610,6 +672,9 @@ function SiteSetup({
   onReset,
   onStartTrial,
 }: {
+  siteId: string;
+  /** Show the Webflow app's setup even before it's listed (see below). */
+  webflowFlow: boolean;
   connector: Connector;
   creating: boolean;
   locked: boolean;
@@ -620,8 +685,25 @@ function SiteSetup({
   onStartTrial: () => void;
 }) {
   const platform = PUBLISH_PLATFORMS.find((p) => p.id === connector.platformId);
+  // Webflow connects through its own app, no key. Until the Marketplace lists
+  // it (addonLive), Webflow only lets invited testers install it, so the
+  // setup opens for them through the install URL
+  // (/dashboard/integrations?connector=webflow&webflow=install) or once a
+  // connection exists; everyone else keeps the "Coming soon" card.
+  const webflowApp = platform?.id === "webflow" && (platform.addonLive || webflowFlow);
   // A key made here stays on screen if the overlay is reopened this visit.
-  const [useApi, setUseApi] = useState(!platform || platform.addonLive || !!fresh);
+  const [useApi, setUseApi] = useState(!platform || (platform.addonLive && !webflowApp) || !!fresh);
+
+  if (webflowApp && !useApi) {
+    return (
+      <WebflowSetup
+        siteId={siteId}
+        locked={locked}
+        onStartTrial={onStartTrial}
+        onUseApi={() => setUseApi(true)}
+      />
+    );
+  }
 
   if (platform && !useApi) {
     return <PlatformSetup platform={platform} onUseApi={() => setUseApi(true)} />;
@@ -644,21 +726,40 @@ function SiteSetup({
   );
 }
 
+const WEBFLOW_OUTCOMES: Record<string, { ok: boolean; text: string }> = {
+  connected: { ok: true, text: "Webflow connected. Now choose the collection to publish into." },
+  denied: { ok: false, text: "Webflow wasn't connected: access was declined on Webflow's screen." },
+  expired: {
+    ok: false,
+    text: "That Webflow sign-in expired or was started elsewhere. Connect again from here.",
+  },
+  failed: { ok: false, text: "Couldn't finish connecting Webflow. Try again in a moment." },
+  unavailable: { ok: false, text: "Connecting Webflow isn't available right now." },
+};
+
 function addonStore(platform: Platform): string {
   // Each store's actual name — these must match what /integrations/{slug} says,
   // since both describe the same install step.
   if (platform.id === "wordpress") return "the WordPress plugin directory";
   if (platform.id === "framer") return "the Framer Marketplace";
+  if (platform.id === "webflow") return "the Webflow Marketplace";
   return `the ${platform.name} ${platform.addon === "app" ? "App Store" : "plugin marketplace"}`;
 }
 
 /** A platform whose add-on hasn't shipped: say so plainly, and offer the route that works today. */
 function PlatformSetup({ platform, onUseApi }: { platform: Platform; onUseApi: () => void }) {
-  const steps = [
-    `Install the Rankbox ${platform.addon} from ${addonStore(platform)}.`,
-    "Paste your Rankbox key when it asks.",
-    "New articles appear on your site on their own.",
-  ];
+  const steps =
+    platform.id === "webflow"
+      ? [
+          `Install the Rankbox app from ${addonStore(platform)} and choose your site.`,
+          "Pick your blog collection and match its fields once.",
+          "New articles appear on your site on their own.",
+        ]
+      : [
+          `Install the Rankbox ${platform.addon} from ${addonStore(platform)}.`,
+          "Paste your Rankbox key when it asks.",
+          "New articles appear on your site on their own.",
+        ];
   return (
     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
       <div className="space-y-3">

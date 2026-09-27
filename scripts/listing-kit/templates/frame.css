@@ -1,0 +1,163 @@
+/*
+ * The frame every listing image shares: the landing hero's brand-blue field,
+ * its drifting white pixel squares, the lockup, and one headline. Each image
+ * then puts one real piece of the product on the right.
+ *
+ * Laid out for a 1600x900 canvas (16:9), the size Shopify asks for and the
+ * safest default where a store doesn't say.
+ */
+@font-face {
+  font-family: "Plus Jakarta Sans";
+  src: url("./plus-jakarta-sans.woff2") format("woff2-variations");
+  font-weight: 200 800;
+  font-style: normal;
+}
+
+:root {
+  --brand-blue: #1877f2;
+  --ink: #14161c;
+  --muted: #6b7280;
+  --border: #e3e6ec;
+  --soft: #f6f7f9;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body { width: 100vw; height: 100vh; overflow: hidden; }
+
+body {
+  font-family: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: geometricPrecision;
+}
+
+.frame {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: var(--brand-blue);
+}
+
+/* Light thrown from behind the headline, deepening to the bottom-right — the
+   share card's falloff, so a flat field doesn't read as a swatch. */
+.field {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(110% 95% at 10% 6%, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0) 55%),
+    radial-gradient(85% 80% at 94% 98%, rgba(9, 48, 105, 0.55) 0%, rgba(9, 48, 105, 0) 62%);
+}
+
+.pixels { position: absolute; inset: 0; }
+.pixels i {
+  position: absolute;
+  display: block;
+  background: #fff;
+  border-radius: 2px;
+}
+
+.inner {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 72px;
+  height: 100%;
+  padding: 0 88px;
+}
+
+.copy { width: 540px; flex: none; color: #fff; }
+
+.lockup { display: flex; align-items: center; gap: 12px; }
+.lockup svg { width: 38px; height: 38px; }
+.lockup .wordmark { font-size: 30px; font-weight: 800; letter-spacing: -0.025em; }
+.lockup .for {
+  margin-left: 4px;
+  padding: 5px 11px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.16);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+h1 {
+  margin-top: 40px;
+  font-size: 60px;
+  font-weight: 800;
+  line-height: 1.06;
+  /* Tighter than this and the variable font's word spaces close up. */
+  letter-spacing: -0.026em;
+  word-spacing: 0.04em;
+  text-wrap: balance;
+}
+
+.sub {
+  margin-top: 24px;
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.84);
+}
+
+.points { margin-top: 32px; display: grid; gap: 14px; }
+.points li {
+  list-style: none;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  font-size: 19px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.94);
+}
+.points li::before {
+  content: "";
+  flex: none;
+  margin-top: 8px;
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
+  background: #fff;
+}
+
+.stage {
+  position: relative;
+  flex: 1;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* A plain white window: the product sits in it without borrowing any other
+   company's chrome, and without traffic-light dots — Shopify rejects
+   screenshots that show browser or OS chrome. */
+.window {
+  position: relative;
+  border-radius: 18px;
+  background: #fff;
+  overflow: hidden;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.6) inset,
+    0 40px 80px -24px rgba(6, 34, 76, 0.6),
+    0 12px 28px -14px rgba(6, 34, 76, 0.45);
+}
+.window .bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 46px;
+  padding: 0 18px;
+  border-bottom: 1px solid var(--border);
+  background: #f7f8fa;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.window .bar .crumb { color: var(--muted); font-weight: 600; }
+
+/* Scenes live in one file per product and are picked with ?s=N, so the copy
+   and the stylesheet can't drift between images. */
+.inner.scene { display: none; }
+.inner.scene.on { display: flex; }

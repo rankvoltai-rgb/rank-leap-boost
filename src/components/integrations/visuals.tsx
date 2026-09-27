@@ -559,21 +559,38 @@ export function HeroVisual({
 
 /* ---------- Setup visuals ---------- */
 
-/** The add-on's settings screen: the key, checked, then where articles go. */
+/**
+ * The add-on's settings screen: the connection, checked, then where articles
+ * go. Webflow connects through Webflow's own sign-in; the others take a key.
+ */
 function SettingsPanel({ integration }: { integration: Integration }) {
+  const oauth = integration.platform === "webflow";
   return (
     <ProductWindow title={`${integration.name} · Rankbox settings`}>
       <div className="space-y-5 p-5">
         <div>
-          <p className="mb-1.5 text-xs font-medium text-muted-foreground">Rankbox key</p>
+          <p className="mb-1.5 text-xs font-medium text-muted-foreground">
+            {oauth ? `${integration.name} site` : "Rankbox key"}
+          </p>
           <div className="flex items-center gap-2 rounded-lg border border-border bg-surface px-3 py-2.5">
-            <KeyRound className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
-            <span className="truncate font-mono text-xs text-ink">
-              rv_live_a1b2c3••••••••••••••••
-            </span>
+            {oauth ? (
+              <span className="truncate text-xs font-medium text-ink">
+                {integration.sample.domain}
+              </span>
+            ) : (
+              <>
+                <KeyRound className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
+                <span className="truncate font-mono text-xs text-ink">
+                  rv_live_a1b2c3••••••••••••••••
+                </span>
+              </>
+            )}
           </div>
           <p className="mt-2 flex items-center gap-1.5 text-xs font-medium text-success">
-            <CheckCircle2 className="h-3.5 w-3.5" /> Connected to {integration.sample.brand}
+            <CheckCircle2 className="h-3.5 w-3.5" />{" "}
+            {oauth
+              ? `Connected through ${integration.name}`
+              : `Connected to ${integration.sample.brand}`}
           </p>
         </div>
 

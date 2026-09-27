@@ -1,0 +1,340 @@
+<!doctype html>
+<!--
+  Rankbox MCP connector: listing screenshots. One scene per image, picked with
+  ?s=1..4 by ../render.sh. Laid out at 1600x900.
+
+  Every tool result shown here is real output from the live server at
+  https://rankbox.xyz/mcp, captured 2026-09-27 for the topic "SaaS pricing".
+  Long results are cut short (marked with "…"), never rewritten. The chat
+  window is deliberately generic: it borrows no assistant's name, logo or
+  chrome, so the images work in every directory.
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="./frame.css" />
+    <style>
+      .chat { width: 760px; }
+      .chat .body { padding: 26px 28px 28px; display: flex; flex-direction: column; gap: 18px; }
+
+      .you { display: flex; justify-content: flex-end; }
+      .you span {
+        max-width: 82%;
+        padding: 13px 18px;
+        border-radius: 16px 16px 5px 16px;
+        background: var(--ink);
+        color: #fff;
+        font-size: 17px;
+        font-weight: 500;
+        line-height: 1.45;
+      }
+
+      /* The tool call, as MCP clients show it: which server, which tool. */
+      .call {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        width: fit-content;
+        padding: 8px 14px 8px 8px;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        background: var(--soft);
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--ink);
+      }
+      .call .tile {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 26px;
+        height: 26px;
+        border-radius: 7px;
+        background: var(--brand-blue);
+        color: #fff;
+      }
+      .call .tile svg { width: 15px; height: 15px; }
+      .call code {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 13.5px;
+        font-weight: 500;
+        color: var(--muted);
+      }
+      .call .done { color: #13804b; font-size: 13px; }
+
+      .answer { color: var(--ink); font-size: 15.5px; line-height: 1.55; }
+      .answer h3 { font-size: 21px; font-weight: 800; letter-spacing: -0.015em; line-height: 1.25; }
+      .answer h4 {
+        margin-top: 16px;
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+      .answer ol, .answer ul { margin-top: 8px; padding-left: 0; list-style: none; display: grid; gap: 7px; }
+      .answer li { position: relative; padding-left: 20px; font-weight: 500; }
+      .answer li::before {
+        content: "";
+        position: absolute;
+        left: 2px;
+        top: 0.62em;
+        width: 7px;
+        height: 7px;
+        border-radius: 2px;
+        background: var(--brand-blue);
+      }
+      .answer li b { font-weight: 700; }
+      .more { color: var(--muted); font-weight: 600; font-size: 14.5px; margin-top: 6px; }
+
+      /* Questions, grouped by intent. */
+      .intents { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 4px; }
+      .intent { padding: 14px 16px; border: 1px solid var(--border); border-radius: 12px; }
+      .intent .name {
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--brand-blue);
+      }
+      .intent ul { margin-top: 8px; display: grid; gap: 8px; list-style: none; }
+      .intent li { font-size: 14px; font-weight: 600; line-height: 1.4; color: var(--ink); }
+
+      /* Meta description options, with their real lengths. */
+      .opts { display: grid; gap: 12px; }
+      .opt { padding: 14px 16px; border: 1px solid var(--border); border-radius: 12px; }
+      .opt p { font-size: 15.5px; font-weight: 500; line-height: 1.5; color: var(--ink); }
+      .opt .len {
+        margin-top: 8px;
+        font-size: 12.5px;
+        font-weight: 700;
+        color: var(--muted);
+        font-variant-numeric: tabular-nums;
+      }
+
+      /* Setup scene. */
+      .setup { width: 700px; padding: 34px 36px; }
+      .setup .label { font-size: 13px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+      .url {
+        margin-top: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 18px 20px;
+        border-radius: 14px;
+        background: var(--soft);
+        border: 1px solid var(--border);
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 24px;
+        font-weight: 600;
+        color: var(--ink);
+      }
+      .url .copy-btn {
+        font-family: "Plus Jakarta Sans", sans-serif;
+        font-size: 14px;
+        font-weight: 700;
+        padding: 8px 14px;
+        border-radius: 10px;
+        background: var(--brand-blue);
+        color: #fff;
+      }
+      .steps { margin-top: 26px; display: grid; gap: 14px; counter-reset: step; list-style: none; }
+      .steps li {
+        counter-increment: step;
+        display: flex;
+        gap: 14px;
+        align-items: baseline;
+        font-size: 17px;
+        font-weight: 600;
+        color: var(--ink);
+        line-height: 1.45;
+      }
+      .steps li::before {
+        content: counter(step);
+        flex: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: #eaf2fe;
+        color: var(--brand-blue);
+        font-size: 14px;
+        font-weight: 800;
+        transform: translateY(-2px);
+      }
+      .clients { margin-top: 28px; display: flex; flex-wrap: wrap; gap: 8px; }
+      .clients span {
+        padding: 7px 12px;
+        border-radius: 999px;
+        border: 1px solid var(--border);
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--ink);
+      }
+      .clients span.more-pill { background: var(--soft); color: var(--muted); }
+    </style>
+  </head>
+  <body>
+    <div class="frame">
+      <div class="field"></div>
+      <div class="pixels">
+        <i style="top:3%;left:2.4%;width:22px;height:22px;opacity:.13"></i>
+        <i style="top:6%;left:12%;width:12px;height:12px;opacity:.09"></i>
+        <i style="top:2.2%;left:27%;width:14px;height:14px;opacity:.1"></i>
+        <i style="top:4.5%;left:41%;width:10px;height:10px;opacity:.08"></i>
+        <i style="top:2%;left:57%;width:18px;height:18px;opacity:.12"></i>
+        <i style="top:5.5%;left:73%;width:12px;height:12px;opacity:.09"></i>
+        <i style="top:1.8%;left:88%;width:24px;height:24px;opacity:.14"></i>
+        <i style="top:22%;left:1%;width:18px;height:18px;opacity:.11"></i>
+        <i style="top:48%;left:1.8%;width:12px;height:12px;opacity:.08"></i>
+        <i style="top:30%;left:97.4%;width:20px;height:20px;opacity:.12"></i>
+        <i style="top:62%;left:97.8%;width:12px;height:12px;opacity:.09"></i>
+        <i style="top:92%;left:3%;width:24px;height:24px;opacity:.14"></i>
+        <i style="top:95%;left:16%;width:12px;height:12px;opacity:.09"></i>
+        <i style="top:93%;left:30%;width:16px;height:16px;opacity:.11"></i>
+        <i style="top:96%;left:46%;width:10px;height:10px;opacity:.08"></i>
+        <i style="top:94%;left:63%;width:20px;height:20px;opacity:.12"></i>
+        <i style="top:96.5%;left:79%;width:12px;height:12px;opacity:.09"></i>
+        <i style="top:92.5%;left:93%;width:18px;height:18px;opacity:.12"></i>
+      </div>
+
+      <!-- ============ 1. Hero: a content brief ============ -->
+      <div class="inner scene" data-s="1">
+        <div class="copy">
+          <div class="lockup"><svg viewBox="0 0 24 24"><use href="#mark" /></svg><span class="wordmark">Rankbox</span><span class="for">MCP server</span></div>
+          <h1>SEO and AI search research, inside your AI assistant.</h1>
+          <p class="sub">Add one URL as a connector. Then ask for the questions buyers put to AI, a content brief, or meta descriptions without leaving the chat.</p>
+        </div>
+        <div class="stage">
+          <div class="window chat">
+            <div class="bar">New chat</div>
+            <div class="body">
+              <div class="you"><span>Brief me an article on how to price a SaaS product.</span></div>
+              <div class="call"><span class="tile"><svg viewBox="0 0 24 24"><use href="#mark" /></svg></span>Rankbox <code>generate_content_brief</code><span class="done">✓</span></div>
+              <div class="answer">
+                <h3>How to Price a SaaS Product in 2026</h3>
+                <h4>Outline</h4>
+                <ol>
+                  <li><b>Why SaaS Pricing Is Unique in 2026</b></li>
+                  <li><b>Core Pricing Models Used Today</b></li>
+                  <li><b>Data-Driven Pricing Validation Methods</b></li>
+                  <li><b>Go-to-Market Execution Best Practices</b></li>
+                </ol>
+                <h4>Questions to answer</h4>
+                <ul>
+                  <li>How do you calculate optimal price points using customer lifetime value and churn data?</li>
+                  <li>How do you communicate price changes to existing customers without churn spikes?</li>
+                </ul>
+                <p class="more">+ talking points, 6 more questions, and entities to mention</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ 2. AI questions ============ -->
+      <div class="inner scene" data-s="2">
+        <div class="copy">
+          <div class="lockup"><svg viewBox="0 0 24 24"><use href="#mark" /></svg><span class="wordmark">Rankbox</span><span class="for">MCP server</span></div>
+          <h1>Find the questions buyers ask AI.</h1>
+          <p class="sub">Name a topic and get the questions people put to ChatGPT, Perplexity, Gemini and Google&rsquo;s AI Overviews, grouped by intent so you know what to write first.</p>
+        </div>
+        <div class="stage">
+          <div class="window chat">
+            <div class="bar">New chat</div>
+            <div class="body">
+              <div class="you"><span>What do people ask AI about SaaS pricing?</span></div>
+              <div class="call"><span class="tile"><svg viewBox="0 0 24 24"><use href="#mark" /></svg></span>Rankbox <code>generate_ai_questions</code><span class="done">✓</span></div>
+              <div class="intents">
+                <div class="intent"><div class="name">Informational</div><ul>
+                  <li>What are the most common SaaS pricing models?</li>
+                  <li>What is value-based pricing for SaaS and how does it work?</li>
+                </ul></div>
+                <div class="intent"><div class="name">Commercial</div><ul>
+                  <li>How do I price a SaaS add-on or premium feature tier?</li>
+                  <li>What pricing psychology tactics work best for SaaS landing pages?</li>
+                </ul></div>
+                <div class="intent"><div class="name">Comparison</div><ul>
+                  <li>Freemium vs. free trial: which converts better for B2C SaaS?</li>
+                  <li>How does usage-based pricing compare to per-seat pricing for dev tools?</li>
+                </ul></div>
+                <div class="intent"><div class="name">Transactional</div><ul>
+                  <li>How do I set up usage-based billing with Stripe for my SaaS app?</li>
+                  <li>What&rsquo;s the fastest way to A/B test two pricing pages on my SaaS site?</li>
+                </ul></div>
+              </div>
+              <p class="more">+ 16 more questions</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ 3. Meta descriptions ============ -->
+      <div class="inner scene" data-s="3">
+        <div class="copy">
+          <div class="lockup"><svg viewBox="0 0 24 24"><use href="#mark" /></svg><span class="wordmark">Rankbox</span><span class="for">MCP server</span></div>
+          <h1>Meta descriptions, three at a time.</h1>
+          <p class="sub">Describe a page and get three meta description options to choose from. Pick one, or ask for another round.</p>
+        </div>
+        <div class="stage">
+          <div class="window chat">
+            <div class="bar">New chat</div>
+            <div class="body">
+              <div class="you"><span>Write meta descriptions for my guide to pricing a SaaS product.</span></div>
+              <div class="call"><span class="tile"><svg viewBox="0 0 24 24"><use href="#mark" /></svg></span>Rankbox <code>write_meta_descriptions</code><span class="done">✓</span></div>
+              <div class="opts" data-opts></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ 4. Setup ============ -->
+      <div class="inner scene" data-s="4">
+        <div class="copy">
+          <div class="lockup"><svg viewBox="0 0 24 24"><use href="#mark" /></svg><span class="wordmark">Rankbox</span><span class="for">MCP server</span></div>
+          <h1>One URL. Works in the AI tools you already use.</h1>
+          <p class="sub">A remote MCP server, so there&rsquo;s nothing to install. Add it as a custom connector and your assistant can call Rankbox&rsquo;s three tools.</p>
+        </div>
+        <div class="stage">
+          <div class="window setup">
+            <div class="label">Server URL</div>
+            <div class="url">https://rankbox.xyz/mcp <span class="copy-btn">Copy</span></div>
+            <ol class="steps">
+              <li>Open your AI tool&rsquo;s connector or MCP settings</li>
+              <li>Add a custom connector and paste the URL</li>
+              <li>Ask for questions, a brief, or meta descriptions</li>
+            </ol>
+            <div class="clients">
+              <span>Claude</span><span>ChatGPT</span><span>Cursor</span><span>Claude Code</span><span>Lovable</span><span>Perplexity</span><span>Codex</span><span>Bolt</span><span>v0</span><span>Replit</span><span>n8n</span><span>Zapier</span><span class="more-pill">+ 37 more with setup guides</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <svg width="0" height="0" style="position:absolute">
+      <defs>
+        <!-- The Rankbox mark, matching public/mark.svg. -->
+        <path id="mark" d="M2.6 2.6 Q12 6.9 21.4 2.6 Q17.1 12 21.4 21.4 Q12 17.1 2.6 21.4 Q6.9 12 2.6 2.6 Z"
+              fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" />
+      </defs>
+    </svg>
+
+    <script>
+      /* write_meta_descriptions output, verbatim and complete. */
+      const OPTIONS = [
+        "Stop guessing prices—learn to choose the right value metric, design winning tiers, and test changes safely without churn. Get your pricing right now.",
+        "Discover how to price your SaaS confidently: pick a meaningful value metric, structure high-converting tiers, and run low-risk price experiments. Start optimizing today.",
+        "Price your SaaS for growth—not guesswork. Master value-based metrics, tiered packaging, and A/B testing price changes without losing customers. Read the guide.",
+      ];
+      document.querySelector("[data-opts]").innerHTML = OPTIONS.map(
+        (o) => `<div class="opt"><p>${o}</p></div>`,
+      ).join("");
+
+      const s = new URLSearchParams(location.search).get("s") || "1";
+      document.querySelector(`.scene[data-s="${s}"]`).classList.add("on");
+    </script>
+  </body>
+</html>

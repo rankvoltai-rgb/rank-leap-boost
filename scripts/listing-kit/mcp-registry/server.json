@@ -1,0 +1,15 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "xyz.rankbox/mcp",
+  "title": "Rankbox",
+  "description": "Find the questions buyers ask AI, build SEO content briefs, and write meta descriptions.",
+  "version": "0.1.0",
+  "websiteUrl": "https://rankbox.xyz/integrations/mcp",
+  "icons": [
+    { "src": "https://rankbox.xyz/apple-touch-icon.png", "mimeType": "image/png", "sizes": ["512x512"] },
+    { "src": "https://rankbox.xyz/mark.svg", "mimeType": "image/svg+xml", "sizes": ["any"] }
+  ],
+  "remotes": [
+    { "type": "streamable-http", "url": "https://rankbox.xyz/mcp" }
+  ]
+}

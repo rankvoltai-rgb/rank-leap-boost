@@ -1,0 +1,65 @@
+<!doctype html>
+<!--
+  Rankbox app icon, any square size. ../render.sh sets the window size; every
+  measurement here is in vw so the same file renders a 16px favicon and a
+  1200px store icon without drifting apart.
+
+  ?v=tile   full-bleed brand-blue square, white mark. For stores that round
+            the corners themselves (Framer, Shopify, Webflow, Wix, Claude).
+  ?v=round  the same tile with its own rounded corners on a transparent
+            background. For directories that show the icon as uploaded.
+  ?v=mark   the mark alone in brand blue on transparent. For light
+            backgrounds and favicons.
+  ?v=mark-white  the mark alone in white, for dark or blue backgrounds.
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 100vw; height: 100vh; overflow: hidden; background: transparent; }
+
+      .tile {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100vw;
+        height: 100vw;
+        /* Rankbox brand blue, from src/styles.css --brand-blue. */
+        background: #1877f2;
+        color: #fff;
+      }
+      /* 62% matches the Framer icon (56px in 90px), so every icon Rankbox
+         ships has the same weight of mark. */
+      .tile svg { width: 62vw; height: 62vw; display: block; }
+
+      body.round .tile { border-radius: 22.5vw; }
+
+      /* The bare mark gets the full canvas less a hair of padding, so it
+         anti-aliases cleanly at 16px instead of touching the edge. */
+      body.mark .tile,
+      body.mark-white .tile { background: transparent; color: #1877f2; }
+      body.mark-white .tile { color: #fff; }
+      body.mark .tile svg,
+      body.mark-white .tile svg { width: 92vw; height: 92vw; }
+    </style>
+  </head>
+  <body>
+    <div class="tile">
+      <!-- The Rankbox mark, matching public/mark.svg. -->
+      <svg viewBox="0 0 24 24" aria-label="Rankbox">
+        <path
+          d="M2.6 2.6 Q12 6.9 21.4 2.6 Q17.1 12 21.4 21.4 Q12 17.1 2.6 21.4 Q6.9 12 2.6 2.6 Z"
+          fill="currentColor"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </div>
+    <script>
+      const v = new URLSearchParams(location.search).get("v") || "tile";
+      if (v !== "tile") document.body.classList.add(v);
+    </script>
+  </body>
+</html>

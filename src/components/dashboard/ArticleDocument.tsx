@@ -24,7 +24,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { editBlogSection, updateBlog, type Blog } from "@/lib/data";
+import { editBlogSection, publishToConnectedPlatforms, updateBlog, type Blog } from "@/lib/data";
 import { markdownToHtml } from "@/lib/markdown";
 import { htmlToMarkdown } from "@/lib/editor-markdown";
 import { YoutubeEmbed } from "@/lib/editor-youtube";
@@ -222,6 +222,7 @@ export function ArticleDocument({
     const ok = await save({ status: "finished" });
     setBusy(null);
     if (ok) {
+      void publishToConnectedPlatforms(blog.site_id, blog.id);
       setConfettiKey((k) => k + 1);
       toast.success("Article published.");
     }
@@ -232,7 +233,10 @@ export function ArticleDocument({
     setBusy("publish");
     const ok = await save();
     setBusy(null);
-    if (ok) toast.success("Changes published.");
+    if (ok) {
+      void publishToConnectedPlatforms(blog.site_id, blog.id);
+      toast.success("Changes published.");
+    }
     return ok;
   }
 
