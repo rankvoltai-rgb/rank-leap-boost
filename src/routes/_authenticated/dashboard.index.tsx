@@ -213,18 +213,18 @@ function AutopilotStatus({ state, perWeek }: { state: EngineState | null; perWee
     >
       <span className="relative flex h-2 w-2 shrink-0" aria-hidden>
         {online && (
-          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-success opacity-50 motion-reduce:animate-none" />
+          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-cta opacity-50 motion-reduce:animate-none" />
         )}
         <span
           className={cn(
             "relative inline-flex h-2 w-2 rounded-full",
-            online ? "bg-success" : "bg-muted-foreground/50",
+            online ? "bg-cta" : "bg-muted-foreground/50",
           )}
         />
       </span>
       Autopilot
       {label && (
-        <span className={cn("font-semibold", online ? "text-success" : "text-muted-foreground")}>
+        <span className={cn("font-semibold", online ? "text-cta" : "text-muted-foreground")}>
           {label}
         </span>
       )}
@@ -637,18 +637,18 @@ function SystemConsole({ siteId }: { siteId: string }) {
                   className={cn(
                     "h-2 w-2 rounded-full",
                     connection === "live"
-                      ? "bg-success"
+                      ? "bg-cta"
                       : connection === "stale"
                         ? "bg-warning"
                         : connection === "waiting"
-                          ? "bg-cta"
+                          ? "bg-cta/40"
                           : "bg-muted-foreground/40",
                   )}
                 />
                 <span
                   className={cn(
                     connection === "live"
-                      ? "text-success"
+                      ? "text-cta"
                       : connection === "none"
                         ? "text-muted-foreground"
                         : "text-ink",
