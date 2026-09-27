@@ -43,6 +43,8 @@ export interface WebflowSiteOption {
   id: string;
   displayName: string;
   domain: string | null;
+  /** Webflow only takes live items on a site that has been published once. */
+  published: boolean;
 }
 
 export interface WebflowCollectionOption {
@@ -225,6 +227,7 @@ export const listWebflowSites = createServerFn({ method: "GET" })
           id: s.id,
           displayName: s.displayName,
           domain: pickDomain(s, site.website_url),
+          published: !!s.lastPublished,
         })),
       };
     },
@@ -361,6 +364,10 @@ export const saveWebflowSetup = createServerFn({ method: "POST" })
     const check = checkFieldMap(fields, data.fieldMap);
     if (!check.ok) throw new Error(check.problems.join(" "));
     const summaryField = fields.find((f) => f.slug === data.fieldMap.summary);
+    if (data.publishMode === "live" && !webflowSite.lastPublished) {
+      const { SITE_NOT_PUBLISHED } = await import("@/lib/webflow/api.server");
+      throw new Error(SITE_NOT_PUBLISHED);
+    }
 
     const conn = await loadConnection(scope);
     if (!conn) throw new Error("Connect Webflow first.");

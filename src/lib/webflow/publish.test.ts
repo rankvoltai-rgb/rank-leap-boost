@@ -489,6 +489,24 @@ describe("connection states", () => {
   });
 });
 
+describe("unpublished site", () => {
+  it("says what to do, and sync stops at the first article instead of trying every one", async () => {
+    for (let i = 0; i < 4; i++) db.blogs.push({ ...db.blogs[0], id: `b${i}`, title: `Post ${i}` });
+    // What Webflow actually answers for a live create on a never-published site.
+    routes.push(() =>
+      json(409, { message: "Conflict: Conflict with server data: The site is not published." }),
+    );
+    const r = await syncSite(scope);
+    expect(r.failed).toBe(1);
+    expect(r.remaining).toBe(4);
+    expect(r.errors[0]).toMatch(/hasn't been published yet/);
+    expect(db.webflow_connections[0]).toMatchObject({ status: "error" });
+    expect(String(db.webflow_connections[0].last_error)).toMatch(/Publish it once in Webflow/);
+    // The claim was released, so publishing the site and syncing again just works.
+    expect(db.webflow_items).toHaveLength(0);
+  });
+});
+
 describe("syncSite", () => {
   it("publishes what's missing and skips what's there", async () => {
     db.blogs.push({ ...db.blogs[0], id: "b2", title: "Second Post" });

@@ -348,6 +348,9 @@ function MappingForm({
   const fetchedAt = fields.data?.fetchedAt ?? collections.data?.fetchedAt ?? sites.data?.fetchedAt;
   const loadError = sites.error ?? collections.error ?? fields.error;
   const siteList = sites.data?.sites ?? [];
+  // Webflow refuses live items until the site has been published once.
+  const unpublished =
+    mode === "live" && siteList.find((s) => s.id === webflowSiteId)?.published === false;
 
   return (
     <div className="space-y-5">
@@ -484,11 +487,22 @@ function MappingForm({
               ))}
             </div>
           </fieldset>
+          {unpublished && (
+            <Notice tone="warning">
+              This site hasn't been published in Webflow yet, and Webflow won't take live articles
+              until it has. Publish it once in Webflow (the webflow.io address is enough), then
+              refresh here. Or choose To drafts.
+            </Notice>
+          )}
         </div>
       )}
 
       <div className="flex flex-wrap items-center gap-3">
-        <Button variant="brand" disabled={!check?.ok || saving} onClick={() => void save()}>
+        <Button
+          variant="brand"
+          disabled={!check?.ok || unpublished || saving}
+          onClick={() => void save()}
+        >
           {saving && <Loader2 className="h-4 w-4 animate-spin" />}
           {conn.status === "setup" ? "Start publishing" : "Save"}
         </Button>

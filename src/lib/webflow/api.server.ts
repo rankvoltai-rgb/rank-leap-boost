@@ -71,6 +71,13 @@ function sleep(ms: number) {
   return new Promise((r) => setTimeout(r, ms));
 }
 
+/**
+ * Webflow refuses live items on a site that has never been published, with a
+ * bare "Conflict with server data". Said in terms of what to do about it.
+ */
+export const SITE_NOT_PUBLISHED =
+  "Your Webflow site hasn't been published yet, so Webflow won't take live articles. Publish it once in Webflow (the webflow.io address is enough), or switch Rankbox to drafts.";
+
 async function readError(res: Response): Promise<WebflowApiError> {
   const body = (await res.json().catch(() => null)) as {
     message?: string;
@@ -83,6 +90,9 @@ async function readError(res: Response): Promise<WebflowApiError> {
       ? ` (${body.details.map((d) => (typeof d === "string" ? d : JSON.stringify(d))).join("; ")})`
       : "";
   const message = `${body?.message ?? body?.msg ?? `Webflow returned ${res.status}`}${detail}`;
+  if (res.status === 409 && /site is not published/i.test(message)) {
+    return new WebflowApiError(409, SITE_NOT_PUBLISHED, "site_not_published");
+  }
   return new WebflowApiError(res.status, message, body?.code);
 }
 

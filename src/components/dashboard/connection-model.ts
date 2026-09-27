@@ -46,6 +46,50 @@ export function lastSync(keys: IntegrationKey[] | undefined): string | null {
   );
 }
 
+/**
+ * Keys aren't the only way a site gets its articles: a Webflow site is pushed
+ * to through its own connection and never calls in with a key. So "is the site
+ * connected" is the better of the two, and every screen that asks should ask
+ * here, or it will call a Webflow site unconnected.
+ */
+export interface WebflowConnectionLike {
+  connected: boolean;
+  status: "setup" | "active" | "error" | "disconnected";
+  lastPublishedAt: string | null;
+}
+
+export interface SiteConnection {
+  status: SiteStatus;
+  /** How the site gets its articles; null when it doesn't yet. */
+  via: "webflow" | "api" | null;
+  /** The last key sync, or the last article pushed to Webflow. */
+  lastActivity: string | null;
+}
+
+/** A Webflow connection in the same terms as keys. */
+export function webflowSiteStatus(webflow: WebflowConnectionLike | null | undefined): SiteStatus {
+  if (!webflow?.connected) return "none";
+  if (webflow.status === "active") return "live";
+  if (webflow.status === "error") return "stale";
+  if (webflow.status === "setup") return "waiting";
+  return "none";
+}
+
+const RANK: Record<SiteStatus, number> = { none: 0, waiting: 1, stale: 2, live: 3 };
+
+export function siteConnection(
+  keys: IntegrationKey[] | undefined,
+  webflow: WebflowConnectionLike | null | undefined,
+  now = Date.now(),
+): SiteConnection {
+  const byKeys = siteStatus(keys, now);
+  const byWebflow = webflowSiteStatus(webflow);
+  if (RANK[byWebflow] > RANK[byKeys]) {
+    return { status: byWebflow, via: "webflow", lastActivity: webflow?.lastPublishedAt ?? null };
+  }
+  return { status: byKeys, via: byKeys === "none" ? null : "api", lastActivity: lastSync(keys) };
+}
+
 export interface Delivery {
   published: number;
   /** Published articles last changed before the sync — the site has them. */

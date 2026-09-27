@@ -31,7 +31,7 @@ import {
   keyStatus,
   lastSync,
   platformOf,
-  siteStatus,
+  siteConnection,
   timeAgo,
   type KeyStatus,
   type SiteStatus,
@@ -108,8 +108,9 @@ function SiteIntegrations({ siteId }: { siteId: string }) {
   // Unknown while the subscription loads, so the page never flashes locked.
   const locked = actions.subscription !== undefined && !isEntitled(actions.subscription);
 
-  const status = siteStatus(keys);
   const synced = lastSync(keys);
+  // Keys or Webflow, whichever is doing better: the rule the dashboard home uses.
+  const { status, via } = siteConnection(keys, webflow?.connection);
   const sent = delivery(blogs, synced);
   const active = keys.filter((k) => !k.revoked_at);
 
@@ -243,6 +244,7 @@ function SiteIntegrations({ siteId }: { siteId: string }) {
       <StatusHero
         loading={isLoading}
         status={status}
+        via={via}
         synced={synced}
         sent={sent}
         locked={locked}
@@ -369,7 +371,8 @@ const DOT: Record<SiteStatus, string> = {
 
 function StatusHero({
   loading,
-  status: keyed,
+  status,
+  via,
   synced,
   sent,
   locked,
@@ -379,6 +382,7 @@ function StatusHero({
 }: {
   loading: boolean;
   status: SiteStatus;
+  via: "webflow" | "api" | null;
   synced: string | null;
   sent: ReturnType<typeof delivery>;
   locked: boolean;
@@ -390,9 +394,7 @@ function StatusHero({
 
   // Webflow pushes articles itself: no key, no sync to wait for. When that's
   // how this site publishes, it's what the hero describes.
-  const wf = webflow?.connection;
-  const viaWebflow = keyed === "none" && !!wf?.connected && wf.status !== "setup";
-  const status: SiteStatus = viaWebflow ? (wf.status === "error" ? "stale" : "live") : keyed;
+  const wf = via === "webflow" ? webflow?.connection : null;
 
   const copy: Record<SiteStatus, { title: string; detail: string }> = {
     none: {
@@ -436,20 +438,24 @@ function StatusHero({
             : ""
         }. Start your free trial to turn syncing back on.`,
       }
-    : viaWebflow
+    : wf
       ? {
           title:
             wf.status === "error"
               ? "Publishing to Webflow needs attention"
-              : "Your site is connected through Webflow",
+              : wf.status === "setup"
+                ? "Finish setting up Webflow"
+                : "Your site is connected through Webflow",
           detail:
             wf.status === "error"
               ? (wf.lastError ?? "The last article couldn't be published. Open Webflow below.")
-              : `New articles go into ${wf.collectionName ?? "your collection"} the moment they're written.${
-                  webflow!.counts.notYet
-                    ? ` ${plural(webflow!.counts.notYet, "published article isn't", "published articles aren't")} in Webflow yet.`
-                    : ""
-                }`,
+              : wf.status === "setup"
+                ? "Webflow is connected. Choose the collection to publish into, and every finished article goes there."
+                : `New articles go into ${wf.collectionName ?? "your collection"} the moment they're written.${
+                    webflow!.counts.notYet
+                      ? ` ${plural(webflow!.counts.notYet, "published article isn't", "published articles aren't")} in Webflow yet.`
+                      : ""
+                  }`,
         }
       : copy[status];
   const dot = paused ? DOT.stale : DOT[status];

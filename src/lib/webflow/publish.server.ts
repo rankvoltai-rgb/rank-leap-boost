@@ -580,9 +580,13 @@ export async function syncSite(scope: SiteScope, budgetMs = 45_000): Promise<Syn
       result.failed++;
       const message = describe(err);
       if (result.errors.length < 5 && !result.errors.includes(message)) result.errors.push(message);
-      // A validation error will fail every article the same way: stop early
-      // rather than spend the rate limit proving it 200 times.
-      if (err instanceof WebflowApiError && err.status === 400 && result.failed >= 3) {
+      // Some errors fail every article the same way: stop early rather than
+      // spend the rate limit proving it 200 times. An unpublished site is
+      // certain from the first; a validation error after three in a row.
+      if (
+        err instanceof WebflowApiError &&
+        (err.code === "site_not_published" || (err.status === 400 && result.failed >= 3))
+      ) {
         result.remaining = due.length - i - 1;
         break;
       }

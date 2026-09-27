@@ -40,7 +40,8 @@ import { CountUp } from "@/components/ui/count-up";
 import { PlatformLogos } from "@/components/dashboard/platforms";
 import { Meter, NextStepCard, type LaunchStep } from "@/components/dashboard/NextStep";
 import { TrafficValue } from "@/components/dashboard/traffic";
-import { lastSync, siteStatus, timeAgo } from "@/components/dashboard/connection-model";
+import { siteConnection, timeAgo } from "@/components/dashboard/connection-model";
+import { useWebflowStatus } from "@/components/dashboard/webflow-status";
 import { PublishingSchedule } from "@/components/dashboard/PublishingSchedule";
 import { ContentGaps } from "@/components/dashboard/ContentGaps";
 import { engineState, type EngineState } from "@/components/dashboard/autopilot-state";
@@ -313,9 +314,17 @@ function SystemConsole({ siteId }: { siteId: string }) {
     queryKey: ["api-keys", siteId],
     queryFn: () => listIntegrationKeys(siteId),
   });
-  // A key existing isn't a connection; a site using it is.
-  const connection = siteStatus(integrationKeys);
-  const lastSiteSync = lastSync(integrationKeys);
+  const { data: webflow, isLoading: webflowLoading } = useWebflowStatus(siteId);
+  // A key existing isn't a connection; a site using it is. A Webflow site is
+  // pushed to through its own connection and never uses a key, so both count.
+  const {
+    status: connection,
+    via,
+    lastActivity: lastSiteSync,
+  } = siteConnection(integrationKeys, webflow?.connection);
+  const connectionLoading = integrationsLoading || webflowLoading;
+  // Webflow's own setup, rather than the key flow, for a site that uses it.
+  const setupSearch = via === "webflow" ? { connector: "webflow" } : {};
   // Drives the trial banner: it disappears the moment a subscription exists.
   const hasEntitlement =
     !!subscription && ["trialing", "active", "past_due"].includes(subscription.status);
@@ -443,7 +452,7 @@ function SystemConsole({ siteId }: { siteId: string }) {
   const nextUp = scheduled[0] ?? null;
   // Held back until everything it reads has loaded, so it never flashes the
   // wrong step at someone who has already done it.
-  const settled = subscription !== undefined && !integrationsLoading && finishedQuery.isSuccess;
+  const settled = subscription !== undefined && !connectionLoading && finishedQuery.isSuccess;
 
   let nextStep: React.ReactNode = null;
   if (settled && !hasEntitlement) {
@@ -494,12 +503,14 @@ function SystemConsole({ siteId }: { siteId: string }) {
         }
         body={
           connection === "waiting"
-            ? "Your key is ready. Add it to your site and Rankbox confirms the first sync here."
+            ? via === "webflow"
+              ? "Webflow is connected. Choose the collection to publish into, and every finished article goes there."
+              : "Your key is ready. Add it to your site and Rankbox confirms the first sync here."
             : "Link your site once. From then on, every finished article goes live without you."
         }
         aside={<PlatformLogos size="h-6 w-6" />}
         action={
-          <Link to="/dashboard/integrations" className={CTA_LINK}>
+          <Link to="/dashboard/integrations" search={setupSearch} className={CTA_LINK}>
             <ConnectIcon className="h-4 w-4" />
             {connection === "waiting" ? "Finish setup" : "Connect your site"}
           </Link>
@@ -643,7 +654,7 @@ function SystemConsole({ siteId }: { siteId: string }) {
                         : "text-ink",
                   )}
                 >
-                  {integrationsLoading
+                  {connectionLoading
                     ? "—"
                     : {
                         live: "Live",
@@ -656,17 +667,28 @@ function SystemConsole({ siteId }: { siteId: string }) {
             }
             hint={
               connection === "live" ? (
-                `Synced ${timeAgo(lastSiteSync)}`
+                via === "webflow" ? (
+                  lastSiteSync ? (
+                    `Webflow · last article ${timeAgo(lastSiteSync)}`
+                  ) : (
+                    "Publishing to Webflow"
+                  )
+                ) : (
+                  `Synced ${timeAgo(lastSiteSync)}`
+                )
               ) : (
                 <Link
                   to="/dashboard/integrations"
+                  search={setupSearch}
                   className="font-medium text-cta underline-offset-2 hover:underline"
                 >
                   {connection === "none"
                     ? "Connect your site →"
                     : connection === "waiting"
                       ? "Finish setup →"
-                      : `Last sync ${timeAgo(lastSiteSync)} →`}
+                      : via === "webflow"
+                        ? "Check Webflow →"
+                        : `Last sync ${timeAgo(lastSiteSync)} →`}
                 </Link>
               )
             }
