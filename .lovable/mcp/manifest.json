@@ -7,9 +7,9 @@
   },
   "mcp": {
     "server": {
-      "name": "rankvolt-mcp",
+      "name": "rankbox-mcp",
       "version": "0.1.0",
-      "title": "Rankvolt MCP"
+      "title": "Rankbox MCP"
     },
     "tools": [
       {
