@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TrustRouteImport } from './routes/trust'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as ShopifyRouteImport } from './routes/shopify'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as McpRouteImport } from './routes/mcp'
@@ -64,6 +65,11 @@ import { Route as AuthenticatedDashboardStudioIndexRouteImport } from './routes/
 import { Route as ApiPublicWebflowCallbackRouteImport } from './routes/api/public/webflow/callback'
 import { Route as ApiPublicV1PingRouteImport } from './routes/api/public/v1/ping'
 import { Route as ApiPublicV1ArticlesRouteImport } from './routes/api/public/v1/articles'
+import { Route as ApiPublicShopifyWebhooksRouteImport } from './routes/api/public/shopify/webhooks'
+import { Route as ApiPublicShopifySyncRouteImport } from './routes/api/public/shopify/sync'
+import { Route as ApiPublicShopifySettingsRouteImport } from './routes/api/public/shopify/settings'
+import { Route as ApiPublicShopifyLinkRouteImport } from './routes/api/public/shopify/link'
+import { Route as ApiPublicShopifyAppRouteImport } from './routes/api/public/shopify/app'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
 import { Route as ApiPublicHooksRedditRunRouteImport } from './routes/api/public/hooks/reddit-run'
 import { Route as ApiPublicHooksExchangeRunRouteImport } from './routes/api/public/hooks/exchange-run'
@@ -80,6 +86,11 @@ const TrustRoute = TrustRouteImport.update({
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ShopifyRoute = ShopifyRouteImport.update({
+  id: '/shopify',
+  path: '/shopify',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PricingRoute = PricingRouteImport.update({
@@ -360,6 +371,33 @@ const ApiPublicV1ArticlesRoute = ApiPublicV1ArticlesRouteImport.update({
   path: '/api/public/v1/articles',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicShopifyWebhooksRoute =
+  ApiPublicShopifyWebhooksRouteImport.update({
+    id: '/api/public/shopify/webhooks',
+    path: '/api/public/shopify/webhooks',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicShopifySyncRoute = ApiPublicShopifySyncRouteImport.update({
+  id: '/api/public/shopify/sync',
+  path: '/api/public/shopify/sync',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicShopifySettingsRoute =
+  ApiPublicShopifySettingsRouteImport.update({
+    id: '/api/public/shopify/settings',
+    path: '/api/public/shopify/settings',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicShopifyLinkRoute = ApiPublicShopifyLinkRouteImport.update({
+  id: '/api/public/shopify/link',
+  path: '/api/public/shopify/link',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicShopifyAppRoute = ApiPublicShopifyAppRouteImport.update({
+  id: '/api/public/shopify/app',
+  path: '/api/public/shopify/app',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicPaymentsWebhookRoute =
   ApiPublicPaymentsWebhookRouteImport.update({
     id: '/api/public/payments/webhook',
@@ -409,6 +447,7 @@ export interface FileRoutesByFullPath {
   '/mcp': typeof McpRoute
   '/onboarding': typeof OnboardingRoute
   '/pricing': typeof PricingRoute
+  '/shopify': typeof ShopifyRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/trust': typeof TrustRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
@@ -458,6 +497,11 @@ export interface FileRoutesByFullPath {
   '/api/public/hooks/exchange-run': typeof ApiPublicHooksExchangeRunRoute
   '/api/public/hooks/reddit-run': typeof ApiPublicHooksRedditRunRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
+  '/api/public/shopify/app': typeof ApiPublicShopifyAppRoute
+  '/api/public/shopify/link': typeof ApiPublicShopifyLinkRoute
+  '/api/public/shopify/settings': typeof ApiPublicShopifySettingsRoute
+  '/api/public/shopify/sync': typeof ApiPublicShopifySyncRoute
+  '/api/public/shopify/webhooks': typeof ApiPublicShopifyWebhooksRoute
   '/api/public/v1/articles': typeof ApiPublicV1ArticlesRouteWithChildren
   '/api/public/v1/ping': typeof ApiPublicV1PingRoute
   '/api/public/webflow/callback': typeof ApiPublicWebflowCallbackRoute
@@ -472,6 +516,7 @@ export interface FileRoutesByTo {
   '/mcp': typeof McpRoute
   '/onboarding': typeof OnboardingRoute
   '/pricing': typeof PricingRoute
+  '/shopify': typeof ShopifyRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/trust': typeof TrustRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
@@ -520,6 +565,11 @@ export interface FileRoutesByTo {
   '/api/public/hooks/exchange-run': typeof ApiPublicHooksExchangeRunRoute
   '/api/public/hooks/reddit-run': typeof ApiPublicHooksRedditRunRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
+  '/api/public/shopify/app': typeof ApiPublicShopifyAppRoute
+  '/api/public/shopify/link': typeof ApiPublicShopifyLinkRoute
+  '/api/public/shopify/settings': typeof ApiPublicShopifySettingsRoute
+  '/api/public/shopify/sync': typeof ApiPublicShopifySyncRoute
+  '/api/public/shopify/webhooks': typeof ApiPublicShopifyWebhooksRoute
   '/api/public/v1/articles': typeof ApiPublicV1ArticlesRouteWithChildren
   '/api/public/v1/ping': typeof ApiPublicV1PingRoute
   '/api/public/webflow/callback': typeof ApiPublicWebflowCallbackRoute
@@ -536,6 +586,7 @@ export interface FileRoutesById {
   '/mcp': typeof McpRoute
   '/onboarding': typeof OnboardingRoute
   '/pricing': typeof PricingRoute
+  '/shopify': typeof ShopifyRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/trust': typeof TrustRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
@@ -585,6 +636,11 @@ export interface FileRoutesById {
   '/api/public/hooks/exchange-run': typeof ApiPublicHooksExchangeRunRoute
   '/api/public/hooks/reddit-run': typeof ApiPublicHooksRedditRunRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
+  '/api/public/shopify/app': typeof ApiPublicShopifyAppRoute
+  '/api/public/shopify/link': typeof ApiPublicShopifyLinkRoute
+  '/api/public/shopify/settings': typeof ApiPublicShopifySettingsRoute
+  '/api/public/shopify/sync': typeof ApiPublicShopifySyncRoute
+  '/api/public/shopify/webhooks': typeof ApiPublicShopifyWebhooksRoute
   '/api/public/v1/articles': typeof ApiPublicV1ArticlesRouteWithChildren
   '/api/public/v1/ping': typeof ApiPublicV1PingRoute
   '/api/public/webflow/callback': typeof ApiPublicWebflowCallbackRoute
@@ -601,6 +657,7 @@ export interface FileRouteTypes {
     | '/mcp'
     | '/onboarding'
     | '/pricing'
+    | '/shopify'
     | '/sitemap.xml'
     | '/trust'
     | '/.mcp/list-tools'
@@ -650,6 +707,11 @@ export interface FileRouteTypes {
     | '/api/public/hooks/exchange-run'
     | '/api/public/hooks/reddit-run'
     | '/api/public/payments/webhook'
+    | '/api/public/shopify/app'
+    | '/api/public/shopify/link'
+    | '/api/public/shopify/settings'
+    | '/api/public/shopify/sync'
+    | '/api/public/shopify/webhooks'
     | '/api/public/v1/articles'
     | '/api/public/v1/ping'
     | '/api/public/webflow/callback'
@@ -664,6 +726,7 @@ export interface FileRouteTypes {
     | '/mcp'
     | '/onboarding'
     | '/pricing'
+    | '/shopify'
     | '/sitemap.xml'
     | '/trust'
     | '/.mcp/list-tools'
@@ -712,6 +775,11 @@ export interface FileRouteTypes {
     | '/api/public/hooks/exchange-run'
     | '/api/public/hooks/reddit-run'
     | '/api/public/payments/webhook'
+    | '/api/public/shopify/app'
+    | '/api/public/shopify/link'
+    | '/api/public/shopify/settings'
+    | '/api/public/shopify/sync'
+    | '/api/public/shopify/webhooks'
     | '/api/public/v1/articles'
     | '/api/public/v1/ping'
     | '/api/public/webflow/callback'
@@ -727,6 +795,7 @@ export interface FileRouteTypes {
     | '/mcp'
     | '/onboarding'
     | '/pricing'
+    | '/shopify'
     | '/sitemap.xml'
     | '/trust'
     | '/.mcp/list-tools'
@@ -776,6 +845,11 @@ export interface FileRouteTypes {
     | '/api/public/hooks/exchange-run'
     | '/api/public/hooks/reddit-run'
     | '/api/public/payments/webhook'
+    | '/api/public/shopify/app'
+    | '/api/public/shopify/link'
+    | '/api/public/shopify/settings'
+    | '/api/public/shopify/sync'
+    | '/api/public/shopify/webhooks'
     | '/api/public/v1/articles'
     | '/api/public/v1/ping'
     | '/api/public/webflow/callback'
@@ -792,6 +866,7 @@ export interface RootRouteChildren {
   McpRoute: typeof McpRoute
   OnboardingRoute: typeof OnboardingRoute
   PricingRoute: typeof PricingRoute
+  ShopifyRoute: typeof ShopifyRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TrustRoute: typeof TrustRoute
   Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
@@ -823,6 +898,11 @@ export interface RootRouteChildren {
   ApiPublicHooksExchangeRunRoute: typeof ApiPublicHooksExchangeRunRoute
   ApiPublicHooksRedditRunRoute: typeof ApiPublicHooksRedditRunRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
+  ApiPublicShopifyAppRoute: typeof ApiPublicShopifyAppRoute
+  ApiPublicShopifyLinkRoute: typeof ApiPublicShopifyLinkRoute
+  ApiPublicShopifySettingsRoute: typeof ApiPublicShopifySettingsRoute
+  ApiPublicShopifySyncRoute: typeof ApiPublicShopifySyncRoute
+  ApiPublicShopifyWebhooksRoute: typeof ApiPublicShopifyWebhooksRoute
   ApiPublicV1ArticlesRoute: typeof ApiPublicV1ArticlesRouteWithChildren
   ApiPublicV1PingRoute: typeof ApiPublicV1PingRoute
   ApiPublicWebflowCallbackRoute: typeof ApiPublicWebflowCallbackRoute
@@ -842,6 +922,13 @@ declare module '@tanstack/react-router' {
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/shopify': {
+      id: '/shopify'
+      path: '/shopify'
+      fullPath: '/shopify'
+      preLoaderRoute: typeof ShopifyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/pricing': {
@@ -1215,6 +1302,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicV1ArticlesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/shopify/webhooks': {
+      id: '/api/public/shopify/webhooks'
+      path: '/api/public/shopify/webhooks'
+      fullPath: '/api/public/shopify/webhooks'
+      preLoaderRoute: typeof ApiPublicShopifyWebhooksRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/shopify/sync': {
+      id: '/api/public/shopify/sync'
+      path: '/api/public/shopify/sync'
+      fullPath: '/api/public/shopify/sync'
+      preLoaderRoute: typeof ApiPublicShopifySyncRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/shopify/settings': {
+      id: '/api/public/shopify/settings'
+      path: '/api/public/shopify/settings'
+      fullPath: '/api/public/shopify/settings'
+      preLoaderRoute: typeof ApiPublicShopifySettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/shopify/link': {
+      id: '/api/public/shopify/link'
+      path: '/api/public/shopify/link'
+      fullPath: '/api/public/shopify/link'
+      preLoaderRoute: typeof ApiPublicShopifyLinkRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/shopify/app': {
+      id: '/api/public/shopify/app'
+      path: '/api/public/shopify/app'
+      fullPath: '/api/public/shopify/app'
+      preLoaderRoute: typeof ApiPublicShopifyAppRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/payments/webhook': {
       id: '/api/public/payments/webhook'
       path: '/api/public/payments/webhook'
@@ -1359,6 +1481,7 @@ const rootRouteChildren: RootRouteChildren = {
   McpRoute: McpRoute,
   OnboardingRoute: OnboardingRoute,
   PricingRoute: PricingRoute,
+  ShopifyRoute: ShopifyRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TrustRoute: TrustRoute,
   Char91DotmcpChar93ListToolsRoute: Char91DotmcpChar93ListToolsRoute,
@@ -1391,6 +1514,11 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicHooksExchangeRunRoute: ApiPublicHooksExchangeRunRoute,
   ApiPublicHooksRedditRunRoute: ApiPublicHooksRedditRunRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
+  ApiPublicShopifyAppRoute: ApiPublicShopifyAppRoute,
+  ApiPublicShopifyLinkRoute: ApiPublicShopifyLinkRoute,
+  ApiPublicShopifySettingsRoute: ApiPublicShopifySettingsRoute,
+  ApiPublicShopifySyncRoute: ApiPublicShopifySyncRoute,
+  ApiPublicShopifyWebhooksRoute: ApiPublicShopifyWebhooksRoute,
   ApiPublicV1ArticlesRoute: ApiPublicV1ArticlesRouteWithChildren,
   ApiPublicV1PingRoute: ApiPublicV1PingRoute,
   ApiPublicWebflowCallbackRoute: ApiPublicWebflowCallbackRoute,

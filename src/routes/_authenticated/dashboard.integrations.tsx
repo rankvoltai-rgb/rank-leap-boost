@@ -31,6 +31,7 @@ import {
   keyStatus,
   lastSync,
   platformOf,
+  PLATFORM_NAME,
   siteConnection,
   timeAgo,
   type KeyStatus,
@@ -41,7 +42,9 @@ import { getConnector, type Connector, type ConnectorCategory } from "@/data/con
 import { formatShortDate } from "@/lib/format-date";
 import { WebflowSetup } from "@/components/dashboard/webflow-setup";
 import { useWebflowStatus } from "@/components/dashboard/webflow-status";
-import type { WebflowStatus } from "@/lib/data";
+import { useShopifyStatus } from "@/components/dashboard/shopify-status";
+import { ShopifyPanel } from "@/components/dashboard/shopify-panel";
+import type { ShopifyStatus, WebflowStatus } from "@/lib/data";
 import { cn } from "@/lib/utils";
 
 interface IntegrationsSearch {
@@ -52,12 +55,15 @@ interface IntegrationsSearch {
    * URL, or how OAuth ended when the callback sends the browser back here.
    */
   webflow?: string;
+  /** `key` when sent from the Rankbox app in Shopify to make a key: skips the "coming soon" card. */
+  shopify?: string;
 }
 
 export const Route = createFileRoute("/_authenticated/dashboard/integrations")({
   validateSearch: (search: Record<string, unknown>): IntegrationsSearch => ({
     connector: typeof search.connector === "string" ? search.connector : undefined,
     webflow: typeof search.webflow === "string" ? search.webflow : undefined,
+    shopify: typeof search.shopify === "string" ? search.shopify : undefined,
   }),
   component: Integrations,
 });
@@ -91,9 +97,10 @@ const TILE_STATUS: Record<Exclude<KeyStatus, "revoked">, NonNullable<TileStatus>
 function SiteIntegrations({ siteId }: { siteId: string }) {
   const queryClient = useQueryClient();
   const navigate = useNavigate({ from: Route.fullPath });
-  const { connector: openId, webflow: webflowFlow } = Route.useSearch();
+  const { connector: openId, webflow: webflowFlow, shopify: shopifyFlow } = Route.useSearch();
   const { data: blogs = [] } = useAllArticles();
   const { data: webflow } = useWebflowStatus(siteId);
+  const { data: shopify } = useShopifyStatus(siteId);
   const { data: keys = [], isLoading } = useQuery({
     queryKey: ["api-keys", siteId],
     queryFn: () => listIntegrationKeys(siteId),
@@ -109,8 +116,11 @@ function SiteIntegrations({ siteId }: { siteId: string }) {
   const locked = actions.subscription !== undefined && !isEntitled(actions.subscription);
 
   const synced = lastSync(keys);
-  // Keys or Webflow, whichever is doing better: the rule the dashboard home uses.
-  const { status, via } = siteConnection(keys, webflow?.connection);
+  // Keys, Webflow or Shopify, whichever is doing better: the rule the dashboard home uses.
+  const { status, via } = siteConnection(keys, {
+    webflow: webflow?.connection,
+    shopify: shopify?.connection,
+  });
   const sent = delivery(blogs, synced);
   const active = keys.filter((k) => !k.revoked_at);
 
@@ -168,6 +178,14 @@ function SiteIntegrations({ siteId }: { siteId: string }) {
       if (!wf.connected) return wf.lastError ? { tone: "warning", label: "Reconnect" } : null;
       if (wf.status === "error") return { tone: "warning", label: "Needs attention" };
       if (wf.status === "setup") return { tone: "neutral", label: "Finish setup" };
+      return { tone: "success", label: "Connected" };
+    }
+    // So does Shopify, set up from inside the Shopify admin.
+    const sh = shopify?.connection;
+    if (c.platformId === "shopify" && sh) {
+      if (!sh.connected) return { tone: "warning", label: "App removed" };
+      if (sh.status === "error") return { tone: "warning", label: "Needs attention" };
+      if (sh.status === "setup") return { tone: "neutral", label: "Finish setup" };
       return { tone: "success", label: "Connected" };
     }
     const own = active.filter((k) =>
@@ -249,6 +267,7 @@ function SiteIntegrations({ siteId }: { siteId: string }) {
         sent={sent}
         locked={locked}
         webflow={webflow}
+        shopify={shopify}
         onSetup={goToSites}
         onStartTrial={startTrial}
       />
@@ -287,7 +306,9 @@ function SiteIntegrations({ siteId }: { siteId: string }) {
               <p className="text-xs text-muted-foreground">
                 {open.platformId === "webflow" && (webflowFlow || webflow?.connection)
                   ? "Rankbox never sees your Webflow password. Disconnect any time."
-                  : "Your site never gives Rankbox a password — just a key you can revoke."}
+                  : open.platformId === "shopify" && shopify?.connection
+                    ? "Rankbox never sees your Shopify password. Remove the app any time."
+                    : "Your site never gives Rankbox a password — just a key you can revoke."}
               </p>
               <Button variant="ghost" onClick={() => setOpen(undefined)}>
                 Done
@@ -302,6 +323,8 @@ function SiteIntegrations({ siteId }: { siteId: string }) {
             key={open.id}
             siteId={siteId}
             webflowFlow={!!webflowFlow || !!webflow?.connection}
+            shopify={shopify?.connection ?? null}
+            shopifyKeyFlow={shopifyFlow === "key"}
             connector={open}
             creating={busy === "create"}
             locked={locked}
@@ -377,16 +400,18 @@ function StatusHero({
   sent,
   locked,
   webflow,
+  shopify,
   onSetup,
   onStartTrial,
 }: {
   loading: boolean;
   status: SiteStatus;
-  via: "webflow" | "api" | null;
+  via: "webflow" | "shopify" | "api" | null;
   synced: string | null;
   sent: ReturnType<typeof delivery>;
   locked: boolean;
   webflow: WebflowStatus | undefined;
+  shopify: ShopifyStatus | undefined;
   onSetup: () => void;
   onStartTrial: () => void;
 }) {
@@ -395,6 +420,8 @@ function StatusHero({
   // Webflow pushes articles itself: no key, no sync to wait for. When that's
   // how this site publishes, it's what the hero describes.
   const wf = via === "webflow" ? webflow?.connection : null;
+  // Shopify too, set up from inside the Shopify admin.
+  const sh = via === "shopify" ? shopify?.connection : null;
 
   const copy: Record<SiteStatus, { title: string; detail: string }> = {
     none: {
@@ -457,7 +484,23 @@ function StatusHero({
                       : ""
                   }`,
         }
-      : copy[status];
+      : sh
+        ? {
+            title:
+              sh.status === "error"
+                ? "Publishing to Shopify needs attention"
+                : sh.status === "setup"
+                  ? "Finish setting up Shopify"
+                  : `Your site is connected through ${PLATFORM_NAME.shopify}`,
+            detail:
+              sh.status === "error"
+                ? (sh.lastError ??
+                  "The last article couldn't be published. Open Rankbox in your Shopify admin.")
+                : sh.status === "setup"
+                  ? "Your store is connected. Pick a blog in the Rankbox app in Shopify, and every finished article goes there."
+                  : `New articles go into ${sh.blogTitle ?? "your blog"} on ${sh.shopName ?? sh.shop} the moment they're written.`,
+          }
+        : copy[status];
   const dot = paused ? DOT.stale : DOT[status];
 
   return (
@@ -669,6 +712,8 @@ function Connections({
 function SiteSetup({
   siteId,
   webflowFlow,
+  shopify,
+  shopifyKeyFlow,
   connector,
   creating,
   locked,
@@ -681,6 +726,10 @@ function SiteSetup({
   siteId: string;
   /** Show the Webflow app's setup even before it's listed (see below). */
   webflowFlow: boolean;
+  /** The store this site publishes to, when the Shopify app is linked to it. */
+  shopify: NonNullable<ShopifyStatus["connection"]> | null;
+  /** Sent from the Shopify app to make a key: go straight to it. */
+  shopifyKeyFlow: boolean;
   connector: Connector;
   creating: boolean;
   locked: boolean;
@@ -698,7 +747,17 @@ function SiteSetup({
   // connection exists; everyone else keeps the "Coming soon" card.
   const webflowApp = platform?.id === "webflow" && (platform.addonLive || webflowFlow);
   // A key made here stays on screen if the overlay is reopened this visit.
-  const [useApi, setUseApi] = useState(!platform || (platform.addonLive && !webflowApp) || !!fresh);
+  const [useApi, setUseApi] = useState(
+    !platform ||
+      (platform.addonLive && !webflowApp) ||
+      !!fresh ||
+      (platform.id === "shopify" && shopifyKeyFlow),
+  );
+
+  // The Shopify app is set up inside the Shopify admin; here, just where it publishes.
+  if (platform?.id === "shopify" && shopify && !useApi) {
+    return <ShopifyPanel siteId={siteId} connection={shopify} />;
+  }
 
   if (webflowApp && !useApi) {
     return (

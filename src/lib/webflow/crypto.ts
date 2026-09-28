@@ -52,8 +52,14 @@ async function deriveBytes(secret: string, purpose: string): Promise<Uint8Array<
   return new Uint8Array(await crypto.subtle.sign("HMAC", master, enc.encode(purpose)));
 }
 
-async function aesKey(secret: string): Promise<CryptoKey> {
-  const raw = await deriveBytes(secret, "rankbox/webflow/token/v1");
+/**
+ * Each integration seals its tokens under its own derived key, so a Webflow
+ * blob can never be decrypted as a Shopify one (or the reverse).
+ */
+export type TokenPurpose = "rankbox/webflow/token/v1" | "rankbox/shopify/token/v1";
+
+async function aesKey(secret: string, purpose: TokenPurpose): Promise<CryptoKey> {
+  const raw = await deriveBytes(secret, purpose);
   return crypto.subtle.importKey("raw", raw, "AES-GCM", false, ["encrypt", "decrypt"]);
 }
 
@@ -69,23 +75,31 @@ async function hmacKey(secret: string): Promise<CryptoKey> {
 
 const TOKEN_VERSION = "v1";
 
-export async function encryptToken(plain: string, secret: string): Promise<string> {
+export async function encryptToken(
+  plain: string,
+  secret: string,
+  purpose: TokenPurpose = "rankbox/webflow/token/v1",
+): Promise<string> {
   const iv = crypto.getRandomValues(new Uint8Array(12));
   const sealed = await crypto.subtle.encrypt(
     { name: "AES-GCM", iv },
-    await aesKey(secret),
+    await aesKey(secret, purpose),
     enc.encode(plain),
   );
   return `${TOKEN_VERSION}.${toB64url(iv)}.${toB64url(new Uint8Array(sealed))}`;
 }
 
 /** Throws when the blob was tampered with or sealed under another key. */
-export async function decryptToken(blob: string, secret: string): Promise<string> {
+export async function decryptToken(
+  blob: string,
+  secret: string,
+  purpose: TokenPurpose = "rankbox/webflow/token/v1",
+): Promise<string> {
   const [version, iv, sealed] = blob.split(".");
   if (version !== TOKEN_VERSION || !iv || !sealed) throw new Error("Unrecognised token format.");
   const plain = await crypto.subtle.decrypt(
     { name: "AES-GCM", iv: fromB64url(iv) },
-    await aesKey(secret),
+    await aesKey(secret, purpose),
     fromB64url(sealed),
   );
   return dec.decode(plain);

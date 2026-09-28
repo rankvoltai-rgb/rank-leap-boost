@@ -53,7 +53,12 @@ export type ApiKeyAuth =
  * unauthenticated HTTP.
  */
 export async function resolveApiKeyUser(request: Request): Promise<ApiKeyAuth> {
-  const raw = extractApiKey(request);
+  return resolveApiKey(extractApiKey(request));
+}
+
+/** The same check for a key that arrives some other way, e.g. pasted into the Shopify app. */
+export async function resolveApiKey(value: string | null | undefined): Promise<ApiKeyAuth> {
+  const raw = value?.trim();
   if (!raw || !raw.startsWith(KEY_PREFIX)) return { ok: false, reason: "invalid" };
 
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");

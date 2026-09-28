@@ -125,9 +125,10 @@ async function ownDomains(scope: SiteScope): Promise<string[]> {
 /**
  * Tell the backlink exchange where the article went live. Only when the URL
  * is on the site's own domain (a `*.webflow.io` staging URL isn't), and only
- * when no URL has been recorded yet: a manual or sitemap URL wins.
+ * when no URL has been recorded yet: a manual or sitemap URL wins. Shared
+ * with the Shopify publisher (a `*.myshopify.com` URL isn't on the domain either).
  */
-async function writeBackLiveUrl(scope: SiteScope, blogId: string, liveUrl: string | null) {
+export async function writeBackLiveUrl(scope: SiteScope, blogId: string, liveUrl: string | null) {
   if (!liveUrl) return;
   const domains = await ownDomains(scope);
   if (!domains.some((d) => isOnDomain(liveUrl, d))) return;

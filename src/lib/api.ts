@@ -511,17 +511,21 @@ export async function updateAutopilot(
 
 /**
  * Push a just-finished article to the platforms the site publishes to
- * (Webflow today). A no-op for a site without one. Never throws: a publishing
+ * (Webflow, Shopify). A no-op for a site without one. Never throws: a publishing
  * problem is recorded on the connection and shown in Integrations, and must
  * not turn a finished article into an error.
  */
 export async function publishToConnectedPlatforms(siteId: string, blogId: string): Promise<void> {
-  try {
-    const { publishFinishedArticle } = await import("@/lib/webflow.functions");
-    await publishFinishedArticle({ data: { siteId, blogId } });
-  } catch {
-    // Shown on the Webflow connection in Integrations.
-  }
+  // Each is a no-op for a site without that platform, and a failure is shown
+  // on its own connection (Integrations for Webflow, the app for Shopify).
+  await Promise.allSettled([
+    import("@/lib/webflow.functions").then(({ publishFinishedArticle }) =>
+      publishFinishedArticle({ data: { siteId, blogId } }),
+    ),
+    import("@/lib/shopify.functions").then(({ publishFinishedArticleToShopify }) =>
+      publishFinishedArticleToShopify({ data: { siteId, blogId } }),
+    ),
+  ]);
 }
 
 /**

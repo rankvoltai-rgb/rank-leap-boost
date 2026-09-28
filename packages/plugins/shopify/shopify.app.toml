@@ -1,0 +1,43 @@
+# Rankbox for Shopify: the app's settings in Shopify, kept as code.
+#
+# The app itself runs inside the main Rankbox app, not here:
+#   /shopify                      the App URL, shown inside the Shopify admin
+#   /api/public/shopify/*         its API (ID-token authenticated) and webhooks
+# See src/lib/shopify/. Push changes to this file with `npm run deploy`, which
+# needs SHOPIFY_APP_AUTOMATION_TOKEN in the environment (Dev Dashboard →
+# the app → Settings → App automation token).
+
+client_id = "08f4af22188b4622a005c624a4893ddd"
+name = "Rankbox"
+application_url = "https://rankbox.xyz/shopify"
+embedded = true
+
+[access_scopes]
+# Blogs and articles only; a write scope includes read. Never products,
+# orders, or customers: /integrations/shopify promises exactly that.
+scopes = "write_content"
+optional_scopes = [ ]
+use_legacy_install_flow = false
+
+[auth]
+# Shopify manages installation and the app uses token exchange, so no redirect
+# is ever followed. Shopify still requires one before the app can go public.
+redirect_urls = [ "https://rankbox.xyz/shopify" ]
+
+[webhooks]
+api_version = "2026-07"
+
+  [[webhooks.subscriptions]]
+  topics = [ "app/uninstalled", "app/scopes_update" ]
+  uri = "https://rankbox.xyz/api/public/shopify/webhooks"
+
+  [[webhooks.subscriptions]]
+  compliance_topics = [ "customers/data_request", "customers/redact", "shop/redact" ]
+  uri = "https://rankbox.xyz/api/public/shopify/webhooks"
+
+[pos]
+embedded = false
+
+[build]
+automatically_update_urls_on_dev = false
+include_config_on_deploy = true

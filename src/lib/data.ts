@@ -122,7 +122,7 @@ export { TrialRequiredError } from "@/lib/errors";
 
 export const generateBlogArticle = IS_MOCK ? mock.generateBlogArticle : real.generateBlogArticle;
 
-/** After an article is marked finished: push it to Webflow if the site has it connected. */
+/** After an article is marked finished: push it to Webflow or Shopify if the site has one connected. */
 export const publishToConnectedPlatforms: (siteId: string, blogId: string) => Promise<void> =
   IS_MOCK ? async () => {} : real.publishToConnectedPlatforms;
 
@@ -440,6 +440,26 @@ export async function syncWebflowNow(siteId: string) {
 export async function disconnectWebflow(siteId: string) {
   if (IS_MOCK) noWebflowInMock();
   const { disconnectWebflow: fn } = await import("@/lib/webflow.functions");
+  return fn({ data: { siteId } });
+}
+
+/* ---------- Shopify (server-side publishing, set up inside the Shopify admin) ---------- */
+
+export type { ShopifyStatus } from "@/lib/shopify.functions";
+
+export async function getShopifyStatus(
+  siteId: string,
+): Promise<import("@/lib/shopify.functions").ShopifyStatus> {
+  // Mock mode has no Shopify: a site simply isn't connected to a store.
+  if (IS_MOCK) return { connection: null };
+  const { getShopifyStatus: fn } = await import("@/lib/shopify.functions");
+  return fn({ data: { siteId } });
+}
+
+/** Stop publishing to the store this site is linked to. */
+export async function disconnectShopify(siteId: string) {
+  if (IS_MOCK) return { ok: true as const };
+  const { disconnectShopify: fn } = await import("@/lib/shopify.functions");
   return fn({ data: { siteId } });
 }
 

@@ -171,6 +171,16 @@ export async function runAutopilot(): Promise<{ processed: number; skipped: numb
           err instanceof Error ? err.message : err,
         );
       }
+      // And into its Shopify blog, if it has one. Same guard, same reason.
+      try {
+        const { publishArticle } = await import("@/lib/shopify/publish.server");
+        await publishArticle(scope, blog.id);
+      } catch (err) {
+        console.error(
+          "autopilot: shopify publish failed",
+          err instanceof Error ? err.message : err,
+        );
+      }
     } catch {
       // Roll the article back to scheduled and refund the reserved credit.
       await client.from("blogs").update({ status: "scheduled" }).eq("id", blog.id);

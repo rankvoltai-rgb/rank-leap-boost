@@ -1,0 +1,8 @@
+{
+  "name": "rankbox-shopify-app",
+  "private": true,
+  "description": "Configuration for the Rankbox Shopify app. The app itself runs inside the main Rankbox app (/shopify and /api/public/shopify/*).",
+  "scripts": {
+    "deploy": "npx --yes @shopify/cli@latest app deploy --allow-updates"
+  }
+}

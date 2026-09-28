@@ -40,8 +40,9 @@ import { CountUp } from "@/components/ui/count-up";
 import { PlatformLogos } from "@/components/dashboard/platforms";
 import { Meter, NextStepCard, type LaunchStep } from "@/components/dashboard/NextStep";
 import { TrafficValue } from "@/components/dashboard/traffic";
-import { siteConnection, timeAgo } from "@/components/dashboard/connection-model";
+import { PLATFORM_NAME, siteConnection, timeAgo } from "@/components/dashboard/connection-model";
 import { useWebflowStatus } from "@/components/dashboard/webflow-status";
+import { useShopifyStatus } from "@/components/dashboard/shopify-status";
 import { PublishingSchedule } from "@/components/dashboard/PublishingSchedule";
 import { ContentGaps } from "@/components/dashboard/ContentGaps";
 import { engineState, type EngineState } from "@/components/dashboard/autopilot-state";
@@ -315,16 +316,21 @@ function SystemConsole({ siteId }: { siteId: string }) {
     queryFn: () => listIntegrationKeys(siteId),
   });
   const { data: webflow, isLoading: webflowLoading } = useWebflowStatus(siteId);
-  // A key existing isn't a connection; a site using it is. A Webflow site is
-  // pushed to through its own connection and never uses a key, so both count.
+  const { data: shopify, isLoading: shopifyLoading } = useShopifyStatus(siteId);
+  // A key existing isn't a connection; a site using it is. A Webflow or
+  // Shopify site is pushed to through its own connection and never uses a
+  // key, so all of them count.
   const {
     status: connection,
     via,
     lastActivity: lastSiteSync,
-  } = siteConnection(integrationKeys, webflow?.connection);
-  const connectionLoading = integrationsLoading || webflowLoading;
-  // Webflow's own setup, rather than the key flow, for a site that uses it.
-  const setupSearch = via === "webflow" ? { connector: "webflow" } : {};
+  } = siteConnection(integrationKeys, {
+    webflow: webflow?.connection,
+    shopify: shopify?.connection,
+  });
+  const connectionLoading = integrationsLoading || webflowLoading || shopifyLoading;
+  // The platform's own setup, rather than the key flow, for a site that uses it.
+  const setupSearch = via === "webflow" || via === "shopify" ? { connector: via } : {};
   // Drives the trial banner: it disappears the moment a subscription exists.
   const hasEntitlement =
     !!subscription && ["trialing", "active", "past_due"].includes(subscription.status);
@@ -505,7 +511,9 @@ function SystemConsole({ siteId }: { siteId: string }) {
           connection === "waiting"
             ? via === "webflow"
               ? "Webflow is connected. Choose the collection to publish into, and every finished article goes there."
-              : "Your key is ready. Add it to your site and Rankbox confirms the first sync here."
+              : via === "shopify"
+                ? "Your Shopify store is connected. Pick a blog in the Rankbox app in Shopify, and every finished article goes there."
+                : "Your key is ready. Add it to your site and Rankbox confirms the first sync here."
             : "Link your site once. From then on, every finished article goes live without you."
         }
         aside={<PlatformLogos size="h-6 w-6" />}
@@ -667,11 +675,11 @@ function SystemConsole({ siteId }: { siteId: string }) {
             }
             hint={
               connection === "live" ? (
-                via === "webflow" ? (
+                via === "webflow" || via === "shopify" ? (
                   lastSiteSync ? (
-                    `Webflow · last article ${timeAgo(lastSiteSync)}`
+                    `${PLATFORM_NAME[via]} · last article ${timeAgo(lastSiteSync)}`
                   ) : (
-                    "Publishing to Webflow"
+                    `Publishing to ${PLATFORM_NAME[via]}`
                   )
                 ) : (
                   `Synced ${timeAgo(lastSiteSync)}`
@@ -686,8 +694,8 @@ function SystemConsole({ siteId }: { siteId: string }) {
                     ? "Connect your site →"
                     : connection === "waiting"
                       ? "Finish setup →"
-                      : via === "webflow"
-                        ? "Check Webflow →"
+                      : via === "webflow" || via === "shopify"
+                        ? `Check ${PLATFORM_NAME[via]} →`
                         : `Last sync ${timeAgo(lastSiteSync)} →`}
                 </Link>
               )

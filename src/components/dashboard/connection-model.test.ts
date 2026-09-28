@@ -32,7 +32,7 @@ describe("webflowSiteStatus", () => {
 
 describe("siteConnection", () => {
   it("calls a Webflow-only site connected, though it has no keys", () => {
-    expect(siteConnection([], webflow("active"), NOW)).toEqual({
+    expect(siteConnection([], { webflow: webflow("active") }, NOW)).toEqual({
       status: "live",
       via: "webflow",
       lastActivity: "2026-09-27T11:00:00.000Z",
@@ -41,14 +41,18 @@ describe("siteConnection", () => {
 
   it("takes whichever route is doing better", () => {
     // A key made but never used, and Webflow publishing: the site is live.
-    expect(siteConnection([key(null)], webflow("active"), NOW).status).toBe("live");
+    expect(siteConnection([key(null)], { webflow: webflow("active") }, NOW).status).toBe("live");
     // A key syncing now beats a Webflow connection still being set up.
-    const byKey = siteConnection([key("2026-09-27T11:30:00.000Z")], webflow("setup"), NOW);
+    const byKey = siteConnection(
+      [key("2026-09-27T11:30:00.000Z")],
+      { webflow: webflow("setup") },
+      NOW,
+    );
     expect(byKey).toMatchObject({ status: "live", via: "api" });
   });
 
   it("shows a half-set-up Webflow connection as waiting, not unconnected", () => {
-    expect(siteConnection([], webflow("setup"), NOW)).toMatchObject({
+    expect(siteConnection([], { webflow: webflow("setup") }, NOW)).toMatchObject({
       status: "waiting",
       via: "webflow",
     });
@@ -58,9 +62,20 @@ describe("siteConnection", () => {
     expect(
       siteConnection(
         [key("2026-09-27T11:00:00.000Z", "2026-09-27T11:10:00.000Z")],
-        webflow("disconnected", false),
+        { webflow: webflow("disconnected", false) },
         NOW,
       ),
     ).toEqual({ status: "none", via: null, lastActivity: null });
+  });
+
+  it("calls a Shopify-only site connected, and takes the better of two platforms", () => {
+    expect(siteConnection([], { shopify: webflow("active") }, NOW)).toEqual({
+      status: "live",
+      via: "shopify",
+      lastActivity: "2026-09-27T11:00:00.000Z",
+    });
+    expect(
+      siteConnection([], { webflow: webflow("setup"), shopify: webflow("error") }, NOW),
+    ).toMatchObject({ status: "stale", via: "shopify" });
   });
 });

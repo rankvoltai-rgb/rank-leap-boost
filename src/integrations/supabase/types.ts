@@ -1527,6 +1527,161 @@ export type Database = {
         }
         Relationships: []
       }
+      shopify_articles: {
+        Row: {
+          blog_id: string
+          connection_id: string
+          content_hash: string
+          created_at: string
+          handle: string
+          id: string
+          is_published: boolean
+          last_error: string | null
+          live_url: string | null
+          locked_at: string | null
+          pushed_at: string
+          shopify_article_id: string
+          shopify_blog_id: string
+          shopify_updated_at: string | null
+          state: string
+        }
+        Insert: {
+          blog_id: string
+          connection_id: string
+          content_hash: string
+          created_at?: string
+          handle: string
+          id?: string
+          is_published?: boolean
+          last_error?: string | null
+          live_url?: string | null
+          locked_at?: string | null
+          pushed_at?: string
+          shopify_article_id: string
+          shopify_blog_id: string
+          shopify_updated_at?: string | null
+          state?: string
+        }
+        Update: {
+          blog_id?: string
+          connection_id?: string
+          content_hash?: string
+          created_at?: string
+          handle?: string
+          id?: string
+          is_published?: boolean
+          last_error?: string | null
+          live_url?: string | null
+          locked_at?: string | null
+          pushed_at?: string
+          shopify_article_id?: string
+          shopify_blog_id?: string
+          shopify_updated_at?: string | null
+          state?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "shopify_articles_blog_id_fkey"
+            columns: ["blog_id"]
+            isOneToOne: false
+            referencedRelation: "blogs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "shopify_articles_connection_id_fkey"
+            columns: ["connection_id"]
+            isOneToOne: false
+            referencedRelation: "shopify_connections"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      shopify_connections: {
+        Row: {
+          access_expires_at: string | null
+          access_token_enc: string | null
+          author: string | null
+          created_at: string
+          id: string
+          installed_at: string
+          last_error: string | null
+          last_published_at: string | null
+          publish_visible: boolean
+          refresh_expires_at: string | null
+          refresh_token_enc: string | null
+          scope: string | null
+          shop: string
+          shop_domain: string | null
+          shop_name: string | null
+          shopify_blog_handle: string | null
+          shopify_blog_id: string | null
+          shopify_blog_title: string | null
+          site_id: string | null
+          status: string
+          uninstalled_at: string | null
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          access_expires_at?: string | null
+          access_token_enc?: string | null
+          author?: string | null
+          created_at?: string
+          id?: string
+          installed_at?: string
+          last_error?: string | null
+          last_published_at?: string | null
+          publish_visible?: boolean
+          refresh_expires_at?: string | null
+          refresh_token_enc?: string | null
+          scope?: string | null
+          shop: string
+          shop_domain?: string | null
+          shop_name?: string | null
+          shopify_blog_handle?: string | null
+          shopify_blog_id?: string | null
+          shopify_blog_title?: string | null
+          site_id?: string | null
+          status?: string
+          uninstalled_at?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          access_expires_at?: string | null
+          access_token_enc?: string | null
+          author?: string | null
+          created_at?: string
+          id?: string
+          installed_at?: string
+          last_error?: string | null
+          last_published_at?: string | null
+          publish_visible?: boolean
+          refresh_expires_at?: string | null
+          refresh_token_enc?: string | null
+          scope?: string | null
+          shop?: string
+          shop_domain?: string | null
+          shop_name?: string | null
+          shopify_blog_handle?: string | null
+          shopify_blog_id?: string | null
+          shopify_blog_title?: string | null
+          site_id?: string | null
+          status?: string
+          uninstalled_at?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "shopify_connections_site_fkey"
+            columns: ["site_id", "user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id", "user_id"]
+          },
+        ]
+      }
       studio_locks: {
         Row: {
           until: string

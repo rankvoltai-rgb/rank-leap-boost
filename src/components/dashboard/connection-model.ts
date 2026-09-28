@@ -47,47 +47,67 @@ export function lastSync(keys: IntegrationKey[] | undefined): string | null {
 }
 
 /**
- * Keys aren't the only way a site gets its articles: a Webflow site is pushed
- * to through its own connection and never calls in with a key. So "is the site
- * connected" is the better of the two, and every screen that asks should ask
- * here, or it will call a Webflow site unconnected.
+ * Keys aren't the only way a site gets its articles: a Webflow or Shopify site
+ * is pushed to through its own connection and never calls in with a key. So
+ * "is the site connected" is the best of all of them, and every screen that
+ * asks should ask here, or it will call such a site unconnected.
  */
-export interface WebflowConnectionLike {
+export interface PlatformConnectionLike {
   connected: boolean;
   status: "setup" | "active" | "error" | "disconnected";
   lastPublishedAt: string | null;
 }
 
+export type WebflowConnectionLike = PlatformConnectionLike;
+
+export type PushPlatform = "webflow" | "shopify";
+
+export const PLATFORM_NAME: Record<PushPlatform, string> = {
+  webflow: "Webflow",
+  shopify: "Shopify",
+};
+
 export interface SiteConnection {
   status: SiteStatus;
   /** How the site gets its articles; null when it doesn't yet. */
-  via: "webflow" | "api" | null;
-  /** The last key sync, or the last article pushed to Webflow. */
+  via: PushPlatform | "api" | null;
+  /** The last key sync, or the last article pushed to the platform. */
   lastActivity: string | null;
 }
 
-/** A Webflow connection in the same terms as keys. */
-export function webflowSiteStatus(webflow: WebflowConnectionLike | null | undefined): SiteStatus {
-  if (!webflow?.connected) return "none";
-  if (webflow.status === "active") return "live";
-  if (webflow.status === "error") return "stale";
-  if (webflow.status === "setup") return "waiting";
+/** A pushed-to platform's connection in the same terms as keys. */
+export function platformSiteStatus(conn: PlatformConnectionLike | null | undefined): SiteStatus {
+  if (!conn?.connected) return "none";
+  if (conn.status === "active") return "live";
+  if (conn.status === "error") return "stale";
+  if (conn.status === "setup") return "waiting";
   return "none";
 }
+
+export const webflowSiteStatus = platformSiteStatus;
 
 const RANK: Record<SiteStatus, number> = { none: 0, waiting: 1, stale: 2, live: 3 };
 
 export function siteConnection(
   keys: IntegrationKey[] | undefined,
-  webflow: WebflowConnectionLike | null | undefined,
+  platforms: Partial<Record<PushPlatform, PlatformConnectionLike | null | undefined>>,
   now = Date.now(),
 ): SiteConnection {
   const byKeys = siteStatus(keys, now);
-  const byWebflow = webflowSiteStatus(webflow);
-  if (RANK[byWebflow] > RANK[byKeys]) {
-    return { status: byWebflow, via: "webflow", lastActivity: webflow?.lastPublishedAt ?? null };
+  let best: SiteConnection = {
+    status: byKeys,
+    via: byKeys === "none" ? null : "api",
+    lastActivity: lastSync(keys),
+  };
+  // Keys win a tie: they're what the site itself reports.
+  for (const via of ["webflow", "shopify"] as const) {
+    const conn = platforms[via];
+    const status = platformSiteStatus(conn);
+    if (RANK[status] > RANK[best.status]) {
+      best = { status, via, lastActivity: conn?.lastPublishedAt ?? null };
+    }
   }
-  return { status: byKeys, via: byKeys === "none" ? null : "api", lastActivity: lastSync(keys) };
+  return best;
 }
 
 export interface Delivery {
