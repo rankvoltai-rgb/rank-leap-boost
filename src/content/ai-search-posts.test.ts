@@ -24,6 +24,12 @@ const BLOG_DIR = "src/content/blog";
  * to. They're shorter than the hubs, and each hub links back down to them.
  */
 const STANDALONES: Record<string, string> = {
+  "entity-authority-seo": "entity-authority-in-the-ai-era",
+  "what-is-entity-authority-in-seo": "entity-authority-in-the-ai-era",
+  "how-to-compare-generative-engine-optimization-software": "comparison-page-formula",
+  "are-automated-blog-posts-effective-for-seo": "synthetic-content-saturation-model-collapse",
+  "how-to-write-blog-posts-for-ai-citation": "reverse-prompt-playbook",
+  "how-to-optimize-content-for-llms": "optimize-content-for-llms-writing-for-machines",
   "seo-knowledge-graph": "knowledge-graph-for-ai",
   "knowledge-graph-search-api": "knowledge-graph-for-ai",
   "what-is-a-knowledge-graph-in-seo": "knowledge-graph-for-ai",
@@ -89,6 +95,11 @@ const SLUGS = [
   "hallucination-by-omission-pricing-page",
   "semantic-drift-ai-memory-reset",
   "knowledge-graph-for-ai",
+  "optimize-content-for-llms-writing-for-machines",
+  "reverse-prompt-playbook",
+  "synthetic-content-saturation-model-collapse",
+  "comparison-page-formula",
+  "entity-authority-in-the-ai-era",
   ...Object.keys(STANDALONES),
 ];
 const TOOL_GUIDES = new Set([

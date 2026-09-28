@@ -499,6 +499,51 @@ const POST_CARDS: Record<string, Titled> = {
     title: "SEO Knowledge Graph: How to Build One for Your Site With Schema",
     blurb: "An entity inventory, stable @ids and internal links that mirror the graph.",
   },
+  "optimize-content-for-llms-writing-for-machines": {
+    title: "How to Optimize Content for LLMs: Writing for Machines That Don't Read Like Google",
+    blurb: "How LLM pipelines read a page, and five formatting changes that make it quotable.",
+  },
+  "how-to-optimize-content-for-llms": {
+    title: "How to Optimize Content for LLMs: A Before-and-After Rewrite",
+    blurb: "One weak section, rewritten step by step for LLMs, with the reason for each edit.",
+  },
+  "reverse-prompt-playbook": {
+    title: 'The "Reverse Prompt" Playbook: Engineering Content Backwards from AI System Prompts',
+    blurb: "Write backwards from how AI answers are assembled, in modular Answer Units.",
+  },
+  "how-to-write-blog-posts-for-ai-citation": {
+    title: "How to Write Blog Posts for AI Citation: A Section-by-Section Template",
+    blurb: "A section-by-section template for blog posts AI answers can quote.",
+  },
+  "synthetic-content-saturation-model-collapse": {
+    title: 'Synthetic Content Saturation & The "Model Collapse" Moat',
+    blurb: "What model collapse really is, and the information-gain moat generic AI text lacks.",
+  },
+  "are-automated-blog-posts-effective-for-seo": {
+    title: "Are Automated Blog Posts Effective for SEO? What Google Says and What Works",
+    blurb: "What Google's rules say about automated posts, and what makes them work.",
+  },
+  "comparison-page-formula": {
+    title: 'The "Comparison Page" Formula: Writing Neutral Reviews That AI Models Quote',
+    blurb: "The Objective Synthesis template for comparison pages AI answers quote.",
+  },
+  "how-to-compare-generative-engine-optimization-software": {
+    title: "How to Compare Different Generative Engine Optimization Software Options",
+    blurb: "Criteria, a scoring sheet and a two-week trial test for GEO tools.",
+  },
+  "entity-authority-in-the-ai-era": {
+    title: "Entity Authority in the AI Era",
+    blurb: "From PageRank to entities: how to check and build your brand's entity authority.",
+  },
+  "what-is-entity-authority-in-seo": {
+    title: "What Is Entity Authority in SEO?",
+    blurb:
+      "What an entity is, what makes one authoritative, and how it differs from domain authority.",
+  },
+  "entity-authority-seo": {
+    title: "Entity Authority SEO: A 30-Day Plan to Build It",
+    blurb: "A week-by-week 30-day plan to build entity authority, with a tracking sheet.",
+  },
   "cheap-seo": {
     title: "Cheap SEO in 2026: What Works and What's a Scam",
     blurb: "The free tools to set up first, the few paid ones worth buying, and the red flags.",
@@ -774,6 +819,14 @@ export const TOPICS: Topic[] = [
       b("how-ai-search-uses-user-intent-and-context"),
       b("hallucination-by-omission-pricing-page"),
       b("how-does-rag-reduce-hallucinations"),
+      b("optimize-content-for-llms-writing-for-machines"),
+      b("how-to-optimize-content-for-llms"),
+      b("reverse-prompt-playbook"),
+      b("how-to-write-blog-posts-for-ai-citation"),
+      b("synthetic-content-saturation-model-collapse"),
+      b("are-automated-blog-posts-effective-for-seo"),
+      b("comparison-page-formula"),
+      b("how-to-compare-generative-engine-optimization-software"),
       b("byword-alternatives"),
       b("jasper-alternatives"),
       b("how-to-get-cited-by-chatgpt"),
@@ -1048,6 +1101,9 @@ export const TOPICS: Topic[] = [
       b("what-is-a-knowledge-graph-in-seo"),
       b("knowledge-graph-search-api"),
       b("seo-knowledge-graph"),
+      b("entity-authority-in-the-ai-era"),
+      b("what-is-entity-authority-in-seo"),
+      b("entity-authority-seo"),
       a("rankpill"),
       a("outrank"),
       c("semrush-vs-ahrefs"),
@@ -1089,6 +1145,7 @@ export const TOPICS: Topic[] = [
     id: "choosing",
     title: "Choosing an AI SEO tool",
     pages: [
+      b("how-to-compare-generative-engine-optimization-software"),
       b("what-is-generative-engine-optimization"),
       "/pricing",
       s("aeo-tools"),

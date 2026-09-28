@@ -333,38 +333,38 @@ How to write content AI engines quote.
 
 **Needs:** Nothing extra.
 
-- [ ] **P06: How to Optimize Content for LLMs: Writing for Machines That Don't Read Like Google**
+- [x] **P06: How to Optimize Content for LLMs: Writing for Machines That Don't Read Like Google** (written: /blog/optimize-content-for-llms-writing-for-machines)
   - Source: Content Plan · Blog Posts
   - Target queries: "how to optimize content for llms" (260/mo · $5.63 CPC · 0.09 competition)
   - Angle: How vector embeddings evaluate topical authority, why clear entity definitions defeat keyword stuffing, and the 5 formatting adjustments that make technical and B2B articles effortless for LLMs to ingest and cite.
   - Competitor gap: SEO writing tools (Surfer, Clearscope) still obsess over keyword density and TF-IDF counts that large language models completely ignore.
   - Standalone posts:
-    - [ ] "how to optimize content for llms"
-- [ ] **OB3·6: The "Reverse Prompt" Playbook: Engineering Content Backwards from AI System Prompts**
+    - [x] "how to optimize content for llms" (written: /blog/how-to-optimize-content-for-llms)
+- [x] **OB3·6: The "Reverse Prompt" Playbook: Engineering Content Backwards from AI System Prompts** (written: /blog/reverse-prompt-playbook)
   - Source: Content Gap · Outside-the-Box Gaps · Set 3
   - Target queries: "how ai search uses user intent and context" (Low KD · 0 competition); "how to write blog posts for ai citation" (30/mo · 0 competition)
   - Angle: How to reverse-engineer the instructions AI models give themselves before generating an answer. Shows how structuring content with modular "Answer Units" (a 1-sentence TL;DR, a 3-bullet feature list, and a verified pricing block) makes your content the easiest puzzle piece for the LLM to fit into its generated answer.
   - Competitor gap: Traditional copywriters write for human readers or Google spiders. Modern AI search engines run user queries through an internal Meta-Prompt (e.g., "Provide a balanced 3-paragraph summary with pros, cons, and pricing for each option").
   - Standalone posts:
     - Repeat: "how ai search uses user intent and context". Same query as A8's, written once there.
-    - [ ] "how to write blog posts for ai citation"
-- [ ] **OB2·5: Synthetic Content Saturation & The "Model Collapse" Moat**
+    - [x] "how to write blog posts for ai citation" (written: /blog/how-to-write-blog-posts-for-ai-citation)
+- [x] **OB2·5: Synthetic Content Saturation & The "Model Collapse" Moat** (written: /blog/synthetic-content-saturation-model-collapse)
   - Source: Content Gap · Outside-the-Box Gaps · Set 2
   - Target queries: "are automated blog posts effective for seo" (Low KD · 0 competition); "how to write blog posts for ai citation" (30/mo · 0 competition)
   - Angle: The concept of the "Information Gain Moat." Why purely generic AI articles get filtered out by retrieval rerankers, and how Rankvolt's engine pairs AI speed with proprietary company facts, integration specs, and verifiable benchmarks to pass the AI quality filter.
   - Competitor gap: AI scrapers are polluting the web with bland, generic AI-written fluff. AI search engines are now aggressively discounting generic synthetic content in favor of "Information Gain" (new proprietary data, founder stories, and unique primary research).
   - Standalone posts:
-    - [ ] "are automated blog posts effective for seo"
+    - [x] "are automated blog posts effective for seo" (written: /blog/are-automated-blog-posts-effective-for-seo)
     - Repeat: "how to write blog posts for ai citation". Same query as OB3·6's, written once there.
-- [ ] **LH1·6: The "Comparison Page" Formula: Writing Neutral Reviews That AI Models Quote**
+- [x] **LH1·6: The "Comparison Page" Formula: Writing Neutral Reviews That AI Models Quote** (written: /blog/comparison-page-formula)
   - Source: Content Gap · Low-Hanging Fruit · Set 1
   - Target queries: "how to compare different generative engine optimization software options" (Low KD · 0 competition); "how to write blog posts for ai citation" (30/mo · 0 competition)
   - Angle: The "Objective Synthesis" template: how writing fair, balanced pros and cons with transparent feature matrices makes AI models trust your comparison page as an authoritative, unbiased benchmark—earning the top citation.
   - Competitor gap: Brands write biased "Us vs. Them" comparison pages that scream marketing hype. When an AI crawler reads these, it flags the content as promotional bias and refuses to cite it.
   - Standalone posts:
-    - [ ] "how to compare different generative engine optimization software options"
+    - [x] "how to compare different generative engine optimization software options" (written: /blog/how-to-compare-generative-engine-optimization-software)
     - Repeat: "how to write blog posts for ai citation". Same query as OB3·6's, written once there.
-- [ ] **A7: Entity Authority in the AI Era**
+- [x] **A7: Entity Authority in the AI Era** (written: /blog/entity-authority-in-the-ai-era)
   - Source: Backlink Fuel · A · Citation Mechanics
   - Subtitle: Why knowledge graphs are starting to matter as much as backlinks
   - Effort: Low · Data: Explainer (no original dataset)
@@ -376,8 +376,8 @@ How to write content AI engines quote.
     - How to check whether your company exists as an entity in Wikidata, Crunchbase, Common Crawl
     - Checklist: 5 ways to build entity authority without buying links
   - Standalone posts:
-    - [ ] "what is entity authority in seo"
-    - [ ] "entity authority seo"
+    - [x] "what is entity authority in seo" (written: /blog/what-is-entity-authority-in-seo)
+    - [x] "entity authority seo" (written: /blog/entity-authority-seo)
 
 ## Phase 8: Audits & checklists
 

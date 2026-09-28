@@ -103,6 +103,15 @@ export const BLOG_VIDEOS: Record<string, BlogVideo> = {
     summary:
       "In an AskGooglebot episode, John Mueller covers what type of redirect to use and how long a site should keep a redirect after a site move.",
   },
+  uhWFLmr7xao: {
+    post: "synthetic-content-saturation-model-collapse",
+    title: "What Is AI Model Collapse? Why AI Could Forget Reality",
+    channel: "IBM Technology",
+    uploadDate: "2026-08-06T04:00:37-07:00",
+    seconds: 790,
+    summary:
+      "Meenakshi Kodati explains model collapse, why synthetic data can distort future AI systems, and how data quality, RAG and human-generated content keep AI grounded.",
+  },
 };
 
 /** ISO 8601 duration for schema.org, e.g. 754 -> "PT12M34S". */
