@@ -450,6 +450,55 @@ const POST_CARDS: Record<string, Titled> = {
     title: "How to Track Competitor Rankings in AI Search Results Effectively",
     blurb: "A weekly rank log for rivals in AI answers, with alerts that beat the noise.",
   },
+  "fix-incorrect-brand-facts-in-ai-answers": {
+    title: "How to Fix Incorrect Brand Facts in AI Answers & LLM Citations",
+    blurb: "Trace the seed source, publish a correction page with JSON-LD, and recheck.",
+  },
+  "how-to-fix-incorrect-brand-facts-in-llm-citations": {
+    title: "How to Fix Incorrect Brand Facts in LLM Citations: Report, Correct, Recheck",
+    blurb: "Report it, correct the source, recheck on a schedule: the one-fact path.",
+  },
+  "defensive-geo": {
+    title:
+      'Defensive GEO: What Does ChatGPT Say When Buyers Ask "Why Shouldn\'t I Buy Your Product?"',
+    blurb: "What AI says when buyers ask why not to buy you, and how to answer it.",
+  },
+  "how-to-monitor-brand-mentions-in-ai-generated-responses": {
+    title: "How to Monitor Brand Mentions in AI-Generated Responses (and Catch the Negative Ones)",
+    blurb: "A negative-prompt watchlist, tone labels and a red-flag severity ladder.",
+  },
+  "hallucination-by-omission-pricing-page": {
+    title: "Hallucination by Omission: The Silent Risk of Not Having a Clear Pricing Page",
+    blurb: "Why a hidden price makes AI guess, and the pricing page that stops it.",
+  },
+  "how-does-rag-reduce-hallucinations": {
+    title: "How Does RAG Reduce Hallucinations Compared to Traditional Language Models?",
+    blurb: "What retrieval grounding fixes, what the studies measured, and where it fails.",
+  },
+  "semantic-drift-ai-memory-reset": {
+    title: 'Semantic Drift: How to Force an AI "Memory Reset" When Your Product Pivots',
+    blurb: "After a pivot: the two layers of drift and a 90-day deprecation campaign.",
+  },
+  "how-ai-models-rank-brands-in-search-results": {
+    title: "How AI Models Rank Brands in Search Results",
+    blurb: "The five filters that decide which brands an AI answer names, and in what order.",
+  },
+  "knowledge-graph-for-ai": {
+    title: "Building a Knowledge Graph for AI: How to Connect Entities for LLMs",
+    blurb: "Connect founders, products and pricing with a JSON-LD graph and sameAs links.",
+  },
+  "what-is-a-knowledge-graph-in-seo": {
+    title: "What Is a Knowledge Graph in SEO?",
+    blurb: "Entities instead of keywords: Google's Knowledge Graph and what feeds it.",
+  },
+  "knowledge-graph-search-api": {
+    title: "Google Knowledge Graph Search API: What It Returns and How to Use It for SEO",
+    blurb: "What Google's entity lookup API returns, its limits, and SEO uses.",
+  },
+  "seo-knowledge-graph": {
+    title: "SEO Knowledge Graph: How to Build One for Your Site With Schema",
+    blurb: "An entity inventory, stable @ids and internal links that mirror the graph.",
+  },
   "cheap-seo": {
     title: "Cheap SEO in 2026: What Works and What's a Scam",
     blurb: "The free tools to set up first, the few paid ones worth buying, and the red flags.",
@@ -723,6 +772,8 @@ export const TOPICS: Topic[] = [
       b("koala-ai-alternatives"),
       b("how-does-ai-search-interpret-user-intent"),
       b("how-ai-search-uses-user-intent-and-context"),
+      b("hallucination-by-omission-pricing-page"),
+      b("how-does-rag-reduce-hallucinations"),
       b("byword-alternatives"),
       b("jasper-alternatives"),
       b("how-to-get-cited-by-chatgpt"),
@@ -889,6 +940,13 @@ export const TOPICS: Topic[] = [
       b("is-it-possible-to-track-brand-mentions-in-ai-search"),
       b("how-to-benchmark-ai-citations-against-competitors"),
       b("how-to-track-competitor-rankings-in-ai-search"),
+      b("fix-incorrect-brand-facts-in-ai-answers"),
+      b("how-to-fix-incorrect-brand-facts-in-llm-citations"),
+      b("defensive-geo"),
+      b("how-to-monitor-brand-mentions-in-ai-generated-responses"),
+      b("hallucination-by-omission-pricing-page"),
+      b("semantic-drift-ai-memory-reset"),
+      b("how-ai-models-rank-brands-in-search-results"),
       t("ai-visibility-prompt-generator"),
       s("ai-search-visibility"),
       s("aeo-tools"),
@@ -986,6 +1044,10 @@ export const TOPICS: Topic[] = [
       b("optimize-business-for-ai-search"),
       b("brand-presence-in-perplexity"),
       b("how-to-rank-on-chatgpt"),
+      b("knowledge-graph-for-ai"),
+      b("what-is-a-knowledge-graph-in-seo"),
+      b("knowledge-graph-search-api"),
+      b("seo-knowledge-graph"),
       a("rankpill"),
       a("outrank"),
       c("semrush-vs-ahrefs"),

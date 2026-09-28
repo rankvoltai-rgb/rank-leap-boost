@@ -24,6 +24,13 @@ const BLOG_DIR = "src/content/blog";
  * to. They're shorter than the hubs, and each hub links back down to them.
  */
 const STANDALONES: Record<string, string> = {
+  "seo-knowledge-graph": "knowledge-graph-for-ai",
+  "knowledge-graph-search-api": "knowledge-graph-for-ai",
+  "what-is-a-knowledge-graph-in-seo": "knowledge-graph-for-ai",
+  "how-ai-models-rank-brands-in-search-results": "semantic-drift-ai-memory-reset",
+  "how-does-rag-reduce-hallucinations": "hallucination-by-omission-pricing-page",
+  "how-to-monitor-brand-mentions-in-ai-generated-responses": "defensive-geo",
+  "how-to-fix-incorrect-brand-facts-in-llm-citations": "fix-incorrect-brand-facts-in-ai-answers",
   "how-to-track-competitor-rankings-in-ai-search":
     "how-to-benchmark-ai-citations-against-competitors",
   "is-it-possible-to-track-brand-mentions-in-ai-search":
@@ -77,6 +84,11 @@ const SLUGS = [
   "how-to-see-if-ai-mentions-your-brand",
   "is-it-possible-to-track-brand-mentions-in-ai-answers",
   "how-to-benchmark-ai-citations-against-competitors",
+  "fix-incorrect-brand-facts-in-ai-answers",
+  "defensive-geo",
+  "hallucination-by-omission-pricing-page",
+  "semantic-drift-ai-memory-reset",
+  "knowledge-graph-for-ai",
   ...Object.keys(STANDALONES),
 ];
 const TOOL_GUIDES = new Set([

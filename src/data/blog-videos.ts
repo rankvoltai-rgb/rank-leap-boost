@@ -50,7 +50,8 @@ export const BLOG_VIDEOS: Record<string, BlogVideo> = {
   },
   Gs7_8euEIh8: {
     post: "bing-webmaster-tools-ai-indexing-guide",
-    title: "Bing Webmaster Tools Releases AI Search Performance Data - Krishna Madhavan  - Inside SEO Week",
+    title:
+      "Bing Webmaster Tools Releases AI Search Performance Data - Krishna Madhavan  - Inside SEO Week",
     channel: "iPullRank",
     uploadDate: "2026-02-13T02:00:33-08:00",
     seconds: 1113,
@@ -74,6 +75,33 @@ export const BLOG_VIDEOS: Record<string, BlogVideo> = {
     seconds: 1634,
     summary:
       "A visual breakdown of how large language models work, including word embeddings, where directions in the vector space carry meaning.",
+  },
+  "T-D1OfcDW1M": {
+    post: "how-does-rag-reduce-hallucinations",
+    title: "What is Retrieval-Augmented Generation (RAG)?",
+    channel: "IBM Technology",
+    uploadDate: "2023-08-23T04:00:32-07:00",
+    seconds: 395,
+    summary:
+      "IBM Senior Research Scientist Marina Danilevsky explains the LLM/RAG framework and how it gives a model up-to-date, trustworthy facts and a source it can point to.",
+  },
+  "mmQl6VGvX-c": {
+    post: "knowledge-graph-for-ai",
+    title: "Introducing the Knowledge Graph",
+    channel: "Google",
+    uploadDate: "2012-05-16T10:03:40-07:00",
+    seconds: 164,
+    summary:
+      "Google introduces the Knowledge Graph, a huge collection of the people, places and things in the world and how they're connected to one another.",
+  },
+  ml7cQHkUc2Q: {
+    post: "semantic-drift-ai-memory-reset",
+    title: "How long to keep 301 redirects?",
+    channel: "Google Search Central",
+    uploadDate: "2021-12-02T06:00:20-08:00",
+    seconds: 99,
+    summary:
+      "In an AskGooglebot episode, John Mueller covers what type of redirect to use and how long a site should keep a redirect after a site move.",
   },
 };
 

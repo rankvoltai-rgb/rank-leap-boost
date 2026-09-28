@@ -286,46 +286,46 @@ Wrong facts, negative answers, missing pricing, pivots and knowledge graphs.
 
 **Needs:** Nothing extra.
 
-- [ ] **P07: How to Fix Incorrect Brand Facts in AI Answers & LLM Citations**
+- [x] **P07: How to Fix Incorrect Brand Facts in AI Answers & LLM Citations** (written: /blog/fix-incorrect-brand-facts-in-ai-answers)
   - Source: Content Plan · Blog Posts
   - Target queries: "how to fix incorrect brand facts in llm citations" (40/mo · 0 competition)
   - Angle: Step-by-step blueprint on how to trace the authoritative seed source the AI is citing, how to publish a canonical factual correction page with JSON-LD schema, and how to accelerate re-indexing so models update their answers.
   - Competitor gap: Zero platforms offer an actionable reputation recovery strategy for brands whose pricing, features, or founding history are hallucinated or misquoted by AI models.
   - Standalone posts:
-    - [ ] "how to fix incorrect brand facts in llm citations"
-- [ ] **OB1·2: Defensive GEO: What Does ChatGPT Say When Buyers Ask "Why Shouldn't I Buy Your Product?"**
+    - [x] "how to fix incorrect brand facts in llm citations" (written: /blog/how-to-fix-incorrect-brand-facts-in-llm-citations)
+- [x] **OB1·2: Defensive GEO: What Does ChatGPT Say When Buyers Ask "Why Shouldn't I Buy Your Product?"** (written: /blog/defensive-geo)
   - Source: Content Gap · Outside-the-Box Gaps · Set 1
   - Target queries: "how to fix incorrect brand facts in llm citations" (40/mo · 0 competition); "how to monitor brand mentions in ai generated responses" (210/mo · 0 competition)
   - Angle: A practical playbook for "Reputation Defense in AI." How to identify negative sentiment vectors in LLM outputs, how to publish targeted FAQ counter-narratives that models ingest to qualify those complaints, and how to prevent competitor FUD from becoming the AI's permanent answer.
   - Competitor gap: 100% of SEO blogs only focus on offensive visibility (getting recommended). Nobody talks about defensive visibility. When high-ticket enterprise buyers ask ChatGPT: "What are the biggest complaints, hidden costs, or dealbreakers for [Company]?", AI often cites outdated Reddit complaints or unverified reviews.
   - Standalone posts:
     - Repeat: "how to fix incorrect brand facts in llm citations". Same query as P07's, written once there.
-    - [ ] "how to monitor brand mentions in ai generated responses"
-- [ ] **OB2·4: Hallucination by Omission: The Silent Risk of Not Having a Clear Pricing Page**
+    - [x] "how to monitor brand mentions in ai generated responses" (written: /blog/how-to-monitor-brand-mentions-in-ai-generated-responses)
+- [x] **OB2·4: Hallucination by Omission: The Silent Risk of Not Having a Clear Pricing Page** (written: /blog/hallucination-by-omission-pricing-page)
   - Source: Content Gap · Outside-the-Box Gaps · Set 2
   - Target queries: "how does rag reduce hallucinations compared to traditional language models" (170/mo · 0 competition); "how to fix incorrect brand facts in llm citations" (40/mo · 0 competition)
   - Angle: A compelling business case on "Pricing Invisibility." Shows real examples of B2B SaaS companies losing deals because AI hallucinated an outrageous enterprise price tag, and provides a framework for publishing a transparent "Starting At" or "Pricing Range" table that eliminates model guesswork.
   - Competitor gap: Companies hide their pricing behind "Book a Demo" buttons to force sales calls. What they don't realize is that when a prospective buyer asks ChatGPT "How much does [Company] cost?", the AI doesn't say "book a demo"—it quotes third-party Reddit guesses or competitor blog teardowns, often inflating the price by 300%.
   - Standalone posts:
-    - [ ] "how does rag reduce hallucinations compared to traditional language models"
+    - [x] "how does rag reduce hallucinations compared to traditional language models" (written: /blog/how-does-rag-reduce-hallucinations)
     - Repeat: "how to fix incorrect brand facts in llm citations". Same query as P07's, written once there.
-- [ ] **OB3·5: Semantic Drift: How to Force an AI "Memory Reset" When Your Product Pivots**
+- [x] **OB3·5: Semantic Drift: How to Force an AI "Memory Reset" When Your Product Pivots** (written: /blog/semantic-drift-ai-memory-reset)
   - Source: Content Gap · Outside-the-Box Gaps · Set 3
   - Target queries: "how to fix incorrect brand facts in llm citations" (40/mo · 0 competition); "how ai models rank brands in search results" (50/mo · 0 competition)
   - Angle: The technical mechanics of "Semantic Drift." How to run a deprecation campaign: publishing 301 redirects, updating Wikidata/Crunchbase parent categories, and issuing authoritative IndexNow updates to overwrite outdated entity embeddings.
   - Competitor gap: When a startup pivots from "social media scheduler" to "AI marketing automation," legacy reviews and old articles stay embedded in the model's weights. The AI keeps pitching the company for its old, dead product line.
   - Standalone posts:
     - Repeat: "how to fix incorrect brand facts in llm citations". Same query as P07's, written once there.
-    - [ ] "how ai models rank brands in search results"
-- [ ] **LH1·5: Building a Knowledge Graph for AI: How to Connect Entities for LLMs**
+    - [x] "how ai models rank brands in search results" (written: /blog/how-ai-models-rank-brands-in-search-results)
+- [x] **LH1·5: Building a Knowledge Graph for AI: How to Connect Entities for LLMs** (written: /blog/knowledge-graph-for-ai)
   - Source: Content Gap · Low-Hanging Fruit · Set 1
   - Target queries: "what is knowledge graph in seo" (50/mo · 0.33 competition); "knowledge graph search api" (1,600/mo · 0.01 competition); "seo knowledge graph" (480/mo · 0.04 competition)
   - Angle: How to build an explicit semantic web of your brand: connecting your founders, products, GitHub repos, and pricing using Schema sameAs links to Wikidata, Crunchbase, and official social handles.
   - Competitor gap: Knowledge graph articles are either dense academic computer-science papers or outdated Google Knowledge Panel tutorials. Nobody explains how modern vector embeddings and graph databases intersect in generative AI.
   - Standalone posts:
-    - [ ] "what is knowledge graph in seo"
-    - [ ] "knowledge graph search api"
-    - [ ] "seo knowledge graph"
+    - [x] "what is knowledge graph in seo" (written: /blog/what-is-a-knowledge-graph-in-seo)
+    - [x] "knowledge graph search api" (written: /blog/knowledge-graph-search-api)
+    - [x] "seo knowledge graph" (written: /blog/seo-knowledge-graph)
 
 ## Phase 7: Writing for LLMs
 

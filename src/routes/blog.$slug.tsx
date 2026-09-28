@@ -4,6 +4,7 @@ import { ArrowRight, ChevronRight } from "lucide-react";
 import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
 import { Reveal } from "@/components/landing/shared";
+import { PixelField, type Pixel } from "@/components/landing/Hero";
 import { ArticleBody } from "@/components/blog/ArticleBody";
 import {
   AuthorCard,
@@ -31,6 +32,65 @@ import { youtubeId } from "@/components/blog/NotionBlocks";
 import type { PostFull, PostMeta } from "@/lib/notion.server";
 
 const SITE = "https://rankbox.xyz";
+
+/* White squares over the blue article header. Denser than the landing hero's
+   field, and heaviest in the page margins: the few that fall behind the copy
+   are kept faint so the title stays crisp. The cover card is opaque, so its
+   area is left empty. */
+const HEADER_PIXELS: Pixel[] = [
+  // top edge
+  { top: "9%", left: "4%", size: 18, opacity: 0.15 },
+  { top: "4%", left: "14%", size: 12, opacity: 0.12 },
+  { top: "2%", left: "27%", size: 8, opacity: 0.1 },
+  { top: "6%", left: "41%", size: 16, opacity: 0.1 },
+  { top: "3%", left: "58%", size: 10, opacity: 0.12 },
+  { top: "5%", left: "71%", size: 18, opacity: 0.14 },
+  { top: "1%", left: "84%", size: 14, opacity: 0.13 },
+  { top: "8%", left: "93%", size: 10, opacity: 0.11 },
+  // left margin
+  { top: "15%", left: "10%", size: 22, opacity: 0.16 },
+  { top: "21%", left: "1.5%", size: 12, opacity: 0.12 },
+  { top: "28%", left: "17%", size: 10, opacity: 0.1 },
+  { top: "34%", left: "6%", size: 26, opacity: 0.18 },
+  { top: "43%", left: "13%", size: 14, opacity: 0.12 },
+  { top: "50%", left: "2%", size: 18, opacity: 0.15 },
+  { top: "57%", left: "19%", size: 12, opacity: 0.1 },
+  { top: "63%", left: "8%", size: 20, opacity: 0.16 },
+  { top: "71%", left: "15%", size: 10, opacity: 0.11 },
+  { top: "76%", left: "3%", size: 24, opacity: 0.17 },
+  { top: "82%", left: "11%", size: 14, opacity: 0.13 },
+  // right margin
+  { top: "14%", left: "88%", size: 20, opacity: 0.15 },
+  { top: "19%", left: "97%", size: 14, opacity: 0.13 },
+  { top: "26%", left: "81%", size: 10, opacity: 0.1 },
+  { top: "33%", left: "92%", size: 26, opacity: 0.18 },
+  { top: "41%", left: "85%", size: 12, opacity: 0.12 },
+  { top: "48%", left: "98%", size: 18, opacity: 0.15 },
+  { top: "55%", left: "80%", size: 16, opacity: 0.13 },
+  { top: "61%", left: "90%", size: 10, opacity: 0.1 },
+  { top: "68%", left: "95%", size: 22, opacity: 0.17 },
+  { top: "74%", left: "84%", size: 12, opacity: 0.12 },
+  { top: "81%", left: "91%", size: 16, opacity: 0.14 },
+  // behind the copy — faint
+  { top: "12%", left: "52%", size: 12, opacity: 0.09 },
+  { top: "18%", left: "38%", size: 10, opacity: 0.07 },
+  { top: "37%", left: "49%", size: 12, opacity: 0.07 },
+  { top: "58%", left: "33%", size: 8, opacity: 0.06 },
+  { top: "72%", left: "46%", size: 14, opacity: 0.08 },
+  // between the copy and the cover
+  { top: "44%", left: "53%", size: 10, opacity: 0.1 },
+  { top: "66%", left: "54%", size: 14, opacity: 0.11 },
+  // bottom edge
+  { top: "88%", left: "6%", size: 12, opacity: 0.13 },
+  { top: "93%", left: "18%", size: 20, opacity: 0.16 },
+  { top: "90%", left: "30%", size: 10, opacity: 0.1 },
+  { top: "95%", left: "39%", size: 16, opacity: 0.13 },
+  { top: "89%", left: "51%", size: 12, opacity: 0.11 },
+  { top: "94%", left: "62%", size: 22, opacity: 0.16 },
+  { top: "91%", left: "74%", size: 10, opacity: 0.11 },
+  { top: "96%", left: "86%", size: 18, opacity: 0.15 },
+  { top: "92%", left: "97%", size: 12, opacity: 0.12 },
+];
 
 export const Route = createFileRoute("/blog/$slug")({
   loader: async ({ params, context }) => {
@@ -220,25 +280,25 @@ function Article({ post, related }: { post: PostFull; related: PostMeta[] }) {
       <ReadingProgress target={bodyRef} />
       <article>
         {/* ---------- header ---------- */}
-        <header className="relative overflow-hidden border-b border-border bg-surface/60">
-          <div className="pointer-events-none absolute inset-0 bg-hero-glow" aria-hidden />
+        <header className="relative overflow-hidden bg-brand-blue text-white">
+          <PixelField pixels={HEADER_PIXELS} seed={3} />
           <div className="relative mx-auto grid max-w-6xl items-center gap-10 px-5 pb-12 pt-10 sm:pt-14 lg:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)] lg:gap-14 lg:pb-16">
             <Reveal>
               <nav aria-label="Breadcrumb">
-                <ol className="flex items-center gap-1.5 text-[0.8rem] font-medium text-muted-foreground">
+                <ol className="flex items-center gap-1.5 text-[0.8rem] font-medium text-white/70">
                   <li>
-                    <Link to="/blog" className="transition-colors hover:text-ink">
+                    <Link to="/blog" className="transition-colors hover:text-white">
                       Blog
                     </Link>
                   </li>
                   {topic && (
                     <>
-                      <ChevronRight aria-hidden className="h-3.5 w-3.5 text-ink/25" />
+                      <ChevronRight aria-hidden className="h-3.5 w-3.5 text-white/40" />
                       <li>
                         <Link
                           to="/blog"
                           search={{ topic }}
-                          className="font-semibold text-volt transition-colors hover:text-ink"
+                          className="font-semibold text-white transition-colors hover:text-white/75"
                         >
                           {topic}
                         </Link>
@@ -247,39 +307,40 @@ function Article({ post, related }: { post: PostFull; related: PostMeta[] }) {
                   )}
                 </ol>
               </nav>
-              <h1 className="mt-5 text-balance font-display text-[2.1rem] font-bold leading-[1.08] tracking-tight text-ink sm:text-[2.9rem] lg:text-[3.1rem]">
+              <h1 className="mt-5 text-balance font-display text-[2.1rem] font-bold leading-[1.08] tracking-tight text-white sm:text-[2.9rem] lg:text-[3.1rem]">
                 {post.title}
               </h1>
               {post.excerpt && (
-                <p className="mt-5 max-w-2xl text-[1.1rem] leading-relaxed text-muted-foreground sm:text-[1.2rem]">
+                <p className="mt-5 max-w-2xl text-[1.1rem] leading-relaxed text-white/80 sm:text-[1.2rem]">
                   {post.excerpt}
                 </p>
               )}
               <div className="mt-8 flex flex-wrap items-center justify-between gap-5">
                 <div className="flex items-center gap-3">
-                  <AuthorMark className="h-10 w-10" />
+                  <AuthorMark className="h-10 w-10 border-white/30" />
                   <div className="text-sm leading-tight">
                     {isTeamAuthor(post.author) ? (
                       <Link
                         to="/about"
-                        className="font-semibold text-ink underline decoration-border underline-offset-4 transition-colors hover:decoration-ink"
+                        className="font-semibold text-white underline decoration-white/35 underline-offset-4 transition-colors hover:decoration-white"
                       >
                         {post.author}
                       </Link>
                     ) : (
-                      <p className="font-semibold text-ink">{post.author}</p>
+                      <p className="font-semibold text-white">{post.author}</p>
                     )}
-                    <p className="mt-1 text-xs text-muted-foreground">
+                    <p className="mt-1 text-xs text-white/70">
                       <PostStamp post={meta} />
                       {post.updated && <> · Updated {formatDate(post.updated)}</>}
                     </p>
                   </div>
                 </div>
-                <ShareButtons url={url} title={post.title} />
+                <ShareButtons url={url} title={post.title} tone="inverse" />
               </div>
             </Reveal>
             <Reveal delay={0.08}>
-              <div className="overflow-hidden rounded-3xl border border-border shadow-3">
+              {/* The ring keeps blue-toned covers from melting into the header. */}
+              <div className="overflow-hidden rounded-3xl shadow-3 ring-1 ring-white/25">
                 <CoverArt post={post} className="aspect-[16/11]" />
               </div>
             </Reveal>

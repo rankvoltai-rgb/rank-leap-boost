@@ -183,15 +183,24 @@ function LinkedInIcon({ className }: { className?: string }) {
 }
 
 const SHARE_BUTTON =
-  "inline-flex h-9 items-center justify-center gap-1.5 rounded-full border border-border bg-card px-3 text-xs font-semibold text-ink shadow-1 transition-all hover:-translate-y-0.5 hover:border-ink/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-volt";
+  "inline-flex h-9 items-center justify-center gap-1.5 rounded-full border px-3 text-xs font-semibold transition-all hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2";
+
+/* "inverse" is for the brand-blue article header. */
+const SHARE_TONE = {
+  default: "border-border bg-card text-ink shadow-1 hover:border-ink/20 focus-visible:ring-volt",
+  inverse:
+    "border-white/25 bg-white/10 text-white hover:border-white/50 hover:bg-white/20 focus-visible:ring-white",
+};
 
 export function ShareButtons({
   url,
   title,
+  tone = "default",
   className,
 }: {
   url: string;
   title: string;
+  tone?: keyof typeof SHARE_TONE;
   className?: string;
 }) {
   const [copied, setCopied] = useState(false);
@@ -205,6 +214,7 @@ export function ShareButtons({
     }
   };
   const enc = encodeURIComponent;
+  const button = cn(SHARE_BUTTON, SHARE_TONE[tone]);
   return (
     <div className={cn("flex items-center gap-2", className)}>
       <a
@@ -212,7 +222,7 @@ export function ShareButtons({
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Share on X"
-        className={cn(SHARE_BUTTON, "w-9 px-0")}
+        className={cn(button, "w-9 px-0")}
       >
         <XIcon className="h-3.5 w-3.5" />
       </a>
@@ -221,13 +231,15 @@ export function ShareButtons({
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Share on LinkedIn"
-        className={cn(SHARE_BUTTON, "w-9 px-0")}
+        className={cn(button, "w-9 px-0")}
       >
         <LinkedInIcon className="h-3.5 w-3.5" />
       </a>
-      <button type="button" onClick={copy} className={SHARE_BUTTON}>
+      <button type="button" onClick={copy} className={button}>
         {copied ? (
-          <Check className="h-3.5 w-3.5 text-success" />
+          <Check
+            className={cn("h-3.5 w-3.5", tone === "inverse" ? "text-white" : "text-success")}
+          />
         ) : (
           <Link2 className="h-3.5 w-3.5" />
         )}

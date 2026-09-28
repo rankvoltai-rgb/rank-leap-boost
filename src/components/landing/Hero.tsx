@@ -11,7 +11,7 @@ import { ProofBadges } from "./proof-badges";
 
 /* Scattered white squares drifting over the blue field. Coordinates are fixed
    (not random) so the server and client renders agree. */
-interface Pixel {
+export interface Pixel {
   top: string;
   left: string;
   size: number;
