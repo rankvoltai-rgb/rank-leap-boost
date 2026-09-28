@@ -8,6 +8,11 @@
 - [About](/about): Who makes Rankbox (Autusus LLC), when it started (2026, as Rankvolt), the editorial standards behind its guides, glossary and comparisons, and how to contact the company.
 - [Changelog](/changelog): Every Rankbox release, dated, each marked live, rolling out or coming soon: Studio (several sites on one account), the connector library for 49 AI tools, the backlink exchange, Reddit Presence, and the Framer plugin. Also as RSS at /changelog/rss.xml.
 
+## Solutions
+
+- [AI search visibility](/solutions/ai-search-visibility): The four gates an AI engine checks before it names a brand (readable, answered, liftable, corroborated), an interactive demo of each, how an AI visibility tracker differs from Rankbox, and how to measure AI search visibility for free. Rankbox builds visibility (questions, articles, AI-readiness scoring, backlinks, Reddit reply drafts); it does not track AI citations yet.
+- [AEO tools](/solutions/aeo-tools): 18 free answer engine optimization tools sorted by job, a live AI search readiness check, the AEO tool market by category with each vendor's dated starting price, and the Rankbox plan that runs three of the jobs on autopilot.
+
 ## Integrations
 
 - [Integrations](/integrations): Every way to connect Rankbox: WordPress, Shopify, Webflow, Framer and Square Online for publishing, the REST API, and 49 AI tools through the MCP server.
@@ -33,6 +38,18 @@
 - [DeepSeek SEO](/ai-seo/deepseek): How DeepSeek's Smart Search finds and cites pages: an undisclosed third-party search API, no documented crawler, and how to measure it.
 - [Mistral Le Chat SEO](/ai-seo/mistral): How Le Chat (renamed Vibe in May 2026) cites pages from Brave Search results; the MistralAI-Index, MistralAI-User and MistralAI-Training bots.
 - [Manus SEO](/ai-seo/manus): How the Manus agent researches in a cloud Chromium browser, the Manus-User agent and its Web Bot Auth signature, why robots.txt won't stop it, and tracking agent traffic.
+
+## Playbooks
+
+- [How to rank on ChatGPT](/blog/how-to-rank-on-chatgpt): Getting named in ChatGPT's "best X" recommendation lists: the shortlist loop (trigger, recall, probe, tally, order), mention rate and average position across runs, and a worked tally of the pages ChatGPT reads.
+- [ChatGPT rank tracker](/blog/chatgpt-rank-tracker): Nine ChatGPT visibility trackers compared on how they collect answers (app or API), fan-out logging, ads and location, with a 10-question vendor spec sheet and cost per tracked prompt, prices dated 28 September 2026.
+- [Optimize your website for ChatGPT and Perplexity](/blog/optimize-website-for-chatgpt-and-perplexity): A 15-row site checklist for both engines with terminal commands to verify each row, and the six places where ChatGPT and Perplexity differ.
+- [Perplexity SEO tools](/blog/perplexity-seo-tools): Tools sorted by job: bot access checks against Perplexity's IP lists, trackers that cover Perplexity, a DIY tracker on Perplexity's Agent API (Sonar ended 27 September 2026) with cost math, and ways to earn cited sources.
+- [Brand presence in Perplexity](/blog/brand-presence-in-perplexity): The brand answer audit: six branded prompt types, five sentence labels, and tracing each wrong answer to the source Perplexity cited.
+- [What are AI search optimization tools?](/blog/ai-search-optimization-tools): The six tool types, what each measures or changes, buy order by budget, and a 100-point weighted scorecard for comparing tools.
+- [Optimize your business for AI search engines](/blog/optimize-business-for-ai-search): Where Google, Gemini, Copilot, ChatGPT, Perplexity and Siri get business facts, an 18-fact business fact sheet, and a worked listing audit.
+- [Optimize content for AI search](/blog/optimize-content-for-ai-search): The Lift Test, nine checks for every passage, with an annotated before/after rewrite and a refresh-priority score.
+- [How to measure GEO](/blog/how-to-measure-geo): The four Cs (crawled, cited, clicked, converted), prompt panel sample sizes, GA4 setup, and a control-prompt test.
 
 ## AI Search Glossary
 

@@ -9,11 +9,16 @@ import type { ReactNode } from "react";
 import {
   ArrowRight,
   Bot,
+  Brain,
   Check,
   CircleDollarSign,
+  ListChecks,
+  ListOrdered,
   MousePointerClick,
   Quote,
+  RefreshCw,
   Search,
+  Zap,
 } from "lucide-react";
 import { ChatGPTMark, GoogleMark } from "@/components/landing/ai-logos";
 import { cn } from "@/lib/utils";
@@ -876,6 +881,131 @@ function ControlTest() {
   );
 }
 
+/* ---------- 9. The shortlist loop ---------- */
+
+/**
+ * How ChatGPT builds a recommendation list, from the "rank on ChatGPT" post:
+ * five stages inside one answer, and a slower loop through the web back into
+ * what future models recall. The stage figures are one researcher's captures
+ * (Search Engine Journal, August 2026); the slow loop is our model, drawn
+ * dashed so it never reads as a documented OpenAI mechanism.
+ */
+const SHORTLIST_STAGES = [
+  { name: "Trigger", icon: Zap, body: "Decides to search. Buying questions usually do." },
+  {
+    name: "Recall",
+    icon: Brain,
+    body: "Writes a first query, often naming brands from memory.",
+    stat: "68.9% of brands named here make the answer",
+    sub: "Only fetched: 2.1%",
+  },
+  {
+    name: "Probe",
+    icon: Search,
+    body: "Checks vendor sites, roundups, reviews and Reddit.",
+    tags: ["site:vendor.com", "best X 2026", "reviews", "reddit"],
+  },
+  {
+    name: "Tally",
+    icon: ListChecks,
+    body: "Reads excerpts and keeps the brands that recur.",
+    stat: "3.1% of pages read get cited",
+  },
+  {
+    name: "Order",
+    icon: ListOrdered,
+    body: "Writes the list. Fit to the buyer's needs moves brands up or down.",
+  },
+];
+
+function ShortlistLoop() {
+  return (
+    <div>
+      <div className="flex flex-wrap items-center gap-2">
+        <span className="text-[0.65rem] font-semibold uppercase tracking-[0.08em] text-muted-foreground">
+          Buyer prompt
+        </span>
+        <span className="rounded-2xl rounded-bl-md bg-ink px-3 py-1.5 text-[0.72rem] leading-snug text-white">
+          Best project management tool for a 12-person startup?
+        </span>
+      </div>
+
+      <div className="mt-4 hidden grid-cols-5 gap-2 sm:grid">
+        <span className="col-span-2" />
+        <span className="col-span-3 border-x-2 border-t-2 border-brand-blue/40 pt-1 text-center text-[0.62rem] font-semibold text-brand-blue">
+          Fast loop: the pages it reads for this answer
+        </span>
+      </div>
+      <ol className="mt-1.5 grid gap-2 sm:grid-cols-5">
+        {SHORTLIST_STAGES.map(({ name, icon: Icon, body, stat, sub, tags }, i) => (
+          <li
+            key={name}
+            className="flex min-w-0 flex-col rounded-2xl border border-border bg-card p-3 shadow-1"
+          >
+            <div className="flex items-center gap-1.5">
+              <Callout n={i + 1} />
+              <p className="text-[0.78rem] font-semibold text-ink">{name}</p>
+              <Icon className="ml-auto h-3.5 w-3.5 text-brand-blue" />
+            </div>
+            <p className="mt-1.5 text-[0.68rem] leading-snug text-muted-foreground">{body}</p>
+            {tags && (
+              <div className="mt-2 flex flex-wrap gap-1">
+                {tags.map((t) => (
+                  <span
+                    key={t}
+                    className="rounded-full bg-ink/5 px-1.5 py-0.5 font-mono text-[0.58rem] text-ink"
+                  >
+                    {t}
+                  </span>
+                ))}
+              </div>
+            )}
+            {stat && (
+              <div className="mt-auto pt-2">
+                <p className="rounded-lg bg-brand-blue/10 px-2 py-1 text-[0.62rem] font-semibold leading-snug text-brand-blue">
+                  {stat}
+                </p>
+                {sub && <p className="mt-1 px-2 text-[0.6rem] text-muted-foreground">{sub}</p>}
+              </div>
+            )}
+          </li>
+        ))}
+      </ol>
+
+      <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-stretch">
+        <div className="flex flex-1 items-center gap-3 rounded-2xl border-2 border-dashed border-ink/20 px-3 py-2.5">
+          <RefreshCw className="h-4 w-4 shrink-0 text-muted-foreground" />
+          <div className="min-w-0">
+            <p className="text-[0.72rem] font-semibold text-ink">
+              Slow loop: the web shapes what future models recall
+            </p>
+            <p className="mt-0.5 text-[0.66rem] leading-snug text-muted-foreground">
+              Roundups, reviews, Reddit, YouTube and your own site feed back into stage 2. Our
+              model, not confirmed by OpenAI.
+            </p>
+          </div>
+        </div>
+        <div className="shrink-0 rounded-2xl border border-border bg-card px-3 py-2.5 shadow-1 sm:w-44">
+          <p className="text-[0.62rem] font-semibold uppercase tracking-[0.08em] text-muted-foreground">
+            Ranked answer
+          </p>
+          <ol className="mt-1 space-y-0.5 text-[0.72rem] font-medium text-ink">
+            <li>1. Loopcraft</li>
+            <li>2. Taskmeadow</li>
+            <li>3. Crewboard</li>
+          </ol>
+          <p className="mt-1 text-[0.6rem] text-muted-foreground">Changes every run</p>
+        </div>
+      </div>
+
+      <p className="mt-3 px-1 text-[0.6rem] leading-snug text-muted-foreground">
+        Stage 2 and 4 figures: one researcher's ChatGPT captures (Search Engine Journal, August
+        2026). Brands are made up.
+      </p>
+    </div>
+  );
+}
+
 /* ---------- registry ---------- */
 
 const FIGURES: Record<string, () => ReactNode> = {
@@ -886,6 +1016,7 @@ const FIGURES: Record<string, () => ReactNode> = {
   "retainer-hours": RetainerHours,
   "geo-scorecard": GeoScorecard,
   "control-test": ControlTest,
+  "shortlist-loop": ShortlistLoop,
 };
 
 /** A fixed figure by id, or a data-driven one ("price-chart/<post-slug>"). */

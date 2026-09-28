@@ -22,6 +22,7 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as UseCasesIndexRouteImport } from './routes/use-cases.index'
 import { Route as ToolsIndexRouteImport } from './routes/tools.index'
+import { Route as SolutionsIndexRouteImport } from './routes/solutions.index'
 import { Route as IntegrationsIndexRouteImport } from './routes/integrations.index'
 import { Route as GlossaryIndexRouteImport } from './routes/glossary.index'
 import { Route as FeaturesIndexRouteImport } from './routes/features.index'
@@ -32,6 +33,8 @@ import { Route as AlternativesIndexRouteImport } from './routes/alternatives.ind
 import { Route as AiSeoIndexRouteImport } from './routes/ai-seo.index'
 import { Route as UseCasesSlugRouteImport } from './routes/use-cases.$slug'
 import { Route as ToolsSlugRouteImport } from './routes/tools.$slug'
+import { Route as SolutionsAiSearchVisibilityRouteImport } from './routes/solutions.ai-search-visibility'
+import { Route as SolutionsAeoToolsRouteImport } from './routes/solutions.aeo-tools'
 import { Route as OauthConsentRouteImport } from './routes/oauth.consent'
 import { Route as LegalTermsRouteImport } from './routes/legal.terms'
 import { Route as LegalRefundsRouteImport } from './routes/legal.refunds'
@@ -143,6 +146,11 @@ const ToolsIndexRoute = ToolsIndexRouteImport.update({
   path: '/tools/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SolutionsIndexRoute = SolutionsIndexRouteImport.update({
+  id: '/solutions/',
+  path: '/solutions/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IntegrationsIndexRoute = IntegrationsIndexRouteImport.update({
   id: '/integrations/',
   path: '/integrations/',
@@ -191,6 +199,17 @@ const UseCasesSlugRoute = UseCasesSlugRouteImport.update({
 const ToolsSlugRoute = ToolsSlugRouteImport.update({
   id: '/tools/$slug',
   path: '/tools/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SolutionsAiSearchVisibilityRoute =
+  SolutionsAiSearchVisibilityRouteImport.update({
+    id: '/solutions/ai-search-visibility',
+    path: '/solutions/ai-search-visibility',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const SolutionsAeoToolsRoute = SolutionsAeoToolsRouteImport.update({
+  id: '/solutions/aeo-tools',
+  path: '/solutions/aeo-tools',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OauthConsentRoute = OauthConsentRouteImport.update({
@@ -476,6 +495,8 @@ export interface FileRoutesByFullPath {
   '/legal/refunds': typeof LegalRefundsRoute
   '/legal/terms': typeof LegalTermsRoute
   '/oauth/consent': typeof OauthConsentRoute
+  '/solutions/aeo-tools': typeof SolutionsAeoToolsRoute
+  '/solutions/ai-search-visibility': typeof SolutionsAiSearchVisibilityRoute
   '/tools/$slug': typeof ToolsSlugRoute
   '/use-cases/$slug': typeof UseCasesSlugRoute
   '/ai-seo/': typeof AiSeoIndexRoute
@@ -486,6 +507,7 @@ export interface FileRoutesByFullPath {
   '/features/': typeof FeaturesIndexRoute
   '/glossary/': typeof GlossaryIndexRoute
   '/integrations/': typeof IntegrationsIndexRoute
+  '/solutions/': typeof SolutionsIndexRoute
   '/tools/': typeof ToolsIndexRoute
   '/use-cases/': typeof UseCasesIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -545,6 +567,8 @@ export interface FileRoutesByTo {
   '/legal/refunds': typeof LegalRefundsRoute
   '/legal/terms': typeof LegalTermsRoute
   '/oauth/consent': typeof OauthConsentRoute
+  '/solutions/aeo-tools': typeof SolutionsAeoToolsRoute
+  '/solutions/ai-search-visibility': typeof SolutionsAiSearchVisibilityRoute
   '/tools/$slug': typeof ToolsSlugRoute
   '/use-cases/$slug': typeof UseCasesSlugRoute
   '/ai-seo': typeof AiSeoIndexRoute
@@ -555,6 +579,7 @@ export interface FileRoutesByTo {
   '/features': typeof FeaturesIndexRoute
   '/glossary': typeof GlossaryIndexRoute
   '/integrations': typeof IntegrationsIndexRoute
+  '/solutions': typeof SolutionsIndexRoute
   '/tools': typeof ToolsIndexRoute
   '/use-cases': typeof UseCasesIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -617,6 +642,8 @@ export interface FileRoutesById {
   '/legal/refunds': typeof LegalRefundsRoute
   '/legal/terms': typeof LegalTermsRoute
   '/oauth/consent': typeof OauthConsentRoute
+  '/solutions/aeo-tools': typeof SolutionsAeoToolsRoute
+  '/solutions/ai-search-visibility': typeof SolutionsAiSearchVisibilityRoute
   '/tools/$slug': typeof ToolsSlugRoute
   '/use-cases/$slug': typeof UseCasesSlugRoute
   '/ai-seo/': typeof AiSeoIndexRoute
@@ -627,6 +654,7 @@ export interface FileRoutesById {
   '/features/': typeof FeaturesIndexRoute
   '/glossary/': typeof GlossaryIndexRoute
   '/integrations/': typeof IntegrationsIndexRoute
+  '/solutions/': typeof SolutionsIndexRoute
   '/tools/': typeof ToolsIndexRoute
   '/use-cases/': typeof UseCasesIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -689,6 +717,8 @@ export interface FileRouteTypes {
     | '/legal/refunds'
     | '/legal/terms'
     | '/oauth/consent'
+    | '/solutions/aeo-tools'
+    | '/solutions/ai-search-visibility'
     | '/tools/$slug'
     | '/use-cases/$slug'
     | '/ai-seo/'
@@ -699,6 +729,7 @@ export interface FileRouteTypes {
     | '/features/'
     | '/glossary/'
     | '/integrations/'
+    | '/solutions/'
     | '/tools/'
     | '/use-cases/'
     | '/.mcp/invoke-tool/$tool'
@@ -758,6 +789,8 @@ export interface FileRouteTypes {
     | '/legal/refunds'
     | '/legal/terms'
     | '/oauth/consent'
+    | '/solutions/aeo-tools'
+    | '/solutions/ai-search-visibility'
     | '/tools/$slug'
     | '/use-cases/$slug'
     | '/ai-seo'
@@ -768,6 +801,7 @@ export interface FileRouteTypes {
     | '/features'
     | '/glossary'
     | '/integrations'
+    | '/solutions'
     | '/tools'
     | '/use-cases'
     | '/.mcp/invoke-tool/$tool'
@@ -829,6 +863,8 @@ export interface FileRouteTypes {
     | '/legal/refunds'
     | '/legal/terms'
     | '/oauth/consent'
+    | '/solutions/aeo-tools'
+    | '/solutions/ai-search-visibility'
     | '/tools/$slug'
     | '/use-cases/$slug'
     | '/ai-seo/'
@@ -839,6 +875,7 @@ export interface FileRouteTypes {
     | '/features/'
     | '/glossary/'
     | '/integrations/'
+    | '/solutions/'
     | '/tools/'
     | '/use-cases/'
     | '/.mcp/invoke-tool/$tool'
@@ -894,6 +931,8 @@ export interface RootRouteChildren {
   GlossaryTermRoute: typeof GlossaryTermRoute
   IntegrationsSlugRoute: typeof IntegrationsSlugRoute
   OauthConsentRoute: typeof OauthConsentRoute
+  SolutionsAeoToolsRoute: typeof SolutionsAeoToolsRoute
+  SolutionsAiSearchVisibilityRoute: typeof SolutionsAiSearchVisibilityRoute
   ToolsSlugRoute: typeof ToolsSlugRoute
   UseCasesSlugRoute: typeof UseCasesSlugRoute
   AiSeoIndexRoute: typeof AiSeoIndexRoute
@@ -904,6 +943,7 @@ export interface RootRouteChildren {
   FeaturesIndexRoute: typeof FeaturesIndexRoute
   GlossaryIndexRoute: typeof GlossaryIndexRoute
   IntegrationsIndexRoute: typeof IntegrationsIndexRoute
+  SolutionsIndexRoute: typeof SolutionsIndexRoute
   ToolsIndexRoute: typeof ToolsIndexRoute
   UseCasesIndexRoute: typeof UseCasesIndexRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -1015,6 +1055,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ToolsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/solutions/': {
+      id: '/solutions/'
+      path: '/solutions'
+      fullPath: '/solutions/'
+      preLoaderRoute: typeof SolutionsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/integrations/': {
       id: '/integrations/'
       path: '/integrations'
@@ -1083,6 +1130,20 @@ declare module '@tanstack/react-router' {
       path: '/tools/$slug'
       fullPath: '/tools/$slug'
       preLoaderRoute: typeof ToolsSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/solutions/ai-search-visibility': {
+      id: '/solutions/ai-search-visibility'
+      path: '/solutions/ai-search-visibility'
+      fullPath: '/solutions/ai-search-visibility'
+      preLoaderRoute: typeof SolutionsAiSearchVisibilityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/solutions/aeo-tools': {
+      id: '/solutions/aeo-tools'
+      path: '/solutions/aeo-tools'
+      fullPath: '/solutions/aeo-tools'
+      preLoaderRoute: typeof SolutionsAeoToolsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/oauth/consent': {
@@ -1518,6 +1579,8 @@ const rootRouteChildren: RootRouteChildren = {
   GlossaryTermRoute: GlossaryTermRoute,
   IntegrationsSlugRoute: IntegrationsSlugRoute,
   OauthConsentRoute: OauthConsentRoute,
+  SolutionsAeoToolsRoute: SolutionsAeoToolsRoute,
+  SolutionsAiSearchVisibilityRoute: SolutionsAiSearchVisibilityRoute,
   ToolsSlugRoute: ToolsSlugRoute,
   UseCasesSlugRoute: UseCasesSlugRoute,
   AiSeoIndexRoute: AiSeoIndexRoute,
@@ -1528,6 +1591,7 @@ const rootRouteChildren: RootRouteChildren = {
   FeaturesIndexRoute: FeaturesIndexRoute,
   GlossaryIndexRoute: GlossaryIndexRoute,
   IntegrationsIndexRoute: IntegrationsIndexRoute,
+  SolutionsIndexRoute: SolutionsIndexRoute,
   ToolsIndexRoute: ToolsIndexRoute,
   UseCasesIndexRoute: UseCasesIndexRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,

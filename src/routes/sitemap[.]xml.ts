@@ -8,6 +8,7 @@ import { TOOL_SLUGS } from "@/data/tools";
 import { ALTERNATIVES_UPDATED, COMPETITORS } from "@/data/alternatives";
 import { COMPARE_UPDATED, MATCHUPS } from "@/data/compare/matchups";
 import { PERSONA_SLUGS } from "@/data/personas";
+import { SOLUTION_SLUGS, SOLUTIONS_UPDATED } from "@/data/solutions";
 import { ENGINES } from "@/data/ai-seo/engines";
 import { GLOSSARY_UPDATED, TERMS } from "@/data/glossary/terms";
 import { ABOUT_UPDATED } from "@/data/company";
@@ -52,6 +53,12 @@ export const Route = createFileRoute("/sitemap.xml")({
             path: `/features/${slug}`,
             changefreq: "monthly" as const,
             priority: "0.7",
+          })),
+          ...SOLUTION_SLUGS.map((slug) => ({
+            path: `/solutions/${slug}`,
+            lastmod: SOLUTIONS_UPDATED,
+            changefreq: "monthly" as const,
+            priority: "0.8",
           })),
           { path: "/integrations", changefreq: "monthly", priority: "0.8" },
           ...INTEGRATION_SLUGS.map((slug) => ({

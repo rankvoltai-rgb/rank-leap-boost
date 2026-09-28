@@ -16,6 +16,7 @@ import { ChatGPTMark, ClaudeMark, GoogleMark, PerplexityMark } from "./ai-logos"
 import { FEATURES, FEATURE_GROUPS } from "@/data/features";
 import { COMPETITORS } from "@/data/alternatives";
 import { PERSONAS } from "@/data/personas";
+import { SOLUTIONS } from "@/data/solutions";
 import { TOOLS } from "@/data/tools";
 import { enginesInTier } from "@/data/ai-seo/engines";
 import { LAUNCH_BADGES } from "@/data/launch-badges";
@@ -125,6 +126,10 @@ const FEATURES_SECTION: FooterSection = {
       label: f.name,
       to: "/features/$slug",
       params: { slug: f.slug },
+    })),
+    ...SOLUTIONS.map((s) => ({
+      label: s.name.charAt(0).toUpperCase() + s.name.slice(1),
+      to: `/solutions/${s.slug}`,
     })),
     { label: "All features", to: "/features", more: true },
   ],

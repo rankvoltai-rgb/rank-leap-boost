@@ -40,6 +40,7 @@ import {
 } from "@/data/compare/matchups";
 import { tallyOf } from "@/data/compare/entries";
 import { scoreFinder } from "@/data/compare/finder";
+import { entryPrice } from "@/data/compare/starting-price";
 import type { Product } from "@/data/compare/products";
 import type { MatchupEntry, Plan, ProductPricing, Round, Side, Winner } from "@/data/compare/types";
 import { TRIAL_DAYS, formatUsd } from "@/data/pricing";
@@ -859,17 +860,6 @@ export function FeatureMatrix({ matchup, entry }: { matchup: Matchup; entry: Mat
 }
 
 /* ---------- 6. Pricing ---------- */
-
-function entryPrice(p: ProductPricing): { monthly: number; annual?: number } | null {
-  // A free tier isn't a starting price: it's the trial line's job to say so.
-  const priced = p.plans.filter(
-    (pl): pl is Plan & { monthly: number } =>
-      pl.monthly !== null && pl.monthly > 0 && !pl.forAgencies,
-  );
-  if (priced.length === 0) return null;
-  const cheapest = priced.reduce((x, y) => (y.monthly < x.monthly ? y : x));
-  return { monthly: cheapest.monthly, annual: cheapest.annual };
-}
 
 function PlanList({ plans, className }: { plans: Plan[]; className?: string }) {
   return (

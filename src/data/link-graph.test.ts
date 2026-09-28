@@ -15,6 +15,7 @@ import { TOOLS, TOOL_SLUGS, relatedTools } from "@/data/tools";
 import { COMPETITORS, SHIPPED } from "@/data/alternatives";
 import { MATCHUPS, matchupTitle, relatedMatchups } from "@/data/compare/matchups";
 import { PUBLISH_PLATFORMS } from "@/data/platforms";
+import { SOLUTION_SLUGS } from "@/data/solutions";
 import { parseFrontmatter } from "@/lib/markdown-blocks";
 import {
   CARD_LIMIT,
@@ -41,6 +42,7 @@ const POSTS = readdirSync(BLOG_DIR)
 const PAGES = [
   "/pricing",
   ...FEATURE_SLUGS.map((s) => `/features/${s}`),
+  ...SOLUTION_SLUGS.map((s) => `/solutions/${s}`),
   ...PERSONA_SLUGS.map((s) => `/use-cases/${s}`),
   ...INTEGRATION_SLUGS.map((s) => `/integrations/${s}`),
   ...AI_TOOL_SLUGS.map((s) => `/integrations/${s}`),

@@ -1,0 +1,226 @@
+/**
+ * The rules for the AI-search playbooks and tool guides written from the
+ * September 2026 keyword research (the ChatGPT, Perplexity and "AI search
+ * optimization tools" clusters).
+ *
+ * They sit next to pages that already rank for close terms (the /ai-seo engine
+ * guides, the "cited by ChatGPT" playbook), and three of them name real
+ * products, so they're held to the comparison pages' standard: no testing we
+ * didn't do, no Rankbox feature before it ships, no product described as
+ * unable to do something, and every price dated. They must also read as eight
+ * articles, not one template, against each other and every other post.
+ */
+import { readFileSync, readdirSync } from "node:fs";
+import { describe, expect, it } from "vitest";
+import { parseFrontmatter } from "@/lib/markdown-blocks";
+import { analyzeArticle } from "@/lib/seo-analysis";
+import { HAS_LIVE_PLUGIN, SHIPPED } from "@/data/alternatives";
+import { cardFor, sectionOf } from "@/data/link-graph";
+
+const BLOG_DIR = "src/content/blog";
+
+/** The posts these rules cover. Tool guides name real products. */
+const SLUGS = [
+  "how-to-rank-on-chatgpt",
+  "chatgpt-rank-tracker",
+  "optimize-website-for-chatgpt-and-perplexity",
+  "perplexity-seo-tools",
+  "brand-presence-in-perplexity",
+  "ai-search-optimization-tools",
+  "optimize-business-for-ai-search",
+  "optimize-content-for-ai-search",
+];
+const TOOL_GUIDES = new Set([
+  "chatgpt-rank-tracker",
+  "perplexity-seo-tools",
+  "ai-search-optimization-tools",
+]);
+
+function read(slug: string) {
+  const { data, body } = parseFrontmatter(readFileSync(`${BLOG_DIR}/${slug}.md`, "utf8"));
+  return { slug, data, body };
+}
+
+const POSTS = SLUGS.map(read);
+const EVERY_POST = readdirSync(BLOG_DIR)
+  .filter((f) => f.endsWith(".md"))
+  .map((f) => read(f.replace(/\.md$/, "")));
+
+/** The markdown under one "## Heading", up to the next "## ". */
+function section(body: string, heading: RegExp): string {
+  const lines = body.split("\n");
+  const start = lines.findIndex((l) => l.startsWith("## ") && heading.test(l));
+  if (start < 0) return "";
+  const end = lines.findIndex((l, i) => i > start && l.startsWith("## "));
+  return lines.slice(start + 1, end < 0 ? undefined : end).join("\n");
+}
+
+/** Body text without link targets, code, or the References list (titles quote vendors). */
+function prose(body: string): string {
+  return body
+    .replace(/\n## References[\s\S]*$/, "")
+    .replace(/```[\s\S]*?```/g, "")
+    .replace(/\]\([^)]*\)/g, "]")
+    .replace(/`[^`]*`/g, "");
+}
+
+/* Rankbox has no proprietary dataset, customers to quote, or test lab. */
+const FIRST_PARTY = [
+  /\bwe tested\b/i,
+  /\bwe tried\b/i,
+  /\bin our (own )?test(s|ing)?\b/i,
+  /\bour (own )?(data|benchmark|study|research)\b/i,
+  /\bhands-on\b/i,
+  /\bwe found\b/i,
+  /\bour customers\b/i,
+];
+
+/* Said about a named product, these are claims we can't source. */
+const INABILITY = [/\bcan(?:'|’)t\b/i, /\bcannot\b/i, /\black(s|ing)?\b/i, /\bis missing\b/i];
+
+const RANKBOX_OVERCLAIMS = [
+  ...(SHIPPED.citationTracking
+    ? []
+    : [/Rankbox (also )?(tracks|monitors)/i, /\/features\/citation-tracking/]),
+  ...(HAS_LIVE_PLUGIN ? [] : [/Rankbox publishes (directly|natively)/i, /one-click publishing/i]),
+  ...(SHIPPED.teamInvites ? [] : [/unlimited (seats|team members|users)/i]),
+];
+
+describe.each(POSTS.map((p) => [p.slug, p] as const))("%s", (slug, { data, body }) => {
+  const keyword = data.keyword ?? "";
+
+  it("targets its keyword in the title and meta description", () => {
+    expect(keyword).not.toBe("");
+    expect(data.title.length).toBeLessThanOrEqual(60);
+    expect(data.title.toLowerCase()).toContain(keyword.toLowerCase());
+    expect(data.description.length).toBeGreaterThanOrEqual(120);
+    expect(data.description.length).toBeLessThanOrEqual(160);
+    expect(data.date).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+  });
+
+  it("scores 100 on the article writer's SEO checks", () => {
+    const analysis = analyzeArticle({
+      title: data.title,
+      keyword,
+      description: data.description,
+      body,
+    });
+    const failing = analysis.checks.filter((c) => c.status !== "pass").map((c) => c.detail);
+    expect(failing).toEqual([]);
+    expect(analysis.metrics.words).toBeGreaterThanOrEqual(2500);
+    expect(analysis.metrics.words).toBeLessThanOrEqual(5200);
+  });
+
+  it("claims no testing or data we don't have", () => {
+    const text = prose(body);
+    for (const pattern of FIRST_PARTY) expect(text, String(pattern)).not.toMatch(pattern);
+    if (TOOL_GUIDES.has(slug)) {
+      for (const pattern of INABILITY) expect(text, String(pattern)).not.toMatch(pattern);
+    }
+  });
+
+  it("describes Rankbox as it ships today", () => {
+    const naming = prose(body)
+      .split(/(?<=[.!?])\s+|\n+/)
+      .filter((s) => /\bRankbox\b/.test(s))
+      .join("\n");
+    for (const pattern of RANKBOX_OVERCLAIMS) expect(naming, String(pattern)).not.toMatch(pattern);
+    if (!SHIPPED.citationTracking) expect(body).not.toMatch(/\/features\/citation-tracking/);
+  });
+
+  it("links only to pages that exist", () => {
+    const internal = [...body.matchAll(/\]\((\/[^)\s]*)\)/g)].map((m) => m[1].split("#")[0]);
+    expect(internal.length).toBeGreaterThanOrEqual(5);
+    for (const href of internal) {
+      const hub = /^\/[a-z-]+$/.test(href) && sectionOf(href) !== undefined;
+      expect(hub || cardFor(href) !== undefined, href).toBe(true);
+    }
+  });
+
+  it("answers 5–6 questions and lists its references", () => {
+    const faq = section(body, /^## Frequently Asked Questions$/);
+    const questions = [...faq.matchAll(/^### .+\?$/gm)].length;
+    expect(questions).toBeGreaterThanOrEqual(5);
+    expect(questions).toBeLessThanOrEqual(6);
+    const refs = section(body, /^## References$/);
+    expect(
+      [...refs.matchAll(/^\d+\. \[[^\]]+\]\((https:\/\/[^)]+)\)/gm)].length,
+    ).toBeGreaterThanOrEqual(8);
+  });
+
+  if (TOOL_GUIDES.has(slug)) {
+    it("dates the prices it quotes", () => {
+      const text = prose(body);
+      if (/\$\d/.test(text.replace(/\$49\.50/g, ""))) {
+        expect(text).toMatch(/(September|Sept?\.?) 2026|2026-09-\d\d/);
+      }
+    });
+  }
+});
+
+/* ------------------------------------------------------------------ */
+/* Across posts: eight articles, not one template                      */
+/* ------------------------------------------------------------------ */
+
+function shingles(body: string): Set<string> {
+  const text = prose(body)
+    .split("\n")
+    .filter((l) => !/^(#|\||!\[)/.test(l.trim()))
+    .join(" ");
+  const words = text.toLowerCase().match(/[a-z0-9$.,'%-]+/g) ?? [];
+  const out = new Set<string>();
+  for (let i = 0; i + 8 <= words.length; i++) out.add(words.slice(i, i + 8).join(" "));
+  return out;
+}
+
+function sectionHeadings(body: string): Set<string> {
+  return new Set(
+    [...body.matchAll(/^## (.+)$/gm)]
+      .map((m) => m[1].replace(/\d+/g, "N").toLowerCase().trim())
+      .filter((h) => !/^(key takeaways|frequently asked questions|references)$/.test(h)),
+  );
+}
+
+describe("AI search posts, compared with every other post", () => {
+  const pairs = POSTS.flatMap((a) =>
+    EVERY_POST.filter(
+      (b) =>
+        b.slug !== a.slug &&
+        !(SLUGS.includes(b.slug) && SLUGS.indexOf(b.slug) < SLUGS.indexOf(a.slug)),
+    ).map((b) => [a, b] as const),
+  );
+
+  it("share no more than 8% of their wording with any other post", () => {
+    const cache = new Map<string, Set<string>>();
+    const sh = (p: { slug: string; body: string }) => {
+      if (!cache.has(p.slug)) cache.set(p.slug, shingles(p.body));
+      return cache.get(p.slug)!;
+    };
+    const over = pairs
+      .map(([a, b]) => {
+        const x = sh(a);
+        const y = sh(b);
+        let shared = 0;
+        for (const s of x) if (y.has(s)) shared++;
+        return {
+          pair: `${a.slug} / ${b.slug}`,
+          pct: Math.round((shared / Math.min(x.size, y.size)) * 1000) / 10,
+        };
+      })
+      .filter((r) => r.pct > 8);
+    expect(over).toEqual([]);
+  });
+
+  it("each have their own structure", () => {
+    const same = pairs
+      .map(([a, b]) => {
+        const theirs = sectionHeadings(b.body);
+        return {
+          pair: `${a.slug} / ${b.slug}`,
+          shared: [...sectionHeadings(a.body)].filter((h) => theirs.has(h)),
+        };
+      })
+      .filter((r) => r.shared.length > 2);
+    expect(same).toEqual([]);
+  });
+});

@@ -24,9 +24,11 @@ import { TOOLS } from "@/data/tools";
 import { PERSONAS } from "@/data/personas";
 import { COMPETITORS, SHIPPED } from "@/data/alternatives";
 import { PUBLISH_PLATFORMS } from "@/data/platforms";
+import { SOLUTIONS } from "@/data/solutions";
 
 export type Section =
   | "features"
+  | "solutions"
   | "use-cases"
   | "pricing"
   | "integrations"
@@ -41,6 +43,7 @@ export type Section =
 /** Card order in the block: the pages that sell first, then the ones that teach. */
 export const SECTION_ORDER: Section[] = [
   "features",
+  "solutions",
   "use-cases",
   "pricing",
   "integrations",
@@ -56,6 +59,7 @@ export const SECTION_ORDER: Section[] = [
 /** The small label above a card's title. */
 export const SECTION_LABEL: Record<Section, string> = {
   features: "Feature",
+  solutions: "Solution",
   "use-cases": "Use case",
   pricing: "Pricing",
   integrations: "Integration",
@@ -268,6 +272,38 @@ const POST_CARDS: Record<string, Titled> = {
     title: "How to Measure GEO: Track AI Citations and Prove Impact",
     blurb: "Crawled, cited, clicked, converted: the metrics, the math, and a control test.",
   },
+  "how-to-rank-on-chatgpt": {
+    title: "How to Rank on ChatGPT: Get Named When Buyers Ask",
+    blurb: "How ChatGPT builds a shortlist, and how to get on the pages it reads.",
+  },
+  "chatgpt-rank-tracker": {
+    title: "ChatGPT Rank Tracker: 9 Tools and 10 Questions to Ask",
+    blurb: "What a ChatGPT tracker should record, and nine tools priced per prompt.",
+  },
+  "optimize-website-for-chatgpt-and-perplexity": {
+    title: "How to Optimize Your Website for ChatGPT and Perplexity",
+    blurb: "One site checklist for both engines, and the six places they differ.",
+  },
+  "perplexity-seo-tools": {
+    title: "Perplexity SEO Tools: Track and Earn Perplexity Citations",
+    blurb: "Access checks, trackers, a DIY API tracker, and ways to earn its sources.",
+  },
+  "brand-presence-in-perplexity": {
+    title: "How to Improve Your Brand Presence in Perplexity",
+    blurb: "Audit what Perplexity says about you and trace each wrong line to its source.",
+  },
+  "ai-search-optimization-tools": {
+    title: "What Are AI Search Optimization Tools? Types and Costs",
+    blurb: "The six tool types, what to buy first, and a 100-point scorecard.",
+  },
+  "optimize-business-for-ai-search": {
+    title: "How to Optimize Your Business for AI Search Engines",
+    blurb: "Where each engine gets your business facts, and an audit to fix them.",
+  },
+  "optimize-content-for-ai-search": {
+    title: "How to Optimize Content for AI Search: Passage by Passage",
+    blurb: "The Lift Test: nine checks for every passage, with an annotated rewrite.",
+  },
   "cheap-seo": {
     title: "Cheap SEO in 2026: What Works and What's a Scam",
     blurb: "The free tools to set up first, the few paid ones worth buying, and the red flags.",
@@ -349,6 +385,12 @@ export function cardFor(href: string): LinkCard | undefined {
         const f = FEATURES.find((x) => x.slug === slug);
         return f && { title: f.name, blurb: f.tagline };
       }
+      case "solutions": {
+        const sol = SOLUTIONS.find((x) => x.slug === slug);
+        return (
+          sol && { title: sol.name.charAt(0).toUpperCase() + sol.name.slice(1), blurb: sol.tagline }
+        );
+      }
       case "use-cases": {
         const p = PERSONAS.find((x) => x.slug === slug);
         return p && { title: `Rankbox for ${p.nameLower}`, blurb: p.tagline };
@@ -406,6 +448,7 @@ export interface Topic {
 }
 
 const f = (slug: string) => `/features/${slug}`;
+const s = (slug: string) => `/solutions/${slug}`;
 const u = (slug: string) => `/use-cases/${slug}`;
 const i = (slug: string) => `/integrations/${slug}`;
 const e = (slug: string) => `/ai-seo/${slug}`;
@@ -424,6 +467,8 @@ export const TOPICS: Topic[] = [
     pages: [
       e("chatgpt"),
       b("how-to-get-cited-by-chatgpt"),
+      b("how-to-rank-on-chatgpt"),
+      b("optimize-website-for-chatgpt-and-perplexity"),
       i("chatgpt"),
       t("get-recommended-by-chatgpt"),
       ...g("oai-searchbot", "gptbot"),
@@ -447,7 +492,14 @@ export const TOPICS: Topic[] = [
   {
     id: "perplexity",
     title: "Get cited by Perplexity",
-    pages: [e("perplexity"), i("perplexity"), ...g("perplexitybot")],
+    pages: [
+      e("perplexity"),
+      b("perplexity-seo-tools"),
+      b("brand-presence-in-perplexity"),
+      b("optimize-website-for-chatgpt-and-perplexity"),
+      i("perplexity"),
+      ...g("perplexitybot"),
+    ],
   },
   {
     id: "gemini",
@@ -510,6 +562,7 @@ export const TOPICS: Topic[] = [
       e("claude"),
       e("perplexity"),
       e("gemini"),
+      b("optimize-content-for-ai-search"),
       b("koala-ai-alternatives"),
       b("byword-alternatives"),
       b("jasper-alternatives"),
@@ -550,6 +603,7 @@ export const TOPICS: Topic[] = [
       t("ai-citation-readiness-checker"),
       e("google-ai-overviews"),
       a("surfer-seo"),
+      b("optimize-content-for-ai-search"),
       b("frase-alternatives"),
       b("surfer-seo-alternatives"),
       a("frase"),
@@ -608,6 +662,8 @@ export const TOPICS: Topic[] = [
     title: "Measure how often AI recommends you",
     pages: [
       f("citation-tracking"),
+      s("ai-search-visibility"),
+      s("aeo-tools"),
       u("marketers"),
       u("saas"),
       u("seo-agencies"),
@@ -622,10 +678,13 @@ export const TOPICS: Topic[] = [
       e("deepseek"),
       e("mistral"),
       e("manus"),
+      b("chatgpt-rank-tracker"),
       b("how-to-measure-geo"),
       b("writesonic-alternatives"),
       b("how-to-get-cited-by-chatgpt"),
       b("how-to-show-up-in-google-ai-overviews"),
+      b("ai-search-optimization-tools"),
+      b("perplexity-seo-tools"),
       t("ai-visibility-prompt-generator"),
       t("get-recommended-by-chatgpt"),
       t("ai-crawler-log-analyzer"),
@@ -692,6 +751,7 @@ export const TOPICS: Topic[] = [
     pages: [
       f("authority-backlinks"),
       f("reddit-presence"),
+      s("ai-search-visibility"),
       u("seo-agencies"),
       u("local-businesses"),
       e("chatgpt"),
@@ -700,6 +760,9 @@ export const TOPICS: Topic[] = [
       e("grok"),
       e("meta-ai"),
       t("get-recommended-by-chatgpt"),
+      b("optimize-business-for-ai-search"),
+      b("brand-presence-in-perplexity"),
+      b("how-to-rank-on-chatgpt"),
       a("rankpill"),
       a("outrank"),
       c("semrush-vs-ahrefs"),
@@ -741,6 +804,10 @@ export const TOPICS: Topic[] = [
     title: "Choosing an AI SEO tool",
     pages: [
       "/pricing",
+      s("aeo-tools"),
+      s("ai-search-visibility"),
+      b("ai-search-optimization-tools"),
+      b("chatgpt-rank-tracker"),
       b("cheap-seo"),
       b("rankpill-alternatives"),
       b("outrank-alternatives"),
@@ -787,11 +854,11 @@ export const PER_SECTION = 2;
 export const TERM_LIMIT = 6;
 
 /**
- * Comparison pages say only what Rankbox ships today (see SHIPPED), so they
- * never link to a feature or add-on that hasn't. Each link appears the day its
- * flag flips.
+ * Comparison and solutions pages say only what Rankbox ships today (see
+ * SHIPPED), so they never link to a feature or add-on that hasn't. Each link
+ * appears the day its flag flips.
  */
-const CLAIM_CHECKED: Section[] = ["alternatives", "compare"];
+const CLAIM_CHECKED: Section[] = ["alternatives", "compare", "solutions"];
 const UNSHIPPED = new Set<string>([
   ...(SHIPPED.citationTracking ? [] : [f("citation-tracking")]),
   ...(PUBLISH_PLATFORMS.some((p) => p.addonLive) ? [] : [f("auto-publishing")]),
@@ -847,7 +914,8 @@ export function crossLinks(path: string, exclude: readonly string[] = []): Cross
   const skip = new Set([path, ...exclude]);
   // The "best X alternatives" posts compare real products, so they follow the
   // comparison sections' rule and never suggest a feature that hasn't shipped.
-  const claimChecked = CLAIM_CHECKED.includes(own) || /^\/blog\/[a-z0-9-]+-alternatives$/.test(path);
+  const claimChecked =
+    CLAIM_CHECKED.includes(own) || /^\/blog\/[a-z0-9-]+-alternatives$/.test(path);
   const cards: string[] = [];
   const terms: string[] = [];
   const perSection = new Map<Section, number>();
