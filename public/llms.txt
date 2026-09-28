@@ -50,6 +50,12 @@
 - [Optimize your business for AI search engines](/blog/optimize-business-for-ai-search): Where Google, Gemini, Copilot, ChatGPT, Perplexity and Siri get business facts, an 18-fact business fact sheet, and a worked listing audit.
 - [Optimize content for AI search](/blog/optimize-content-for-ai-search): The Lift Test, nine checks for every passage, with an annotated before/after rewrite and a refresh-priority score.
 - [How to measure GEO](/blog/how-to-measure-geo): The four Cs (crawled, cited, clicked, converted), prompt panel sample sizes, GA4 setup, and a control-prompt test.
+- [The AI Crawler Directory](/blog/ai-crawler-directory): Every documented AI crawler (34 rows) with user-agent token, job (training, search, live fetch, agent), robots.txt behavior in the vendor's words, IP lists and verification, crawl-to-referral ratios, tested robots.txt/.htaccess/NGINX rules and log one-liners. Last checked 28 September 2026.
+- [The Cloudflare Challenge Trap](/blog/cloudflare-challenge-trap): Which Cloudflare settings (Bot Fight Mode, Super Bot Fight Mode, the 15 September 2026 AI bot defaults, WAF rules) silently block ChatGPT and Perplexity bots, a 7-step audit, and Skip-rule expressions that let verified AI search bots in.
+- [Bing Webmaster Tools for AI search](/blog/bing-webmaster-tools-ai-indexing-guide): Search Console mapped to Bing Webmaster Tools, a first-hour setup checklist, IndexNow and crawl-frequency monitoring, the AI Performance report, and how Bing relates to ChatGPT search.
+- [How to get indexed by LLMs with llms.txt](/blog/how-to-get-indexed-by-llms-with-llms-txt): The llms.txt v2 spec, an annotated example, serving it on Nginx, Next.js, WordPress, Shopify and Cloudflare, Lighthouse and log checks, and what the file does and doesn't do for AI indexing.
+- [MCP as the new sitemap](/blog/mcp-protocol-new-sitemap): What an MCP server does compared with an XML sitemap, the evidence on agents and APIs, what to expose, auth and safety, a minimal v2 TypeScript SDK server, and how to get listed.
+- [How to measure AI referral traffic in GA4](/blog/how-to-measure-ai-referral-traffic-in-ga4): A tested regex for AI assistant hostnames, a custom channel group placed above Referral, GA4's AI Assistant channel, and AI vs organic comparisons in explorations, Data Studio and BigQuery.
 
 ## AI Search Glossary
 

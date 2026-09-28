@@ -29,6 +29,14 @@ const SLUGS = [
   "ai-search-optimization-tools",
   "optimize-business-for-ai-search",
   "optimize-content-for-ai-search",
+  // Phase 1 of docs/content-roadmap.md: titles verbatim from the Semrush content plan.
+  "ai-crawler-directory",
+  "cloudflare-challenge-trap",
+  "bing-webmaster-tools-ai-indexing-guide",
+  "how-to-get-indexed-by-llms-with-llms-txt",
+  "mcp-protocol-new-sitemap",
+  // Phase 2
+  "how-to-measure-ai-referral-traffic-in-ga4",
 ];
 const TOOL_GUIDES = new Set([
   "chatgpt-rank-tracker",
@@ -90,8 +98,8 @@ describe.each(POSTS.map((p) => [p.slug, p] as const))("%s", (slug, { data, body 
   const keyword = data.keyword ?? "";
 
   it("targets its keyword in the title and meta description", () => {
+    // No length cap: posts from the Semrush content plan keep the plan's exact titles.
     expect(keyword).not.toBe("");
-    expect(data.title.length).toBeLessThanOrEqual(60);
     expect(data.title.toLowerCase()).toContain(keyword.toLowerCase());
     expect(data.description.length).toBeGreaterThanOrEqual(120);
     expect(data.description.length).toBeLessThanOrEqual(160);

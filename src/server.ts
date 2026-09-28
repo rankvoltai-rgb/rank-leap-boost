@@ -1,6 +1,7 @@
 import "./lib/error-capture";
 
 import { consumeLastCapturedError } from "./lib/error-capture";
+import { botFromUserAgent } from "./lib/lab/experiments";
 import { renderErrorPage } from "./lib/error-page";
 
 type ServerEntry = {
@@ -37,12 +38,27 @@ async function normalizeCatastrophicSsrResponse(response: Response): Promise<Res
   });
 }
 
+// Requests the lab experiments record (src/lib/lab): every /lab page, and bot
+// visits to blog posts. Checked here so ordinary page views never load the
+// logger.
+function isLabLogged(request: Request): boolean {
+  const path = new URL(request.url).pathname;
+  if (path.startsWith("/lab/") || path === "/lab") return true;
+  return path.startsWith("/blog/") && botFromUserAgent(request.headers.get("user-agent")) !== null;
+}
+
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
     try {
       const handler = await getServerEntry();
-      const response = await handler.fetch(request, env, ctx);
-      return await normalizeCatastrophicSsrResponse(response);
+      const response = await normalizeCatastrophicSsrResponse(
+        await handler.fetch(request, env, ctx),
+      );
+      if (isLabLogged(request)) {
+        const { logLabRequest } = await import("./lib/lab/hits.server");
+        await logLabRequest(request, response);
+      }
+      return response;
     } catch (error) {
       console.error(error);
       return new Response(renderErrorPage(), {

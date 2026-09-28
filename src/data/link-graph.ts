@@ -272,6 +272,10 @@ const POST_CARDS: Record<string, Titled> = {
     title: "How to Measure GEO: Track AI Citations and Prove Impact",
     blurb: "Crawled, cited, clicked, converted: the metrics, the math, and a control test.",
   },
+  "how-to-measure-ai-referral-traffic-in-ga4": {
+    title: "How to Measure AI Referral Traffic in Google Analytics 4 (GA4)",
+    blurb: "A tested regex, a channel group above Referral, and AI vs organic reports.",
+  },
   "how-to-rank-on-chatgpt": {
     title: "How to Rank on ChatGPT: Get Named When Buyers Ask",
     blurb: "How ChatGPT builds a shortlist, and how to get on the pages it reads.",
@@ -303,6 +307,28 @@ const POST_CARDS: Record<string, Titled> = {
   "optimize-content-for-ai-search": {
     title: "How to Optimize Content for AI Search: Passage by Passage",
     blurb: "The Lift Test: nine checks for every passage, with an annotated rewrite.",
+  },
+  "ai-crawler-directory": {
+    title: "The AI Crawler Directory",
+    blurb: "Every AI bot's user agent, job, IP list and robots.txt rules, rechecked monthly.",
+  },
+  "cloudflare-challenge-trap": {
+    title:
+      "The Cloudflare Challenge Trap: Are You Silently Blocking ChatGPT from Recommending You?",
+    blurb:
+      "The Cloudflare settings that silently block AI bots, and rules that let verified ones in.",
+  },
+  "bing-webmaster-tools-ai-indexing-guide": {
+    title: "Bing Webmaster Tools Is the New Google Search Console: The AI Indexing Guide",
+    blurb: "Set up Bing Webmaster Tools for AI search: IndexNow, crawl checks and AI citations.",
+  },
+  "how-to-get-indexed-by-llms-with-llms-txt": {
+    title: "How to Get Indexed by LLMs with an llms.txt File: The Complete Guide",
+    blurb: "The llms.txt spec, an annotated example, serving it on five stacks, and log checks.",
+  },
+  "mcp-protocol-new-sitemap": {
+    title: "The MCP Protocol as the New Sitemap: Why AI Models Prefer APIs Over Web Crawling",
+    blurb: "What an MCP server adds to your sitemap, and how to build, secure and list one.",
   },
   "cheap-seo": {
     title: "Cheap SEO in 2026: What Works and What's a Scam",
@@ -514,7 +540,12 @@ export const TOPICS: Topic[] = [
   {
     id: "copilot",
     title: "Get cited by Microsoft Copilot",
-    pages: [e("copilot"), i("copilot-studio"), i("github-copilot")],
+    pages: [
+      e("copilot"),
+      b("bing-webmaster-tools-ai-indexing-guide"),
+      i("copilot-studio"),
+      i("github-copilot"),
+    ],
   },
 
   /* One per job the product does, led by the feature page that does it. */
@@ -680,6 +711,7 @@ export const TOPICS: Topic[] = [
       e("manus"),
       b("chatgpt-rank-tracker"),
       b("how-to-measure-geo"),
+      b("how-to-measure-ai-referral-traffic-in-ga4"),
       b("writesonic-alternatives"),
       b("how-to-get-cited-by-chatgpt"),
       b("how-to-show-up-in-google-ai-overviews"),
@@ -727,6 +759,9 @@ export const TOPICS: Topic[] = [
       e("google-ai-overviews"),
       e("deepseek"),
       b("how-to-get-cited-by-chatgpt"),
+      b("ai-crawler-directory"),
+      b("cloudflare-challenge-trap"),
+      b("how-to-get-indexed-by-llms-with-llms-txt"),
       ...g(
         "ai-crawlers",
         "robots-txt",
@@ -790,6 +825,7 @@ export const TOPICS: Topic[] = [
     pages: [
       i("mcp"),
       i("api"),
+      b("mcp-protocol-new-sitemap"),
       f("answer-space-research"),
       t("ai-question-generator"),
       t("content-brief-generator"),
