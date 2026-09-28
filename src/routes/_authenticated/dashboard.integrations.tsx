@@ -100,7 +100,8 @@ function SiteIntegrations({ siteId }: { siteId: string }) {
   const { connector: openId, webflow: webflowFlow, shopify: shopifyFlow } = Route.useSearch();
   const { data: blogs = [] } = useAllArticles();
   const { data: webflow } = useWebflowStatus(siteId);
-  const { data: shopify } = useShopifyStatus(siteId);
+  // Sent here from the Shopify app to make a key: watch for the store to link.
+  const { data: shopify } = useShopifyStatus(siteId, { waitForLink: shopifyFlow === "key" });
   const { data: keys = [], isLoading } = useQuery({
     queryKey: ["api-keys", siteId],
     queryFn: () => listIntegrationKeys(siteId),
@@ -755,7 +756,9 @@ function SiteSetup({
   );
 
   // The Shopify app is set up inside the Shopify admin; here, just where it publishes.
-  if (platform?.id === "shopify" && shopify && !useApi) {
+  // Also once the key made for it has linked the store: that key never calls
+  // the API again, so its "waiting for the first request" would never end.
+  if (platform?.id === "shopify" && shopify && (!useApi || (shopifyKeyFlow && shopify.connected))) {
     return <ShopifyPanel siteId={siteId} connection={shopify} />;
   }
 

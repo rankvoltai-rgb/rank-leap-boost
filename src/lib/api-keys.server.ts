@@ -78,11 +78,18 @@ export async function resolveApiKey(value: string | null | undefined): Promise<A
     return { ok: false, reason: "no-plan" };
   }
 
-  // Best-effort usage timestamp; never block the response on it.
-  void supabaseAdmin
-    .from("api_keys")
-    .update({ last_used_at: new Date().toISOString() })
-    .eq("id", data.id);
+  // The usage timestamp the dashboard reads to call a site connected. It must
+  // be awaited: a Supabase query only runs when awaited, and the `void` that
+  // was here meant no key was ever stamped. A failure still never blocks the
+  // request.
+  try {
+    await supabaseAdmin
+      .from("api_keys")
+      .update({ last_used_at: new Date().toISOString() })
+      .eq("id", data.id);
+  } catch {
+    // Best effort.
+  }
 
   return { ok: true, ...scope };
 }
