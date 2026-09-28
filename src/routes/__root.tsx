@@ -88,6 +88,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { title: "Rankbox — Get AI Traffic on Autopilot" },
       { name: "google-site-verification", content: "fG4neVF-dPj7kLMIjpCUpXjX2XhTPhoZvyyiGL-xs40" },
       { name: "trustpilot-one-time-domain-verification-id", content: "de145b7d-659e-4783-a55a-4dac354411ea" },
+      { name: "msvalidate.01", content: "5373161F6EDC88351E4D29926AC8C8FC" },
       { name: "description", content: "Rankbox is the AI growth engine that researches, writes, and publishes daily articles engineered to get your brand cited by ChatGPT, Perplexity, and Google AI Overviews — and ranked on classic search." },
       { name: "author", content: "Rankbox" },
       { property: "og:title", content: "Rankbox — Get AI Traffic on Autopilot" },
