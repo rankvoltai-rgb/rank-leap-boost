@@ -14,6 +14,8 @@ That matters because of how much of the web sits there. Cloudflare says [more th
 
 This guide is the audit. It maps which Cloudflare settings stop which AI bots, shows you where a blocked bot appears in Security Events and AI Crawl Control, and gives you copy-paste custom rules that keep scrapers out while letting verified AI search bots in. For how ChatGPT search finds pages in the first place, see our [ChatGPT SEO guide](/ai-seo/chatgpt).
 
+Two shorter guides answer the common questions: [why Cloudflare is blocking ChatGPT](/blog/why-is-cloudflare-blocking-chatgpt), symptom by symptom, and [how to let ChatGPT's bots through on each Cloudflare plan](/blog/cloudflare-blocking-chatgpt).
+
 ## Key Takeaways
 
 - A blocked AI bot fails silently. Cloudflare stops the request at its edge, your origin logs show nothing, and Security Events keeps only 24 hours on the Free and Pro plans.

@@ -29,7 +29,10 @@ export interface NotionBlock {
   /** table: every row's cells, header row first when hasColumnHeader. */
   rows?: RichTextSpan[][][];
   hasColumnHeader?: boolean;
-  /** figure: alt text for a built-in diagram (the figure's id is in url). */
+  /**
+   * figure: alt text for a built-in diagram (the figure's id is in url);
+   * image: alt text; video: the video's title.
+   */
   alt?: string;
 }
 

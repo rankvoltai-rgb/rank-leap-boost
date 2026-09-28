@@ -14,6 +14,8 @@ The file is still worth an hour. Its spec got a major revision in [August 2026](
 
 This guide covers the full spec, an annotated example for Plannora (a made-up project management app), serving steps for five stacks, validation, log checks and an honest answer on SEO. For a short definition, see our [llms.txt glossary entry](/glossary/llms-txt).
 
+Short answers to two related questions: [will an llms.txt file help your SEO?](/blog/will-llms-txt-help-your-seo) and [can an llms.txt file get you indexed by an LLM?](/blog/how-to-get-indexed-by-llm-through-llms-txt)
+
 ## Key Takeaways
 
 - llms.txt is a reading list for AI agents, not an index or a permission file. No major AI search engine says it ranks or cites pages because of it.

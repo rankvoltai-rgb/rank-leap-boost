@@ -24,6 +24,7 @@ import { ChatGPTMark, GoogleMark } from "@/components/landing/ai-logos";
 import { cn } from "@/lib/utils";
 import { PRICE_CHARTS, type PriceChart } from "@/data/blog-figures";
 import { formatUsd } from "@/data/pricing";
+import { STUDY_CHARTS, type EmbeddingMap, type StudyBarChart } from "@/data/study-charts";
 
 /* ---------- shared bits ---------- */
 
@@ -1006,6 +1007,162 @@ function ShortlistLoop() {
   );
 }
 
+/* ---------- 9. Study charts (Rankbox research posts) ---------- */
+
+/** Blue, light gray, dark ink: three series that stay apart in both themes. */
+const SERIES_BAR = ["bg-brand-blue", "bg-ink/30", "bg-ink/80"];
+const SERIES_DOT = SERIES_BAR;
+
+function StudyBarsFigure({ chart }: { chart: StudyBarChart }) {
+  const max = chart.max ?? Math.max(...chart.rows.flatMap((r) => Object.values(r.values)));
+  const multi = chart.series.length > 1;
+  return (
+    <div className="rounded-2xl border border-border bg-card p-4 shadow-1 sm:p-5">
+      <p className="text-sm font-semibold text-ink">{chart.title}</p>
+      <p className="mt-0.5 text-xs text-muted-foreground">{chart.subtitle}</p>
+      {multi && (
+        <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1">
+          {chart.series.map((s, i) => (
+            <span key={s.key} className="flex items-center gap-1.5 text-[0.68rem] text-ink">
+              <span className={cn("h-2.5 w-2.5 rounded-sm", SERIES_DOT[i])} />
+              {s.label}
+            </span>
+          ))}
+        </div>
+      )}
+      <div className={cn("mt-4", multi ? "space-y-4" : "space-y-3")}>
+        {chart.rows.map((row) => (
+          <div
+            key={row.name}
+            className="grid grid-cols-[6.5rem_minmax(0,1fr)] items-center gap-3 sm:grid-cols-[9rem_minmax(0,1fr)]"
+          >
+            <div className="min-w-0">
+              <p className="text-xs font-semibold leading-tight text-ink">{row.name}</p>
+              {row.note && (
+                <p className="mt-0.5 line-clamp-2 text-[0.65rem] leading-tight text-muted-foreground">
+                  {row.note}
+                </p>
+              )}
+            </div>
+            <div className="space-y-1 border-l border-ink/15">
+              {chart.series.map((s, i) => {
+                const v = row.values[s.key];
+                if (v === undefined) return null;
+                return (
+                  <div
+                    key={s.key}
+                    className="flex items-center gap-2"
+                    title={`${row.name}, ${s.label}: ${v}%`}
+                  >
+                    <span
+                      className={cn("block rounded-r", multi ? "h-2.5" : "h-4", SERIES_BAR[i])}
+                      style={{ width: `${Math.max(1, (v / max) * 78)}%` }}
+                    />
+                    <span className="shrink-0 text-[0.68rem] font-bold tabular-nums text-ink">
+                      {v.toFixed(1)}%
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        ))}
+      </div>
+      <p className="mt-4 text-[0.65rem] leading-snug text-muted-foreground">{chart.source}</p>
+    </div>
+  );
+}
+
+/** Opacity steps for 0–4 definition sentences, light to dark. */
+const K_SHADE = ["opacity-25", "opacity-40", "opacity-60", "opacity-80", "opacity-100"];
+
+function EmbeddingMapFigure({ map }: { map: EmbeddingMap }) {
+  const xs = [
+    ...map.prompts.map((p) => p.x),
+    ...map.clusters.flatMap((c) => c.points.map((p) => p.x)),
+  ];
+  const ys = [
+    ...map.prompts.map((p) => p.y),
+    ...map.clusters.flatMap((c) => c.points.map((p) => p.y)),
+  ];
+  const [x0, x1, y0, y1] = [Math.min(...xs), Math.max(...xs), Math.min(...ys), Math.max(...ys)];
+  // 8% padding each side; y grows upward
+  const px = (x: number) => 8 + ((x - x0) / (x1 - x0)) * 84;
+  const py = (y: number) => 8 + ((y1 - y) / (y1 - y0)) * 84;
+  return (
+    <div className="rounded-2xl border border-border bg-card p-4 shadow-1 sm:p-5">
+      <p className="text-sm font-semibold text-ink">{map.title}</p>
+      <p className="mt-0.5 text-xs text-muted-foreground">{map.subtitle}</p>
+      <div className="relative mt-4 aspect-square w-full rounded-xl border border-border bg-surface sm:aspect-[16/9]">
+        {map.clusters.map((c) => {
+          const cx = c.points.reduce((s, p) => s + px(p.x), 0) / c.points.length;
+          const below = c.labelPlace === "below";
+          const cy = below
+            ? Math.max(...c.points.map((p) => py(p.y)))
+            : Math.min(...c.points.map((p) => py(p.y)));
+          return (
+            <div key={c.k}>
+              {c.points.map((p, i) => (
+                <span
+                  key={i}
+                  className={cn(
+                    "absolute h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand-blue",
+                    K_SHADE[c.k],
+                  )}
+                  style={{ left: `${px(p.x)}%`, top: `${py(p.y)}%` }}
+                />
+              ))}
+              <span
+                className={cn(
+                  "absolute -translate-x-1/2 whitespace-nowrap text-[0.6rem] font-semibold text-brand-blue sm:text-[0.68rem]",
+                  below ? "pt-1.5" : "-translate-y-full pb-1.5",
+                )}
+                style={{ left: `${cx}%`, top: `${cy}%` }}
+              >
+                {c.label}
+              </span>
+            </div>
+          );
+        })}
+        {map.prompts.map((p) => {
+          const place = p.place ?? "below";
+          const at = { left: `${px(p.x)}%`, top: `${py(p.y)}%` };
+          return (
+            <div key={p.label}>
+              <span
+                className="absolute h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rotate-45 bg-ink"
+                style={at}
+              />
+              <span
+                className={cn(
+                  "absolute w-max max-w-[6.5rem] text-[0.58rem] leading-tight text-ink sm:max-w-[9rem] sm:text-[0.65rem]",
+                  place === "below" && "-translate-x-1/2 pt-2.5 text-center",
+                  place === "above" && "-translate-x-1/2 -translate-y-full pb-2.5 text-center",
+                  place === "left" && "-translate-x-full -translate-y-1/2 pr-3 text-right",
+                  place === "right" && "-translate-y-1/2 pl-3 text-left",
+                )}
+                style={at}
+              >
+                {p.label}
+              </span>
+            </div>
+          );
+        })}
+      </div>
+      <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-[0.68rem] text-ink">
+        <span className="flex items-center gap-1.5">
+          <span className="h-2.5 w-2.5 shrink-0 rotate-45 bg-ink" /> User prompt
+        </span>
+        <span className="flex items-center gap-1.5">
+          <span className="h-2 w-2 shrink-0 rounded-full bg-brand-blue" /> Paragraph (darker = more
+          definitions; dots in a cluster differ only in keyword repeats)
+        </span>
+      </div>
+      <p className="mt-3 text-[0.65rem] leading-snug text-muted-foreground">{map.source}</p>
+    </div>
+  );
+}
+
 /* ---------- registry ---------- */
 
 const FIGURES: Record<string, () => ReactNode> = {
@@ -1019,10 +1176,19 @@ const FIGURES: Record<string, () => ReactNode> = {
   "shortlist-loop": ShortlistLoop,
 };
 
-/** A fixed figure by id, or a data-driven one ("price-chart/<post-slug>"). */
+/**
+ * A fixed figure by id, or a data-driven one: "price-chart/<post-slug>" or
+ * "study/<chart-id>".
+ */
 function figureFor(id: string): (() => ReactNode) | undefined {
   if (FIGURES[id]) return FIGURES[id];
   const [kind, key] = id.split("/");
+  if (kind === "study" && key && STUDY_CHARTS[key]) {
+    const study = STUDY_CHARTS[key];
+    return study.kind === "map"
+      ? () => <EmbeddingMapFigure map={study} />
+      : () => <StudyBarsFigure chart={study} />;
+  }
   const chart = kind === "price-chart" && key ? PRICE_CHARTS[key] : undefined;
   return chart ? () => <PriceChartFigure chart={chart} /> : undefined;
 }

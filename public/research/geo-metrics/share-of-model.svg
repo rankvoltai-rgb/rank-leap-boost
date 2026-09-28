@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+<title id="title">Share of Model (SoM)</title>
+<desc id="desc">Share of Model formula: the mean, across category prompt variants, of the share of runs whose AI answer names the brand</desc>
+<rect width="1200" height="630" fill="#ffffff"/>
+<rect width="1200" height="10" fill="#1877f2"/>
+<rect x="20" y="30" width="1160" height="580" rx="22" fill="none" stroke="#dfe5ee" stroke-width="2"/>
+<text x="52" y="78" font-family="Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="20" font-weight="700" letter-spacing="1.5" fill="#1877f2">PRESENCE LAYER</text>
+<text x="52" y="124" font-family="Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="42" font-weight="700" fill="#121826">Share of Model (SoM)</text>
+<text x="52" y="160" font-family="Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="23" fill="#566072">How often AI answers name your brand when buyers ask about the category without naming anyone.</text>
+<rect x="52" y="198" width="1096" height="74" rx="14" fill="#f2f7ff" stroke="#cddffb"/>
+<text x="600" y="242" font-family="'JetBrains Mono', 'SFMono-Regular', Menlo, Consolas, 'Liberation Mono', monospace" font-size="27" font-weight="600" text-anchor="middle" fill="#121826">SoM(b) = (1 / |V|) × Σ_v [ (1 / K_v) × Σ_r m(b, a_v,r) ]</text>
+<text x="52" y="308" font-family="'JetBrains Mono', 'SFMono-Regular', Menlo, Consolas, 'Liberation Mono', monospace" font-size="22" font-weight="700" fill="#1877f2">V</text>
+<text x="162" y="308" font-family="Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="22" fill="#121826">unbranded category prompt variants (brand prompts excluded)</text>
+<text x="52" y="342" font-family="'JetBrains Mono', 'SFMono-Regular', Menlo, Consolas, 'Liberation Mono', monospace" font-size="22" font-weight="700" fill="#1877f2">K_v</text>
+<text x="162" y="342" font-family="Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="22" fill="#121826">valid runs of variant v (errors and refusals dropped; at least 3 per engine)</text>
+<text x="52" y="376" font-family="'JetBrains Mono', 'SFMono-Regular', Menlo, Consolas, 'Liberation Mono', monospace" font-size="22" font-weight="700" fill="#1877f2">m(b, a)</text>
+<text x="162" y="376" font-family="Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="22" fill="#121826">1 if answer a names brand b (aliases count once per answer), else 0</text>
+<text x="52" y="414" font-family="Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="20" fill="#566072">Average within each variant first, then across variants. Compute per engine. Report a 95% interval.</text>
+<rect x="52" y="468" width="1096" height="74" rx="10" fill="#fbfcfe" stroke="#dfe5ee"/>
+<text x="70" y="498" font-family="Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="22" font-weight="600" fill="#121826">Illustrative: fictional Plannora is named in 21 of 60 answers (20 variants × 3 runs) → SoM</text>
+<text x="70" y="526" font-family="Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="22" font-weight="600" fill="#121826">= 35.0% (95% CI 24.2%–47.6%)</text>
+<line x1="52" y1="558" x2="1148" y2="558" stroke="#dfe5ee" stroke-width="2"/>
+<text x="52" y="590" font-family="Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="20" fill="#566072">Rankbox GEO Metrics Framework · rankbox.xyz/blog/geo-metrics-framework</text>
+<text x="1148" y="590" font-family="Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="20" text-anchor="end" fill="#566072">v1.0 · 28 September 2026</text>
+</svg>

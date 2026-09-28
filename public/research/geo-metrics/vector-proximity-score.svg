@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+<title id="title">Vector Proximity Score (VPS)</title>
+<desc id="desc">Vector Proximity Score formula: mean cosine similarity between buyer problem prompts and a brand's positioning statement in one open embedding model</desc>
+<rect width="1200" height="630" fill="#ffffff"/>
+<rect width="1200" height="10" fill="#1877f2"/>
+<rect x="20" y="30" width="1160" height="580" rx="22" fill="none" stroke="#dfe5ee" stroke-width="2"/>
+<text x="52" y="78" font-family="Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="20" font-weight="700" letter-spacing="1.5" fill="#1877f2">POSITIONING LAYER · PROPOSED METRIC</text>
+<text x="52" y="124" font-family="Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="42" font-weight="700" fill="#121826">Vector Proximity Score (VPS)</text>
+<text x="52" y="160" font-family="Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="23" fill="#566072">How close a brand's positioning statement sits, in meaning, to the problems buyers describe.</text>
+<rect x="52" y="198" width="1096" height="74" rx="14" fill="#f2f7ff" stroke="#cddffb"/>
+<text x="600" y="242" font-family="'JetBrains Mono', 'SFMono-Regular', Menlo, Consolas, 'Liberation Mono', monospace" font-size="28" font-weight="600" text-anchor="middle" fill="#121826">VPS(b) = (1 / |P|) × Σ_p∈P cos( E(q + p), E(s_b) )</text>
+<text x="52" y="308" font-family="'JetBrains Mono', 'SFMono-Regular', Menlo, Consolas, 'Liberation Mono', monospace" font-size="22" font-weight="700" fill="#1877f2">P</text>
+<text x="122" y="308" font-family="Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="22" fill="#121826">buyer problem prompts, no brand names</text>
+<text x="52" y="342" font-family="'JetBrains Mono', 'SFMono-Regular', Menlo, Consolas, 'Liberation Mono', monospace" font-size="22" font-weight="700" fill="#1877f2">s_b</text>
+<text x="122" y="342" font-family="Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="22" fill="#121826">the brand's positioning statement (2–3 sentences)</text>
+<text x="52" y="376" font-family="'JetBrains Mono', 'SFMono-Regular', Menlo, Consolas, 'Liberation Mono', monospace" font-size="22" font-weight="700" fill="#1877f2">E</text>
+<text x="122" y="376" font-family="Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="22" fill="#121826">bge-base-en-v1.5, CLS pooling, vectors normalized</text>
+<text x="52" y="410" font-family="'JetBrains Mono', 'SFMono-Regular', Menlo, Consolas, 'Liberation Mono', monospace" font-size="22" font-weight="700" fill="#1877f2">q</text>
+<text x="122" y="410" font-family="Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="22" fill="#121826">&quot;Represent this sentence for searching relevant passages: &quot; (prompts only)</text>
+<text x="52" y="448" font-family="Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="20" font-style="italic" fill="#566072">A proxy for positioning clarity. It does not measure how any AI engine retrieves or ranks sources.</text>
+<rect x="52" y="468" width="1096" height="74" rx="10" fill="#fbfcfe" stroke="#dfe5ee"/>
+<text x="70" y="498" font-family="Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="22" font-weight="600" fill="#121826">Illustrative, 8 agency prompts: fictional Plannora 0.5367 vs fictional Loopcraft 0.4556</text>
+<text x="70" y="526" font-family="Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="22" font-weight="600" fill="#121826">(off-category control 0.3405)</text>
+<line x1="52" y1="558" x2="1148" y2="558" stroke="#dfe5ee" stroke-width="2"/>
+<text x="52" y="590" font-family="Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="20" fill="#566072">Rankbox GEO Metrics Framework · rankbox.xyz/blog/geo-metrics-framework</text>
+<text x="1148" y="590" font-family="Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="20" text-anchor="end" fill="#566072">v1.0 · 28 September 2026</text>
+</svg>

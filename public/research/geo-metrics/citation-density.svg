@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+<title id="title">Citation Density (CD)</title>
+<desc id="desc">Citation Density formula: distinct cited sources per 1,000 tokens of AI answer text, counted with the o200k_base tokenizer</desc>
+<rect width="1200" height="630" fill="#ffffff"/>
+<rect width="1200" height="10" fill="#1877f2"/>
+<rect x="20" y="30" width="1160" height="580" rx="22" fill="none" stroke="#dfe5ee" stroke-width="2"/>
+<text x="52" y="78" font-family="Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="20" font-weight="700" letter-spacing="1.5" fill="#1877f2">PROOF LAYER</text>
+<text x="52" y="124" font-family="Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="42" font-weight="700" fill="#121826">Citation Density (CD)</text>
+<text x="52" y="160" font-family="Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="23" fill="#566072">How many distinct sources an AI answer cites for every 1,000 tokens of text.</text>
+<rect x="52" y="198" width="1096" height="74" rx="14" fill="#f2f7ff" stroke="#cddffb"/>
+<text x="600" y="242" font-family="'JetBrains Mono', 'SFMono-Regular', Menlo, Consolas, 'Liberation Mono', monospace" font-size="34" font-weight="600" text-anchor="middle" fill="#121826">CD(a) = 1,000 × |C(a)| ÷ T(a)</text>
+<text x="52" y="308" font-family="'JetBrains Mono', 'SFMono-Regular', Menlo, Consolas, 'Liberation Mono', monospace" font-size="22" font-weight="700" fill="#1877f2">C(a)</text>
+<text x="202" y="308" font-family="Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="22" fill="#121826">distinct URLs cited in answer a (a source cited twice counts once)</text>
+<text x="52" y="342" font-family="'JetBrains Mono', 'SFMono-Regular', Menlo, Consolas, 'Liberation Mono', monospace" font-size="22" font-weight="700" fill="#1877f2">T(a)</text>
+<text x="202" y="342" font-family="Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="22" fill="#121826">tokens in a's visible text, citation markers and source list removed</text>
+<text x="52" y="376" font-family="'JetBrains Mono', 'SFMono-Regular', Menlo, Consolas, 'Liberation Mono', monospace" font-size="22" font-weight="700" fill="#1877f2">Tokenizer</text>
+<text x="202" y="376" font-family="Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="22" fill="#121826">o200k_base (OpenAI tiktoken; GPT-4o, GPT-4.1, GPT-5)</text>
+<text x="52" y="414" font-family="Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="20" fill="#566072">Panel CD = 1,000 × Σ |C(a)| ÷ Σ T(a) (ratio of sums, not mean of ratios).</text>
+<rect x="52" y="496" width="1096" height="46" rx="10" fill="#fbfcfe" stroke="#dfe5ee"/>
+<text x="70" y="526" font-family="Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="22" font-weight="600" fill="#121826">Fictional answer: 5 distinct sources, 164 tokens → CD = 1,000 × 5 ÷ 164 = 30.49</text>
+<line x1="52" y1="558" x2="1148" y2="558" stroke="#dfe5ee" stroke-width="2"/>
+<text x="52" y="590" font-family="Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="20" fill="#566072">Rankbox GEO Metrics Framework · rankbox.xyz/blog/geo-metrics-framework</text>
+<text x="1148" y="590" font-family="Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="20" text-anchor="end" fill="#566072">v1.0 · 28 September 2026</text>
+</svg>

@@ -16,6 +16,8 @@ AI crawler documentation is scattered across more than a dozen help pages, each 
 
 Below you'll find the master table, the verification method behind each row, what AI crawlers cost your server next to Googlebot, robots.txt, .htaccess and NGINX rules checked on real servers, and log one-liners. For the concepts, see our glossary entry on [AI crawlers](/glossary/ai-crawlers).
 
+Three companion guides go deeper on single bots: [what OAI-SearchBot is and how to allow or block it](/blog/what-is-oai-searchbot), [PerplexityBot's user agent, robots.txt rules and IP checks](/blog/perplexitybot-user-agent), and [how to track GPTBot and ClaudeBot crawling activity](/blog/how-to-track-gptbot-and-claudebot).
+
 ## Key Takeaways
 
 - Most vendors now run a separate bot for each job, so you can refuse training and stay in AI search: block `GPTBot`, keep `OAI-SearchBot`. Anthropic, Mistral and Amazon split their bots the same way.

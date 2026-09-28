@@ -115,6 +115,14 @@ describe("topics", () => {
       for (const card of [...(result?.cards ?? []), ...(result?.terms ?? [])])
         linked.add(card.href);
     }
+    // A blog post also counts as reached when another post links to it in its
+    // body. An editorial link is a stronger signal than a suggestion card, and
+    // with dozens of posts per topic the cards alone can't reach every one.
+    for (const post of POSTS) {
+      for (const m of post.body.matchAll(/\]\((\/blog\/[a-z0-9-]+)\)/g)) {
+        if (m[1] !== `/blog/${post.slug}`) linked.add(m[1]);
+      }
+    }
     const orphans = [...LISTED].filter((p) => !linked.has(p));
     expect(
       orphans,

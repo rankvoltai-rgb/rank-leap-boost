@@ -308,6 +308,10 @@ const POST_CARDS: Record<string, Titled> = {
     title: "How to Optimize Content for AI Search: Passage by Passage",
     blurb: "The Lift Test: nine checks for every passage, with an annotated rewrite.",
   },
+  "vector-distance-vs-keyword-density": {
+    title: "Vector Distance vs. Keyword Density",
+    blurb: "263 test paragraphs, 10 scorers: definitions beat repeats after the second mention.",
+  },
   "ai-crawler-directory": {
     title: "The AI Crawler Directory",
     blurb: "Every AI bot's user agent, job, IP list and robots.txt rules, rechecked monthly.",
@@ -326,9 +330,125 @@ const POST_CARDS: Record<string, Titled> = {
     title: "How to Get Indexed by LLMs with an llms.txt File: The Complete Guide",
     blurb: "The llms.txt spec, an annotated example, serving it on five stacks, and log checks.",
   },
+  "state-of-llms-txt-adoption": {
+    title: "The State of llms.txt Adoption",
+    blurb: "21,353 sites crawled: who serves llms.txt, the common errors, and who generates them.",
+  },
+  "ai-bot-crawler-census": {
+    title: "The AI Bot Crawler Census",
+    blurb: "Who blocks GPTBot, ClaudeBot and PerplexityBot, and who splits training from search.",
+  },
   "mcp-protocol-new-sitemap": {
     title: "The MCP Protocol as the New Sitemap: Why AI Models Prefer APIs Over Web Crawling",
     blurb: "What an MCP server adds to your sitemap, and how to build, secure and list one.",
+  },
+  "perplexitybot-user-agent": {
+    title: "PerplexityBot User Agent Documentation: robots.txt Rules and IP Checks",
+    blurb: "Both Perplexity user agents, what robots.txt does to each, and how to verify an IP.",
+  },
+  "how-to-track-gptbot-and-claudebot": {
+    title: "How to Track GPTBot and ClaudeBot Website Crawling Activity",
+    blurb: "Find the logs, count each bot, verify its IPs, and run a weekly crawl sheet.",
+  },
+  "what-is-oai-searchbot": {
+    title: "OAI-SearchBot: What It Is and How to Allow or Block It",
+    blurb: "ChatGPT's search crawler: what blocking it changes, and how to allow it.",
+  },
+  "why-is-cloudflare-blocking-chatgpt": {
+    title: "Why Is Cloudflare Blocking ChatGPT? How to Find and Fix It",
+    blurb: "Which Cloudflare setting stopped ChatGPT, where to see it, and the fix.",
+  },
+  "cloudflare-blocking-chatgpt": {
+    title: "Cloudflare Blocking ChatGPT: How to Let ChatGPT's Bots Through on Any Plan",
+    blurb: "The allow-list steps for OAI-SearchBot and ChatGPT-User, plan by plan.",
+  },
+  "how-to-use-bing-webmaster-tools-for-seo": {
+    title: "How to Use Bing Webmaster Tools for SEO",
+    blurb: "Setup, indexing, keyword wins, site audits, link gaps and a monthly check.",
+  },
+  "does-bing-webmaster-tools-help-google-indexing": {
+    title: "Does Submitting to Bing Webmaster Tools Help Google Indexing?",
+    blurb: "No: what carries over from Bing to Google, and what speeds up Google.",
+  },
+  "will-llms-txt-help-your-seo": {
+    title: "Will an llms.txt File Help Your SEO?",
+    blurb: "Not for Google rankings. Who it helps, the evidence, and a payoff matrix.",
+  },
+  "how-to-get-indexed-by-llm-through-llms-txt": {
+    title: "How to Get Indexed by an LLM Through an llms.txt File (and What Actually Works)",
+    blurb: "The three routes into an LLM, and a two-track setup checklist.",
+  },
+  "what-is-an-llms-txt-file": {
+    title: "What Is an llms.txt File? A Plain-English Explainer",
+    blurb: "What the file is, who reads it, and how it differs from robots.txt.",
+  },
+  "llms-txt-standard": {
+    title: "The llms.txt Standard, Explained Line by Line",
+    blurb: "Every element of the spec, v2 changes, and what validators check.",
+  },
+  "chatgpt-traffic-analysis": {
+    title: "ChatGPT Traffic Analysis: How to Measure Visits From ChatGPT",
+    blurb: "Referrers, UTM tags, GA4 channels and a worked conversion analysis.",
+  },
+  "how-to-track-ai-referral-traffic-in-ga4": {
+    title: "How to Track AI Referral Traffic in GA4: A 15-Minute Setup",
+    blurb: "GA4's AI Assistant channel, one exploration and one saved report.",
+  },
+  "how-to-benchmark-ai-search-performance": {
+    title: "How to Benchmark AI Search Performance",
+    blurb: "Set a baseline, compare rivals and engines, and tell real gaps from noise.",
+  },
+  "how-does-ai-search-interpret-user-intent": {
+    title: "How Does AI Search Interpret User Intent?",
+    blurb: "Five steps from prompt to passage, each sourced to the vendor.",
+  },
+  "how-ai-search-uses-user-intent-and-context": {
+    title: "How AI Search Uses User Intent and Context",
+    blurb: "Memory, location and conversation history, and what they mean for pages.",
+  },
+  "geo-metrics-framework": {
+    title: "The GEO Metrics Framework",
+    blurb: "Share of Model, Citation Density, Vector Proximity and more: the formulas for GEO.",
+  },
+  "what-is-generative-engine-optimization": {
+    title: "What Is Generative Engine Optimization (GEO)? A Plain-English Guide",
+    blurb: "The plain-English definition of GEO, where it came from, and how to start.",
+  },
+  "how-to-benchmark-website-performance-in-ai-search": {
+    title: "How to Benchmark Website Performance Against Competitors in AI Search",
+    blurb: "Which rival pages and domains AI cites, and the content gaps behind them.",
+  },
+  "how-to-track-brand-mentions-in-ai-search": {
+    title: "How to Track Brand Mentions in AI Search: A Practical Guide for 2026",
+    blurb: "Prompt sampling, a prompt set, a recording template and alert rules.",
+  },
+  "track-brand-mentions-in-ai-search-free-and-paid": {
+    title: "How to Track Brand Mentions in AI Search for Free (and When to Pay)",
+    blurb: "The free stack, nine trackers' prices, and the break-even test for paying.",
+  },
+  "how-to-see-if-ai-mentions-your-brand": {
+    title: "How to See If AI Mentions Your Brand: The 15-Minute Audit",
+    blurb: "Five prompts, three engines, one scorecard, in fifteen minutes.",
+  },
+  "see-if-ai-mentions-your-brand-places-to-look": {
+    title: "How to See If AI Mentions Your Brand: 6 Places to Look",
+    blurb: "Six places that show AI mentions without running an audit, and what each misses.",
+  },
+  "is-it-possible-to-track-brand-mentions-in-ai-answers": {
+    title: "Is It Possible to Track Brand Mentions in AI Answers? (The Technical Reality)",
+    blurb: "Temperature, seeds, personalization and the statistics of repeated runs.",
+  },
+  "is-it-possible-to-track-brand-mentions-in-ai-search": {
+    title: "Is It Possible to Track Brand Mentions in AI Search? Yes, Within Limits",
+    blurb: "Yes, within limits: what you can track, what you can't, and why.",
+  },
+  "how-to-benchmark-ai-citations-against-competitors": {
+    title: "How to Benchmark Your Brand's AI Citations Against Competitors",
+    blurb: "The 20-Prompt Rival Matrix and a head-to-head score for each competitor.",
+  },
+  "how-to-track-competitor-rankings-in-ai-search": {
+    title: "How to Track Competitor Rankings in AI Search Results Effectively",
+    blurb: "A weekly rank log for rivals in AI answers, with alerts that beat the noise.",
   },
   "cheap-seo": {
     title: "Cheap SEO in 2026: What Works and What's a Scam",
@@ -495,6 +615,9 @@ export const TOPICS: Topic[] = [
       b("how-to-get-cited-by-chatgpt"),
       b("how-to-rank-on-chatgpt"),
       b("optimize-website-for-chatgpt-and-perplexity"),
+      b("cloudflare-blocking-chatgpt"),
+      b("why-is-cloudflare-blocking-chatgpt"),
+      b("how-to-get-indexed-by-llm-through-llms-txt"),
       i("chatgpt"),
       t("get-recommended-by-chatgpt"),
       ...g("oai-searchbot", "gptbot"),
@@ -506,6 +629,7 @@ export const TOPICS: Topic[] = [
     pages: [
       e("google-ai-overviews"),
       b("how-to-show-up-in-google-ai-overviews"),
+      b("will-llms-txt-help-your-seo"),
       t("serp-snippet-preview"),
       ...g("ai-overviews", "ai-mode", "featured-snippet", "snippet-controls"),
     ],
@@ -543,6 +667,8 @@ export const TOPICS: Topic[] = [
     pages: [
       e("copilot"),
       b("bing-webmaster-tools-ai-indexing-guide"),
+      b("how-to-use-bing-webmaster-tools-for-seo"),
+      b("does-bing-webmaster-tools-help-google-indexing"),
       i("copilot-studio"),
       i("github-copilot"),
     ],
@@ -595,6 +721,8 @@ export const TOPICS: Topic[] = [
       e("gemini"),
       b("optimize-content-for-ai-search"),
       b("koala-ai-alternatives"),
+      b("how-does-ai-search-interpret-user-intent"),
+      b("how-ai-search-uses-user-intent-and-context"),
       b("byword-alternatives"),
       b("jasper-alternatives"),
       b("how-to-get-cited-by-chatgpt"),
@@ -635,6 +763,7 @@ export const TOPICS: Topic[] = [
       e("google-ai-overviews"),
       a("surfer-seo"),
       b("optimize-content-for-ai-search"),
+      b("vector-distance-vs-keyword-density"),
       b("frase-alternatives"),
       b("surfer-seo-alternatives"),
       a("frase"),
@@ -709,9 +838,13 @@ export const TOPICS: Topic[] = [
       e("deepseek"),
       e("mistral"),
       e("manus"),
+      b("how-to-track-gptbot-and-claudebot"),
       b("chatgpt-rank-tracker"),
       b("how-to-measure-geo"),
       b("how-to-measure-ai-referral-traffic-in-ga4"),
+      b("how-to-track-ai-referral-traffic-in-ga4"),
+      b("chatgpt-traffic-analysis"),
+      b("how-to-benchmark-ai-search-performance"),
       b("writesonic-alternatives"),
       b("how-to-get-cited-by-chatgpt"),
       b("how-to-show-up-in-google-ai-overviews"),
@@ -742,6 +875,40 @@ export const TOPICS: Topic[] = [
     ],
   },
   {
+    id: "brand-mentions",
+    title: "Track what AI says about your brand",
+    pages: [
+      b("geo-metrics-framework"),
+      b("what-is-generative-engine-optimization"),
+      b("how-to-benchmark-website-performance-in-ai-search"),
+      b("how-to-track-brand-mentions-in-ai-search"),
+      b("track-brand-mentions-in-ai-search-free-and-paid"),
+      b("how-to-see-if-ai-mentions-your-brand"),
+      b("see-if-ai-mentions-your-brand-places-to-look"),
+      b("is-it-possible-to-track-brand-mentions-in-ai-answers"),
+      b("is-it-possible-to-track-brand-mentions-in-ai-search"),
+      b("how-to-benchmark-ai-citations-against-competitors"),
+      b("how-to-track-competitor-rankings-in-ai-search"),
+      t("ai-visibility-prompt-generator"),
+      s("ai-search-visibility"),
+      s("aeo-tools"),
+      e("chatgpt"),
+      e("perplexity"),
+      e("claude"),
+      e("gemini"),
+      e("google-ai-overviews"),
+      e("copilot"),
+      ...g(
+        "brand-mentions",
+        "ai-share-of-voice",
+        "ai-citation",
+        "generative-engine-optimization",
+        "ai-visibility",
+        "answer-engine-optimization",
+      ),
+    ],
+  },
+  {
     id: "crawlers",
     title: "Let AI crawlers read your site",
     pages: [
@@ -760,8 +927,15 @@ export const TOPICS: Topic[] = [
       e("deepseek"),
       b("how-to-get-cited-by-chatgpt"),
       b("ai-crawler-directory"),
+      b("what-is-oai-searchbot"),
+      b("perplexitybot-user-agent"),
+      b("how-to-track-gptbot-and-claudebot"),
+      b("ai-bot-crawler-census"),
       b("cloudflare-challenge-trap"),
+      b("why-is-cloudflare-blocking-chatgpt"),
+      b("cloudflare-blocking-chatgpt"),
       b("how-to-get-indexed-by-llms-with-llms-txt"),
+      b("state-of-llms-txt-adoption"),
       ...g(
         "ai-crawlers",
         "robots-txt",
@@ -778,6 +952,20 @@ export const TOPICS: Topic[] = [
         "core-web-vitals",
         "llm-training-data",
       ),
+    ],
+  },
+  {
+    id: "llms-txt",
+    title: "Point AI agents at your best pages with llms.txt",
+    pages: [
+      t("llms-txt-generator"),
+      b("what-is-an-llms-txt-file"),
+      b("llms-txt-standard"),
+      b("how-to-get-indexed-by-llms-with-llms-txt"),
+      b("will-llms-txt-help-your-seo"),
+      b("state-of-llms-txt-adoption"),
+      b("how-to-get-indexed-by-llm-through-llms-txt"),
+      ...g("llms-txt", "xml-sitemap", "indexing"),
     ],
   },
   {
@@ -839,6 +1027,7 @@ export const TOPICS: Topic[] = [
     id: "choosing",
     title: "Choosing an AI SEO tool",
     pages: [
+      b("what-is-generative-engine-optimization"),
       "/pricing",
       s("aeo-tools"),
       s("ai-search-visibility"),

@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+<title id="title">The GEO Metrics Framework</title>
+<desc id="desc">The GEO Metrics Framework: twelve GEO metrics in seven layers, from presence to positioning</desc>
+<rect width="1200" height="630" fill="#ffffff"/>
+<rect width="1200" height="10" fill="#1877f2"/>
+<rect x="20" y="30" width="1160" height="580" rx="22" fill="none" stroke="#dfe5ee" stroke-width="2"/>
+<text x="52" y="84" font-family="Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="40" font-weight="700" fill="#121826">The GEO Metrics Framework</text>
+<text x="52" y="118" font-family="Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="23" fill="#566072">12 GEO metrics in 7 layers, with one shared notation</text>
+<rect x="52" y="143" width="1096" height="48" rx="10" fill="#f2f7ff" stroke="#cddffb"/>
+<text x="68" y="174" font-family="Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="21" font-weight="700" fill="#1877f2">Presence</text>
+<text x="230" y="174" font-family="'JetBrains Mono', 'SFMono-Regular', Menlo, Consolas, 'Liberation Mono', monospace" font-size="21" font-weight="800" fill="#121826">SoM</text>
+<text x="300" y="165" font-family="Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="18" font-weight="600" fill="#121826">Share of Model</text>
+<text x="300" y="186" font-family="Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="16" fill="#566072">runs naming b ÷ runs (per variant)</text>
+<text x="681" y="174" font-family="'JetBrains Mono', 'SFMono-Regular', Menlo, Consolas, 'Liberation Mono', monospace" font-size="21" font-weight="800" fill="#121826">VR</text>
+<text x="751" y="165" font-family="Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="18" font-weight="600" fill="#121826">Visibility Rate</text>
+<text x="751" y="186" font-family="Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="16" fill="#566072">answers naming or linking b ÷ N</text>
+<rect x="52" y="197" width="1096" height="48" rx="10" fill="#ffffff" stroke="#dfe5ee"/>
+<text x="68" y="228" font-family="Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="21" font-weight="700" fill="#1877f2">Share</text>
+<text x="230" y="228" font-family="'JetBrains Mono', 'SFMono-Regular', Menlo, Consolas, 'Liberation Mono', monospace" font-size="21" font-weight="800" fill="#121826">SoV</text>
+<text x="300" y="219" font-family="Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="18" font-weight="600" fill="#121826">AI Share of Voice</text>
+<text x="300" y="240" font-family="Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="16" fill="#566072">b's appearances ÷ all brand appearances</text>
+<text x="681" y="228" font-family="'JetBrains Mono', 'SFMono-Regular', Menlo, Consolas, 'Liberation Mono', monospace" font-size="21" font-weight="800" fill="#121826">CS</text>
+<text x="751" y="219" font-family="Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="18" font-weight="600" fill="#121826">Citation Share</text>
+<text x="751" y="240" font-family="Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="16" fill="#566072">URLs on d ÷ all cited URLs</text>
+<rect x="52" y="251" width="1096" height="48" rx="10" fill="#f2f7ff" stroke="#cddffb"/>
+<text x="68" y="282" font-family="Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="21" font-weight="700" fill="#1877f2">Prominence</text>
+<text x="230" y="282" font-family="'JetBrains Mono', 'SFMono-Regular', Menlo, Consolas, 'Liberation Mono', monospace" font-size="21" font-weight="800" fill="#121826">FMR</text>
+<text x="300" y="273" font-family="Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="18" font-weight="600" fill="#121826">First-Mention Rate</text>
+<text x="300" y="294" font-family="Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="16" fill="#566072">named first ÷ answers naming any brand</text>
+<text x="681" y="282" font-family="'JetBrains Mono', 'SFMono-Regular', Menlo, Consolas, 'Liberation Mono', monospace" font-size="21" font-weight="800" fill="#121826">AAP</text>
+<text x="751" y="273" font-family="Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="18" font-weight="600" fill="#121826">Average Answer Position</text>
+<text x="751" y="294" font-family="Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="16" fill="#566072">mean rank when named</text>
+<rect x="52" y="305" width="1096" height="48" rx="10" fill="#ffffff" stroke="#dfe5ee"/>
+<text x="68" y="336" font-family="Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="21" font-weight="700" fill="#1877f2">Proof</text>
+<text x="230" y="336" font-family="'JetBrains Mono', 'SFMono-Regular', Menlo, Consolas, 'Liberation Mono', monospace" font-size="21" font-weight="800" fill="#121826">CR</text>
+<text x="300" y="327" font-family="Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="18" font-weight="600" fill="#121826">Citation Rate</text>
+<text x="300" y="348" font-family="Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="16" fill="#566072">answers linking d ÷ N</text>
+<text x="681" y="336" font-family="'JetBrains Mono', 'SFMono-Regular', Menlo, Consolas, 'Liberation Mono', monospace" font-size="21" font-weight="800" fill="#121826">CD</text>
+<text x="751" y="327" font-family="Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="18" font-weight="600" fill="#121826">Citation Density</text>
+<text x="751" y="348" font-family="Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="16" fill="#566072">sources per 1,000 tokens</text>
+<rect x="52" y="359" width="1096" height="48" rx="10" fill="#f2f7ff" stroke="#cddffb"/>
+<text x="68" y="390" font-family="Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="21" font-weight="700" fill="#1877f2">Perception</text>
+<text x="230" y="390" font-family="'JetBrains Mono', 'SFMono-Regular', Menlo, Consolas, 'Liberation Mono', monospace" font-size="21" font-weight="800" fill="#121826">SS</text>
+<text x="300" y="381" font-family="Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="18" font-weight="600" fill="#121826">Sentiment Share</text>
+<text x="300" y="402" font-family="Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="16" fill="#566072">b's positive mentions ÷ all positive mentions</text>
+<text x="681" y="390" font-family="'JetBrains Mono', 'SFMono-Regular', Menlo, Consolas, 'Liberation Mono', monospace" font-size="21" font-weight="800" fill="#121826">AR</text>
+<text x="751" y="381" font-family="Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="18" font-weight="600" fill="#121826">Accuracy Rate</text>
+<text x="751" y="402" font-family="Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="16" fill="#566072">correct descriptions ÷ answers naming b</text>
+<rect x="52" y="413" width="1096" height="48" rx="10" fill="#ffffff" stroke="#dfe5ee"/>
+<text x="68" y="444" font-family="Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="21" font-weight="700" fill="#1877f2">Payoff</text>
+<text x="230" y="444" font-family="'JetBrains Mono', 'SFMono-Regular', Menlo, Consolas, 'Liberation Mono', monospace" font-size="21" font-weight="800" fill="#121826">ARS</text>
+<text x="300" y="435" font-family="Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="18" font-weight="600" fill="#121826">AI Referral Share</text>
+<text x="300" y="456" font-family="Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="16" fill="#566072">AI assistant sessions ÷ all sessions</text>
+<rect x="52" y="467" width="1096" height="48" rx="10" fill="#f2f7ff" stroke="#cddffb"/>
+<text x="68" y="498" font-family="Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="21" font-weight="700" fill="#1877f2">Positioning</text>
+<text x="230" y="498" font-family="'JetBrains Mono', 'SFMono-Regular', Menlo, Consolas, 'Liberation Mono', monospace" font-size="21" font-weight="800" fill="#121826">VPS</text>
+<text x="300" y="489" font-family="Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="18" font-weight="600" fill="#121826">Vector Proximity Score</text>
+<text x="300" y="510" font-family="Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="16" fill="#566072">mean cosine(problem prompts, positioning)</text>
+<text x="52" y="546" font-family="Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="18" fill="#566072">b = brand · d = domain · a = one AI answer · N = valid answers · compute per engine</text>
+<line x1="52" y1="558" x2="1148" y2="558" stroke="#dfe5ee" stroke-width="2"/>
+<text x="52" y="590" font-family="Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="20" fill="#566072">Rankbox GEO Metrics Framework · rankbox.xyz/blog/geo-metrics-framework</text>
+<text x="1148" y="590" font-family="Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="20" text-anchor="end" fill="#566072">v1.0 · 28 September 2026</text>
+</svg>

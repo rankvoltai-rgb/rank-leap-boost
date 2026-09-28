@@ -28,6 +28,8 @@ This guide covers what MCP is, the evidence that agents work better through APIs
 
 MCP is a shared language between AI apps and the services they use. Before it, every assistant needed its own custom connector for every data source. Anthropic's launch post put the problem simply: "Every new data source requires its own custom implementation." MCP swaps that mess for one standard, so a server you build once works in many clients.
 
+![Why we built—and donated—the Model Context Protocol (MCP)](youtube:PLyCki2K0Lg "MCP co-creator David Soria Parra on why Anthropic built the protocol and gave it to the Linux Foundation (Anthropic, December 2025).")
+
 ### Hosts, clients and servers
 
 The [MCP specification](https://modelcontextprotocol.io/specification/latest) names three roles. A **host** is the AI app a person uses, such as Claude or ChatGPT. A **client** is the connector inside that host. A **server** is the service that offers data and actions: yours. They talk in JSON-RPC 2.0 messages, a plain JSON request and response format.

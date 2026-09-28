@@ -26,6 +26,8 @@ import {
 } from "@/lib/article-outline";
 import { formatDate } from "@/lib/format-date";
 import { AUTHOR_ORG, isTeamAuthor } from "@/data/company";
+import { BLOG_VIDEOS, isoDuration } from "@/data/blog-videos";
+import { youtubeId } from "@/components/blog/NotionBlocks";
 import type { PostFull, PostMeta } from "@/lib/notion.server";
 
 const SITE = "https://rankbox.xyz";
@@ -50,6 +52,13 @@ export const Route = createFileRoute("/blog/$slug")({
     const desc = post.excerpt || `${post.title} — a Rankbox guide.`;
     const modified = post.updated ?? post.date;
     const faq = faqForSchema(post.blocks);
+    // Only videos in src/data/blog-videos.ts get markup: it has the upload
+    // date and length Google needs, checked on YouTube rather than guessed.
+    const videos = post.blocks.flatMap((b) => {
+      const id = b.type === "video" && b.url ? youtubeId(b.url) : null;
+      const video = id ? BLOG_VIDEOS[id] : undefined;
+      return id && video ? [{ id, ...video }] : [];
+    });
     return {
       meta: [
         { title: `${post.title} | Rankbox` },
@@ -95,7 +104,21 @@ export const Route = createFileRoute("/blog/$slug")({
                     : { "@type": "Person", name: post.author },
                 publisher: { "@type": "Organization", name: "Rankbox", url: SITE },
                 mainEntityOfPage: url,
+                ...(videos.length
+                  ? { video: videos.map((v) => ({ "@id": `${url}#video-${v.id}` })) }
+                  : {}),
               },
+              ...videos.map((v) => ({
+                "@type": "VideoObject",
+                "@id": `${url}#video-${v.id}`,
+                name: v.title,
+                description: v.summary,
+                thumbnailUrl: `https://i.ytimg.com/vi/${v.id}/hqdefault.jpg`,
+                uploadDate: v.uploadDate,
+                duration: isoDuration(v.seconds),
+                embedUrl: `https://www.youtube.com/embed/${v.id}`,
+                url: `https://www.youtube.com/watch?v=${v.id}`,
+              })),
               ...(faq.length
                 ? [
                     {

@@ -1,0 +1,20 @@
+# Inputs downloaded at run time and everything the scripts write.
+node_modules/
+top-1m.csv
+tranco.zip
+f500-2026.json
+f500.json
+yc.json
+wd-*.json
+domains*.json
+crawl.jsonl
+hosts.json
+crawl-summary.json
+linkcheck*.json
+data/
+a8/.hf-cache/
+a8/scores-*.json
+a8/analysis-*.json
+a8/vectors-*.json
+a8/pca-*.json
+a8/meta.json

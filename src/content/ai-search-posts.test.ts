@@ -19,6 +19,37 @@ import { cardFor, sectionOf } from "@/data/link-graph";
 
 const BLOG_DIR = "src/content/blog";
 
+/**
+ * One-query standalone posts, each with the category ("hub") post it links up
+ * to. They're shorter than the hubs, and each hub links back down to them.
+ */
+const STANDALONES: Record<string, string> = {
+  "how-to-track-competitor-rankings-in-ai-search":
+    "how-to-benchmark-ai-citations-against-competitors",
+  "is-it-possible-to-track-brand-mentions-in-ai-search":
+    "is-it-possible-to-track-brand-mentions-in-ai-answers",
+  "see-if-ai-mentions-your-brand-places-to-look": "how-to-see-if-ai-mentions-your-brand",
+  "track-brand-mentions-in-ai-search-free-and-paid": "how-to-track-brand-mentions-in-ai-search",
+  "how-to-benchmark-website-performance-in-ai-search": "geo-metrics-framework",
+  "what-is-generative-engine-optimization": "geo-metrics-framework",
+  "perplexitybot-user-agent": "ai-crawler-directory",
+  "how-to-track-gptbot-and-claudebot": "ai-crawler-directory",
+  "what-is-oai-searchbot": "ai-crawler-directory",
+  "why-is-cloudflare-blocking-chatgpt": "cloudflare-challenge-trap",
+  "cloudflare-blocking-chatgpt": "cloudflare-challenge-trap",
+  "how-to-use-bing-webmaster-tools-for-seo": "bing-webmaster-tools-ai-indexing-guide",
+  "does-bing-webmaster-tools-help-google-indexing": "bing-webmaster-tools-ai-indexing-guide",
+  "will-llms-txt-help-your-seo": "how-to-get-indexed-by-llms-with-llms-txt",
+  "how-to-get-indexed-by-llm-through-llms-txt": "how-to-get-indexed-by-llms-with-llms-txt",
+  "what-is-an-llms-txt-file": "state-of-llms-txt-adoption",
+  "llms-txt-standard": "state-of-llms-txt-adoption",
+  "how-to-track-ai-referral-traffic-in-ga4": "how-to-measure-ai-referral-traffic-in-ga4",
+  "chatgpt-traffic-analysis": "how-to-measure-ai-referral-traffic-in-ga4",
+  "how-to-benchmark-ai-search-performance": "ai-bot-crawler-census",
+  "how-does-ai-search-interpret-user-intent": "vector-distance-vs-keyword-density",
+  "how-ai-search-uses-user-intent-and-context": "vector-distance-vs-keyword-density",
+};
+
 /** The posts these rules cover. Tool guides name real products. */
 const SLUGS = [
   "how-to-rank-on-chatgpt",
@@ -37,6 +68,16 @@ const SLUGS = [
   "mcp-protocol-new-sitemap",
   // Phase 2
   "how-to-measure-ai-referral-traffic-in-ga4",
+  // Phase 3: Rankbox's own data studies
+  "vector-distance-vs-keyword-density",
+  "state-of-llms-txt-adoption",
+  "ai-bot-crawler-census",
+  "geo-metrics-framework",
+  "how-to-track-brand-mentions-in-ai-search",
+  "how-to-see-if-ai-mentions-your-brand",
+  "is-it-possible-to-track-brand-mentions-in-ai-answers",
+  "how-to-benchmark-ai-citations-against-competitors",
+  ...Object.keys(STANDALONES),
 ];
 const TOOL_GUIDES = new Set([
   "chatgpt-rank-tracker",
@@ -115,8 +156,9 @@ describe.each(POSTS.map((p) => [p.slug, p] as const))("%s", (slug, { data, body 
     });
     const failing = analysis.checks.filter((c) => c.status !== "pass").map((c) => c.detail);
     expect(failing).toEqual([]);
-    expect(analysis.metrics.words).toBeGreaterThanOrEqual(2500);
-    expect(analysis.metrics.words).toBeLessThanOrEqual(5200);
+    const [min, max] = STANDALONES[slug] ? [1500, 2800] : [2500, 5200];
+    expect(analysis.metrics.words).toBeGreaterThanOrEqual(min);
+    expect(analysis.metrics.words).toBeLessThanOrEqual(max);
   });
 
   it("claims no testing or data we don't have", () => {
@@ -136,6 +178,14 @@ describe.each(POSTS.map((p) => [p.slug, p] as const))("%s", (slug, { data, body 
     if (!SHIPPED.citationTracking) expect(body).not.toMatch(/\/features\/citation-tracking/);
   });
 
+  if (STANDALONES[slug]) {
+    it("links up to its category post, which links back down", () => {
+      const hub = STANDALONES[slug];
+      expect(body, `link to /blog/${hub}`).toContain(`](/blog/${hub})`);
+      expect(read(hub).body, `${hub} links to /blog/${slug}`).toContain(`](/blog/${slug})`);
+    });
+  }
+
   it("links only to pages that exist", () => {
     const internal = [...body.matchAll(/\]\((\/[^)\s]*)\)/g)].map((m) => m[1].split("#")[0]);
     expect(internal.length).toBeGreaterThanOrEqual(5);
@@ -153,7 +203,7 @@ describe.each(POSTS.map((p) => [p.slug, p] as const))("%s", (slug, { data, body 
     const refs = section(body, /^## References$/);
     expect(
       [...refs.matchAll(/^\d+\. \[[^\]]+\]\((https:\/\/[^)]+)\)/gm)].length,
-    ).toBeGreaterThanOrEqual(8);
+    ).toBeGreaterThanOrEqual(STANDALONES[slug] ? 6 : 8);
   });
 
   if (TOOL_GUIDES.has(slug)) {

@@ -184,6 +184,8 @@ This is the step that changed most in 2026, and it is where the new Search Conso
 
 Search Console now reports your visibility in AI Overviews, AI Mode, and generative AI features in Discover, broken out from classic search for the first time. Launched on 3 June 2026 and rolled out worldwide by 31 August 2026, it gives you impressions by page, country, device, and date.
 
+![Google Search Gen AI Reports, Search Profiles & more  (Q2 ‘26)](youtube:sq55KB5icQ4 "John Mueller on the new generative AI report and AI control in Search Console (Google Search Central, June 2026).")
+
 Note the gap: it does not include click data. You can see that a page surfaced in AI features and how often, but not what that traffic did. That data was always folded into the overall Performance report, so this is a clearer view of numbers you already had, not new numbers.
 
 Use it for what it is good at. Sort by page, and you have a ranked list of which content Google actually trusts in AI features. That list is usually surprising, and it is the best content brief you will get this quarter.

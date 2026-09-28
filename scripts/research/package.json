@@ -1,0 +1,11 @@
+{
+  "name": "rankbox-research",
+  "private": true,
+  "type": "module",
+  "description": "Crawl and embedding experiments behind Rankbox's research posts. Not part of the site build.",
+  "dependencies": {
+    "@huggingface/transformers": "^3.8.1",
+    "p-limit": "^6.2.0",
+    "robots-parser": "^3.0.1"
+  }
+}

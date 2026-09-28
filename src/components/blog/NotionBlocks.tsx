@@ -8,7 +8,7 @@
  */
 import { useContext, useState, type ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
-import { Check, Copy, Link2 } from "lucide-react";
+import { Check, Copy, Link2, Play } from "lucide-react";
 import type { NotionBlock, RichTextSpan } from "@/lib/notion.server";
 import { ArticleFigure } from "@/components/blog/figures";
 import { BlockContext } from "@/components/blog/block-context";
@@ -75,19 +75,27 @@ function Caption({ caption }: { caption?: RichTextSpan[] }) {
 
 /* ---------- media ---------- */
 
-function youtubeVimeo(url: string): string {
+/** The video id in a YouTube watch, share, embed or Shorts URL. */
+export function youtubeId(url: string): string | null {
   try {
     const u = new URL(url);
-    const host = u.hostname.replace(/^www\./, "");
-    if (host === "youtu.be") return `https://www.youtube.com/embed/${u.pathname.slice(1)}`;
-    if (host === "youtube.com") {
-      if (u.pathname.startsWith("/embed/")) return url;
-      if (u.pathname.startsWith("/shorts/"))
-        return `https://www.youtube.com/embed/${u.pathname.split("/")[2]}`;
-      const id = u.searchParams.get("v");
-      if (id) return `https://www.youtube.com/embed/${id}`;
+    const host = u.hostname.replace(/^(www|m)\./, "");
+    if (host === "youtu.be") return u.pathname.slice(1) || null;
+    if (host === "youtube.com" || host === "youtube-nocookie.com") {
+      const [, kind, id] = u.pathname.split("/");
+      if (kind === "embed" || kind === "shorts") return id || null;
+      return u.searchParams.get("v");
     }
-    if (host === "vimeo.com") {
+  } catch {
+    /* not a URL */
+  }
+  return null;
+}
+
+function vimeoEmbed(url: string): string {
+  try {
+    const u = new URL(url);
+    if (u.hostname.replace(/^www\./, "") === "vimeo.com") {
       const id = u.pathname.split("/").filter(Boolean)[0];
       if (id) return `https://player.vimeo.com/video/${id}`;
     }
@@ -97,17 +105,92 @@ function youtubeVimeo(url: string): string {
   return url;
 }
 
+/**
+ * A YouTube video shown as its thumbnail until the reader presses play. The
+ * player is around a megabyte of script, so only readers who watch pay for it,
+ * and it comes from youtube-nocookie.com so YouTube sets no cookies before then.
+ */
+function YouTubeVideo({
+  id,
+  title,
+  caption,
+}: {
+  id: string;
+  title: string;
+  caption?: RichTextSpan[];
+}) {
+  const [playing, setPlaying] = useState(false);
+  return (
+    <figure className="my-10">
+      <div className="relative aspect-video overflow-hidden rounded-2xl border border-border bg-black">
+        {playing ? (
+          <iframe
+            src={`https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0`}
+            title={title}
+            className="absolute inset-0 h-full w-full"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          />
+        ) : (
+          <button
+            type="button"
+            onClick={() => setPlaying(true)}
+            aria-label={`Play video: ${title}`}
+            className="group absolute inset-0 h-full w-full"
+          >
+            <img
+              src={`https://i.ytimg.com/vi/${id}/hqdefault.jpg`}
+              alt=""
+              loading="lazy"
+              className="h-full w-full object-cover opacity-90 transition-opacity group-hover:opacity-100"
+            />
+            <span className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-5 pb-4 pt-12 text-left text-sm font-medium text-white">
+              {title}
+            </span>
+            <span className="absolute inset-0 grid place-items-center">
+              <span className="grid h-16 w-16 place-items-center rounded-full bg-cta text-white shadow-lg transition-transform group-hover:scale-105 group-focus-visible:scale-105">
+                <Play className="ml-1 h-7 w-7 fill-current" aria-hidden />
+              </span>
+            </span>
+          </button>
+        )}
+      </div>
+      <figcaption className="mt-3 text-center text-[0.8rem] text-muted-foreground">
+        {caption?.length ? (
+          <>
+            <Rich spans={caption} />{" "}
+          </>
+        ) : null}
+        <a
+          href={`https://www.youtube.com/watch?v=${id}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="whitespace-nowrap underline decoration-border underline-offset-2 hover:text-ink"
+        >
+          Watch on YouTube ↗
+        </a>
+      </figcaption>
+    </figure>
+  );
+}
+
 function MediaEmbed({ block }: { block: NotionBlock }) {
   const url = block.url ?? "";
   if (!url) return null;
+
+  const ytId = block.embedKind === "youtube" ? youtubeId(url) : null;
+  if (ytId) {
+    const title = block.alt || (block.caption ?? []).map((c) => c.text).join("") || "Video";
+    return <YouTubeVideo id={ytId} title={title} caption={block.caption} />;
+  }
 
   if (block.embedKind === "youtube" || block.embedKind === "vimeo") {
     return (
       <figure className="my-10">
         <div className="relative aspect-video overflow-hidden rounded-2xl border border-border bg-black">
           <iframe
-            src={youtubeVimeo(url)}
-            title="Embedded video"
+            src={block.embedKind === "vimeo" ? vimeoEmbed(url) : url}
+            title={block.alt || "Embedded video"}
             className="absolute inset-0 h-full w-full"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
@@ -354,7 +437,7 @@ function Block({ block }: { block: NotionBlock }) {
         <figure className="my-10">
           <img
             src={block.url}
-            alt={(block.caption ?? []).map((c) => c.text).join("") || "Article image"}
+            alt={block.alt || (block.caption ?? []).map((c) => c.text).join("") || "Article image"}
             loading="lazy"
             className="w-full rounded-2xl border border-border"
           />

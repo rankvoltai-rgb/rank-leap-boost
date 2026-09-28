@@ -16,6 +16,8 @@ Microsoft is leaning into that role. Jordi Ribas, its corporate vice president f
 
 This guide maps Search Console to Bing Webmaster Tools, gives you a first-hour setup checklist, shows how to monitor Bing crawl frequency, and ends with a weekly routine for AI visibility. For how Copilot picks and shows its sources, read our [Copilot SEO guide](/ai-seo/copilot).
 
+For classic search rankings, see [how to use Bing Webmaster Tools for SEO](/blog/how-to-use-bing-webmaster-tools-for-seo). For the most common mix-up, see [whether submitting to Bing Webmaster Tools helps Google indexing](/blog/does-bing-webmaster-tools-help-google-indexing).
+
 ## Key Takeaways
 
 - Bing Webmaster Tools is the console for one index that many AI and search products draw on: Copilot, Bing's AI summaries, Yahoo, most of DuckDuckGo's links, and apps built on Microsoft's grounding APIs.
@@ -204,6 +206,8 @@ Anyone can fake a user agent, so check busy IPs with the Verify Bingbot tool bef
 ## Reading the AI Performance Report
 
 AI Performance launched in public preview in [February 2026](https://blogs.bing.com/webmaster/2026/2/Introducing-AI-Performance-in-Bing-Webmaster-Tools-Public-Preview/). It counts citations across three surfaces: Microsoft Copilot, AI-generated summaries in Bing, and "select partner AI integrations." Microsoft doesn't say who the partners are.
+
+![Bing Webmaster Tools Releases AI Search Performance Data - Krishna Madhavan  - Inside SEO Week](youtube:Gs7_8euEIh8 "Microsoft product manager Krishna Madhavan on the AI Performance report and grounding queries, with iPullRank (February 2026).")
 
 ### The core numbers
 

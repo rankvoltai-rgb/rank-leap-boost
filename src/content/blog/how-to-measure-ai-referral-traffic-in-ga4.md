@@ -16,6 +16,8 @@ AI referral traffic is small, which is why it's easy to get wrong. In April 2026
 
 This guide is the full GA4 setup: a copy-paste rule set with a tested regex, the exact steps, where visits still get lost, a worked example, and three ways to build the comparison. For the wider picture (citations, prompt panels and control tests), read our guide to [measuring GEO](/blog/how-to-measure-geo). For a short definition, see [AI referral traffic](/glossary/ai-referral-traffic) in our glossary.
 
+Want the short version? See [how to track AI referral traffic in GA4 in 15 minutes](/blog/how-to-track-ai-referral-traffic-in-ga4). To go deeper on one source, see [ChatGPT traffic analysis](/blog/chatgpt-traffic-analysis).
+
 ## Key Takeaways
 
 - GA4's AI Assistant channel, live since 13 May 2026, sets the medium to `ai-assistant` when a referrer is on Google's unpublished list. Its definition names ChatGPT, Gemini, DeepSeek, Copilot and Grok, and the launch note adds Claude.
@@ -137,6 +139,8 @@ Google documents the path on its [custom channel groups](https://support.google.
 7. Click **Save group**.
 
 Step 6 is the one people skip. GA4 files each session under the first channel whose rules it meets, in the order you set. Leave the AI channel below Referral and any assistant visit with a `referral` medium never reaches it.
+
+![How to Report on AI Traffic in GA4 (Including ChatGPT, Gemini & Copilot)](youtube:26znNsMTUiw "Loves Data builds a custom AI channel group in GA4. Recorded August 2025, before Google's AI Assistant channel, so use the regex above.")
 
 ### Limits and rules to know
 

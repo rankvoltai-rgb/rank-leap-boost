@@ -10,7 +10,8 @@
  * "##" becomes heading_1 (rendered as <h2>), "###" heading_2, "####" heading_3.
  *
  * `![alt](figure:<id> "caption")` places one of the built-in diagrams from
- * src/components/blog/figures.tsx.
+ * src/components/blog/figures.tsx, and `![title](youtube:<video id> "caption")`
+ * a YouTube video listed in src/data/blog-videos.ts.
  */
 import { marked, type Token, type Tokens } from "marked";
 import type { NotionBlock, RichTextSpan } from "@/lib/notion.server";
@@ -129,11 +130,21 @@ export function markdownToBlocks(markdown: string, idPrefix = "md"): NotionBlock
                 alt: img.text,
                 caption,
               });
+            } else if (img.href.startsWith("youtube:")) {
+              out.push({
+                id: id(),
+                type: "video",
+                embedKind: "youtube",
+                url: `https://www.youtube.com/watch?v=${img.href.slice("youtube:".length)}`,
+                alt: img.text,
+                caption,
+              });
             } else {
               out.push({
                 id: id(),
                 type: "image",
                 url: img.href,
+                alt: img.text,
                 caption: caption.length ? caption : [{ text: img.text }],
               });
             }
