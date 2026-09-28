@@ -72,6 +72,7 @@ import { Route as ApiPublicShopifyLinkRouteImport } from './routes/api/public/sh
 import { Route as ApiPublicShopifyAppRouteImport } from './routes/api/public/shopify/app'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
 import { Route as ApiPublicHooksRedditRunRouteImport } from './routes/api/public/hooks/reddit-run'
+import { Route as ApiPublicHooksIndexnowRunRouteImport } from './routes/api/public/hooks/indexnow-run'
 import { Route as ApiPublicHooksExchangeRunRouteImport } from './routes/api/public/hooks/exchange-run'
 import { Route as ApiPublicHooksAutopilotRunRouteImport } from './routes/api/public/hooks/autopilot-run'
 import { Route as AuthenticatedDashboardStudioNewRouteImport } from './routes/_authenticated/dashboard.studio.new'
@@ -409,6 +410,12 @@ const ApiPublicHooksRedditRunRoute = ApiPublicHooksRedditRunRouteImport.update({
   path: '/api/public/hooks/reddit-run',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicHooksIndexnowRunRoute =
+  ApiPublicHooksIndexnowRunRouteImport.update({
+    id: '/api/public/hooks/indexnow-run',
+    path: '/api/public/hooks/indexnow-run',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicHooksExchangeRunRoute =
   ApiPublicHooksExchangeRunRouteImport.update({
     id: '/api/public/hooks/exchange-run',
@@ -495,6 +502,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/studio/new': typeof AuthenticatedDashboardStudioNewRoute
   '/api/public/hooks/autopilot-run': typeof ApiPublicHooksAutopilotRunRoute
   '/api/public/hooks/exchange-run': typeof ApiPublicHooksExchangeRunRoute
+  '/api/public/hooks/indexnow-run': typeof ApiPublicHooksIndexnowRunRoute
   '/api/public/hooks/reddit-run': typeof ApiPublicHooksRedditRunRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/api/public/shopify/app': typeof ApiPublicShopifyAppRoute
@@ -563,6 +571,7 @@ export interface FileRoutesByTo {
   '/dashboard/studio/new': typeof AuthenticatedDashboardStudioNewRoute
   '/api/public/hooks/autopilot-run': typeof ApiPublicHooksAutopilotRunRoute
   '/api/public/hooks/exchange-run': typeof ApiPublicHooksExchangeRunRoute
+  '/api/public/hooks/indexnow-run': typeof ApiPublicHooksIndexnowRunRoute
   '/api/public/hooks/reddit-run': typeof ApiPublicHooksRedditRunRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/api/public/shopify/app': typeof ApiPublicShopifyAppRoute
@@ -634,6 +643,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/studio/new': typeof AuthenticatedDashboardStudioNewRoute
   '/api/public/hooks/autopilot-run': typeof ApiPublicHooksAutopilotRunRoute
   '/api/public/hooks/exchange-run': typeof ApiPublicHooksExchangeRunRoute
+  '/api/public/hooks/indexnow-run': typeof ApiPublicHooksIndexnowRunRoute
   '/api/public/hooks/reddit-run': typeof ApiPublicHooksRedditRunRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/api/public/shopify/app': typeof ApiPublicShopifyAppRoute
@@ -705,6 +715,7 @@ export interface FileRouteTypes {
     | '/dashboard/studio/new'
     | '/api/public/hooks/autopilot-run'
     | '/api/public/hooks/exchange-run'
+    | '/api/public/hooks/indexnow-run'
     | '/api/public/hooks/reddit-run'
     | '/api/public/payments/webhook'
     | '/api/public/shopify/app'
@@ -773,6 +784,7 @@ export interface FileRouteTypes {
     | '/dashboard/studio/new'
     | '/api/public/hooks/autopilot-run'
     | '/api/public/hooks/exchange-run'
+    | '/api/public/hooks/indexnow-run'
     | '/api/public/hooks/reddit-run'
     | '/api/public/payments/webhook'
     | '/api/public/shopify/app'
@@ -843,6 +855,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/studio/new'
     | '/api/public/hooks/autopilot-run'
     | '/api/public/hooks/exchange-run'
+    | '/api/public/hooks/indexnow-run'
     | '/api/public/hooks/reddit-run'
     | '/api/public/payments/webhook'
     | '/api/public/shopify/app'
@@ -896,6 +909,7 @@ export interface RootRouteChildren {
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
   ApiPublicHooksAutopilotRunRoute: typeof ApiPublicHooksAutopilotRunRoute
   ApiPublicHooksExchangeRunRoute: typeof ApiPublicHooksExchangeRunRoute
+  ApiPublicHooksIndexnowRunRoute: typeof ApiPublicHooksIndexnowRunRoute
   ApiPublicHooksRedditRunRoute: typeof ApiPublicHooksRedditRunRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
   ApiPublicShopifyAppRoute: typeof ApiPublicShopifyAppRoute
@@ -1351,6 +1365,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicHooksRedditRunRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/hooks/indexnow-run': {
+      id: '/api/public/hooks/indexnow-run'
+      path: '/api/public/hooks/indexnow-run'
+      fullPath: '/api/public/hooks/indexnow-run'
+      preLoaderRoute: typeof ApiPublicHooksIndexnowRunRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/hooks/exchange-run': {
       id: '/api/public/hooks/exchange-run'
       path: '/api/public/hooks/exchange-run'
@@ -1512,6 +1533,7 @@ const rootRouteChildren: RootRouteChildren = {
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
   ApiPublicHooksAutopilotRunRoute: ApiPublicHooksAutopilotRunRoute,
   ApiPublicHooksExchangeRunRoute: ApiPublicHooksExchangeRunRoute,
+  ApiPublicHooksIndexnowRunRoute: ApiPublicHooksIndexnowRunRoute,
   ApiPublicHooksRedditRunRoute: ApiPublicHooksRedditRunRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
   ApiPublicShopifyAppRoute: ApiPublicShopifyAppRoute,

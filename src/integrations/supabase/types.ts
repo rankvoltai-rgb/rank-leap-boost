@@ -710,6 +710,24 @@ export type Database = {
           },
         ]
       }
+      indexnow_submissions: {
+        Row: {
+          lastmod: string | null
+          submitted_at: string
+          url: string
+        }
+        Insert: {
+          lastmod?: string | null
+          submitted_at?: string
+          url: string
+        }
+        Update: {
+          lastmod?: string | null
+          submitted_at?: string
+          url?: string
+        }
+        Relationships: []
+      }
       keywords: {
         Row: {
           created_at: string
