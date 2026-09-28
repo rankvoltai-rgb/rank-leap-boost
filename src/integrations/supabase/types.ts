@@ -295,6 +295,7 @@ export type Database = {
           current_period_start: string | null
           environment: string
           id: string
+          past_due_since: string | null
           price_id: string
           product_id: string
           status: string
@@ -310,6 +311,7 @@ export type Database = {
           current_period_start?: string | null
           environment?: string
           id?: string
+          past_due_since?: string | null
           price_id: string
           product_id: string
           status?: string
@@ -325,6 +327,7 @@ export type Database = {
           current_period_start?: string | null
           environment?: string
           id?: string
+          past_due_since?: string | null
           price_id?: string
           product_id?: string
           status?: string
@@ -369,10 +372,15 @@ export type Database = {
     Functions: {
       consume_article_credit: { Args: { _user_id: string }; Returns: boolean }
       refund_article_credit: { Args: { _user_id: string }; Returns: undefined }
-      reset_article_credits: {
-        Args: { _period_end: string; _user_id: string }
-        Returns: undefined
-      }
+      reset_article_credits:
+        | {
+            Args: { _period_end: string; _user_id: string }
+            Returns: undefined
+          }
+        | {
+            Args: { _credits: number; _period_end: string; _user_id: string }
+            Returns: undefined
+          }
     }
     Enums: {
       blog_status: "opportunity" | "scheduled" | "generating" | "finished"
