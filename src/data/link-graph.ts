@@ -264,6 +264,10 @@ const POST_CARDS: Record<string, Titled> = {
     title: "How to Show Up in Google AI Overviews: The 2026 Playbook",
     blurb: "Be indexed and snippet-eligible, and own the subtopics behind the question.",
   },
+  "how-to-measure-geo": {
+    title: "How to Measure GEO: Track AI Citations and Prove Impact",
+    blurb: "Crawled, cited, clicked, converted: the metrics, the math, and a control test.",
+  },
   "cheap-seo": {
     title: "Cheap SEO in 2026: What Works and What's a Scam",
     blurb: "The free tools to set up first, the few paid ones worth buying, and the red flags.",
@@ -618,6 +622,7 @@ export const TOPICS: Topic[] = [
       e("deepseek"),
       e("mistral"),
       e("manus"),
+      b("how-to-measure-geo"),
       b("writesonic-alternatives"),
       b("how-to-get-cited-by-chatgpt"),
       b("how-to-show-up-in-google-ai-overviews"),

@@ -6,7 +6,15 @@
  * exposed to assistive tech as one image described by the markdown alt text.
  */
 import type { ReactNode } from "react";
-import { Bot, Check, Search } from "lucide-react";
+import {
+  ArrowRight,
+  Bot,
+  Check,
+  CircleDollarSign,
+  MousePointerClick,
+  Quote,
+  Search,
+} from "lucide-react";
 import { ChatGPTMark, GoogleMark } from "@/components/landing/ai-logos";
 import { cn } from "@/lib/utils";
 import { PRICE_CHARTS, type PriceChart } from "@/data/blog-figures";
@@ -567,6 +575,307 @@ function PriceChartFigure({ chart }: { chart: PriceChart }) {
   );
 }
 
+/* ---------- 7. The four Cs of GEO measurement ---------- */
+
+/**
+ * Four questions in the order a result moves through them. The early rungs
+ * move first and prove least; the late ones move last and prove most, which
+ * is why a report needs all four.
+ */
+const RUNGS = [
+  {
+    name: "Crawled",
+    icon: Bot,
+    question: "Can AI engines fetch your pages?",
+    metric: "User-triggered fetches per page",
+    source: "Server or CDN logs",
+    moves: "Days",
+  },
+  {
+    name: "Cited",
+    icon: Quote,
+    question: "Do AI answers name or link you?",
+    metric: "Visibility rate, citation rate, share of voice",
+    source: "Prompt panel, Search Console, Bing Webmaster Tools",
+    moves: "Weeks",
+  },
+  {
+    name: "Clicked",
+    icon: MousePointerClick,
+    question: "Do those answers send visits?",
+    metric: "AI referral sessions and landing pages",
+    source: "GA4, with a custom AI channel",
+    moves: "Weeks to months",
+  },
+  {
+    name: "Converted",
+    icon: CircleDollarSign,
+    question: "Are those visits worth money?",
+    metric: "Signups, pipeline, self-reported source",
+    source: "GA4 key events, CRM, signup form",
+    moves: "Months",
+  },
+];
+
+function GeoScorecard() {
+  return (
+    <div>
+      <div className="grid gap-3 sm:grid-cols-2">
+        {RUNGS.map(({ name, icon: Icon, question, metric, source, moves }, i) => (
+          <div key={name} className="rounded-2xl border border-border bg-card p-4 shadow-1">
+            <div className="flex items-center gap-2">
+              <Callout n={i + 1} />
+              <p className="text-sm font-semibold text-ink">{name}</p>
+              <Icon className="ml-auto h-4 w-4 text-brand-blue" />
+            </div>
+            <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">{question}</p>
+            <dl className="mt-3 space-y-1.5 border-t border-border pt-3 text-[0.68rem] leading-snug">
+              {(
+                [
+                  ["Metric", metric],
+                  ["Read it in", source],
+                  ["Moves in", moves],
+                ] as const
+              ).map(([term, value]) => (
+                <div key={term} className="grid grid-cols-[4.25rem_minmax(0,1fr)] gap-2">
+                  <dt className="font-semibold uppercase tracking-[0.08em] text-muted-foreground">
+                    {term}
+                  </dt>
+                  <dd className="font-medium text-ink">{value}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+        ))}
+      </div>
+      <div className="mt-4 flex items-center gap-3 px-1 text-[0.68rem] font-medium text-muted-foreground">
+        <span className="shrink-0">Moves first, proves least</span>
+        <span className="relative h-px flex-1 bg-ink/15">
+          <ArrowRight className="absolute -right-1 -top-[7px] h-3.5 w-3.5 text-ink/30" />
+        </span>
+        <span className="shrink-0 text-right">Moves last, proves most</span>
+      </div>
+    </div>
+  );
+}
+
+/* ---------- 8. A control-prompt test ---------- */
+
+/**
+ * The worked example in the GEO measurement guide: the weekly visibility rate
+ * of the prompts whose pages changed, against prompts left alone. Illustrative
+ * numbers for a fictional brand. The lift in the footer is computed from these
+ * arrays, so the chart and its arithmetic can't disagree.
+ */
+const CONTROL_TEST = {
+  changed: [21, 23, 22, 22, 24, 29, 34, 37, 39, 38],
+  control: [25, 23, 24, 24, 25, 26, 27, 26, 28, 27],
+  /** Weeks 1–4 before the change ships, weeks 7–10 after two weeks of crawl lag. */
+  before: [0, 4] as const,
+  after: [6, 10] as const,
+  answersPerWeek: 120,
+  yMax: 50,
+};
+
+function meanOf(values: number[], [from, to]: readonly [number, number]): number {
+  const slice = values.slice(from, to);
+  return slice.reduce((s, v) => s + v, 0) / slice.length;
+}
+
+function ControlTest() {
+  const { changed, control, before, after, answersPerWeek, yMax } = CONTROL_TEST;
+  const weeks = changed.length;
+  const x = (i: number) => ((i + 0.5) / weeks) * 100;
+  const y = (v: number) => 100 - (v / yMax) * 100;
+  const line = (values: number[]) => values.map((v, i) => `${x(i)},${y(v)}`).join(" ");
+  const cb = meanOf(changed, before);
+  const ca = meanOf(changed, after);
+  const kb = meanOf(control, before);
+  const ka = meanOf(control, after);
+  const lift = ca - cb - (ka - kb);
+  const band = (from: number, to: number) => ({
+    left: `${(from / weeks) * 100}%`,
+    width: `${((to - from) / weeks) * 100}%`,
+  });
+  const series = [
+    { key: "changed", label: "Changed pages", values: changed, solid: true },
+    { key: "control", label: "Control", values: control, solid: false },
+  ];
+
+  return (
+    <div className="rounded-2xl border border-border bg-card p-4 shadow-1 sm:p-5">
+      <div className="flex flex-wrap items-start justify-between gap-2">
+        <div>
+          <p className="text-sm font-semibold text-ink">Visibility rate by week</p>
+          <p className="mt-0.5 text-xs text-muted-foreground">
+            Share of answers that name the brand, {answersPerWeek} answers per group each week
+          </p>
+        </div>
+        <span className="text-[0.65rem] font-medium uppercase tracking-[0.14em] text-muted-foreground">
+          Example
+        </span>
+      </div>
+
+      <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-[0.68rem] text-muted-foreground">
+        <span className="inline-flex items-center gap-1.5">
+          <span className="block h-0.5 w-5 rounded-full bg-brand-blue" />
+          Prompts whose pages you changed
+        </span>
+        <span className="inline-flex items-center gap-1.5">
+          <span className="block w-5 border-t-2 border-dashed border-muted-foreground" />
+          Control prompts, left alone
+        </span>
+      </div>
+
+      <div className="mt-4 grid grid-cols-[2.25rem_minmax(0,1fr)] gap-x-2">
+        <div className="relative h-48 sm:h-56">
+          {[yMax, yMax / 2, 0].map((v) => (
+            <span
+              key={v}
+              className="absolute right-0 -translate-y-1/2 text-[0.62rem] tabular-nums text-muted-foreground"
+              style={{ top: `${y(v)}%` }}
+            >
+              {v}%
+            </span>
+          ))}
+        </div>
+
+        <div className="relative h-48 sm:h-56">
+          {(
+            [
+              [before, "Before"],
+              [[before[1], after[0]], "Crawl lag"],
+              [after, "After"],
+            ] as const
+          ).map(([[from, to], label]) => (
+            <div
+              key={label}
+              className={cn(
+                "absolute inset-y-0 border-x border-card",
+                label === "Crawl lag" ? "bg-transparent" : "bg-ink/[0.035]",
+              )}
+              style={band(from, to)}
+            >
+              <span className="absolute inset-x-0 top-1.5 whitespace-nowrap text-center text-[0.6rem] font-semibold uppercase tracking-[0.1em] text-muted-foreground">
+                {label === "Crawl lag" ? (
+                  <>
+                    <span className="sm:hidden">Lag</span>
+                    <span className="hidden sm:inline">{label}</span>
+                  </>
+                ) : (
+                  label
+                )}
+              </span>
+            </div>
+          ))}
+
+          <svg
+            viewBox="0 0 100 100"
+            preserveAspectRatio="none"
+            className="absolute inset-0 h-full w-full overflow-visible"
+          >
+            {[yMax, yMax / 2, 0].map((v) => (
+              <line
+                key={v}
+                x1="0"
+                x2="100"
+                y1={y(v)}
+                y2={y(v)}
+                stroke="currentColor"
+                className="text-ink/10"
+                strokeWidth="1"
+                vectorEffect="non-scaling-stroke"
+              />
+            ))}
+            <line
+              x1={(before[1] / weeks) * 100}
+              x2={(before[1] / weeks) * 100}
+              y1="0"
+              y2="100"
+              stroke="currentColor"
+              className="text-ink/35"
+              strokeWidth="1"
+              strokeDasharray="3 3"
+              vectorEffect="non-scaling-stroke"
+            />
+            {series.map((s) => (
+              <polyline
+                key={s.key}
+                points={line(s.values)}
+                fill="none"
+                stroke="currentColor"
+                className={s.solid ? "text-brand-blue" : "text-muted-foreground"}
+                strokeWidth="2"
+                strokeDasharray={s.solid ? undefined : "5 4"}
+                strokeLinejoin="round"
+                strokeLinecap="round"
+                vectorEffect="non-scaling-stroke"
+              />
+            ))}
+          </svg>
+
+          {series.map((s) =>
+            s.values.map((v, i) => (
+              <span
+                key={`${s.key}-${i}`}
+                className={cn(
+                  "absolute h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full ring-2 ring-card",
+                  s.solid ? "bg-brand-blue" : "border-2 border-muted-foreground bg-card",
+                )}
+                style={{ left: `${x(i)}%`, top: `${y(v)}%` }}
+              />
+            )),
+          )}
+
+          {series.map((s) => (
+            <span
+              key={`${s.key}-label`}
+              className="absolute right-0 -translate-y-[160%] text-[0.62rem] font-semibold text-ink"
+              style={{ top: `${y(s.values[weeks - 1])}%` }}
+            >
+              {s.label}
+            </span>
+          ))}
+
+          <span
+            className="absolute bottom-1.5 -translate-x-1/2 whitespace-nowrap rounded bg-card px-1 text-[0.6rem] font-semibold text-ink"
+            style={{ left: `${(before[1] / weeks) * 100}%` }}
+          >
+            Pages shipped
+          </span>
+
+          {changed.map((v, i) => (
+            <div
+              key={`hit-${i}`}
+              title={`Week ${i + 1}: changed pages ${v}%, control ${control[i]}%`}
+              className="absolute inset-y-0"
+              style={{ left: `${(i / weeks) * 100}%`, width: `${100 / weeks}%` }}
+            />
+          ))}
+        </div>
+
+        <div />
+        <div className="mt-1.5 grid" style={{ gridTemplateColumns: `repeat(${weeks}, 1fr)` }}>
+          {changed.map((_, i) => (
+            <span key={i} className="text-center text-[0.6rem] tabular-nums text-muted-foreground">
+              W{i + 1}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      <div className="mt-4 rounded-xl border border-border bg-surface px-3 py-2.5 text-[0.7rem] leading-relaxed text-ink">
+        <span className="font-semibold">Lift</span> = changed ({ca} − {cb}) − control ({ka} − {kb})
+        = <span className="font-bold tabular-nums">{lift} points</span>
+        <span className="text-muted-foreground">
+          {" "}
+          · the control's {ka - kb}-point rise happened without you, so it comes off the top.
+        </span>
+      </div>
+    </div>
+  );
+}
+
 /* ---------- registry ---------- */
 
 const FIGURES: Record<string, () => ReactNode> = {
@@ -575,6 +884,8 @@ const FIGURES: Record<string, () => ReactNode> = {
   "prompt-panel": PromptPanel,
   "query-fan-out": QueryFanOut,
   "retainer-hours": RetainerHours,
+  "geo-scorecard": GeoScorecard,
+  "control-test": ControlTest,
 };
 
 /** A fixed figure by id, or a data-driven one ("price-chart/<post-slug>"). */
