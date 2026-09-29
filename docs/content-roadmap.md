@@ -385,38 +385,38 @@ Claude audits, the AEO audit, the pre-publish checklist, author bios and the Com
 
 **Needs:** Nothing extra.
 
-- [ ] **P13: How to Use Claude for SEO Audits and Content Analysis**
+- [x] **P13: How to Use Claude for SEO Audits and Content Analysis** (written: /blog/claude-for-seo-audits)
   - Source: Content Plan · Blog Posts
   - Target queries: "how to use claude for seo audits" (1,600/mo · 0 competition); "claude seo tool" (720/mo · $11.67 CPC)
   - Angle: Actionable Claude prompt templates to audit existing blog posts for entity gaps, compare schema markup against top-ranking rivals, and extract quotable soundbites before publishing.
   - Competitor gap: Most AI SEO guides focus exclusively on ChatGPT or Midjourney; virtually no software blogs demonstrate how to turn Claude's large context window into an automated on-page technical and entity audit engine.
   - Standalone posts:
-    - [ ] "how to use claude for seo audits"
-    - [ ] "claude seo tool"
-- [ ] **P10: How to Conduct an Answer Engine Optimization (AEO) Audit in 2026**
+    - [x] "how to use claude for seo audits" (written: /blog/how-to-use-claude-for-seo-audits)
+    - [x] "claude seo tool" (written: /blog/claude-seo-tool)
+- [x] **P10: How to Conduct an Answer Engine Optimization (AEO) Audit in 2026** (written: /blog/aeo-audit)
   - Source: Content Plan · Blog Posts
   - Target queries: "what is generative engine optimization geo tools list" (170/mo · 0 competition); "how to evaluate effectiveness of geo tool before purchasing" (40/mo · 0 competition)
   - Angle: A 20-point actionable GEO audit checklist covering crawl permissions (GPTBot, ClaudeBot, PerplexityBot), machine-readable structured summaries, prompt coverage gaps, and authority backlink distribution.
   - Competitor gap: Existing audit checklists only examine site speed and Google canonical tags; none provide a framework for llms.txt validation, entity graph completeness, or citation-readiness.
   - Standalone posts:
-    - [ ] "what is generative engine optimization geo tools list"
-    - [ ] "how to evaluate effectiveness of geo tool before purchasing"
-- [ ] **LH2·3: AI SEO Checklist: A 30-Minute Pre-Publish Audit for Every New Article**
+    - [x] "what is generative engine optimization geo tools list" (written: /blog/geo-tools-list)
+    - [x] "how to evaluate effectiveness of geo tool before purchasing" (written: /blog/evaluate-geo-tool-before-purchasing)
+- [x] **LH2·3: AI SEO Checklist: A 30-Minute Pre-Publish Audit for Every New Article** (written: /blog/ai-seo-checklist-pre-publish-audit)
   - Source: Content Gap · Low-Hanging Fruit · Set 2
   - Target queries: "ai seo checklist" (70/mo · $8.02 CPC · KD 25)
   - Angle: Create a printable checklist that covers direct-answer openings, source attribution, claim verification, entity clarity, semantic headings, tables, crawl accessibility, and AI crawler directives. Make it a downloadable template so agencies and marketers link to it.
   - Competitor gap: Most checklists are recycled Google SEO basics—title tags, metadata, and keyword placement—with no checks for citation-readiness or answer extraction.
   - Standalone posts:
-    - [ ] "ai seo checklist"
-- [ ] **LH2·4: Do Author Bios Help AI Search Visibility? The Trust Signal Most AI Content Misses**
+    - [x] "ai seo checklist" (written: /blog/ai-seo-checklist)
+- [x] **LH2·4: Do Author Bios Help AI Search Visibility? The Trust Signal Most AI Content Misses** (written: /blog/do-author-bios-help-ai-search-visibility)
   - Source: Content Gap · Low-Hanging Fruit · Set 2
   - Target queries: "do author bios help seo" (Low KD · 0 competition); "author bio seo" (20/mo · KD 0)
   - Angle: Explain how to build a machine-readable author footprint using Person schema, first-party bio pages, external profile links, real expertise evidence, and consistent bylines—without pretending that an author bio alone guarantees rankings.
   - Competitor gap: E-E-A-T articles focus on Google quality guidelines but do not test whether named, verifiable authors make content easier for AI systems to attribute and trust.
   - Standalone posts:
-    - [ ] "do author bios help seo"
-    - [ ] "author bio seo"
-- [ ] **OB1·5: The "Shadow Training Data" Audit: How Common Crawl Decided Your Brand's Fate in 2024**
+    - [x] "do author bios help seo" (written: /blog/do-author-bios-help-seo)
+    - [x] "author bio seo" (written: /blog/author-bio-seo)
+- [x] **OB1·5: The "Shadow Training Data" Audit: How Common Crawl Decided Your Brand's Fate in 2024** (written: /blog/shadow-training-data-audit)
   - Source: Content Gap · Outside-the-Box Gaps · Set 1
   - Target queries: "what is entity authority in seo" (30/mo · 0 competition); "how ai models rank brands in search results" (50/mo · 0 competition)
   - Angle: How to audit your brand's footprint in historical Common Crawl dumps. Why brands founded after a model's cutoff date suffer from "Entity Invisibility," and how to bridge the gap between static weights and live retrieval augmentation using structured entity seeding.

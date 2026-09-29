@@ -1,0 +1,165 @@
+<!doctype html>
+<!--
+  Source of public/downloads/ai-seo-checklist.pdf, the printable checklist
+  linked from /blog/ai-seo-checklist-pre-publish-audit. Its 24 checks must
+  match that post. Rebuild (two A4 pages) with:
+  "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new \
+    --no-pdf-header-footer --virtual-time-budget=8000 \
+    --print-to-pdf=public/downloads/ai-seo-checklist.pdf \
+    "file://$PWD/scripts/downloads/ai-seo-checklist.html"
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>AI SEO Checklist: 30-Minute Pre-Publish Audit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=block" rel="stylesheet">
+<style>
+  @page { size: A4; margin: 0; }
+  :root { --blue: #1877f2; --ink: #0f172a; --muted: #5b6475; --rule: #d9dee7; --tint: #eef4fe; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: #fff; }
+  body { font-family: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif; color: var(--ink); font-size: 9.6pt; line-height: 1.32; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .page { width: 210mm; height: 297mm; padding: 14mm 15mm 0 15mm; position: relative; overflow: hidden; page-break-after: always; break-after: page; }
+  .page:last-child { page-break-after: auto; break-after: auto; }
+  .brand { display: flex; align-items: center; gap: 2mm; font-weight: 700; font-size: 10pt; color: var(--ink); margin-bottom: 5mm; }
+  .brand svg { width: 5mm; height: 5mm; }
+  h1 { font-size: 19pt; line-height: 1.15; margin: 0 0 2mm; font-weight: 800; letter-spacing: -0.01em; }
+  .intro { margin: 0 0 5mm; color: var(--muted); font-size: 10pt; }
+  .fields { display: grid; grid-template-columns: 2.2fr 1.4fr 1fr; gap: 6mm; margin-bottom: 4mm; font-size: 9.2pt; }
+  .field { display: flex; align-items: flex-end; gap: 1.5mm; }
+  .field span { font-weight: 600; }
+  .field i { flex: 1; border-bottom: 0.3mm solid var(--ink); height: 4.2mm; }
+  .legend { display: flex; align-items: center; gap: 2mm; font-size: 9pt; color: var(--muted); padding: 2mm 3mm; background: var(--tint); border-radius: 1.5mm; margin-bottom: 4.5mm; }
+  .legend b { color: var(--ink); }
+  .badge { display: inline-flex; align-items: center; justify-content: center; font-size: 6.6pt; font-weight: 800; letter-spacing: 0.06em; color: #fff; background: var(--blue); border-radius: 1mm; padding: 0.5mm 1.4mm; line-height: 1.2; vertical-align: 0.3mm; }
+  section { margin-bottom: 3.8mm; }
+  .sh { display: flex; align-items: baseline; gap: 2mm; border-bottom: 0.45mm solid var(--blue); padding-bottom: 1mm; margin-bottom: 1.8mm; }
+  .sh h2 { font-size: 11.4pt; margin: 0; font-weight: 700; flex: 1; }
+  .sh .time { font-weight: 800; font-size: 10pt; }
+  .sh .clock { color: var(--muted); font-size: 9pt; font-variant-numeric: tabular-nums; }
+  ul { list-style: none; margin: 0; padding: 0; }
+  li { display: grid; grid-template-columns: 5.5mm 7mm 1fr; column-gap: 1mm; padding: 1.15mm 0; border-bottom: 0.2mm solid var(--rule); }
+  li:last-child { border-bottom: none; }
+  .box { width: 4mm; height: 4mm; border: 0.35mm solid var(--ink); border-radius: 0.6mm; margin-top: 0.3mm; }
+  .num { font-weight: 700; font-variant-numeric: tabular-nums; }
+  .check { font-weight: 500; }
+  .pass { grid-column: 3; color: var(--muted); font-size: 8.8pt; margin-top: 0.4mm; }
+  .pass b { color: var(--ink); font-weight: 600; }
+  .total { display: flex; justify-content: space-between; align-items: baseline; padding: 2.5mm 0; border-top: 0.45mm solid var(--ink); border-bottom: 0.2mm solid var(--rule); margin: 1mm 0 4mm; font-size: 10pt; }
+  .total b { font-weight: 800; }
+  .verdict { border: 0.5mm solid var(--blue); border-radius: 2mm; padding: 4mm 5mm; }
+  .score { display: flex; gap: 8mm; font-size: 10.5pt; font-weight: 700; margin-bottom: 3.5mm; }
+  .score i { display: inline-block; width: 12mm; border-bottom: 0.3mm solid var(--ink); margin: 0 1mm; }
+  .verdict h3 { font-size: 10.5pt; margin: 0 0 2mm; }
+  .verdict h3 span { font-weight: 500; color: var(--muted); font-size: 9pt; }
+  .opt { display: grid; grid-template-columns: 30mm 1fr; gap: 2mm; padding: 1.8mm 0; border-top: 0.2mm solid var(--rule); align-items: baseline; }
+  .opt b { font-size: 10pt; }
+  .opt b::before { content: ""; display: inline-block; width: 3.4mm; height: 3.4mm; border: 0.35mm solid var(--ink); border-radius: 50%; margin-right: 2mm; vertical-align: -0.5mm; }
+  footer { position: absolute; left: 15mm; right: 15mm; bottom: 9mm; display: flex; justify-content: space-between; font-size: 8pt; color: var(--muted); border-top: 0.2mm solid var(--rule); padding-top: 2mm; }
+</style>
+</head>
+<body>
+
+<div class="page">
+  <div class="brand"><svg viewBox="0 0 24 24"><path d="M2.6 2.6 Q12 6.9 21.4 2.6 Q17.1 12 21.4 21.4 Q12 17.1 2.6 21.4 Q6.9 12 2.6 2.6 Z" fill="#1877f2" stroke="#1877f2" stroke-width="1.6" stroke-linejoin="round"/></svg>Rankbox</div>
+  <h1>AI SEO Checklist: 30-Minute Pre-Publish Audit</h1>
+  <p class="intro">Run these 24 checks on every new article before it goes live: eight timed sections, 30 minutes, one verdict.</p>
+  <div class="fields">
+    <div class="field"><span>Article:</span><i></i></div>
+    <div class="field"><span>Reviewer:</span><i></i></div>
+    <div class="field"><span>Date:</span><i></i></div>
+  </div>
+  <div class="legend"><span class="badge">B</span><span><b>= blocker.</b> If any blocker fails, hold the post.</span></div>
+
+  <section>
+    <div class="sh"><h2>1. Direct-answer opening</h2><span class="time">3 min</span><span class="clock">00:00–03:00</span></div>
+    <ul>
+      <li><div class="box"></div><span class="num">1.1</span><span class="check"><span class="badge">B</span> The first sentence answers the title's question.</span><span class="pass"><b>Pass:</b> read alone, it's a full answer with its key number or condition.</span></li>
+      <li><div class="box"></div><span class="num">1.2</span><span class="check">The opening is two or three sentences and under about 60 words.</span><span class="pass"><b>Pass:</b> count the words before the first paragraph break.</span></li>
+      <li><div class="box"></div><span class="num">1.3</span><span class="check">The answer states its scope: who, where or when it applies.</span><span class="pass"><b>Pass:</b> any answer that changes by country, plan, size or date says which one.</span></li>
+    </ul>
+  </section>
+
+  <section>
+    <div class="sh"><h2>2. Source attribution</h2><span class="time">4 min</span><span class="clock">03:00–07:00</span></div>
+    <ul>
+      <li><div class="box"></div><span class="num">2.1</span><span class="check"><span class="badge">B</span> Every number, quote and "research shows" claim links to its source where it's used.</span><span class="pass"><b>Pass:</b> every highlighted number has a link in the same sentence.</span></li>
+      <li><div class="box"></div><span class="num">2.2</span><span class="check">Links go to the primary source, not a roundup that quotes it.</span><span class="pass"><b>Pass:</b> each link lands on the study, the vendor's doc, the law or the dataset.</span></li>
+      <li><div class="box"></div><span class="num">2.3</span><span class="check">The source is named in the sentence, not only linked.</span><span class="pass"><b>Pass:</b> no bare "here" or "this study" links.</span></li>
+    </ul>
+  </section>
+
+  <section>
+    <div class="sh"><h2>3. Claim verification</h2><span class="time">6 min</span><span class="clock">07:00–13:00</span></div>
+    <ul>
+      <li><div class="box"></div><span class="num">3.1</span><span class="check"><span class="badge">B</span> Each linked number matches its source: same figure, unit, year and scope.</span><span class="pass"><b>Pass:</b> every source opened and ticked. Any mismatch fixed or cut.</span></li>
+      <li><div class="box"></div><span class="num">3.2</span><span class="check">Claims with no source are cut, or rewritten as your own labelled view.</span><span class="pass"><b>Pass:</b> no number, "study" or "expert" left without a link or a label.</span></li>
+      <li><div class="box"></div><span class="num">3.3</span><span class="check">Fast-moving facts carry a date.</span><span class="pass"><b>Pass:</b> every price, statistic, feature, law and "best" claim has a month and year.</span></li>
+    </ul>
+  </section>
+
+  <section>
+    <div class="sh"><h2>4. Entity clarity</h2><span class="time">4 min</span><span class="clock">13:00–17:00</span></div>
+    <ul>
+      <li><div class="box"></div><span class="num">4.1</span><span class="check">Each section names its subject in full, not "it", "we" or "the tool".</span><span class="pass"><b>Pass:</b> the first sentence under every H2 names the subject.</span></li>
+      <li><div class="box"></div><span class="num">4.2</span><span class="check">Key terms are defined once ("X is a Y that Z"), and abbreviations are spelled out.</span><span class="pass"><b>Pass:</b> the two or three core terms each have a definition sentence.</span></li>
+      <li><div class="box"></div><span class="num">4.3</span><span class="check">Article markup names the author, headline and dates, and matches the page.</span><span class="pass"><b>Pass:</b> the Rich Results Test shows no errors, and the byline and dates match what readers see.</span></li>
+    </ul>
+  </section>
+
+  <footer><span>Rankbox · rankbox.xyz/blog/ai-seo-checklist-pre-publish-audit</span><span>1 of 2</span></footer>
+</div>
+
+<div class="page">
+  <section>
+    <div class="sh"><h2>5. Semantic headings</h2><span class="time">3 min</span><span class="clock">17:00–20:00</span></div>
+    <ul>
+      <li><div class="box"></div><span class="num">5.1</span><span class="check">One H1 and no skipped heading levels.</span><span class="pass"><b>Pass:</b> a heading checker shows one H1 and no jump from H2 to H4.</span></li>
+      <li><div class="box"></div><span class="num">5.2</span><span class="check">Each H2 and H3 names its topic or asks its sub-question.</span><span class="pass"><b>Pass:</b> read alone, the headings say what each section answers. No "Overview" or "Wrapping up".</span></li>
+      <li><div class="box"></div><span class="num">5.3</span><span class="check">The first sentence under each heading answers that heading.</span><span class="pass"><b>Pass:</b> spot-check every H2.</span></li>
+    </ul>
+  </section>
+
+  <section>
+    <div class="sh"><h2>6. Tables and lists</h2><span class="time">3 min</span><span class="clock">20:00–23:00</span></div>
+    <ul>
+      <li><div class="box"></div><span class="num">6.1</span><span class="check">Comparisons of three or more items sit in an HTML table with a header row.</span><span class="pass"><b>Pass:</b> no paragraph walks through "A costs this, B costs that, C costs the other."</span></li>
+      <li><div class="box"></div><span class="num">6.2</span><span class="check">Tables and charts are text, not screenshots.</span><span class="pass"><b>Pass:</b> you can select the table's text on the preview page.</span></li>
+      <li><div class="box"></div><span class="num">6.3</span><span class="check">Steps are a numbered list, one action per item.</span><span class="pass"><b>Pass:</b> every process with an order is numbered, and each step makes sense alone.</span></li>
+    </ul>
+  </section>
+
+  <section>
+    <div class="sh"><h2>7. Crawl accessibility</h2><span class="time">4 min</span><span class="clock">23:00–27:00</span></div>
+    <ul>
+      <li><div class="box"></div><span class="num">7.1</span><span class="check"><span class="badge">B</span> The final URL returns a 200 status and its canonical tag points to itself.</span><span class="pass"><b>Pass:</b> a status check shows 200, and the canonical is the post's own URL.</span></li>
+      <li><div class="box"></div><span class="num">7.2</span><span class="check"><span class="badge">B</span> The answer, tables and FAQ are in the HTML the server sends, not loaded by JavaScript or hidden in tabs.</span><span class="pass"><b>Pass:</b> the raw HTML contains the opening, one table cell and one FAQ answer.</span></li>
+      <li><div class="box"></div><span class="num">7.3</span><span class="check">The post is linked from a live page and listed in the XML sitemap.</span><span class="pass"><b>Pass:</b> a related post or the blog index links to it, and the sitemap lists the URL.</span></li>
+    </ul>
+  </section>
+
+  <section>
+    <div class="sh"><h2>8. AI crawler directives</h2><span class="time">3 min</span><span class="clock">27:00–30:00</span></div>
+    <ul>
+      <li><div class="box"></div><span class="num">8.1</span><span class="check"><span class="badge">B</span> robots.txt allows Googlebot, Bingbot, OAI-SearchBot, Claude-SearchBot and PerplexityBot on the post's path.</span><span class="pass"><b>Pass:</b> a robots.txt tester shows "allowed" for each.</span></li>
+      <li><div class="box"></div><span class="num">8.2</span><span class="check"><span class="badge">B</span> No unintended noindex, nosnippet, small max-snippet, noarchive or nocache rule in the page or its X-Robots-Tag header.</span><span class="pass"><b>Pass:</b> the page source and headers show only rules you meant to set.</span></li>
+      <li><div class="box"></div><span class="num">8.3</span><span class="check">Your CDN or firewall lets verified search crawlers through.</span><span class="pass"><b>Pass:</b> the search category is allowed, with no new rule since your last check.</span></li>
+    </ul>
+  </section>
+
+  <div class="total"><span><b>Total time:</b> 3 + 4 + 6 + 4 + 3 + 3 + 4 + 3</span><b>30 minutes</b></div>
+
+  <div class="verdict">
+    <div class="score"><span>Score: <i></i> of 24 checks</span><span><i></i> of 7 blockers</span></div>
+    <h3>Verdict <span>(circle one)</span></h3>
+    <div class="opt"><b>Ship</b><span>All 7 blockers pass and at least 20 of 24 checks pass.</span></div>
+    <div class="opt"><b>Fix, then ship</b><span>All blockers pass and 16 to 19 checks pass. Fix the misses the same day.</span></div>
+    <div class="opt"><b>Hold</b><span>Any blocker fails, or fewer than 16 checks pass.</span></div>
+  </div>
+
+  <footer><span>Rankbox · rankbox.xyz/blog/ai-seo-checklist-pre-publish-audit</span><span>2 of 2</span></footer>
+</div>
+
+</body>
+</html>

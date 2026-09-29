@@ -10,7 +10,7 @@
  * unable to do something, and every price dated. They must also read as eight
  * articles, not one template, against each other and every other post.
  */
-import { readFileSync, readdirSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { parseFrontmatter } from "@/lib/markdown-blocks";
 import { analyzeArticle } from "@/lib/seo-analysis";
@@ -24,6 +24,13 @@ const BLOG_DIR = "src/content/blog";
  * to. They're shorter than the hubs, and each hub links back down to them.
  */
 const STANDALONES: Record<string, string> = {
+  "author-bio-seo": "do-author-bios-help-ai-search-visibility",
+  "do-author-bios-help-seo": "do-author-bios-help-ai-search-visibility",
+  "ai-seo-checklist": "ai-seo-checklist-pre-publish-audit",
+  "evaluate-geo-tool-before-purchasing": "aeo-audit",
+  "geo-tools-list": "aeo-audit",
+  "claude-seo-tool": "claude-for-seo-audits",
+  "how-to-use-claude-for-seo-audits": "claude-for-seo-audits",
   "entity-authority-seo": "entity-authority-in-the-ai-era",
   "what-is-entity-authority-in-seo": "entity-authority-in-the-ai-era",
   "how-to-compare-generative-engine-optimization-software": "comparison-page-formula",
@@ -100,12 +107,19 @@ const SLUGS = [
   "synthetic-content-saturation-model-collapse",
   "comparison-page-formula",
   "entity-authority-in-the-ai-era",
+  "claude-for-seo-audits",
+  "aeo-audit",
+  "ai-seo-checklist-pre-publish-audit",
+  "do-author-bios-help-ai-search-visibility",
+  "shadow-training-data-audit",
   ...Object.keys(STANDALONES),
 ];
 const TOOL_GUIDES = new Set([
   "chatgpt-rank-tracker",
   "perplexity-seo-tools",
   "ai-search-optimization-tools",
+  "claude-seo-tool",
+  "geo-tools-list",
 ]);
 
 function read(slug: string) {
@@ -214,7 +228,8 @@ describe.each(POSTS.map((p) => [p.slug, p] as const))("%s", (slug, { data, body 
     expect(internal.length).toBeGreaterThanOrEqual(5);
     for (const href of internal) {
       const hub = /^\/[a-z-]+$/.test(href) && sectionOf(href) !== undefined;
-      expect(hub || cardFor(href) !== undefined, href).toBe(true);
+      const file = href.startsWith("/downloads/") && existsSync(`public${href}`);
+      expect(hub || file || cardFor(href) !== undefined, href).toBe(true);
     }
   });
 

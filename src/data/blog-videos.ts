@@ -27,7 +27,7 @@ export interface BlogVideo {
   summary: string;
 }
 
-export const VIDEOS_CHECKED = "2026-09-28";
+export const VIDEOS_CHECKED = "2026-09-29";
 
 export const BLOG_VIDEOS: Record<string, BlogVideo> = {
   sq55KB5icQ4: {
@@ -111,6 +111,33 @@ export const BLOG_VIDEOS: Record<string, BlogVideo> = {
     seconds: 790,
     summary:
       "Meenakshi Kodati explains model collapse, why synthetic data can distort future AI systems, and how data quality, RAG and human-generated content keep AI grounded.",
+  },
+  _jjSS0qGFbI: {
+    post: "claude-for-seo-audits",
+    title: "Getting started with connectors in Claude.ai",
+    channel: "Anthropic",
+    uploadDate: "2025-12-11T09:07:09-08:00",
+    seconds: 223,
+    summary:
+      "Anthropic shows how to set up connectors that give Claude access to your files, apps and workflows.",
+  },
+  "3QlY8ba0jYI": {
+    post: "do-author-bios-help-seo",
+    title: 'Will Google be evaluating the use of rel="author" moving forward?',
+    channel: "Google Search Central",
+    uploadDate: "2013-06-05T09:58:33-07:00",
+    seconds: 121,
+    summary:
+      'A Webmaster Help answer on whether Google will evaluate rel="author" on pages that aren\'t articles, such as a home page or an about page.',
+  },
+  "DFkl-wmYvA8": {
+    post: "shadow-training-data-audit",
+    title: "An Inside Look at Common Crawl",
+    channel: "TWiT Tech Podcast Network",
+    uploadDate: "2025-08-28T10:00:30-07:00",
+    seconds: 2568,
+    summary:
+      "On Intelligent Machines, Leo, Paris and Jeff talk to Rich Skrenta, the Executive Director of Common Crawl.",
   },
 };
 
