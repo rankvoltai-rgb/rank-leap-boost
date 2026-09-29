@@ -139,6 +139,24 @@ export const BLOG_VIDEOS: Record<string, BlogVideo> = {
     summary:
       "On Intelligent Machines, Leo, Paris and Jeff talk to Rich Skrenta, the Executive Director of Common Crawl.",
   },
+  _R04ySodhGE: {
+    post: "google-ai-mode-vs-traditional-search",
+    title: "How AI Is Changing Google Search and SEO",
+    channel: "Google Search Central",
+    uploadDate: "2026-05-01T02:40:10-07:00",
+    seconds: 1991,
+    summary:
+      "On Search Off the Record, Martin speaks with Nikola Todorovic, director of Software Engineering at Google Search, about the evolution from traditional search to AI Overviews and AI Mode, and why queries are becoming more conversational.",
+  },
+  o4hH4ZQ_19k: {
+    post: "content-freshness-seo",
+    title: "Is freshness an important signal for all sites?",
+    channel: "Google Search Central",
+    uploadDate: "2012-10-01T11:55:54-07:00",
+    seconds: 211,
+    summary:
+      "A Webmaster Help answer on how important freshness is as a signal, given that frequently updated pages can get a boost for queries that deserve freshness.",
+  },
 };
 
 /** ISO 8601 duration for schema.org, e.g. 754 -> "PT12M34S". */

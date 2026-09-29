@@ -24,6 +24,13 @@ const BLOG_DIR = "src/content/blog";
  * to. They're shorter than the hubs, and each hub links back down to them.
  */
 const STANDALONES: Record<string, string> = {
+  "voice-search-optimization-2026": "voice-search-ai-powered",
+  "how-search-intent-is-evolving-with-conversational-ai":
+    "ai-search-intent-conversational-buyer-stages",
+  "what-is-ai-mode-in-google": "google-ai-mode-vs-traditional-search",
+  "what-is-google-ai-mode": "google-ai-mode-vs-traditional-search",
+  "how-often-to-update-content-for-ai-seo": "freshness-factor-ai-search",
+  "content-freshness-seo": "freshness-factor-ai-search",
   "author-bio-seo": "do-author-bios-help-ai-search-visibility",
   "do-author-bios-help-seo": "do-author-bios-help-ai-search-visibility",
   "ai-seo-checklist": "ai-seo-checklist-pre-publish-audit",
@@ -112,6 +119,11 @@ const SLUGS = [
   "ai-seo-checklist-pre-publish-audit",
   "do-author-bios-help-ai-search-visibility",
   "shadow-training-data-audit",
+  "freshness-factor-ai-search",
+  "ai-search-content-refresh-calendar",
+  "google-ai-mode-vs-traditional-search",
+  "ai-search-intent-conversational-buyer-stages",
+  "voice-search-ai-powered",
   ...Object.keys(STANDALONES),
 ];
 const TOOL_GUIDES = new Set([
@@ -229,7 +241,8 @@ describe.each(POSTS.map((p) => [p.slug, p] as const))("%s", (slug, { data, body 
     for (const href of internal) {
       const hub = /^\/[a-z-]+$/.test(href) && sectionOf(href) !== undefined;
       const file = href.startsWith("/downloads/") && existsSync(`public${href}`);
-      expect(hub || file || cardFor(href) !== undefined, href).toBe(true);
+      const route = /^\/[a-z-]+$/.test(href) && existsSync(`src/routes${href}.index.tsx`);
+      expect(hub || file || route || cardFor(href) !== undefined, href).toBe(true);
     }
   });
 

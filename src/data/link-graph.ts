@@ -592,6 +592,53 @@ const POST_CARDS: Record<string, Titled> = {
     title: 'The "Shadow Training Data" Audit: How Common Crawl Decided Your Brand\'s Fate in 2024',
     blurb: "Audit your brand in the Common Crawl dumps behind models' training windows.",
   },
+  "freshness-factor-ai-search": {
+    title: "The Freshness Factor in AI Search: Why 30-Day-Old Content Beats 10-Year-Old Giants",
+    blurb:
+      "What the evidence says about recency in AI answers, and a refresh framework you can measure.",
+  },
+  "content-freshness-seo": {
+    title: "Content Freshness SEO: How Google and AI Search Judge Fresh Content",
+    blurb:
+      "What content freshness means to Google, how it reads dates, and where AI search differs.",
+  },
+  "how-often-to-update-content-for-ai-seo": {
+    title: "How Often to Update Content for AI SEO Freshness (and What Counts as an Update)",
+    blurb: "A change-rate test and update triggers, plus what counts as a real update.",
+  },
+  "ai-search-content-refresh-calendar": {
+    title: "How to Build an AI Search Content Refresh Calendar",
+    blurb: "Refresh intervals by page type, a free spreadsheet template and a change log pattern.",
+  },
+  "google-ai-mode-vs-traditional-search": {
+    title: "Google AI Mode vs. Traditional Search: What It Means for Web Traffic",
+    blurb: "How AI Mode differs from classic results and AI Overviews, and what it does to clicks.",
+  },
+  "what-is-google-ai-mode": {
+    title: "What Is Google AI Mode? How It Works and How It Differs From AI Overviews",
+    blurb: "How Google AI Mode works, sourced to Google, and how it differs from AI Overviews.",
+  },
+  "what-is-ai-mode-in-google": {
+    title: "What Is AI Mode in Google? Where to Find It and How to Use It",
+    blurb: "Where to find AI Mode, what you can do in it, and how to leave it.",
+  },
+  "ai-search-intent-conversational-buyer-stages": {
+    title: "AI Search Intent: The 4 New Conversational Buyer Stages",
+    blurb: "Four conversational buyer stages, and the content asset that wins each one.",
+  },
+  "how-search-intent-is-evolving-with-conversational-ai": {
+    title: "How Search Intent Is Evolving With Conversational AI Assistants",
+    blurb: "From the classic intent taxonomy to how people talk to assistants now, with the data.",
+  },
+  "voice-search-ai-powered": {
+    title: "Voice Search Is Back\u2014But This Time It's AI-Powered",
+    blurb: "How voice prompts differ from typed search, and a spoken-answer format to write in.",
+  },
+  "voice-search-optimization-2026": {
+    title: "Voice Search Optimization in 2026: A Checklist for AI Assistants",
+    blurb:
+      "A 2026 voice checklist: assistants, their answer sources, local listings and crawl access.",
+  },
   "cheap-seo": {
     title: "Cheap SEO in 2026: What Works and What's a Scam",
     blurb: "The free tools to set up first, the few paid ones worth buying, and the red flags.",
@@ -771,6 +818,10 @@ export const TOPICS: Topic[] = [
     pages: [
       e("google-ai-overviews"),
       b("how-to-show-up-in-google-ai-overviews"),
+      b("google-ai-mode-vs-traditional-search"),
+      b("what-is-google-ai-mode"),
+      b("what-is-ai-mode-in-google"),
+      b("voice-search-optimization-2026"),
       b("will-llms-txt-help-your-seo"),
       t("serp-snippet-preview"),
       ...g("ai-overviews", "ai-mode", "featured-snippet", "snippet-controls"),
@@ -829,6 +880,8 @@ export const TOPICS: Topic[] = [
       e("google-ai-overviews"),
       e("chatgpt"),
       b("how-to-show-up-in-google-ai-overviews"),
+      b("ai-search-intent-conversational-buyer-stages"),
+      b("how-search-intent-is-evolving-with-conversational-ai"),
       u("saas"),
       u("solo-founders"),
       i("mcp"),
@@ -874,6 +927,9 @@ export const TOPICS: Topic[] = [
       b("synthetic-content-saturation-model-collapse"),
       b("are-automated-blog-posts-effective-for-seo"),
       b("comparison-page-formula"),
+      b("ai-search-content-refresh-calendar"),
+      b("voice-search-ai-powered"),
+      b("voice-search-optimization-2026"),
       b("how-to-compare-generative-engine-optimization-software"),
       b("byword-alternatives"),
       b("jasper-alternatives"),
@@ -901,6 +957,22 @@ export const TOPICS: Topic[] = [
         "entity-seo",
         "click-through-rate",
       ),
+    ],
+  },
+  {
+    id: "freshness",
+    title: "Keep your pages current for AI answers",
+    pages: [
+      b("freshness-factor-ai-search"),
+      b("content-freshness-seo"),
+      b("how-often-to-update-content-for-ai-seo"),
+      b("ai-search-content-refresh-calendar"),
+      b("ai-seo-checklist"),
+      f("citation-ready-writer"),
+      t("ai-citation-readiness-checker"),
+      t("schema-generator"),
+      t("ai-search-readiness-check"),
+      ...g("content-freshness", "xml-sitemap", "indexnow", "information-gain"),
     ],
   },
   {

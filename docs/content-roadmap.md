@@ -504,15 +504,15 @@ Content freshness, the refresh calendar, Google AI Mode, conversational intent a
 
 **Needs:** Nothing extra.
 
-- [ ] **LH2·2: The Freshness Factor in AI Search: Why 30-Day-Old Content Beats 10-Year-Old Giants**
+- [x] **LH2·2: The Freshness Factor in AI Search: Why 30-Day-Old Content Beats 10-Year-Old Giants** (written: /blog/freshness-factor-ai-search)
   - Source: Content Gap · Low-Hanging Fruit · Set 2
   - Target queries: "content freshness seo" (480/mo · KD 30 · 0.01 competition); "how often to update content for ai seo freshness" (Low KD · 0 competition)
   - Angle: A measurable content-refresh framework: which pages to update first, how to add new facts without rewriting an entire article, and how to track whether revised pages begin appearing in AI citations.
   - Competitor gap: Conventional SEO freshness guides only discuss Google's ranking systems. There is little practical guidance on how fast-moving AI answer engines update their cited sources.
   - Standalone posts:
-    - [ ] "content freshness seo"
-    - [ ] "how often to update content for ai seo freshness"
-- [ ] **LH2·7: How to Build an AI Search Content Refresh Calendar**
+    - [x] "content freshness seo" (written: /blog/content-freshness-seo)
+    - [x] "how often to update content for ai seo freshness" (written: /blog/how-often-to-update-content-for-ai-seo)
+- [x] **LH2·7: How to Build an AI Search Content Refresh Calendar** (written: /blog/ai-search-content-refresh-calendar)
   - Source: Content Gap · Low-Hanging Fruit · Set 2
   - Target queries: "content freshness seo" (480/mo · KD 30 · 0.01 competition); "how often to update content for ai seo freshness" (Low KD · 0 competition)
   - Angle: Provide a practical model for assigning refresh intervals by page type: pricing pages, comparison pages, integration docs, statistics posts, and evergreen guides. Include a downloadable refresh-calendar template and a "change log" pattern that makes updates visible to readers and machines.
@@ -520,29 +520,29 @@ Content freshness, the refresh calendar, Google AI Mode, conversational intent a
   - Standalone posts:
     - Repeat: "content freshness seo". Same query as LH2·2's, written once there.
     - Repeat: "how often to update content for ai seo freshness". Same query as LH2·2's, written once there.
-- [ ] **LH1·3: Google AI Mode vs. Traditional Search: What It Means for Web Traffic**
+- [x] **LH1·3: Google AI Mode vs. Traditional Search: What It Means for Web Traffic** (written: /blog/google-ai-mode-vs-traditional-search)
   - Source: Content Gap · Low-Hanging Fruit · Set 1
   - Target queries: "what is google ai mode" (880/mo · 0.33 competition); "what is ai mode in google" (590/mo · 0.01 competition)
   - Angle: Plain-English explanation of Google AI Mode, how multi-turn query follow-ups change searcher journeys, and how to optimize content for "query fan-out" where Google evaluates 5 related questions simultaneously.
   - Competitor gap: Google is testing full conversational "AI Mode" directly in mobile Chrome and Search Labs. Competitor blogs confuse Google AI Overviews with full AI Mode; zero sites provide a clear architectural breakdown of how it works.
   - Standalone posts:
-    - [ ] "what is google ai mode"
-    - [ ] "what is ai mode in google"
-- [ ] **LH1·7: AI Search Intent: The 4 New Conversational Buyer Stages**
+    - [x] "what is google ai mode" (written: /blog/what-is-google-ai-mode)
+    - [x] "what is ai mode in google" (written: /blog/what-is-ai-mode-in-google)
+- [x] **LH1·7: AI Search Intent: The 4 New Conversational Buyer Stages** (written: /blog/ai-search-intent-conversational-buyer-stages)
   - Source: Content Gap · Low-Hanging Fruit · Set 1
   - Target queries: "how ai search uses user intent and context" (Low KD · 0 competition); "how search intent is evolving with conversational ai assistants" (Low KD · 0 competition)
   - Angle: The 4 new stages of conversational search: (1) Prompt Exploration, (2) Solution Synthesis, (3) Dealbreaker Interrogation, and (4) Action Handoff. Shows what content assets you need published to win buyers at each turn of the conversation.
   - Competitor gap: SEO still categorizes intent into Informational, Navigational, Commercial, and Transactional. Conversational search collapses all four into a single 5-minute interactive dialogue.
   - Standalone posts:
     - Repeat: "how ai search uses user intent and context". Same query as A8's, written once there.
-    - [ ] "how search intent is evolving with conversational ai assistants"
-- [ ] **LH2·5: Voice Search Is Back—But This Time It's AI-Powered**
+    - [x] "how search intent is evolving with conversational ai assistants" (written: /blog/how-search-intent-is-evolving-with-conversational-ai)
+- [x] **LH2·5: Voice Search Is Back—But This Time It's AI-Powered** (written: /blog/voice-search-ai-powered)
   - Source: Content Gap · Low-Hanging Fruit · Set 2
   - Target queries: "voice search optimization 2026" (20/mo · KD 0 · 0 competition)
   - Angle: Show how voice prompts differ from typed search: longer questions, follow-ups, context, and recommendation requests. Include a "spoken-answer" content format: concise definitions, comparison tables, decisive recommendations, and transparent caveats.
   - Competitor gap: Most voice-search advice is frozen in the Alexa/Siri era and focuses on short "near me" queries. It ignores voice conversations that branch into complex recommendations through modern assistants.
   - Standalone posts:
-    - [ ] "voice search optimization 2026"
+    - [x] "voice search optimization 2026" (written: /blog/voice-search-optimization-2026)
 
 ## Phase 11: Ranking factors & channels
 
