@@ -7,7 +7,7 @@ import boundlessAsset from "@/assets/boundless.png.asset.json";
 
 /* 128px WebP: the mark is never shown above ~37px, so this covers 3x screens.
    public/assets/gemini.png (960px) stays as the source for the OG card. */
-const GEMINI_SRC = "/assets/gemini.webp";
+export const GEMINI_SRC = "/assets/gemini.webp";
 
 export function ChatGPTMark({ className }: { className?: string }) {
   return (

@@ -341,7 +341,7 @@ function Article({ post, related }: { post: PostFull; related: PostMeta[] }) {
             <Reveal delay={0.08}>
               {/* The ring keeps blue-toned covers from melting into the header. */}
               <div className="overflow-hidden rounded-3xl shadow-3 ring-1 ring-white/25">
-                <CoverArt post={post} className="aspect-[16/11]" />
+                <CoverArt post={post} onBlue className="aspect-[16/11]" />
               </div>
             </Reveal>
           </div>

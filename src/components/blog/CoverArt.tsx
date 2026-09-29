@@ -1,86 +1,80 @@
 /**
  * A post's cover. Posts with a cover image show it; the rest get a generated
- * one in the site's language: a pixel field like the hero's, with an AI answer
- * card citing "yoursite.com" — the outcome every article is about.
+ * one in the style of Webflow's blog covers (see covers/). The scene is
+ * picked from what the title is about, so the grid reads as a set of
+ * subjects rather than 80 copies of one picture.
  *
- * Everything is derived from the slug and first tag, so a post always gets the
- * same cover and server and client renders match. Sizes are in container
- * units, so one cover reads the same as a card thumbnail and as a hero.
+ * Everything is derived from the slug and title, so a post always gets the
+ * same cover and server and client renders match. The art is one SVG canvas
+ * scaled to cover its box, so it reads the same as a card thumbnail and as a
+ * hero.
  */
-import type { CSSProperties } from "react";
+import { useId } from "react";
 import { AI_MARKS } from "@/components/landing/ai-logos";
 import type { PostMeta } from "@/lib/notion.server";
 import { cn } from "@/lib/utils";
+import { CoverScene } from "./covers/CoverScene";
+import { hash, type Engine, type SceneName } from "./covers/kit";
 
-type Engine = (typeof AI_MARKS)[number];
+/* How a title names each engine. Google counts only as Google's AI search:
+   "Google Analytics" or "Google Search Console" is not an AI engine. */
+const ENGINE_NAMES: Record<Engine["name"], RegExp> = {
+  ChatGPT: /\bchatgpt\b/i,
+  Google: /\bgoogle ai\b|\bai overviews?\b|\bai mode\b/i,
+  Gemini: /\bgemini\b/i,
+  Claude: /\bclaude\b/i,
+  Perplexity: /\bperplexity\b/i,
+};
 
-/* One tone per topic, so a topic reads the same everywhere on the blog. */
-const TONES = [
-  {
-    field: "bg-brand-blue",
-    pixel: "bg-white",
-    label: "text-white/75",
-    bubble: "bg-white/20",
-    card: "bg-white",
-  },
-  {
-    field: "bg-hero-black",
-    pixel: "bg-brand-blue",
-    label: "text-white/60",
-    bubble: "bg-white/12",
-    card: "bg-white",
-  },
-  {
-    field: "bg-[color-mix(in_oklab,var(--brand-blue)_9%,white)]",
-    pixel: "bg-brand-blue",
-    label: "text-brand-blue/80",
-    bubble: "bg-brand-blue",
-    card: "bg-white ring-1 ring-ink/5",
-  },
-  {
-    field: "bg-[linear-gradient(140deg,var(--brand-blue-deep),var(--hero-black))]",
-    pixel: "bg-brand-blue",
-    label: "text-white/60",
-    bubble: "bg-white/12",
-    card: "bg-white",
-  },
-] as const;
-
-function hash(text: string): number {
-  let h = 2166136261;
-  for (let i = 0; i < text.length; i++) {
-    h ^= text.charCodeAt(i);
-    h = Math.imul(h, 16777619);
-  }
-  return h >>> 0;
+/* The engine the title names, if any. */
+function namedEngine(title: string): Engine | null {
+  return AI_MARKS.find((m) => ENGINE_NAMES[m.name].test(title)) ?? null;
 }
 
-/* Small seeded PRNG (mulberry32): the same slug always draws the same cover. */
-function random(seed: number) {
-  let a = seed;
-  return () => {
-    a = (a + 0x6d2b79f5) | 0;
-    let t = Math.imul(a ^ (a >>> 15), 1 | a);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
+/* First match wins, so the more specific subjects come first: an llms.txt
+   post about indexing is a file post, a bot post about tracking is a crawl
+   post, a post about tracking competitors is a leaderboard. */
+const SUBJECTS: [SceneName, RegExp][] = [
+  ["file", /llms\.txt|schema/i],
+  ["bots", /census|directory|user agent/i],
+  [
+    "crawl",
+    /crawl|\bbots?\b|gptbot|claudebot|perplexitybot|searchbot|cloudflare|robots|webmaster|index/i,
+  ],
+  ["leaderboard", /benchmark|competitor|rank tracker|rankings/i],
+  ["traffic", /traffic|ga4|referral/i],
+  ["feed", /(track|monitor)\w* brand mentions/i],
+  ["analytics", /track|measur|metric|analytic|monitor/i],
+  ["compare", /alternative|compar(e|ing)\b.*\b(tools|software|options)|optimization tools/i],
+  ["graph", /knowledge graph|entit|\brag\b|vector|intent|\bmcp\b|model collapse|rank brands/i],
+  ["answer", /brand|mention|hallucinat|\bfacts?\b|defensive|drift|say when/i],
+];
 
-/* The engine the post is about when its title names one, else a seeded pick. */
-function engineFor(title: string, rand: () => number): Engine {
-  const named = AI_MARKS.find((m) => new RegExp(`\\b${m.name}\\b`, "i").test(title));
-  return named ?? AI_MARKS[Math.floor(rand() * AI_MARKS.length)];
+const WRITING =
+  /writ|content|blog post|rewrite|template|comparison page|prompt|playbook|formula|optimi[sz]e/i;
+
+function sceneFor(post: Pick<PostMeta, "title" | "tags">, engine: Engine | null, seed: number) {
+  if (post.tags.includes("Alternatives")) return "compare";
+  const subject = SUBJECTS.find(([, test]) => test.test(post.title));
+  if (subject) return subject[0];
+  if (engine) return "lockup";
+  if (WRITING.test(post.title)) return "write";
+  return seed % 2 ? "write" : "lockup";
 }
 
 export function CoverArt({
   post,
   className,
-  showTopic = true,
+  onBlue,
 }: {
   post: Pick<PostMeta, "slug" | "title" | "tags" | "cover">;
   className?: string;
-  showTopic?: boolean;
+  /** Set where the cover sits on the brand-blue article header. */
+  onBlue?: boolean;
 }) {
+  // Gradient and filter ids must be unique per cover: a grid shows dozens.
+  const uid = `cover${useId().replace(/[^\w-]/g, "")}`;
+
   if (post.cover) {
     return (
       <div className={cn("relative overflow-hidden bg-secondary", className)}>
@@ -94,86 +88,18 @@ export function CoverArt({
     );
   }
 
-  const topic = post.tags[0] ?? "";
-  const tone = TONES[hash(topic || post.slug) % TONES.length];
-  const rand = random(hash(post.slug));
-  const engine = engineFor(post.title, rand);
-  const pixels = Array.from({ length: 16 }, () => ({
-    top: rand() * 92,
-    left: rand() * 94,
-    size: 1.2 + rand() * 2.6,
-    opacity: 0.08 + rand() * 0.2,
-  }));
-  const lines = [88 + rand() * 12, 70 + rand() * 24, 45 + rand() * 25];
-  const Mark = engine.Mark;
-
+  const seed = hash(post.slug);
+  const engine = namedEngine(post.title);
   return (
-    <div aria-hidden className={cn("@container relative overflow-hidden", tone.field, className)}>
-      {pixels.map((p, i) => (
-        <span
-          key={i}
-          className={cn("absolute", tone.pixel)}
-          style={
-            {
-              top: `${p.top}%`,
-              left: `${p.left}%`,
-              width: `${p.size}cqw`,
-              height: `${p.size}cqw`,
-              opacity: p.opacity,
-            } as CSSProperties
-          }
-        />
-      ))}
-
-      {/* The buyer's question, then the answer that cites them. */}
-      <div
-        className={cn(
-          "absolute right-[8%] top-[12%] w-[34%] space-y-[1cqw] rounded-[1.6cqw] rounded-br-[0.4cqw] px-[2cqw] py-[1.8cqw]",
-          tone.bubble,
-        )}
-      >
-        <div className="h-[1.2cqw] rounded-full bg-white/80" />
-        <div className="h-[1.2cqw] w-3/5 rounded-full bg-white/80" />
-      </div>
-      <div
-        className={cn(
-          "absolute left-[14%] top-[34%] w-[58%] rounded-[1.6cqw] p-[3cqw] shadow-[0_2cqw_5cqw_-2cqw_rgb(0_0_0/0.35)]",
-          tone.card,
-        )}
-      >
-        <div className="flex items-center gap-[1.2cqw]">
-          <span className="flex h-[4.4cqw] w-[4.4cqw] items-center justify-center rounded-full border border-border bg-background">
-            <Mark className="h-[2.6cqw] w-[2.6cqw]" />
-          </span>
-          <span className="text-[2.2cqw] font-semibold text-ink">{engine.name}</span>
-          <span className="ml-auto h-[1.2cqw] w-[1.2cqw] rounded-full bg-volt" />
-        </div>
-        <div className="mt-[2.6cqw] space-y-[1.3cqw]">
-          {lines.map((w, i) => (
-            <div key={i} className="h-[1.4cqw] rounded-full bg-ink/10" style={{ width: `${w}%` }} />
-          ))}
-        </div>
-        <div className="mt-[2.8cqw] flex items-center gap-[1.2cqw]">
-          <span className="inline-flex items-center gap-[0.8cqw] rounded-[0.9cqw] border border-volt/40 bg-volt/10 px-[1.3cqw] py-[0.6cqw] text-[1.7cqw] font-semibold text-ink">
-            <span className="h-[0.9cqw] w-[0.9cqw] rounded-full bg-volt" />
-            yoursite.com
-          </span>
-          <span className="rounded-full bg-success/15 px-[1.3cqw] py-[0.6cqw] text-[1.6cqw] font-semibold text-success">
-            Cited
-          </span>
-        </div>
-      </div>
-
-      {showTopic && topic && (
-        <span
-          className={cn(
-            "absolute bottom-[5cqw] left-[5cqw] text-[1.9cqw] font-semibold uppercase tracking-[0.2em]",
-            tone.label,
-          )}
-        >
-          {topic}
-        </span>
-      )}
+    <div aria-hidden className={cn("relative overflow-hidden bg-brand-blue", className)}>
+      <CoverScene
+        scene={sceneFor(post, engine, seed)}
+        seed={seed}
+        engine={engine}
+        title={post.title}
+        uid={uid}
+        onBlue={onBlue}
+      />
     </div>
   );
 }

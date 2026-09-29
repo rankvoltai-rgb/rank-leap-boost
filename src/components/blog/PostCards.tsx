@@ -69,7 +69,6 @@ export function PostCard({ post, className }: { post: PostMeta; className?: stri
       <div className="overflow-hidden rounded-2xl border border-border shadow-1 transition-shadow duration-300 group-hover:shadow-3 group-focus-visible:ring-2 group-focus-visible:ring-volt">
         <CoverArt
           post={post}
-          showTopic={false}
           className="aspect-[16/10] transition-transform duration-500 ease-out group-hover:scale-[1.035]"
         />
       </div>
