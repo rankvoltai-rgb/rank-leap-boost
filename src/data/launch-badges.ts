@@ -54,4 +54,8 @@ export const LAUNCH_BADGES: LaunchBadge[] = [
   <img src="https://smollaunch.com/badges/featured.svg" alt="Rankbox — Featured on Smol Launch" loading="lazy" width="250" height="60" />
 </a>`,
   },
+  {
+    name: "Good AI Tools",
+    html: `<a target="_blank" href="https://goodaitools.com/ai/rankbox"><img src="https://goodaitools.com/assets/images/badge.png" alt="Good AI Tools" height="54" loading="lazy"></a>`,
+  },
 ];
