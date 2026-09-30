@@ -27,7 +27,7 @@ export interface BlogVideo {
   summary: string;
 }
 
-export const VIDEOS_CHECKED = "2026-09-29";
+export const VIDEOS_CHECKED = "2026-09-30";
 
 export const BLOG_VIDEOS: Record<string, BlogVideo> = {
   sq55KB5icQ4: {
@@ -156,6 +156,51 @@ export const BLOG_VIDEOS: Record<string, BlogVideo> = {
     seconds: 211,
     summary:
       "A Webmaster Help answer on how important freshness is as a signal, given that frequently updated pages can get a boost for queries that deserve freshness.",
+  },
+  "2PW5y3zAvPE": {
+    post: "apple-intelligence-siri-chatgpt",
+    title: "Apple’s next big step for Siri and iPhone",
+    channel: "Apple",
+    uploadDate: "2026-06-08T11:27:15-07:00",
+    seconds: 96,
+    summary:
+      "Apple shows a more conversational Siri AI with natural language abilities that can edit and write emails, texts and documents, alongside new Image Playground features.",
+  },
+  "5ZA1lTxTH3c": {
+    post: "indirect-prompt-injection-black-hat-geo",
+    title: "Securing AI Agents: How to Prevent Hidden Prompt Injection Attacks",
+    channel: "IBM Technology",
+    uploadDate: "2026-01-10T04:00:11-08:00",
+    seconds: 607,
+    summary:
+      "Jeff Crume and Martin Keen break down prompt injection attacks on AI agents, starting from an agent that bought the wrong book, and how to defend against them.",
+  },
+  WdbeqSQjZI8: {
+    post: "what-is-multimodal-search",
+    title: "Introducing a new way to search | Circle to Search",
+    channel: "Google",
+    uploadDate: "2024-01-17T10:12:57-08:00",
+    seconds: 61,
+    summary:
+      "Circle to Search lets you search anything on an Android phone without switching apps, by circling, highlighting, scribbling or tapping what you're curious about.",
+  },
+  kQQbTYPt7VE: {
+    post: "death-of-10-blue-links",
+    title: "Search + Shopping | I/O 2026 Keynote",
+    channel: "Google",
+    uploadDate: "2026-05-22T11:59:28-07:00",
+    seconds: 1388,
+    summary:
+      "The Google Search segment of the I/O 2026 keynote, introducing the era of Search agents that people can create, customize and manage for their tasks, right in Search.",
+  },
+  uXspbC2srEQ: {
+    post: "agentic-seo-autonomous-ai-buyers",
+    title: "Introducing dots, always-on agents built to handle everything.",
+    channel: "OpenAI",
+    uploadDate: "2026-09-29T11:04:41-07:00",
+    seconds: 148,
+    summary:
+      "OpenAI's dots are always-on agents powered by GPT-6 Astra, with their own cloud computer, that connect to over 4,000 apps through plugins and work toward your goals around the clock.",
   },
 };
 

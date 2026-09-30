@@ -7,8 +7,9 @@
  *   title: How to Get Cited by ChatGPT: The 2026 Playbook
  *   description: Meta description and the article's dek, 120–160 characters.
  *   keyword: cited by ChatGPT
- *   date: 2026-09-18
+ *   date: 2026-09-18           (the day it goes live; see blog-release.ts)
  *   updated: 2026-09-18        (optional)
+ *   written: 2026-09-18        (optional; set by the scheduler)
  *   author: Rankbox Team      (optional)
  *   tags: AI Search, Playbooks
  *   cover: https://…           (optional; a generated cover is drawn otherwise)
@@ -22,6 +23,7 @@
 import type { PostFull, PostMeta } from "@/lib/notion.server";
 import { markdownToBlocks, parseFrontmatter } from "@/lib/markdown-blocks";
 import { countWords, readingMinutes } from "@/lib/article-outline";
+import { isLive, todayUTC, unlinkPosts } from "@/lib/blog-release";
 
 const FILES = import.meta.glob<string>("/src/content/blog/*.md", {
   query: "?raw",
@@ -63,10 +65,21 @@ function housePosts(): PostFull[] {
   return cache;
 }
 
-export function listHousePosts(): PostMeta[] {
-  return housePosts().map(({ blocks: _blocks, ...meta }) => meta);
+/** Live posts only: a post dated after today is scheduled (see blog-release.ts). */
+export function listHousePosts(today = todayUTC()): PostMeta[] {
+  return housePosts()
+    .filter((p) => isLive(p.date, today))
+    .map(({ blocks: _blocks, ...meta }) => meta);
 }
 
-export function getHousePost(slug: string): PostFull | null {
-  return housePosts().find((p) => p.slug === slug) ?? null;
+/** A live post, with its links to posts that are still scheduled made plain text. */
+export function getHousePost(slug: string, today = todayUTC()): PostFull | null {
+  const post = housePosts().find((p) => p.slug === slug);
+  if (!post || !isLive(post.date, today)) return null;
+  const scheduled = new Set(
+    housePosts()
+      .filter((p) => !isLive(p.date, today))
+      .map((p) => p.slug),
+  );
+  return scheduled.size ? { ...post, blocks: unlinkPosts(post.blocks, scheduled) } : post;
 }

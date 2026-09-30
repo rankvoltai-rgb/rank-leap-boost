@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "test": "vitest run"
+    "test": "vitest run",
+    "blog:schedule": "node scripts/blog-schedule.ts"
   },
   "dependencies": {
     "@ai-sdk/openai-compatible": "^1",

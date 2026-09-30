@@ -16,66 +16,9 @@ import { parseFrontmatter } from "@/lib/markdown-blocks";
 import { analyzeArticle } from "@/lib/seo-analysis";
 import { HAS_LIVE_PLUGIN, SHIPPED } from "@/data/alternatives";
 import { cardFor, sectionOf } from "@/data/link-graph";
+import { STANDALONES } from "@/content/standalones";
 
 const BLOG_DIR = "src/content/blog";
-
-/**
- * One-query standalone posts, each with the category ("hub") post it links up
- * to. They're shorter than the hubs, and each hub links back down to them.
- */
-const STANDALONES: Record<string, string> = {
-  "voice-search-optimization-2026": "voice-search-ai-powered",
-  "how-search-intent-is-evolving-with-conversational-ai":
-    "ai-search-intent-conversational-buyer-stages",
-  "what-is-ai-mode-in-google": "google-ai-mode-vs-traditional-search",
-  "what-is-google-ai-mode": "google-ai-mode-vs-traditional-search",
-  "how-often-to-update-content-for-ai-seo": "freshness-factor-ai-search",
-  "content-freshness-seo": "freshness-factor-ai-search",
-  "author-bio-seo": "do-author-bios-help-ai-search-visibility",
-  "do-author-bios-help-seo": "do-author-bios-help-ai-search-visibility",
-  "ai-seo-checklist": "ai-seo-checklist-pre-publish-audit",
-  "evaluate-geo-tool-before-purchasing": "aeo-audit",
-  "geo-tools-list": "aeo-audit",
-  "claude-seo-tool": "claude-for-seo-audits",
-  "how-to-use-claude-for-seo-audits": "claude-for-seo-audits",
-  "entity-authority-seo": "entity-authority-in-the-ai-era",
-  "what-is-entity-authority-in-seo": "entity-authority-in-the-ai-era",
-  "how-to-compare-generative-engine-optimization-software": "comparison-page-formula",
-  "are-automated-blog-posts-effective-for-seo": "synthetic-content-saturation-model-collapse",
-  "how-to-write-blog-posts-for-ai-citation": "reverse-prompt-playbook",
-  "how-to-optimize-content-for-llms": "optimize-content-for-llms-writing-for-machines",
-  "seo-knowledge-graph": "knowledge-graph-for-ai",
-  "knowledge-graph-search-api": "knowledge-graph-for-ai",
-  "what-is-a-knowledge-graph-in-seo": "knowledge-graph-for-ai",
-  "how-ai-models-rank-brands-in-search-results": "semantic-drift-ai-memory-reset",
-  "how-does-rag-reduce-hallucinations": "hallucination-by-omission-pricing-page",
-  "how-to-monitor-brand-mentions-in-ai-generated-responses": "defensive-geo",
-  "how-to-fix-incorrect-brand-facts-in-llm-citations": "fix-incorrect-brand-facts-in-ai-answers",
-  "how-to-track-competitor-rankings-in-ai-search":
-    "how-to-benchmark-ai-citations-against-competitors",
-  "is-it-possible-to-track-brand-mentions-in-ai-search":
-    "is-it-possible-to-track-brand-mentions-in-ai-answers",
-  "see-if-ai-mentions-your-brand-places-to-look": "how-to-see-if-ai-mentions-your-brand",
-  "track-brand-mentions-in-ai-search-free-and-paid": "how-to-track-brand-mentions-in-ai-search",
-  "how-to-benchmark-website-performance-in-ai-search": "geo-metrics-framework",
-  "what-is-generative-engine-optimization": "geo-metrics-framework",
-  "perplexitybot-user-agent": "ai-crawler-directory",
-  "how-to-track-gptbot-and-claudebot": "ai-crawler-directory",
-  "what-is-oai-searchbot": "ai-crawler-directory",
-  "why-is-cloudflare-blocking-chatgpt": "cloudflare-challenge-trap",
-  "cloudflare-blocking-chatgpt": "cloudflare-challenge-trap",
-  "how-to-use-bing-webmaster-tools-for-seo": "bing-webmaster-tools-ai-indexing-guide",
-  "does-bing-webmaster-tools-help-google-indexing": "bing-webmaster-tools-ai-indexing-guide",
-  "will-llms-txt-help-your-seo": "how-to-get-indexed-by-llms-with-llms-txt",
-  "how-to-get-indexed-by-llm-through-llms-txt": "how-to-get-indexed-by-llms-with-llms-txt",
-  "what-is-an-llms-txt-file": "state-of-llms-txt-adoption",
-  "llms-txt-standard": "state-of-llms-txt-adoption",
-  "how-to-track-ai-referral-traffic-in-ga4": "how-to-measure-ai-referral-traffic-in-ga4",
-  "chatgpt-traffic-analysis": "how-to-measure-ai-referral-traffic-in-ga4",
-  "how-to-benchmark-ai-search-performance": "ai-bot-crawler-census",
-  "how-does-ai-search-interpret-user-intent": "vector-distance-vs-keyword-density",
-  "how-ai-search-uses-user-intent-and-context": "vector-distance-vs-keyword-density",
-};
 
 /** The posts these rules cover. Tool guides name real products. */
 const SLUGS = [
@@ -124,6 +67,21 @@ const SLUGS = [
   "google-ai-mode-vs-traditional-search",
   "ai-search-intent-conversational-buyer-stages",
   "voice-search-ai-powered",
+  "chatgpt-ranking-factors-ai-search-placement",
+  "reddit-in-ai-search",
+  "local-seo-in-chatgpt",
+  "apple-intelligence-siri-chatgpt",
+  "link-building-ai-visibility-co-citation",
+  "github-readme-ai-seo",
+  "substack-arbitrage-llm-knowledge",
+  "podcast-transcripts-ai-search-citations",
+  "multimodal-geo",
+  "indirect-prompt-injection-black-hat-geo",
+  "agentic-seo-autonomous-ai-buyers",
+  "prompt-zero-purchase-ai-agents-buy-software",
+  "chatgpt-search-ads-conversational-ppc",
+  "headless-brand-zero-click",
+  "death-of-10-blue-links",
   ...Object.keys(STANDALONES),
 ];
 const TOOL_GUIDES = new Set([
@@ -132,6 +90,11 @@ const TOOL_GUIDES = new Set([
   "ai-search-optimization-tools",
   "claude-seo-tool",
   "geo-tools-list",
+  "best-chatgpt-seo-software",
+  "ai-link-building",
+  "open-source-seo-tools",
+  "seo-newsletters",
+  "ai-powered-seo-agents",
 ]);
 
 function read(slug: string) {

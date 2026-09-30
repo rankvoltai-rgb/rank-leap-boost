@@ -25,6 +25,7 @@ import { PERSONAS } from "@/data/personas";
 import { COMPETITORS, SHIPPED } from "@/data/alternatives";
 import { PUBLISH_PLATFORMS } from "@/data/platforms";
 import { SOLUTIONS } from "@/data/solutions";
+import { isBlogPathLive } from "@/lib/blog-release";
 
 export type Section =
   | "features"
@@ -639,6 +640,203 @@ const POST_CARDS: Record<string, Titled> = {
     blurb:
       "A 2026 voice checklist: assistants, their answer sources, local listings and crawl access.",
   },
+  "chatgpt-ranking-factors-ai-search-placement": {
+    title: "The 7 ChatGPT Ranking Factors: What Actually Influences AI Search Placement",
+    blurb: "Seven signals said to decide ChatGPT recommendations, each graded by its evidence.",
+  },
+  "chatgpt-ranking-factors": {
+    title: "ChatGPT Ranking Factors: What OpenAI Documents and What the Data Shows",
+    blurb: "What OpenAI documents about how ChatGPT search picks sources, plus a 10-minute check.",
+  },
+  "best-chatgpt-seo-software": {
+    title: "Best ChatGPT SEO Software in 2026: Tools to Get Cited and to Work Inside ChatGPT",
+    blurb:
+      "Software to get cited by ChatGPT, and SEO tools that work inside ChatGPT, dated prices.",
+  },
+  "reddit-in-ai-search": {
+    title: "The Role of Reddit in AI Search: Why LLMs Prioritize Forum Discussions",
+    blurb: "Why AI answers cite Reddit so often, and how to join buyer threads by Reddit's rules.",
+  },
+  "how-to-use-reddit-for-seo": {
+    title: "How to Use Reddit for SEO: A Rule-Following Guide for 2026",
+    blurb:
+      "Reddit in Google results and AI answers: find ranking threads and take part by the rules.",
+  },
+  "how-to-rank-in-ai-search-results": {
+    title: "How to Rank in AI Search Results: A 10-Step Plan",
+    blurb:
+      "Ten steps across AI engines, ordered by effort and impact, each linked to a deep guide.",
+  },
+  "local-seo-in-chatgpt": {
+    title: "Local SEO in ChatGPT: How AI Search Recommends Nearby Businesses",
+    blurb: "Where each AI assistant gets local answers, and a three-part plan for near-me picks.",
+  },
+  "how-ai-helps-small-businesses-with-local-seo": {
+    title: "How AI Helps Small Businesses With Local SEO: 8 Practical Uses",
+    blurb: "Eight practical ways AI tools speed up local SEO work, with prompts and guardrails.",
+  },
+  "how-to-get-cited-by-chatgpt-as-a-local-business": {
+    title: "How to Get Cited by ChatGPT as a Local Business",
+    blurb: "How ChatGPT answers local questions, and the listings and reviews to fix first.",
+  },
+  "apple-intelligence-siri-chatgpt": {
+    title: "Apple Intelligence & Siri: How iOS 18/26 Routes Queries to ChatGPT",
+    blurb: "How Apple Intelligence and Siri route questions, and how to be the recommendation.",
+  },
+  "what-does-apple-intelligence-do": {
+    title: "What Does Apple Intelligence Do? Every Feature Explained for 2026",
+    blurb: "Every Apple Intelligence feature in 2026, with devices, languages and privacy.",
+  },
+  "how-chatgpt-search-decides-citations": {
+    title: "How ChatGPT Search Decides Citations: What OpenAI Documents and What Tests Show",
+    blurb: "When ChatGPT searches, how it picks and shows sources, and what tests found.",
+  },
+  "link-building-ai-visibility-co-citation": {
+    title: 'Does Link Building Still Matter for AI Visibility? The New Rules of "Co-Citation"',
+    blurb: "Links still matter, and unlinked co-citations shape what models associate with you.",
+  },
+  "does-link-building-help-ai-visibility": {
+    title: "Does Link Building Help With AI Visibility? What the Evidence Shows",
+    blurb: "Yes, indirectly: what the evidence says about links, mentions and AI visibility.",
+  },
+  "ai-link-building": {
+    title: "AI Link Building: How to Use AI Tools to Earn Links Without Spam",
+    blurb: "AI tools for prospecting, research and outreach, inside Google's link spam rules.",
+  },
+  "github-readme-ai-seo": {
+    title: "GitHub READMEs as AI SEO Fuel: Why Developers Rank in ChatGPT Without a Blog",
+    blurb:
+      "How GitHub READMEs reach AI assistants, graded by evidence, and a README built for both.",
+  },
+  "github-seo": {
+    title: "GitHub SEO: How to Make a Repository Findable in Google and AI Search",
+    blurb: "Make a repository findable in Google, GitHub search and AI: the fields that count.",
+  },
+  "github-pages-seo": {
+    title: "GitHub Pages SEO: A Setup Guide for Project Sites and Docs",
+    blurb: "Set up GitHub Pages for search: domains, robots.txt, sitemaps, redirects and limits.",
+  },
+  "open-source-seo-tools": {
+    title: "Open Source SEO Tools: A 2026 List With What Each One Does",
+    blurb: "Twenty open source SEO tools by job, with licences and last activity checked.",
+  },
+  "substack-arbitrage-llm-knowledge": {
+    title: "The Substack Arbitrage: Using High-Domain-Authority Newsletters to Seed LLM Knowledge",
+    blurb: "Using newsletters to back up your brand's facts in AI answers, within Google's rules.",
+  },
+  "is-substack-good-for-seo": {
+    title: "Is Substack Good for SEO? What Google Indexes and What You Give Up",
+    blurb: "What Google indexes from Substack, and what you give up by not owning the site.",
+  },
+  "substack-seo": {
+    title: "Substack SEO: Settings, Custom Domains and Posts That Get Found",
+    blurb: "Every Substack setting that affects search, verified in Substack's help center.",
+  },
+  "seo-newsletters": {
+    title: "The Best SEO Newsletters to Read in 2026",
+    blurb: "SEO and AI search newsletters worth reading, each checked on its own page.",
+  },
+  "podcast-transcripts-ai-search-citations": {
+    title: "Podcast Transcripts & Whisper AI: How Spoken Audio Becomes Search Citations",
+    blurb: "What's documented about AI and podcast audio, and a transcript page AI can quote.",
+  },
+  "how-can-a-podcast-increase-seo": {
+    title: "How Can a Podcast Increase SEO? 6 Ways It Helps and 2 It Doesn't",
+    blurb: "Six ways a podcast helps SEO and two ways it doesn't, each graded by evidence.",
+  },
+  "podcast-seo": {
+    title: "Podcast SEO: How to Get Your Show Found in Search, Apps and AI",
+    blurb: "Get a show found in Google, YouTube, Apple, Spotify and AI: a 30-minute audit.",
+  },
+  "does-podcast-image-help-seo": {
+    title: "Does a Podcast Image Help SEO? Cover Art, Episode Images and Alt Text",
+    blurb: "Podcast artwork isn't a ranking factor; where images do matter, with specs.",
+  },
+  "multimodal-geo": {
+    title: 'Multimodal GEO: How AI Search "Sees" Infographics, Charts, and Screenshots',
+    blurb: "What AI search documents about reading images, and charts built to be read as text.",
+  },
+  "multimodal-seo": {
+    title: "Multimodal SEO: How to Optimize Images, Video and Audio for AI Search",
+    blurb: "Optimize images, video and audio for AI search, with a media parity audit.",
+  },
+  "what-is-multimodal-search": {
+    title: "What Is Multimodal Search? Google Lens, Circle to Search and AI Mode Explained",
+    blurb: "Google Lens, Circle to Search, AI Mode and other ways to search with images and voice.",
+  },
+  "indirect-prompt-injection-black-hat-geo": {
+    title: 'Indirect Prompt Injection & "Black Hat" GEO: Can You Hijack AI Search Crawlers?',
+    blurb: "Where AI actually reads your page, what tests show, and why black hat GEO backfires.",
+  },
+  "indirect-prompt-injection": {
+    title: "Indirect Prompt Injection: What It Is, Documented Cases and Defenses",
+    blurb: "Instructions hidden in content a model reads: documented cases and defenses.",
+  },
+  "what-is-prompt-injection": {
+    title: "What Is Prompt Injection in AI? A Plain-English Guide",
+    blurb: "Prompt injection in plain English: direct versus indirect, and what to do.",
+  },
+  "how-does-prompt-injection-work": {
+    title: "How Does Prompt Injection Work in Generative AI? A Step-by-Step Look",
+    blurb: "The mechanics step by step, and which defense interrupts each step.",
+  },
+  "agentic-seo-autonomous-ai-buyers": {
+    title: "Agentic SEO: Optimizing for Autonomous AI Buyers (Beyond Conversational Search)",
+    blurb: "What AI agents sent to buy need from a site, and where they get stuck today.",
+  },
+  "what-is-agentic-seo": {
+    title: "What Is Agentic SEO? A Plain Definition With Examples",
+    blurb: "A plain definition of agentic SEO, with three examples and first steps.",
+  },
+  "ai-powered-seo-agents": {
+    title: "AI-Powered SEO Agents in 2026: What They Do and Which Tasks to Trust Them With",
+    blurb: "AI agents that do SEO work: what they handle well and what needs a human.",
+  },
+  "what-are-ai-powered-seo-agents": {
+    title: "What Are AI-Powered SEO Agents? How They Work Under the Hood",
+    blurb: "How SEO agents work: a model, tools and a loop, and where they fail.",
+  },
+  "prompt-zero-purchase-ai-agents-buy-software": {
+    title:
+      'The "Prompt-Zero" Purchase: When AI Agents Buy Software Without a Human Ever Seeing the SERP',
+    blurb: "When an agent shortlists software for a buyer: a zero-human evaluation checklist.",
+  },
+  "how-saas-companies-use-ai-for-seo-content-creation": {
+    title: "How SaaS Companies Use AI for SEO Content Creation",
+    blurb: "How SaaS content teams use AI across research, drafts, editing and refreshes.",
+  },
+  "chatgpt-search-ads-conversational-ppc": {
+    title: "The Coming Wave of ChatGPT Search Ads: How Conversational PPC Will Work",
+    blurb: "Ads in AI answers today, and how a conversational auction could work.",
+  },
+  "chatgpt-search-ads": {
+    title: "ChatGPT Search Ads: What Exists, Who Can Buy, and How They Look",
+    blurb: "ChatGPT ads as of September 2026: where they show, who sees them, who can buy.",
+  },
+  "does-chatgpt-search-have-paid-ads": {
+    title: "Does ChatGPT Search Have Paid Ads? A Direct Answer",
+    blurb: "A direct answer on paid ads in ChatGPT search, and how to tell ads apart.",
+  },
+  "headless-brand-zero-click": {
+    title: 'The "Headless Brand": What Happens to Marketing When No One Visits Your Homepage?',
+    blurb: "When AI answers carry your brand: what they say, and a headless brand audit.",
+  },
+  "zero-click-searches": {
+    title: "Zero-Click Searches: What the Data Shows in 2026",
+    blurb: "What zero-click studies found, before and after AI Overviews, by query type.",
+  },
+  "how-to-measure-roi-from-zero-click-searches": {
+    title: "How to Measure ROI From Zero-Click Searches",
+    blurb: "Measure the value of visibility that doesn't click, with a simple ROI model.",
+  },
+  "death-of-10-blue-links": {
+    title: "The Death of 10 Blue Links",
+    blurb: "From indexing to ranking to synthesis: a sourced timeline, 1998 to 2026.",
+  },
+  "how-user-search-intent-evolves-with-conversational-ai": {
+    title: "How User Search Intent Evolves Within a Conversation With an AI Assistant",
+    blurb: "How intent shifts turn by turn inside one AI conversation, and what content helps.",
+  },
   "cheap-seo": {
     title: "Cheap SEO in 2026: What Works and What's a Scam",
     blurb: "The free tools to set up first, the few paid ones worth buying, and the red flags.",
@@ -802,6 +1000,14 @@ export const TOPICS: Topic[] = [
     pages: [
       e("chatgpt"),
       b("how-to-get-cited-by-chatgpt"),
+      b("chatgpt-ranking-factors-ai-search-placement"),
+      b("chatgpt-ranking-factors"),
+      b("how-chatgpt-search-decides-citations"),
+      b("best-chatgpt-seo-software"),
+      b("how-to-get-cited-by-chatgpt-as-a-local-business"),
+      b("chatgpt-search-ads-conversational-ppc"),
+      b("chatgpt-search-ads"),
+      b("does-chatgpt-search-have-paid-ads"),
       b("how-to-rank-on-chatgpt"),
       b("optimize-website-for-chatgpt-and-perplexity"),
       b("cloudflare-blocking-chatgpt"),
@@ -822,6 +1028,9 @@ export const TOPICS: Topic[] = [
       b("what-is-google-ai-mode"),
       b("what-is-ai-mode-in-google"),
       b("voice-search-optimization-2026"),
+      b("what-is-multimodal-search"),
+      b("zero-click-searches"),
+      b("death-of-10-blue-links"),
       b("will-llms-txt-help-your-seo"),
       t("serp-snippet-preview"),
       ...g("ai-overviews", "ai-mode", "featured-snippet", "snippet-controls"),
@@ -882,6 +1091,8 @@ export const TOPICS: Topic[] = [
       b("how-to-show-up-in-google-ai-overviews"),
       b("ai-search-intent-conversational-buyer-stages"),
       b("how-search-intent-is-evolving-with-conversational-ai"),
+      b("death-of-10-blue-links"),
+      b("how-user-search-intent-evolves-with-conversational-ai"),
       u("saas"),
       u("solo-founders"),
       i("mcp"),
@@ -930,6 +1141,10 @@ export const TOPICS: Topic[] = [
       b("ai-search-content-refresh-calendar"),
       b("voice-search-ai-powered"),
       b("voice-search-optimization-2026"),
+      b("how-to-rank-in-ai-search-results"),
+      b("multimodal-geo"),
+      b("multimodal-seo"),
+      b("how-saas-companies-use-ai-for-seo-content-creation"),
       b("how-to-compare-generative-engine-optimization-software"),
       b("byword-alternatives"),
       b("jasper-alternatives"),
@@ -973,6 +1188,37 @@ export const TOPICS: Topic[] = [
       t("schema-generator"),
       t("ai-search-readiness-check"),
       ...g("content-freshness", "xml-sitemap", "indexnow", "information-gain"),
+    ],
+  },
+  {
+    id: "local",
+    title: "Get recommended as a local business",
+    pages: [
+      b("local-seo-in-chatgpt"),
+      b("how-ai-helps-small-businesses-with-local-seo"),
+      b("how-to-get-cited-by-chatgpt-as-a-local-business"),
+      b("optimize-business-for-ai-search"),
+      t("schema-generator"),
+      t("get-recommended-by-chatgpt"),
+      t("ai-visibility-prompt-generator"),
+      f("citation-ready-writer"),
+      ...g("schema-markup", "entity-seo", "brand-mentions"),
+    ],
+  },
+  {
+    id: "assistants",
+    title: "Get recommended by Siri and voice assistants",
+    pages: [
+      b("apple-intelligence-siri-chatgpt"),
+      b("what-does-apple-intelligence-do"),
+      b("how-chatgpt-search-decides-citations"),
+      b("voice-search-ai-powered"),
+      b("voice-search-optimization-2026"),
+      i("chatgpt"),
+      t("robots-txt-tester"),
+      t("ai-search-readiness-check"),
+      f("citation-ready-writer"),
+      ...g("ai-crawlers", "snippet-controls", "answer-first-content"),
     ],
   },
   {
@@ -1078,6 +1324,7 @@ export const TOPICS: Topic[] = [
       b("perplexity-seo-tools"),
       b("aeo-audit"),
       b("evaluate-geo-tool-before-purchasing"),
+      b("how-to-measure-roi-from-zero-click-searches"),
       t("ai-visibility-prompt-generator"),
       t("get-recommended-by-chatgpt"),
       t("ai-crawler-log-analyzer"),
@@ -1125,6 +1372,8 @@ export const TOPICS: Topic[] = [
       b("semantic-drift-ai-memory-reset"),
       b("how-ai-models-rank-brands-in-search-results"),
       b("shadow-training-data-audit"),
+      b("reddit-in-ai-search"),
+      b("headless-brand-zero-click"),
       t("ai-visibility-prompt-generator"),
       s("ai-search-visibility"),
       s("aeo-tools"),
@@ -1172,6 +1421,10 @@ export const TOPICS: Topic[] = [
       b("cloudflare-blocking-chatgpt"),
       b("how-to-get-indexed-by-llms-with-llms-txt"),
       b("state-of-llms-txt-adoption"),
+      b("indirect-prompt-injection-black-hat-geo"),
+      b("indirect-prompt-injection"),
+      b("what-is-prompt-injection"),
+      b("how-does-prompt-injection-work"),
       ...g(
         "ai-crawlers",
         "robots-txt",
@@ -1233,6 +1486,24 @@ export const TOPICS: Topic[] = [
       b("do-author-bios-help-seo"),
       b("author-bio-seo"),
       b("shadow-training-data-audit"),
+      b("reddit-in-ai-search"),
+      b("how-to-use-reddit-for-seo"),
+      b("how-to-rank-in-ai-search-results"),
+      b("link-building-ai-visibility-co-citation"),
+      b("does-link-building-help-ai-visibility"),
+      b("ai-link-building"),
+      b("github-readme-ai-seo"),
+      b("github-seo"),
+      b("github-pages-seo"),
+      b("open-source-seo-tools"),
+      b("substack-arbitrage-llm-knowledge"),
+      b("is-substack-good-for-seo"),
+      b("substack-seo"),
+      b("seo-newsletters"),
+      b("podcast-transcripts-ai-search-citations"),
+      b("how-can-a-podcast-increase-seo"),
+      b("podcast-seo"),
+      b("does-podcast-image-help-seo"),
       a("rankpill"),
       a("outrank"),
       c("semrush-vs-ahrefs"),
@@ -1264,6 +1535,11 @@ export const TOPICS: Topic[] = [
       b("claude-for-seo-audits"),
       b("how-to-use-claude-for-seo-audits"),
       b("claude-seo-tool"),
+      b("agentic-seo-autonomous-ai-buyers"),
+      b("what-is-agentic-seo"),
+      b("ai-powered-seo-agents"),
+      b("what-are-ai-powered-seo-agents"),
+      b("prompt-zero-purchase-ai-agents-buy-software"),
       f("answer-space-research"),
       t("ai-question-generator"),
       t("content-brief-generator"),
@@ -1296,6 +1572,9 @@ export const TOPICS: Topic[] = [
       b("writesonic-alternatives"),
       b("claude-seo-tool"),
       b("geo-tools-list"),
+      b("best-chatgpt-seo-software"),
+      b("open-source-seo-tools"),
+      b("ai-powered-seo-agents"),
       b("evaluate-geo-tool-before-purchasing"),
       u("solo-founders"),
       u("marketers"),
@@ -1404,7 +1683,11 @@ export function crossLinks(path: string, exclude: readonly string[] = []): Cross
       .map((section) => ({
         section,
         pages: topic.pages.filter(
-          (p) => sectionOf(p) === section && !skip.has(p) && !(claimChecked && UNSHIPPED.has(p)),
+          (p) =>
+            sectionOf(p) === section &&
+            !skip.has(p) &&
+            !(claimChecked && UNSHIPPED.has(p)) &&
+            isBlogPathLive(p),
         ),
       }))
       .filter((pool) => pool.pages.length > 0);

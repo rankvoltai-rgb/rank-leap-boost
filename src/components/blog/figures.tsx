@@ -1163,6 +1163,430 @@ function EmbeddingMapFigure({ map }: { map: EmbeddingMap }) {
   );
 }
 
+/* ---------- 11. One chart, two designs, through OCR ---------- */
+
+/**
+ * The Tallyfold chart from the multimodal GEO post, in the two designs its OCR
+ * check compared (fictional data). The "before" panel copies the weak design
+ * on purpose: faint pastel bars, rotated labels, no printed values. The badges
+ * are the recorded results from Apple's Vision text recognizer, accurate mode,
+ * on the 512 px renders.
+ */
+const REMINDER_DAYS = [
+  { label: "No reminders", days: 38 },
+  { label: "Manual email reminders", days: 31 },
+  { label: "Automatic reminders", days: 24 },
+  { label: "Automatic reminders + card link", days: 17 },
+];
+
+function OcrBadge({ children, good }: { children: ReactNode; good?: boolean }) {
+  return (
+    <p
+      className={cn(
+        "mt-2 rounded-md px-2 py-1 text-center text-[0.65rem] font-semibold tabular-nums",
+        good ? "bg-brand-blue/10 text-brand-blue" : "bg-ink/5 text-muted-foreground",
+      )}
+    >
+      {children}
+    </p>
+  );
+}
+
+function TwoLayerChart() {
+  const top = 62;
+  const base = 202;
+  const perDay = (base - top) / 40;
+  return (
+    <div>
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div>
+          <p className="mb-1.5 text-[0.7rem] font-semibold uppercase tracking-wide text-muted-foreground">
+            Before
+          </p>
+          <svg viewBox="0 0 400 290" className="w-full rounded-xl">
+            <defs>
+              <linearGradient id="tlc-bg" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stopColor="#f6f2fd" />
+                <stop offset="1" stopColor="#ece6f7" />
+              </linearGradient>
+              <linearGradient id="tlc-bar" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stopColor="#dccdf6" />
+                <stop offset="1" stopColor="#c7b3ee" />
+              </linearGradient>
+            </defs>
+            <rect width="400" height="290" fill="url(#tlc-bg)" />
+            <text x="24" y="30" fontSize="15" fontWeight="300" fill="#b9aed0">
+              How smarter reminders speed up payments
+            </text>
+            <text x="24" y="46" fontSize="10" fill="#cdc4de">
+              Tallyfold agency benchmark
+            </text>
+            {[0, 10, 20, 30, 40].map((v) => (
+              <g key={v}>
+                <line
+                  x1="60"
+                  x2="380"
+                  y1={base - v * perDay}
+                  y2={base - v * perDay}
+                  stroke="#e4dcf1"
+                />
+                <text x="52" y={base - v * perDay + 3} fontSize="8" fill="#c4bcd3" textAnchor="end">
+                  {v}
+                </text>
+              </g>
+            ))}
+            <text
+              transform={`translate(22 ${(top + base) / 2}) rotate(-90)`}
+              fontSize="8"
+              fill="#c4bcd3"
+              textAnchor="middle"
+            >
+              avg. days
+            </text>
+            {REMINDER_DAYS.map((r, i) => {
+              const cx = 100 + i * 78;
+              const h = r.days * perDay;
+              return (
+                <g key={r.label}>
+                  <rect
+                    x={cx - 22}
+                    y={base - h}
+                    width="44"
+                    height={h}
+                    rx="4"
+                    fill="url(#tlc-bar)"
+                  />
+                  <text
+                    transform={`translate(${cx + 10} ${base + 12}) rotate(-30)`}
+                    fontSize="8"
+                    fill="#c4bcd3"
+                    textAnchor="end"
+                  >
+                    {r.label}
+                  </text>
+                </g>
+              );
+            })}
+            <text x="380" y="280" fontSize="10" fill="#ddd5eb" textAnchor="end">
+              tallyfold
+            </text>
+          </svg>
+          <OcrBadge>OCR at 512 px: 0 of 4 labels, 0 of 4 values</OcrBadge>
+        </div>
+        <div>
+          <p className="mb-1.5 text-[0.7rem] font-semibold uppercase tracking-wide text-brand-blue">
+            After: Two-Layer Chart
+          </p>
+          <div className="rounded-xl bg-white p-4 text-[#111]">
+            <p className="text-sm font-bold leading-snug">
+              Automatic reminders plus a card link cut payment time to 17 days
+            </p>
+            <p className="mt-0.5 text-[0.7rem] text-[#333]">
+              Average days from invoice to payment, by reminder setup
+            </p>
+            <div className="mt-4 space-y-3">
+              {REMINDER_DAYS.map((r) => (
+                <div key={r.label}>
+                  <p className="text-[0.7rem] font-bold leading-tight">{r.label}</p>
+                  <div className="mt-1 flex items-center gap-2">
+                    <span
+                      className="block h-3.5 rounded-r bg-brand-blue-deep"
+                      style={{ width: `${(r.days / 38) * 72}%` }}
+                    />
+                    <span className="shrink-0 text-xs font-bold tabular-nums">{r.days} days</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <p className="mt-4 text-[0.6rem] text-[#333]">
+              Source: Tallyfold (fictional example data), September 2026
+            </p>
+          </div>
+          <OcrBadge good>OCR at 512 px: 4 of 4 labels, 4 of 4 values</OcrBadge>
+        </div>
+      </div>
+      <p className="mt-3 text-center text-[0.65rem] text-muted-foreground">
+        Fictional example data. OCR results from Apple's Vision text recognizer, accurate mode,
+        exact matches.
+      </p>
+    </div>
+  );
+}
+
+/* ---------- 12. The death of 10 blue links, 1998 to 2026 ---------- */
+
+/**
+ * The timeline from the "Death of 10 Blue Links" study. Every date, label and
+ * description is copied from the post's tables, where each one links to the
+ * company's announcement or the original paper. Spacing is by order, not to
+ * scale. The 2027 block is Rankbox's forecast and is drawn apart from the
+ * record: dashed, hatched and tagged, so it doesn't rely on colour.
+ */
+const BLUE_LINK_ERAS = [
+  {
+    title: "Era 1: Indexing",
+    years: "1998 to 2006",
+    line: "The 10 blue links: a list of URLs.",
+    tint: "bg-brand-blue/[0.04]",
+    items: [
+      [
+        "Apr 1998",
+        "PageRank",
+        "Brin and Page describe a search engine that indexes 24 million pages and weighs them by the links pointing to them.",
+        "Stanford paper",
+      ],
+      [
+        "Oct 2000",
+        "AdWords",
+        "Self-serve keyword ads launch on the results page, so paid links share the screen.",
+        "Google press release",
+      ],
+      [
+        "Nov 2006",
+        "Sitemap protocol",
+        "Google, Yahoo! and Microsoft back one Sitemap format, so sites can list pages for indexing.",
+        "Google Webmaster Central",
+      ],
+    ],
+  },
+  {
+    title: "Era 2: Ranking",
+    years: "2007 to 2021",
+    line: "The 10 blue links plus boxes: images, news, facts, snippets.",
+    tint: "bg-brand-blue/[0.08]",
+    items: [
+      [
+        "May 2007",
+        "Universal Search",
+        "Google blends news, video, images, maps and books into one ranked list.",
+        "Google press release",
+      ],
+      [
+        "May 2012",
+        "Knowledge Graph",
+        '"Things, not strings": facts about 500 million entities appear next to the links.',
+        "Google blog",
+      ],
+      [
+        "Jan 2014",
+        "Featured snippets",
+        "An extracted answer starts appearing above the organic results.",
+        "Google blog, 2018",
+      ],
+      [
+        "2015",
+        "RankBrain",
+        "Google's first deep learning system in Search starts helping to rank results.",
+        "Google blog",
+      ],
+      [
+        "Jun 2017",
+        "Transformer",
+        "Researchers at Google publish the model design behind today's chat assistants.",
+        "Vaswani et al.",
+      ],
+      [
+        "Oct 2019",
+        "BERT in Search",
+        "Better language understanding helps Search read one in ten US English searches.",
+        "Google blog",
+      ],
+      [
+        "May 2020",
+        "RAG",
+        "Researchers pair a language model with a document retriever: the blueprint for grounded answers.",
+        "Lewis et al.",
+      ],
+      [
+        "May 2021",
+        "Rethinking Search",
+        'Google researchers argue engines should answer directly, not just point to "references."',
+        "Metzler et al.",
+      ],
+      [
+        "Dec 2021",
+        "WebGPT",
+        "OpenAI trains a model to run searches, quote pages and cite its sources.",
+        "OpenAI",
+      ],
+    ],
+  },
+  {
+    title: "Era 3: Synthesis",
+    years: "2022 to September 2026",
+    line: "A written answer with a few sources.",
+    tint: "bg-brand-blue/[0.12]",
+    items: [
+      [
+        "Nov 2022",
+        "ChatGPT",
+        'A chat model that can "answer followup questions" reaches the public.',
+        "OpenAI",
+      ],
+      [
+        "Feb 2023",
+        "Bing chat",
+        'Microsoft puts chat beside search, estimating that half of 10 billion daily queries "go unanswered."',
+        "Microsoft",
+      ],
+      [
+        "Nov 2023",
+        "GEO",
+        "Researchers name generative engine optimization: visibility inside AI answers.",
+        "Aggarwal et al.",
+      ],
+      [
+        "May 2024",
+        "AI Overviews",
+        "After a year of testing in Search Labs, AI summaries roll out to everyone in the US.",
+        "Google blog",
+      ],
+      [
+        "Oct 2024",
+        "ChatGPT search",
+        'ChatGPT answers with web sources from "third-party search providers" and partners.',
+        "OpenAI",
+      ],
+      [
+        "Jan 2025",
+        "Operator",
+        "An OpenAI agent uses its own browser to click, type and scroll through sites.",
+        "OpenAI",
+      ],
+      [
+        "Feb 2025",
+        "Deep research",
+        'ChatGPT reads "hundreds of online sources" to write one report.',
+        "OpenAI",
+      ],
+      [
+        "May 2025",
+        "AI Mode",
+        'Google\'s chat-style mode, built on "query fan-out," opens to everyone in the US.',
+        "Google blog",
+      ],
+      [
+        "Jul 2025",
+        "ChatGPT agent",
+        'OpenAI merges browsing and research into one agent that asks before "actions of consequence."',
+        "OpenAI",
+      ],
+      [
+        "Sep 2025",
+        "Instant Checkout",
+        "Shoppers can buy inside ChatGPT through the Agentic Commerce Protocol. OpenAI scaled it back in March 2026.",
+        "OpenAI",
+      ],
+      [
+        "Feb 2026",
+        "Ads in ChatGPT",
+        "OpenAI starts testing ads in the US, labelled and kept apart from the answer.",
+        "OpenAI",
+      ],
+      [
+        "May 2026",
+        "Search agents",
+        "AI Mode passes one billion monthly users, and Google announces agents that search in the background.",
+        "Google blog",
+      ],
+    ],
+  },
+] as const;
+
+const BLUE_LINK_OUTLOOK = [
+  "The 10 blue links survive as the fallback and proof layer.",
+  "AI answers take the first screen for complex questions.",
+  "Agents become a visible share of site visits.",
+  "Ads settle inside answers on ad-funded engines, not everywhere.",
+  "Ranking still decides who gets cited.",
+];
+
+/** Index within Era 3 where the agentic-retrieval frontier starts (Operator). */
+const FRONTIER_FROM = 5;
+
+function TimelineCard({ item }: { item: readonly [string, string, string, string] }) {
+  const [date, label, desc, src] = item;
+  return (
+    <li className="relative pl-6">
+      <span className="absolute left-[-5px] top-1.5 block h-2.5 w-2.5 rounded-full border-2 border-brand-blue bg-card" />
+      <p className="text-[0.65rem] font-semibold uppercase tracking-wide text-muted-foreground tabular-nums">
+        {date}
+      </p>
+      <p className="text-sm font-bold leading-snug text-ink">{label}</p>
+      <p className="text-xs leading-snug text-ink/80">{desc}</p>
+      <p className="mt-0.5 text-[0.6rem] text-muted-foreground">{src}</p>
+    </li>
+  );
+}
+
+function BlueLinksTimeline() {
+  return (
+    <div className="rounded-2xl border border-border bg-card p-4 shadow-1 sm:p-5">
+      <p className="text-base font-bold text-ink">The Death of 10 Blue Links, 1998 to 2026</p>
+      <p className="mt-0.5 text-xs text-muted-foreground">
+        From finding pages to writing answers: how search moved through three eras
+      </p>
+      <div className="mt-5 space-y-3">
+        {BLUE_LINK_ERAS.map((era, e) => (
+          <section key={era.title} className={cn("rounded-xl p-3 sm:p-4", era.tint)}>
+            <p className="text-sm font-bold text-ink">
+              {era.title} <span className="font-medium text-muted-foreground">· {era.years}</span>
+            </p>
+            <p className="text-xs text-ink/80">{era.line}</p>
+            {e < 2 ? (
+              <ol className="mt-3 ml-2 space-y-3 border-l-2 border-brand-blue/40">
+                {era.items.map((item) => (
+                  <TimelineCard key={item[1]} item={item} />
+                ))}
+              </ol>
+            ) : (
+              <div className="mt-3 ml-2">
+                <ol className="space-y-3 border-l-2 border-brand-blue/40 pb-3">
+                  {era.items.slice(0, FRONTIER_FROM).map((item) => (
+                    <TimelineCard key={item[1]} item={item} />
+                  ))}
+                </ol>
+                <div className="rounded-r-lg border-y border-r border-ink/25 py-2 pr-2">
+                  <p className="pl-6 text-[0.7rem] font-bold uppercase tracking-wide text-ink">
+                    Frontier: agentic retrieval
+                  </p>
+                  <p className="mb-3 pl-6 text-[0.65rem] text-muted-foreground">
+                    Models plan their own searches, read the results and sometimes act.
+                  </p>
+                  <ol className="space-y-3 border-l-2 border-brand-blue/40">
+                    {era.items.slice(FRONTIER_FROM).map((item) => (
+                      <TimelineCard key={item[1]} item={item} />
+                    ))}
+                  </ol>
+                </div>
+              </div>
+            )}
+          </section>
+        ))}
+        <section className="relative rounded-xl border-2 border-dashed border-ink/30 bg-[repeating-linear-gradient(135deg,transparent_0_7px,rgba(127,127,127,0.09)_7px_14px)] p-3 sm:p-4">
+          <span className="absolute right-3 top-3 rounded bg-ink px-1.5 py-0.5 text-[0.6rem] font-bold tracking-widest text-card">
+            FORECAST
+          </span>
+          <p className="text-sm font-bold text-ink">2027 outlook</p>
+          <p className="text-xs text-muted-foreground">Rankbox forecast, not a record</p>
+          <ol className="mt-3 list-decimal space-y-1.5 pl-5 text-xs text-ink/85">
+            {BLUE_LINK_OUTLOOK.map((line) => (
+              <li key={line}>{line}</li>
+            ))}
+          </ol>
+        </section>
+      </div>
+      <p className="mt-4 text-[0.6rem] leading-snug text-muted-foreground">
+        Sources: each milestone's company announcement or original paper, as linked in the post.
+        Dates as stated by each source. Spacing is by order, not to scale.
+      </p>
+      <p className="mt-1 text-[0.6rem] text-muted-foreground">
+        Rankbox · rankbox.xyz/blog/death-of-10-blue-links · September 2026
+      </p>
+    </div>
+  );
+}
+
 /* ---------- registry ---------- */
 
 const FIGURES: Record<string, () => ReactNode> = {
@@ -1174,6 +1598,8 @@ const FIGURES: Record<string, () => ReactNode> = {
   "geo-scorecard": GeoScorecard,
   "control-test": ControlTest,
   "shortlist-loop": ShortlistLoop,
+  "two-layer-chart": TwoLayerChart,
+  "blue-links-timeline": BlueLinksTimeline,
 };
 
 /**

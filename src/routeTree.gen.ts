@@ -15,6 +15,7 @@ import { Route as ShopifyRouteImport } from './routes/shopify'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as McpRouteImport } from './routes/mcp'
+import { Route as LlmsDottxtRouteImport } from './routes/llms[.]txt'
 import { Route as LegalRouteImport } from './routes/legal'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AboutRouteImport } from './routes/about'
@@ -110,6 +111,11 @@ const OnboardingRoute = OnboardingRouteImport.update({
 const McpRoute = McpRouteImport.update({
   id: '/mcp',
   path: '/mcp',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LlmsDottxtRoute = LlmsDottxtRouteImport.update({
+  id: '/llms.txt',
+  path: '/llms.txt',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LegalRoute = LegalRouteImport.update({
@@ -470,6 +476,7 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
   '/legal': typeof LegalRouteWithChildren
+  '/llms.txt': typeof LlmsDottxtRoute
   '/mcp': typeof McpRoute
   '/onboarding': typeof OnboardingRoute
   '/pricing': typeof PricingRoute
@@ -543,6 +550,7 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
   '/legal': typeof LegalRouteWithChildren
+  '/llms.txt': typeof LlmsDottxtRoute
   '/mcp': typeof McpRoute
   '/onboarding': typeof OnboardingRoute
   '/pricing': typeof PricingRoute
@@ -617,6 +625,7 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
   '/legal': typeof LegalRouteWithChildren
+  '/llms.txt': typeof LlmsDottxtRoute
   '/mcp': typeof McpRoute
   '/onboarding': typeof OnboardingRoute
   '/pricing': typeof PricingRoute
@@ -692,6 +701,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/auth'
     | '/legal'
+    | '/llms.txt'
     | '/mcp'
     | '/onboarding'
     | '/pricing'
@@ -765,6 +775,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/auth'
     | '/legal'
+    | '/llms.txt'
     | '/mcp'
     | '/onboarding'
     | '/pricing'
@@ -838,6 +849,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/auth'
     | '/legal'
+    | '/llms.txt'
     | '/mcp'
     | '/onboarding'
     | '/pricing'
@@ -913,6 +925,7 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   AuthRoute: typeof AuthRoute
   LegalRoute: typeof LegalRouteWithChildren
+  LlmsDottxtRoute: typeof LlmsDottxtRoute
   McpRoute: typeof McpRoute
   OnboardingRoute: typeof OnboardingRoute
   PricingRoute: typeof PricingRoute
@@ -1004,6 +1017,13 @@ declare module '@tanstack/react-router' {
       path: '/mcp'
       fullPath: '/mcp'
       preLoaderRoute: typeof McpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/llms.txt': {
+      id: '/llms.txt'
+      path: '/llms.txt'
+      fullPath: '/llms.txt'
+      preLoaderRoute: typeof LlmsDottxtRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/legal': {
@@ -1560,6 +1580,7 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   AuthRoute: AuthRoute,
   LegalRoute: LegalRouteWithChildren,
+  LlmsDottxtRoute: LlmsDottxtRoute,
   McpRoute: McpRoute,
   OnboardingRoute: OnboardingRoute,
   PricingRoute: PricingRoute,

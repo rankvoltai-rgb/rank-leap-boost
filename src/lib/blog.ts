@@ -12,6 +12,7 @@ import { IS_MOCK } from "@/lib/mock/mode";
 import * as mock from "@/lib/mock/blog";
 import * as real from "@/lib/notion.functions";
 import { getRepoPost, listRepoPosts } from "@/lib/house-posts.functions";
+import { isBlogPathLive } from "@/lib/blog-release";
 import type { PostFull, PostMeta } from "@/lib/notion.server";
 
 export async function listPosts(): Promise<{ posts: PostMeta[]; error: boolean }> {
@@ -31,6 +32,8 @@ export async function listPosts(): Promise<{ posts: PostMeta[]; error: boolean }
 }
 
 export async function getPost(slug: string): Promise<{ post: PostFull | null; error: boolean }> {
+  // A scheduled post is a plain 404 until its day, whatever Notion says.
+  if (!isBlogPathLive(`/blog/${slug}`)) return { post: null, error: false };
   const repo = await getRepoPost({ data: { slug } }).catch(() => null);
   if (repo) return { post: repo, error: false };
   return IS_MOCK ? mock.getPost(slug) : real.getPost({ data: { slug } });
