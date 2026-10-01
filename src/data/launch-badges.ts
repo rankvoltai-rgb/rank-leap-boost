@@ -62,4 +62,8 @@ export const LAUNCH_BADGES: LaunchBadge[] = [
     name: "ShinyLaunch",
     html: `<a target="_blank" href="https://shinylaunch.com/product/rankbox"><img src="https://shinylaunch.com/assets/images/badge-dark.png" alt="ShinyLaunch" height="54" loading="lazy"></a>`,
   },
+  {
+    name: "Million Dot Homepage",
+    html: `<a target="_blank" href="https://milliondothomepage.com/product/rankbox"><img src="https://milliondothomepage.com/assets/images/badge.png" alt="Million Dot Homepage" height="54" loading="lazy"></a>`,
+  },
 ];
