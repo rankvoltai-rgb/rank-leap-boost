@@ -58,4 +58,8 @@ export const LAUNCH_BADGES: LaunchBadge[] = [
     name: "Good AI Tools",
     html: `<a target="_blank" href="https://goodaitools.com/ai/rankbox"><img src="https://goodaitools.com/assets/images/badge.png" alt="Good AI Tools" height="54" loading="lazy"></a>`,
   },
+  {
+    name: "ShinyLaunch",
+    html: `<a target="_blank" href="https://shinylaunch.com/product/rankbox"><img src="https://shinylaunch.com/assets/images/badge-dark.png" alt="ShinyLaunch" height="54" loading="lazy"></a>`,
+  },
 ];
