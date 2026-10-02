@@ -152,6 +152,29 @@ export interface RobotsFile {
   sitemaps: string[];
 }
 
+/**
+ * The product token a User-agent line names: "GPTBot/1.4" is "gptbot". Like
+ * Google's parser, it keeps letters, "_" and "-" up to the first other
+ * character; "*" stays "*".
+ */
+function productToken(value: string): string {
+  const v = value.trim().toLowerCase();
+  if (v.startsWith("*")) return "*";
+  return v.match(/^[a-z_-]+/)?.[0] ?? v;
+}
+
+/**
+ * Crawlers their vendor says obey another crawler's group when robots.txt
+ * doesn't name them. Google's special crawlers fall back to Googlebot, and
+ * Apple says Applebot follows Googlebot's rules when Applebot isn't named.
+ */
+const FALLBACK: Record<string, string> = {
+  "googlebot-image": "googlebot",
+  "googlebot-video": "googlebot",
+  "googlebot-news": "googlebot",
+  applebot: "googlebot",
+};
+
 export function parseRobots(text: string): RobotsFile {
   const groups: RobotsGroup[] = [];
   const sitemaps: string[] = [];
@@ -174,16 +197,16 @@ export function parseRobots(text: string): RobotsFile {
         groups.push(current);
         collecting = true;
       }
-      current.agents.push(value.toLowerCase());
+      current.agents.push(productToken(value));
     } else if (key === "allow" || key === "disallow") {
       if (!current) return;
       collecting = false;
       current.rules.push({ type: key, path: value, line: n });
     } else if (key === "sitemap") {
       if (value) sitemaps.push(value);
-    } else {
-      collecting = false;
     }
+    // Any other line (Crawl-delay, Content-Signal, unknown keys) is ignored and
+    // doesn't end a run of User-agent lines, as in RFC 9309 and Google's parser.
   });
   return { groups, sitemaps };
 }
@@ -221,24 +244,29 @@ export function pathOf(input: string): string {
 }
 
 /**
- * Chooses the group whose agent best matches `userAgent` (longest token that
- * is a prefix of the product token wins; `*` only if nothing else matched), then
- * the longest matching rule; Allow wins a tie.
+ * Picks the groups for `userAgent` the way RFC 9309 and Google's parser do:
+ * groups naming the crawler's exact product token (never a longer or shorter
+ * name: "applebot" isn't "applebot-extended", and "claude" isn't "claudebot"),
+ * else its vendor's documented fallback, else `*`. Groups naming the same token
+ * are merged, so a block prepended by a CDN combines with the site's own. Then
+ * the longest matching rule wins; Allow wins a tie.
  */
 export function checkRobots(file: RobotsFile, userAgent: string, path: string): RobotsVerdict {
-  const ua = userAgent.toLowerCase();
-  let group: RobotsGroup | null = null;
-  let best = -1;
-  for (const g of file.groups) {
-    for (const a of g.agents) {
-      if (a === "*") continue;
-      if ((ua.startsWith(a) || a.startsWith(ua)) && a.length > best) {
-        best = a.length;
-        group = g;
-      }
-    }
+  const groupsFor = (token: string) => file.groups.filter((g) => g.agents.includes(token));
+  let token: string | undefined = productToken(userAgent);
+  let matched = groupsFor(token);
+  while (!matched.length && token && FALLBACK[token]) {
+    token = FALLBACK[token];
+    matched = groupsFor(token);
   }
-  if (!group) group = file.groups.find((g) => g.agents.includes("*")) ?? null;
+  if (!matched.length) matched = groupsFor("*");
+  const group: RobotsGroup | null = matched.length
+    ? {
+        agents: [...new Set(matched.flatMap((g) => g.agents))],
+        rules: matched.flatMap((g) => g.rules),
+        line: matched[0].line,
+      }
+    : null;
   if (!group) {
     return {
       allowed: true,

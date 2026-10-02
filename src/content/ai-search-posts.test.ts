@@ -82,6 +82,11 @@ const SLUGS = [
   "chatgpt-search-ads-conversational-ppc",
   "headless-brand-zero-click",
   "death-of-10-blue-links",
+  "edge-seo-for-ai-cloudflare-workers",
+  "dynamic-rendering-prerendering-ai-crawlers",
+  "cloudflare-ai-bot-management",
+  "ai-crawler-robots-txt-guide",
+  "applebot-apple-intelligence-search",
   ...Object.keys(STANDALONES),
 ];
 const TOOL_GUIDES = new Set([
@@ -95,6 +100,8 @@ const TOOL_GUIDES = new Set([
   "open-source-seo-tools",
   "seo-newsletters",
   "ai-powered-seo-agents",
+  "edge-seo",
+  "prerender-seo",
 ]);
 
 function read(slug: string) {
@@ -135,6 +142,10 @@ const FIRST_PARTY = [
   /\bwe found\b/i,
   /\bour customers\b/i,
 ];
+
+/** A price is dated when the post names the month and year, or an ISO date. */
+const MONTH_DATED =
+  /\b(January|February|March|April|May|June|July|August|September|Sept?\.?|October|Oct\.?|November|December) 20\d\d\b|\b20\d\d-\d\d-\d\d\b/;
 
 /* Said about a named product, these are claims we can't source. */
 const INABILITY = [/\bcan(?:'|’)t\b/i, /\bcannot\b/i, /\black(s|ing)?\b/i, /\bis missing\b/i];
@@ -224,7 +235,7 @@ describe.each(POSTS.map((p) => [p.slug, p] as const))("%s", (slug, { data, body 
     it("dates the prices it quotes", () => {
       const text = prose(body);
       if (/\$\d/.test(text.replace(/\$49\.50/g, ""))) {
-        expect(text).toMatch(/(September|Sept?\.?) 2026|2026-09-\d\d/);
+        expect(text).toMatch(MONTH_DATED);
       }
     });
   }

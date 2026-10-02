@@ -1,6 +1,6 @@
 # Rankbox content roadmap
 
-Every blog from the two Semrush PDFs, the *Rankvolt Content Plan* (Part 2 blog posts, Part 3 content-gap blogs) and *Backlink Fuel* (data studies), plus 24 low-hanging fruits from the Semrush US pull of 30 September 2026: 100 in total, in 23 rollout phases. Generated from the same data as the visual plan: https://claude.ai/artifact/XxzuHhB39Z2FpcFw9YCBxN
+Every blog from the two Semrush PDFs, the *Rankvolt Content Plan* (Part 2 blog posts, Part 3 content-gap blogs) and *Backlink Fuel* (data studies), plus 24 low-hanging fruits from the Semrush US pull of 30 September 2026 and 48 buyer-intent topics: 148 in total, in 32 rollout phases. Generated from the same data as the visual plan: https://claude.ai/artifact/XxzuHhB39Z2FpcFw9YCBxN
 
 **To run a phase**, start a session with: `Run Phase N of docs/content-roadmap.md`. Tick the boxes when its posts are live.
 
@@ -45,6 +45,15 @@ Every blog from the two Semrush PDFs, the *Rankvolt Content Plan* (Part 2 blog p
 | 21 | Retrieval & page structure | 5 | 12 | A small extraction test for LH3·6 and a chunking code demo for LH3·5. |
 | 22 | Agents, MCP & other engines | 5 | 10 | Nothing extra. |
 | 23 | AI Overviews, zero-click & strategy | 4 | 9 | Nothing extra. |
+| 24 | Buyer's guides: AI visibility platforms | 5 | 20 | Current pricing and feature checks on every competitor named, the week you publish. |
+| 25 | Buyer's guides: engines & automation | 5 | 16 | Same competitor checks as Phase 24. |
+| 26 | Trackers & checkers | 5 | 18 | A working free checker for CB4·3 if you can ship one. |
+| 27 | Agencies & services | 5 | 18 | Nothing extra. |
+| 28 | Consultants, specialists & cost | 5 | 16 | Real, citable price data for the cost figures. |
+| 29 | Audits, ROI & reporting | 5 | 20 | Build CB6·3's ROI calculator and CB6·1's slide template as real downloads. |
+| 30 | Enterprise & B2B | 6 | 20 | Nothing extra. |
+| 31 | Reputation, citations & channels | 5 | 17 | Nothing extra. |
+| 32 | Long tail | 7 | 18 | Nothing extra. |
 
 ## Phase 1: Crawlers & access
 
@@ -1010,48 +1019,48 @@ Sept 30 pull. Leads with edge SEO: 1,600/mo at KD 19, the biggest new keyword in
 
 **Needs:** Nothing extra. A working Cloudflare Worker demo makes LH3·2 stronger.
 
-- [ ] **LH3·2: Edge SEO for AI: Dynamic Rendering & Header Injection via Cloudflare Workers**
+- [x] **LH3·2: Edge SEO for AI: Dynamic Rendering & Header Injection via Cloudflare Workers** (written: /blog/edge-seo-for-ai-cloudflare-workers)
   - Source: Sept 30 Semrush · Technical & Architecture
   - Target queries: "edge seo" (1,600/mo · KD 19 · $8.31 CPC · 0.03 comp); "what is edge seo" (40/mo · KD 0)
   - Angle: Using CDN edge workers to detect AI bot user-agents and serve clean, markdown-friendly payloads without rebuilding the backend.
   - PDF flag: Biggest new keyword in the batch. People searching "edge seo" want the general topic (redirects, hreflang, header changes at the CDN), so cover that first and use the AI-bot angle as the hook. Give bots the same content in a cleaner format, never different content, or it's cloaking.
   - Standalone posts:
-    - [ ] "edge seo"
-    - [ ] "what is edge seo"
-- [ ] **LH3·8: Dynamic Rendering & Prerendering for JavaScript-Heavy AI Crawlers**
+    - [x] "edge seo" (written: /blog/edge-seo)
+    - [x] "what is edge seo" (written: /blog/what-is-edge-seo)
+- [x] **LH3·8: Dynamic Rendering & Prerendering for JavaScript-Heavy AI Crawlers** (written: /blog/dynamic-rendering-prerendering-ai-crawlers)
   - Source: Sept 30 Semrush · Technical & Architecture
   - Close to B3: set it apart and link to it
   - Target queries: "dynamic rendering seo" (50/mo · KD 24 · 0.33 comp); "prerender seo" (20/mo · KD 0)
   - Angle: AI crawlers (GPTBot, ClaudeBot) don't run full headless Chromium like Googlebot, so client-rendered React/Vue sites look blank to LLMs unless prerendered.
   - PDF flag: Close to B3 (Does GPTBot Execute JavaScript?). Set it apart: B3 proves the problem, this is the fix (SSR, prerender services, static export, per framework). Link to B3. Don't state as fact that AI crawlers don't render JS until B3's results are in.
   - Standalone posts:
-    - [ ] "dynamic rendering seo"
-    - [ ] "prerender seo"
-- [ ] **LH3·4: Cloudflare AI Bot Management: Blocking Scrapers vs. Preserving Citations**
+    - [x] "dynamic rendering seo" (written: /blog/dynamic-rendering-seo)
+    - [x] "prerender seo" (written: /blog/prerender-seo)
+- [x] **LH3·4: Cloudflare AI Bot Management: Blocking Scrapers vs. Preserving Citations** (written: /blog/cloudflare-ai-bot-management)
   - Source: Sept 30 Semrush · Technical & Architecture
   - Close to OB3·1: set it apart and link to it
   - Target queries: "cloudflare ai bots" (30/mo · KD 0 · 0.03 comp); "block ai bots cloudflare" (20/mo · KD 0)
   - Angle: The pitfalls of Cloudflare's one-click "Block AI Scrapers and Crawlers" toggle, which can block PerplexityBot and OAI-SearchBot and wipe out conversational traffic.
   - PDF flag: Close to OB3·1 (written, the Challenge Trap). Set it apart: OB3·1 is WAF challenges; this is a walkthrough of Cloudflare's AI bot settings screen by screen, and which bots each toggle hits. Link to OB3·1.
   - Standalone posts:
-    - [ ] "cloudflare ai bots"
-    - [ ] "block ai bots cloudflare"
-- [ ] **LH4·6: The Complete AI Crawler robots.txt Guide**
+    - [x] "cloudflare ai bots" (written: /blog/cloudflare-ai-bots)
+    - [x] "block ai bots cloudflare" (written: /blog/block-ai-bots-cloudflare)
+- [x] **LH4·6: The Complete AI Crawler robots.txt Guide** (written: /blog/ai-crawler-robots-txt-guide)
   - Source: Sept 30 Semrush · Brand, Schema & Engines
   - Close to B1: set it apart and link to it
   - Target queries: "ai crawler robots txt" (20/mo · KD 0 · 0.33 comp)
   - Angle: GPTBot, PerplexityBot, ClaudeBot, Applebot and Bytespider: the trade-off between blocking scrapers for copyright and disappearing from AI recommendations.
   - PDF flag: Close to B1 (written, the AI Crawler Directory). Set it apart: B1 lists the bots, this one makes the decision (which bots to block and which to allow, by goal), with ready-made robots.txt templates. Link to B1.
   - Standalone posts:
-    - [ ] "ai crawler robots txt"
-- [ ] **LH5·6: Applebot User-Agent & Preparing for Apple Intelligence Search**
+    - [x] "ai crawler robots txt" (written: /blog/ai-crawler-robots-txt)
+- [x] **LH5·6: Applebot User-Agent & Preparing for Apple Intelligence Search** (written: /blog/applebot-apple-intelligence-search)
   - Source: Sept 30 Semrush · Measurement, Entities & Strategy
   - Close to LH1·4: set it apart and link to it
   - Target queries: "applebot user agent" (20/mo · KD 0 · 0.33 comp)
   - Angle: Applebot and Applebot-Extended crawling: how Apple indexes content for Siri, Spotlight and Safari summaries, and how to configure your server for it.
   - PDF flag: Close to LH1·4 (written, Apple Intelligence and Siri). Set it apart: the crawler itself, with user-agent strings, Applebot vs. Applebot-Extended, and robots.txt rules. Link to it from the AI Crawler Directory (B1).
   - Standalone posts:
-    - [ ] "applebot user agent"
+    - [x] "applebot user agent" (written: /blog/applebot-user-agent)
 
 ## Phase 20: Brand mentions, entities & AEO vs GEO
 
@@ -1249,3 +1258,611 @@ Sept 30 pull. Finishes with the LLM SEO strategy hub, which links to every guide
   - Standalone posts:
     - [ ] "llm seo strategy"
     - [ ] "ai search ranking factors"
+
+## Phase 24: Buyer's guides: AI visibility platforms
+
+Buyer Intent batch. The biggest commercial queries: "ai visibility platform", "ai search visibility tool" and "aeo tool" (1,300 to 1,600/mo each, $13 to $19 CPC).
+
+**Needs:** Current pricing and feature checks on every competitor named, the week you publish.
+
+- [ ] **CB1·2: Best AI Search Visibility Platforms Compared (2026 Buyer's Guide)**
+  - Source: Buyer Intent · Set 1
+  - Target queries: "ai visibility platform" (1,600/mo · KD 34 · $18.55 CPC · 0.10 comp); "which platform excels in ai visibility metrics" (260/mo · KD 18); "is it best ai visibility platforms with seo capabilities" (140/mo · KD 15); "who offers the best ai visibility platform" (40/mo · KD 0)
+  - Angle: Bottom-of-funnel software buyers comparing enterprise tools (Profound, Semrush AI Visibility and others) against lighter platforms.
+  - Rankbox pitch (check against what ships): Objective comparison matrix emphasizing speed, live citation tracking and publishing integration without five-figure annual contracts.
+  - PDF flag: Top commercial pick in this batch. CB4·7 ("ai search visibility tool") and CB5·2 ("ai visibility optimization") target near-identical buyers: make this one the platform comparison matrix and keep the other two clearly different. Verify every competitor's pricing and features on their site the week you publish.
+  - Standalone posts:
+    - [ ] "ai visibility platform"
+    - [ ] "which platform excels in ai visibility metrics"
+    - [ ] "is it best ai visibility platforms with seo capabilities"
+    - [ ] "who offers the best ai visibility platform"
+- [ ] **CB4·7: AI Search Visibility Tools: Features, Pricing & Architecture Comparison**
+  - Source: Buyer Intent · Set 4
+  - Close to CB1·2: set it apart and link to it
+  - Target queries: "ai search visibility tool" (1,600/mo · KD 32 · $14.93 CPC · 0.38 comp); "ai brand visibility tool" (1,600/mo · $14.33 CPC); "search visibility tool" (1,600/mo · $6.04 CPC)
+  - Angle: Agency and in-house teams surveying the AI visibility tool market.
+  - Rankbox pitch (check against what ships): A buyer's matrix of Rankvolt's stack, webhook integrations and real-time tracking.
+  - PDF flag: Same buyer as CB1·2. Make this the tool-by-tool reviews (one section per tool); CB1·2 is the matrix. "search visibility tool" is classic SEO; don't lead with it.
+  - Standalone posts:
+    - [ ] "ai search visibility tool"
+    - [ ] "ai brand visibility tool"
+    - [ ] "search visibility tool"
+- [ ] **CB5·2: AI Visibility Optimization: Which Platforms Deliver the Highest ROI?**
+  - Source: Buyer Intent · Set 5
+  - Close to CB1·2: set it apart and link to it
+  - Target queries: "ai visibility optimization" (590/mo · KD 29 · $13.06 CPC · 0.08 comp); "what is the top ai visibility optimization tool" (210/mo · KD 0); "is it top-rated ai visibility optimization software" (170/mo · KD 0); "where to find best llm optimization for ai visibility" (170/mo · KD 0); "is it most effective ai visibility optimization software" (140/mo · KD 0)
+  - Angle: Buyers asking which software to purchase to improve brand visibility across AI models.
+  - Rankbox pitch (check against what ships): Rankvolt as the all-in-one GEO suite for lean teams that need automation, not agency hours.
+  - PDF flag: Third page for the CB1·2 buyer. Make this one ROI-led (cost per cited answer, payback period). The "is it …" queries are Semrush's machine-garbled phrasing; don't write standalone titles in that wording.
+  - Standalone posts:
+    - [ ] "ai visibility optimization"
+    - [ ] "what is the top ai visibility optimization tool"
+    - [ ] "is it top-rated ai visibility optimization software"
+    - [ ] "where to find best llm optimization for ai visibility"
+    - [ ] "is it most effective ai visibility optimization software"
+- [ ] **CB5·1: Best AEO Tools for 2026: The Definitive Software Buyer's Guide**
+  - Source: Buyer Intent · Set 5
+  - Close to P18: set it apart and link to it
+  - Target queries: "best aeo tools" (590/mo · KD 24 · $13.77 CPC · 0.20 comp); "aeo tools" (1,000/mo · $7.79 CPC); "what tools are best for conducting keyword research for aeo" (210/mo · KD 0); "what are the best seo/aeo intelligence tools for small businesses" (20/mo · KD 0)
+  - Angle: Marketers comparing software to optimize for Perplexity, Copilot and ChatGPT.
+  - Rankbox pitch (check against what ships): Comparison grid: Rankvolt's research, writing and citation tracking vs. single-feature tools.
+  - PDF flag: Close to P18's "best aeo tool" query (similar page live). This is the ranked list. Refresh it quarterly; "best X tools" pages decay fast.
+  - Standalone posts:
+    - [ ] "best aeo tools"
+    - [ ] "aeo tools"
+    - [ ] "what tools are best for conducting keyword research for aeo"
+    - [ ] "what are the best seo/aeo intelligence tools for small businesses"
+- [ ] **CB2·6: The Best Answer Engine Optimization Software for Modern Marketing Teams**
+  - Source: Buyer Intent · Set 2
+  - Close to CB5·1: set it apart and link to it
+  - Target queries: "answer engine optimization software" (50/mo · $7.79 CPC); "what is the best software for answer engine optimization" (40/mo · KD 0); "aeo tool" (1,300/mo · $7.79 CPC); "hubspot aeo grader" (1,300/mo · $8.63 CPC)
+  - Angle: Product buyers looking for a roundup and feature comparison of AEO software.
+  - Rankbox pitch (check against what ships): Product evaluation guide highlighting citation tracking, autopilot writing and CMS sync.
+  - PDF flag: "hubspot aeo grader" is a branded query; HubSpot's own page will hold #1. Review the grader honestly in one section rather than targeting it. Near-duplicate of CB5·1 ("best aeo tools"): make this the software-category explainer and CB5·1 the ranked list.
+  - Standalone posts:
+    - [ ] "answer engine optimization software"
+    - [ ] "what is the best software for answer engine optimization"
+    - [ ] "aeo tool"
+    - [ ] "hubspot aeo grader"
+
+## Phase 25: Buyer's guides: engines & automation
+
+ChatGPT and Perplexity tool roundups, GEO platform ROI, AEO tools for AI products, and autopilot SEO ("search engine optimization automation", 1,600/mo).
+
+**Needs:** Same competitor checks as Phase 24.
+
+- [ ] **CB4·4: Autopilot SEO Software: Automating Research, Writing & Publishing**
+  - Source: Buyer Intent · Set 4
+  - Target queries: "autopilot seo" (30/mo · KD 26 · $11.04 CPC · 0.36 comp); "search engine optimization automation" (1,600/mo · $10.17 CPC); "auto seo software" (720/mo · $14.59 CPC); "automatic seo optimization" (390/mo · $9.96 CPC)
+  - Angle: Solo founders and small teams tired of manual keyword spreadsheets, looking for an end-to-end publishing engine.
+  - Rankbox pitch (check against what ships): Rankvolt's Autopilot (30 articles/month, citation-first writing, CMS publishing via Framer/Shopify/webhooks).
+  - PDF flag: Direct product fit. Lead with "search engine optimization automation" (1,600/mo). Address Google's scaled-content policy head-on; buyers worry about it.
+  - Standalone posts:
+    - [ ] "autopilot seo"
+    - [ ] "search engine optimization automation"
+    - [ ] "auto seo software"
+    - [ ] "automatic seo optimization"
+- [ ] **CB3·1: Best ChatGPT SEO Tracking Software (2026 Comparison & Buyer's Guide)**
+  - Source: Buyer Intent · Set 3
+  - Close to P09: set it apart and link to it
+  - Target queries: "best chatgpt seo tracking software" (320/mo · KD 19 · 0 comp); "best chatgpt seo software" (390/mo · KD 38); "chatgpt seo tools" (480/mo · $6.02 CPC · KD 19)
+  - Angle: Marketers searching for software that tracks prompts, rankings and brand citations inside ChatGPT.
+  - Rankbox pitch (check against what ships): Feature-by-feature: SERP rank trackers that can't read LLMs vs. Rankvolt's live ChatGPT recommendation monitoring.
+  - PDF flag: "best chatgpt seo software" already has a written standalone (from LH2·1). Close to P09 and CB2·3: this one is ChatGPT-only and a ranked list.
+  - Standalone posts:
+    - [ ] "best chatgpt seo tracking software"
+    - Repeat: "best chatgpt seo software". Same query as LH2·1's, written once there.
+    - [ ] "chatgpt seo tools"
+- [ ] **CB3·3: Perplexity SEO Tools: How to Monitor Citations & Source Links**
+  - Source: Buyer Intent · Set 3
+  - Close to P04: set it apart and link to it
+  - Target queries: "perplexity seo tool" (720/mo · KD 32 · 0 comp); "what is profound tool for perplexity seo" (KD 0); "how does perplexity compare to traditional seo tools" (KD 0)
+  - Angle: Brands seeing Perplexity referral spikes and hunting for tools to measure and influence citations.
+  - Rankbox pitch (check against what ships): Citation detection, answer-space gap analysis, and outranking competitors in Perplexity's sources.
+  - PDF flag: "perplexity seo tool" is P04's main query, so its standalone is written there and marked a repeat here. P04 is the how-to; this is the tool roundup. Link to P04 and LH4·2.
+  - Standalone posts:
+    - Repeat: "perplexity seo tool". Same query as P04's, written once there.
+    - [ ] "what is profound tool for perplexity seo"
+    - [ ] "how does perplexity compare to traditional seo tools"
+- [ ] **CB4·5: What's the Best Answer Engine Optimization Tool for AI Products?**
+  - Source: Buyer Intent · Set 4
+  - Target queries: "what's the best answer engine optimization tool for ai products" (210/mo · KD 15 · 0.33 comp); "how to optimize brand for ai answer engines visibility" (70/mo · KD 0); "what's the leading answer engine optimization for ai" (70/mo · KD 0); "how to rank higher in answer engine optimization- perplexity ai" (40/mo · KD 0)
+  - Angle: Product marketers at AI and SaaS startups who want to be recommended when buyers research on Perplexity and ChatGPT.
+  - Rankbox pitch (check against what ships): How Rankvolt helps AI startups out-cite incumbents.
+  - PDF flag: Close to CB2·6 and CB5·1. Set it apart: only for companies selling AI products, with examples from that category.
+  - Standalone posts:
+    - [ ] "what's the best answer engine optimization tool for ai products"
+    - [ ] "how to optimize brand for ai answer engines visibility"
+    - [ ] "what's the leading answer engine optimization for ai"
+    - [ ] "how to rank higher in answer engine optimization- perplexity ai"
+- [ ] **CB4·2: Which GEO Platforms Are Worth Buying in 2026? (Buyer's Guide & ROI Breakdown)**
+  - Source: Buyer Intent · Set 4
+  - Target queries: "geo platform" (30/mo · KD 0 · $6.00 CPC · 0.18 comp); "which geo platforms are worth buying in 2026" (30/mo · KD 0); "what roi can i expect from geo platform investment" (40/mo · KD 0); "which geo platform lets agencies manage multiple client accounts" (50/mo · KD 0)
+  - Angle: Buyers who know they need GEO and are building the budget case before signing an annual contract.
+  - Rankbox pitch (check against what ships): Pricing and capability breakdown: why lean SaaS teams choose Rankvolt over five-figure enterprise contracts.
+  - PDF flag: "which geo platform lets agencies manage multiple client accounts" is CB5·8's main query; this phase comes first, so it's written here. Move it to CB5·8 if you'd rather that page own it. Say "generative engine optimization" early; "geo platform" also means geospatial software.
+  - Standalone posts:
+    - [ ] "geo platform"
+    - [ ] "which geo platforms are worth buying in 2026"
+    - [ ] "what roi can i expect from geo platform investment"
+    - [ ] "which geo platform lets agencies manage multiple client accounts"
+
+## Phase 26: Trackers & checkers
+
+Brand tracking, LLM rank trackers, rank checkers and citation tracking. "ai brand tracking" has the highest CPC here ($25.10).
+
+**Needs:** A working free checker for CB4·3 if you can ship one.
+
+- [ ] **CB4·1: AI Brand Tracking: How to Monitor Brand Mentions Across LLM Searches**
+  - Source: Buyer Intent · Set 4
+  - Close to P01: set it apart and link to it
+  - Target queries: "ai brand tracking" (480/mo · KD 22 · $25.10 CPC · 0.03 comp); "how to track brand mentions in ai search" (1,300/mo · $18.65 CPC); "llm visibility tool" (1,600/mo · $19.11 CPC); "why should i track ai brand visibility" (320/mo · KD 0)
+  - Angle: CMOs and brand marketers realizing social listening and PR trackers miss what Perplexity, ChatGPT and Claude say about them.
+  - Rankbox pitch (check against what ships): Rankvolt as an automated AI brand tracker: citation changes, sentiment shifts, competitor displacement.
+  - PDF flag: "how to track brand mentions in ai search" is P01's query and already written. Close to P01, P08 and LH4·1. Set it apart: the tool-buying angle, led by "ai brand tracking" and "llm visibility tool" (1,600/mo).
+  - Standalone posts:
+    - [ ] "ai brand tracking"
+    - Repeat: "how to track brand mentions in ai search". Same query as P01's, written once there.
+    - [ ] "llm visibility tool"
+    - [ ] "why should i track ai brand visibility"
+- [ ] **CB2·3: LLM Rank Trackers: How to Monitor Your Brand Across ChatGPT, Claude & Perplexity**
+  - Source: Buyer Intent · Set 2
+  - Close to P09: set it apart and link to it
+  - Target queries: "llm rank tracker" (390/mo · KD 27 · $13.74 CPC · 0.28 comp); "what are the best free llm rank tracker tools" (KD 0); "how to track llm rankings easily" (KD 0)
+  - Angle: Growth marketers frustrated that Semrush and Ahrefs don't show where they stand in AI answers.
+  - Rankbox pitch (check against what ships): How conversational rank tracking differs from positions 1–10 (prompts, sentiment, citation share), featuring Rankvolt's answer-space monitoring.
+  - PDF flag: Close to P09 and the live ChatGPT Rank Tracker page. Set it apart: multi-engine, and a tool roundup rather than a method guide. Link to the live page.
+  - Standalone posts:
+    - [ ] "llm rank tracker"
+    - [ ] "what are the best free llm rank tracker tools"
+    - [ ] "how to track llm rankings easily"
+- [ ] **CB4·3: AI Rank Checkers: How to Check Your Website Ranking in AI Search Results**
+  - Source: Buyer Intent · Set 4
+  - Close to CB6·5: set it apart and link to it
+  - Target queries: "ai rank checker" (390/mo · KD 29 · $9.90 CPC · 0.36 comp); "how to check website ranking in ai-powered search results" (40/mo · KD 0); "chatgpt rank checker" (20/mo · KD 0); "how to check brand ranking in chatgpt" (10/mo · KD 0)
+  - Angle: SEO leads who want to know where ChatGPT or Perplexity puts them for their product category.
+  - Rankbox pitch (check against what ships): Rankvolt's Answer-Space Research and free ChatGPT recommendation checker.
+  - PDF flag: Near-duplicate of CB6·5, which shares two of these queries. "ai rank checker" searchers want a tool: ship a working free checker on the page or it won't hold rank.
+  - Standalone posts:
+    - [ ] "ai rank checker"
+    - [ ] "how to check website ranking in ai-powered search results"
+    - [ ] "chatgpt rank checker"
+    - [ ] "how to check brand ranking in chatgpt"
+- [ ] **CB5·4: Dedicated AI Citation Tracking Tools: Free vs. Paid Options**
+  - Source: Buyer Intent · Set 5
+  - Close to CB2·7: set it apart and link to it
+  - Target queries: "ai citation tracking tool" (90/mo · KD 0 · 0 comp); "is it ai visibility tools with citation tracking" (KD 0); "which tools track ai search citations" (KD 0); "which tools track citations in ai answers" (KD 0)
+  - Angle: Brand managers who want software that logs where and when their domain is cited in AI answers.
+  - Rankbox pitch (check against what ships): Live demo of Rankvolt's citation tracking.
+  - PDF flag: KD 0 and 90/mo: the easiest rank in the batch. Pair with CB2·7 (method guide) and link both ways.
+  - Standalone posts:
+    - [ ] "ai citation tracking tool"
+    - [ ] "is it ai visibility tools with citation tracking"
+    - [ ] "which tools track ai search citations"
+    - [ ] "which tools track citations in ai answers"
+- [ ] **CB2·7: How to Track AI Citations Across Search Engines (Free & Paid Methods)**
+  - Source: Buyer Intent · Set 2
+  - Close to CB5·4: set it apart and link to it
+  - Target queries: "ai citation tracker" (30/mo · KD 0 · $4.13 CPC · 0.56 comp); "how to track ai citation rates over time" (40/mo · KD 0); "how to track competitor citations in ai search results" (30/mo · KD 0); "what platforms track ai search citations" (20/mo · KD 0)
+  - Angle: Users who want tooling or a method to see when and why their domain gets cited in Perplexity, Claude or ChatGPT.
+  - Rankbox pitch (check against what ships): Walkthrough of Rankvolt's multi-engine citation logging.
+  - PDF flag: Near-duplicate of CB5·4 ("ai citation tracking tool"). Make this the method guide (free and manual first), CB5·4 the tool list. Link both ways.
+  - Standalone posts:
+    - [ ] "ai citation tracker"
+    - [ ] "how to track ai citation rates over time"
+    - [ ] "how to track competitor citations in ai search results"
+    - [ ] "what platforms track ai search citations"
+
+## Phase 27: Agencies & services
+
+"aeo agency" and "aeo services" (1,000/mo each, $16 to $21 CPC), GEO agencies (1,300/mo) and ChatGPT SEO services.
+
+**Needs:** Nothing extra.
+
+- [ ] **CB2·1: How to Choose an AEO Agency: Vetting Framework & Questions**
+  - Source: Buyer Intent · Set 2
+  - Target queries: "aeo agency" (1,000/mo · KD 26 · $21.16 CPC · 0.17 comp); "how to choose seo agency for aeo answer engine optimization" (320/mo · KD 0); "what to look for when choosing an aeo agency" (50/mo · KD 0); "how do i compare aeo agencies" (40/mo · KD 0)
+  - Angle: Decision-makers with budget trying to tell agencies that understand LLM citation mechanics from SEO agencies rebranding overnight.
+  - Rankbox pitch (check against what ships): A transparent RFP and interview rubric, showing how software gets measurable citation gains without a $10k/month agency fee.
+  - PDF flag: Highest-CPC query with real volume in this batch ($21.16, 1,000/mo). "aeo agency" results are mostly agency homepages; a vetting guide can still rank if it's the most useful page, so include the scoring rubric as a download.
+  - Standalone posts:
+    - [ ] "aeo agency"
+    - [ ] "how to choose seo agency for aeo answer engine optimization"
+    - [ ] "what to look for when choosing an aeo agency"
+    - [ ] "how do i compare aeo agencies"
+- [ ] **CB2·2: AEO Services & Pricing Guide: Packages, Retainers & What's Included**
+  - Source: Buyer Intent · Set 2
+  - Target queries: "aeo services" (1,000/mo · KD 28 · $16.26 CPC · 0.24 comp); "what are aeo services" (70/mo · KD 0); "how do aeo agencies price their services" (10/mo · KD 0); "how do aeo service packages compare in pricing and features" (10/mo · KD 0); "how much do professional aeo implementation services cost for businesses" (10/mo · KD 0)
+  - Angle: Finance and marketing leads researching typical market costs for AEO deliverables.
+  - Rankbox pitch (check against what ships): Pricing comparison between $5k–$15k agency retainers and always-on software like Rankvolt at $49.50/mo.
+  - PDF flag: Close to CB1·3 (AI SEO cost). Set it apart: this one lists what's in each AEO package, CB1·3 compares costs across agencies, consultants and software. Same sourcing rule for retainer figures.
+  - Standalone posts:
+    - [ ] "aeo services"
+    - [ ] "what are aeo services"
+    - [ ] "how do aeo agencies price their services"
+    - [ ] "how do aeo service packages compare in pricing and features"
+    - [ ] "how much do professional aeo implementation services cost for businesses"
+- [ ] **CB3·4: GEO Marketing Agencies: When to Hire an Agency vs. Use Software**
+  - Source: Buyer Intent · Set 3
+  - Target queries: "geo marketing agency" (70/mo · KD 20 · $16.03 CPC · 0.31 comp); "generative engine optimization agency" (1,300/mo · $20.51 CPC); "geo agency" (590/mo · $16.47 CPC); "what's the best saas geo agency among marketing firms" (KD 0); "what is the best marketing agency for geo" (KD 0)
+  - Angle: Founders and VPs of Marketing deciding between a GEO agency and giving their in-house team software.
+  - Rankbox pitch (check against what ships): ROI comparison: agency-grade AI search discovery and publishing for $49.50/month.
+  - PDF flag: Lead with "generative engine optimization agency" (1,300/mo), not the 70/mo one. "geo marketing agency" also means geo-targeted marketing; the title must say generative engine optimization.
+  - Standalone posts:
+    - [ ] "geo marketing agency"
+    - [ ] "generative engine optimization agency"
+    - [ ] "geo agency"
+    - [ ] "what's the best saas geo agency among marketing firms"
+    - [ ] "what is the best marketing agency for geo"
+- [ ] **CB3·6: ChatGPT SEO Services: What Deliverables Move the Needle?**
+  - Source: Buyer Intent · Set 3
+  - Close to CB1·6: set it apart and link to it
+  - Target queries: "chatgpt seo services" (90/mo · KD 12 · $8.91 CPC · 0.05 comp); "chatgpt seo" (1,600/mo · $7.65 CPC); "seo for chatgpt" (590/mo · $9.46 CPC)
+  - Angle: Businesses shopping for service packages to get recommended when users ask ChatGPT for the best product in a category.
+  - Rankbox pitch (check against what ships): The technical playbook (entity verification, comparison tables) and how Rankvolt runs it automatically.
+  - PDF flag: "chatgpt seo" (1,600/mo) is the prize, but it's broad and informational. Close to P02, P14 and CB1·6: this is the services checklist. "seo for chatgpt" also sits in CB1·6; this phase comes first, so it's written here.
+  - Standalone posts:
+    - [ ] "chatgpt seo services"
+    - [ ] "chatgpt seo"
+    - [ ] "seo for chatgpt"
+- [ ] **CB1·6: ChatGPT SEO Agency: Services, Results & Is It Worth the Retainer?**
+  - Source: Buyer Intent · Set 1
+  - Target queries: "chatgpt seo agency" (70/mo · KD 21 · $9.78 CPC · 0.16 comp); "ai-powered seo agents" (590/mo · KD 20 · $22.74 CPC); "seo for chatgpt" (590/mo · KD 22 · $9.46 CPC); "chatgpt seo tools" (480/mo · KD 19 · $6.02 CPC)
+  - Angle: Prospects evaluating agency pitches built around winning ChatGPT search visibility.
+  - Rankbox pitch (check against what ships): Demystifies agency deliverables (knowledge graph alignment, citation seeding, freshness cadence) and shows how software streamlines them.
+  - PDF flag: "ai-powered seo agents" is about AI agents, not agencies, and already has a standalone post from OB1·3. "seo for chatgpt" and "chatgpt seo tools" fit CB3·6 and CB3·1 better. Lead with "chatgpt seo agency".
+  - Standalone posts:
+    - [ ] "chatgpt seo agency"
+    - Repeat: "ai-powered seo agents". Same query as OB1·3's, written once there.
+    - Repeat: "seo for chatgpt". Same query as CB3·6's, written once there.
+    - Repeat: "chatgpt seo tools". Same query as CB3·1's, written once there.
+
+## Phase 28: Consultants, specialists & cost
+
+What AI SEO costs, and hiring consultants and specialists.
+
+**Needs:** Real, citable price data for the cost figures.
+
+- [ ] **CB1·3: AI SEO Cost Breakdown: What Do Agencies, Consultants & Software Charge?**
+  - Source: Buyer Intent · Set 1
+  - Target queries: "ai seo cost" (30/mo · KD 0 · 0 comp); "how much does ai seo cost" (40/mo · KD 0); "how much do ai seo agency services cost pricing comparison" (30/mo · KD 0); "how much does enterprise ai seo software cost" (10/mo · KD 0)
+  - Angle: Budget-holders scoping 2026 retainers and software budgets who want real numbers: hourly rates, monthly retainers and tooling fees.
+  - Rankbox pitch (check against what ships): The math of an agency retainer vs. software automation at $49.50/mo.
+  - PDF flag: The $3k–$15k/mo retainer range in the research is unsourced. Cite real published agency price lists, or label the numbers as ranges you observed.
+  - Standalone posts:
+    - [ ] "ai seo cost"
+    - [ ] "how much does ai seo cost"
+    - [ ] "how much do ai seo agency services cost pricing comparison"
+    - [ ] "how much does enterprise ai seo software cost"
+- [ ] **CB1·5: Hiring an AI SEO Consultant: Rates, Deliverables & What to Expect**
+  - Source: Buyer Intent · Set 1
+  - Target queries: "ai seo consultant" (210/mo · KD 28 · $18.99 CPC · 0.14 comp); "what is the cost of ai seo consulting" (10/mo · KD 0); "how is ai impacting the seo consulting services industry" (30/mo · KD 0); "what's the best ai consulting company for organic search seo" (10/mo · KD 0)
+  - Angle: Companies deciding between an outside consultant and running GEO in-house with the right toolkit.
+  - Rankbox pitch (check against what ships): Vetting checklist for consultants, plus how teams use Rankvolt for the workflows consultants bill $250+/hr for.
+  - PDF flag: Close to CB1·8 and CB3·2. This one owns rates and deliverables; CB1·8 owns vetting questions; CB3·2 owns the job description. Link all three.
+  - Standalone posts:
+    - [ ] "ai seo consultant"
+    - [ ] "what is the cost of ai seo consulting"
+    - [ ] "how is ai impacting the seo consulting services industry"
+    - [ ] "what's the best ai consulting company for organic search seo"
+- [ ] **CB3·2: Hiring a Generative Engine Optimization Specialist: Scope, Rates & Deliverables**
+  - Source: Buyer Intent · Set 3
+  - Target queries: "generative engine optimization specialist" (20/mo · KD 0 · $27.25 CPC · 0.66 comp)
+  - Angle: Companies writing job descriptions or contract RFPs for a dedicated GEO specialist.
+  - Rankbox pitch (check against what ships): Core skills of a GEO specialist and how Rankvolt automates the repetitive parts of their workflow.
+  - PDF flag: Highest CPC in the batch but only 20/mo. Include a copy-paste job description; that's what earns links and return visits.
+  - Standalone posts:
+    - [ ] "generative engine optimization specialist"
+- [ ] **CB1·8: How to Hire a GEO Consultant: Vetting Guide, Red Flags & Interview Questions**
+  - Source: Buyer Intent · Set 1
+  - Target queries: "geo consultant" (20/mo · KD 0 · $4.11 CPC · 0.06 comp); "which ai consulting agencies have the best geo capabilities" (30/mo · KD 0); "how to select geo consultant" (20/mo · KD 0); "how to improve geo performance without hiring specialized consultants" (10/mo · KD 0)
+  - Angle: Buyers with approved budget writing an RFP or interviewing GEO consultants.
+  - Rankbox pitch (check against what ships): A downloadable set of 10 technical questions to ask a GEO agency, proving Rankvolt's authority.
+  - PDF flag: "geo consultant" also means geology and geospatial consultants. Put "generative engine optimization" in the title tag so Google reads the right meaning.
+  - Standalone posts:
+    - [ ] "geo consultant"
+    - [ ] "which ai consulting agencies have the best geo capabilities"
+    - [ ] "how to select geo consultant"
+    - [ ] "how to improve geo performance without hiring specialized consultants"
+- [ ] **CB3·8: ChatGPT Marketing Agency: How Agencies Position Brands Inside LLM Chats**
+  - Source: Buyer Intent · Set 3
+  - Target queries: "chatgpt marketing agency" (40/mo · KD 0 · 0.52 comp); "how to appear in chatgpt answers as a marketing agency" (KD 0); "what is geo in digital marketing agencies" (KD 0)
+  - Angle: Agency owners adding AI search to their service menu, or brands hiring an agency for ChatGPT presence.
+  - Rankbox pitch (check against what ships): How agencies use Rankvolt as the engine behind their client AI search work.
+  - PDF flag: Mixed audience. Pick agency owners (they're Rankvolt buyers) and link brands to CB1·6.
+  - Standalone posts:
+    - [ ] "chatgpt marketing agency"
+    - [ ] "how to appear in chatgpt answers as a marketing agency"
+    - [ ] "what is geo in digital marketing agencies"
+
+## Phase 29: Audits, ROI & reporting
+
+The AI search audit (390/mo, KD 16), the business case, the ROI calculator and board reporting.
+
+**Needs:** Build CB6·3's ROI calculator and CB6·1's slide template as real downloads.
+
+- [ ] **CB1·1: How to Run an AI Search Visibility Audit (Framework & Free Checklist)**
+  - Source: Buyer Intent · Set 1
+  - Close to P10: set it apart and link to it
+  - Target queries: "ai search audit" (390/mo · KD 16 · $12.32 CPC · 0.61 comp); "ai search visibility checker" (390/mo · $12.46 CPC); "how to audit ai search visibility for brand" (70/mo · KD 0); "what agencies offer ai powered search visibility audit services" (40/mo · KD 0)
+  - Angle: CMOs and heads of growth who suspect they're missing AI traffic and need a structured audit to benchmark ChatGPT, Perplexity and Gemini presence against competitors.
+  - Rankbox pitch (check against what ships): Step-by-step DIY audit checklist, ending with Rankvolt's automated audit and ongoing tracking.
+  - PDF flag: Close to P10 (AEO audit, written) and P03. Set it apart: this is the buyer-side audit with a downloadable scorecard; link to P10 for the technical checks. "ai search visibility checker" wants a tool, so embed a free checker or link to one above the fold.
+  - Standalone posts:
+    - [ ] "ai search audit"
+    - [ ] "ai search visibility checker"
+    - [ ] "how to audit ai search visibility for brand"
+    - [ ] "what agencies offer ai powered search visibility audit services"
+- [ ] **CB5·3: How AI Search Monitoring Platforms Improve SEO Strategy**
+  - Source: Buyer Intent · Set 5
+  - Target queries: "how can an ai search monitoring platform improve seo strategy" (320/mo · KD 18 · $6.52 CPC · 0.33 comp); "is it best ai visibility platforms with seo capabilities" (140/mo · KD 0); "how to evaluate ai platform impact on seo performance" (20/mo · KD 0); "how to choose ai platform for seo and aeo 2026" (10/mo · KD 0)
+  - Angle: SEO directors writing internal business cases to add an AI search monitoring platform to their stack.
+  - Rankbox pitch (check against what ships): A downloadable RFP template and ROI model.
+  - PDF flag: "is it best ai visibility platforms with seo capabilities" is also in CB1·2, where it's written first. The RFP template is the link magnet; ship it as a real download.
+  - Standalone posts:
+    - [ ] "how can an ai search monitoring platform improve seo strategy"
+    - Repeat: "is it best ai visibility platforms with seo capabilities". Same query as CB1·2's, written once there.
+    - [ ] "how to evaluate ai platform impact on seo performance"
+    - [ ] "how to choose ai platform for seo and aeo 2026"
+- [ ] **CB6·3: Measuring ROI from Answer Engine Optimization (AEO) Strategies**
+  - Source: Buyer Intent · Set 6
+  - Target queries: "how to measure roi from answer engine optimization strategies" (KD 0 · 0 comp); "how to update seo strategy for aeo answer engine optimization" (30/mo · KD 0); "why answer engine optimization matters for modern b2b marketing strategies" (10/mo · KD 0); "can small businesses afford answer engine optimization aeo costs strategies" (KD 0)
+  - Angle: Finance and marketing leaders building the payback model for AEO software or retainers.
+  - Rankbox pitch (check against what ships): An interactive AEO ROI calculator.
+  - PDF flag: The calculator is the asset. Build it as a working tool; it will earn links a text post won't. Link to CB5·2 and CB1·3.
+  - Standalone posts:
+    - [ ] "how to measure roi from answer engine optimization strategies"
+    - [ ] "how to update seo strategy for aeo answer engine optimization"
+    - [ ] "why answer engine optimization matters for modern b2b marketing strategies"
+    - [ ] "can small businesses afford answer engine optimization aeo costs strategies"
+- [ ] **CB6·1: How to Report AI Search Visibility to the Board & Executive Leadership**
+  - Source: Buyer Intent · Set 6
+  - Close to E1: set it apart and link to it
+  - Target queries: "how to report on ai search visibility to the board" (30/mo · KD 0 · 0 comp); "which geo tools help cmos report ai search visibility" (20/mo · KD 0); "how to report ai search visibility to clients marketing agency" (10/mo · KD 0); "how to automate ai search visibility reports" (KD 0); "how to report ai search visibility to executives" (KD 0)
+  - Angle: VPs of Marketing, CMOs and agency directors who need reporting frameworks to show AI search ROI.
+  - Rankbox pitch (check against what ships): Downloadable executive slide template plus Rankvolt's export tools.
+  - PDF flag: Build the slide template with E1's metric names (Share of Model, Citation Density) so the two reinforce each other.
+  - Standalone posts:
+    - [ ] "how to report on ai search visibility to the board"
+    - [ ] "which geo tools help cmos report ai search visibility"
+    - [ ] "how to report ai search visibility to clients marketing agency"
+    - [ ] "how to automate ai search visibility reports"
+    - [ ] "how to report ai search visibility to executives"
+- [ ] **CB5·6: Conversational Search Optimization: Does It Increase SaaS Conversions?**
+  - Source: Buyer Intent · Set 5
+  - Close to C2: set it apart and link to it
+  - Target queries: "conversational search optimization" (70/mo · KD 14 · 0.06 comp); "how to optimize for ai search engines visibility conversions" (50/mo · KD 0); "does ai search optimization saas increase conversions" (10/mo · KD 0); "how businesses optimize content for conversational search" (KD 0)
+  - Angle: Growth marketers and founders checking whether conversational SEO drives revenue or just vanity metrics.
+  - Rankbox pitch (check against what ships): Conversion analysis of AI-referred visitors vs. organic.
+  - PDF flag: The research claims AI-referred users have "3–4x higher purchase intent" with no source. Cite a real study or your own GA4 data, or cut the number; C2 (parked) exists because this data is hard to get.
+  - Standalone posts:
+    - [ ] "conversational search optimization"
+    - [ ] "how to optimize for ai search engines visibility conversions"
+    - [ ] "does ai search optimization saas increase conversions"
+    - [ ] "how businesses optimize content for conversational search"
+
+## Phase 30: Enterprise & B2B
+
+Six small enterprise and B2B pages. Give each one job so they don't compete.
+
+**Needs:** Nothing extra.
+
+- [ ] **CB6·2: Enterprise AEO: How Multi-Brand Teams Choose Answer Engine Tools**
+  - Source: Buyer Intent · Set 6
+  - Target queries: "enterprise aeo" (20/mo · KD 0 · 0 comp); "what is answer engine optimization aeo enterprise tools platforms" (10/mo · KD 0); "how do enterprise aeo solutions compare to traditional seo tools" (KD 0); "how enterprise marketing teams choose aeo tools ai engine optimization" (KD 0); "how enterprise multi-brand companies manage aeo at portfolio scale" (KD 0)
+  - Angle: Enterprise SEO leads rolling out AEO across sub-brands, domains and international properties.
+  - Rankbox pitch (check against what ships): Multi-project organization, API publishing and security controls.
+  - PDF flag: Enterprise page #2 of five: this one owns tool selection for multi-brand portfolios.
+  - Standalone posts:
+    - [ ] "enterprise aeo"
+    - [ ] "what is answer engine optimization aeo enterprise tools platforms"
+    - [ ] "how do enterprise aeo solutions compare to traditional seo tools"
+    - [ ] "how enterprise marketing teams choose aeo tools ai engine optimization"
+    - [ ] "how enterprise multi-brand companies manage aeo at portfolio scale"
+- [ ] **CB2·8: Enterprise AI SEO: Scaling Content Creation & LLM Indexing for Global Brands**
+  - Source: Buyer Intent · Set 2
+  - Target queries: "enterprise ai seo" (10/mo · KD 0 · 0 comp); "how to use ai search optimization for enterprise seo" (30/mo · KD 0); "how do enterprise seo teams automate brief creation with ai" (20/mo · KD 0); "how much does enterprise ai seo software cost" (KD 0)
+  - Angle: Enterprise SEO directors figuring out governance, quality control and automation at scale without brand risk.
+  - Rankbox pitch (check against what ships): Rankvolt's editorial controls, citation grounding and CMS webhooks in enterprise workflows.
+  - PDF flag: Phase 30 has five enterprise pages. Give each one job: this one is content production at scale (briefs, governance).
+  - Standalone posts:
+    - [ ] "enterprise ai seo"
+    - [ ] "how to use ai search optimization for enterprise seo"
+    - [ ] "how do enterprise seo teams automate brief creation with ai"
+    - Repeat: "how much does enterprise ai seo software cost". Same query as CB1·3's, written once there.
+- [ ] **CB4·8: Enterprise Generative Engine Optimization: Security, Accuracy & Scale**
+  - Source: Buyer Intent · Set 4
+  - Close to CB6·7: set it apart and link to it
+  - Target queries: "how enterprise brands optimize content for ai-generated answers in search" (50/mo · KD 0 · 0 comp); "how enterprises optimize content for ai recommendations seo aeo" (KD 0); "how enterprise brands optimize content for ai-generated answers search platforms" (30/mo · KD 0)
+  - Angle: Enterprise content directors worried about brand safety, inaccurate quotes and legal liability.
+  - Rankbox pitch (check against what ships): Rankvolt's entity grounding and human-in-the-loop editorial controls.
+  - PDF flag: Same main query as CB6·7. This phase comes first, so the standalone is written here and CB6·7's shows as a repeat. Keep this one on risk, security and accuracy.
+  - Standalone posts:
+    - [ ] "how enterprise brands optimize content for ai-generated answers in search"
+    - [ ] "how enterprises optimize content for ai recommendations seo aeo"
+    - [ ] "how enterprise brands optimize content for ai-generated answers search platforms"
+- [ ] **CB6·7: How Enterprise Brands Optimize Content for AI-Generated Search Answers**
+  - Source: Buyer Intent · Set 6
+  - Close to CB4·8: set it apart and link to it
+  - Target queries: "how enterprise brands optimize content for ai-generated answers in search" (50/mo · KD 0 · 0 comp); "how enterprise brands optimize content for ai-generated answers search platforms" (30/mo · KD 0); "how enterprise brands optimize content for ai-generated search answers" (20/mo · KD 0); "how does llm optimization impact ai-generated search results" (30/mo · KD 0)
+  - Angle: Enterprise editorial teams rewriting guidelines and pipelines for LLM ingestion.
+  - Rankbox pitch (check against what ships): Semantic structure, information gain and machine-readable citations applied to every draft.
+  - PDF flag: Same main query as CB4·8 (written first there). Your rule keeps both; give this one the editorial-guidelines angle (a style guide enterprises can adopt) so the two don't compete.
+  - Standalone posts:
+    - Repeat: "how enterprise brands optimize content for ai-generated answers in search". Same query as CB4·8's, written once there.
+    - Repeat: "how enterprise brands optimize content for ai-generated answers search platforms". Same query as CB4·8's, written once there.
+    - [ ] "how enterprise brands optimize content for ai-generated search answers"
+    - [ ] "how does llm optimization impact ai-generated search results"
+- [ ] **CB1·7: B2B AEO: Answer Engine Optimization for SaaS & Enterprise Tech**
+  - Source: Buyer Intent · Set 1
+  - Close to P14: set it apart and link to it
+  - Target queries: "b2b aeo" (10/mo · KD 0 · 0 comp); "what is answer engine optimization aeo for b2b software companies" (70/mo · KD 0); "who are the best b2b aeo agencies" (30/mo · KD 0); "who are the best b2b aeo consultants" (20/mo · KD 0)
+  - Angle: B2B marketing leaders whose buyers use Perplexity and ChatGPT to shortlist vendors.
+  - Rankbox pitch (check against what ships): How B2B vendors structure comparison tables, feature specs and digital PR so AI cites them in software recommendation prompts.
+  - PDF flag: Close to P14 (B2B brand cited by ChatGPT, similar page live) and CB6·8. Set it apart: AEO across all engines for SaaS, with a vendor-shortlist walkthrough.
+  - Standalone posts:
+    - [ ] "b2b aeo"
+    - [ ] "what is answer engine optimization aeo for b2b software companies"
+    - [ ] "who are the best b2b aeo agencies"
+    - [ ] "who are the best b2b aeo consultants"
+- [ ] **CB6·8: Generative Search Optimization for B2B Tech: RFP & Vendor Procurement Checklist**
+  - Source: Buyer Intent · Set 6
+  - Close to CB5·3: set it apart and link to it
+  - Target queries: "is it top answer engine optimization strategies for ai products" (10/mo · KD 0 · 0 comp); "what is answer engine optimization aeo vs seo differences strategies" (10/mo · KD 0); "how is answer engine optimization aeo changing b2b marketing strategy" (10/mo · KD 0)
+  - Angle: B2B SaaS marketing heads preparing an RFP for GEO vendors or content software.
+  - Rankbox pitch (check against what ships): 10 criteria for evaluating GEO platforms (API connectors, multi-model tracking, CMS publishing).
+  - PDF flag: Weakest queries in the batch (30/mo total, garbled phrasing). The RFP checklist is the value; merge-worthy with CB5·3's RFP template, but kept per your rule. Link the two.
+  - Standalone posts:
+    - [ ] "is it top answer engine optimization strategies for ai products"
+    - [ ] "what is answer engine optimization aeo vs seo differences strategies"
+    - [ ] "how is answer engine optimization aeo changing b2b marketing strategy"
+
+## Phase 31: Reputation, citations & channels
+
+AI reputation management (320/mo, $14.48 CPC), how ChatGPT picks citations, answer engine marketing, link-building vendors and programmatic SEO (KD 9).
+
+**Needs:** Nothing extra.
+
+- [ ] **CB1·4: AI Reputation Management: Protecting Your Brand When LLMs Hallucinate**
+  - Source: Buyer Intent · Set 1
+  - Close to OB1·2: set it apart and link to it
+  - Target queries: "ai reputation management" (320/mo · KD 26 · $14.48 CPC · 0.24 comp); "how ai overviews and generative search affect brand reputation management" (40/mo · KD 0); "how brands manage reputation on ai platforms" (10/mo · KD 0); "how enterprises manage brand reputation in ai answers" (10/mo · KD 0)
+  - Angle: Enterprise buyers whose brand is misrepresented by AI: outdated pricing, false features, missing certifications.
+  - Rankbox pitch (check against what ships): How to seed authoritative, structured sources and update answers across ChatGPT and Perplexity before hallucinations cost sales.
+  - PDF flag: Close to P07 and OB1·2 (both written). Set it apart: frame it as an ongoing reputation program (monitoring, escalation, owners), not a one-off fix. Some "ai reputation management" searchers mean using AI tools for classic ORM; cover that in one section so the page matches both.
+  - Standalone posts:
+    - [ ] "ai reputation management"
+    - [ ] "how ai overviews and generative search affect brand reputation management"
+    - [ ] "how brands manage reputation on ai platforms"
+    - [ ] "how enterprises manage brand reputation in ai answers"
+- [ ] **CB4·6: How ChatGPT Decides Sources & Citations (And How to Get Picked)**
+  - Source: Buyer Intent · Set 4
+  - Close to A3: set it apart and link to it
+  - Target queries: "how does chatgpt decide citations or sources when browsing" (210/mo · KD 0 · 0 comp); "how does chatgpt with browsing decide citations sources" (50/mo · KD 0); "how does chatgpt decide citations or sources in responses" (40/mo · KD 0); "how to track brand citations in chatgpt and perplexity" (30/mo · KD 0)
+  - Angle: Content marketers who want the criteria OpenAI's search uses to pick citation URLs.
+  - Rankbox pitch (check against what ships): How OAI-SearchBot retrieval works and how Rankvolt's Citation-Ready Writer formats articles for citation slots.
+  - PDF flag: Close to A3 (Reverse-Engineering ChatGPT Search Citations) and the written "how chatgpt search decides citations" standalone. OpenAI doesn't publish its ranking criteria, so split documented facts from observed patterns.
+  - Standalone posts:
+    - [ ] "how does chatgpt decide citations or sources when browsing"
+    - [ ] "how does chatgpt with browsing decide citations sources"
+    - [ ] "how does chatgpt decide citations or sources in responses"
+    - [ ] "how to track brand citations in chatgpt and perplexity"
+- [ ] **CB3·7: Answer Engine Marketing (AEM): Finding & Closing Gaps in AI Search Answers**
+  - Source: Buyer Intent · Set 3
+  - Close to P17: set it apart and link to it
+  - Target queries: "answer engine marketing" (90/mo · KD 42 · $8.66 CPC · 0.37 comp); "how to identify gaps in answer engine visibility digital marketing" (50/mo · KD 0); "how to identify gaps in answer engine visibility b2b marketing" (30/mo · KD 0); "how to monitor competitors in answer engines digital marketing" (30/mo · KD 0)
+  - Angle: Strategists who want a method to find where competitors win AI answers and take those citations.
+  - Rankbox pitch (check against what ships): Step-by-step gap analysis with templates, positioning Rankvolt's Answer-Space Research.
+  - PDF flag: Close to P17 (benchmark AI citations vs competitors, written). Set it apart: gap-closing workflow with a template, not measurement. KD 42 is high for the batch.
+  - Standalone posts:
+    - [ ] "answer engine marketing"
+    - [ ] "how to identify gaps in answer engine visibility digital marketing"
+    - [ ] "how to identify gaps in answer engine visibility b2b marketing"
+    - [ ] "how to monitor competitors in answer engines digital marketing"
+- [ ] **CB2·5: AI Link Building: How to Earn Backlinks & Citations That LLMs Actually Read**
+  - Source: Buyer Intent · Set 2
+  - Close to OB2·1: set it apart and link to it
+  - Target queries: "ai link building" (140/mo · KD 24 · $11.26 CPC · 0.23 comp); "what's the best ai link building agency for high-quality backlinks" (KD 0); "which ai-powered link-building agency is best for ecommerce seo" (KD 0); "does link building help with ai visibility" (KD 0)
+  - Angle: SEO heads evaluating link-building vendors and asking whether guest posts help with ChatGPT and Perplexity.
+  - Rankbox pitch (check against what ships): Authority link strategies designed for RAG retrieval and knowledge-graph verification.
+  - PDF flag: "ai link building" and "does link building help with ai visibility" are OB2·1's queries and both standalones are written. Make this the vendor-buying guide (what to buy, what to avoid, pricing) and lead with the agency queries.
+  - Standalone posts:
+    - Repeat: "ai link building". Same query as OB2·1's, written once there.
+    - [ ] "what's the best ai link building agency for high-quality backlinks"
+    - [ ] "which ai-powered link-building agency is best for ecommerce seo"
+    - Repeat: "does link building help with ai visibility". Same query as OB2·1's, written once there.
+- [ ] **CB2·4: Programmatic SEO Agency vs. In-House AI Content Automation**
+  - Source: Buyer Intent · Set 2
+  - Target queries: "programmatic seo agency" (210/mo · KD 9 · $18.97 CPC · 0.29 comp); "seo agency for software companies" (480/mo · $19.06 CPC); "programmatic seo tools" (140/mo · $8.98 CPC)
+  - Angle: SaaS founders and growth leads exploring programmatic SEO to capture thousands of long-tail queries.
+  - Rankbox pitch (check against what ships): The engineering cost of building custom pSEO databases vs. an autopilot publishing engine with CMS connectors.
+  - PDF flag: Lowest KD with real CPC in the batch (KD 9). Be honest that Google's scaled-content policy targets thin programmatic pages; show what makes pSEO pages safe.
+  - Standalone posts:
+    - [ ] "programmatic seo agency"
+    - [ ] "seo agency for software companies"
+    - [ ] "programmatic seo tools"
+
+## Phase 32: Long tail
+
+The smallest queries in the batch: AI Overview tools, ranking software, multi-engine audits, white-label, AI SEM, restaurants and AI search agencies.
+
+**Needs:** Nothing extra.
+
+- [ ] **CB5·5: Google AI Overview Tracking Tools: What's Best to Monitor AI Overview Links?**
+  - Source: Buyer Intent · Set 5
+  - Close to LH5·1: set it apart and link to it
+  - Target queries: "google ai overview tool" (50/mo · KD 0 · 0.33 comp); "which tools are best to track google ai overviews" (10/mo · KD 0); "how to optimize for google ai overviews tools and strategies" (10/mo · KD 0); "what are the best tools to track google ai overviews" (KD 0)
+  - Angle: SaaS and e-commerce SEO leads pushed below AI Overviews looking for tracking tools.
+  - Rankbox pitch (check against what ships): Rankvolt monitoring Google AI Overviews and LLMs side by side.
+  - PDF flag: Title changed from "SGE": Google retired the Search Generative Experience name when AI Overviews launched in 2024. Close to P12, LH4·7 and LH5·1; this is tools only. Only claim AI Overview tracking if Rankvolt actually does it.
+  - Standalone posts:
+    - [ ] "google ai overview tool"
+    - [ ] "which tools are best to track google ai overviews"
+    - [ ] "how to optimize for google ai overviews tools and strategies"
+    - [ ] "what are the best tools to track google ai overviews"
+- [ ] **CB6·5: AI Search Ranking Software: Native LLM Trackers vs. Legacy SERP Checkers**
+  - Source: Buyer Intent · Set 6
+  - Close to CB4·3: set it apart and link to it
+  - Target queries: "ai search ranking software" (10/mo · KD 0 · 0 comp); "how to check website ranking in ai-powered search results" (40/mo · KD 0); "chatgpt rank checker" (20/mo · KD 0); "how to check brand ranking in chatgpt answers" (KD 0)
+  - Angle: SEO teams moving off rank checkers that only read Google's 10 blue links.
+  - Rankbox pitch (check against what ships): Why legacy rank tracking is blind to LLMs, and Rankvolt's answer-space tracking.
+  - PDF flag: Near-duplicate of CB4·3; two of these queries are written there first. Keep this one to the legacy-vs-native comparison.
+  - Standalone posts:
+    - [ ] "ai search ranking software"
+    - Repeat: "how to check website ranking in ai-powered search results". Same query as CB4·3's, written once there.
+    - Repeat: "chatgpt rank checker". Same query as CB4·3's, written once there.
+    - [ ] "how to check brand ranking in chatgpt answers"
+- [ ] **CB5·7: Multi-Engine GEO: Auditing Your Brand Across ChatGPT, Claude & Copilot**
+  - Source: Buyer Intent · Set 5
+  - Close to CB1·1: set it apart and link to it
+  - Target queries: "ai searchability" (volume unclear · KD 20 · $1.53 CPC); "how to optimize for perplexity chatgpt google ai overviews tools" (10/mo · KD 0); "how marketers measure brand presence in ai engines chatgpt perplexity" (KD 0)
+  - Angle: Teams wanting one score for how findable their product is across all major AI engines.
+  - Rankbox pitch (check against what ships): Step-by-step audit using Rankvolt's multi-engine scoring.
+  - PDF flag: The research lists "8,100/mo macro" for "ai searchability"; that's a broad parent-topic figure, not this query's volume. Treat this as a low-volume page. Close to CB1·1 (audit) and A5 (multi-engine study).
+  - Standalone posts:
+    - [ ] "ai searchability"
+    - [ ] "how to optimize for perplexity chatgpt google ai overviews tools"
+    - [ ] "how marketers measure brand presence in ai engines chatgpt perplexity"
+- [ ] **CB5·8: Agency White-Label GEO Platforms: Scaling Client AI Search Services**
+  - Source: Buyer Intent · Set 5
+  - Close to CB4·2: set it apart and link to it
+  - Target queries: "which geo platform lets agencies manage multiple client accounts" (50/mo · KD 0 · 0 comp); "how to choose a geo platform for e-commerce brands" (20/mo · KD 0); "which geo platform has crawler logs and visitor analytics together" (20/mo · KD 0)
+  - Angle: Agency owners who need software to deliver GEO audits and content to retainer clients.
+  - Rankbox pitch (check against what ships): Rankvolt's API access, CMS webhooks and multi-domain capabilities.
+  - PDF flag: Only claim white-label or multi-client features Rankvolt has today. Its main query is also in CB4·2, which is written first.
+  - Standalone posts:
+    - Repeat: "which geo platform lets agencies manage multiple client accounts". Same query as CB4·2's, written once there.
+    - [ ] "how to choose a geo platform for e-commerce brands"
+    - [ ] "which geo platform has crawler logs and visitor analytics together"
+- [ ] **CB3·5: AI Search Engine Marketing (AI SEM): Paid vs. Organic LLM Visibility**
+  - Source: Buyer Intent · Set 3
+  - Close to OB2·2: set it apart and link to it
+  - Target queries: "ai search engine marketing" (20/mo · KD 0 · $14.97 CPC · 0.66 comp)
+  - Angle: Advertisers exploring sponsored placements and organic optimization inside AI engines.
+  - Rankbox pitch (check against what ships): Why organic citation (GEO) compounds while sponsored placements don't.
+  - PDF flag: Close to OB2·2 (ChatGPT search ads, written). Check what ad products ChatGPT, Perplexity and Copilot actually run the week you publish; this changes fast.
+  - Standalone posts:
+    - [ ] "ai search engine marketing"
+- [ ] **CB6·6: How Restaurant & Hospitality Brands Optimize for AI Overviews & Local LLMs**
+  - Source: Buyer Intent · Set 6
+  - Close to LH1·2: set it apart and link to it
+  - Target queries: "how restaurant brands optimize for generative search ai overview" (110/mo · KD 0 · 0 comp); "how to optimize brand for ai search engines generative visibility" (30/mo · KD 0); "how to optimize content for generative ai search engines" (30/mo · KD 0)
+  - Angle: Franchise and multi-location hospitality marketers losing foot traffic to AI-recommended competitors.
+  - Rankbox pitch (check against what ships): Local entity schema, TripAdvisor/Yelp co-citation and automated publishing.
+  - PDF flag: Off Rankvolt's B2B SaaS audience; traffic, not customers. Close to LH1·2 (local SEO in ChatGPT, written).
+  - Standalone posts:
+    - [ ] "how restaurant brands optimize for generative search ai overview"
+    - [ ] "how to optimize brand for ai search engines generative visibility"
+    - [ ] "how to optimize content for generative ai search engines"
+- [ ] **CB6·4: AI Search Marketing Agencies: Vetting Top Firms vs. Software Automation**
+  - Source: Buyer Intent · Set 6
+  - Close to CB3·4: set it apart and link to it
+  - Target queries: "ai search marketing agency" (30/mo · KD 0 · 0 comp); "who are the top ai search marketing agencies" (10/mo · KD 0); "what b2b marketing agency can optimize content for ai search" (10/mo · KD 0); "how to report ai search visibility to clients marketing agency" (10/mo · KD 0)
+  - Angle: Brands looking for agency recommendations for ChatGPT, Perplexity and Copilot.
+  - Rankbox pitch (check against what ships): Agency deliverables vs. in-house writers using Rankvolt's Citation-Ready engine.
+  - PDF flag: Fifth agency page (with CB2·1, CB3·4, CB1·6, CB3·8). Close to CB3·4. Naming "top agencies" means naming real firms; only list ones you've checked.
+  - Standalone posts:
+    - [ ] "ai search marketing agency"
+    - [ ] "who are the top ai search marketing agencies"
+    - [ ] "what b2b marketing agency can optimize content for ai search"
+    - Repeat: "how to report ai search visibility to clients marketing agency". Same query as CB6·1's, written once there.

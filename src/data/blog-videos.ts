@@ -27,7 +27,7 @@ export interface BlogVideo {
   summary: string;
 }
 
-export const VIDEOS_CHECKED = "2026-09-30";
+export const VIDEOS_CHECKED = "2026-10-01";
 
 export const BLOG_VIDEOS: Record<string, BlogVideo> = {
   sq55KB5icQ4: {
@@ -201,6 +201,24 @@ export const BLOG_VIDEOS: Record<string, BlogVideo> = {
     seconds: 148,
     summary:
       "OpenAI's dots are always-on agents powered by GPT-6 Astra, with their own cloud computer, that connect to over 4,000 apps through plugins and work toward your goals around the clock.",
+  },
+  CrzUP6MmBW4: {
+    post: "dynamic-rendering-seo",
+    title: "Dynamic Rendering for JavaScript web apps - JavaScript SEO",
+    channel: "Google Search Central",
+    uploadDate: "2019-04-17T09:37:43-07:00",
+    seconds: 200,
+    summary:
+      "In the JavaScript SEO series, Martin Splitt shows how to implement dynamic rendering, switching between client-side rendered and pre-rendered content.",
+  },
+  WDhruDqb5nM: {
+    post: "edge-seo-for-ai-cloudflare-workers",
+    title: "Cloudflare Workers Explained",
+    channel: "Cloudflare Developers",
+    uploadDate: "2026-06-23T07:15:35-07:00",
+    seconds: 322,
+    summary:
+      "How Cloudflare Workers work and why they change backend architecture, compared with traditional Node.js and Express servers.",
   },
 };
 

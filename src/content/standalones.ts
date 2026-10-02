@@ -6,6 +6,14 @@
  * (scripts/blog-schedule.ts) publishes a hub before any of its standalones.
  */
 export const STANDALONES: Record<string, string> = {
+  "applebot-user-agent": "applebot-apple-intelligence-search",
+  "ai-crawler-robots-txt": "ai-crawler-robots-txt-guide",
+  "block-ai-bots-cloudflare": "cloudflare-ai-bot-management",
+  "cloudflare-ai-bots": "cloudflare-ai-bot-management",
+  "prerender-seo": "dynamic-rendering-prerendering-ai-crawlers",
+  "dynamic-rendering-seo": "dynamic-rendering-prerendering-ai-crawlers",
+  "what-is-edge-seo": "edge-seo-for-ai-cloudflare-workers",
+  "edge-seo": "edge-seo-for-ai-cloudflare-workers",
   "how-user-search-intent-evolves-with-conversational-ai": "death-of-10-blue-links",
   "how-to-measure-roi-from-zero-click-searches": "headless-brand-zero-click",
   "zero-click-searches": "headless-brand-zero-click",

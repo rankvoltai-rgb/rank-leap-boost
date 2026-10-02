@@ -42,13 +42,13 @@ Every AI crawler in the table does one of five jobs. The job decides what a bloc
 
 Anyone can type "GPTBot" into a user-agent header. So the column that matters most is proof: how you can tell a real AI crawler from a scraper wearing its name. We call the five levels the Proof Ladder. Each AI crawler sits on the highest rung its vendor supports.
 
-| Rung | What proves the request is real | Bots on this rung |
-| --- | --- | --- |
-| 1. Signed | A Web Bot Auth signature (RFC 9421) checked against the vendor's public keys | ChatGPT agent, Manus, YouBot; Google is testing it |
-| 2. DNS | Reverse DNS lands on the vendor's domain, and forward DNS points back | Googlebot, Bingbot, Applebot, CCBot, YouBot |
-| 3. IP list | The source IP sits in a range the vendor publishes | OpenAI, Anthropic, Perplexity, Amazon, Mistral, DuckDuckGo |
-| 4. Name only | A documented token, but no way to check it | Meta's bots, `MistralAI-Training` |
-| 5. Nothing | No vendor documentation at all | `Bytespider`, xAI's fetches, DeepSeek |
+| Rung         | What proves the request is real                                              | Bots on this rung                                          |
+| ------------ | ---------------------------------------------------------------------------- | ---------------------------------------------------------- |
+| 1. Signed    | A Web Bot Auth signature (RFC 9421) checked against the vendor's public keys | ChatGPT agent, Manus, YouBot; Google is testing it         |
+| 2. DNS       | Reverse DNS lands on the vendor's domain, and forward DNS points back        | Googlebot, Bingbot, Applebot, CCBot, YouBot                |
+| 3. IP list   | The source IP sits in a range the vendor publishes                           | OpenAI, Anthropic, Perplexity, Amazon, Mistral, DuckDuckGo |
+| 4. Name only | A documented token, but no way to check it                                   | Meta's bots, `MistralAI-Training`                          |
+| 5. Nothing   | No vendor documentation at all                                               | `Bytespider`, xAI's fetches, DeepSeek                      |
 
 The rule that follows is simple. **Allow only from rungs 1 to 3. Block at any rung.** A block on a user agent is safe even if the name is faked, because the faker gets blocked too. An allow on a user agent alone, such as a firewall skip rule that matches "PerplexityBot", opens a hole for every scraper that copies the string.
 
@@ -56,42 +56,42 @@ The rule that follows is simple. **Allow only from rungs 1 to 3. Block at any ru
 
 Tokens are what to match in logs and robots.txt. The robots.txt column paraphrases or quotes the vendor. "Proof" uses the rungs above.
 
-| Token | Vendor | Job | robots.txt, per the vendor | Proof |
-| --- | --- | --- | --- | --- |
-| `GPTBot` | OpenAI | Training | Yes: a block means "should not be used in training" | IP list |
-| `OAI-SearchBot` | OpenAI | Search | Yes; blocked sites may still show as links | IP list |
-| `ChatGPT-User` | OpenAI | Live fetch | "May not apply" | IP list |
-| `OAI-AdsBot` | OpenAI | Ad page review | Not stated; visits submitted ad pages only | IP list |
-| None (ChatGPT agent) | OpenAI | Agent | Not stated | Signed |
-| `ClaudeBot` | Anthropic | Training | Yes, plus Crawl-delay | IP list |
-| `Claude-SearchBot` | Anthropic | Search | Yes, plus Crawl-delay | IP list |
-| `Claude-User` | Anthropic | Live fetch | Yes, plus Crawl-delay | IP list |
-| `PerplexityBot` | Perplexity | Search; "not used" for AI models | Yes | IP list |
-| `Perplexity-User` | Perplexity | Live fetch | "Generally ignores" | IP list |
-| `Googlebot` | Google | Search, incl. AI Overviews and AI Mode | Yes | DNS, IP list |
-| `Google-Extended` | Google | Token: Gemini training and grounding | Yes (token only) | No traffic |
-| `Google-CloudVertexBot` | Google | Owner-requested Vertex AI crawls | Yes; falls back to Googlebot rules | DNS, IP list |
-| `Google-Agent` | Google | Agent | Ignored (user-triggered) | IP list |
-| `Google-GeminiNotebook` | Google | Live fetch | Ignored (user-triggered) | IP list |
-| `Applebot` | Apple | Search; data may train | Yes; uses Googlebot rules if unnamed | DNS, IP list |
-| `Applebot-Extended` | Apple | Token: training opt-out | Yes (token only) | No traffic |
-| `bingbot` | Microsoft | Search (Bing's index, which Copilot uses) | Yes, plus Crawl-delay | DNS, IP list |
-| `meta-externalagent` | Meta | Training or product indexing | Yes | Name only |
-| `meta-webindexer` | Meta | Search (Meta AI) | Yes | Name only |
-| `meta-externalfetcher` | Meta | Live fetch | "May bypass" | Name only |
-| `Amazonbot` | Amazon | Products; may train | Yes; no Crawl-delay | IP list |
-| `Amzn-SearchBot` | Amazon | Search (Alexa) | Yes; copies other search bots' rules if unnamed | IP list |
-| `Amzn-User` | Amazon | Live fetch | "May not follow all" | IP list |
-| `MistralAI-Training` | Mistral | Training | Yes | Name only |
-| `MistralAI-Index` | Mistral | Search | Yes (listed as a robots.txt tag) | IP list |
-| `MistralAI-User` | Mistral | Live fetch | Token "governs" user fetches | IP list |
-| `DuckAssistBot` | DuckDuckGo | Live crawl for AI answers | Yes, after 72 hours | IP list |
-| `YouBot` | You.com | Search | Yes, plus Crawl-delay | Signed, DNS, IP range |
-| `CCBot` | Common Crawl | Open dataset | Yes, plus Crawl-delay | DNS, IP list |
-| `Bytespider` | ByteDance | Training, per Cloudflare | Undocumented | Nothing |
-| `Manus-User` (unconfirmed) | Manus | Agent | Undocumented | Signed |
-| None | xAI (Grok) | Live fetch | Undocumented | Nothing |
-| None | DeepSeek | Unknown | Undocumented | Nothing |
+| Token                      | Vendor       | Job                                       | robots.txt, per the vendor                          | Proof                 |
+| -------------------------- | ------------ | ----------------------------------------- | --------------------------------------------------- | --------------------- |
+| `GPTBot`                   | OpenAI       | Training                                  | Yes: a block means "should not be used in training" | IP list               |
+| `OAI-SearchBot`            | OpenAI       | Search                                    | Yes; blocked sites may still show as links          | IP list               |
+| `ChatGPT-User`             | OpenAI       | Live fetch                                | "May not apply"                                     | IP list               |
+| `OAI-AdsBot`               | OpenAI       | Ad page review                            | Not stated; visits submitted ad pages only          | IP list               |
+| None (ChatGPT agent)       | OpenAI       | Agent                                     | Not stated                                          | Signed                |
+| `ClaudeBot`                | Anthropic    | Training                                  | Yes, plus Crawl-delay                               | IP list               |
+| `Claude-SearchBot`         | Anthropic    | Search                                    | Yes, plus Crawl-delay                               | IP list               |
+| `Claude-User`              | Anthropic    | Live fetch                                | Yes, plus Crawl-delay                               | IP list               |
+| `PerplexityBot`            | Perplexity   | Search; "not used" for AI models          | Yes                                                 | IP list               |
+| `Perplexity-User`          | Perplexity   | Live fetch                                | "Generally ignores"                                 | IP list               |
+| `Googlebot`                | Google       | Search, incl. AI Overviews and AI Mode    | Yes                                                 | DNS, IP list          |
+| `Google-Extended`          | Google       | Token: Gemini training and grounding      | Yes (token only)                                    | No traffic            |
+| `Google-CloudVertexBot`    | Google       | Owner-requested Vertex AI crawls          | Yes; falls back to Googlebot rules                  | DNS, IP list          |
+| `Google-Agent`             | Google       | Agent                                     | Ignored (user-triggered)                            | IP list               |
+| `Google-GeminiNotebook`    | Google       | Live fetch                                | Ignored (user-triggered)                            | IP list               |
+| `Applebot`                 | Apple        | Search; data may train                    | Yes; uses Googlebot rules if unnamed                | DNS, IP list          |
+| `Applebot-Extended`        | Apple        | Token: training opt-out                   | Yes (token only)                                    | No traffic            |
+| `bingbot`                  | Microsoft    | Search (Bing's index, which Copilot uses) | Yes, plus Crawl-delay                               | DNS, IP list          |
+| `meta-externalagent`       | Meta         | Training or product indexing              | Yes                                                 | Name only             |
+| `meta-webindexer`          | Meta         | Search (Meta AI)                          | Yes                                                 | Name only             |
+| `meta-externalfetcher`     | Meta         | Live fetch                                | "May bypass"                                        | Name only             |
+| `Amazonbot`                | Amazon       | Products; may train                       | Yes; no Crawl-delay                                 | IP list               |
+| `Amzn-SearchBot`           | Amazon       | Search (Alexa)                            | Yes; copies other search bots' rules if unnamed     | IP list               |
+| `Amzn-User`                | Amazon       | Live fetch                                | "May not follow all"                                | IP list               |
+| `MistralAI-Training`       | Mistral      | Training                                  | Yes                                                 | Name only             |
+| `MistralAI-Index`          | Mistral      | Search                                    | Yes (listed as a robots.txt tag)                    | IP list               |
+| `MistralAI-User`           | Mistral      | Live fetch                                | Token "governs" user fetches                        | IP list               |
+| `DuckAssistBot`            | DuckDuckGo   | Live crawl for AI answers                 | Yes, after 72 hours                                 | IP list               |
+| `YouBot`                   | You.com      | Search                                    | Yes, plus Crawl-delay                               | Signed, DNS, IP range |
+| `CCBot`                    | Common Crawl | Open dataset                              | Yes, plus Crawl-delay                               | DNS, IP list          |
+| `Bytespider`               | ByteDance    | Training, per Cloudflare                  | Undocumented                                        | Nothing               |
+| `Manus-User` (unconfirmed) | Manus        | Agent                                     | Undocumented                                        | Signed                |
+| None                       | xAI (Grok)   | Live fetch                                | Undocumented                                        | Nothing               |
+| None                       | DeepSeek     | Unknown                                   | Undocumented                                        | Nothing               |
 
 ### What each vendor adds to the table
 
@@ -103,7 +103,7 @@ Tokens are what to match in logs and robots.txt. The robots.txt column paraphras
 
 **Google.** AI Overviews and AI Mode use Googlebot's crawl, and Google's [AI features page](https://developers.google.com/search/docs/appearance/ai-features) says robots.txt rules for Googlebot are "the control." `Google-Extended` governs training and "grounding ... in Gemini Apps and Grounding with Google Search on Vertex AI," with no effect on Search. `Google-CloudVertexBot` only crawls sites whose owners asked it to. See our [Gemini guide](/ai-seo/gemini) for what each control switches off.
 
-**Apple, Amazon and Microsoft.** [Applebot](https://support.apple.com/en-us/119829) follows your Googlebot group when you don't name it, and ignores `Crawl-delay`. [Amzn-SearchBot](https://developer.amazon.com/amazonbot) copies the rules you give "other search bots." Amazon's bots also read a `noarchive` robots meta tag as "do not use the page for model training." Microsoft documents no Copilot crawler at all. Its [webmaster guidelines](https://www.bing.com/webmasters/help/webmaster-guidelines-30fba23a) say Bing and Copilot search experiences "rely on the same core crawling, indexing, and ranking foundation," which is why our [Copilot guide](/ai-seo/copilot) starts with Bingbot.
+**Apple, Amazon and Microsoft.** [Applebot](https://support.apple.com/en-us/119829) follows your Googlebot group when you don't name it, and ignores `Crawl-delay`. Our [Applebot guide](/blog/applebot-apple-intelligence-search) covers what it powers, how it renders and how to verify it. [Amzn-SearchBot](https://developer.amazon.com/amazonbot) copies the rules you give "other search bots." Amazon's bots also read a `noarchive` robots meta tag as "do not use the page for model training." Microsoft documents no Copilot crawler at all. Its [webmaster guidelines](https://www.bing.com/webmasters/help/webmaster-guidelines-30fba23a) say Bing and Copilot search experiences "rely on the same core crawling, indexing, and ranking foundation," which is why our [Copilot guide](/ai-seo/copilot) starts with Bingbot.
 
 **Meta, Mistral, DuckDuckGo and You.com.** Meta's [crawler page](https://developers.facebook.com/docs/sharing/webmasters/web-crawlers/) (updated 21 May 2026) says allowing `meta-webindexer` "helps us cite and link to your content in Meta AI's responses," but it lists no IP ranges. [Mistral](https://docs.mistral.ai/robots) publishes lists for its index and user bots, not for `MistralAI-Training`. DuckDuckGo says `DuckAssistBot` data "is not used in any way to train AI models." [YouBot](https://you.com/docs/youbot) caches robots.txt for 30 minutes, the shortest window here.
 
@@ -113,19 +113,19 @@ Tokens are what to match in logs and robots.txt. The robots.txt column paraphras
 
 Nine of these vendors use the same JSON shape: a `prefixes` array of `ipv4Prefix` or `ipv6Prefix` entries. Dates are each file's own `creationTime` field on 28 September 2026. An old date isn't an error, but Microsoft asks you to refresh its list daily anyway.
 
-| Vendor | List | List dated |
-| --- | --- | --- |
-| OpenAI | `openai.com/gptbot.json`, `searchbot.json`, `chatgpt-user.json`, `adsbot.json` | 22 Sep, 2 Jan, 25 Sep, 12 May 2026 |
-| Anthropic | `claude.com/crawling/bots.json` (all three bots) | 18 Aug 2026 |
-| Perplexity | `perplexity.com/perplexitybot.json`, `perplexity-user.json` | 7 Feb 2025, 17 Oct 2025 |
-| Google | `developers.google.com/static/crawling/ipranges/common-crawlers.json` | 25 Sep 2026 |
-| Apple | `search.developer.apple.com/applebot.json` | 15 Sep 2026 |
-| Microsoft | `bing.com/toolbox/bingbot.json` | 3 Jan 2024 |
-| Mistral | `mistral.ai/mistralai-index-ips.json`, `mistralai-user-ips.json` | 19 Apr 2026, 19 Feb 2025 |
-| DuckDuckGo | `duckduckgo.com/duckassistbot.json` | 1 Sep 2026 |
-| Common Crawl | `index.commoncrawl.org/ccbot.json` | 11 Aug 2026 |
-| Amazon | Three web pages under `developer.amazon.com/amazonbot/` | 8 Sep 2026 (two), 4 Nov 2025 (Amzn-User) |
-| You.com | One range in its docs: `68.67.112.0/24` | Not dated |
+| Vendor       | List                                                                           | List dated                               |
+| ------------ | ------------------------------------------------------------------------------ | ---------------------------------------- |
+| OpenAI       | `openai.com/gptbot.json`, `searchbot.json`, `chatgpt-user.json`, `adsbot.json` | 22 Sep, 2 Jan, 25 Sep, 12 May 2026       |
+| Anthropic    | `claude.com/crawling/bots.json` (all three bots)                               | 18 Aug 2026                              |
+| Perplexity   | `perplexity.com/perplexitybot.json`, `perplexity-user.json`                    | 7 Feb 2025, 17 Oct 2025                  |
+| Google       | `developers.google.com/static/crawling/ipranges/common-crawlers.json`          | 25 Sep 2026                              |
+| Apple        | `search.developer.apple.com/applebot.json`                                     | 15 Sep 2026                              |
+| Microsoft    | `bing.com/toolbox/bingbot.json`                                                | 3 Jan 2024                               |
+| Mistral      | `mistral.ai/mistralai-index-ips.json`, `mistralai-user-ips.json`               | 19 Apr 2026, 19 Feb 2025                 |
+| DuckDuckGo   | `duckduckgo.com/duckassistbot.json`                                            | 1 Sep 2026                               |
+| Common Crawl | `index.commoncrawl.org/ccbot.json`                                             | 11 Aug 2026                              |
+| Amazon       | Three web pages under `developer.amazon.com/amazonbot/`                        | 8 Sep 2026 (two), 4 Nov 2025 (Amzn-User) |
+| You.com      | One range in its docs: `68.67.112.0/24`                                        | Not dated                                |
 
 Amazon's lists are JSON pasted into HTML pages, and its SearchBot list names the field `ip_prefix` instead. Scripts that parse the other nine need a special case for it. Google's user-triggered fetchers and agents have their own files, linked from its [verification page](https://developers.google.com/crawling/docs/crawlers-fetchers/verify-google-requests).
 
@@ -135,18 +135,18 @@ A common AI crawler question is how `OAI-SearchBot` differs from `GPTBot`. The a
 
 Most vendors now follow the same pattern:
 
-| Vendor | Training | Search index | Live fetch |
-| --- | --- | --- | --- |
-| OpenAI | `GPTBot` | `OAI-SearchBot` | `ChatGPT-User` |
-| Anthropic | `ClaudeBot` | `Claude-SearchBot` | `Claude-User` |
-| Perplexity | None documented | `PerplexityBot` | `Perplexity-User` |
-| Google | `Google-Extended` (token) | `Googlebot` | `Google-Agent`, `Google-GeminiNotebook` |
-| Apple | `Applebot-Extended` (token) | `Applebot` | None documented |
-| Meta | `meta-externalagent` | `meta-webindexer` | `meta-externalfetcher` |
-| Amazon | `Amazonbot` | `Amzn-SearchBot` | `Amzn-User` |
-| Mistral | `MistralAI-Training` | `MistralAI-Index` | `MistralAI-User` |
-| Microsoft | None separate | `bingbot` | None documented |
-| DuckDuckGo | None ("not used in any way to train") | `DuckDuckBot` (web search) | `DuckAssistBot` |
+| Vendor     | Training                              | Search index               | Live fetch                              |
+| ---------- | ------------------------------------- | -------------------------- | --------------------------------------- |
+| OpenAI     | `GPTBot`                              | `OAI-SearchBot`            | `ChatGPT-User`                          |
+| Anthropic  | `ClaudeBot`                           | `Claude-SearchBot`         | `Claude-User`                           |
+| Perplexity | None documented                       | `PerplexityBot`            | `Perplexity-User`                       |
+| Google     | `Google-Extended` (token)             | `Googlebot`                | `Google-Agent`, `Google-GeminiNotebook` |
+| Apple      | `Applebot-Extended` (token)           | `Applebot`                 | None documented                         |
+| Meta       | `meta-externalagent`                  | `meta-webindexer`          | `meta-externalfetcher`                  |
+| Amazon     | `Amazonbot`                           | `Amzn-SearchBot`           | `Amzn-User`                             |
+| Mistral    | `MistralAI-Training`                  | `MistralAI-Index`          | `MistralAI-User`                        |
+| Microsoft  | None separate                         | `bingbot`                  | None documented                         |
+| DuckDuckGo | None ("not used in any way to train") | `DuckDuckBot` (web search) | `DuckAssistBot`                         |
 
 Google and Apple differ in one way that trips people up. Their training switch is a token, not a crawler. The same Googlebot or Applebot fetch serves search, and the token tells the vendor what it may do with that fetch afterwards. So the only way to opt out of their AI training without leaving search is robots.txt.
 
@@ -160,14 +160,14 @@ Googlebot is still the heaviest single crawler. What sets an AI crawler apart is
 
 Cloudflare Radar calls this the crawl-to-refer ratio: HTML page requests from an operator's bots, divided by HTML page visits its products refer back.
 
-| Operator | Week to 28 Sep 2026 | July 2025 |
-| --- | --- | --- |
-| Google | 5 : 1 | 5.4 : 1 |
-| Microsoft | 43.8 : 1 | 40 : 1 |
-| OpenAI | 277.6 : 1 | 1,091 : 1 |
-| Anthropic | 543.1 : 1 | 38,065 : 1 |
-| Perplexity | About 2,800 : 1 | 194 : 1 |
-| Mistral | No referrals recorded | Not reported |
+| Operator   | Week to 28 Sep 2026   | July 2025    |
+| ---------- | --------------------- | ------------ |
+| Google     | 5 : 1                 | 5.4 : 1      |
+| Microsoft  | 43.8 : 1              | 40 : 1       |
+| OpenAI     | 277.6 : 1             | 1,091 : 1    |
+| Anthropic  | 543.1 : 1             | 38,065 : 1   |
+| Perplexity | About 2,800 : 1       | 194 : 1      |
+| Mistral    | No referrals recorded | Not reported |
 
 The first column is from [Radar's AI Insights](https://radar.cloudflare.com/ai-insights), the second from Cloudflare's [August 2025 analysis](https://blog.cloudflare.com/crawlers-click-ai-bots-training/). The ratios swing hard between periods, so treat any single week as a snapshot. The gap to Google holds in both, though. Radar also splits each operator's crawling by bot. That week, `GPTBot` made 75.5% of OpenAI's crawl requests and `ClaudeBot` 83.3% of Anthropic's, so training bots do most of the fetching.
 
@@ -184,8 +184,8 @@ The takeaway for a sysadmin is practical. Most of the load comes from training c
 
 `Crawl-delay` is a non-standard robots.txt line that asks a bot to wait between requests. Support varies from one AI crawler to the next:
 
-| Honors it | Ignores it, per the vendor | Vendor doesn't say |
-| --- | --- | --- |
+| Honors it                                      | Ignores it, per the vendor         | Vendor doesn't say                            |
+| ---------------------------------------------- | ---------------------------------- | --------------------------------------------- |
 | Anthropic's bots, `CCBot`, `YouBot`, `bingbot` | Googlebot, Applebot, Amazon's bots | OpenAI, Perplexity, Meta, Mistral, DuckDuckGo |
 
 For bots that ignore it, throttle at the server instead. The NGINX rules below include a rate limit that returns 429, the "slow down" status. [YouBot's docs](https://you.com/docs/youbot) say a 429 makes it reduce its crawl rate.
@@ -423,12 +423,12 @@ Expect `googlebot.com` or `google.com`, `search.msn.com`, `applebot.apple.com` a
 
 Plannora is a made-up project management app. Its admin runs command 3 on 30 days of logs, then pulls referral sessions from GA4. The numbers are illustrative.
 
-| Bot | Requests | Errors | Error rate | Referrals from the same vendor | Crawls per referral |
-| --- | --- | --- | --- | --- | --- |
-| Googlebot | 42,000 | 1,260 | 3% | 9,800 (Google organic) | 4.3 |
-| `GPTBot` + `OAI-SearchBot` | 20,400 | 5,520 | 27% | 180 (chatgpt.com) | 113 |
-| `ClaudeBot` | 9,500 | 3,040 | 32% | 6 (claude.ai) | 1,583 |
-| `PerplexityBot` | 300 | 6 | 2% | 24 (perplexity.ai) | 12.5 |
+| Bot                        | Requests | Errors | Error rate | Referrals from the same vendor | Crawls per referral |
+| -------------------------- | -------- | ------ | ---------- | ------------------------------ | ------------------- |
+| Googlebot                  | 42,000   | 1,260  | 3%         | 9,800 (Google organic)         | 4.3                 |
+| `GPTBot` + `OAI-SearchBot` | 20,400   | 5,520  | 27%        | 180 (chatgpt.com)              | 113                 |
+| `ClaudeBot`                | 9,500    | 3,040  | 32%        | 6 (claude.ai)                  | 1,583               |
+| `PerplexityBot`            | 300      | 6      | 2%         | 24 (perplexity.ai)             | 12.5                |
 
 Two actions fall out of the arithmetic. First, 8,566 of the 30,200 AI crawler requests (28%) hit errors, mostly old URLs. Redirecting those cuts load for every bot at once. Second, Anthropic sends back almost nothing in visits for its crawling, so Plannora makes its `ClaudeBot` call on principle, not traffic. It keeps `Claude-SearchBot` and `Claude-User` open either way. For measuring what those visits are worth, see our guide to [measuring GEO](/blog/how-to-measure-geo).
 
