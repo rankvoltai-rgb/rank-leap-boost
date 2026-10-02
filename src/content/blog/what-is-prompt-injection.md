@@ -2,8 +2,8 @@
 title: What Is Prompt Injection in AI? A Plain-English Guide
 description: Prompt injection is text that tricks an AI into following someone else's orders. A plain-English guide with safe examples, the risks, and what you can do.
 keyword: prompt injection
-date: 2026-11-13
-updated: 2026-11-13
+date: 2026-10-28
+updated: 2026-10-28
 written: 2026-09-30
 author: Rankbox Team
 tags: AI Security, AI Search

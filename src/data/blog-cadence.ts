@@ -20,14 +20,17 @@
 /** Scheduled dates start here; posts dated before it went live before the scheduler existed. */
 export const SCHEDULE_START = "2026-10-01";
 
-/** Posts per day of the week (UTC), Sunday first: seven a week, none at weekends. */
-export const POSTS_PER_WEEKDAY = [0, 1, 2, 1, 2, 1, 0] as const;
+/**
+ * Posts per day of the week (UTC), Sunday first: 2–3 a weekday, 12 a week,
+ * none at weekends. Raised from 7 a week on 2026-10-02 at the user's request.
+ */
+export const POSTS_PER_WEEKDAY = [0, 2, 3, 2, 3, 2, 0] as const;
 
 /** The most posts on one day. */
-export const MAX_PER_DAY = 2;
+export const MAX_PER_DAY = 3;
 
 /** The most posts in any seven consecutive days. */
-export const MAX_PER_WEEK = 8;
+export const MAX_PER_WEEK = 14;
 
 /**
  * Days between two posts from one cluster (a hub and its standalones), so a

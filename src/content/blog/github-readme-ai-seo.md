@@ -2,8 +2,8 @@
 title: GitHub READMEs as AI SEO Fuel: Why Developers Rank in ChatGPT Without a Blog
 description: How a GitHub README reaches Google, AI search and coding assistants, what is documented versus assumed, and a README and metadata plan for dev tools.
 keyword: GitHub README
-date: 2026-10-22
-updated: 2026-10-22
+date: 2026-10-08
+updated: 2026-10-08
 written: 2026-09-30
 author: Rankbox Team
 tags: AI Search, Developer Marketing

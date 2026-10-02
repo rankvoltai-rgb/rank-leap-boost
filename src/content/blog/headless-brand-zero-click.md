@@ -2,8 +2,8 @@
 title: The "Headless Brand": What Happens to Marketing When No One Visits Your Homepage?
 description: A headless brand is marketed by AI answers and search features, not its homepage. The data, what AI can and can't see, and a four-layer brand audit.
 keyword: headless brand
-date: 2026-10-22
-updated: 2026-10-22
+date: 2026-10-14
+updated: 2026-10-14
 written: 2026-09-30
 author: Rankbox Team
 tags: AI Search, Brand Strategy

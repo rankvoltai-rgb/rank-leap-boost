@@ -2,8 +2,8 @@
 title: How Can a Podcast Increase SEO? 6 Ways It Helps and 2 It Doesn't
 description: How can a podcast increase SEO? Six ways it helps (transcripts, guest links, YouTube, show notes) and two it doesn't, each sourced or marked as inference.
 keyword: podcast increase SEO
-date: 2026-11-03
-updated: 2026-11-03
+date: 2026-10-22
+updated: 2026-10-22
 written: 2026-09-30
 author: Rankbox Team
 tags: SEO, Content Strategy

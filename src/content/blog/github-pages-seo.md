@@ -2,8 +2,8 @@
 title: GitHub Pages SEO: A Setup Guide for Project Sites and Docs
 description: GitHub Pages SEO setup: custom domain and HTTPS, sitemaps and canonical tags, robots.txt for project sites, Search Console, 404 pages and usage limits.
 keyword: GitHub Pages SEO
-date: 2026-10-29
-updated: 2026-10-29
+date: 2026-10-20
+updated: 2026-10-20
 written: 2026-09-30
 author: Rankbox Team
 tags: Technical SEO, Developer Marketing

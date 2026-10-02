@@ -2,8 +2,8 @@
 title: Is Substack Good for SEO? What Google Indexes and What You Give Up
 description: Is Substack good for SEO? What Google can crawl on a Substack, how custom domains and cross-posts affect rankings, and what you give up in control.
 keyword: Substack good for SEO
-date: 2026-11-06
-updated: 2026-11-06
+date: 2026-10-22
+updated: 2026-10-22
 written: 2026-09-30
 author: Rankbox Team
 tags: SEO, Content Strategy

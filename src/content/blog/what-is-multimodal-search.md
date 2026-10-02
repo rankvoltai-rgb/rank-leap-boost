@@ -2,8 +2,8 @@
 title: What Is Multimodal Search? Google Lens, Circle to Search and AI Mode Explained
 description: What is multimodal search? How searching with photos, screenshots, your camera and words together works in Google Lens, Circle to Search, AI Mode and more.
 keyword: multimodal search
-date: 2026-11-12
-updated: 2026-11-12
+date: 2026-10-27
+updated: 2026-10-27
 written: 2026-09-30
 author: Rankbox Team
 tags: AI Search, Google

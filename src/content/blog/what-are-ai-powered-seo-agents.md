@@ -2,8 +2,8 @@
 title: What Are AI-Powered SEO Agents? How They Work Under the Hood
 description: What are AI-powered SEO agents? How a model, tools and a loop work together, which tools SEO agents call, where they fail and how to judge one.
 keyword: SEO agents
-date: 2026-11-12
-updated: 2026-11-12
+date: 2026-10-27
+updated: 2026-10-27
 written: 2026-09-30
 author: Rankbox Team
 tags: AI SEO Tools, AI Agents

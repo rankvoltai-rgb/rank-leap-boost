@@ -2,8 +2,8 @@
 title: Does Link Building Still Matter for AI Visibility? The New Rules of "Co-Citation"
 description: Link building still matters for AI visibility, but unlinked co-citation matters too. What Google documents, what studies show, and how to audit it.
 keyword: co-citation
-date: 2026-10-07
-updated: 2026-10-07
+date: 2026-10-06
+updated: 2026-10-06
 written: 2026-09-29
 author: Rankbox Team
 tags: AI Search, Link Building

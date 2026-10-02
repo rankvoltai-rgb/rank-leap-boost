@@ -2,8 +2,8 @@
 title: How to Block AI Bots in Cloudflare Without Losing AI Search Traffic
 description: Block AI bots that train on your content in Cloudflare while keeping AI search and assistant bots: the dashboard path for each step, a WAF rule, and log checks.
 keyword: block AI bots
-date: 2026-11-25
-updated: 2026-11-25
+date: 2026-11-03
+updated: 2026-11-03
 written: 2026-10-01
 author: Rankbox Team
 tags: Technical SEO, AI Search

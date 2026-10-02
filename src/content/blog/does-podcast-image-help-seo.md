@@ -2,8 +2,8 @@
 title: Does a Podcast Image Help SEO? Cover Art, Episode Images and Alt Text
 description: Does a podcast image help SEO? Not as a ranking factor, but it shapes clicks, Google Images and social previews. Specs for Apple, Spotify and YouTube.
 keyword: podcast image
-date: 2026-10-30
-updated: 2026-10-30
+date: 2026-10-19
+updated: 2026-10-19
 written: 2026-09-30
 author: Rankbox Team
 tags: SEO, Content Strategy

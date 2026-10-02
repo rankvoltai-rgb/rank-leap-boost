@@ -2,8 +2,8 @@
 title: AI-Powered SEO Agents in 2026: What They Do and Which Tasks to Trust Them With
 description: AI-powered SEO agents in 2026: what they do, named tools with September 2026 prices, and which SEO tasks to hand over, review first or keep human.
 keyword: AI-powered SEO agents
-date: 2026-10-28
-updated: 2026-10-28
+date: 2026-10-19
+updated: 2026-10-19
 written: 2026-09-30
 author: Rankbox Team
 tags: AI SEO Tools, AI Agents

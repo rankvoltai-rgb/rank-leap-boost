@@ -2,8 +2,8 @@
 title: Multimodal GEO: How AI Search "Sees" Infographics, Charts, and Screenshots
 description: Multimodal GEO explained: what AI search engines really do with images on your pages, and how to design charts that people, OCR and AI can read.
 keyword: multimodal GEO
-date: 2026-10-26
-updated: 2026-10-26
+date: 2026-10-15
+updated: 2026-10-15
 written: 2026-09-30
 author: Rankbox Team
 tags: AI Search, Technical SEO

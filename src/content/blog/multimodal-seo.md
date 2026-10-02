@@ -2,8 +2,8 @@
 title: Multimodal SEO: How to Optimize Images, Video and Audio for AI Search
 description: A practical multimodal SEO guide: Google's image and video rules, transcripts for audio, and a media audit that puts every visual fact in text.
 keyword: multimodal SEO
-date: 2026-11-09
-updated: 2026-11-09
+date: 2026-10-22
+updated: 2026-10-22
 written: 2026-09-30
 author: Rankbox Team
 tags: AI Search, Technical SEO

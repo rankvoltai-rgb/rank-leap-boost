@@ -2,8 +2,8 @@
 title: How to Measure ROI From Zero-Click Searches
 description: How to measure ROI from zero-click searches: track impressions, share of voice, branded search, direct visits and self-reported attribution, then build a range.
 keyword: zero-click searches
-date: 2026-11-04
-updated: 2026-11-04
+date: 2026-10-21
+updated: 2026-10-21
 written: 2026-09-30
 author: Rankbox Team
 tags: Analytics, AI Search

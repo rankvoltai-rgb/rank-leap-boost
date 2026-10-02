@@ -2,8 +2,8 @@
 title: The Role of Reddit in AI Search: Why LLMs Prioritize Forum Discussions
 description: Reddit in AI search: what the Google and OpenAI data deals say, dated studies of Reddit's citation share by engine, and how to join buyer threads by the rules.
 keyword: Reddit in AI search
-date: 2026-10-09
-updated: 2026-10-09
+date: 2026-10-07
+updated: 2026-10-07
 written: 2026-09-29
 author: Rankbox Team
 tags: AI Search, Reddit

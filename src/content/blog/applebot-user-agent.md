@@ -2,8 +2,8 @@
 title: Applebot User Agent Strings: How to Identify and Verify Apple's Crawler
 description: The Applebot user agent strings exactly as Apple documents them, plus tested reverse DNS and IP-list checks to tell real Applebot from spoofers.
 keyword: Applebot user agent
-date: 2026-11-24
-updated: 2026-11-24
+date: 2026-11-03
+updated: 2026-11-03
 written: 2026-10-01
 author: Rankbox Team
 tags: Technical SEO, Apple

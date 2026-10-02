@@ -2,8 +2,8 @@
 title: ChatGPT Ranking Factors: What OpenAI Documents and What the Data Shows
 description: ChatGPT ranking factors, sorted by proof: what OpenAI documents about finding and ranking sources, what studies link to citations, and a 10-minute check.
 keyword: ChatGPT ranking factors
-date: 2026-10-16
-updated: 2026-10-16
+date: 2026-10-12
+updated: 2026-10-12
 written: 2026-09-29
 author: Rankbox Team
 tags: AI Search, ChatGPT

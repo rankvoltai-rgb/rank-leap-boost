@@ -2,8 +2,8 @@
 title: AI Crawler robots.txt Mistakes: How to Test Rules for GPTBot, ClaudeBot and Others
 description: Find and fix AI crawler robots.txt mistakes. Test rules for GPTBot, ClaudeBot and PerplexityBot with real parsers, live fetches and your logs.
 keyword: AI crawler robots.txt
-date: 2026-11-24
-updated: 2026-11-24
+date: 2026-11-03
+updated: 2026-11-03
 written: 2026-10-01
 author: Rankbox Team
 tags: Technical SEO, AI Search

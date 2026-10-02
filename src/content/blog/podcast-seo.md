@@ -2,8 +2,8 @@
 title: Podcast SEO: How to Get Your Show Found in Search, Apps and AI
 description: Podcast SEO for your show in 2026: what Apple, Spotify, YouTube and Google document about titles, feeds, artwork and search, plus a 30-minute audit.
 keyword: podcast SEO
-date: 2026-11-10
-updated: 2026-11-10
+date: 2026-10-26
+updated: 2026-10-26
 written: 2026-09-30
 author: Rankbox Team
 tags: SEO, Content Strategy

@@ -2,8 +2,8 @@
 title: Open Source SEO Tools: A 2026 List With What Each One Does
 description: 20 open source SEO tools sorted by job, from crawlers and log analyzers to rank trackers and analytics, each with its licence and last release date.
 keyword: open source SEO tools
-date: 2026-11-10
-updated: 2026-11-10
+date: 2026-10-26
+updated: 2026-10-26
 written: 2026-09-30
 author: Rankbox Team
 tags: AI SEO Tools, SEO

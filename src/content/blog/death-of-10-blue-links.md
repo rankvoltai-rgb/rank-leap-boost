@@ -2,8 +2,8 @@
 title: The Death of 10 Blue Links
 description: The 10 blue links didn't die. They moved behind the answer. A sourced timeline from PageRank in 1998 to search agents in 2026, plus a 2027 forecast.
 keyword: 10 blue links
-date: 2026-10-21
-updated: 2026-10-21
+date: 2026-10-07
+updated: 2026-10-07
 written: 2026-09-30
 author: Rankbox Team
 tags: AI Search, Research

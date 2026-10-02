@@ -2,8 +2,8 @@
 title: Applebot User-Agent & Preparing for Apple Intelligence Search
 description: What Applebot crawls for Siri, Spotlight and Safari, what Applebot-Extended controls, how it renders pages, and the server checks Apple search needs.
 keyword: Applebot
-date: 2026-11-19
-updated: 2026-11-19
+date: 2026-10-29
+updated: 2026-10-29
 written: 2026-10-01
 author: Rankbox Team
 tags: Technical SEO, Apple

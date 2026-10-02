@@ -2,8 +2,8 @@
 title: What Is Agentic SEO? A Plain Definition With Examples
 description: What is agentic SEO? A plain definition, three real-world examples of AI agents acting on websites, how it differs from SEO and GEO, and first steps.
 keyword: agentic SEO
-date: 2026-11-17
-updated: 2026-11-17
+date: 2026-10-30
+updated: 2026-10-30
 written: 2026-09-30
 author: Rankbox Team
 tags: AI Search, AI Agents

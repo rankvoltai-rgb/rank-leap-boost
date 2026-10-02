@@ -2,8 +2,8 @@
 title: AI Link Building: How to Use AI Tools to Earn Links Without Spam
 description: AI link building done right: use AI tools to prospect, research data stories, personalize outreach and find unlinked mentions, inside Google's spam rules.
 keyword: AI link building
-date: 2026-10-12
-updated: 2026-10-12
+date: 2026-10-09
+updated: 2026-10-09
 written: 2026-09-29
 author: Rankbox Team
 tags: Link Building, AI SEO Tools

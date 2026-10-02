@@ -2,8 +2,8 @@
 title: What Is Edge SEO? A Plain Definition, With Examples and Risks
 description: What is edge SEO? A plain definition, three worked examples, how it differs from editing your CMS, the main risks, and a three-question test for using it.
 keyword: what is edge SEO
-date: 2026-12-01
-updated: 2026-12-01
+date: 2026-11-09
+updated: 2026-11-09
 written: 2026-10-01
 author: Rankbox Team
 tags: Technical SEO, SEO

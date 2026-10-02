@@ -2,8 +2,8 @@
 title: Cloudflare AI Bot Management: Blocking Scrapers vs. Preserving Citations
 description: Cloudflare AI bot management after the 15 September 2026 changes: what each setting blocks, which bots it hits, and how to stop training but keep citations.
 keyword: Cloudflare AI bot management
-date: 2026-11-19
-updated: 2026-11-19
+date: 2026-10-29
+updated: 2026-10-29
 written: 2026-10-01
 author: Rankbox Team
 tags: Technical SEO, AI Search

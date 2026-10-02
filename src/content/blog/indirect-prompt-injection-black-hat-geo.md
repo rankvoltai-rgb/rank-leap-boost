@@ -2,8 +2,8 @@
 title: Indirect Prompt Injection & "Black Hat" GEO: Can You Hijack AI Search Crawlers?
 description: Can prompt injection hijack AI search? What published tests found, how AI vendors defend, what Google and Bing's spam rules say, and how to audit your site.
 keyword: prompt injection
-date: 2026-10-23
-updated: 2026-10-23
+date: 2026-10-14
+updated: 2026-10-14
 written: 2026-09-30
 author: Rankbox Team
 tags: AI Search, AI Security

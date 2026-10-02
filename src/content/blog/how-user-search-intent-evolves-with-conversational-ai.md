@@ -2,8 +2,8 @@
 title: How User Search Intent Evolves Within a Conversation With an AI Assistant
 description: Search intent evolves turn by turn inside one AI chat. What conversation data shows about follow-ups, and how to write pages for each next question.
 keyword: search intent evolves
-date: 2026-11-05
-updated: 2026-11-05
+date: 2026-10-21
+updated: 2026-10-21
 written: 2026-09-30
 author: Rankbox Team
 tags: AI Search, Content Strategy

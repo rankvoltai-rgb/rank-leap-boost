@@ -2,8 +2,8 @@
 title: Edge SEO for AI: Dynamic Rendering & Header Injection via Cloudflare Workers
 description: Edge SEO for AI with Cloudflare Workers: inject headers, fix canonicals and serve the same page as Markdown to agents that ask, without cloaking.
 keyword: edge SEO for AI
-date: 2026-11-23
-updated: 2026-11-23
+date: 2026-11-02
+updated: 2026-11-02
 written: 2026-10-01
 author: Rankbox Team
 tags: Technical SEO, AI Search

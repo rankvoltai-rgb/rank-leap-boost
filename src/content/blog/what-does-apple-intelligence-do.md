@@ -2,8 +2,8 @@
 title: What Does Apple Intelligence Do? Every Feature Explained for 2026
 description: What Apple Intelligence does in iOS 27: Siri AI, writing help, summaries, Visual Intelligence, image tools, ChatGPT, plus devices, privacy and settings.
 keyword: Apple Intelligence
-date: 2026-10-20
-updated: 2026-10-20
+date: 2026-10-13
+updated: 2026-10-13
 written: 2026-09-29
 author: Rankbox Team
 tags: AI Search, Apple

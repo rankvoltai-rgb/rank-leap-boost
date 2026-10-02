@@ -2,8 +2,8 @@
 title: Dynamic Rendering & Prerendering for JavaScript-Heavy AI Crawlers
 description: Dynamic rendering, SSR and prerendering for AI crawlers: what they read without JavaScript, a raw HTML test, and the fix for each framework.
 keyword: dynamic rendering
-date: 2026-11-20
-updated: 2026-11-20
+date: 2026-11-02
+updated: 2026-11-02
 written: 2026-10-01
 author: Rankbox Team
 tags: Technical SEO, AI Search

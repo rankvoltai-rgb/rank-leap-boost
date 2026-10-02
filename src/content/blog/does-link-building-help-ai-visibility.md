@@ -2,8 +2,8 @@
 title: Does Link Building Help With AI Visibility? What the Evidence Shows
 description: Does link building help with AI visibility? Yes, indirectly. What Google and Bing document, what five studies correlate, and how to split your budget.
 keyword: link building
-date: 2026-10-15
-updated: 2026-10-15
+date: 2026-10-12
+updated: 2026-10-12
 written: 2026-09-29
 author: Rankbox Team
 tags: AI Search, Link Building

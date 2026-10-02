@@ -2,8 +2,8 @@
 title: The Complete AI Crawler robots.txt Guide
 description: Pick an AI crawler robots.txt policy by goal, then copy one of six tested templates: block training, keep AI search, or lock one folder.
 keyword: AI crawler robots.txt
-date: 2026-11-18
-updated: 2026-11-18
+date: 2026-10-29
+updated: 2026-10-29
 written: 2026-10-01
 author: Rankbox Team
 tags: Technical SEO, AI Search

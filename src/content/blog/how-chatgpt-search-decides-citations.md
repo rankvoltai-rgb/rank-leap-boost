@@ -2,8 +2,8 @@
 title: How ChatGPT Search Decides Citations: What OpenAI Documents and What Tests Show
 description: How ChatGPT search decides what to cite: when it searches, how it rewrites queries, where pages come from, how Sources work, and what tests found.
 keyword: ChatGPT search
-date: 2026-10-14
-updated: 2026-10-14
+date: 2026-10-08
+updated: 2026-10-08
 written: 2026-09-29
 author: Rankbox Team
 tags: AI Search, ChatGPT

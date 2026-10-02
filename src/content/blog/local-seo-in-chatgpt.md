@@ -2,8 +2,8 @@
 title: Local SEO in ChatGPT: How AI Search Recommends Nearby Businesses
 description: Local SEO in ChatGPT and other AI assistants: which map, listing and review sources each one uses, a three-part framework and a near-me prompt test.
 keyword: local SEO
-date: 2026-10-08
-updated: 2026-10-08
+date: 2026-10-06
+updated: 2026-10-06
 written: 2026-09-29
 author: Rankbox Team
 tags: AI Search, Local SEO

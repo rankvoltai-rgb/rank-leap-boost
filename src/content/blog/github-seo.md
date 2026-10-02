@@ -2,8 +2,8 @@
 title: GitHub SEO: How to Make a Repository Findable in Google and AI Search
 description: GitHub SEO in practice: what Google and AI crawlers can read on a repo, how GitHub builds your title and snippet, and the fields to set for GitHub search.
 keyword: GitHub SEO
-date: 2026-11-02
-updated: 2026-11-02
+date: 2026-10-23
+updated: 2026-10-23
 written: 2026-09-30
 author: Rankbox Team
 tags: SEO, Developer Marketing

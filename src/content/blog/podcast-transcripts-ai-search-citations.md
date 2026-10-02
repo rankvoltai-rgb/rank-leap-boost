@@ -2,8 +2,8 @@
 title: Podcast Transcripts & Whisper AI: How Spoken Audio Becomes Search Citations
 description: How podcast transcripts turn spoken audio into search citations, what OpenAI documents about Whisper, and a transcript page format AI engines can quote.
 keyword: podcast transcripts
-date: 2026-10-27
-updated: 2026-10-27
+date: 2026-10-15
+updated: 2026-10-15
 written: 2026-09-30
 author: Rankbox Team
 tags: AI Search, Content Strategy

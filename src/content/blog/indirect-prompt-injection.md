@@ -2,8 +2,8 @@
 title: Indirect Prompt Injection: What It Is, Documented Cases and Defenses
 description: Indirect prompt injection hides instructions in pages, emails and files an AI reads. The paper that named it, dated cases from 2023 to 2026, and defenses.
 keyword: indirect prompt injection
-date: 2026-11-05
-updated: 2026-11-05
+date: 2026-10-23
+updated: 2026-10-23
 written: 2026-09-30
 author: Rankbox Team
 tags: AI Security, AI Search

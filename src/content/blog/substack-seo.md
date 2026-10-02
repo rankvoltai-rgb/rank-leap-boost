@@ -2,8 +2,8 @@
 title: Substack SEO: Settings, Custom Domains and Posts That Get Found
 description: A Substack SEO walkthrough of every setting that matters, verified in Substack's help center: URLs, custom domains, tags, sitemaps and the AI crawler switch.
 keyword: Substack SEO
-date: 2026-11-16
-updated: 2026-11-16
+date: 2026-10-30
+updated: 2026-10-30
 written: 2026-09-30
 author: Rankbox Team
 tags: SEO, Content Strategy

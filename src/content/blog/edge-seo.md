@@ -2,8 +2,8 @@
 title: Edge SEO: A Practical Guide to SEO Changes at the CDN
 description: Edge SEO in practice: what you can change at the CDN, which platforms run it and what they cost in October 2026, plus governance, rollback and when to skip it.
 keyword: edge SEO
-date: 2026-11-26
-updated: 2026-11-26
+date: 2026-11-05
+updated: 2026-11-05
 written: 2026-10-01
 author: Rankbox Team
 tags: Technical SEO, SEO

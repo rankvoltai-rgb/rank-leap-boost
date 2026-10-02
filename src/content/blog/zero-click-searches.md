@@ -2,8 +2,8 @@
 title: Zero-Click Searches: What the Data Shows in 2026
 description: Zero-click searches are about 68% of US Google searches. The studies behind that figure, what AI Overviews changed, and which queries still get clicks.
 keyword: zero-click searches
-date: 2026-11-17
-updated: 2026-11-17
+date: 2026-10-28
+updated: 2026-10-28
 written: 2026-09-30
 author: Rankbox Team
 tags: SEO, AI Search

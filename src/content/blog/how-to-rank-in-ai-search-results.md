@@ -2,8 +2,8 @@
 title: How to Rank in AI Search Results: A 10-Step Plan
 description: How to rank in AI search results across ChatGPT, Google, Perplexity and Copilot: ten steps in order of effort and impact, each linked to a deeper guide.
 keyword: rank in AI search results
-date: 2026-10-15
-updated: 2026-10-15
+date: 2026-10-13
+updated: 2026-10-13
 written: 2026-09-29
 author: Rankbox Team
 tags: AI Search, Playbooks

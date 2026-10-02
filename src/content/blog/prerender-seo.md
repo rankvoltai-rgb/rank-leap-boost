@@ -2,8 +2,8 @@
 title: Prerender SEO: How Prerendering Works and When You Need It
 description: Prerender SEO explained: build-time vs on-demand prerendering, services and prices as of October 2026, cache freshness risks, and how to test the result.
 keyword: prerender SEO
-date: 2026-12-01
-updated: 2026-12-01
+date: 2026-11-09
+updated: 2026-11-09
 written: 2026-10-01
 author: Rankbox Team
 tags: Technical SEO, SEO

@@ -2,8 +2,8 @@
 title: Cloudflare AI Bots: How Cloudflare Classifies AI Crawlers and Where to See Them
 description: How Cloudflare AI bots are classified by behavior, verification and operator, where to see them in the dashboard, and what Radar's crawl ratios mean.
 keyword: Cloudflare AI bots
-date: 2026-11-30
-updated: 2026-11-30
+date: 2026-11-06
+updated: 2026-11-06
 written: 2026-10-01
 author: Rankbox Team
 tags: Technical SEO, AI Search

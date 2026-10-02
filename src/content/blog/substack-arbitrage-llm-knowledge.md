@@ -2,8 +2,8 @@
 title: The Substack Arbitrage: Using High-Domain-Authority Newsletters to Seed LLM Knowledge
 description: The Substack arbitrage, graded: what Google's site reputation policy allows, how AI engines read newsletters, and a founder plan that stays in bounds.
 keyword: Substack arbitrage
-date: 2026-10-27
-updated: 2026-10-27
+date: 2026-10-15
+updated: 2026-10-15
 written: 2026-09-30
 author: Rankbox Team
 tags: AI Search, Content Strategy

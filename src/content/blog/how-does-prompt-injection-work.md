@@ -2,8 +2,8 @@
 title: How Does Prompt Injection Work in Generative AI? A Step-by-Step Look
 description: How does prompt injection work? How an AI's context window mixes orders and data, the six steps of an attack, why filters fail, and the defenses that help.
 keyword: prompt injection
-date: 2026-10-29
-updated: 2026-10-29
+date: 2026-10-20
+updated: 2026-10-20
 written: 2026-09-30
 author: Rankbox Team
 tags: AI Security, AI Search

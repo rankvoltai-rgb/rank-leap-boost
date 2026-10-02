@@ -2,8 +2,8 @@
 title: Apple Intelligence & Siri: How iOS 18/26 Routes Queries to ChatGPT
 description: How Apple Intelligence routes Siri requests on device, to Private Cloud Compute or to ChatGPT in iOS 18, 26 and 27, and what Applebot reads to answer.
 keyword: Apple Intelligence
-date: 2026-10-06
-updated: 2026-10-06
+date: 2026-10-05
+updated: 2026-10-05
 written: 2026-09-29
 author: Rankbox Team
 tags: AI Search, Apple

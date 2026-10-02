@@ -2,8 +2,8 @@
 title: How to Get Cited by ChatGPT as a Local Business
 description: How to get cited by ChatGPT as a local business: what OpenAI says about local results, where the listing data comes from, a 20-minute check and a checklist.
 keyword: local business
-date: 2026-10-19
-updated: 2026-10-19
+date: 2026-10-16
+updated: 2026-10-16
 written: 2026-09-29
 author: Rankbox Team
 tags: Local SEO, ChatGPT
