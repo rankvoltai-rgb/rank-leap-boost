@@ -136,7 +136,10 @@ Tests live beside the code in `src/lib` and run from the repo root with
 
 ### Before submitting
 
-`framer.json` ships with a placeholder `id`. Register the plugin in the
+The `id` in `framer.json` (`9af397`) is ours, not issued by Framer:
+`create-framer-plugin` makes it from 3 random bytes in hex. Framer uses it to
+tell which plugin owns a synced collection, so never change it after the first
+upload, or existing users' Rankbox collections stop syncing. To submit, choose
+"New Plugin" in the
 [Framer Creator Dashboard](https://www.framer.com/marketplace/dashboard/plugins/),
-put the real id in `framer.json`, then run `npm run pack` and upload
-`plugin.zip`.
+run `npm run pack`, and upload `plugin.zip`.

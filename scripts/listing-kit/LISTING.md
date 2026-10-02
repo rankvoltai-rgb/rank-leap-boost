@@ -10,7 +10,7 @@ Rankbox has two listable products, and directories list them separately:
 |---|---|---|
 | What it does | Syncs Rankbox articles into a Framer CMS collection | Gives an AI assistant three SEO / AI search research tools |
 | Submit to | Framer Marketplace | Claude, ChatGPT, the MCP Registry, Smithery, mcp.so, MCP Market |
-| Status | Built. Needs a real plugin id (§2) | Live at `https://rankbox.xyz/mcp` |
+| Status | Built. Plugin id `9af397` set (§2) | Live at `https://rankbox.xyz/mcp` |
 | Images | `out/cms/` | `out/mcp/` |
 
 Both use the same icon, favicon and logo (§5).
@@ -32,7 +32,7 @@ copy never pitches the paid plan.
 
 | Directory | Submit now? | Name | Short text | Long text | Icon | Images | Also needs |
 |---|---|---|---|---|---|---|---|
-| **Framer Marketplace**, framer.com/marketplace/dashboard/plugins | Yes, once `framer.json` has a real id. Publishes instantly, with no review | `Rankbox` | Byline: §2 tagline (80) | Description: §2 long | Ships in the zip (`packages/plugins/framer/public/icon.png`, 90px) | `out/cms/*` | Tags (§2), the pricing line, login disclosure |
+| **Framer Marketplace**, framer.com/marketplace/dashboard/plugins | Yes. Publishes instantly, with no review | `Rankbox` | Byline: §2 tagline (80) | Description: §2 long | Ships in the zip (`packages/plugins/framer/public/icon.png`, 90px) | `out/cms/*` | Tags (§2), the pricing line, login disclosure |
 | **Claude Connectors Directory**, claude.ai/directory/manage | Yes. No-auth servers are accepted for public data | `Rankbox` (≤100) | One-liner: §3 tagline (200) | Description: §3 long (≤2,000) | `out/icon/rankbox-icon-512.png` | None (only MCP Apps with UI take screenshots) | 1–5 categories, use cases, reviewer notes, data handling (§3) |
 | **ChatGPT Plugins**, platform.openai.com | After two setup steps: verify your developer identity, and serve OpenAI's token at `/.well-known/openai-apps-challenge` | `Rankbox` (≤30) | §3 tagline (30) | §3 long (≤4,000) | `out/icon/rankbox-icon-512.png` | None (only plugins with UI take screenshots) | Capabilities, starter prompts, test cases (§3) |
 | **Official MCP Registry**, registry.modelcontextprotocol.io | Yes, after proving you own rankbox.xyz (DNS TXT record or a `/.well-known/mcp-registry-auth` file) | `mcp-registry/server.json` | description (100) | — | icon URLs are in `server.json` | — | PulseMCP now imports from here |
@@ -162,10 +162,9 @@ screenshots are worth swapping in.
 
 ### Before you submit
 
-1. Register the plugin at framer.com/marketplace/dashboard/plugins and copy its id.
-2. Replace `REPLACE_WITH_FRAMER_PLUGIN_ID` in `packages/plugins/framer/framer.json`.
-3. `cd packages/plugins/framer && npm run pack`, then upload `plugin.zip`.
-4. Once it's live, flip `addonLive` to `true` for framer in `src/data/platforms.ts`.
+1. The plugin id is `9af397` in `packages/plugins/framer/framer.json`. Framer doesn't issue ids; we generated it. Never change it after the first upload.
+2. `cd packages/plugins/framer && npm run pack`, then choose "New Plugin" at framer.com/marketplace/dashboard/plugins and upload `plugin.zip`.
+3. Once it's live, flip `addonLive` to `true` for framer in `src/data/platforms.ts`.
 
 ---
 
