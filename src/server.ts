@@ -47,9 +47,20 @@ function isLabLogged(request: Request): boolean {
   return path.startsWith("/blog/") && botFromUserAgent(request.headers.get("user-agent")) !== null;
 }
 
+// Docs pages as markdown for agents (<page>.md, or Accept: text/markdown).
+// Checked here so ordinary page views never load the docs index.
+function mayBeDocsMarkdown(request: Request): boolean {
+  const path = new URL(request.url).pathname;
+  return path === "/docs" || path === "/docs.md" || path.startsWith("/docs/");
+}
+
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
     try {
+      if (mayBeDocsMarkdown(request)) {
+        const docs = await import("./lib/docs/agent.server");
+        if (docs.isDocsMarkdownRequest(request)) return docs.docsMarkdownResponse(request);
+      }
       const handler = await getServerEntry();
       const response = await normalizeCatastrophicSsrResponse(
         await handler.fetch(request, env, ctx),

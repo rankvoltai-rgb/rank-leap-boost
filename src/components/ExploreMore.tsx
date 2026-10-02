@@ -31,7 +31,7 @@ export function ExploreMore({
   return (
     <section aria-labelledby="explore-title" className={cn("border-t border-border", className)}>
       <div className="mx-auto max-w-6xl px-5 py-16 sm:py-20">
-        <p className="text-[0.72rem] font-semibold uppercase tracking-[0.16em] text-volt">
+        <p className="text-[0.72rem] font-semibold uppercase tracking-[0.16em] text-cta">
           Keep exploring
         </p>
         <h2

@@ -11,6 +11,8 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { RedditMark } from "@/components/landing/ai-logos";
+import { DELIVERY_CLAUSE, FAQS as AUTO_PUBLISHING_FAQS } from "@/data/auto-publishing";
+import { PLAN, TRIAL_ARTICLE_CREDITS, TRIAL_DAYS } from "@/data/pricing";
 
 export interface FeatureBenefit {
   title: string;
@@ -64,7 +66,9 @@ export interface Feature {
   metaTitle: string;
   metaDescription: string;
   specs: FeatureSpec[];
-  problem: { title: string; body: string; before: string[]; after: string[] };
+  /** The before/after section. Optional: a feature with its own layout (see
+   *  LAYOUTS in routes/features.$slug.tsx) may tell the story another way. */
+  problem?: { title: string; body: string; before: string[]; after: string[] };
   benefitsTitle: string;
   benefitsIntro: string;
   benefits: FeatureBenefit[];
@@ -275,96 +279,62 @@ export const FEATURES: Feature[] = [
     ctaBody: "Turn your topic map into citation-ready content in minutes, in your brand voice.",
   },
   {
+    // Rendered by its own layout (components/features/auto-publishing), and
+    // every status-dependent sentence comes from src/data/auto-publishing.ts.
     slug: "auto-publishing",
     group: "Grow",
     name: "Auto-Publishing",
-    tagline: "Fresh articles go live daily on your site, hands-free.",
+    tagline: "Finished articles reach your site on a pace you set.",
     icon: Send,
     eyebrow: "Automated blog publishing",
-    headline: { lead: "Auto-publish a fresh", accent: "article every day" },
-    subhead:
-      "Connect your site once and Rankbox publishes a new, optimized article every day to WordPress, Webflow, Shopify, Wix, or Framer, or to any other stack through the Rankbox API.",
-    metaTitle: "Automated Blog Publishing for WordPress & More | Rankbox",
+    headline: { lead: "Keep your blog", accent: "shipping every\u00a0week" },
+    subhead: `Pick a pace from one article a week to one a day. Rankbox writes each one, checks it against its SEO rules, and ${DELIVERY_CLAUSE}.`,
+    metaTitle: "Automated Blog Publishing at Your Pace | Rankbox",
     metaDescription:
-      "Publish a fresh, SEO-optimized article to your blog every day on WordPress, Webflow, Shopify, Wix, Framer, or any site via API. Set it once and it runs.",
+      "Set a pace of 1 to 7 articles a week. Rankbox writes and SEO-checks each one, then delivers it to your site through an API any stack can pull from.",
     specs: [
-      { value: "30", label: "articles a month, one every day" },
-      { value: "5 + API", label: "CMS integrations, plus a REST API" },
-      { value: "0", label: "developers needed to connect" },
-      { value: "Optional", label: "approval before anything goes live" },
+      { value: "1–7", label: "articles a week: every day, or 5, 3, 2, or 1" },
+      { value: String(PLAN.articlesPerMonth), label: `articles a month on the ${PLAN.name} plan` },
+      { value: "Checked", label: "every draft, against the SEO rules, before it's finished" },
+      { value: "Any stack", label: "can pull finished articles from the API" },
     ],
-    problem: {
-      title: "Consistency is where content plans die",
-      body: "Publishing every day compounds. Publishing whenever someone finds the time doesn't.",
-      before: [
-        "Drafts stuck in a doc waiting for someone to upload them",
-        "Reformatting headings, images, and links by hand",
-        "Weeks without a post whenever the team gets busy",
-        "A content calendar nobody keeps up with",
-      ],
-      after: [
-        "Articles go live on schedule as native posts",
-        "Formatting, images, and meta tags handled for you",
-        "A new article every day, even on your busiest weeks",
-        "A calendar that fills and publishes itself",
-      ],
-    },
-    benefitsTitle: "Set it once. Publish every day.",
-    benefitsIntro:
-      "Pick where articles go and when, and Rankbox handles the rest, from formatting to the moment a post goes live.",
+    benefitsTitle: "Your site, your rules",
+    benefitsIntro: "Three rules decide what reaches your site, and when.",
     benefits: [
       {
-        title: "One-click integrations",
-        body: "Connect WordPress, Webflow, Shopify, Wix, and Framer in minutes, no developer needed.",
+        title: "Your edits win",
+        body: "Rankbox never overwrites a post you've changed. The Webflow and Shopify connectors stop updating a post once you edit or delete it in your CMS, and never re-create one you removed. Through the API, your code decides what to update.",
       },
       {
-        title: "Set-and-forget schedule",
-        body: "Choose a cadence and articles go live automatically, building momentum while you focus on the business.",
+        title: "Checked before it's finished",
+        body: "Each draft is scored against Rankbox's SEO checks, from keyword placement to meta description length, and revised where it fails.",
       },
       {
-        title: "Publish anywhere",
-        body: "On any other stack, pull finished articles from the Rankbox API, or copy formatted content straight from the editor.",
+        title: "Paced and capped",
+        body: `Choose every day or a few a week. Autopilot never writes past your plan's ${PLAN.articlesPerMonth} articles a month, and you can pause it from the dashboard at any time.`,
       },
     ],
-    stepsTitle: "Connected and publishing in minutes",
+    stepsTitle: "Three steps, then it runs on its own",
     steps: [
       {
-        title: "Connect your site",
-        body: "Authorize your CMS or create an API key in a couple of minutes.",
+        title: "Set your pace",
+        body: "In Settings, choose every day or 1 to 5 articles a week. Your calendar fills with topics from your content plan.",
       },
-      { title: "Set your schedule", body: "Pick how often articles publish and at what time." },
       {
-        title: "Watch it compound",
-        body: "Fresh content goes live on autopilot and traffic builds day after day.",
+        title: "Rankbox writes and checks",
+        body: "When an article is due, Rankbox researches the topic, writes it in your brand voice, and runs it through the SEO checks.",
+      },
+      {
+        title: "Your site gets it",
+        body: "Your site pulls it through the publishing API and reports the live URL, or a native connector pushes it where one is available.",
       },
     ],
     connects:
-      "Auto-Publishing is the last mile. Drafts from the Citation-Ready Writer that clear the SEO/GEO Score go live on schedule, and Citation Tracking picks them up from there.",
-    proof: ["Hannah Whitfield", "Elise Tanaka", "Priya Raman"],
-    faqs: [
-      {
-        q: "Which platforms are supported?",
-        a: "WordPress, Webflow, Shopify, Wix, and Framer, plus a REST API for anything else.",
-      },
-      {
-        q: "Can I review before it goes live?",
-        a: "Yes. Turn on approval mode to review drafts, or enable full auto-publish.",
-      },
-      {
-        q: "Will it match my site styling?",
-        a: "Articles publish as native posts on your CMS, so they inherit your theme and styling.",
-      },
-      {
-        q: "Can I choose when articles publish?",
-        a: "Yes. You set the cadence and the time of day, and articles go live on that schedule.",
-      },
-      {
-        q: "What if my platform isn't listed?",
-        a: "Create an API key and pull finished articles into any stack from the Rankbox API, or copy formatted content straight from the editor.",
-      },
-    ],
-    ctaTitle: "Put your content engine on autopilot",
-    ctaBody: "Connect your site and start publishing fresh, optimized articles every day.",
+      "Auto-Publishing is the last step. Drafts from the Citation-Ready Writer, checked by the SEO/GEO Score, reach your site here. The live URL your site reports back is how Authority Backlinks verifies the links your articles host, which earns the credits that buy links to you.",
+    proof: [],
+    faqs: AUTO_PUBLISHING_FAQS,
+    ctaTitle: "Start publishing on a pace you set",
+    ctaBody: `Try it for ${TRIAL_DAYS} days with ${TRIAL_ARTICLE_CREDITS} articles, then connect your site through the publishing API.`,
   },
   {
     slug: "citation-tracking",
@@ -852,7 +822,8 @@ export function getFeature(slug: string): Feature | undefined {
 
 /** The H1 as one plain string, for anywhere the two-part lockup can't be used. */
 export function featureH1(feature: Feature): string {
-  return `${feature.headline.lead} ${feature.headline.accent}`;
+  // Plain spaces: a headline may hold a no-break space to control wrapping.
+  return `${feature.headline.lead} ${feature.headline.accent}`.replace(/\u00a0/g, " ");
 }
 
 export const FEATURE_SLUGS = FEATURES.map((f) => f.slug);

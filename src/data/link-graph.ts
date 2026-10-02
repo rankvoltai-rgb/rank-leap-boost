@@ -889,6 +889,70 @@ const POST_CARDS: Record<string, Titled> = {
     title: "Applebot User Agent Strings: How to Identify and Verify Apple's Crawler",
     blurb: "Applebot's user-agent strings, and how to verify the real crawler.",
   },
+  "aeo-vs-geo": {
+    title: "Answer Engine Optimization (AEO) vs. Generative Engine Optimization (GEO)",
+    blurb: "AEO and GEO side by side: what each optimizes for, where they overlap, and one plan.",
+  },
+  "aeo-vs-geo-differences": {
+    title: "AEO vs GEO: The Tactics That Overlap and the Ones That Don't",
+    blurb: "Common tactics sorted: which help both AEO and GEO, and which help only one.",
+  },
+  "geo-vs-aeo": {
+    title: "GEO vs AEO: Where the Terms Came From and Which One to Use",
+    blurb: "Where GEO, AEO, LLMO and AI SEO came from, and which term to use.",
+  },
+  "answer-engine-optimization-vs-seo": {
+    title: "Answer Engine Optimization vs SEO: What Changes and What Doesn't",
+    blurb: "What changes from classic SEO to AEO, what doesn't, and what Google says.",
+  },
+  "brand-sentiment-chatgpt": {
+    title: "Brand Sentiment & Mention Monitoring in ChatGPT",
+    blurb: "What shapes how ChatGPT describes your brand, and a method to score its sentiment.",
+  },
+  "monitor-brand-mentions-in-chatgpt": {
+    title: "How to Monitor Brand Mentions in ChatGPT: A Weekly Routine",
+    blurb: "A weekly prompt-panel routine for ChatGPT, with a log template and tools.",
+  },
+  "optimize-brand-mentions-in-chatgpt-and-perplexity": {
+    title: "How to Optimize Brand Mentions in ChatGPT and Perplexity",
+    blurb: "What moves brand mentions in ChatGPT and Perplexity, and how the two differ.",
+  },
+  "get-cited-by-perplexity": {
+    title: "How to Get Cited by Perplexity AI",
+    blurb: "How Perplexity picks and names its sources, and how to make sure it can reach you.",
+  },
+  "brand-mentions-in-perplexity": {
+    title: "Brand Mentions in Perplexity: How Perplexity Decides Which Brands to Name",
+    blurb: "Which sources Perplexity cites for brand questions, and named versus cited.",
+  },
+  "track-brand-mentions-in-perplexity": {
+    title: "How to Track Brand Mentions in Perplexity, Free and Paid",
+    blurb: "Track Perplexity mentions by hand or with tools, with dated prices.",
+  },
+  "how-to-get-cited-by-perplexity": {
+    title: "How to Get Cited by Perplexity: A 30-Day Plan for One Page",
+    blurb: "One page, 30 days: a day-by-day plan to earn a Perplexity citation.",
+  },
+  "co-citation-seo": {
+    title: "Co-Citation SEO: Teaching LLMs to Connect Your Brand to Industry Leaders",
+    blurb: "Where brands get named next to category leaders, and how to earn those mentions.",
+  },
+  "what-is-co-citation-in-seo": {
+    title: "What Is Co-Citation in SEO? Meaning, Examples and How It Differs From Co-Occurrence",
+    blurb: "Co-citation and co-occurrence defined, where the term came from, with examples.",
+  },
+  "entity-seo-strategy": {
+    title: "Entity SEO Strategy: Choosing the Entities Your Site Should Own",
+    blurb: "Choose the entities your site should own, and map them to pages and schema.",
+  },
+  "wikidata-seo": {
+    title: "Wikidata SEO: Building Machine-Readable Authority for LLM Knowledge Bases",
+    blurb: "What's documented about Wikidata in AI and search, and a compliant company item.",
+  },
+  "create-wikidata-item-for-company": {
+    title: "How to Create a Wikidata Item for Your Company (Without Getting It Deleted)",
+    blurb: "Create a company Wikidata item step by step, within Wikidata's rules.",
+  },
   "cheap-seo": {
     title: "Cheap SEO in 2026: What Works and What's a Scam",
     blurb: "The free tools to set up first, the few paid ones worth buying, and the red flags.",
@@ -1052,6 +1116,8 @@ export const TOPICS: Topic[] = [
     pages: [
       e("chatgpt"),
       b("how-to-get-cited-by-chatgpt"),
+      b("brand-sentiment-chatgpt"),
+      b("monitor-brand-mentions-in-chatgpt"),
       b("chatgpt-ranking-factors-ai-search-placement"),
       b("chatgpt-ranking-factors"),
       b("how-chatgpt-search-decides-citations"),
@@ -1101,6 +1167,11 @@ export const TOPICS: Topic[] = [
       b("perplexity-seo-tools"),
       b("brand-presence-in-perplexity"),
       b("optimize-website-for-chatgpt-and-perplexity"),
+      b("optimize-brand-mentions-in-chatgpt-and-perplexity"),
+      b("get-cited-by-perplexity"),
+      b("brand-mentions-in-perplexity"),
+      b("track-brand-mentions-in-perplexity"),
+      b("how-to-get-cited-by-perplexity"),
       i("perplexity"),
       ...g("perplexitybot"),
     ],
@@ -1307,9 +1378,10 @@ export const TOPICS: Topic[] = [
   },
   {
     id: "publishing",
-    title: "Publish on a schedule, hands-free",
+    title: "Publish on a schedule",
     pages: [
       f("auto-publishing"),
+      s("autonomous-geo"),
       i("wordpress"),
       i("webflow"),
       i("shopify"),
@@ -1428,6 +1500,7 @@ export const TOPICS: Topic[] = [
       b("shadow-training-data-audit"),
       b("reddit-in-ai-search"),
       b("headless-brand-zero-click"),
+      b("brand-sentiment-chatgpt"),
       t("ai-visibility-prompt-generator"),
       s("ai-search-visibility"),
       s("aeo-tools"),
@@ -1600,6 +1673,42 @@ export const TOPICS: Topic[] = [
       ),
     ],
   },
+  {
+    id: "aeo-geo",
+    title: "Understand AEO, GEO and how they differ from SEO",
+    pages: [
+      b("aeo-vs-geo"),
+      b("aeo-vs-geo-differences"),
+      b("geo-vs-aeo"),
+      b("answer-engine-optimization-vs-seo"),
+      s("ai-search-visibility"),
+      s("aeo-tools"),
+      t("ai-search-readiness-check"),
+      t("ai-visibility-prompt-generator"),
+      f("answer-space-research"),
+      ...g(
+        "answer-engine-optimization",
+        "generative-engine-optimization",
+        "ai-share-of-voice",
+        "featured-snippet",
+      ),
+    ],
+  },
+  {
+    id: "entities",
+    title: "Become an entity AI engines recognize",
+    pages: [
+      b("co-citation-seo"),
+      b("what-is-co-citation-in-seo"),
+      b("entity-seo-strategy"),
+      b("wikidata-seo"),
+      b("create-wikidata-item-for-company"),
+      t("schema-generator"),
+      t("get-recommended-by-chatgpt"),
+      f("citation-ready-writer"),
+      ...g("entity-seo", "knowledge-graph", "brand-mentions", "digital-pr", "e-e-a-t"),
+    ],
+  },
 
   /* Every AI-tool page links here; the directory itself links to them all. */
   {
@@ -1633,6 +1742,7 @@ export const TOPICS: Topic[] = [
       b("how-to-compare-generative-engine-optimization-software"),
       b("what-is-generative-engine-optimization"),
       "/pricing",
+      s("autonomous-geo"),
       s("aeo-tools"),
       s("ai-search-visibility"),
       b("ai-search-optimization-tools"),

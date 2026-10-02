@@ -5,6 +5,7 @@
  */
 import {
   BookA,
+  BookMarked,
   BookOpen,
   FileText,
   GitCompare,
@@ -20,7 +21,16 @@ export type MenuId = "features" | "resources";
 /** Paths each menu covers, so its trigger can mark the section you're in. */
 export const MENU_SECTIONS: Record<MenuId, string[]> = {
   features: ["/features", "/use-cases", "/integrations"],
-  resources: ["/blog", "/glossary", "/tools", "/alternatives", "/compare", "/ai-seo", "/changelog"],
+  resources: [
+    "/blog",
+    "/docs",
+    "/glossary",
+    "/tools",
+    "/alternatives",
+    "/compare",
+    "/ai-seo",
+    "/changelog",
+  ],
 };
 
 export function inSection(pathname: string, paths: readonly string[]) {
@@ -42,6 +52,12 @@ export const LEARN_LINKS: NavEntry[] = [
     title: "Blog",
     description: "Guides & GEO playbooks",
     target: { to: "/blog" },
+  },
+  {
+    icon: BookMarked,
+    title: "Docs",
+    description: "Guides, API & agent access",
+    target: { to: "/docs" },
   },
   {
     icon: BookA,

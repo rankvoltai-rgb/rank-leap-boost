@@ -12,15 +12,12 @@
  *   inline code, line by line, so the content survives
  */
 import { markdownToHtml } from "@/lib/markdown";
+import { stripWriterNotes } from "@/lib/publish-body";
 
-const IMAGE_CONCEPT = /\*{0,2}\[Image:[^\]]*\]\s*\(alt:\s*"[^"]*"\)\*{0,2}/g;
-const INTERNAL_LINK = /\[([^\]]+)\]\(#internal:[^)]*\)/g;
 const IFRAME = /<iframe\b[^>]*>[\s\S]*?<\/iframe>/gi;
 
 export function cleanMarkdownForWebflow(markdown: string): string {
-  let md = (markdown ?? "").replace(/\r\n/g, "\n");
-  md = md.replace(IMAGE_CONCEPT, "");
-  md = md.replace(INTERNAL_LINK, "$1");
+  let md = stripWriterNotes(markdown);
   md = md.replace(IFRAME, "");
   // Only the opening H1: the title is the page's H1 in the collection template.
   md = md.replace(/^\s*#\s+[^\n]*\n?/, "");

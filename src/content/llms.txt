@@ -8,10 +8,18 @@
 - [About](https://rankbox.xyz/about): Who makes Rankbox (Autusus LLC), when it started (2026, as Rankvolt), the editorial standards behind its guides, glossary and comparisons, and how to contact the company.
 - [Changelog](https://rankbox.xyz/changelog): Every Rankbox release, dated, each marked live, rolling out or coming soon: Studio (several sites on one account), the connector library for 49 AI tools, the backlink exchange, Reddit Presence, and the Framer plugin. Also as RSS at /changelog/rss.xml.
 
+## Docs
+
+- [Rankbox Docs](https://rankbox.xyz/docs): The product documentation and knowledge base: getting started, the content engine, publishing, the backlink exchange and Reddit Presence, the MCP server, the REST API, agent access, billing, and help.
+- [Docs index for LLMs](https://rankbox.xyz/docs/llms.txt): Every docs page with a one-line description and a link to its Markdown copy. Every docs page is also available as Markdown by adding .md to its URL; https://rankbox.xyz/docs/llms-full.txt has all of them in one file.
+- [Agent quickstart](https://rankbox.xyz/docs/agents/quickstart.md): How an AI agent creates a Rankbox account and runs the platform for a project through the API or MCP.
+
 ## Solutions
 
 - [AI search visibility](https://rankbox.xyz/solutions/ai-search-visibility): The four gates an AI engine checks before it names a brand (readable, answered, liftable, corroborated), an interactive demo of each, how an AI visibility tracker differs from Rankbox, and how to measure AI search visibility for free. Rankbox builds visibility (questions, articles, AI-readiness scoring, backlinks, Reddit reply drafts); it does not track AI citations yet.
 - [AEO tools](https://rankbox.xyz/solutions/aeo-tools): 18 free answer engine optimization tools sorted by job, a live AI search readiness check, the AEO tool market by category with each vendor's dated starting price, and the Rankbox plan that runs three of the jobs on autopilot.
+- [AI search optimization tool that does the work](https://rankbox.xyz/solutions/autonomous-geo): Autonomous GEO. Rankbox finds the questions buyers ask AI that a site doesn't answer, writes cited answers and delivers up to one a day. It doesn't track AI visibility.
+- [Solutions](https://rankbox.xyz/solutions): every Rankbox solutions page in one index, grouped by the job, platform or industry it starts from.
 
 ## Integrations
 
@@ -193,6 +201,22 @@
 - [AI Crawler robots.txt Mistakes: How to Test Rules for GPTBot, ClaudeBot and Others](https://rankbox.xyz/blog/ai-crawler-robots-txt): AI crawler robots.txt mistakes: wrong groups, matching and wildcard errors, CDN overrides and status codes, how each AI vendor reads robots.txt, and how to test rules with parsers and logs.
 - [Applebot User-Agent & Preparing for Apple Intelligence Search](https://rankbox.xyz/blog/applebot-apple-intelligence-search): Applebot and Apple Intelligence search: what Applebot powers, what Applebot-Extended controls, how Applebot renders pages, the robots.txt and meta rules Apple honours, and a readiness check.
 - [Applebot User Agent Strings: How to Identify and Verify Apple's Crawler](https://rankbox.xyz/blog/applebot-user-agent): Applebot user agent strings as Apple documents them, Applebot-Extended as a robots.txt token, and how to verify the real crawler and spot spoofers.
+- [Answer Engine Optimization (AEO) vs. Generative Engine Optimization (GEO)](https://rankbox.xyz/blog/aeo-vs-geo): Answer engine optimization (AEO) vs generative engine optimization (GEO): a side-by-side comparison of goals, surfaces, how engines use your content, measurement and tactics, with a combined plan.
+- [AEO vs GEO: The Tactics That Overlap and the Ones That Don't](https://rankbox.xyz/blog/aeo-vs-geo-differences): AEO vs GEO tactics: a sorter of common tactics into those that help both, mainly AEO and mainly GEO, with where to start by business type.
+- [GEO vs AEO: Where the Terms Came From and Which One to Use](https://rankbox.xyz/blog/geo-vs-aeo): GEO vs AEO as terms: where GEO, AEO, LLMO, AIO and AI SEO came from, who uses which today, and which term to use in an RFP, job post or report.
+- [Answer Engine Optimization vs SEO: What Changes and What Doesn't](https://rankbox.xyz/blog/answer-engine-optimization-vs-seo): Answer engine optimization vs SEO: what stays the same, what changes, what Google says about optimizing for its AI features, and a checklist for SEO teams.
+- [Brand Sentiment & Mention Monitoring in ChatGPT](https://rankbox.xyz/blog/brand-sentiment-chatgpt): Brand sentiment and mention monitoring in ChatGPT: what shapes how ChatGPT describes a brand, a sentiment scoring method for a prompt panel, separating wrong facts from negative opinions, and avoiding personalization skew.
+- [How to Monitor Brand Mentions in ChatGPT: A Weekly Routine](https://rankbox.xyz/blog/monitor-brand-mentions-in-chatgpt): How to monitor brand mentions in ChatGPT: a weekly prompt-panel routine, what to log, a log template, and tools with dated prices.
+- [How to Optimize Brand Mentions in ChatGPT and Perplexity](https://rankbox.xyz/blog/optimize-brand-mentions-in-chatgpt-and-perplexity): How to optimize brand mentions in ChatGPT and Perplexity: what moves mentions, how the two engines differ in where they pull from, and a checklist.
+- [How to Get Cited by Perplexity AI](https://rankbox.xyz/blog/get-cited-by-perplexity): How to get cited by Perplexity AI: how Perplexity mentions brands and picks the sources it cites, what Perplexity documents, dated citation studies, and a reachability check.
+- [Brand Mentions in Perplexity: How Perplexity Decides Which Brands to Name](https://rankbox.xyz/blog/brand-mentions-in-perplexity): Brand mentions in Perplexity: which sources Perplexity cites for brand and product questions, how Comet and shopping change exposure, and why named and cited differ.
+- [How to Track Brand Mentions in Perplexity, Free and Paid](https://rankbox.xyz/blog/track-brand-mentions-in-perplexity): How to track brand mentions in Perplexity: a manual method, what Perplexity's own features show, and tools with dated prices.
+- [How to Get Cited by Perplexity: A 30-Day Plan for One Page](https://rankbox.xyz/blog/how-to-get-cited-by-perplexity): How to get cited by Perplexity: a 30-day, one-page plan to check who Perplexity cites today, close the gap, get recrawled and re-test.
+- [Co-Citation SEO: Teaching LLMs to Connect Your Brand to Industry Leaders](https://rankbox.xyz/blog/co-citation-seo): Co-citation SEO: a playbook for earning mentions next to category leaders (roundups, comparison pages, analysts, podcasts, data studies, communities), source by source, within Google's link spam rules.
+- [What Is Co-Citation in SEO? Meaning, Examples and How It Differs From Co-Occurrence](https://rankbox.xyz/blog/what-is-co-citation-in-seo): What co-citation means in SEO: the definition, its origin in citation analysis, how it differs from co-occurrence, and examples by type.
+- [Entity SEO Strategy: Choosing the Entities Your Site Should Own](https://rankbox.xyz/blog/entity-seo-strategy): Entity SEO strategy: choosing which entities your site should own, mapping them to pages and schema, what to claim versus earn, and how to measure entity recognition.
+- [Wikidata SEO: Building Machine-Readable Authority for LLM Knowledge Bases](https://rankbox.xyz/blog/wikidata-seo): Wikidata SEO: what's documented about Wikidata and Wikipedia in AI systems and search, who qualifies under Wikidata's notability policy, the key properties for a company item, and how it connects to sameAs.
+- [How to Create a Wikidata Item for Your Company (Without Getting It Deleted)](https://rankbox.xyz/blog/create-wikidata-item-for-company): How to create a Wikidata item for a company without getting it deleted: notability first, references, key statements, identifiers, conflict-of-interest disclosure and maintenance.
 
 ## AI Search Glossary
 

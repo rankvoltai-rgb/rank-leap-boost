@@ -932,7 +932,7 @@ export const TOOLS: Tool[] = [
       },
       {
         q: "Can this be automated?",
-        a: "Yes — Rankbox tracks prompts across engines daily and shows your share of voice against competitors. This kit is the manual version so you can see the gap first.",
+        a: "Rankbox doesn't run these prompts for you yet. It automates the fix instead: each day it writes a cited answer page for a question you're missing. Rerun this kit once a month and compare scorecards to see whether the gap is closing.",
       },
     ],
   },

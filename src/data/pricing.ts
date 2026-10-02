@@ -107,7 +107,7 @@ export const PRICING_FAQS: { q: string; a: string }[] = [
   },
   {
     q: "Is everything included in the free trial?",
-    a: `Everything except the backlink exchange and Reddit presence, which both open with your first paid invoice. Research, writing, publishing, and citation tracking all work during the trial, with up to ${TRIAL_ARTICLE_CREDITS} articles. Backlinks wait for a paid plan so that throwaway accounts can't join the network; Reddit presence waits because replies go out under your own name, in threads that outlive a trial.`,
+    a: `Everything except the backlink exchange and Reddit presence, which both open with your first paid invoice. Research, writing, scoring, and publishing all work during the trial, with up to ${TRIAL_ARTICLE_CREDITS} articles. Backlinks wait for a paid plan so that throwaway accounts can't join the network; Reddit presence waits because replies go out under your own name, in threads that outlive a trial.`,
   },
   {
     q: "Are there any add-ons, setup fees, or contracts?",

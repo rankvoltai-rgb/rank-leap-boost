@@ -44,6 +44,25 @@ export const Route = createFileRoute("/sitemap.xml")({
           // Notion unavailable: the sitemap still lists the repo articles.
         }
 
+        // The docs hub, each section page, and every docs page.
+        const docs = await import("@/lib/docs/content.server");
+        const docsUpdated = docs.docsUpdated() ?? undefined;
+        const docsEntries: SitemapEntry[] = [
+          { path: "/docs", lastmod: docsUpdated, changefreq: "weekly", priority: "0.8" },
+          ...docs.docsNav().map((s) => ({
+            path: s.path,
+            lastmod: docsUpdated,
+            changefreq: "weekly" as const,
+            priority: "0.7",
+          })),
+          ...docs.listDocs().map((d) => ({
+            path: d.path,
+            lastmod: d.updated ?? undefined,
+            changefreq: "monthly" as const,
+            priority: "0.7",
+          })),
+        ];
+
         const entries: SitemapEntry[] = [
           { path: "/", changefreq: "weekly", priority: "1.0" },
           { path: "/pricing", changefreq: "monthly", priority: "0.9" },
@@ -54,6 +73,7 @@ export const Route = createFileRoute("/sitemap.xml")({
             changefreq: "monthly" as const,
             priority: "0.7",
           })),
+          { path: "/solutions", lastmod: SOLUTIONS_UPDATED, changefreq: "weekly", priority: "0.8" },
           ...SOLUTION_SLUGS.map((slug) => ({
             path: `/solutions/${slug}`,
             lastmod: SOLUTIONS_UPDATED,
@@ -130,6 +150,7 @@ export const Route = createFileRoute("/sitemap.xml")({
             changefreq: "monthly" as const,
             priority: "0.6",
           })),
+          ...docsEntries,
           { path: "/tools", changefreq: "weekly", priority: "0.8" },
           ...TOOL_SLUGS.map((slug) => ({
             path: `/tools/${slug}`,

@@ -11,14 +11,10 @@
  * YouTube embed and code blocks stay as they are.
  */
 import { markdownToHtml } from "@/lib/markdown";
-
-const IMAGE_CONCEPT = /\*{0,2}\[Image:[^\]]*\]\s*\(alt:\s*"[^"]*"\)\*{0,2}/g;
-const INTERNAL_LINK = /\[([^\]]+)\]\(#internal:[^)]*\)/g;
+import { stripWriterNotes } from "@/lib/publish-body";
 
 export function cleanMarkdownForShopify(markdown: string): string {
-  let md = (markdown ?? "").replace(/\r\n/g, "\n");
-  md = md.replace(IMAGE_CONCEPT, "");
-  md = md.replace(INTERNAL_LINK, "$1");
+  let md = stripWriterNotes(markdown);
   // Only the opening H1: the theme's article template shows the title.
   md = md.replace(/^\s*#\s+[^\n]*\n?/, "");
   return md.replace(/\n{3,}/g, "\n\n").trim();

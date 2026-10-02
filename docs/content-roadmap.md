@@ -1068,50 +1068,50 @@ Sept 30 pull. "aeo vs geo" + "geo vs aeo" (1,470/mo) and "monitor brand mentions
 
 **Needs:** Nothing extra.
 
-- [ ] **LH4·5: Answer Engine Optimization (AEO) vs. Generative Engine Optimization (GEO)**
+- [x] **LH4·5: Answer Engine Optimization (AEO) vs. Generative Engine Optimization (GEO)** (written: /blog/aeo-vs-geo)
   - Source: Sept 30 Semrush · Brand, Schema & Engines
   - Target queries: "aeo vs geo" (880/mo · KD 47); "geo vs aeo" (590/mo · KD 48); "answer engine optimization vs seo" (70/mo · KD 0 · 0 comp)
   - Angle: AEO (extracting direct answers for voice and featured snippets) vs. GEO (getting generative LLMs to include your brand in multi-option recommendations).
   - PDF flag: Make "aeo vs geo" the main keyword: 1,470/mo combined with "geo vs aeo". KD 47 is harder than the rest of the batch, so it needs a comparison table and links from P18 and E1.
   - Standalone posts:
-    - [ ] "aeo vs geo"
-    - [ ] "geo vs aeo"
-    - [ ] "answer engine optimization vs seo"
-- [ ] **LH4·1: Brand Sentiment & Mention Monitoring in ChatGPT**
+    - [x] "aeo vs geo" (written: /blog/aeo-vs-geo-differences)
+    - [x] "geo vs aeo" (written: /blog/geo-vs-aeo)
+    - [x] "answer engine optimization vs seo" (written: /blog/answer-engine-optimization-vs-seo)
+- [x] **LH4·1: Brand Sentiment & Mention Monitoring in ChatGPT** (written: /blog/brand-sentiment-chatgpt)
   - Source: Sept 30 Semrush · Brand, Schema & Engines
   - Close to P01: set it apart and link to it
   - Target queries: "monitor brand mentions in chatgpt" (590/mo · KD 8 · 0 comp); "how to optimize brand mentions in chatgpt and perplexity" (20/mo · KD 0)
   - Angle: How models associate brand attributes with categories, how to detect negative or hallucinated sentiment, and how to track share of voice across LLM sessions.
   - PDF flag: Close to P01 and P08 (both written), which cover all AI search. Set it apart: ChatGPT only, and lead with sentiment (what ChatGPT says about you), not just whether you're mentioned. Link to P01.
   - Standalone posts:
-    - [ ] "monitor brand mentions in chatgpt"
-    - [ ] "how to optimize brand mentions in chatgpt and perplexity"
-- [ ] **LH4·2: How to Get Cited by Perplexity AI**
+    - [x] "monitor brand mentions in chatgpt" (written: /blog/monitor-brand-mentions-in-chatgpt)
+    - [x] "how to optimize brand mentions in chatgpt and perplexity" (written: /blog/optimize-brand-mentions-in-chatgpt-and-perplexity)
+- [x] **LH4·2: How to Get Cited by Perplexity AI** (written: /blog/get-cited-by-perplexity)
   - Source: Sept 30 Semrush · Brand, Schema & Engines
   - Close to P04: set it apart and link to it
   - Target queries: "brand mentions in perplexity" (320/mo · KD 11 · 0 comp); "how to track brand mentions in perplexity" (50/mo · KD 10); "how to get cited by perplexity" (30/mo · KD 0)
   - Angle: Perplexity's real-time retrieval layer: how it picks its top 3 to 5 citations per prompt, domain authority vs. topical relevance, and how to check your pages are reachable.
   - PDF flag: Close to P04 and the live /ai-seo/perplexity guide. Set it apart: lead with tracking brand mentions in Perplexity (the 320/mo query), and link to the guide for optimization.
   - Standalone posts:
-    - [ ] "brand mentions in perplexity"
-    - [ ] "how to track brand mentions in perplexity"
-    - [ ] "how to get cited by perplexity"
-- [ ] **LH5·2: Co-Citation SEO: Teaching LLMs to Connect Your Brand to Industry Leaders**
+    - [x] "brand mentions in perplexity" (written: /blog/brand-mentions-in-perplexity)
+    - [x] "how to track brand mentions in perplexity" (written: /blog/track-brand-mentions-in-perplexity)
+    - [x] "how to get cited by perplexity" (written: /blog/how-to-get-cited-by-perplexity)
+- [x] **LH5·2: Co-Citation SEO: Teaching LLMs to Connect Your Brand to Industry Leaders** (written: /blog/co-citation-seo)
   - Source: Sept 30 Semrush · Measurement, Entities & Strategy
   - Close to OB2·1: set it apart and link to it
   - Target queries: "co citation seo" (90/mo · KD 11 · 0.33 comp); "entity seo strategy" (10/mo · KD 0)
   - Angle: How embedding models group entities, and why being mentioned alongside category leaders (even without links) puts your brand in the same recommendation cluster.
   - PDF flag: Close to OB2·1 (written, link building and co-citation). Set it apart: the playbook for earning co-citations (listicles, comparison roundups, podcast mentions), not whether links still matter. Link to OB2·1.
   - Standalone posts:
-    - [ ] "co citation seo"
-    - [ ] "entity seo strategy"
-- [ ] **LH5·4: Wikidata SEO: Building Machine-Readable Authority for LLM Knowledge Bases**
+    - [x] "co citation seo" (written: /blog/what-is-co-citation-in-seo)
+    - [x] "entity seo strategy" (written: /blog/entity-seo-strategy)
+- [x] **LH5·4: Wikidata SEO: Building Machine-Readable Authority for LLM Knowledge Bases** (written: /blog/wikidata-seo)
   - Source: Sept 30 Semrush · Measurement, Entities & Strategy
   - Target queries: "wikidata seo" (30/mo · KD 0 · 0.33 comp)
   - Angle: Wikipedia and Wikidata as core grounding datasets, and how to create compliant, verifiable Wikidata items so AI engines recognize your company as an entity.
   - PDF flag: Keep it inside Wikidata's notability rules. A spammy how-to gets items deleted and draws criticism. Link to LH1·5 (knowledge graph).
   - Standalone posts:
-    - [ ] "wikidata seo"
+    - [x] "wikidata seo" (written: /blog/create-wikidata-item-for-company)
 
 ## Phase 21: Retrieval & page structure
 

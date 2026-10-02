@@ -17,6 +17,7 @@ import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as McpRouteImport } from './routes/mcp'
 import { Route as LlmsDottxtRouteImport } from './routes/llms[.]txt'
 import { Route as LegalRouteImport } from './routes/legal'
+import { Route as DocsRouteImport } from './routes/docs'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
@@ -27,6 +28,7 @@ import { Route as SolutionsIndexRouteImport } from './routes/solutions.index'
 import { Route as IntegrationsIndexRouteImport } from './routes/integrations.index'
 import { Route as GlossaryIndexRouteImport } from './routes/glossary.index'
 import { Route as FeaturesIndexRouteImport } from './routes/features.index'
+import { Route as DocsIndexRouteImport } from './routes/docs.index'
 import { Route as CompareIndexRouteImport } from './routes/compare.index'
 import { Route as ChangelogIndexRouteImport } from './routes/changelog.index'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
@@ -34,6 +36,7 @@ import { Route as AlternativesIndexRouteImport } from './routes/alternatives.ind
 import { Route as AiSeoIndexRouteImport } from './routes/ai-seo.index'
 import { Route as UseCasesSlugRouteImport } from './routes/use-cases.$slug'
 import { Route as ToolsSlugRouteImport } from './routes/tools.$slug'
+import { Route as SolutionsAutonomousGeoRouteImport } from './routes/solutions.autonomous-geo'
 import { Route as SolutionsAiSearchVisibilityRouteImport } from './routes/solutions.ai-search-visibility'
 import { Route as SolutionsAeoToolsRouteImport } from './routes/solutions.aeo-tools'
 import { Route as OauthConsentRouteImport } from './routes/oauth.consent'
@@ -46,6 +49,9 @@ import { Route as LegalAcceptableUseRouteImport } from './routes/legal.acceptabl
 import { Route as IntegrationsSlugRouteImport } from './routes/integrations.$slug'
 import { Route as GlossaryTermRouteImport } from './routes/glossary.$term'
 import { Route as FeaturesSlugRouteImport } from './routes/features.$slug'
+import { Route as DocsLlmsDottxtRouteImport } from './routes/docs_.llms[.]txt'
+import { Route as DocsLlmsFullDottxtRouteImport } from './routes/docs_.llms-full[.]txt'
+import { Route as DocsSectionRouteImport } from './routes/docs.$section'
 import { Route as CompareSlugRouteImport } from './routes/compare.$slug'
 import { Route as ChangelogRssDotxmlRouteImport } from './routes/changelog.rss[.]xml'
 import { Route as ChangelogSlugRouteImport } from './routes/changelog.$slug'
@@ -55,7 +61,9 @@ import { Route as AiSeoEngineRouteImport } from './routes/ai-seo.$engine'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
+import { Route as DocsSectionIndexRouteImport } from './routes/docs.$section.index'
 import { Route as AuthenticatedDashboardIndexRouteImport } from './routes/_authenticated/dashboard.index'
+import { Route as DocsSectionPageRouteImport } from './routes/docs.$section.$page'
 import { Route as AuthenticatedDashboardVisibilityRouteImport } from './routes/_authenticated/dashboard.visibility'
 import { Route as AuthenticatedDashboardSettingsRouteImport } from './routes/_authenticated/dashboard.settings'
 import { Route as AuthenticatedDashboardRedditRouteImport } from './routes/_authenticated/dashboard.reddit'
@@ -123,6 +131,11 @@ const LegalRoute = LegalRouteImport.update({
   path: '/legal',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DocsRoute = DocsRouteImport.update({
+  id: '/docs',
+  path: '/docs',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
@@ -172,6 +185,11 @@ const FeaturesIndexRoute = FeaturesIndexRouteImport.update({
   path: '/features/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DocsIndexRoute = DocsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DocsRoute,
+} as any)
 const CompareIndexRoute = CompareIndexRouteImport.update({
   id: '/compare/',
   path: '/compare/',
@@ -205,6 +223,11 @@ const UseCasesSlugRoute = UseCasesSlugRouteImport.update({
 const ToolsSlugRoute = ToolsSlugRouteImport.update({
   id: '/tools/$slug',
   path: '/tools/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SolutionsAutonomousGeoRoute = SolutionsAutonomousGeoRouteImport.update({
+  id: '/solutions/autonomous-geo',
+  path: '/solutions/autonomous-geo',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SolutionsAiSearchVisibilityRoute =
@@ -268,6 +291,21 @@ const FeaturesSlugRoute = FeaturesSlugRouteImport.update({
   path: '/features/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DocsLlmsDottxtRoute = DocsLlmsDottxtRouteImport.update({
+  id: '/docs_/llms.txt',
+  path: '/docs/llms.txt',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DocsLlmsFullDottxtRoute = DocsLlmsFullDottxtRouteImport.update({
+  id: '/docs_/llms-full.txt',
+  path: '/docs/llms-full.txt',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DocsSectionRoute = DocsSectionRouteImport.update({
+  id: '/$section',
+  path: '/$section',
+  getParentRoute: () => DocsRoute,
+} as any)
 const CompareSlugRoute = CompareSlugRouteImport.update({
   id: '/compare/$slug',
   path: '/compare/$slug',
@@ -315,12 +353,22 @@ const Char91DotmcpChar93ListToolsRoute =
     path: '/.mcp/list-tools',
     getParentRoute: () => rootRouteImport,
   } as any)
+const DocsSectionIndexRoute = DocsSectionIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DocsSectionRoute,
+} as any)
 const AuthenticatedDashboardIndexRoute =
   AuthenticatedDashboardIndexRouteImport.update({
     id: '/',
     path: '/',
     getParentRoute: () => AuthenticatedDashboardRoute,
   } as any)
+const DocsSectionPageRoute = DocsSectionPageRouteImport.update({
+  id: '/$page',
+  path: '/$page',
+  getParentRoute: () => DocsSectionRoute,
+} as any)
 const AuthenticatedDashboardVisibilityRoute =
   AuthenticatedDashboardVisibilityRouteImport.update({
     id: '/visibility',
@@ -475,6 +523,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
+  '/docs': typeof DocsRouteWithChildren
   '/legal': typeof LegalRouteWithChildren
   '/llms.txt': typeof LlmsDottxtRoute
   '/mcp': typeof McpRoute
@@ -492,6 +541,9 @@ export interface FileRoutesByFullPath {
   '/changelog/$slug': typeof ChangelogSlugRoute
   '/changelog/rss.xml': typeof ChangelogRssDotxmlRoute
   '/compare/$slug': typeof CompareSlugRoute
+  '/docs/$section': typeof DocsSectionRouteWithChildren
+  '/docs/llms-full.txt': typeof DocsLlmsFullDottxtRoute
+  '/docs/llms.txt': typeof DocsLlmsDottxtRoute
   '/features/$slug': typeof FeaturesSlugRoute
   '/glossary/$term': typeof GlossaryTermRoute
   '/integrations/$slug': typeof IntegrationsSlugRoute
@@ -504,6 +556,7 @@ export interface FileRoutesByFullPath {
   '/oauth/consent': typeof OauthConsentRoute
   '/solutions/aeo-tools': typeof SolutionsAeoToolsRoute
   '/solutions/ai-search-visibility': typeof SolutionsAiSearchVisibilityRoute
+  '/solutions/autonomous-geo': typeof SolutionsAutonomousGeoRoute
   '/tools/$slug': typeof ToolsSlugRoute
   '/use-cases/$slug': typeof UseCasesSlugRoute
   '/ai-seo/': typeof AiSeoIndexRoute
@@ -511,6 +564,7 @@ export interface FileRoutesByFullPath {
   '/blog/': typeof BlogIndexRoute
   '/changelog/': typeof ChangelogIndexRoute
   '/compare/': typeof CompareIndexRoute
+  '/docs/': typeof DocsIndexRoute
   '/features/': typeof FeaturesIndexRoute
   '/glossary/': typeof GlossaryIndexRoute
   '/integrations/': typeof IntegrationsIndexRoute
@@ -526,7 +580,9 @@ export interface FileRoutesByFullPath {
   '/dashboard/reddit': typeof AuthenticatedDashboardRedditRoute
   '/dashboard/settings': typeof AuthenticatedDashboardSettingsRoute
   '/dashboard/visibility': typeof AuthenticatedDashboardVisibilityRoute
+  '/docs/$section/$page': typeof DocsSectionPageRoute
   '/dashboard/': typeof AuthenticatedDashboardIndexRoute
+  '/docs/$section/': typeof DocsSectionIndexRoute
   '/dashboard/editor/$blogId': typeof AuthenticatedDashboardEditorBlogIdRoute
   '/dashboard/studio/new': typeof AuthenticatedDashboardStudioNewRoute
   '/api/public/hooks/autopilot-run': typeof ApiPublicHooksAutopilotRunRoute
@@ -565,6 +621,8 @@ export interface FileRoutesByTo {
   '/changelog/$slug': typeof ChangelogSlugRoute
   '/changelog/rss.xml': typeof ChangelogRssDotxmlRoute
   '/compare/$slug': typeof CompareSlugRoute
+  '/docs/llms-full.txt': typeof DocsLlmsFullDottxtRoute
+  '/docs/llms.txt': typeof DocsLlmsDottxtRoute
   '/features/$slug': typeof FeaturesSlugRoute
   '/glossary/$term': typeof GlossaryTermRoute
   '/integrations/$slug': typeof IntegrationsSlugRoute
@@ -577,6 +635,7 @@ export interface FileRoutesByTo {
   '/oauth/consent': typeof OauthConsentRoute
   '/solutions/aeo-tools': typeof SolutionsAeoToolsRoute
   '/solutions/ai-search-visibility': typeof SolutionsAiSearchVisibilityRoute
+  '/solutions/autonomous-geo': typeof SolutionsAutonomousGeoRoute
   '/tools/$slug': typeof ToolsSlugRoute
   '/use-cases/$slug': typeof UseCasesSlugRoute
   '/ai-seo': typeof AiSeoIndexRoute
@@ -584,6 +643,7 @@ export interface FileRoutesByTo {
   '/blog': typeof BlogIndexRoute
   '/changelog': typeof ChangelogIndexRoute
   '/compare': typeof CompareIndexRoute
+  '/docs': typeof DocsIndexRoute
   '/features': typeof FeaturesIndexRoute
   '/glossary': typeof GlossaryIndexRoute
   '/integrations': typeof IntegrationsIndexRoute
@@ -599,7 +659,9 @@ export interface FileRoutesByTo {
   '/dashboard/reddit': typeof AuthenticatedDashboardRedditRoute
   '/dashboard/settings': typeof AuthenticatedDashboardSettingsRoute
   '/dashboard/visibility': typeof AuthenticatedDashboardVisibilityRoute
+  '/docs/$section/$page': typeof DocsSectionPageRoute
   '/dashboard': typeof AuthenticatedDashboardIndexRoute
+  '/docs/$section': typeof DocsSectionIndexRoute
   '/dashboard/editor/$blogId': typeof AuthenticatedDashboardEditorBlogIdRoute
   '/dashboard/studio/new': typeof AuthenticatedDashboardStudioNewRoute
   '/api/public/hooks/autopilot-run': typeof ApiPublicHooksAutopilotRunRoute
@@ -624,6 +686,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
+  '/docs': typeof DocsRouteWithChildren
   '/legal': typeof LegalRouteWithChildren
   '/llms.txt': typeof LlmsDottxtRoute
   '/mcp': typeof McpRoute
@@ -641,6 +704,9 @@ export interface FileRoutesById {
   '/changelog/$slug': typeof ChangelogSlugRoute
   '/changelog/rss.xml': typeof ChangelogRssDotxmlRoute
   '/compare/$slug': typeof CompareSlugRoute
+  '/docs/$section': typeof DocsSectionRouteWithChildren
+  '/docs_/llms-full.txt': typeof DocsLlmsFullDottxtRoute
+  '/docs_/llms.txt': typeof DocsLlmsDottxtRoute
   '/features/$slug': typeof FeaturesSlugRoute
   '/glossary/$term': typeof GlossaryTermRoute
   '/integrations/$slug': typeof IntegrationsSlugRoute
@@ -653,6 +719,7 @@ export interface FileRoutesById {
   '/oauth/consent': typeof OauthConsentRoute
   '/solutions/aeo-tools': typeof SolutionsAeoToolsRoute
   '/solutions/ai-search-visibility': typeof SolutionsAiSearchVisibilityRoute
+  '/solutions/autonomous-geo': typeof SolutionsAutonomousGeoRoute
   '/tools/$slug': typeof ToolsSlugRoute
   '/use-cases/$slug': typeof UseCasesSlugRoute
   '/ai-seo/': typeof AiSeoIndexRoute
@@ -660,6 +727,7 @@ export interface FileRoutesById {
   '/blog/': typeof BlogIndexRoute
   '/changelog/': typeof ChangelogIndexRoute
   '/compare/': typeof CompareIndexRoute
+  '/docs/': typeof DocsIndexRoute
   '/features/': typeof FeaturesIndexRoute
   '/glossary/': typeof GlossaryIndexRoute
   '/integrations/': typeof IntegrationsIndexRoute
@@ -675,7 +743,9 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/reddit': typeof AuthenticatedDashboardRedditRoute
   '/_authenticated/dashboard/settings': typeof AuthenticatedDashboardSettingsRoute
   '/_authenticated/dashboard/visibility': typeof AuthenticatedDashboardVisibilityRoute
+  '/docs/$section/$page': typeof DocsSectionPageRoute
   '/_authenticated/dashboard/': typeof AuthenticatedDashboardIndexRoute
+  '/docs/$section/': typeof DocsSectionIndexRoute
   '/_authenticated/dashboard/editor/$blogId': typeof AuthenticatedDashboardEditorBlogIdRoute
   '/_authenticated/dashboard/studio/new': typeof AuthenticatedDashboardStudioNewRoute
   '/api/public/hooks/autopilot-run': typeof ApiPublicHooksAutopilotRunRoute
@@ -700,6 +770,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/auth'
+    | '/docs'
     | '/legal'
     | '/llms.txt'
     | '/mcp'
@@ -717,6 +788,9 @@ export interface FileRouteTypes {
     | '/changelog/$slug'
     | '/changelog/rss.xml'
     | '/compare/$slug'
+    | '/docs/$section'
+    | '/docs/llms-full.txt'
+    | '/docs/llms.txt'
     | '/features/$slug'
     | '/glossary/$term'
     | '/integrations/$slug'
@@ -729,6 +803,7 @@ export interface FileRouteTypes {
     | '/oauth/consent'
     | '/solutions/aeo-tools'
     | '/solutions/ai-search-visibility'
+    | '/solutions/autonomous-geo'
     | '/tools/$slug'
     | '/use-cases/$slug'
     | '/ai-seo/'
@@ -736,6 +811,7 @@ export interface FileRouteTypes {
     | '/blog/'
     | '/changelog/'
     | '/compare/'
+    | '/docs/'
     | '/features/'
     | '/glossary/'
     | '/integrations/'
@@ -751,7 +827,9 @@ export interface FileRouteTypes {
     | '/dashboard/reddit'
     | '/dashboard/settings'
     | '/dashboard/visibility'
+    | '/docs/$section/$page'
     | '/dashboard/'
+    | '/docs/$section/'
     | '/dashboard/editor/$blogId'
     | '/dashboard/studio/new'
     | '/api/public/hooks/autopilot-run'
@@ -790,6 +868,8 @@ export interface FileRouteTypes {
     | '/changelog/$slug'
     | '/changelog/rss.xml'
     | '/compare/$slug'
+    | '/docs/llms-full.txt'
+    | '/docs/llms.txt'
     | '/features/$slug'
     | '/glossary/$term'
     | '/integrations/$slug'
@@ -802,6 +882,7 @@ export interface FileRouteTypes {
     | '/oauth/consent'
     | '/solutions/aeo-tools'
     | '/solutions/ai-search-visibility'
+    | '/solutions/autonomous-geo'
     | '/tools/$slug'
     | '/use-cases/$slug'
     | '/ai-seo'
@@ -809,6 +890,7 @@ export interface FileRouteTypes {
     | '/blog'
     | '/changelog'
     | '/compare'
+    | '/docs'
     | '/features'
     | '/glossary'
     | '/integrations'
@@ -824,7 +906,9 @@ export interface FileRouteTypes {
     | '/dashboard/reddit'
     | '/dashboard/settings'
     | '/dashboard/visibility'
+    | '/docs/$section/$page'
     | '/dashboard'
+    | '/docs/$section'
     | '/dashboard/editor/$blogId'
     | '/dashboard/studio/new'
     | '/api/public/hooks/autopilot-run'
@@ -848,6 +932,7 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/about'
     | '/auth'
+    | '/docs'
     | '/legal'
     | '/llms.txt'
     | '/mcp'
@@ -865,6 +950,9 @@ export interface FileRouteTypes {
     | '/changelog/$slug'
     | '/changelog/rss.xml'
     | '/compare/$slug'
+    | '/docs/$section'
+    | '/docs_/llms-full.txt'
+    | '/docs_/llms.txt'
     | '/features/$slug'
     | '/glossary/$term'
     | '/integrations/$slug'
@@ -877,6 +965,7 @@ export interface FileRouteTypes {
     | '/oauth/consent'
     | '/solutions/aeo-tools'
     | '/solutions/ai-search-visibility'
+    | '/solutions/autonomous-geo'
     | '/tools/$slug'
     | '/use-cases/$slug'
     | '/ai-seo/'
@@ -884,6 +973,7 @@ export interface FileRouteTypes {
     | '/blog/'
     | '/changelog/'
     | '/compare/'
+    | '/docs/'
     | '/features/'
     | '/glossary/'
     | '/integrations/'
@@ -899,7 +989,9 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/reddit'
     | '/_authenticated/dashboard/settings'
     | '/_authenticated/dashboard/visibility'
+    | '/docs/$section/$page'
     | '/_authenticated/dashboard/'
+    | '/docs/$section/'
     | '/_authenticated/dashboard/editor/$blogId'
     | '/_authenticated/dashboard/studio/new'
     | '/api/public/hooks/autopilot-run'
@@ -924,6 +1016,7 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AboutRoute: typeof AboutRoute
   AuthRoute: typeof AuthRoute
+  DocsRoute: typeof DocsRouteWithChildren
   LegalRoute: typeof LegalRouteWithChildren
   LlmsDottxtRoute: typeof LlmsDottxtRoute
   McpRoute: typeof McpRoute
@@ -940,12 +1033,15 @@ export interface RootRouteChildren {
   ChangelogSlugRoute: typeof ChangelogSlugRoute
   ChangelogRssDotxmlRoute: typeof ChangelogRssDotxmlRoute
   CompareSlugRoute: typeof CompareSlugRoute
+  DocsLlmsFullDottxtRoute: typeof DocsLlmsFullDottxtRoute
+  DocsLlmsDottxtRoute: typeof DocsLlmsDottxtRoute
   FeaturesSlugRoute: typeof FeaturesSlugRoute
   GlossaryTermRoute: typeof GlossaryTermRoute
   IntegrationsSlugRoute: typeof IntegrationsSlugRoute
   OauthConsentRoute: typeof OauthConsentRoute
   SolutionsAeoToolsRoute: typeof SolutionsAeoToolsRoute
   SolutionsAiSearchVisibilityRoute: typeof SolutionsAiSearchVisibilityRoute
+  SolutionsAutonomousGeoRoute: typeof SolutionsAutonomousGeoRoute
   ToolsSlugRoute: typeof ToolsSlugRoute
   UseCasesSlugRoute: typeof UseCasesSlugRoute
   AiSeoIndexRoute: typeof AiSeoIndexRoute
@@ -1033,6 +1129,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LegalRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/docs': {
+      id: '/docs'
+      path: '/docs'
+      fullPath: '/docs'
+      preLoaderRoute: typeof DocsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/auth': {
       id: '/auth'
       path: '/auth'
@@ -1103,6 +1206,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FeaturesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/docs/': {
+      id: '/docs/'
+      path: '/'
+      fullPath: '/docs/'
+      preLoaderRoute: typeof DocsIndexRouteImport
+      parentRoute: typeof DocsRoute
+    }
     '/compare/': {
       id: '/compare/'
       path: '/compare'
@@ -1150,6 +1260,13 @@ declare module '@tanstack/react-router' {
       path: '/tools/$slug'
       fullPath: '/tools/$slug'
       preLoaderRoute: typeof ToolsSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/solutions/autonomous-geo': {
+      id: '/solutions/autonomous-geo'
+      path: '/solutions/autonomous-geo'
+      fullPath: '/solutions/autonomous-geo'
+      preLoaderRoute: typeof SolutionsAutonomousGeoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/solutions/ai-search-visibility': {
@@ -1236,6 +1353,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FeaturesSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/docs_/llms.txt': {
+      id: '/docs_/llms.txt'
+      path: '/docs/llms.txt'
+      fullPath: '/docs/llms.txt'
+      preLoaderRoute: typeof DocsLlmsDottxtRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/docs_/llms-full.txt': {
+      id: '/docs_/llms-full.txt'
+      path: '/docs/llms-full.txt'
+      fullPath: '/docs/llms-full.txt'
+      preLoaderRoute: typeof DocsLlmsFullDottxtRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/docs/$section': {
+      id: '/docs/$section'
+      path: '/$section'
+      fullPath: '/docs/$section'
+      preLoaderRoute: typeof DocsSectionRouteImport
+      parentRoute: typeof DocsRoute
+    }
     '/compare/$slug': {
       id: '/compare/$slug'
       path: '/compare/$slug'
@@ -1299,12 +1437,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Char91DotmcpChar93ListToolsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/docs/$section/': {
+      id: '/docs/$section/'
+      path: '/'
+      fullPath: '/docs/$section/'
+      preLoaderRoute: typeof DocsSectionIndexRouteImport
+      parentRoute: typeof DocsSectionRoute
+    }
     '/_authenticated/dashboard/': {
       id: '/_authenticated/dashboard/'
       path: '/'
       fullPath: '/dashboard/'
       preLoaderRoute: typeof AuthenticatedDashboardIndexRouteImport
       parentRoute: typeof AuthenticatedDashboardRoute
+    }
+    '/docs/$section/$page': {
+      id: '/docs/$section/$page'
+      path: '/$page'
+      fullPath: '/docs/$section/$page'
+      preLoaderRoute: typeof DocsSectionPageRouteImport
+      parentRoute: typeof DocsSectionRoute
     }
     '/_authenticated/dashboard/visibility': {
       id: '/_authenticated/dashboard/visibility'
@@ -1543,6 +1695,32 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
 const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
+interface DocsSectionRouteChildren {
+  DocsSectionPageRoute: typeof DocsSectionPageRoute
+  DocsSectionIndexRoute: typeof DocsSectionIndexRoute
+}
+
+const DocsSectionRouteChildren: DocsSectionRouteChildren = {
+  DocsSectionPageRoute: DocsSectionPageRoute,
+  DocsSectionIndexRoute: DocsSectionIndexRoute,
+}
+
+const DocsSectionRouteWithChildren = DocsSectionRoute._addFileChildren(
+  DocsSectionRouteChildren,
+)
+
+interface DocsRouteChildren {
+  DocsSectionRoute: typeof DocsSectionRouteWithChildren
+  DocsIndexRoute: typeof DocsIndexRoute
+}
+
+const DocsRouteChildren: DocsRouteChildren = {
+  DocsSectionRoute: DocsSectionRouteWithChildren,
+  DocsIndexRoute: DocsIndexRoute,
+}
+
+const DocsRouteWithChildren = DocsRoute._addFileChildren(DocsRouteChildren)
+
 interface LegalRouteChildren {
   LegalAcceptableUseRoute: typeof LegalAcceptableUseRoute
   LegalCookiesRoute: typeof LegalCookiesRoute
@@ -1579,6 +1757,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AboutRoute: AboutRoute,
   AuthRoute: AuthRoute,
+  DocsRoute: DocsRouteWithChildren,
   LegalRoute: LegalRouteWithChildren,
   LlmsDottxtRoute: LlmsDottxtRoute,
   McpRoute: McpRoute,
@@ -1596,12 +1775,15 @@ const rootRouteChildren: RootRouteChildren = {
   ChangelogSlugRoute: ChangelogSlugRoute,
   ChangelogRssDotxmlRoute: ChangelogRssDotxmlRoute,
   CompareSlugRoute: CompareSlugRoute,
+  DocsLlmsFullDottxtRoute: DocsLlmsFullDottxtRoute,
+  DocsLlmsDottxtRoute: DocsLlmsDottxtRoute,
   FeaturesSlugRoute: FeaturesSlugRoute,
   GlossaryTermRoute: GlossaryTermRoute,
   IntegrationsSlugRoute: IntegrationsSlugRoute,
   OauthConsentRoute: OauthConsentRoute,
   SolutionsAeoToolsRoute: SolutionsAeoToolsRoute,
   SolutionsAiSearchVisibilityRoute: SolutionsAiSearchVisibilityRoute,
+  SolutionsAutonomousGeoRoute: SolutionsAutonomousGeoRoute,
   ToolsSlugRoute: ToolsSlugRoute,
   UseCasesSlugRoute: UseCasesSlugRoute,
   AiSeoIndexRoute: AiSeoIndexRoute,

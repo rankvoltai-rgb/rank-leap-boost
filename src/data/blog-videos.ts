@@ -27,7 +27,7 @@ export interface BlogVideo {
   summary: string;
 }
 
-export const VIDEOS_CHECKED = "2026-10-01";
+export const VIDEOS_CHECKED = "2026-10-02";
 
 export const BLOG_VIDEOS: Record<string, BlogVideo> = {
   sq55KB5icQ4: {
@@ -219,6 +219,23 @@ export const BLOG_VIDEOS: Record<string, BlogVideo> = {
     seconds: 322,
     summary:
       "How Cloudflare Workers work and why they change backend architecture, compared with traditional Node.js and Express servers.",
+  },
+  MmOxK0nwtIc: {
+    post: "answer-engine-optimization-vs-seo",
+    title: "AI features in Search & your site, Search Console, SEO community insights (Q2 ‘25)",
+    channel: "Google Search Central",
+    uploadDate: "2025-07-01T09:00:44-07:00",
+    seconds: 429,
+    summary:
+      "Google Search News on the latest updates to AI features in Search, how a site can be eligible to be shown in them, and the new documentation about them.",
+  },
+  qMCEUspq5xQ: {
+    post: "wikidata-seo",
+    title: "What is Wikidata? | Wikimedia UK",
+    channel: "Wikimedia UK",
+    uploadDate: "2019-05-20T06:58:08-07:00",
+    seconds: 93,
+    summary: "A short explainer video about Wikidata from Wikimedia UK.",
   },
 };
 

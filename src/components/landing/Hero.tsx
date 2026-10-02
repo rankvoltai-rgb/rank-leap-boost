@@ -206,7 +206,7 @@ export function UrlForm({ url, onChange }: { url: string; onChange: (v: string) 
       </div>
       <button
         type="submit"
-        className="inline-flex h-12 shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-lg bg-brand-blue px-4 text-sm font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:bg-brand-blue/85 hover:shadow-md active:translate-y-0 sm:px-6"
+        className="inline-flex h-12 shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-lg bg-cta px-4 text-sm font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:bg-cta-hover hover:shadow-md active:translate-y-0 sm:px-6"
       >
         {/* "Free" and the arrow are dropped on the narrowest phones so the
             button keeps its place on the row and the field keeps room to read. */}

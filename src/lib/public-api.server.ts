@@ -4,6 +4,7 @@
 // may report back where each one was published (PATCH /articles/:id).
 import { markdownToHtml } from "@/lib/markdown";
 import { articleSlug } from "@/lib/api-keys.server";
+import { stripWriterNotes } from "@/lib/publish-body";
 
 export const API_CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",
@@ -79,9 +80,11 @@ interface BlogRow {
   updated_at: string;
 }
 
-/** Map a stored blog row into the public, plugin-facing article shape. */
+/** Map a stored blog row into the public, plugin-facing article shape. The
+ *  body leaves without the writer's image notes and placeholder links, which
+ *  would otherwise render on the integrator's live page. */
 export function serializeArticle(row: BlogRow): PublishedArticle {
-  const body = row.body ?? "";
+  const body = stripWriterNotes(row.body ?? "");
   return {
     id: row.id,
     slug: articleSlug(row.title, row.id),

@@ -6,6 +6,17 @@
  * (scripts/blog-schedule.ts) publishes a hub before any of its standalones.
  */
 export const STANDALONES: Record<string, string> = {
+  "create-wikidata-item-for-company": "wikidata-seo",
+  "entity-seo-strategy": "co-citation-seo",
+  "what-is-co-citation-in-seo": "co-citation-seo",
+  "how-to-get-cited-by-perplexity": "get-cited-by-perplexity",
+  "track-brand-mentions-in-perplexity": "get-cited-by-perplexity",
+  "brand-mentions-in-perplexity": "get-cited-by-perplexity",
+  "optimize-brand-mentions-in-chatgpt-and-perplexity": "brand-sentiment-chatgpt",
+  "monitor-brand-mentions-in-chatgpt": "brand-sentiment-chatgpt",
+  "answer-engine-optimization-vs-seo": "aeo-vs-geo",
+  "geo-vs-aeo": "aeo-vs-geo",
+  "aeo-vs-geo-differences": "aeo-vs-geo",
   "applebot-user-agent": "applebot-apple-intelligence-search",
   "ai-crawler-robots-txt": "ai-crawler-robots-txt-guide",
   "block-ai-bots-cloudflare": "cloudflare-ai-bot-management",

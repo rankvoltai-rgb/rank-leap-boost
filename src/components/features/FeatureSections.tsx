@@ -15,24 +15,18 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import {
-  Reveal,
-  Eyebrow,
-  Avatar,
-  Stars,
-  StatCard,
-  PrimaryButton,
-} from "@/components/landing/shared";
+import { Reveal, Eyebrow, Avatar, Stars, StatCard } from "@/components/landing/shared";
 import { PixelField, CARD_PIXELS, UrlForm, TrustRow } from "@/components/landing/Hero";
 import { ChatAnswerCard } from "@/components/landing/chat";
 import { TESTIMONIALS } from "@/components/landing/Testimonials";
 import { cn } from "@/lib/utils";
 import { ENGINE_ORDER, getFeature, type Feature } from "@/data/features";
+import { TRIAL_DAYS } from "@/data/pricing";
 import { SHOWCASES } from "./showcase";
 
 /* ---------- shared bits ---------- */
 
-function Heading({
+export function Heading({
   id,
   eyebrow,
   title,
@@ -89,7 +83,24 @@ function IconTile({
 
 /* ---------- 1. Hero ---------- */
 
-export function FeatureHero({ feature }: { feature: Feature }) {
+/* Under every CTA. The trial runs through Stripe Checkout, which takes a card,
+   so this never says "no credit card required". */
+export const TRIAL_NOTE = `${TRIAL_DAYS}-day free trial · Cancel anytime`;
+
+/* The hero field starts in the navbar's brand blue so the two meet without a
+   seam, then settles on --cta within 3rem, above any text. White on brand
+   blue is 4.24:1, under AA for body text; white on --cta is 4.73:1. That's
+   also why small hero text is solid white rather than translucent. */
+const HERO_FIELD = "bg-[linear-gradient(to_bottom,var(--brand-blue),var(--cta)_3rem)]";
+
+export function FeatureHero({
+  feature,
+  trust = true,
+}: {
+  feature: Feature;
+  /** The founders row under the visual. Off where the page makes no proof claims. */
+  trust?: boolean;
+}) {
   const [url, setUrl] = useState("");
   const Icon = feature.icon;
   const Showcase = SHOWCASES[feature.slug]?.Hero;
@@ -99,7 +110,10 @@ export function FeatureHero({ feature }: { feature: Feature }) {
     <section
       id="top"
       aria-labelledby="feature-title"
-      className="relative flex min-h-[calc(100svh-var(--top-chrome))] items-center overflow-hidden bg-brand-blue text-white"
+      className={cn(
+        "relative flex min-h-[calc(100svh-var(--top-chrome))] items-center overflow-hidden text-white",
+        HERO_FIELD,
+      )}
     >
       <PixelField />
       <div className="relative mx-auto w-full max-w-6xl px-5 py-12 lg:py-10">
@@ -108,9 +122,12 @@ export function FeatureHero({ feature }: { feature: Feature }) {
           <div className="mx-auto min-w-0 max-w-2xl text-center lg:mx-0 lg:flex lg:max-w-none lg:flex-col lg:justify-center lg:text-left">
             <Reveal>
               <nav aria-label="Breadcrumb" className="mb-6 flex justify-center lg:justify-start">
-                <ol className="flex items-center gap-1.5 text-xs font-medium text-white/65">
+                <ol className="flex items-center gap-1.5 text-xs font-medium text-white">
                   <li>
-                    <Link to="/" className="transition-colors hover:text-white">
+                    <Link
+                      to="/"
+                      className="py-3.5 underline decoration-white/40 underline-offset-4 transition-colors hover:decoration-white"
+                    >
                       Home
                     </Link>
                   </li>
@@ -118,14 +135,17 @@ export function FeatureHero({ feature }: { feature: Feature }) {
                     <ChevronRight className="h-3 w-3" />
                   </li>
                   <li>
-                    <Link to="/features" className="transition-colors hover:text-white">
+                    <Link
+                      to="/features"
+                      className="py-3.5 underline decoration-white/40 underline-offset-4 transition-colors hover:decoration-white"
+                    >
                       Features
                     </Link>
                   </li>
                   <li aria-hidden>
                     <ChevronRight className="h-3 w-3" />
                   </li>
-                  <li aria-current="page" className="text-white">
+                  <li aria-current="page" className="font-semibold">
                     {feature.name}
                   </li>
                 </ol>
@@ -133,36 +153,37 @@ export function FeatureHero({ feature }: { feature: Feature }) {
             </Reveal>
 
             <Reveal delay={0.05}>
-              <span className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-3 py-1.5 text-xs font-semibold text-white backdrop-blur">
-                <Icon className="h-3.5 w-3.5" />
+              {/* Darkened, not lightened, behind the text: a white wash would
+                  drop white-on-blue under 4.5:1. */}
+              <span className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/25 bg-brand-blue-deep/25 px-3 py-1.5 text-xs font-semibold text-white">
+                <Icon aria-hidden className="h-3.5 w-3.5" />
                 {feature.eyebrow}
               </span>
             </Reveal>
 
-            <Reveal delay={0.12}>
-              <h1
-                id="feature-title"
-                className="font-display text-balance text-[2.35rem] font-bold leading-[1.06] tracking-tight text-white sm:text-[3.25rem] xl:text-[3.6rem]"
-              >
-                <span className="lg:block">{feature.headline.lead}</span>{" "}
-                <span className="whitespace-nowrap">
-                  <IconTile icon={Icon} mark={feature.heroMark} className="mr-[0.22em]" />
-                  {firstAccent}
-                </span>
-                {restAccent.length > 0 && ` ${restAccent.join(" ")}`}
-              </h1>
-            </Reveal>
+            {/* The H1 and subhead paint straight from the server HTML, with no
+                fade: the H1 is the page's LCP element, and an opacity-0 start
+                would hold it back until the client bundle hydrates. */}
+            <h1
+              id="feature-title"
+              className="font-display text-balance text-[2.35rem] font-bold leading-[1.06] tracking-tight text-white sm:text-[3.25rem] xl:text-[3.6rem]"
+            >
+              <span className="lg:block">{feature.headline.lead}</span>{" "}
+              <span className="whitespace-nowrap">
+                <IconTile icon={Icon} mark={feature.heroMark} className="mr-[0.22em]" />
+                {firstAccent}
+              </span>
+              {restAccent.length > 0 && ` ${restAccent.join(" ")}`}
+            </h1>
 
-            <Reveal delay={0.19}>
-              <p className="mx-auto mt-6 max-w-lg text-[1.05rem] leading-relaxed text-white/80 lg:mx-0">
-                {feature.subhead}
-              </p>
-            </Reveal>
+            <p className="mx-auto mt-6 max-w-lg text-[1.05rem] leading-relaxed text-white lg:mx-0">
+              {feature.subhead}
+            </p>
 
             <Reveal delay={0.26}>
               <div className="mt-8 flex flex-col items-center gap-3 lg:items-start">
                 <UrlForm url={url} onChange={setUrl} />
-                <p className="text-sm text-white/70">No credit card required · Free 7-day trial</p>
+                <p className="text-sm text-white">{TRIAL_NOTE}</p>
               </div>
             </Reveal>
           </div>
@@ -178,9 +199,11 @@ export function FeatureHero({ feature }: { feature: Feature }) {
                   <Showcase className="relative flex-1 lg:min-h-[min(34rem,calc((100svh-var(--top-chrome)-4rem)*0.86))]" />
                 )}
               </div>
-              <div className="mt-8 flex justify-center lg:justify-start">
-                <TrustRow />
-              </div>
+              {trust && (
+                <div className="mt-8 flex justify-center lg:justify-start">
+                  <TrustRow />
+                </div>
+              )}
             </div>
           </Reveal>
         </div>
@@ -222,14 +245,16 @@ export function FeatureSpecs({ feature }: { feature: Feature }) {
 
 export function FeatureProblem({ feature }: { feature: Feature }) {
   const Icon = feature.icon;
+  const { problem } = feature;
+  if (!problem) return null;
   return (
     <section aria-labelledby="problem-title" className="py-24 sm:py-32">
       <div className="mx-auto max-w-6xl px-5">
         <Heading
           id="problem-title"
           eyebrow="Why it matters"
-          title={feature.problem.title}
-          intro={feature.problem.body}
+          title={problem.title}
+          intro={problem.body}
         />
 
         <div className="mx-auto mt-14 grid max-w-5xl gap-5 md:grid-cols-2 lg:gap-6">
@@ -245,7 +270,7 @@ export function FeatureProblem({ feature }: { feature: Feature }) {
                 </div>
               </div>
               <ul className="mt-7 space-y-4">
-                {feature.problem.before.map((b) => (
+                {problem.before.map((b) => (
                   <li
                     key={b}
                     className="flex gap-3 text-[0.95rem] leading-snug text-muted-foreground"
@@ -270,7 +295,7 @@ export function FeatureProblem({ feature }: { feature: Feature }) {
                 </div>
               </div>
               <ul className="mt-7 space-y-4">
-                {feature.problem.after.map((a) => (
+                {problem.after.map((a) => (
                   <li key={a} className="flex gap-3 text-[0.95rem] leading-snug text-ink">
                     <span className="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-success/15 text-success">
                       <Check className="h-3 w-3" strokeWidth={3} />
@@ -292,7 +317,7 @@ export function FeatureProblem({ feature }: { feature: Feature }) {
 function BenefitText({ index, title, body }: { index: number; title: string; body: string }) {
   return (
     <>
-      <span className="text-xs font-semibold tabular-nums text-volt">
+      <span className="text-xs font-semibold tabular-nums text-cta">
         {String(index + 1).padStart(2, "0")}
       </span>
       <h3 className="mt-2 text-lg font-semibold text-ink">{title}</h3>
@@ -382,7 +407,7 @@ export function FeatureHowItWorks({ feature }: { feature: Feature }) {
             {feature.steps.map((s, i) => (
               <li key={s.title} className="relative">
                 <Reveal delay={i * 0.08} className="flex flex-col items-center text-center">
-                  <span className="relative flex h-12 w-12 items-center justify-center rounded-full bg-brand-blue text-base font-semibold text-white shadow-sm ring-8 ring-background">
+                  <span className="relative flex h-12 w-12 items-center justify-center rounded-full bg-cta text-base font-semibold text-white shadow-sm ring-8 ring-background">
                     {i + 1}
                   </span>
                   <h3 className="mt-6 text-lg font-semibold text-ink">{s.title}</h3>
@@ -396,12 +421,13 @@ export function FeatureHowItWorks({ feature }: { feature: Feature }) {
         </div>
 
         <Reveal delay={0.1} className="mt-14 flex flex-col items-center gap-3">
-          <PrimaryButton>
-            Start your free trial <ArrowRight className="h-4 w-4" />
-          </PrimaryButton>
-          <p className="text-xs text-muted-foreground">
-            No credit card required · Free 7-day trial
-          </p>
+          <a
+            href="/auth"
+            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-cta px-6 py-3.5 text-sm font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:bg-cta-hover hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cta focus-visible:ring-offset-2"
+          >
+            Start your free trial <ArrowRight aria-hidden className="h-4 w-4" />
+          </a>
+          <p className="text-xs text-muted-foreground">{TRIAL_NOTE}</p>
         </Reveal>
       </div>
     </section>
@@ -437,21 +463,21 @@ export function FeatureEngine({ feature }: { feature: Feature }) {
                   {current ? (
                     <div
                       aria-current="page"
-                      className="relative flex h-full flex-col overflow-hidden rounded-2xl bg-brand-blue p-5 text-white shadow-elevation-lg"
+                      className="relative flex h-full flex-col overflow-hidden rounded-2xl bg-cta p-5 text-white shadow-elevation-lg"
                     >
                       <div className="flex items-center justify-between">
                         <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-white text-brand-blue">
                           <Icon className="h-4 w-4" />
                         </span>
-                        <span className="rounded-full bg-white/15 px-2 py-0.5 text-[0.65rem] font-semibold uppercase tracking-[0.1em]">
+                        <span className="rounded-full bg-brand-blue-deep/40 px-2 py-0.5 text-[0.65rem] font-semibold uppercase tracking-[0.1em]">
                           You&rsquo;re here
                         </span>
                       </div>
-                      <p className="mt-4 text-[0.65rem] font-semibold tabular-nums text-white/60">
+                      <p className="mt-4 text-[0.65rem] font-semibold tabular-nums text-white">
                         {step}
                       </p>
                       <p className="mt-0.5 text-sm font-semibold">{f.name}</p>
-                      <p className="mt-1 text-xs leading-relaxed text-white/75">{f.tagline}</p>
+                      <p className="mt-1 text-xs leading-relaxed text-white">{f.tagline}</p>
                     </div>
                   ) : (
                     <Link
@@ -483,7 +509,7 @@ export function FeatureEngine({ feature }: { feature: Feature }) {
         <Reveal delay={0.1} className="mt-10 text-center">
           <Link
             to="/features"
-            className="inline-flex items-center gap-1.5 text-sm font-semibold text-ink transition-colors hover:text-volt"
+            className="-my-3 inline-flex items-center gap-1.5 py-3 text-sm font-semibold text-ink transition-colors hover:text-volt"
           >
             Explore all features <ArrowRight className="h-4 w-4" />
           </Link>
@@ -500,6 +526,8 @@ export function FeatureProof({ feature }: { feature: Feature }) {
     .map((name) => TESTIMONIALS.find((t) => t.n === name))
     .filter((t): t is (typeof TESTIMONIALS)[number] => Boolean(t));
   const [lead, ...rest] = picks;
+  // No quotes picked means the page makes no proof claims, stats included.
+  if (!lead) return null;
 
   return (
     <section id="proof" aria-labelledby="proof-title" className="py-24 sm:py-32">
@@ -594,7 +622,10 @@ export function FeatureFAQ({ feature }: { feature: Feature }) {
                 <AccordionTrigger className="py-5 text-left text-base font-semibold text-ink hover:no-underline">
                   {f.q}
                 </AccordionTrigger>
-                <AccordionContent forceMount className="text-sm leading-relaxed text-muted-foreground">
+                <AccordionContent
+                  forceMount
+                  className="text-sm leading-relaxed text-muted-foreground"
+                >
                   {f.a}
                 </AccordionContent>
               </AccordionItem>
@@ -642,9 +673,7 @@ export function FeatureCTA({ feature }: { feature: Feature }) {
               <div className="mt-8 flex justify-center">
                 <UrlForm url={url} onChange={setUrl} />
               </div>
-              <p className="mt-3 text-sm text-background/60">
-                No credit card required · Free 7-day trial · Cancel anytime
-              </p>
+              <p className="mt-3 text-sm text-background/70">{TRIAL_NOTE}</p>
               <div className="mx-auto mt-12 max-w-xl text-left [mask-image:linear-gradient(to_bottom,black_70%,transparent)]">
                 <ChatAnswerCard
                   engine="Perplexity"
@@ -668,5 +697,36 @@ export function FeatureCTA({ feature }: { feature: Feature }) {
         </Reveal>
       </div>
     </section>
+  );
+}
+
+/* ---------- Route fallbacks ---------- */
+
+export function FeatureNotFound() {
+  return (
+    <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-background px-5 text-center">
+      <h1 className="font-display text-3xl font-semibold text-ink">Feature not found</h1>
+      <p className="text-muted-foreground">That feature page doesn't exist.</p>
+      <Link
+        to="/features"
+        className="rounded-xl bg-cta px-5 py-3 text-sm font-semibold text-white hover:bg-cta-hover"
+      >
+        Browse all features
+      </Link>
+    </div>
+  );
+}
+
+export function FeatureError() {
+  return (
+    <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-background px-5 text-center">
+      <h1 className="font-display text-3xl font-semibold text-ink">Something went wrong</h1>
+      <Link
+        to="/features"
+        className="rounded-xl bg-cta px-5 py-3 text-sm font-semibold text-white hover:bg-cta-hover"
+      >
+        Browse all features
+      </Link>
+    </div>
   );
 }

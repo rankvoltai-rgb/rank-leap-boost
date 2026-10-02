@@ -127,11 +127,14 @@ const FEATURES_SECTION: FooterSection = {
       to: "/features/$slug",
       params: { slug: f.slug },
     })),
-    ...SOLUTIONS.map((s) => ({
+    // Only the "job" pages: platform and industry pages run to dozens, and
+    // the /solutions hub lists them all.
+    ...SOLUTIONS.filter((s) => s.group === "job").map((s) => ({
       label: s.name.charAt(0).toUpperCase() + s.name.slice(1),
       to: `/solutions/${s.slug}`,
     })),
     { label: "All features", to: "/features", more: true },
+    { label: "All solutions", to: "/solutions", more: true },
   ],
 };
 
@@ -157,6 +160,8 @@ const RESOURCES: FooterSection = {
   title: "Resources",
   links: [
     { label: "Blog", to: "/blog" },
+    { label: "Docs", to: "/docs" },
+    { label: "API reference", to: "/docs/api/overview" },
     { label: "AI search glossary", to: "/glossary" },
     { label: "Sample articles", to: "/", hash: "examples" },
     { label: "Head-to-head comparisons", to: "/compare" },

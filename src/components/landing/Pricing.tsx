@@ -136,7 +136,7 @@ export function Pricing() {
             <div className="flex flex-col p-6 sm:p-10">
               <div className="flex items-center gap-2.5">
                 <h3 className="text-xl font-semibold tracking-tight text-ink">{PLAN.name}</h3>
-                <span className="rounded-full bg-cta-soft px-2.5 py-0.5 text-xs font-medium text-cta">
+                <span className="rounded-full bg-cta-soft px-2.5 py-0.5 text-xs font-medium text-cta-hover">
                   {PLAN.sites} website
                 </span>
               </div>

@@ -87,6 +87,11 @@ const SLUGS = [
   "cloudflare-ai-bot-management",
   "ai-crawler-robots-txt-guide",
   "applebot-apple-intelligence-search",
+  "aeo-vs-geo",
+  "brand-sentiment-chatgpt",
+  "get-cited-by-perplexity",
+  "co-citation-seo",
+  "wikidata-seo",
   ...Object.keys(STANDALONES),
 ];
 const TOOL_GUIDES = new Set([
@@ -102,6 +107,8 @@ const TOOL_GUIDES = new Set([
   "ai-powered-seo-agents",
   "edge-seo",
   "prerender-seo",
+  "monitor-brand-mentions-in-chatgpt",
+  "track-brand-mentions-in-perplexity",
 ]);
 
 function read(slug: string) {

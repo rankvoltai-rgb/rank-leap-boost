@@ -791,3 +791,315 @@
   height: 0;
   pointer-events: none;
 }
+
+/* ---------- Docs (/docs) ----------
+   Page bodies are server-rendered HTML from src/lib/docs/render.ts, so they
+   are styled here by element rather than with utility classes. */
+.docs-prose {
+  --docs-code-bg: #121417;
+  --docs-code-fg: #e6e8eb;
+  --docs-important: oklch(0.52 0.19 290);
+  color: color-mix(in oklab, var(--ink) 88%, var(--background));
+  font-size: 1rem;
+  line-height: 1.75;
+  overflow-wrap: anywhere;
+}
+.docs-prose > :first-child {
+  margin-top: 0;
+}
+.docs-prose p,
+.docs-prose ul,
+.docs-prose ol {
+  margin: 1.05em 0;
+}
+.docs-prose .docs-h {
+  scroll-margin-top: 5rem;
+  color: var(--ink);
+  font-weight: 650;
+  letter-spacing: -0.015em;
+}
+.docs-prose h2 {
+  margin: 2.8rem 0 0.9rem;
+  font-size: 1.5rem;
+  line-height: 1.25;
+}
+.docs-prose h3 {
+  margin: 2rem 0 0.6rem;
+  font-size: 1.15rem;
+  line-height: 1.35;
+}
+.docs-prose h4 {
+  margin: 1.6rem 0 0.4rem;
+  font-size: 1rem;
+}
+.docs-prose .docs-anchor {
+  color: inherit;
+  text-decoration: none;
+}
+.docs-prose .docs-anchor::after {
+  content: "#";
+  margin-left: 0.4em;
+  color: var(--cta);
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.docs-prose .docs-h:hover .docs-anchor::after,
+.docs-prose .docs-anchor:focus-visible::after {
+  opacity: 1;
+}
+.docs-prose a:not(.docs-anchor) {
+  color: var(--cta);
+  font-weight: 500;
+  text-decoration: underline;
+  text-decoration-color: color-mix(in oklab, var(--cta) 35%, transparent);
+  text-underline-offset: 3px;
+  transition: text-decoration-color 0.15s;
+}
+.docs-prose a:not(.docs-anchor):hover {
+  text-decoration-color: var(--cta);
+}
+.docs-prose strong {
+  color: var(--ink);
+  font-weight: 650;
+}
+.docs-prose ul,
+.docs-prose ol {
+  padding-left: 1.35rem;
+}
+.docs-prose ul {
+  list-style: disc;
+}
+.docs-prose ol {
+  list-style: decimal;
+}
+.docs-prose li {
+  margin: 0.4em 0;
+  padding-left: 0.2rem;
+}
+.docs-prose li::marker {
+  color: var(--muted-foreground);
+}
+.docs-prose ol > li::marker {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.docs-prose li > ul,
+.docs-prose li > ol {
+  margin: 0.35em 0;
+}
+.docs-prose hr {
+  margin: 2.5rem 0;
+  border: 0;
+  border-top: 1px solid var(--border);
+}
+.docs-prose blockquote {
+  margin: 1.4rem 0;
+  border-left: 3px solid var(--border);
+  padding-left: 1rem;
+  color: var(--muted-foreground);
+}
+.docs-prose :not(pre) > code {
+  border: 1px solid var(--border);
+  border-radius: 0.375rem;
+  background: var(--secondary);
+  padding: 0.1em 0.38em;
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  overflow-wrap: anywhere;
+}
+
+/* Tables */
+.docs-prose .docs-table {
+  margin: 1.5rem 0;
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  background: var(--card);
+}
+.docs-prose table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+.docs-prose th {
+  background: var(--surface);
+  color: var(--ink);
+  font-weight: 600;
+  text-align: left;
+  white-space: nowrap;
+}
+.docs-prose th,
+.docs-prose td {
+  padding: 0.6rem 0.9rem;
+  vertical-align: top;
+}
+.docs-prose tr + tr td,
+.docs-prose tbody tr:first-child td {
+  border-top: 1px solid var(--border);
+}
+.docs-prose td code {
+  font-size: 0.82em;
+  overflow-wrap: normal;
+  white-space: nowrap;
+}
+
+/* Callouts */
+.docs-prose .docs-callout {
+  --callout: var(--cta);
+  display: flex;
+  gap: 0.75rem;
+  margin: 1.5rem 0;
+  border: 1px solid color-mix(in oklab, var(--callout) 28%, transparent);
+  border-radius: 0.75rem;
+  background: color-mix(in oklab, var(--callout) 6%, var(--card));
+  padding: 0.9rem 1.1rem;
+  font-size: 0.95rem;
+  line-height: 1.65;
+}
+.docs-prose .docs-callout[data-kind="tip"] {
+  --callout: var(--success);
+}
+.docs-prose .docs-callout[data-kind="important"] {
+  --callout: var(--docs-important);
+}
+.docs-prose .docs-callout[data-kind="warning"] {
+  --callout: oklch(0.62 0.15 60);
+}
+.docs-prose .docs-callout-icon {
+  margin-top: 0.2rem;
+  width: 1.1rem;
+  height: 1.1rem;
+  flex-shrink: 0;
+  color: var(--callout);
+}
+.docs-prose .docs-callout-body {
+  min-width: 0;
+}
+.docs-prose .docs-callout-body > :last-child {
+  margin-bottom: 0;
+}
+.docs-prose .docs-callout-body > p:nth-child(2) {
+  margin-top: 0.15rem;
+}
+.docs-prose .docs-callout-label {
+  margin: 0;
+  color: color-mix(in oklab, var(--callout) 80%, var(--ink));
+  font-size: 0.85rem;
+  font-weight: 650;
+}
+
+/* Code */
+.docs-prose .docs-code {
+  margin: 1.5rem 0;
+  overflow: hidden;
+  border: 1px solid color-mix(in oklab, var(--ink) 12%, transparent);
+  border-radius: 0.75rem;
+  background: var(--docs-code-bg);
+  color: var(--docs-code-fg);
+}
+.docs-prose .docs-code-bar {
+  display: flex;
+  min-height: 2.5rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  border-bottom: 1px solid rgb(255 255 255 / 0.08);
+  padding: 0 0.5rem 0 1rem;
+}
+.docs-prose .docs-code-title {
+  color: rgb(255 255 255 / 0.6);
+  font-size: 0.78rem;
+  font-weight: 500;
+}
+.docs-prose .docs-copy {
+  flex-shrink: 0;
+  border-radius: 0.375rem;
+  padding: 0.25rem 0.55rem;
+  color: rgb(255 255 255 / 0.6);
+  font-size: 0.75rem;
+  font-weight: 500;
+  transition:
+    background 0.15s,
+    color 0.15s;
+}
+.docs-prose .docs-copy:hover,
+.docs-prose .docs-copy:focus-visible {
+  background: rgb(255 255 255 / 0.1);
+  color: #fff;
+  outline: none;
+}
+.docs-prose .docs-tabs {
+  display: flex;
+  min-width: 0;
+  gap: 0.25rem;
+  overflow-x: auto;
+  margin-left: -0.5rem;
+}
+.docs-prose .docs-tabs [role="tab"] {
+  flex-shrink: 0;
+  padding: 0.7rem 0.55rem;
+  color: rgb(255 255 255 / 0.55);
+  font-size: 0.78rem;
+  font-weight: 500;
+  transition: color 0.15s;
+}
+.docs-prose .docs-tabs [role="tab"]:hover {
+  color: #fff;
+}
+.docs-prose .docs-tabs [role="tab"][aria-selected="true"] {
+  color: #fff;
+  box-shadow: inset 0 -2px 0 #7db4ff;
+}
+.docs-prose .docs-tabs [role="tab"]:focus-visible {
+  outline: 2px solid #7db4ff;
+  outline-offset: -2px;
+  border-radius: 0.25rem;
+}
+.docs-prose pre {
+  margin: 0;
+  overflow-x: auto;
+  padding: 1rem 1.1rem 1.1rem;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  line-height: 1.7;
+  tab-size: 2;
+}
+.docs-prose pre code {
+  overflow-wrap: normal;
+  white-space: pre;
+}
+.docs-prose .tk-c {
+  color: #7b8494;
+}
+.docs-prose .tk-s {
+  color: #9ee6b8;
+}
+.docs-prose .tk-n {
+  color: #ffc285;
+}
+.docs-prose .tk-k {
+  color: #c4a7ff;
+}
+.docs-prose .tk-p,
+.docs-prose .tk-t {
+  color: #8cc8ff;
+}
+.docs-prose .tk-f {
+  color: #7dd3fc;
+}
+.docs-prose .tk-v {
+  color: #ffb4a8;
+}
+.docs-prose .tk-a {
+  color: #9ee6b8;
+}
+.docs-prose .tk-d {
+  color: #ffa198;
+}
+@media (max-width: 640px) {
+  .docs-prose pre {
+    font-size: 0.78rem;
+  }
+}

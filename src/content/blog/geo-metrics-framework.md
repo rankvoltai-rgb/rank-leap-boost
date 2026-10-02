@@ -28,19 +28,19 @@ This page is a reference, not a how-to. It gives each metric's math and says whe
 
 ## GEO in Brief, and Why It Needs Its Own Metrics
 
-Generative engine optimization (GEO) is the work of getting a brand named, cited and described correctly in answers that AI systems write, such as ChatGPT, Perplexity, Gemini and Google's AI Overviews. The term comes from a November 2023 paper by Pranjal Aggarwal and colleagues at Princeton, IIT Delhi and other institutions, later accepted at KDD 2024. Our [GEO glossary entry](/glossary/generative-engine-optimization) and the [plain-English GEO guide](/blog/what-is-generative-engine-optimization) cover the practice itself.
+Generative engine optimization (GEO) is the work of getting a brand named, cited and described correctly in answers that AI systems write, such as ChatGPT, Perplexity, Gemini and Google's AI Overviews. The term comes from a November 2023 paper by Pranjal Aggarwal and colleagues at Princeton, IIT Delhi and other institutions, later accepted at KDD 2024. Our [GEO glossary entry](/glossary/generative-engine-optimization) and the [plain-English GEO guide](/blog/what-is-generative-engine-optimization) cover the practice itself. For how GEO differs from answer engine optimization, see our [AEO vs GEO comparison](/blog/aeo-vs-geo).
 
 Google treats the label with some caution. Its [AI optimization guide](https://developers.google.com/search/docs/fundamentals/ai-optimization-guide) says that from its point of view, "optimizing for generative AI search is optimizing for the search experience, and thus still SEO." The work may overlap with SEO. The measurement doesn't, because an AI answer has no fixed rank and changes from one run to the next. That's why GEO metrics need definitions of their own.
 
 Here is how the familiar SEO numbers map to their nearest GEO metrics:
 
-| SEO metric | Nearest GEO metric | What changes |
-| --- | --- | --- |
-| Impressions | Share of Model, Visibility Rate | The answer varies by run, so presence becomes a rate across repeated samples |
-| Ranking position | Average Answer Position, First-Mention Rate | No stable order exists; position only means something as an average |
-| Referring domains, PageRank | Citation Share, Citation Rate | The unit is a cited source inside one answer, not a link across the web |
-| Click-through rate | AI Referral Share | Most answers end without a click, so visits understate exposure |
-| Keyword relevance | Vector Proximity Score | Retrieval can match by meaning, not only by matching words |
+| SEO metric                  | Nearest GEO metric                          | What changes                                                                 |
+| --------------------------- | ------------------------------------------- | ---------------------------------------------------------------------------- |
+| Impressions                 | Share of Model, Visibility Rate             | The answer varies by run, so presence becomes a rate across repeated samples |
+| Ranking position            | Average Answer Position, First-Mention Rate | No stable order exists; position only means something as an average          |
+| Referring domains, PageRank | Citation Share, Citation Rate               | The unit is a cited source inside one answer, not a link across the web      |
+| Click-through rate          | AI Referral Share                           | Most answers end without a click, so visits understate exposure              |
+| Keyword relevance           | Vector Proximity Score                      | Retrieval can match by meaning, not only by matching words                   |
 
 ## Notation and the Twelve GEO Metrics at a Glance
 
@@ -48,10 +48,10 @@ Here is how the familiar SEO numbers map to their nearest GEO metrics:
 
 Every metric below uses the same symbols. Shared notation is what lets two teams compare GEO metrics without arguing about what a number means.
 
-- **Q** is a panel of prompts. **V ⊆ Q** is the set of *category prompt variants*: unbranded prompts that ask for a solution, a shortlist or a comparison ("best tool for X", "how do I solve Y"). Brand prompts that contain your name are excluded from V.
+- **Q** is a panel of prompts. **V ⊆ Q** is the set of _category prompt variants_: unbranded prompts that ask for a solution, a shortlist or a comparison ("best tool for X", "how do I solve Y"). Brand prompts that contain your name are excluded from V.
 - **e** is an engine and mode, such as ChatGPT with search on. Compute every metric per engine. If you must blend engines, give each engine equal weight and say so.
 - **K_v** is the number of valid runs of variant v. A run is valid when the engine returns an answer. Errors, refusals and empty replies are dropped from numerator and denominator alike, and their count is reported.
-- **a_{v,r}** is the answer to run r of variant v. **A** is the set of all valid answers, and **N = |A|**.
+- **a\_{v,r}** is the answer to run r of variant v. **A** is the set of all valid answers, and **N = |A|**.
 - **m(b, a)** equals 1 if answer a names brand b in its visible text, counting the brand's listed aliases and product names once per answer, and 0 otherwise.
 - **l(d, a)** equals 1 if answer a links to at least one URL on domain d.
 - **c(d, a)** is the number of distinct URLs on domain d that answer a cites. **C(a)** is all distinct cited URLs in a.
@@ -60,20 +60,20 @@ Every metric below uses the same symbols. Shared notation is what lets two teams
 
 The framework groups twelve GEO metrics into seven layers:
 
-| Layer | Metric | Formula (short form) | Range |
-| --- | --- | --- | --- |
-| Presence | Share of Model (SoM) | Mean over variants of the share of runs that name b | 0–100% |
-| Presence | Visibility Rate (VR) | Answers that name or link b ÷ N | 0–100% |
-| Share | AI Share of Voice (SoV) | Answers naming b ÷ all brand appearances | 0–100%, sums to 100% |
-| Share | Citation Share (CS) | Cited URLs on d ÷ all cited URLs | 0–100%, sums to 100% |
-| Prominence | First-Mention Rate (FMR) | Answers where b is named first ÷ answers naming any brand | 0–100% |
-| Prominence | Average Answer Position (AAP) | Mean pos(b, a) over answers naming b | 1 or more, lower is earlier |
-| Proof | Citation Rate (CR) | Answers linking d ÷ N | 0–100% |
-| Proof | Citation Density (CD) | 1,000 × distinct cited URLs ÷ tokens | 0 or more |
-| Perception | Sentiment Share (SS) | Positive mentions of b ÷ all positive brand mentions | 0–100% |
-| Perception | Accuracy Rate (AR) | Correct descriptions of b ÷ answers naming b | 0–100% |
-| Payoff | AI Referral Share (ARS) | AI assistant sessions ÷ all sessions | 0–100% |
-| Positioning | Vector Proximity Score (VPS) | Mean cosine similarity of problem prompts and positioning statement | −1 to 1 |
+| Layer       | Metric                        | Formula (short form)                                                | Range                       |
+| ----------- | ----------------------------- | ------------------------------------------------------------------- | --------------------------- |
+| Presence    | Share of Model (SoM)          | Mean over variants of the share of runs that name b                 | 0–100%                      |
+| Presence    | Visibility Rate (VR)          | Answers that name or link b ÷ N                                     | 0–100%                      |
+| Share       | AI Share of Voice (SoV)       | Answers naming b ÷ all brand appearances                            | 0–100%, sums to 100%        |
+| Share       | Citation Share (CS)           | Cited URLs on d ÷ all cited URLs                                    | 0–100%, sums to 100%        |
+| Prominence  | First-Mention Rate (FMR)      | Answers where b is named first ÷ answers naming any brand           | 0–100%                      |
+| Prominence  | Average Answer Position (AAP) | Mean pos(b, a) over answers naming b                                | 1 or more, lower is earlier |
+| Proof       | Citation Rate (CR)            | Answers linking d ÷ N                                               | 0–100%                      |
+| Proof       | Citation Density (CD)         | 1,000 × distinct cited URLs ÷ tokens                                | 0 or more                   |
+| Perception  | Sentiment Share (SS)          | Positive mentions of b ÷ all positive brand mentions                | 0–100%                      |
+| Perception  | Accuracy Rate (AR)            | Correct descriptions of b ÷ answers naming b                        | 0–100%                      |
+| Payoff      | AI Referral Share (ARS)       | AI assistant sessions ÷ all sessions                                | 0–100%                      |
+| Positioning | Vector Proximity Score (VPS)  | Mean cosine similarity of problem prompts and positioning statement | −1 to 1                     |
 
 The worked examples share one made-up panel. Plannora, a fictional project management tool for agencies, runs 20 category prompt variants three times each in one engine: 60 valid answers. Loopcraft and Taskwell are fictional rivals. The inputs are illustrative; the arithmetic is exact.
 
@@ -241,17 +241,17 @@ For a plain explanation of embeddings and cosine similarity, see Rankbox's exper
 
 The problem set has eight prompts an agency owner might type. Plannora's statement describes an agency tool that turns briefs into task boards, tracks billable hours against budgets and offers a client approval portal. Loopcraft's describes an AI workspace for software teams. Two more rows test the method: a vague tagline for Plannora ("the all-in-one work platform that helps teams do their best work, together") and an off-category control for a made-up coffee brand. All four statements are fictional, and the prompts below are shortened. Every number is copied exactly from the script's output.
 
-| Problem prompt | Plannora | Plannora, vague tagline | Loopcraft | Coffee control |
-| --- | --- | --- | --- | --- |
-| Stop client projects going over budget | 0.5883 | 0.4612 | 0.4277 | 0.2816 |
-| Get client approval on design work | 0.5056 | 0.4222 | 0.4317 | 0.3713 |
-| Track billable hours for several clients | 0.5587 | 0.5089 | 0.4190 | 0.3946 |
-| Keep track of deadlines across many clients | 0.5133 | 0.4481 | 0.4377 | 0.3376 |
-| Turn a client brief into a list of tasks | 0.5623 | 0.5331 | 0.4488 | 0.3180 |
-| See which team members have time | 0.5311 | 0.5373 | 0.5195 | 0.3083 |
-| Share progress with clients without endless emails | 0.5489 | 0.4866 | 0.5220 | 0.3715 |
-| Stop scope creep on fixed-fee projects | 0.4853 | 0.3830 | 0.4382 | 0.3409 |
-| **VPS (mean of 8)** | **0.5367** | **0.4725** | **0.4556** | **0.3405** |
+| Problem prompt                                     | Plannora   | Plannora, vague tagline | Loopcraft  | Coffee control |
+| -------------------------------------------------- | ---------- | ----------------------- | ---------- | -------------- |
+| Stop client projects going over budget             | 0.5883     | 0.4612                  | 0.4277     | 0.2816         |
+| Get client approval on design work                 | 0.5056     | 0.4222                  | 0.4317     | 0.3713         |
+| Track billable hours for several clients           | 0.5587     | 0.5089                  | 0.4190     | 0.3946         |
+| Keep track of deadlines across many clients        | 0.5133     | 0.4481                  | 0.4377     | 0.3376         |
+| Turn a client brief into a list of tasks           | 0.5623     | 0.5331                  | 0.4488     | 0.3180         |
+| See which team members have time                   | 0.5311     | 0.5373                  | 0.5195     | 0.3083         |
+| Share progress with clients without endless emails | 0.5489     | 0.4866                  | 0.5220     | 0.3715         |
+| Stop scope creep on fixed-fee projects             | 0.4853     | 0.3830                  | 0.4382     | 0.3409         |
+| **VPS (mean of 8)**                                | **0.5367** | **0.4725**              | **0.4556** | **0.3405**     |
 
 Three readings follow from the table:
 
@@ -267,19 +267,19 @@ VPS measures geometry in one open model's vector space. It isn't a measure of ho
 
 Put together, the GEO metrics from the illustrative panel fill a one-page scorecard. Each cell has one agreed meaning.
 
-| Metric | Plannora | Loopcraft | What it tells Plannora |
-| --- | --- | --- | --- |
-| Share of Model | 35.0% (24.2–47.6) | 55.0% (42.5–66.9) | Named in about a third of runs; the rival in over half |
-| Visibility Rate | 41.7% | 58.3% | Links without mentions add little |
-| AI Share of Voice | 16.7% | 26.2% | A smaller slice of a crowded answer |
-| Citation Share | 2.7% | 9.2% | The engine rarely cites Plannora's own pages |
-| First-Mention Rate | 10.5% | 33.3% | Rarely the lead recommendation |
-| Average Answer Position | 3.00 | 1.70 | Listed third on average when named |
-| Citation Rate | 15.0% | 40.0% | Few answers link to plannora.io |
-| Sentiment Share | 16.9% | 33.8% | Fewer warm descriptions |
-| Accuracy Rate | 81.0% | Not measured | One mention in five has an error |
-| AI Referral Share | 1.25% | Not visible | Only measurable for your own site |
-| Vector Proximity Score | 0.5367 | 0.4556 | Positioning already fits the problems |
+| Metric                  | Plannora          | Loopcraft         | What it tells Plannora                                 |
+| ----------------------- | ----------------- | ----------------- | ------------------------------------------------------ |
+| Share of Model          | 35.0% (24.2–47.6) | 55.0% (42.5–66.9) | Named in about a third of runs; the rival in over half |
+| Visibility Rate         | 41.7%             | 58.3%             | Links without mentions add little                      |
+| AI Share of Voice       | 16.7%             | 26.2%             | A smaller slice of a crowded answer                    |
+| Citation Share          | 2.7%              | 9.2%              | The engine rarely cites Plannora's own pages           |
+| First-Mention Rate      | 10.5%             | 33.3%             | Rarely the lead recommendation                         |
+| Average Answer Position | 3.00              | 1.70              | Listed third on average when named                     |
+| Citation Rate           | 15.0%             | 40.0%             | Few answers link to plannora.io                        |
+| Sentiment Share         | 16.9%             | 33.8%             | Fewer warm descriptions                                |
+| Accuracy Rate           | 81.0%             | Not measured      | One mention in five has an error                       |
+| AI Referral Share       | 1.25%             | Not visible       | Only measurable for your own site                      |
+| Vector Proximity Score  | 0.5367            | 0.4556            | Positioning already fits the problems                  |
 
 The pattern points to a clear diagnosis. Plannora's positioning fits the buyer's problems (VPS), yet engines rarely cite its pages (CS, CR) and rank it low (FMR, AAP). The gap is citable evidence on the web, not a fuzzy message. Sampling error applies to every rate row. The SoM intervals for Plannora and Loopcraft overlap slightly at 60 answers, so a larger panel would firm up that gap.
 
@@ -291,15 +291,15 @@ To benchmark website performance against competitors in AI search, compute the s
 
 This framework builds on others' work. The table shows where each definition matches an existing one and where it differs.
 
-| Source | Their term and definition | How the framework differs |
-| --- | --- | --- |
-| Aggarwal et al., KDD 2024 | Position-Adjusted Word Count: words in sentences citing a source, weighted down the later they appear, ÷ all words | Counts answers and sources, which a team can tally by hand |
-| Roach and Smyth, 2024 | Share of model: brand mentions ÷ all brand mentions in the category | That is our SoV; our SoM is a presence rate |
-| Peec AI docs | Visibility: responses mentioning the brand ÷ total responses | Same idea as SoM, but we limit SoM to unbranded category prompts |
-| Profound docs | Visibility: runs naming your brand ÷ runs naming any brand, averaged per model | Our SoM keeps brandless answers in the denominator |
-| Semrush | AI share of voice uses mentions and position; for ChatGPT in Enterprise AIO, topic search volume too | We keep position out of SoV and report AAP separately |
-| Ahrefs Brand Radar | AI share of voice: share of impressions, which are search-volume weighted | Our SoV is unweighted, so any prompt set works |
-| Bing Webmaster Tools | Citation Share per grounding query | Same formula as our CS, applied to a whole prompt panel |
+| Source                    | Their term and definition                                                                                          | How the framework differs                                        |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------- |
+| Aggarwal et al., KDD 2024 | Position-Adjusted Word Count: words in sentences citing a source, weighted down the later they appear, ÷ all words | Counts answers and sources, which a team can tally by hand       |
+| Roach and Smyth, 2024     | Share of model: brand mentions ÷ all brand mentions in the category                                                | That is our SoV; our SoM is a presence rate                      |
+| Peec AI docs              | Visibility: responses mentioning the brand ÷ total responses                                                       | Same idea as SoM, but we limit SoM to unbranded category prompts |
+| Profound docs             | Visibility: runs naming your brand ÷ runs naming any brand, averaged per model                                     | Our SoM keeps brandless answers in the denominator               |
+| Semrush                   | AI share of voice uses mentions and position; for ChatGPT in Enterprise AIO, topic search volume too               | We keep position out of SoV and report AAP separately            |
+| Ahrefs Brand Radar        | AI share of voice: share of impressions, which are search-volume weighted                                          | Our SoV is unweighted, so any prompt set works                   |
+| Bing Webmaster Tools      | Citation Share per grounding query                                                                                 | Same formula as our CS, applied to a whole prompt panel          |
 
 Sources for the table: the [GEO paper](https://arxiv.org/html/2311.09735v3), [Marketing Week](https://www.marketingweek.com/tom-roach-share-of-model-ai-era/), [Peec's visibility docs](https://docs.peec.ai/metrics/brand-metrics/visibility), [Profound's metric formulas](https://docs.tryprofound.com/cookbook/metrics/how-metrics-are-calculated), [Semrush's share of voice guide](https://www.semrush.com/blog/how-to-measure-ai-share-of-voice/) (July 2026), [Ahrefs' help center](https://help.ahrefs.com/en/articles/15501968-ai-visibility-metrics) and [Bing's June 2026 update](https://blogs.bing.com/search/June-2026/New-AI-Visibility-Insights-in-Bing-Webmaster-Tools-Intents-Topics-Citation-Share-Compare). Even one vendor can word things two ways. The FAQ on Ahrefs' [Brand Radar page](https://ahrefs.com/brand-radar) describes AI share of voice as the percentage of responses that "mention or cite your brand versus competitors," while its help center uses impressions.
 
@@ -324,29 +324,65 @@ Four diagrams are available as SVG files. Each shows a title, the formula, its v
 **Share of Model:**
 
 ```html
-<a href="https://rankbox.xyz/blog/geo-metrics-framework"><img src="https://rankbox.xyz/research/geo-metrics/share-of-model.svg" alt="Share of Model formula: the mean, across category prompt variants, of the share of runs whose AI answer names the brand" width="1200" height="630" style="max-width:100%;height:auto"></a>
-<p>Source: <a href="https://rankbox.xyz/blog/geo-metrics-framework">Rankbox GEO Metrics Framework</a></p>
+<a href="https://rankbox.xyz/blog/geo-metrics-framework"
+  ><img
+    src="https://rankbox.xyz/research/geo-metrics/share-of-model.svg"
+    alt="Share of Model formula: the mean, across category prompt variants, of the share of runs whose AI answer names the brand"
+    width="1200"
+    height="630"
+    style="max-width:100%;height:auto"
+/></a>
+<p>
+  Source: <a href="https://rankbox.xyz/blog/geo-metrics-framework">Rankbox GEO Metrics Framework</a>
+</p>
 ```
 
 **Citation Density:**
 
 ```html
-<a href="https://rankbox.xyz/blog/geo-metrics-framework"><img src="https://rankbox.xyz/research/geo-metrics/citation-density.svg" alt="Citation Density formula: distinct cited sources per 1,000 tokens of AI answer text, counted with the o200k_base tokenizer" width="1200" height="630" style="max-width:100%;height:auto"></a>
-<p>Source: <a href="https://rankbox.xyz/blog/geo-metrics-framework">Rankbox GEO Metrics Framework</a></p>
+<a href="https://rankbox.xyz/blog/geo-metrics-framework"
+  ><img
+    src="https://rankbox.xyz/research/geo-metrics/citation-density.svg"
+    alt="Citation Density formula: distinct cited sources per 1,000 tokens of AI answer text, counted with the o200k_base tokenizer"
+    width="1200"
+    height="630"
+    style="max-width:100%;height:auto"
+/></a>
+<p>
+  Source: <a href="https://rankbox.xyz/blog/geo-metrics-framework">Rankbox GEO Metrics Framework</a>
+</p>
 ```
 
 **Vector Proximity Score:**
 
 ```html
-<a href="https://rankbox.xyz/blog/geo-metrics-framework"><img src="https://rankbox.xyz/research/geo-metrics/vector-proximity-score.svg" alt="Vector Proximity Score formula: mean cosine similarity between buyer problem prompts and a brand's positioning statement in one open embedding model" width="1200" height="630" style="max-width:100%;height:auto"></a>
-<p>Source: <a href="https://rankbox.xyz/blog/geo-metrics-framework">Rankbox GEO Metrics Framework</a></p>
+<a href="https://rankbox.xyz/blog/geo-metrics-framework"
+  ><img
+    src="https://rankbox.xyz/research/geo-metrics/vector-proximity-score.svg"
+    alt="Vector Proximity Score formula: mean cosine similarity between buyer problem prompts and a brand's positioning statement in one open embedding model"
+    width="1200"
+    height="630"
+    style="max-width:100%;height:auto"
+/></a>
+<p>
+  Source: <a href="https://rankbox.xyz/blog/geo-metrics-framework">Rankbox GEO Metrics Framework</a>
+</p>
 ```
 
 **Framework overview:**
 
 ```html
-<a href="https://rankbox.xyz/blog/geo-metrics-framework"><img src="https://rankbox.xyz/research/geo-metrics/geo-metrics-overview.svg" alt="The GEO Metrics Framework: twelve GEO metrics in seven layers, from presence to positioning" width="1200" height="630" style="max-width:100%;height:auto"></a>
-<p>Source: <a href="https://rankbox.xyz/blog/geo-metrics-framework">Rankbox GEO Metrics Framework</a></p>
+<a href="https://rankbox.xyz/blog/geo-metrics-framework"
+  ><img
+    src="https://rankbox.xyz/research/geo-metrics/geo-metrics-overview.svg"
+    alt="The GEO Metrics Framework: twelve GEO metrics in seven layers, from presence to positioning"
+    width="1200"
+    height="630"
+    style="max-width:100%;height:auto"
+/></a>
+<p>
+  Source: <a href="https://rankbox.xyz/blog/geo-metrics-framework">Rankbox GEO Metrics Framework</a>
+</p>
 ```
 
 **Licence:** the diagrams and formulas are free to embed with a link to this page.
