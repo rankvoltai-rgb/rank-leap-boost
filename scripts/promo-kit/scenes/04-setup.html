@@ -1,0 +1,155 @@
+<!doctype html>
+<!-- 04 · Setup. Paste a URL, Rankbox reads the site and lays out the first
+     month of content; docs and support sit underneath. Strings in the panels
+     are the onboarding's own ("Build my plan", "Your first month of content"). -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x3 4x5 1x1" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<script src="../kit/kit.js"></script>
+<style>
+  .field { background: var(--night); }
+  .g1 { left: -420px; top: 240px; width: 1200px; height: 520px; background: #1556e8; --blur: 120px; opacity: .9; transform: rotate(-18deg); }
+  .g2 { left: -200px; top: 860px; width: 1000px; height: 600px; background: #5aa8ff; --blur: 140px; opacity: .85; }
+  .g3 { left: 560px; top: 300px; width: 900px; height: 500px; background: #0a2f9a; --blur: 140px; opacity: .6; }
+  .g4 { left: 1100px; top: -300px; width: 800px; height: 500px; background: #0a2a78; --blur: 140px; opacity: .6; }
+
+  .icons { position: absolute; right: 46px; top: 46px; display: flex; gap: 18px; }
+  .icons .app { --s: 70px; box-shadow: 0 0 0 2px rgba(255,255,255,.08), 0 8px 20px -10px rgba(0,0,0,.6); }
+
+  .lock { position: absolute; left: 80px; top: 150px; }
+  .lock .lockup { font-size: 50px; gap: 20px; }
+  .lock .app { --s: 66px; }
+  h1 { position: absolute; left: 76px; top: 266px; font-size: 124px; line-height: 0.97; }
+
+  /* right: the setup panel */
+  .dpanel.setup { position: absolute; left: 914px; top: 150px; width: 640px; height: 760px; }
+  .setup .sec { padding: 36px 40px 0; }
+  .setup .title { display: flex; align-items: center; gap: 22px; padding-bottom: 30px; border-bottom: 1.5px solid var(--line); font-size: 60px; font-weight: 700; letter-spacing: -0.045em; }
+  .setup .title .app { --s: 64px; --r: 16px; }
+  .setup .field2 { margin-top: 30px; height: 84px; border-radius: 18px; background: var(--row); box-shadow: inset 0 0 0 2px var(--blue); display: flex; align-items: center; gap: 18px; padding: 0 26px; font-size: 32px; font-weight: 600; letter-spacing: -0.02em; }
+  .setup .field2 .fav { width: 40px; height: 40px; border-radius: 10px; }
+  .setup .btn { margin-top: 18px; height: 88px; }
+  .setup .more { margin-top: 34px; height: 120px; border-radius: 24px; background: var(--row); display: flex; align-items: center; justify-content: flex-end; gap: 22px; padding: 0 30px; font-size: 32px; font-weight: 600; letter-spacing: -0.025em; }
+  .setup .more svg { width: 34px; height: 34px; color: var(--on-dark-2); }
+
+  /* bottom-left: resources */
+  .dpanel.res { position: absolute; left: 80px; top: 722px; width: 760px; height: 600px; padding: 34px 36px; }
+  .res h3 { font-size: 26px; font-weight: 600; color: var(--on-dark-2); letter-spacing: -0.01em; }
+  .res .item { display: flex; align-items: center; gap: 26px; margin-top: 22px; height: 116px; padding: 0 24px; border-radius: 22px; background: var(--row); box-shadow: inset 0 0 0 1.5px rgba(255,255,255,.04); }
+  .res .ic { width: 66px; height: 66px; border-radius: 16px; background: #0f1011; display: grid; place-items: center; color: #5aa9ff; flex: none; }
+  .res .ic svg { width: 32px; height: 32px; }
+  .res b { display: block; font-size: 32px; font-weight: 600; letter-spacing: -0.025em; }
+  .res span { display: block; margin-top: 4px; font-size: 24px; font-weight: 500; color: var(--on-dark-2); }
+
+  /* center: the plan modal */
+  .wcard.plan { position: absolute; left: 556px; top: 650px; width: 720px; height: 680px; padding: 56px 56px 0; text-align: center; }
+  .plan .link { display: flex; align-items: center; justify-content: center; gap: 30px; }
+  .plan .link .app { --s: 124px; --r: 30px; }
+  .plan .dots { display: flex; gap: 16px; }
+  .plan .dots i { width: 22px; height: 22px; border-radius: 50%; background: var(--blue); }
+  .plan .dots i:nth-child(2) { opacity: .6; }
+  .plan .dots i:nth-child(3) { opacity: .3; }
+  .plan h2 { margin-top: 32px; font-size: 42px; font-weight: 500; letter-spacing: -0.035em; line-height: 1.18; color: #2b3140; }
+  .plan h2 b { font-weight: 750; color: var(--ink); }
+  .plan ol { margin-top: 30px; list-style: none; display: grid; gap: 14px; text-align: left; }
+  .plan li { display: flex; align-items: center; gap: 22px; height: 84px; padding: 0 24px; border-radius: 16px; background: var(--paper-2); font-size: 28px; font-weight: 600; letter-spacing: -0.02em; }
+  .plan li time { width: 100px; font-size: 24px; font-weight: 600; color: var(--blue); }
+  .plan li span { margin-left: auto; font-size: 22px; font-weight: 500; color: var(--ink-2); }
+
+  .brightloop { --bg: linear-gradient(150deg, #ffbe3b, #ff8a1f); }
+  .brightloop i { width: 48%; height: 48%; border-radius: 50%; border: 11px solid #fff; display: block; }
+  .field2 .brightloop i { border-width: 4px; }
+  .setup .auto { display: flex; align-items: center; justify-content: space-between; margin-top: 22px; height: 120px; padding: 0 30px; border-radius: 24px; background: var(--row); }
+  .setup .auto b { display: block; font-size: 32px; font-weight: 600; letter-spacing: -0.025em; }
+  .setup .auto span { display: block; margin-top: 4px; font-size: 24px; font-weight: 500; color: var(--on-dark-2); }
+  .tog { position: relative; width: 92px; height: 54px; border-radius: 999px; background: var(--blue); flex: none; }
+  .tog::after { content: ""; position: absolute; right: 6px; top: 6px; width: 42px; height: 42px; border-radius: 50%; background: #fff; }
+
+  /* 4:5 */
+  html[data-f="4x5"] .icons { top: 64px; }
+  html[data-f="4x5"] .lock { top: 196px; }
+  html[data-f="4x5"] h1 { top: 318px; font-size: 128px; }
+  html[data-f="4x5"] .dpanel.setup { top: 196px; height: 1100px; }
+  html[data-f="4x5"] .dpanel.res { top: 846px; height: 1400px; }
+  html[data-f="4x5"] .wcard.plan { top: 980px; height: 1200px; }
+  html[data-f="4x5"] .g1 { top: 420px; }
+  html[data-f="4x5"] .g2 { top: 1400px; height: 800px; }
+  html[data-f="4x5"] .g3 { top: 600px; }
+
+  /* 1:1 */
+  html[data-f="1x1"] .dpanel.setup { height: 1100px; }
+  html[data-f="1x1"] .dpanel.res { height: 1000px; }
+  html[data-f="1x1"] .wcard.plan { height: 1000px; }
+  html[data-f="1x1"] .g2 { top: 1100px; height: 700px; }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="field">
+    <div class="glow g3"></div>
+    <div class="glow g1"></div>
+    <div class="glow g2"></div>
+    <div class="glow g4"></div>
+  </div>
+  <div class="grain"></div>
+
+  <div class="icons">
+    <div class="app round chatgpt rim"><svg><use href="#lg-chatgpt"/></svg></div>
+    <div class="app round claude"><svg><use href="#lg-claude"/></svg></div>
+    <div class="app round gemini"><img src="../kit/gemini.png" alt="" /></div>
+    <div class="app round perplexity rim"><svg><use href="#lg-perplexity"/></svg></div>
+    <div class="app round google"><svg><use href="#lg-google"/></svg></div>
+    <div class="app round copilot"><svg><use href="#lg-copilot"/></svg></div>
+    <div class="app round grok rim"><svg><use href="#lg-grok"/></svg></div>
+    <div class="app round deepseek"><svg><use href="#lg-deepseek"/></svg></div>
+    <div class="app round meta"><svg><use href="#lg-meta"/></svg></div>
+    <div class="app round mistral"><svg><use href="#lg-mistral"/></svg></div>
+  </div>
+
+  <div class="lock"><div class="lockup"><div class="app rankbox"><svg><use href="#lg-rankbox"/></svg></div>Rankbox</div></div>
+  <h1 class="display">A month of<br />content from<br />one URL</h1>
+
+  <div class="dpanel setup">
+    <div class="head">
+      <div class="app rankbox"><svg><use href="#lg-rankbox"/></svg></div>
+      Rankbox
+      <span class="close"><svg><use href="#ic-x"/></svg></span>
+    </div>
+    <div class="sec">
+      <div class="title"><div class="app rankbox"><svg><use href="#lg-rankbox"/></svg></div>Quick setup</div>
+      <div class="field2"><span class="app brightloop fav"><i></i></span>brightloop.app</div>
+      <div class="btn">Build my plan</div>
+      <div class="more">What happens next? <svg><use href="#ic-chev-down"/></svg></div>
+      <div class="auto" data-only="4x5 1x1"><div><b>Autopilot</b><span>Publish each article on schedule</span></div><i class="tog"></i></div>
+    </div>
+  </div>
+
+  <div class="dpanel res">
+    <h3>Resources &amp; support</h3>
+    <div class="item"><span class="ic"><svg><use href="#ic-book"/></svg></span><div><b>Docs &amp; guides</b><span>Set up publishing, step by step</span></div></div>
+    <div class="item"><span class="ic"><svg><use href="#ic-code"/></svg></span><div><b>API &amp; MCP</b><span>Connect any site or AI assistant</span></div></div>
+    <div class="item"><span class="ic"><svg><use href="#ic-mail"/></svg></span><div><b>Contact support</b><span>Get help from the Rankbox team</span></div></div>
+    <div class="item" data-only="4x5 1x1"><span class="ic"><svg><use href="#ic-refresh"/></svg></span><div><b>Changelog</b><span>See what shipped this week</span></div></div>
+  </div>
+
+  <div class="wcard plan">
+    <div class="link">
+      <div class="app brightloop"><i></i></div>
+      <div class="dots"><i></i><i></i><i></i></div>
+      <div class="app rankbox"><svg><use href="#lg-rankbox"/></svg></div>
+    </div>
+    <h2>Your first month of content<br />for <b>brightloop.app</b></h2>
+    <ol>
+      <li><time>Oct 6</time>Usage-Based Pricing<span>Scheduled</span></li>
+      <li><time>Oct 7</time>Pricing a SaaS App<span>Scheduled</span></li>
+      <li><time>Oct 8</time>Freemium or Trial?<span>Scheduled</span></li>
+      <li><time>Oct 9</time>API Pricing Guide<span>Scheduled</span></li>
+      <li><time>Oct 10</time>Value Metrics 101<span>Scheduled</span></li>
+      <li><time>Oct 11</time>Pricing Page Tests<span>Scheduled</span></li>
+    </ol>
+  </div>
+</div>
+</body>
+</html>

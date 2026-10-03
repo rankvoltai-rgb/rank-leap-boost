@@ -1,0 +1,164 @@
+<!doctype html>
+<!--
+  Review page for the promo kit. Open it in a browser after ./render.sh.
+  Each Rankbox image sits beside the reference it was built from, so the two
+  can be judged at the same size. The references live in refs/, which is
+  git-ignored (they're other companies' art), so on a fresh clone the page
+  shows the Rankbox images alone.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Promo Kit Review</title>
+<style>
+  @font-face {
+    font-family: "Jakarta";
+    src: url("./kit/fonts/plus-jakarta-sans-latin-wght-normal.woff2") format("woff2-variations");
+    font-weight: 200 800;
+  }
+  :root {
+    --bg: #f4f5f7;
+    --card: #ffffff;
+    --ink: #0c1018;
+    --muted: #6b7280;
+    --line: #e3e6ec;
+    --blue: #1877f2;
+    --blue-soft: #e8f1ff;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0d0f13;
+      --card: #161a21;
+      --ink: #eef1f6;
+      --muted: #9aa3b2;
+      --line: #262c36;
+      --blue-soft: #14284a;
+    }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--ink); font-family: "Jakarta", ui-sans-serif, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+
+  header { position: sticky; top: 0; z-index: 5; display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; padding: 16px clamp(16px, 4vw, 40px); background: color-mix(in oklab, var(--bg) 88%, transparent); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); }
+  header h1 { font-size: 20px; font-weight: 700; letter-spacing: -0.02em; }
+  header p { font-size: 14px; color: var(--muted); }
+  .controls { margin-left: auto; display: flex; gap: 8px; flex-wrap: wrap; }
+  .controls button { font: inherit; font-size: 14px; font-weight: 600; padding: 8px 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--card); color: var(--ink); cursor: pointer; }
+  .controls button[aria-pressed="true"] { background: var(--blue); border-color: var(--blue); color: #fff; }
+  .controls button:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+
+  main { padding: 28px clamp(16px, 4vw, 40px) 64px; display: grid; gap: 28px; }
+  h2.batch { font-size: 15px; font-weight: 700; color: var(--muted); margin-top: 8px; }
+
+  .pair { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 16px; display: grid; gap: 12px; }
+  .pair .meta { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 14px; }
+  .pair .meta b { font-size: 16px; font-weight: 700; letter-spacing: -0.01em; }
+  .pair .meta span { font-size: 14px; color: var(--muted); }
+  .pair .meta .fmts { margin-left: auto; display: flex; gap: 6px; flex-wrap: wrap; }
+  .pair .meta .fmts a { font-size: 13px; font-weight: 600; color: var(--blue); background: var(--blue-soft); padding: 4px 10px; border-radius: 999px; text-decoration: none; }
+  .imgs { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  body.solo .imgs { grid-template-columns: 1fr; }
+  body.solo .ref { display: none; }
+  figure { display: grid; gap: 6px; min-width: 0; }
+  figure img { width: 100%; height: auto; display: block; border-radius: 10px; border: 1px solid var(--line); background: var(--bg); }
+  figcaption { font-size: 12px; font-weight: 600; color: var(--muted); }
+  .ref.missing { display: none; }
+  @media (max-width: 760px) { .imgs { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>Rankbox promo kit</h1>
+  <p id="count"></p>
+  <div class="controls" role="group" aria-label="View">
+    <button type="button" data-view="pairs" aria-pressed="true">Beside reference</button>
+    <button type="button" data-view="solo" aria-pressed="false">Rankbox only</button>
+  </div>
+</header>
+<main id="list"></main>
+<script>
+  // id → reference image(s) it was built from, and what it says.
+  const SCENES = [
+    { batch: "Round 1", id: "01-hero", refs: ["03"], says: "Get AI traffic on autopilot" },
+    { id: "02-questions", refs: ["04"], says: "Answer what buyers ask AI" },
+    { id: "03-publish", refs: ["05"], says: "New articles land every day" },
+    { id: "04-setup", refs: ["06"], says: "A month of content from one URL" },
+    { id: "05-mcp", refs: ["01"], says: "The MCP server, one URL" },
+    { id: "06-chat", refs: ["02"], says: "The free MCP tools in an AI chat" },
+    { id: "07-framer", refs: ["07"], says: "Rankbox for Framer" },
+    { id: "08-framer-editor", refs: ["10"], says: "Rank Framer sites in AI search" },
+    { batch: "Round 2", id: "09-iso-hero", refs: ["11"], says: "Get AI traffic on autopilot" },
+    { id: "10-feature-pills", refs: ["12"], says: "Seven features beside the editor" },
+    { id: "11-guesswork", refs: ["13"], says: "Skip the guesswork" },
+    { id: "12-everywhere", refs: ["14"], says: "Written for Google and AI" },
+    { id: "13-plugin-panels", refs: ["15"], says: "Rankbox panels" },
+    { id: "14-sync-flow", refs: ["16"], says: "Sync AI articles into Framer CMS" },
+    { id: "15-calendar-drag", refs: ["17"], says: "Drag articles between days" },
+    { id: "16-three-voices", refs: ["18"], says: "Articles that sound like your brand" },
+    { id: "17-bento", refs: ["19"], says: "One platform for search and AI traffic" },
+    { id: "18-power-up", refs: ["20"], says: "Power up your Framer blog" },
+    { id: "19-chips-editor", refs: ["21"], says: "Full articles + meta + schema" },
+    { id: "20-three-steps", refs: ["22"], says: "Three steps to a month of content" },
+    { id: "21-two-scores", refs: ["23"], says: "Scored for Google and AI answers" },
+    { id: "22-your-ai", refs: ["24"], says: "Use Rankbox in the AI you already pay for" },
+    { id: "23-select-edit", refs: ["25"], says: "Select a line, rewrite it in one click" },
+    { id: "24-cost-history", refs: ["26"], says: "Know what every article costs" },
+    { id: "25-seo-score", refs: ["27"], says: "SEO score beside the article" },
+    { id: "26-welcome", refs: ["28"], says: "Welcome to Rankbox" },
+    { id: "27-three-words", refs: ["29"], says: "Research. Writing. Publishing." },
+    { id: "28-traffic-from", refs: ["30"], says: "Get AI traffic from ChatGPT" },
+    { id: "29-integrations", refs: ["31"], says: "Publish to Framer, Webflow & more" },
+    { id: "30-ai-crawlers", refs: ["32"], says: "Let AI crawlers read your site" },
+    { id: "31-head-code-dark", refs: ["33"], says: "Structured data in your site's head" },
+    { id: "32-head-code-light", refs: ["34"], says: "Structured data, light" },
+    { id: "33-calendar", refs: ["35"], says: "Content calendar" },
+    { id: "34-brand-form", refs: ["36"], says: "Tell it who you are" },
+    { id: "35-light-dark", refs: ["37"], says: "Your site's theme, light or dark" },
+    { batch: "Banners", id: "36-linkedin-banner", refs: [], main: "li", says: "LinkedIn profile banner and company cover" },
+  ];
+  const FORMATS = ["4x3", "4x5", "1x1", "9x16", "li", "lic"];
+  // The company cover ships as JPEG (LinkedIn caps it at 3 MB); the rest are PNG.
+  const file = (f, id) => `out/${f}/rankbox-${id}.${f === "lic" ? "jpg" : "png"}`;
+  const list = document.getElementById("list");
+
+  // A format link only shows once that file has loaded, so the page lists
+  // exactly what's been rendered.
+  function probe(src) {
+    return new Promise((ok) => { const i = new Image(); i.onload = () => ok(true); i.onerror = () => ok(false); i.src = src; });
+  }
+
+  let shown = 0;
+  (async () => {
+    for (const s of SCENES) {
+      if (s.batch) list.insertAdjacentHTML("beforeend", `<h2 class="batch">${s.batch}</h2>`);
+      const main = file(s.main || "4x3", s.id);
+      if (!(await probe(main))) continue;
+      shown++;
+      const fmts = [];
+      for (const f of FORMATS) if (await probe(file(f, s.id))) fmts.push(f);
+      const ref = s.refs[0];
+      list.insertAdjacentHTML("beforeend", `
+        <section class="pair">
+          <div class="meta"><b>${s.id}</b><span>${s.says}</span>
+            <span class="fmts">${fmts.map((f) => `<a href="${file(f, s.id)}" target="_blank" rel="noopener">${f.replace("x", ":")}</a>`).join("")}</span>
+          </div>
+          <div class="imgs">
+            <figure class="ref"><img src="refs/ref-${ref}.png" alt="Reference ${ref}" loading="lazy" onerror="this.closest('figure').classList.add('missing')" /><figcaption>Reference</figcaption></figure>
+            <figure><img src="${main}" alt="Rankbox ${s.id}" loading="lazy" /><figcaption>Rankbox</figcaption></figure>
+          </div>
+        </section>`);
+    }
+    document.getElementById("count").textContent = `${shown} scenes rendered`;
+  })();
+
+  const KEY = "promo-kit.view";
+  function setView(v) {
+    document.body.classList.toggle("solo", v === "solo");
+    document.querySelectorAll("[data-view]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.view === v)));
+    try { localStorage.setItem(KEY, v); } catch {}
+  }
+  document.querySelectorAll("[data-view]").forEach((b) => b.addEventListener("click", () => setView(b.dataset.view)));
+  try { const v = localStorage.getItem(KEY); if (v) setView(v); } catch {}
+</script>
+</body>
+</html>

@@ -1,0 +1,189 @@
+<!doctype html>
+<!-- 28 · Get AI traffic from ChatGPT. After Thenty's "Sell digital products
+     with Stripe": a flat brand-blue field, a three-line caps headline with the
+     ChatGPT tile set into the last line, and the Rankbox app cropped by the
+     right and bottom edges, open on Rank for the sample site. The split card
+     pairs the projection (sample numbers for Brightloop) with what AI engines
+     look for; the cursor rests on "Cites sources". The headline is the site's
+     own hero promise: aspirational, not a measured result. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x3" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<script src="../kit/kit.js"></script>
+<style>
+  html, body { background: #1877f2; }
+  .canvas { background: radial-gradient(1100px 700px at 18% 8%, #2a83f6 0%, rgba(42, 131, 246, 0) 70%), #1877f2; }
+  .grain { --grain: 0.07; }
+
+  /* ---- headline */
+  .t-hl { position: absolute; left: 77px; top: 67px; font-size: 90px; line-height: 90px; color: #fff; white-space: nowrap; }
+  .t-hl .inline-tile { width: 0.76em; height: 0.76em; margin: 0 0.15em 0 0.04em; border-radius: 0.12em; vertical-align: 0.125em; --bg: #0d0d0d; }
+  .t-hl .inline-tile > svg { width: 0.47em; height: 0.47em; }
+
+  /* ---- the app window */
+  .t-win {
+    position: absolute; left: 78px; top: 400px; width: 1600px; height: 900px;
+    border-radius: 16px 0 0 0;
+    background: #fff; overflow: hidden;
+    box-shadow: 0 30px 70px -30px rgba(2, 24, 80, 0.45);
+  }
+  .t-bar { position: absolute; left: 0; top: 0; right: 0; height: 86px; display: flex; align-items: center; padding: 0 0 0 17px; border-bottom: 1.5px solid #eeeff1; white-space: nowrap; }
+  .t-menu { display: flex; align-items: center; gap: 10px; height: 42px; padding: 0 12px 0 13px; border-radius: 11px; background: #fff; box-shadow: 0 3px 10px -3px rgba(0, 0, 0, 0.18), 0 0 0 1px rgba(0, 0, 0, 0.05); font-size: 19px; font-weight: 600; letter-spacing: -0.025em; color: #0c1018; }
+  .t-menu svg.mk { width: 22px; height: 22px; color: var(--blue); }
+  .t-menu svg.cv { width: 17px; height: 17px; color: #7a808a; margin-left: 2px; }
+  .t-page { display: flex; align-items: center; gap: 12px; margin-left: 30px; padding-left: 30px; border-left: 1.5px solid #eceef1; height: 34px; font-size: 19px; font-weight: 600; color: #2a2e36; letter-spacing: -0.015em; }
+  .t-page i { width: 28px; height: 28px; border-radius: 7px; background: #e8f1ff; display: grid; place-items: center; color: var(--blue); }
+  .t-page i svg { width: 19px; height: 19px; }
+  .t-proj { position: absolute; left: 878px; top: 0; height: 86px; display: flex; align-items: center; gap: 9px; font-size: 18.5px; font-weight: 600; letter-spacing: -0.015em; color: #2a2e36; }
+  .t-proj em { font-style: normal; font-weight: 500; color: #9aa0ab; }
+  .t-proj b { margin-left: 4px; height: 26px; padding: 0 9px; border-radius: 7px; background: #e6f0ff; color: #1561d6; font-size: 15px; font-weight: 700; letter-spacing: 0.05em; display: grid; place-items: center; }
+
+  /* the sidebar, as the dashboard draws it */
+  .t-side { position: absolute; left: 0; top: 86px; width: 364px; bottom: 0; padding: 26px 18px 0; border-right: 1.5px solid #eeeff1; background: #fbfbfc; }
+  .t-sec { margin: 0 12px 10px; font-size: 15px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: #9aa0ab; }
+  .t-sec.acc { margin-top: 24px; }
+  .t-it { display: flex; align-items: center; gap: 15px; height: 45px; margin-bottom: 4px; padding: 0 13px; border-radius: 11px; font-size: 19px; font-weight: 500; letter-spacing: -0.012em; color: #4b5060; }
+  .t-it svg { width: 23px; height: 23px; color: #8a8f99; flex: none; }
+  .t-it.on { background: var(--blue); color: #fff; font-weight: 600; box-shadow: 0 1px 2px rgba(10, 30, 70, 0.2); }
+  .t-it.on svg { color: #fff; }
+  .t-it em { margin-left: auto; font-style: normal; font-size: 15px; font-weight: 600; color: #8a8f99; background: #eef0f3; border-radius: 999px; padding: 2px 9px; }
+
+  /* the page */
+  .t-main { position: absolute; left: 365px; top: 86px; right: 0; bottom: 0; background: #f3f4f6; }
+  .t-strip { position: absolute; left: 61px; top: 47px; width: 1040px; height: 43px; display: flex; align-items: center; gap: 12px; padding: 0 14px 0 11px; border-radius: 10px; background: #dde9fb; font-size: 17px; font-weight: 600; color: #1767d8; letter-spacing: -0.01em; white-space: nowrap; }
+  .t-strip i { width: 23px; height: 23px; border-radius: 6px; background: var(--blue); display: grid; place-items: center; color: #fff; }
+  .t-strip i svg { width: 15px; height: 15px; }
+  .t-strip .end { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+  .t-strip .end svg { width: 18px; height: 18px; }
+
+  .t-card { position: absolute; left: 57px; top: 111px; width: 1048px; height: 720px; display: flex; background: #fff; box-shadow: 0 1px 0 rgba(12, 16, 24, 0.04); }
+  .t-dark { position: relative; width: 536px; flex: none; background: #0e1a33; color: #fff; }
+  .t-light { position: relative; flex: 1; }
+
+  .t-logo { position: absolute; left: 80px; top: 43px; font-size: 35px; color: #fff; }
+  .t-logo > i { border-color: #ff8a1f; }
+  .t-k { position: absolute; left: 80px; top: 103px; font-size: 19px; font-weight: 500; color: #93a1c1; letter-spacing: -0.01em; }
+  .t-big { position: absolute; left: 79px; top: 129px; font-size: 41px; font-weight: 600; letter-spacing: -0.035em; line-height: 1; }
+  .t-big small { font-size: 26px; font-weight: 500; color: #b8c3dc; letter-spacing: -0.02em; margin-left: 2px; }
+  .t-chart { position: absolute; left: 80px; top: 205px; width: 378px; height: 104px; }
+  .t-keys { position: absolute; left: 80px; top: 322px; display: flex; gap: 22px; font-size: 15px; font-weight: 500; color: #93a1c1; }
+  .t-keys span { display: inline-flex; align-items: center; gap: 8px; }
+  .t-keys svg { width: 20px; height: 4px; }
+  .t-rule { position: absolute; left: 80px; width: 378px; height: 1.5px; background: #22304d; }
+  .t-row { position: absolute; left: 80px; width: 378px; display: flex; justify-content: space-between; font-size: 18px; font-weight: 500; color: #dfe5f2; letter-spacing: -0.01em; }
+  .t-row b { font-weight: 600; color: #fff; }
+  .t-row.tot { font-weight: 600; color: #fff; }
+  .t-row.tot b { font-weight: 700; }
+  .t-cov { position: absolute; left: 80px; top: 404px; width: 378px; height: 7px; display: flex; gap: 3px; }
+  .t-cov i { display: block; height: 100%; border-radius: 999px; }
+
+  .t-h { position: absolute; left: 79px; top: 46px; font-size: 23px; font-weight: 700; letter-spacing: -0.025em; color: #0c1018; }
+  .t-sub { position: absolute; left: 79px; top: 83px; font-size: 17px; font-weight: 500; color: #6b7280; letter-spacing: -0.01em; }
+  .t-eng { position: absolute; left: 79px; top: 120px; display: flex; gap: 8px; }
+  .t-eng span { width: 36px; height: 36px; border-radius: 9px; background: #fff; box-shadow: inset 0 0 0 1.5px #e5e7eb; display: grid; place-items: center; }
+  .t-eng svg { width: 19px; height: 19px; }
+  .t-eng .gpt { color: #0d0d0d; }
+  .t-eng .cl { color: #d97757; }
+  .t-sig { position: absolute; left: 79px; top: 180px; width: 376px; padding: 5px 0; border-radius: 14px; background: #fff; border: 1.5px solid #e7e9ed; overflow: hidden; }
+  .t-s { position: relative; height: 84px; padding: 18px 20px 0; }
+  .t-s + .t-s::before { content: ""; position: absolute; left: 20px; right: 20px; top: 0; height: 1px; background: #f0f1f4; }
+  .t-s.hov { background: #f5f8fe; }
+  .t-s.hov::before, .t-s.hov + .t-s::before { opacity: 0; }
+  .t-s .top { display: flex; justify-content: space-between; align-items: baseline; }
+  .t-s .top span { font-size: 18px; font-weight: 600; color: #0c1018; letter-spacing: -0.015em; }
+  .t-s .top em { font-style: normal; font-size: 16px; font-weight: 500; color: #8a8f99; }
+  .t-s .top em b { font-weight: 700; color: #0c1018; }
+  .t-s .bar { margin-top: 13px; height: 7px; border-radius: 999px; background: #e3edfd; overflow: hidden; }
+  .t-s .bar i { display: block; height: 100%; border-radius: 999px; background: var(--blue); }
+
+  .t-cur { --cs: 54px; }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="grain"></div>
+
+  <h1 class="t-hl hl-caps">Get AI<br />traffic from<br /><span class="inline-tile"><svg><use href="#lg-chatgpt"/></svg></span>ChatGPT</h1>
+
+  <div class="t-win">
+    <div class="t-bar">
+      <div class="t-menu"><svg class="mk"><use href="#lg-rankbox"/></svg>Rankbox<svg class="cv"><use href="#ic-chev-down"/></svg></div>
+      <div class="t-page"><i><svg><use href="#rb-radar"/></svg></i>Rank</div>
+      <div class="t-proj">Brightloop <em>· brightloop.app</em><b>BUSINESS</b></div>
+    </div>
+
+    <div class="t-side">
+      <div class="t-sec">Workspace</div>
+      <div class="t-it"><svg><use href="#rb-pulse"/></svg>Overview</div>
+      <div class="t-it"><svg><use href="#rb-article"/></svg>Articles</div>
+      <div class="t-it"><svg><use href="#rb-calendar"/></svg>Calendar</div>
+      <div class="t-it on"><svg><use href="#rb-radar"/></svg>Rank</div>
+      <div class="t-it"><svg><use href="#rb-link"/></svg>Backlinks</div>
+      <div class="t-it"><svg><use href="#rb-thread"/></svg>Reddit</div>
+      <div class="t-it"><svg><use href="#rb-connect"/></svg>Integrations</div>
+      <div class="t-sec acc">Account</div>
+      <div class="t-it"><svg><use href="#rb-studio"/></svg>Studio</div>
+      <div class="t-it"><svg><use href="#rb-card"/></svg>Plan &amp; Billing</div>
+      <div class="t-it"><svg><use href="#rb-controls"/></svg>Settings</div>
+    </div>
+
+    <div class="t-main">
+      <div class="t-strip"><i><svg><use href="#rb-radar"/></svg></i>See where you rank — and what to do next<span class="end">Next best moves<svg><use href="#ic-chev-right"/></svg></span></div>
+
+      <div class="t-card">
+        <div class="t-dark">
+          <span class="t-logo bl-logo"><i></i>Brightloop</span>
+          <div class="t-k">Projected monthly visits</div>
+          <div class="t-big">4,800<small>/mo</small></div>
+          <svg class="t-chart" viewBox="0 0 378 104" aria-hidden="true">
+            <defs>
+              <linearGradient id="t-area" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#4b9dff" stop-opacity=".38" />
+                <stop offset="1" stop-color="#4b9dff" stop-opacity="0" />
+              </linearGradient>
+            </defs>
+            <path d="M0 34.5 H378 M0 69 H378 M0 103 H378" stroke="#1c2a47" stroke-width="1.5" />
+            <path d="M0 92 C 30 90 52 88 76 84 S 118 76 140 70 S 184 60 206 50 L 206 103 L 0 103 Z" fill="url(#t-area)" />
+            <path d="M0 92 C 30 90 52 88 76 84 S 118 76 140 70 S 184 60 206 50" fill="none" stroke="#5aa6ff" stroke-width="3.2" stroke-linecap="round" />
+            <path d="M206 50 C 240 36 268 30 300 22 S 350 10 376 6" fill="none" stroke="#5aa6ff" stroke-width="3.2" stroke-linecap="round" stroke-dasharray="7 7" />
+            <circle cx="206" cy="50" r="6.5" fill="#5aa6ff" stroke="#0e1a33" stroke-width="3" />
+          </svg>
+          <div class="t-keys">
+            <span><svg viewBox="0 0 20 4"><line x1="0" y1="2" x2="20" y2="2" stroke="#5aa6ff" stroke-width="3" /></svg>Published</span>
+            <span><svg viewBox="0 0 20 4"><line x1="0" y1="2" x2="20" y2="2" stroke="#5aa6ff" stroke-width="3" stroke-dasharray="4 3" /></svg>Scheduled</span>
+          </div>
+          <div class="t-rule" style="top:366px"></div>
+          <div class="t-row" style="top:384px">Market coverage<b>38%</b></div>
+          <div class="t-cov" style="top:420px"><i style="width:38%;background:#4b9dff"></i><i style="width:27%;background:#2a4a7d"></i><i style="flex:1;background:#1c2a47"></i></div>
+          <div class="t-row" style="top:450px">Est. monthly visits<b>1,240</b></div>
+          <div class="t-rule" style="top:500px"></div>
+          <div class="t-row tot" style="top:518px">Avg. SEO score<b>91</b></div>
+        </div>
+
+        <div class="t-light">
+          <div class="t-h">What AI engines look for</div>
+          <div class="t-sub">How many of your published articles have each.</div>
+          <div class="t-eng">
+            <span class="gpt"><svg><use href="#lg-chatgpt"/></svg></span>
+            <span class="cl"><svg><use href="#lg-claude"/></svg></span>
+            <span><img src="../kit/gemini.png" alt="" style="width:19px;height:19px" /></span>
+            <span><svg><use href="#lg-google"/></svg></span>
+          </div>
+          <div class="t-sig">
+            <div class="t-s"><div class="top"><span>FAQ section</span><em><b>8</b> of 8</em></div><div class="bar"><i style="width:100%"></i></div></div>
+            <div class="t-s"><div class="top"><span>Clear sections</span><em><b>8</b> of 8</em></div><div class="bar"><i style="width:100%"></i></div></div>
+            <div class="t-s hov"><div class="top"><span>Cites sources</span><em><b>7</b> of 8</em></div><div class="bar"><i style="width:87.5%"></i></div></div>
+            <div class="t-s"><div class="top"><span>Depth</span><em><b>6</b> of 8</em></div><div class="bar"><i style="width:75%"></i></div></div>
+            <div class="t-s"><div class="top"><span>Easy to read</span><em><b>8</b> of 8</em></div><div class="bar"><i style="width:100%"></i></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <svg class="cur t-cur" style="left:1442px;top:1006px"><use href="#ic-cursor"/></svg>
+</div>
+</body>
+</html>

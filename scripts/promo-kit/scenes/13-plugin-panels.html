@@ -1,0 +1,276 @@
+<!doctype html>
+<!-- 13 · Plugin panels. After Forms Plugin's two tilted panels on dark navy:
+     the lockup on top, the start panel tilted left with "Questions buyers ask
+     AI" lifted out of it, the Rank checks panel tilted right with a check and
+     a publish toast popping off its edge, and the publishing apps piled in the
+     bottom-left corner. The publishing add-ons are not live yet (addonLive). -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x3" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<script src="../kit/kit.js"></script>
+<style>
+  .canvas { background: #01091d; }
+
+  /* ------------------------------------------------------------ field */
+  .pp-field {
+    position: absolute; inset: 0; z-index: -3;
+    background:
+      radial-gradient(1050px 780px at 1490px -60px, #1f63b6 0%, #18529f 16%, #103d7e 34%, #0a2858 54%, #05173a 74%, #020b21 100%);
+  }
+  .pp-dots {
+    position: absolute; inset: 0; z-index: -2; pointer-events: none;
+    background-image: radial-gradient(rgba(175, 205, 255, 0.55) 0.9px, transparent 1.5px);
+    background-size: 9px 9px;
+    -webkit-mask-image: radial-gradient(1000px 760px at 1460px -20px, rgba(0,0,0,.85) 0%, rgba(0,0,0,.45) 40%, transparent 78%);
+            mask-image: radial-gradient(1000px 760px at 1460px -20px, rgba(0,0,0,.85) 0%, rgba(0,0,0,.45) 40%, transparent 78%);
+  }
+  .grain { --grain: 0.1; }
+
+  /* ------------------------------------------------------------ lockup */
+  .pp-lock { position: absolute; left: 0; right: 0; top: 58px; display: flex; justify-content: center; align-items: center; gap: 28px; }
+  .pp-lock .app { --s: 110px; --r: 25px; box-shadow: inset 0 0 0 4px rgba(150, 195, 255, 0.35), 0 0 0 2px rgba(60, 130, 255, 0.55), 0 22px 44px -16px rgba(0, 0, 0, 0.7); }
+  .pp-lock .hl-caps { font-size: 94px; color: #fff; line-height: 1; letter-spacing: -0.03em; }
+  .pp-lock .hl-caps i { font-style: normal; margin-right: 0.035em; }
+
+  /* ------------------------------------------------------------ panels */
+  .pp-panel {
+    position: absolute; width: 610px; height: 1100px;
+    background: #fff; color: #2b2b2b;
+    border-radius: 26px; overflow: hidden;
+    transform-origin: 0 0;
+    box-shadow: 0 0 0 1.5px rgba(255, 255, 255, 0.55), 0 60px 110px -30px rgba(0, 3, 15, 0.8), 0 18px 40px -18px rgba(0, 3, 15, 0.55);
+  }
+  .pp-left { left: 152px; top: 284px; transform: rotate(-4.9deg); }
+  .pp-right { left: 826px; top: 232px; width: 588px; transform: rotate(4.7deg); }
+
+  .pp-head { display: flex; align-items: center; gap: 12px; height: 70px; padding: 0 28px; border-bottom: 1.5px solid #eeeeee; font-size: 21px; font-weight: 600; letter-spacing: -0.02em; color: #262626; }
+  .pp-head .mk { width: 30px; height: 30px; color: var(--blue); }
+  .pp-head .xx { margin-left: auto; width: 24px; height: 24px; color: #2b2b2b; }
+
+  /* left: start screen */
+  .pp-hi { display: flex; align-items: center; gap: 14px; height: 94px; padding: 0 28px; border-bottom: 1.5px solid #eeeeee; }
+  .pp-hi b { margin-right: auto; font-size: 27px; font-weight: 700; letter-spacing: -0.03em; color: #262626; white-space: nowrap; }
+  .pp-badge { display: inline-flex; align-items: center; gap: 8px; height: 44px; padding: 0 16px 0 14px; border-radius: 11px; background: var(--blue); color: #fff; font-size: 19px; font-weight: 700; letter-spacing: -0.01em; box-shadow: 0 8px 16px -8px rgba(24, 119, 242, 0.7); }
+  .pp-badge svg { width: 22px; height: 22px; }
+  .pp-user { width: 44px; height: 44px; color: #555; }
+
+  .pp-start { padding: 26px 30px 0; }
+  .pp-start b { display: block; font-size: 21px; font-weight: 700; letter-spacing: -0.02em; color: #2b2b2b; }
+  .pp-start p { margin-top: 8px; width: 400px; font-size: 19px; line-height: 1.45; font-weight: 500; color: #8c8c8c; letter-spacing: -0.005em; }
+
+  .pp-tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 150px 22px 0; }
+  .pp-tile { height: 216px; padding: 26px 24px 0; border-radius: 20px; background: #f9f9f9; }
+  .pp-chip { width: 58px; height: 58px; flex: none; border-radius: 15px; background: #fff; display: grid; place-items: center; color: #585858; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), 0 6px 14px -6px rgba(0, 0, 0, 0.12); }
+  .pp-chip svg { width: 26px; height: 26px; }
+  .pp-tile b { display: block; margin-top: 22px; font-size: 24px; font-weight: 700; letter-spacing: -0.025em; color: #333; }
+  .pp-tile p { margin-top: 8px; font-size: 19px; line-height: 1.4; font-weight: 500; color: #9b9b9b; letter-spacing: -0.005em; }
+
+  .pp-row { position: relative; display: flex; align-items: center; gap: 22px; height: 146px; margin: 16px 22px 0; padding: 0 0 0 24px; border-radius: 20px; background: #f9f9f9; overflow: hidden; }
+  .pp-row b { display: block; font-size: 24px; font-weight: 700; letter-spacing: -0.025em; color: #333; }
+  .pp-row p { margin-top: 6px; width: 240px; font-size: 19px; line-height: 1.4; font-weight: 500; color: #9b9b9b; letter-spacing: -0.005em; }
+
+  /* tiny calendar, peeking from the right of the Calendar row */
+  .pp-cal { position: absolute; top: 20px; width: 168px; height: 140px; border-radius: 10px; background: #fff; box-shadow: 0 8px 22px -8px rgba(20, 30, 60, 0.28), 0 0 0 1px rgba(0, 0, 0, 0.04); overflow: hidden; }
+  .pp-cal.back { right: 34px; top: 10px; background: #f1f2f5; }
+  .pp-cal.back .bar { background: #3a3d44; }
+  .pp-cal.front { right: -18px; top: 30px; }
+  .pp-cal .bar { height: 22px; background: var(--blue); display: flex; align-items: center; gap: 5px; padding: 0 9px; }
+  .pp-cal .bar i { width: 6px; height: 6px; border-radius: 50%; background: rgba(255, 255, 255, 0.75); }
+  .pp-cal .days { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; padding: 9px; }
+  .pp-cal .days i { height: 15px; border-radius: 3px; background: #eef0f3; }
+  .pp-cal .days i.s { background: #cfe2ff; }
+  .pp-cal .days i.p { background: var(--blue); }
+
+  .pp-apps { position: absolute; right: 22px; top: 14px; display: grid; gap: 10px; justify-items: end; }
+  .pp-app { display: inline-flex; align-items: center; gap: 10px; height: 48px; padding: 0 16px 0 8px; border-radius: 12px; background: #fff; font-size: 18px; font-weight: 700; letter-spacing: -0.01em; color: #2b2b2b; box-shadow: 0 8px 20px -8px rgba(20, 30, 60, 0.3), 0 0 0 1px rgba(0, 0, 0, 0.04); }
+  .pp-app .app { --s: 32px; --r: 8px; }
+
+  /* the lifted card */
+  .pp-pop {
+    position: absolute; left: 84px; top: 574px; width: 652px; height: 166px;
+    display: flex; align-items: center; gap: 26px; padding: 0 30px 4px 32px;
+    border-radius: 30px;
+    transform: rotate(-4.9deg); transform-origin: 0 0;
+    background:
+      radial-gradient(260px 140px at 96% 22%, rgba(214, 170, 255, 0.85), transparent 72%),
+      radial-gradient(240px 160px at 74% 110%, rgba(175, 196, 255, 0.55), transparent 70%),
+      linear-gradient(100deg, #f8f9ff 0%, #f1f3ff 34%, #e9e7ff 64%, #ecdcff 100%);
+    box-shadow:
+      inset 0 0 0 2px rgba(255, 255, 255, 0.95),
+      0 0 70px -6px rgba(132, 120, 255, 0.55),
+      0 46px 80px -26px rgba(0, 4, 20, 0.85),
+      0 14px 30px -14px rgba(0, 4, 20, 0.5);
+    z-index: 4;
+  }
+  .pp-ai { position: relative; width: 82px; height: 82px; flex: none; border-radius: 22px; display: grid; place-items: center; color: #fff; background: linear-gradient(140deg, #3e8fff 0%, #5b6bff 48%, #9a5cff 100%); box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.25), 0 12px 22px -10px rgba(90, 80, 255, 0.75); }
+  .pp-ai svg { width: 46px; height: 46px; }
+  .pp-pop b { display: block; font-size: 29px; font-weight: 700; letter-spacing: -0.03em; color: #1c1c22; }
+  .pp-pop p { margin-top: 8px; font-size: 22px; line-height: 1.36; font-weight: 500; color: #464654; letter-spacing: -0.01em; }
+  .pp-glint { position: absolute; width: 18px; height: 18px; color: #fff; filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.9)); }
+
+  /* right: what AI engines look for */
+  .pp-nav { display: flex; align-items: center; height: 92px; padding: 0 22px 0 24px; }
+  .pp-back { display: flex; align-items: center; gap: 6px; font-size: 23px; font-weight: 600; letter-spacing: -0.02em; color: #262626; }
+  .pp-back svg { width: 26px; height: 26px; }
+  .pp-seg { margin-left: auto; display: flex; gap: 4px; padding: 6px; border-radius: 15px; background: #f6f6f6; }
+  .pp-seg span { height: 54px; width: 128px; display: grid; place-items: center; border-radius: 11px; font-size: 20px; font-weight: 500; letter-spacing: -0.015em; color: #3a3a3a; }
+  .pp-seg span.pp-act { background: #fff; color: #1a1a1a; font-weight: 600; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06), 0 4px 10px -4px rgba(0, 0, 0, 0.12); }
+  .pp-lab { display: flex; align-items: baseline; justify-content: space-between; padding: 8px 26px 0; font-size: 20px; font-weight: 600; letter-spacing: -0.015em; color: #555; }
+  .pp-lab em { font-style: normal; font-size: 19px; font-weight: 600; color: #a2a2a2; }
+  .pp-sub { padding: 6px 26px 0; font-size: 17px; font-weight: 500; color: #9a9a9a; letter-spacing: -0.005em; }
+  .pp-search { display: flex; align-items: center; gap: 14px; height: 68px; margin: 16px 22px 0; padding: 0 22px; border-radius: 15px; background: #f9f9f9; font-size: 22px; font-weight: 500; color: #a0a0a0; letter-spacing: -0.01em; }
+  .pp-search svg { width: 26px; height: 26px; color: #8a8a8a; }
+  .pp-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 22px 22px 0; }
+  .pp-cell { position: relative; height: 202px; border-radius: 20px; background: #f9f9f9; display: grid; justify-items: center; align-content: start; padding-top: 32px; }
+  .pp-cell .pp-chip { width: 60px; height: 60px; }
+  .pp-cell .pp-chip svg { width: 26px; height: 26px; }
+  .pp-cell .pp-lbl { font-style: normal; position: absolute; left: 8px; right: 8px; bottom: 38px; text-align: center; font-size: 19px; line-height: 1.22; font-weight: 500; letter-spacing: -0.025em; color: #333; white-space: nowrap; }
+  .pp-cell .pp-lbl.two { bottom: 26px; }
+
+  /* pop-outs off the right panel */
+  .pp-meta {
+    position: absolute; left: 1304px; top: 472px; width: 292px; height: 108px;
+    display: flex; align-items: center; gap: 16px; padding: 0 22px;
+    border-radius: 24px; background: #fff;
+    transform: rotate(-1.5deg);
+    box-shadow: 0 0 0 1.5px rgba(255, 255, 255, 0.7), 0 34px 60px -22px rgba(0, 4, 20, 0.75), 0 10px 24px -12px rgba(0, 4, 20, 0.45);
+    z-index: 6;
+  }
+  .pp-disc { width: 60px; height: 60px; flex: none; border-radius: 50%; display: grid; place-items: center; background: #eaf2ff; color: var(--blue); box-shadow: inset 0 0 0 2px #d3e3ff, 0 4px 10px -4px rgba(24, 119, 242, 0.35); }
+  .pp-disc svg { width: 28px; height: 28px; }
+  .pp-meta b { display: block; font-size: 22px; font-weight: 700; letter-spacing: -0.025em; color: #1f1f1f; white-space: nowrap; }
+  .pp-meta small { display: block; margin-top: 6px; font-size: 18px; font-weight: 500; color: #7c7c7c; }
+
+  .pp-toast {
+    position: absolute; left: 1206px; top: 990px; width: 350px; height: 116px;
+    display: flex; align-items: center; gap: 18px; padding: 0 26px;
+    border-radius: 26px; background: #fff;
+    transform: rotate(5deg);
+    box-shadow: 0 0 0 1.5px rgba(255, 255, 255, 0.7), 0 36px 64px -22px rgba(0, 4, 20, 0.8), 0 12px 26px -12px rgba(0, 4, 20, 0.45);
+    z-index: 6;
+  }
+  .pp-ok { width: 50px; height: 50px; flex: none; color: #1fb15a; }
+  .pp-toast b { display: block; font-size: 23px; font-weight: 700; letter-spacing: -0.025em; color: #1f1f1f; }
+  .pp-toast small { display: block; margin-top: 5px; font-size: 18px; font-weight: 500; color: #7c7c7c; white-space: nowrap; }
+  .pp-ftile { position: absolute; left: 1414px; top: 914px; z-index: 6; transform: rotate(4deg); }
+  .pp-ftile .app { --s: 72px; --r: 17px; --g: 50%; box-shadow: 0 18px 30px -12px rgba(0, 0, 0, 0.7); }
+
+  /* the publishing apps, piled in the corner */
+  .pp-pile { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+  .pp-pile .app { position: absolute; box-shadow: 0 22px 36px -14px rgba(0, 0, 0, 0.75), 0 6px 12px -6px rgba(0, 0, 0, 0.5); }
+  .pp-pile .app.img { --bg: #fff; }
+  .pp-pile .app.img img { width: 100%; height: 100%; }
+  .pp-left { z-index: 2; }
+  .pp-right { z-index: 5; }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="pp-field"></div>
+  <div class="pp-dots"></div>
+  <div class="grain"></div>
+
+  <div class="pp-lock">
+    <div class="app rankbox"><svg><use href="#lg-rankbox"/></svg></div>
+    <span class="hl-caps"><i>R</i>ankbox</span>
+  </div>
+
+  <div class="pp-pile">
+    <div class="app webflow"    style="--s:96px;  left:-14px; top:866px;  transform:rotate(15deg)"><svg><use href="#lg-webflow"/></svg></div>
+    <div class="app framer rim" style="--s:86px;  left:90px;  top:850px;  transform:rotate(-6deg)"><svg><use href="#lg-framer"/></svg></div>
+    <div class="app shopify"    style="--s:106px; left:28px;  top:966px;  transform:rotate(-10deg)"><svg><use href="#lg-shopify"/></svg></div>
+    <div class="app img"        style="--s:94px;  left:142px; top:948px;  transform:rotate(13deg)"><img src="../../../src/assets/connectors/make.webp" alt="" /></div>
+    <div class="app wordpress"  style="--s:96px;  left:-36px; top:1094px; transform:rotate(-13deg)"><svg><use href="#lg-wordpress"/></svg></div>
+    <div class="app img"        style="--s:98px;  left:68px;  top:1104px; transform:rotate(-6deg)"><img src="../../../src/assets/connectors/n8n.webp" alt="" /></div>
+    <div class="app square"     style="--s:122px; left:150px; top:1084px; transform:rotate(12deg)"><svg><use href="#lg-square"/></svg></div>
+  </div>
+
+  <!-- left: the start screen -->
+  <div class="pp-panel pp-left">
+    <div class="pp-head"><svg class="mk"><use href="#lg-rankbox"/></svg>Rankbox<svg class="xx"><use href="#ic-x"/></svg></div>
+    <div class="pp-hi">
+      <b>Hey Brightloop 👋</b>
+      <span class="pp-badge"><svg><use href="#ic-crown"/></svg>Business</span>
+      <svg class="pp-user" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="10.2"/><circle cx="12" cy="9.6" r="3.3"/><path d="M6.4 18.6c1.3-2.4 3.3-3.6 5.6-3.6s4.3 1.2 5.6 3.6"/></g></svg>
+    </div>
+    <div class="pp-start">
+      <b>Get started</b>
+      <p>Pick what to write next, or<br />let autopilot choose.</p>
+    </div>
+    <div class="pp-tiles">
+      <div class="pp-tile"><span class="pp-chip"><svg><use href="#ic-plus"/></svg></span><b>Write now</b><p>Start an article<br />from a keyword.</p></div>
+      <div class="pp-tile"><span class="pp-chip"><svg><use href="#ic-layers"/></svg></span><b>Ideas</b><p>Browse the gaps<br />in your market.</p></div>
+    </div>
+    <div class="pp-row">
+      <span class="pp-chip"><svg><use href="#ic-calendar"/></svg></span>
+      <div><b>Calendar</b><p>See what autopilot writes, and when.</p></div>
+      <div class="pp-cal back"><div class="bar"><i></i><i></i><i></i></div><div class="days" id="calb"></div></div>
+      <div class="pp-cal front"><div class="bar"><i></i><i></i><i></i></div><div class="days" id="calf"></div></div>
+    </div>
+    <div class="pp-row">
+      <span class="pp-chip"><svg><use href="#rb-connect"/></svg></span>
+      <div><b>Integrations</b><p>Connect the site you publish to.</p></div>
+      <div class="pp-apps">
+        <span class="pp-app"><span class="app framer"><svg><use href="#lg-framer"/></svg></span>Framer</span>
+        <span class="pp-app"><span class="app webflow"><svg><use href="#lg-webflow"/></svg></span>Webflow</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="pp-pop">
+    <span class="pp-ai"><svg><use href="#ic-sparkle"/></svg></span>
+    <div>
+      <b>Questions buyers ask AI</b>
+      <p>Type a topic and see what people ask<br />ChatGPT, Gemini and Google about it.</p>
+    </div>
+    <svg class="pp-glint" style="left:22px; top:128px"><use href="#ic-sparkle"/></svg>
+    <svg class="pp-glint" style="left:236px; top:150px; width:12px; height:12px"><use href="#ic-sparkle"/></svg>
+    <svg class="pp-glint" style="left:600px; top:16px; width:13px; height:13px"><use href="#ic-sparkle"/></svg>
+  </div>
+
+  <!-- right: what AI engines look for -->
+  <div class="pp-panel pp-right">
+    <div class="pp-head"><svg class="mk"><use href="#lg-rankbox"/></svg>Rankbox<svg class="xx"><use href="#ic-x"/></svg></div>
+    <div class="pp-nav">
+      <span class="pp-back"><svg><use href="#ic-chev-left"/></svg>Back</span>
+      <div class="pp-seg"><span>Articles</span><span>Ideas</span><span class="pp-act">Rank</span></div>
+    </div>
+    <div class="pp-lab">What AI engines look for</div>
+    <p class="pp-sub">Checked on every article Rankbox writes</p>
+    <div class="pp-search"><svg><use href="#ic-search"/></svg>Search checks…</div>
+    <div class="pp-grid">
+      <div class="pp-cell"><span class="pp-chip"><svg><use href="#ic-help"/></svg></span><em class="pp-lbl">FAQ section</em></div>
+      <div class="pp-cell"><span class="pp-chip"><svg><use href="#ic-layout"/></svg></span><em class="pp-lbl">Clear sections</em></div>
+      <div class="pp-cell"><span class="pp-chip"><svg><use href="#ic-quote"/></svg></span><em class="pp-lbl">Cites sources</em></div>
+      <div class="pp-cell"><span class="pp-chip"><svg><use href="#ic-layers"/></svg></span><em class="pp-lbl">Depth</em></div>
+      <div class="pp-cell"><span class="pp-chip"><svg><use href="#ic-book"/></svg></span><em class="pp-lbl">Easy to read</em></div>
+      <div class="pp-cell"><span class="pp-chip"><svg><use href="#ic-bolt"/></svg></span><em class="pp-lbl">Answers up front</em></div>
+      <div class="pp-cell"><span class="pp-chip"><svg><use href="#ic-search"/></svg></span><em class="pp-lbl">Meta description</em></div>
+      <div class="pp-cell"><span class="pp-chip"><svg><use href="#ic-list"/></svg></span><em class="pp-lbl">Scannable lists</em></div>
+      <div class="pp-cell"><span class="pp-chip"><svg><use href="#ic-link"/></svg></span><em class="pp-lbl two">Internal &amp;<br />external links</em></div>
+    </div>
+  </div>
+
+  <div class="pp-meta">
+    <span class="pp-disc"><svg><use href="#ic-search"/></svg></span>
+    <div><b>Meta description</b><small>148 characters</small></div>
+  </div>
+
+  <div class="pp-ftile"><div class="app framer rim"><svg><use href="#lg-framer"/></svg></div></div>
+  <div class="pp-toast">
+    <svg class="pp-ok"><use href="#ic-check-circle"/></svg>
+    <div><b>Published</b><small>brightloop.app/blog</small></div>
+  </div>
+</div>
+<script>
+  // Two little month grids: a few days lit where autopilot has articles.
+  const lit = { 3: "p", 5: "s", 8: "s", 10: "s", 12: "s", 15: "s", 17: "s", 19: "s" };
+  for (const id of ["calb", "calf"]) {
+    const el = document.getElementById(id);
+    for (let i = 0; i < 28; i++) el.insertAdjacentHTML("beforeend", `<i class="${id === "calf" ? (lit[i] || "") : ""}"></i>`);
+  }
+</script>
+</body>
+</html>

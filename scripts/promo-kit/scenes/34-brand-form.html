@@ -1,0 +1,116 @@
+<!doctype html>
+<!-- 34 · Your brand. After Cal.com's booking form: scene 33's near-black frame
+     and dark widget, the left column saying what this step is, the right
+     column the brand form filled in for the sample site. Every string is the
+     product's own: onboarding step 1's fields (Website, Brand name, What you
+     do / "Briefs every article", Add logo), its button ("Find my keywords") and
+     the start of its footer note ("Next, we analyze your site. It takes about
+     20 seconds."), with the Settings "Your brand" title and description on the
+     left. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x3" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<script src="../kit/kit.js"></script>
+<style>
+  /* the frame, exactly as scene 33 */
+  html, body { background: #000; }
+  .canvas { background: #000; }
+  .frame { position: absolute; inset: 0; border-radius: 30px; background: #111112; box-shadow: inset 0 0 0 1.5px #1c1c1e; }
+
+  .bf-card {
+    position: absolute; left: 349px; top: 304px; width: 902px; height: 527px;
+    display: grid; grid-template-columns: 359px minmax(0, 1fr);
+    border-radius: 18px; background: #161617;
+    box-shadow: inset 0 0 0 1.5px #262628, 0 30px 80px -40px rgba(0, 0, 0, 0.9);
+    color: #f2f2f3;
+    overflow: hidden;
+  }
+  .bf-col + .bf-col { border-left: 1.5px solid #262628; }
+
+  /* left: what this step is (scene 33's info column) */
+  .bf-about { position: relative; padding: 0 31px; }
+  .bf-strip { position: absolute; left: 6px; right: 6px; top: 6px; height: 117px; border-radius: 12px; overflow: hidden; background: #1c1c1e; display: grid; grid-template-columns: repeat(10, 1fr); grid-auto-rows: 1fr; gap: 4px; padding: 4px; -webkit-mask-image: linear-gradient(180deg, #000 40%, transparent); mask-image: linear-gradient(180deg, #000 40%, transparent); }
+  .bf-strip i { border-radius: 6px; background: #262628; }
+  .bf-strip i.b { background: #1d4f9c; }
+  .bf-strip i.b2 { background: #2a6ad0; }
+  .bf-who { position: relative; display: flex; margin-top: 100px; }
+  .bf-who > * { width: 40px; height: 40px; border-radius: 10px; box-shadow: 0 0 0 3px #161617; }
+  .bf-who .app { --s: 40px; --r: 10px; --g: 58%; }
+  .bf-who .bf-bl { margin-left: -6px; border-radius: 50%; background: #fff3e6; display: grid; place-items: center; }
+  .bf-who .bf-bl i { width: 20px; height: 20px; border-radius: 50%; border: 5px solid #ff8a1f; display: block; }
+  .bf-about .bf-k { margin-top: 9px; font-size: 18px; font-weight: 500; color: #a1a1a6; }
+  .bf-about h2 { margin-top: 7px; font-size: 27px; font-weight: 700; letter-spacing: -0.035em; color: #fff; }
+  .bf-about p { margin-top: 12px; font-size: 17.5px; line-height: 1.2; font-weight: 500; color: #d4d4d8; letter-spacing: -0.005em; }
+  .bf-facts { margin-top: 41px; display: grid; gap: 13px; }
+  .bf-facts div { display: flex; align-items: center; gap: 12px; font-size: 18px; font-weight: 500; color: #e4e4e7; white-space: nowrap; }
+  .bf-facts svg { width: 20px; height: 20px; color: #a1a1a6; flex: none; }
+
+  /* right: the form */
+  .bf-form { position: relative; padding: 29px 32px 0 31px; }
+  .bf-label { display: block; font-size: 17.5px; font-weight: 500; color: #e4e4e7; letter-spacing: -0.005em; line-height: 24px; }
+  .bf-label em { font-style: normal; margin-left: 9px; color: #d4d4d8; font-size: 15px; vertical-align: 1px; }
+  .bf-label + .bf-in { margin-top: 5px; }
+  .bf-in {
+    display: flex; align-items: center; height: 41px; padding: 0 12px;
+    border-radius: 9px; background: #262628; box-shadow: inset 0 0 0 1.5px #3a3a3c;
+    font-size: 17.5px; font-weight: 500; color: #f2f2f3; letter-spacing: -0.005em; white-space: nowrap;
+  }
+  .bf-in + .bf-label { margin-top: 23px; }
+  .bf-in.bf-area { display: block; height: 98px; padding: 10px 12px 0; line-height: 20.5px; white-space: normal; }
+  .bf-add { display: inline-flex; align-items: center; gap: 9px; margin: 31px 0 0 9px; font-size: 17.5px; font-weight: 500; color: #a7a7aa; letter-spacing: -0.005em; }
+  .bf-add svg { width: 19px; height: 19px; }
+  .bf-acts { position: absolute; right: 32px; bottom: 21px; display: flex; align-items: center; gap: 26px; }
+  .bf-cancel { font-size: 17.5px; font-weight: 500; color: #a7a7aa; letter-spacing: -0.005em; }
+  .bf-go { height: 42px; padding: 0 17px; border-radius: 10px; display: grid; place-items: center; background: #166fe5; color: #fff; font-size: 17.5px; font-weight: 600; letter-spacing: -0.01em; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14), 0 6px 16px -8px rgba(22, 111, 229, 0.8); }
+
+  /* the wordmark at the foot, exactly as scene 33 */
+  .bf-foot { position: absolute; left: 0; right: 0; top: 1150px; display: flex; justify-content: center; }
+  .bf-foot .wm { font-size: 30px; color: #fff; }
+  .bf-hint { float: right; font-weight: 500; color: #8e8e93; }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="frame"></div>
+
+  <div class="bf-card">
+    <div class="bf-col bf-about">
+      <div class="bf-strip" id="strip"></div>
+      <div class="bf-who">
+        <div class="app rankbox"><svg><use href="#lg-rankbox"/></svg></div>
+        <div class="bf-bl"><i></i></div>
+      </div>
+      <div class="bf-k">Setup</div>
+      <h2>Your brand</h2>
+      <p>Who autopilot writes for. Every article is built around this.</p>
+      <div class="bf-facts">
+        <div><svg><use href="#ic-clock"/></svg>Step 1 of 3</div>
+        <div><svg><use href="#rb-article"/></svg>Brand, Keywords, Plan</div>
+        <div><svg><use href="#ic-globe"/></svg>brightloop.app</div>
+      </div>
+    </div>
+
+    <div class="bf-col bf-form">
+      <label class="bf-label">Brand name<em>*</em></label>
+      <div class="bf-in">Brightloop</div>
+      <label class="bf-label">Website<em>*</em></label>
+      <div class="bf-in">brightloop.app</div>
+      <label class="bf-label">What you do<span class="bf-hint">Briefs every article</span></label>
+      <div class="bf-in bf-area">Brightloop is usage-based billing for SaaS teams. It meters API calls and bills them through Stripe.</div>
+      <div class="bf-add"><svg><use href="#ic-image"/></svg>Add logo</div>
+      <div class="bf-acts"><span class="bf-cancel">It takes about 20 seconds.</span><span class="bf-go">Find my keywords</span></div>
+    </div>
+  </div>
+
+  <div class="bf-foot"><span class="wm"><svg><use href="#lg-rankbox"/></svg>Rankbox</span></div>
+</div>
+<script>
+  // The header strip: scene 33's soft wall of tiles, a few lit in brand blue.
+  const strip = document.getElementById("strip");
+  const lit = { 3: "b", 14: "b2", 22: "b", 27: "b" };
+  for (let i = 0; i < 30; i++) strip.insertAdjacentHTML("beforeend", `<i class="${lit[i] || ""}"></i>`);
+</script>
+</body>
+</html>

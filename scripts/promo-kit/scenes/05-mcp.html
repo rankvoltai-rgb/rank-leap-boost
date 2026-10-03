@@ -1,0 +1,85 @@
+<!doctype html>
+<!-- 05 · MCP. One small card on a smeared field of brand light: the server URL
+     and the copy button, nothing else. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x3 4x5 1x1 9x16" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<script src="../kit/kit.js"></script>
+<style>
+  .smear { position: absolute; inset: 0; z-index: -2; width: 1600px; height: var(--h); }
+
+  .card {
+    position: absolute;
+    left: 50%; top: 50%;
+    width: 610px;
+    transform: translate(-50%, -50%) scale(var(--k, 1));
+    padding: 0 30px 0;
+    border-radius: 28px;
+    background: #121314;
+    color: var(--on-dark);
+    box-shadow: 0 0 0 1.5px rgba(255,255,255,.08), 0 50px 90px -30px rgba(2,10,60,.75), 0 18px 36px -18px rgba(2,10,60,.55);
+  }
+  .card .hd { display: flex; align-items: center; gap: 16px; height: 92px; font-size: 25px; font-weight: 650; letter-spacing: -0.02em; }
+  .card .hd .app { --s: 38px; --r: 10px; }
+  .card .hd .close { width: 22px; height: 22px; }
+  .card p { margin-top: 18px; font-size: 22.5px; line-height: 1.38; font-weight: 500; letter-spacing: -0.01em; color: #d5d7dc; }
+  .card .live { display: flex; align-items: center; gap: 14px; margin-top: 28px; font-size: 23px; font-weight: 500; color: #d5d7dc; letter-spacing: -0.01em; }
+  .card .live .dot { width: 14px; height: 14px; background: #33d26b; }
+  .url { display: flex; gap: 14px; margin-top: 28px; }
+  .url .box { flex: 1; height: 62px; border-radius: 12px; background: #26272a; display: flex; align-items: center; padding: 0 20px; font-size: 23px; font-weight: 600; letter-spacing: -0.005em; }
+  .url .cp { width: 74px; height: 62px; border-radius: 12px; background: #26272a; display: grid; place-items: center; color: #d5d7dc; }
+  .url .cp svg { width: 28px; height: 28px; }
+  .card .ft { display: flex; align-items: center; gap: 40px; margin-top: 30px; height: 92px; border-top: 1.5px solid #2a2b2e; font-size: 22px; font-weight: 500; color: #7d8089; letter-spacing: -0.005em; }
+  .card .ft span:nth-child(2) { color: #b9bcc4; }
+  .card .ft svg { margin-left: auto; width: 24px; height: 24px; color: #d5d7dc; }
+
+  html[data-f="4x5"] { --k: 1.32; }
+  html[data-f="1x1"] { --k: 1.2; }
+  html[data-f="9x16"] { --k: 1.6; }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <!-- The field: soft blobs of brand light, blurred, then dragged down in
+       thin vertical strips by a noise map, the smeared-paint look. -->
+  <svg class="smear" viewBox="0 0 1600 1200" preserveAspectRatio="none">
+    <defs>
+      <filter id="smear" x="-5%" y="-5%" width="110%" height="110%" color-interpolation-filters="sRGB">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="40" result="soft" />
+        <feTurbulence type="fractalNoise" baseFrequency="0.042 0.0014" numOctaves="3" seed="11" result="noise" />
+        <feColorMatrix in="noise" type="matrix" values="0 0 0 0 0.5  1.6 0 0 0 -0.3  0 0 0 0 0  0 0 0 0 1" result="map" />
+        <feDisplacementMap in="soft" in2="map" scale="300" xChannelSelector="R" yChannelSelector="G" />
+      </filter>
+    </defs>
+    <g filter="url(#smear)">
+      <rect x="-200" y="-200" width="2000" height="1600" fill="#e8f1ff" />
+      <path d="M-200 520 C 260 400, 520 260, 900 380 S 1500 760, 1800 980 L 1800 1500 L -200 1500 Z" fill="#7dbbff" />
+      <path d="M-200 640 C 240 520, 560 420, 900 560 S 1460 900, 1800 1120 L 1800 1500 L -200 1500 Z" fill="#2b86ff" />
+      <path d="M-200 820 C 220 700, 520 640, 860 760 S 1420 1060, 1800 1260 L 1800 1500 L -200 1500 Z" fill="#1559e6" />
+      <path d="M-200 1000 C 200 900, 500 880, 820 980 S 1300 1200, 1800 1400 L 1800 1500 L -200 1500 Z" fill="#2a2fc8" />
+      <ellipse cx="160" cy="1180" rx="520" ry="260" fill="#4b2fd9" />
+      <ellipse cx="60" cy="40" rx="620" ry="330" fill="#a8d0ff" />
+      <ellipse cx="1340" cy="160" rx="520" ry="240" fill="#f6f9ff" />
+    </g>
+  </svg>
+  <div class="grain" style="--grain:.22"></div>
+
+  <div class="card">
+    <div class="hd">
+      <div class="app rankbox"><svg><use href="#lg-rankbox"/></svg></div>
+      MCP
+      <span class="close"><svg><use href="#ic-x"/></svg></span>
+    </div>
+    <p>Copy the MCP server URL below and add it to your AI assistant (Claude, ChatGPT, Cursor, etc.)</p>
+    <div class="live">Free research tools work without a key <span class="dot"></span></div>
+    <div class="url">
+      <div class="box">https://rankbox.xyz/mcp</div>
+      <div class="cp"><svg><use href="#ic-copy"/></svg></div>
+    </div>
+    <div class="ft"><span>3 tools ready</span><span>read the docs</span><svg><use href="#ic-chev-up"/></svg></div>
+  </div>
+</div>
+</body>
+</html>

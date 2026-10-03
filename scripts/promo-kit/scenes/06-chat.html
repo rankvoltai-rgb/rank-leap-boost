@@ -1,0 +1,110 @@
+<!doctype html>
+<!-- 06 · In your AI assistant. A chat that runs Rankbox's three free MCP tools
+     (generate_ai_questions, generate_content_brief, write_meta_descriptions)
+     and hands back a brief. The window is drawn generic: no real share link,
+     no real account. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x3 4x5" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<script src="../kit/kit.js"></script>
+<style>
+  .smear { position: absolute; inset: 0; z-index: -2; width: 1600px; height: var(--h); }
+
+  .win {
+    position: absolute;
+    left: 130px; top: 120px;
+    width: 1340px; height: 1200px;
+    border-radius: 18px 18px 0 0;
+    background: #faf9f6;
+    overflow: hidden;
+    box-shadow: 0 0 0 1px rgba(255,255,255,.12), 0 50px 100px -20px rgba(0,0,0,.8);
+  }
+  .chrome { display: flex; align-items: center; gap: 18px; height: 50px; padding: 0 18px; background: #efeeea; border-bottom: 1px solid #e2e0da; }
+  .lights { display: flex; gap: 9px; }
+  .lights i { width: 13px; height: 13px; border-radius: 50%; display: block; }
+  .lights i:nth-child(1) { background: #ff5f57; } .lights i:nth-child(2) { background: #febc2e; } .lights i:nth-child(3) { background: #28c840; }
+  .tb { width: 20px; height: 16px; border: 2px solid #8b8a85; border-radius: 4px; }
+  .addr { margin: 0 auto; width: 540px; height: 30px; border-radius: 8px; background: #e3e2dd; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 14px; font-weight: 500; color: #6d6c67; }
+  .addr i { width: 11px; height: 11px; border-radius: 3px; background: #d97757; }
+  .titlebar { display: flex; align-items: center; justify-content: space-between; height: 64px; padding: 0 30px; font-size: 18px; font-weight: 600; color: #2b2a27; letter-spacing: -0.01em; }
+  .titlebar span { padding: 7px 14px; border-radius: 9px; background: #efeeea; font-size: 15px; font-weight: 600; color: #4a4944; }
+
+  .thread { width: 800px; margin: 10px auto 0; }
+  .user { display: flex; gap: 14px; padding: 14px 16px; border-radius: 14px; background: #efede6; font-size: 19.5px; line-height: 1.5; color: #23221f; }
+  .user .av { width: 32px; height: 32px; border-radius: 50%; background: #2e2d2a; color: #fff; display: grid; place-items: center; font-size: 14px; font-weight: 700; flex: none; }
+  .ai { margin-top: 26px; font-family: "Iowan Old Style", Charter, Georgia, serif; font-size: 21px; line-height: 1.58; color: #262521; }
+  .ai p { margin-top: 18px; }
+  .ai p:first-child { margin-top: 0; }
+  .ai ul { margin: 12px 0 0 22px; }
+  .ai li { margin-top: 8px; padding-left: 4px; }
+  .tool { display: flex; align-items: center; gap: 13px; margin: 18px 0; height: 58px; padding: 0 18px; border-radius: 12px; background: #fff; box-shadow: 0 0 0 1px #e4e2db; font-family: "Jakarta", sans-serif; font-size: 17px; font-weight: 500; color: #4a4944; }
+  .tool .app { --s: 27px; --r: 7px; }
+  .tool svg.chev { margin-left: auto; width: 18px; height: 18px; color: #8b8a85; }
+  .tool b { font-weight: 600; color: #2b2a27; }
+  .composer { position: absolute; left: 50%; bottom: 56px; transform: translateX(-50%); width: 1120px; height: 150px; border-radius: 26px; background: #fff; box-shadow: 0 0 0 1.5px #e2e0d8, 0 12px 30px -16px rgba(0,0,0,.25); }
+  .composer .ph { position: absolute; left: 30px; top: 26px; font-size: 25px; color: #9a988f; }
+  .composer .plus { position: absolute; left: 22px; bottom: 20px; width: 46px; height: 46px; border-radius: 12px; box-shadow: 0 0 0 1.5px #e2e0d8; display: grid; place-items: center; color: #6d6c67; }
+  .composer .send { position: absolute; right: 22px; bottom: 20px; width: 50px; height: 50px; border-radius: 13px; background: #2e2d2a; display: grid; place-items: center; color: #fff; }
+  .composer svg { width: 26px; height: 26px; }
+  .composer .send svg { transform: rotate(-90deg); }
+
+  /* 4:5 */
+  html[data-f="4x5"] .win { top: 170px; height: 1830px; }
+  html[data-f="4x5"] .thread { zoom: 1.4; }
+</style>
+</head>
+<body>
+<div class="canvas" style="background:#000">
+  <svg class="smear" viewBox="0 0 1600 1200" preserveAspectRatio="none">
+    <defs>
+      <filter id="smear" x="-5%" y="-5%" width="110%" height="110%" color-interpolation-filters="sRGB">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="34" result="soft" />
+        <feTurbulence type="fractalNoise" baseFrequency="0.05 0.0016" numOctaves="3" seed="4" result="noise" />
+        <feColorMatrix in="noise" type="matrix" values="0 0 0 0 0.5  1.6 0 0 0 -0.3  0 0 0 0 0  0 0 0 0 1" result="map" />
+        <feDisplacementMap in="soft" in2="map" scale="320" xChannelSelector="R" yChannelSelector="G" />
+      </filter>
+    </defs>
+    <g filter="url(#smear)">
+      <rect x="-200" y="-200" width="2000" height="1600" fill="#000" />
+      <path d="M-200 360 C -40 420, 40 640, 100 1500 L -200 1500 Z" fill="#1d6cf5" />
+      <path d="M-200 600 C -60 660, 20 900, 60 1500 L -200 1500 Z" fill="#9fd2ff" />
+      <path d="M1800 300 C 1640 380, 1560 640, 1500 1500 L 1800 1500 Z" fill="#1d6cf5" />
+      <path d="M1800 560 C 1680 640, 1600 880, 1560 1500 L 1800 1500 Z" fill="#a6f0ff" />
+      <path d="M-200 1080 C 400 1000, 1200 1000, 1800 1080 L 1800 1500 L -200 1500 Z" fill="#1450d8" />
+    </g>
+  </svg>
+  <div class="grain" style="--grain:.2"></div>
+
+  <div class="win">
+    <div class="chrome">
+      <div class="lights"><i></i><i></i><i></i></div>
+      <div class="tb"></div>
+      <div class="addr"><i></i>claude.ai</div>
+    </div>
+    <div class="titlebar">Usage-Based Pricing Brief<span>Share</span></div>
+    <div class="thread">
+      <div class="user"><span class="av">B</span>Plan my next blog post on usage-based pricing. Start from what buyers ask AI.</div>
+      <div class="ai">
+        <p>I'll find the questions people ask AI about usage-based pricing first.</p>
+        <div class="tool"><span class="app rankbox"><svg><use href="#lg-rankbox"/></svg></span><b>Rankbox</b>generate_ai_questions<svg class="chev"><use href="#ic-chev-down"/></svg></div>
+        <p>Buyers mostly ask how to meter usage, whether it's worth it, and which billing tool to pick. I'll build the brief around those.</p>
+        <div class="tool"><span class="app rankbox"><svg><use href="#lg-rankbox"/></svg></span><b>Rankbox</b>generate_content_brief<svg class="chev"><use href="#ic-chev-down"/></svg></div>
+        <p>And a meta description to match.</p>
+        <div class="tool"><span class="app rankbox"><svg><use href="#lg-rankbox"/></svg></span><b>Rankbox</b>write_meta_descriptions<svg class="chev"><use href="#ic-chev-down"/></svg></div>
+        <p>Here's your brief for <b>Usage-Based Pricing, Explained</b>:</p>
+        <ul>
+          <li><b>Questions to answer:</b> How do I bill by usage? Is it worth it? Stripe Billing or Chargebee?</li>
+          <li><b>Outline:</b> six sections, from picking a value metric to testing a price change</li>
+          <li><b>Meta description:</b> "How usage-based pricing works, how to pick a value metric, and when to add a base fee."</li>
+        </ul>
+        <p>Want me to turn the outline into a full draft?</p>
+        <div style="margin-top:22px;color:#8b8a85"><svg style="width:22px;height:22px"><use href="#ic-copy"/></svg></div>
+      </div>
+    </div>
+    <div class="composer" data-only="4x5"><span class="ph">Reply…</span><span class="plus"><svg><use href="#ic-plus"/></svg></span><span class="send"><svg><use href="#ic-arrow-right"/></svg></span></div>
+  </div>
+</div>
+</body>
+</html>

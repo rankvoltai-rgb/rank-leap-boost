@@ -1,0 +1,272 @@
+<!doctype html>
+<!-- 14 · Sync flow. After Forms Plugin's "BUILD FORMS WITH AI IN FRAMER": a
+     two-line caps headline on navy, the app tile hanging in 3D at top right,
+     and a light Framer editor filling the bottom of the frame. On its canvas
+     the Rankbox plugin (right) feeds a status card (centre), which writes the
+     article into the page's CMS item below. The plugin isn't approved yet. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x3" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<script src="../kit/kit.js"></script>
+<style>
+  .canvas { background: #020a20; }
+  .sf-field {
+    position: absolute; inset: 0; z-index: -2;
+    background:
+      radial-gradient(900px 520px at 1420px 40px, rgba(36, 104, 190, 0.95), rgba(23, 76, 150, 0.6) 40%, transparent 75%),
+      linear-gradient(98deg, #030b21 0%, #05123a 30%, #0a2457 56%, #12407f 80%, #16509c 100%);
+  }
+  .grain { --grain: 0.12; }
+
+  /* ------------------------------------------------------------ headline */
+  .sf-hl {
+    position: absolute; left: 58px; top: 54px;
+    font-size: 88px; line-height: 0.9; letter-spacing: -0.04em;
+    color: #fff;
+    background: linear-gradient(90deg, #ffffff 0%, #ffffff 50%, #dbe7ff 100%);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent; -webkit-text-stroke-color: transparent;
+  }
+  .sf-hl .kr { margin-right: 0.03em; }
+  .sf-hl .ai {
+    background: linear-gradient(180deg, #9ccaff 8%, #3d8bff 92%);
+    -webkit-background-clip: text; background-clip: text;
+  }
+
+  /* ------------------------------------------------------------ 3D tile */
+  .sf-t3d { position: absolute; left: 1196px; top: 70px; width: 196px; height: 196px; perspective: 900px; z-index: 20; }
+  .sf-slab { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; transform: rotateZ(9deg) rotateX(14deg) rotateY(-26deg); }
+  .sf-slab > i { position: absolute; inset: 0; border-radius: 46px; background: linear-gradient(160deg, #1253c9, #0a3a96); transform: translateZ(var(--z)); }
+  .sf-face {
+    position: absolute; inset: 0; border-radius: 46px; display: grid; place-items: center; color: #fff;
+    background: linear-gradient(150deg, #4ea2ff 0%, #2a83ff 42%, #1669e8 100%);
+    box-shadow: inset 0 3px 0 rgba(255, 255, 255, 0.35), inset 0 -6px 14px rgba(5, 40, 120, 0.35);
+  }
+  .sf-face::after { content: ""; position: absolute; inset: 0; border-radius: inherit; background: linear-gradient(170deg, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0) 45%); }
+  .sf-face svg { width: 112px; height: 112px; filter: drop-shadow(0 6px 10px rgba(5, 40, 130, 0.35)); }
+  .sf-tshadow { position: absolute; left: 1222px; top: 236px; width: 170px; height: 46px; border-radius: 50%; background: rgba(0, 12, 45, 0.32); filter: blur(16px); z-index: 19; }
+  .sf-tglow { position: absolute; left: 1150px; top: 30px; width: 300px; height: 260px; border-radius: 50%; background: radial-gradient(closest-side, rgba(70, 150, 255, 0.45), transparent); filter: blur(20px); z-index: 0; }
+
+  /* ------------------------------------------------------------ editor */
+  .fx.sf-ed { left: 60px; top: 240px; width: 1600px; height: 1000px; border-radius: 26px 0 0 0; box-shadow: 0 0 0 1.5px rgba(255, 255, 255, 0.3), 0 -20px 60px -20px rgba(0, 0, 0, 0.5); }
+  .sf-ed .fx-bar { height: 64px; gap: 30px; padding: 0 18px; font-size: 18px; font-weight: 500; color: #50555d; }
+  .sf-ed .fx-menu { height: 46px; padding: 0 10px 0 12px; gap: 6px; border-radius: 12px; }
+  .sf-ed .fx-menu svg { width: 22px; height: 22px; }
+  .sf-ed .fx-menu svg + svg { width: 16px; height: 16px; }
+  .sf-ed .fx-tool { gap: 10px; }
+  .sf-ed .fx-tool > svg { width: 26px; height: 26px; color: #7b8089; }
+  .sf-ed .fx-proj { position: absolute; left: 836px; top: 0; height: 64px; gap: 8px; font-size: 17px; font-weight: 600; color: #22262d; letter-spacing: -0.01em; }
+  .sf-ed .fx-proj em { color: #9aa0ab; font-weight: 500; }
+  .sf-ed .fx-left { top: 64px; width: 236px; padding: 18px 14px; }
+  .sf-ed .fx-tabs { padding: 4px; gap: 2px; border-radius: 11px; }
+  .sf-ed .fx-tabs > span { height: 38px; border-radius: 8px; font-size: 16px; }
+  .sf-hr { height: 1.5px; background: #eeeff1; margin: 16px -14px; }
+  .sf-in { display: flex; align-items: center; gap: 10px; height: 40px; padding: 0 12px; border-radius: 9px; background: #f4f4f5; font-size: 16px; font-weight: 500; color: #3a3e45; white-space: nowrap; }
+  .sf-in + .sf-in { margin-top: 10px; }
+  .sf-in svg { width: 18px; height: 18px; color: #8a8f99; flex: none; }
+  .sf-in .chev { margin-left: auto; width: 16px; height: 16px; }
+  .sf-in.ph { color: #a0a5ae; }
+  .sf-ly { display: flex; align-items: center; gap: 9px; height: 38px; padding: 0 4px; font-size: 17px; font-weight: 500; color: #2f333a; white-space: nowrap; }
+  .sf-ly .tri { width: 0; height: 0; border-left: 6px solid #a3a8b0; border-top: 4.5px solid transparent; border-bottom: 4.5px solid transparent; margin: 0 4px 0 2px; }
+  .sf-ly .stk { width: 16px; height: 13px; display: grid; gap: 2px; }
+  .sf-ly .stk i { display: block; border-radius: 2px; background: #1f8bff; }
+  .sf-ly em { margin-left: auto; font-style: normal; font-size: 15px; font-weight: 500; color: #9aa0ab; letter-spacing: -0.01em; }
+  .sf-ly em.p { color: #1f8bff; }
+
+  .sf-ed .fx-canvas { left: 236px; top: 64px; background: #efefef; }
+  .sf-rt { position: absolute; left: 0; right: 0; top: 0; height: 22px; background: #f7f7f7; border-bottom: 1px solid #e6e6e6; }
+  .sf-rl { position: absolute; left: 0; top: 22px; bottom: 0; width: 22px; background: #f7f7f7; border-right: 1px solid #e6e6e6; }
+  .sf-rt b, .sf-rl b { position: absolute; font-size: 14px; font-weight: 500; color: #a7abb2; letter-spacing: 0; }
+  .sf-rt b { top: 2px; transform: translateX(-50%); }
+  .sf-rl b { left: 3px; transform: translateY(-50%) rotate(-90deg); transform-origin: 9px 50%; }
+  .sf-rt b::after { content: ""; position: absolute; left: 50%; top: 17px; width: 1px; height: 3px; background: #c9ccd1; }
+
+  /* ------------------------------------------------------------ the page */
+  .sf-page {
+    position: absolute; left: 332px; top: 768px; width: 830px; height: 520px;
+    border-radius: 30px 30px 0 0; background: #f8f8f8; overflow: hidden;
+    box-shadow: 0 0 0 1px #e6e6e8;
+    z-index: 2;
+  }
+  .sf-blob { position: absolute; left: -140px; top: 330px; width: 460px; height: 320px; border-radius: 50%; background: radial-gradient(closest-side, rgba(52, 128, 255, 0.85), rgba(88, 150, 255, 0.35) 55%, transparent); filter: blur(26px); }
+  .sf-pill { position: absolute; left: 28px; top: 36px; height: 40px; padding: 0 18px; border-radius: 999px; display: grid; place-items: center; background: #e6efff; box-shadow: inset 0 0 0 1.5px #c9dcff, 0 10px 18px -10px rgba(24, 119, 242, 0.65); color: #1a62d8; font-size: 17px; font-weight: 600; letter-spacing: -0.01em; }
+  .sf-h { position: absolute; left: 25px; top: 96px; font-size: 72px; font-weight: 800; line-height: 0.94; letter-spacing: -0.05em; color: #0c0c0d; white-space: nowrap; }
+  .sf-p { position: absolute; left: 28px; top: 322px; width: 420px; font-size: 19px; line-height: 1.42; font-weight: 500; color: #2f3338; letter-spacing: -0.01em; }
+
+  .sf-item { position: absolute; left: 514px; top: 40px; width: 302px; padding: 14px 16px 16px; border-radius: 16px; background: #fff; box-shadow: 0 0 0 1px #ececee, 0 12px 26px -16px rgba(20, 30, 60, 0.25); }
+  .sf-item h4 { font-size: 18px; font-weight: 700; letter-spacing: -0.02em; color: #141518; }
+  .sf-f { margin-top: 9px; }
+  .sf-f label { display: block; font-size: 15px; font-weight: 600; color: #2c2f35; letter-spacing: -0.01em; }
+  .sf-f div { margin-top: 4px; height: 34px; padding: 0 12px; border-radius: 8px; background: #f5f5f6; box-shadow: inset 0 0 0 1px #eeeef0; display: flex; align-items: center; font-size: 16px; font-weight: 500; color: #585d66; white-space: nowrap; overflow: hidden; letter-spacing: -0.01em; }
+  .sf-bar { margin-top: 14px; height: 40px; border-radius: 9px; background: var(--blue); color: #fff; display: grid; place-items: center; font-size: 16px; font-weight: 650; letter-spacing: -0.01em; box-shadow: 0 8px 16px -10px rgba(24, 119, 242, 0.8); }
+
+  /* ------------------------------------------------------------ status card */
+  .sf-card {
+    position: absolute; left: 790px; top: 428px; width: 366px; padding: 64px 26px 22px;
+    border-radius: 20px; background: #fff; text-align: center;
+    box-shadow: 0 0 0 1px #ececee, 0 20px 40px -24px rgba(20, 30, 60, 0.35);
+    z-index: 4;
+  }
+  .sf-card .app { position: absolute; left: 50%; top: -24px; margin-left: -42px; --s: 84px; --r: 21px; box-shadow: 0 12px 24px -10px rgba(22, 100, 230, 0.6), 0 0 0 5px #fff; }
+  .sf-card b { display: block; font-size: 21px; font-weight: 700; letter-spacing: -0.025em; color: #1b1d21; }
+  .sf-card p { margin: 6px auto 0; width: 300px; font-size: 17px; line-height: 1.4; font-weight: 500; color: #8a8f99; letter-spacing: -0.005em; }
+  .sf-chk { margin: 18px auto 0; width: 266px; display: grid; gap: 11px; text-align: left; }
+  .sf-chk div { display: flex; align-items: center; gap: 12px; font-size: 18px; font-weight: 500; letter-spacing: -0.015em; white-space: nowrap; }
+  .sf-chk svg { width: 24px; height: 24px; flex: none; }
+  .sf-chk .done { color: #1a6fe0; }
+  .sf-chk .now { color: #1b1d21; }
+  .sf-chk .now svg { color: #2b2e33; }
+  .sf-chk .next { color: #b4b8bf; }
+  .sf-chk .next svg { color: #dcdfe3; }
+
+  /* ------------------------------------------------------------ plugin panel */
+  .sf-plug {
+    position: absolute; left: 1178px; top: 350px; width: 410px; height: 800px;
+    border-radius: 18px; background: #fff;
+    box-shadow: 0 0 0 1px #e9eaec, 0 24px 50px -28px rgba(20, 30, 60, 0.35);
+    z-index: 5;
+  }
+  .sf-ph { display: flex; align-items: center; gap: 10px; height: 54px; padding: 0 18px; border-bottom: 1px solid #efeff1; font-size: 17px; font-weight: 600; letter-spacing: -0.015em; color: #23262b; }
+  .sf-ph .mk { width: 22px; height: 22px; color: var(--blue); }
+  .sf-ph .xx { margin-left: auto; width: 18px; height: 18px; color: #2b2e33; }
+  .sf-pb { padding: 18px 20px 0; }
+  .sf-pt { display: flex; align-items: center; gap: 12px; font-size: 22px; font-weight: 700; letter-spacing: -0.025em; color: #1b1d21; }
+  .sf-pt .bk { width: 22px; height: 22px; color: #2b2e33; margin-right: 6px; }
+  .sf-pt .sp { width: 26px; height: 26px; color: var(--blue); }
+  .sf-lab { margin-top: 24px; font-size: 16px; font-weight: 700; color: #26292e; letter-spacing: -0.01em; }
+  .sf-sel { margin-top: 8px; display: flex; align-items: center; height: 46px; padding: 0 14px; border-radius: 10px; background: #f6f6f7; box-shadow: inset 0 0 0 1px #ededef; font-size: 17px; font-weight: 500; color: #2b2e33; }
+  .sf-sel svg { margin-left: auto; width: 18px; height: 18px; color: #7d828b; }
+  .sf-stat { margin-top: 16px; display: flex; align-items: center; gap: 14px; padding: 16px; border-radius: 12px; background: #f2f8f4; box-shadow: inset 0 0 0 1px #d9eedf; }
+  .sf-stat svg { width: 30px; height: 30px; color: #1fb15a; flex: none; }
+  .sf-stat b { display: block; font-size: 17px; font-weight: 700; letter-spacing: -0.015em; color: #17361f; }
+  .sf-stat small { display: block; margin-top: 3px; font-size: 15px; font-weight: 500; color: #5f7a66; }
+  .sf-stat.sf-busy { background: #f2f7ff; box-shadow: inset 0 0 0 1px #d6e6fb; }
+  .sf-stat.sf-busy > div { flex: 1; }
+  .sf-stat.sf-busy b { color: #12305c; }
+  .sf-stat.sf-busy small { color: #5d7392; }
+  .sf-bar { position: relative; display: block; margin-top: 8px; height: 6px; border-radius: 999px; background: #dbe8fa; overflow: hidden; }
+  .sf-bar > span { position: absolute; left: 0; top: 0; bottom: 0; width: 66%; border-radius: inherit; background: #1877f2; }
+  .sf-cb { display: flex; align-items: flex-start; gap: 12px; margin-top: 16px; }
+  .sf-cb .chk { width: 24px; height: 24px; border-radius: 7px; margin-top: 1px; }
+  .sf-cb .chk svg { width: 17px; height: 17px; }
+  .sf-cb b { display: block; font-size: 17px; font-weight: 600; letter-spacing: -0.015em; color: #23262b; }
+  .sf-cb small { display: block; margin-top: 4px; font-size: 15px; line-height: 1.4; font-weight: 500; color: #8a8f99; }
+  .sf-go { margin-top: 24px; height: 52px; border-radius: 11px; background: var(--blue); color: #fff; display: grid; place-items: center; font-size: 18px; font-weight: 650; letter-spacing: -0.015em; box-shadow: 0 10px 20px -12px rgba(24, 119, 242, 0.9); }
+
+  .sf-wires { position: absolute; left: 0; top: 0; width: 1600px; height: 1200px; overflow: visible; z-index: 3; pointer-events: none; }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="sf-field"></div>
+  <div class="grain"></div>
+
+  <h1 class="hl-caps sf-hl">Sync <span class="ai">AI</span> articles<br />into F<span class="kr">r</span>amer CMS</h1>
+
+  <div class="sf-tglow"></div>
+  <div class="sf-tshadow"></div>
+  <div class="sf-t3d"><div class="sf-slab" id="slab"><div class="sf-face"><svg><use href="#lg-rankbox"/></svg></div></div></div>
+
+  <div class="fx sf-ed">
+    <div class="fx-bar">
+      <div class="fx-menu"><svg><use href="#lg-framer"/></svg><svg><use href="#ic-chev-down"/></svg></div>
+      <span class="fx-tool"><svg><use href="#ic-insert"/></svg>Insert</span>
+      <span class="fx-tool"><svg><use href="#ic-layout"/></svg>Layout</span>
+      <span class="fx-tool"><svg><use href="#ic-type"/></svg>Text</span>
+      <span class="fx-tool"><svg><use href="#ic-vector"/></svg>Vector</span>
+      <span class="fx-tool"><svg><use href="#ic-cms"/></svg>CMS</span>
+      <span class="fx-proj">Brightloop <em>· brightloop.app</em></span>
+    </div>
+    <div class="fx-left">
+      <div class="fx-tabs"><span>Pages</span><span class="on">Layers</span><span>Assets</span></div>
+      <div class="sf-hr"></div>
+      <div class="sf-in"><svg><use href="#ic-doc"/></svg>/blog/:slug<svg class="chev"><use href="#ic-chev-down"/></svg></div>
+      <div class="sf-in ph"><svg><use href="#ic-search"/></svg>Search…</div>
+      <div class="sf-hr"></div>
+      <div class="sf-ly"><i class="tri"></i><span class="stk"><i></i><i></i></span>Desktop<em class="p">Primary</em></div>
+      <div class="sf-ly"><i class="tri"></i><span class="stk"><i></i><i></i></span>Tablet<em>1199—810</em></div>
+      <div class="sf-ly"><i class="tri"></i><span class="stk"><i></i><i></i></span>Phone<em>809—0</em></div>
+    </div>
+    <div class="fx-canvas">
+      <div class="sf-rt" id="rt"></div>
+      <div class="sf-rl" id="rl"></div>
+    </div>
+  </div>
+
+  <div class="sf-page">
+    <div class="sf-blob"></div>
+    <span class="sf-pill">Pricing</span>
+    <div class="sf-h">Usage-Based<br />Pricing,<br />Explained</div>
+    <p class="sf-p">Pick one unit that grows with the value a customer gets, and meter it from day one.</p>
+    <div class="sf-item" id="item">
+      <h4>Articles</h4>
+      <div class="sf-f"><label>Title</label><div>Usage-Based Pricing, Explained</div></div>
+      <div class="sf-f"><label>Slug</label><div>usage-based-pricing</div></div>
+      <div class="sf-f"><label>Description</label><div>How usage-based pricing works…</div></div>
+      <div class="sf-f"><label>Tags</label><div>Pricing</div></div>
+      <div class="sf-bar">SEO Score 94</div>
+    </div>
+  </div>
+
+  <div class="sf-card" id="card">
+    <div class="app rankbox" id="tile"><svg><use href="#lg-rankbox"/></svg></div>
+    <b>Syncing 3 new articles</b>
+    <p>Rankbox is writing them into your Articles collection.</p>
+    <div class="sf-chk">
+      <div class="done"><svg><use href="#ic-check-ring"/></svg>Fetching articles</div>
+      <div class="done"><svg><use href="#ic-check-ring"/></svg>Checking collection fields</div>
+      <div class="now"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="#e3e5e8" stroke-width="2"/><path d="M12 3a9 9 0 0 1 9 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>Writing to the CMS · 2 of 3</div>
+      <div class="next"><svg><use href="#ic-ring"/></svg>Finishing up</div>
+    </div>
+  </div>
+
+  <div class="sf-plug" id="plug">
+    <div class="sf-ph" id="plughead"><svg class="mk"><use href="#lg-rankbox"/></svg>Rankbox<svg class="xx"><use href="#ic-x"/></svg></div>
+    <div class="sf-pb">
+      <div class="sf-pt"><svg class="bk"><use href="#ic-chev-left"/></svg><svg class="sp"><use href="#ic-sparkle"/></svg>Sync articles</div>
+      <div class="sf-lab">Collection</div>
+      <div class="sf-sel">Articles<svg><use href="#ic-chev-down"/></svg></div>
+      <div class="sf-stat sf-busy"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="#cfe0f7" stroke-width="2.4"/><path d="M12 3a9 9 0 0 1 9 9" fill="none" stroke="#1877f2" stroke-width="2.6" stroke-linecap="round"/></svg><div><b>Writing to the CMS…</b><span class="sf-bar"><span></span></span><small>2 of 3 new articles</small></div></div>
+      <div class="sf-lab">Collection page path</div>
+      <div class="sf-sel">/blog</div>
+      <div class="sf-cb" style="margin-top:22px"><span class="chk on"><svg><use href="#ic-check"/></svg></span><div><b>Report live URLs to Rankbox</b></div></div>
+      <div class="sf-cb"><span class="chk on"><svg><use href="#ic-check"/></svg></span><div><b>Add article structured data</b><small>Writes JSON-LD into your site's head so search and AI engines can read your articles.</small></div></div>
+      <div class="sf-go">Sync articles</div>
+    </div>
+  </div>
+
+  <svg class="sf-wires" id="wires"></svg>
+</div>
+<script>
+  // Extrude the 3D tile: a stack of darker slices behind the face.
+  const slab = document.getElementById("slab");
+  for (let z = 1; z <= 16; z++) slab.insertAdjacentHTML("afterbegin", `<i style="--z:${-z * 1.25}px"></i>`);
+
+  // Rulers: 100-unit marks along the canvas.
+  const rt = document.getElementById("rt"), rl = document.getElementById("rl");
+  for (let i = 0; i <= 13; i++) rt.insertAdjacentHTML("beforeend", `<b style="left:${118 + i * 97}px">${i * 100}</b>`);
+  for (let i = 0; i <= 9; i++) rl.insertAdjacentHTML("beforeend", `<b style="top:${70 + i * 97}px">${i * 100}</b>`);
+
+  // Connectors: plugin header → down into the tile; card → down into the CMS item.
+  addEventListener("load", () => {
+    const c = document.querySelector(".canvas").getBoundingClientRect();
+    const r = (id) => { const b = document.getElementById(id).getBoundingClientRect(); return { l: b.left - c.left, t: b.top - c.top, r: b.right - c.left, b: b.bottom - c.top, w: b.width, h: b.height }; };
+    const plug = r("plug"), head = r("plughead"), tile = r("tile"), card = r("card"), item = r("item");
+    const tx = tile.l + tile.w / 2, hy = head.t + head.h / 2, R = 18;
+    const ns = "http://www.w3.org/2000/svg", svg = document.getElementById("wires");
+    const line = (d) => {
+      for (const [w, col] of [[10, "rgba(24,119,242,.16)"], [3.5, "#1877f2"]]) {
+        const p = document.createElementNS(ns, "path");
+        p.setAttribute("d", d); p.setAttribute("fill", "none"); p.setAttribute("stroke", col);
+        p.setAttribute("stroke-width", w); p.setAttribute("stroke-linecap", "round");
+        svg.appendChild(p);
+      }
+    };
+    line(`M${plug.l} ${hy} H${tx + R} Q${tx} ${hy} ${tx} ${hy + R} V${tile.t + 6}`);
+    line(`M${tx} ${card.b} V${item.t}`);
+  });
+</script>
+</body>
+</html>

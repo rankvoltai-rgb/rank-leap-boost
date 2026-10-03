@@ -1,0 +1,106 @@
+<!doctype html>
+<!-- 20 · Three steps to a month of content. After FramerForms' "CREATE TRUE
+     MULTI-STEP FORMS": a flat brand-blue field, the headline on the left,
+     a hand-written note with a hand-drawn arrow pointing at the step dots
+     (cursor on the third), and on the right the onboarding's step cards,
+     stacked and cropped by the right edge. The onboarding really has three
+     steps: Brand, Keywords, Plan. "Build my plan" is its real button label;
+     the keywords are Brightloop's (FACTS). -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x3" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<script src="../kit/kit.js"></script>
+<style>
+  .canvas { background: #1a6ff2; }
+  .grain { --grain: 0.06; }
+
+  .ts-hl { position: absolute; left: 77px; top: 465px; font-size: 90px; line-height: 1; color: #fff; white-space: nowrap; }
+
+  /* the hand-written note and its arrow */
+  .ts-note {
+    position: absolute; left: 436px; top: 806px;
+    font-family: "Marker Felt", "Chalkboard SE", cursive; font-weight: 700;
+    font-size: 50px; line-height: 1.04; letter-spacing: 0.01em; color: #fff;
+    transform: rotate(-12deg); transform-origin: 0 100%;
+    white-space: nowrap;
+  }
+  .ts-note span { display: block; }
+  .ts-note span + span { margin-left: 20px; }
+  .ts-arrow { position: absolute; left: 672px; top: 838px; width: 110px; height: 100px; overflow: visible; opacity: 0.72; }
+
+  /* the step dots */
+  .ts-pill {
+    position: absolute; left: 610px; top: 943px; width: 212px; height: 76px;
+    display: flex; align-items: center; justify-content: center; gap: 30px;
+    border-radius: 19px; background: #fff;
+    transform: rotate(4deg);
+    box-shadow: 0 18px 34px -16px rgba(3, 20, 80, 0.45), 0 4px 10px -4px rgba(3, 20, 80, 0.2);
+  }
+  .ts-pill i { width: 34px; height: 34px; border-radius: 50%; background: #d9dadd; }
+  .ts-pill i.ts-on { background: #1565f0; }
+  .cur { --cs: 92px; left: 790px; top: 1004px; }
+
+  /* the step cards */
+  .ts-card { position: absolute; left: 918px; width: 848px; border-radius: 24px; }
+  .ts-card > * { position: absolute; }
+  .ts-glass { background: rgba(255, 255, 255, 0.38); }
+  .ts-glass .lbl { left: 37px; font-size: 24px; font-weight: 600; letter-spacing: -0.01em; color: rgba(255, 255, 255, 0.92); }
+
+  .ts-up { top: -60px; height: 303px; }
+  .ts-up .lbl { top: 86px; }
+  .ts-up .bar { left: 37px; top: 184px; width: 774px; height: 84px; border-radius: 16px; background: linear-gradient(180deg, #2a70ea, #2f78ec); }
+
+  .ts-mid { top: 297px; height: 608px; background: #fff; box-shadow: 0 30px 60px -20px rgba(3, 20, 80, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.4); }
+  .ts-mid .lbl { left: 37px; top: 38px; font-size: 24px; font-weight: 500; letter-spacing: -0.01em; color: #868a93; }
+  .ts-opt { left: 37px; width: 774px; height: 98px; border-radius: 16px; background: #f1f2f4; display: flex; align-items: center; padding-left: 31px; gap: 21px; font-size: 26px; font-weight: 500; letter-spacing: -0.015em; color: #a3a6ad; white-space: nowrap; }
+  .ts-opt .chk { width: 38px; height: 38px; border-radius: 9px; border: 2px solid #e2e4e9; }
+  .ts-opt .chk.on { border-color: var(--blue); }
+  .ts-opt .chk svg { width: 26px; height: 26px; }
+  .ts-opt.ts-picked { color: #3f434b; }
+  .ts-mid .go { left: 37px; top: 489px; width: 774px; height: 83px; border-radius: 16px; background: #166fe5; display: grid; place-items: center; color: #fff; font-size: 26px; font-weight: 700; letter-spacing: -0.015em; box-shadow: 0 10px 22px -12px rgba(10, 60, 170, 0.7); }
+
+  .ts-low { top: 958px; height: 400px; }
+  .ts-low .lbl { top: 38px; }
+  .ts-low .bar { left: 37px; top: 88px; width: 774px; height: 98px; border-radius: 16px; background: rgba(255, 255, 255, 0.13); }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="grain"></div>
+
+  <h1 class="hl-caps ts-hl">Three steps<br />to a month<br />of content</h1>
+
+  <div class="ts-note"><span>NO</span><span>PROMPTS</span></div>
+  <svg class="ts-arrow" viewBox="0 0 110 100" fill="none" stroke="#fff" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
+    <defs><filter id="ts-rough" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" seed="4" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="3"/></filter></defs>
+    <g filter="url(#ts-rough)">
+      <path d="M6 30 C 30 22, 52 26, 62 44 C 70 58, 66 72, 60 84"/>
+      <path d="M47 74 L 60 86 L 72 72"/>
+    </g>
+  </svg>
+
+  <div class="ts-pill"><i></i><i></i><i class="ts-on"></i></div>
+  <svg class="cur"><use href="#ic-cursor"/></svg>
+
+  <div class="ts-card ts-glass ts-up">
+    <div class="lbl">Step 1 · Brand</div>
+    <div class="bar"></div>
+  </div>
+
+  <div class="ts-card ts-mid">
+    <div class="lbl">Step 2 · Keywords</div>
+    <div class="ts-opt ts-picked" style="top: 87px"><span class="chk on"><svg><use href="#ic-check"/></svg></span>usage based pricing</div>
+    <div class="ts-opt ts-picked" style="top: 212px"><span class="chk on"><svg><use href="#ic-check"/></svg></span>saas pricing</div>
+    <div class="ts-opt" style="top: 337px"><span class="chk"></span>freemium vs free trial</div>
+    <div class="go">Build my plan</div>
+  </div>
+
+  <div class="ts-card ts-glass ts-low">
+    <div class="lbl">Step 3 · Plan</div>
+    <div class="bar"></div>
+  </div>
+</div>
+</body>
+</html>

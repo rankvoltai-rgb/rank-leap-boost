@@ -1,0 +1,139 @@
+<!doctype html>
+<!-- 30 · Let AI crawlers read your site. After Thenty's "Create protected
+     content & pages": a two-line caps headline ending in a black tile, a light
+     window cropped by the left and bottom edges holding the robots.txt the
+     free AI Crawler robots.txt Generator writes, and a panel of bots in front:
+     search bots allowed, training bots blocked, GPTBot's menu open on Block.
+     The generator is a free tool at rankbox.xyz/tools, not part of the paid
+     product. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x3" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<script src="../kit/kit.js"></script>
+<style>
+  html, body { background: #1877f2; }
+  .canvas { background: radial-gradient(1000px 600px at 20% 10%, #2581f6 0%, rgba(37, 129, 246, 0) 70%), #1877f2; }
+  .grain { --grain: 0.07; }
+
+  /* ---- headline */
+  .c-hl { position: absolute; left: 78px; top: 66px; font-size: 92px; line-height: 92px; color: #fff; white-space: nowrap; }
+  .c-hl .inline-tile { width: 0.76em; height: 0.76em; margin: 0 0 0 0.2em; border-radius: 0.11em; vertical-align: 0.125em; --bg: #0d0d0d; }
+  .c-hl .inline-tile > svg { width: 0.5em; height: 0.5em; }
+
+  /* ---- the tool page, behind, cropped by the left and bottom edges */
+  .c-win { position: absolute; left: -40px; top: 336px; width: 1260px; height: 900px; border-radius: 0 13px 0 0; background: #fff; overflow: hidden; box-shadow: 0 30px 70px -30px rgba(2, 24, 80, 0.4); }
+  .c-bar { position: absolute; left: 0; right: 0; top: 0; height: 84px; display: flex; align-items: center; border-bottom: 1.5px solid #eeeff1; white-space: nowrap; }
+  .c-nav { display: flex; align-items: center; gap: 18px; margin-left: 58px; color: #9aa0a8; }
+  .c-nav svg { width: 24px; height: 24px; }
+  .c-nav svg + svg { color: #c4c8ce; }
+  .c-ttl { position: absolute; left: 286px; top: 0; height: 84px; display: flex; align-items: center; gap: 10px; font-size: 18.5px; font-weight: 600; letter-spacing: -0.015em; color: #2a2e36; }
+  .c-ttl em { font-style: normal; font-weight: 500; color: #9aa0ab; }
+  .c-ttl b { margin-left: 4px; height: 26px; padding: 0 9px; border-radius: 7px; background: #e6f0ff; color: #1561d6; font-size: 15px; font-weight: 700; letter-spacing: 0.05em; display: grid; place-items: center; }
+  .c-cv { position: absolute; left: 0; right: 0; top: 85px; bottom: 0; background: #f0f1f3; }
+  .c-preset { position: absolute; left: 0; top: 39px; width: 883px; height: 43px; display: flex; align-items: center; gap: 10px; padding: 0 16px 0 70px; border-radius: 0 10px 10px 0; background: #dde9fb; font-size: 17px; font-weight: 600; color: #1767d8; white-space: nowrap; }
+  .c-preset .k { color: #5f86c4; font-weight: 500; }
+  .c-preset .end { margin-left: auto; display: flex; align-items: center; gap: 9px; }
+  .c-preset .end svg { width: 20px; height: 20px; color: var(--blue); }
+
+  .c-code { position: absolute; left: 0; top: 103px; width: 885px; height: 760px; border-radius: 0 12px 0 0; background: #0f1524; box-shadow: inset 0 0 0 1.5px #1d2538; overflow: hidden; }
+  .c-code .hd { display: flex; align-items: center; gap: 12px; height: 62px; padding: 0 22px 0 66px; background: #141b2c; border-bottom: 1.5px solid #1f283b; white-space: nowrap; }
+  .c-code .hd svg.f { width: 21px; height: 21px; color: #8b96aa; }
+  .c-code .hd b { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 18px; font-weight: 600; color: #e6eaf1; }
+  .c-code .hd span { font-size: 16px; font-weight: 500; color: #6f7a8f; margin-left: 6px; }
+  .c-code .hd .cp { margin-left: auto; display: flex; align-items: center; gap: 8px; height: 36px; padding: 0 14px; border-radius: 9px; background: #1b2336; box-shadow: inset 0 0 0 1px #273149; font-size: 16px; font-weight: 600; color: #c9d1de; }
+  .c-code .hd .cp svg { width: 17px; height: 17px; }
+  .c-code pre { margin: 0; padding: 22px 0 0 66px; font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 21px; line-height: 34px; color: #d7dde8; white-space: pre; counter-reset: ln; }
+  .c-code pre span.l { display: block; }
+  .c-code pre span.l::before { counter-increment: ln; content: counter(ln); display: inline-block; width: 30px; margin-right: 26px; text-align: right; color: #445069; }
+  .c-code .cm { color: #7c879c; }
+  .c-code .ua { color: #8ab4ff; }
+  .c-code .ok { color: #4ade80; }
+  .c-code .no { color: #f98b8b; }
+
+  /* ---- the panel */
+  .c-pan {
+    position: absolute; left: 900px; top: 372px; width: 616px; height: 900px; z-index: 5;
+    border-radius: 34px; background: #fff; color: #0c1018;
+    box-shadow: 0 0 0 1px rgba(12, 16, 24, 0.05), 0 40px 100px -20px rgba(2, 20, 70, 0.5), 0 0 60px -10px rgba(2, 20, 70, 0.25);
+  }
+  .c-head { position: absolute; left: 30px; right: 34px; top: 34px; display: flex; align-items: center; }
+  .c-head .wm { font-size: 26px; color: #0c1018; }
+  .c-head .wm svg { color: var(--blue); }
+  .c-head .c-x { margin-left: auto; width: 26px; height: 26px; color: #8a8f99; }
+  .c-back { position: absolute; left: 30px; top: 130px; display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 500; color: #6b707a; }
+  .c-back svg { width: 21px; height: 21px; }
+  .c-title { position: absolute; left: 29px; top: 176px; font-size: 48px; color: #0c1018; }
+  .c-desc { position: absolute; left: 30px; right: 34px; top: 238px; font-size: 21.5px; line-height: 31px; font-weight: 500; color: #4b5060; letter-spacing: -0.012em; }
+  .c-desc a { color: var(--blue); text-decoration: underline; text-decoration-thickness: 1.5px; text-underline-offset: 4px; }
+
+  .c-rows { position: absolute; left: 28px; right: 28px; top: 330px; }
+  .c-r { position: relative; display: flex; align-items: center; height: 78px; margin-bottom: 16px; padding: 0 16px 0 22px; border-radius: 16px; background: #f6f8fa; box-shadow: inset 0 0 0 1.5px #e9ecef, 0 3px 8px -6px rgba(12, 16, 24, 0.18); }
+  .c-r .tok { font-size: 21px; font-weight: 500; color: #2a2e36; letter-spacing: -0.012em; }
+  .c-r .ctl { position: absolute; left: 286px; display: flex; align-items: center; gap: 11px; }
+  .c-r .ctl .toggle { width: 52px; height: 30px; }
+  .c-r .ctl .toggle::after { left: 3px; top: 3px; width: 24px; height: 24px; }
+  .c-r .ctl .toggle.on::after { left: 25px; }
+  .c-r .ctl svg { width: 25px; height: 25px; color: #c3c7ce; }
+  .c-r .ctl .toggle.on + svg { color: #0c1018; }
+  .c-dd { position: absolute; right: 16px; top: 15px; width: 166px; height: 48px; display: flex; align-items: center; justify-content: space-between; padding: 0 14px 0 17px; border-radius: 12px; background: #fff; box-shadow: inset 0 0 0 1.5px #e3e6ea, 0 2px 5px -3px rgba(12, 16, 24, 0.18); font-size: 19px; font-weight: 500; color: #4b5060; }
+  .c-dd svg { width: 19px; height: 19px; color: #6b707a; }
+  .c-dd.open { box-shadow: inset 0 0 0 2px var(--blue), 0 0 0 4px rgba(24, 119, 242, 0.14); color: #0c1018; }
+
+  .c-menu { position: absolute; z-index: 7; width: 176px; padding: 8px; border-radius: 14px; background: #fff; box-shadow: 0 0 0 1px rgba(12, 16, 24, 0.06), 0 18px 34px -12px rgba(12, 16, 24, 0.32); }
+  .c-menu div { display: flex; align-items: center; justify-content: space-between; height: 46px; padding: 0 10px 0 14px; border-radius: 9px; font-size: 19px; font-weight: 500; color: #4b5060; }
+  .c-menu div.hov { background: #f2f6fd; color: #0c1018; }
+  .c-menu .chk { width: 26px; height: 26px; border-radius: 7px; border-width: 2px; }
+  .c-menu .chk svg { width: 18px; height: 18px; }
+
+  .c-cur { --cs: 56px; }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="grain"></div>
+
+  <h1 class="c-hl hl-caps">Let AI crawlers<br />read your site<span class="inline-tile"><svg><use href="#ic-robot"/></svg></span></h1>
+
+  <div class="c-win">
+    <div class="c-bar">
+      <div class="c-nav"><svg><use href="#ic-chev-left"/></svg><svg><use href="#ic-chev-right"/></svg></div>
+      <div class="c-ttl">AI Crawler robots.txt Generator <em>· rankbox.xyz/tools</em><b>FREE</b></div>
+    </div>
+    <div class="c-cv">
+      <div class="c-preset"><span class="k">Preset</span><span class="end"><svg><use href="#ic-check-circle"/></svg>Search &amp; live fetch only</span></div>
+      <div class="c-code">
+        <div class="hd"><svg class="f"><use href="#ic-doc"/></svg><b>robots.txt</b><span>19 lines</span><span class="cp"><svg><use href="#ic-copy"/></svg>Copy</span></div>
+        <pre><span class="l"><span class="cm"># AI search index</span></span><span class="l"><span class="ua">User-agent:</span> OAI-SearchBot</span><span class="l"><span class="ok">Allow:</span> /</span><span class="l"> </span><span class="l"><span class="ua">User-agent:</span> Claude-SearchBot</span><span class="l"><span class="ok">Allow:</span> /</span><span class="l"> </span><span class="l"><span class="ua">User-agent:</span> PerplexityBot</span><span class="l"><span class="ok">Allow:</span> /</span><span class="l"> </span><span class="l"><span class="cm"># Model training</span></span><span class="l"><span class="ua">User-agent:</span> GPTBot</span><span class="l"><span class="no">Disallow:</span> /</span><span class="l"> </span><span class="l"><span class="ua">User-agent:</span> Google-Extended</span><span class="l"><span class="no">Disallow:</span> /</span><span class="l"> </span><span class="l"><span class="ua">User-agent:</span> CCBot</span><span class="l"><span class="no">Disallow:</span> /</span></pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="c-pan">
+    <div class="c-head">
+      <span class="wm caps"><svg><use href="#lg-rankbox"/></svg>Rankbox</span>
+      <svg class="c-x"><use href="#ic-x"/></svg>
+    </div>
+    <div class="c-back"><svg><use href="#ic-back"/></svg>Back</div>
+    <div class="c-title hl-caps">AI crawlers</div>
+    <p class="c-desc">Pick which AI bots can read your site. Free at <a>rankbox.xyz/tools</a>.</p>
+
+    <div class="c-rows">
+      <div class="c-r"><span class="tok">OAI-SearchBot</span><span class="ctl"><i class="toggle on"></i><svg><use href="#ic-robot"/></svg></span><span class="c-dd">Allowed<svg><use href="#ic-chev-down"/></svg></span></div>
+      <div class="c-r"><span class="tok">Claude-SearchBot</span><span class="ctl"><i class="toggle on"></i><svg><use href="#ic-robot"/></svg></span><span class="c-dd">Allowed<svg><use href="#ic-chev-down"/></svg></span></div>
+      <div class="c-r"><span class="tok">PerplexityBot</span><span class="ctl"><i class="toggle on"></i><svg><use href="#ic-robot"/></svg></span><span class="c-dd">Allowed<svg><use href="#ic-chev-down"/></svg></span></div>
+      <div class="c-r"><span class="tok">GPTBot</span><span class="ctl"><i class="toggle"></i><svg><use href="#ic-robot"/></svg></span><span class="c-dd open">Blocked<svg><use href="#ic-chev-up"/></svg></span></div>
+      <div class="c-r"><span class="tok">Google-Extended</span><span class="ctl"><i class="toggle"></i><svg><use href="#ic-robot"/></svg></span><span class="c-dd">Blocked<svg><use href="#ic-chev-down"/></svg></span></div>
+      <div class="c-r"><span class="tok">CCBot</span><span class="ctl"><i class="toggle"></i><svg><use href="#ic-robot"/></svg></span><span class="c-dd">Blocked<svg><use href="#ic-chev-down"/></svg></span></div>
+    </div>
+  </div>
+
+  <div class="c-menu" style="left:1302px;top:1050px">
+    <div>Allow<span class="chk"></span></div>
+    <div class="hov">Block<span class="chk on"><svg><use href="#ic-check"/></svg></span></div>
+  </div>
+  <svg class="cur c-cur" style="left:1452px;top:1124px"><use href="#ic-cursor"/></svg>
+</div>
+</body>
+</html>

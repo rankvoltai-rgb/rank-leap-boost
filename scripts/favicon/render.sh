@@ -48,7 +48,11 @@ shoot() {
 }
 
 shoot 512 "$root/public/apple-touch-icon.png"
-shoot 256 "$tmp/favicon-256.png"
+
+# Headless Chrome won't open a window narrower than about 500px, so a 256px
+# shot crops the left of a wider page and the mark comes out cut in half.
+# Scale the 512 render down instead.
+sips -z 256 256 "$root/public/apple-touch-icon.png" --out "$tmp/favicon-256.png" >/dev/null
 
 # An ICO is a six-byte header, one directory entry, then the image itself —
 # and every browser that still asks for favicon.ico takes a PNG inside it.

@@ -1,0 +1,219 @@
+<!doctype html>
+<!-- 32 · Structured data in the head (light). After Tweaker's light preview: a
+     hazy desert built from SVG shapes, blur and grain; Framer's Custom Code page
+     as a frosted window at the left and bottom; under it, the block the plugin
+     places at the end of <head>; the plugin's light panel at the right.
+     The code is the shape of what the plugin writes (one @graph: Organization,
+     Blog, a BlogPosting per article), pretty-printed for reading; the real
+     block is minified and carries @id, dates and a WebSite node too.
+     The plugin is not approved in the Framer Marketplace yet. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x3" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<script src="../kit/kit.js"></script>
+<style>
+  html, body { background: #cfced5; }
+  .canvas { background: #cfced5; }
+  .grain { --grain: 0.13; }
+  .lc-bg { position: absolute; inset: 0; z-index: -2; }
+  .lc-bg svg { position: absolute; inset: 0; width: 1600px; height: 1200px; }
+
+  /* Framer's Custom Code page, frosted */
+  .lc-win {
+    position: absolute; left: 70px; top: 393px; width: 1080px; height: 900px;
+    border-radius: 28px 28px 0 0; overflow: hidden;
+    background: linear-gradient(90deg, rgba(252, 251, 252, 0.95) 0px, rgba(250, 249, 250, 0.92) 600px, rgba(243, 242, 241, 0.74) 830px, rgba(240, 239, 238, 0) 1060px);
+    -webkit-backdrop-filter: blur(26px); backdrop-filter: blur(26px);
+    box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, 0.9), -20px 30px 80px -40px rgba(70, 60, 50, 0.3);
+  }
+  .lc-main { position: absolute; left: 281px; top: 0; right: 0; bottom: 0; color: #333; }
+  .lc-main h3 { position: absolute; top: 47px; font-size: 30px; font-weight: 700; color: #333; letter-spacing: -0.035em; line-height: 36px; }
+  .lc-main .lc-desc { position: absolute; top: 104px; width: 400px; font-size: 16px; line-height: 25px; font-weight: 500; color: #626262; letter-spacing: -0.005em; }
+  .lc-desc a { color: #2f86d8; }
+  .lc-main .lc-scripts { position: absolute; top: 192px; font-size: 16px; font-weight: 600; color: #3f3f3f; letter-spacing: -0.005em; line-height: 22px; }
+  .lc-table { position: absolute; top: 233px; left: 0; width: 640px; }
+  .lc-tr { position: relative; height: 53px; border-top: 1.5px solid #e9e7e6; font-size: 16px; font-weight: 500; letter-spacing: -0.005em; white-space: nowrap; }
+  .lc-tr:last-child { border-bottom: 1.5px solid #e9e7e6; }
+  .lc-tr > span { position: absolute; top: 0; height: 100%; display: flex; align-items: center; gap: 13px; }
+  .lc-tr.th { color: #9d9b99; }
+  .lc-tr .c1 { left: 0; }
+  .lc-tr .c2 { left: 442px; }
+  .lc-tr.td { color: #575553; }
+  .lc-tr.td .c2 { color: #6d6b68; }
+  .lc-grip { display: grid; grid-template-columns: 4px 4px; gap: 4px; margin: 0 6px 0 7px; }
+  .lc-grip i { width: 4px; height: 4px; border-radius: 50%; background: #c9c7c5; }
+  .lc-tr .app { --s: 26px; --r: 7px; --g: 58%; }
+
+  /* the block the plugin placed, in its own frosted window */
+  .lc-code {
+    position: absolute; left: 230px; top: 757px; width: 880px; height: 500px;
+    border-radius: 18px 18px 0 0; overflow: hidden;
+    background: linear-gradient(90deg, rgba(249, 247, 246, 0.95) 0px, rgba(246, 244, 242, 0.9) 380px, rgba(240, 238, 235, 0.66) 560px, rgba(236, 234, 231, 0.34) 700px, rgba(236, 234, 231, 0) 880px);
+    -webkit-backdrop-filter: blur(14px) saturate(0.85); backdrop-filter: blur(14px) saturate(0.85);
+    box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, 0.95), 0 -12px 40px -20px rgba(70, 60, 50, 0.22);
+  }
+  .lc-ct { display: flex; align-items: center; gap: 13px; height: 66px; padding-left: 20px; font-size: 16px; font-weight: 600; color: #42403e; letter-spacing: -0.01em; white-space: nowrap; }
+  .lc-ct .app { --s: 27px; --r: 7px; --g: 58%; }
+  .lc-ct em { font-style: normal; font-weight: 500; color: #b9b7b5; margin-left: -6px; }
+  .lc-pre {
+    position: absolute; left: 20px; top: 66px; right: 0; bottom: 0;
+    border-radius: 10px 0 0 0;
+    background: linear-gradient(90deg, rgba(60, 50, 40, 0.085) 0px, rgba(60, 50, 40, 0.07) 600px, rgba(60, 50, 40, 0) 860px);
+    padding: 9px 0 0 22px;
+    font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 16px; line-height: 24.2px; color: #6a6866; white-space: pre;
+    -webkit-mask-image: linear-gradient(180deg, #000 55%, rgba(0, 0, 0, 0.35) 88%, rgba(0, 0, 0, 0.1));
+    mask-image: linear-gradient(180deg, #000 55%, rgba(0, 0, 0, 0.35) 88%, rgba(0, 0, 0, 0.1));
+  }
+  .lc-pre .l { position: relative; display: block; }
+  .lc-pre .l > u { position: absolute; top: -1px; bottom: -1px; width: 1.5px; background: #d6d3cf; text-decoration: none; }
+  .lc-pre .cm { color: #b0aeab; }
+  .lc-pre .tg { color: #df8a2b; }
+  .lc-pre .k { color: #2f78cc; }
+  .lc-pre .s { color: #2e9461; }
+  .lc-pre .p { color: #8a8784; }
+
+  /* the plugin panel, light */
+  .lc-panel {
+    position: absolute; left: 966px; top: 196px; width: 515px;
+    padding: 0 25px 28px 23px;
+    border-radius: 30px; background: #ffffff; color: #333;
+    box-shadow: 0 0 0 1px rgba(40, 30, 20, 0.05), 0 40px 90px -24px rgba(60, 45, 30, 0.45), 0 14px 30px -14px rgba(60, 45, 30, 0.25);
+  }
+  .lc-head { display: flex; align-items: center; gap: 16px; height: 80px; font-size: 20px; font-weight: 500; letter-spacing: -0.015em; color: #4f4f4f; }
+  .lc-head .app { --s: 33px; --r: 8px; --g: 58%; }
+  .lc-head .lc-x { margin-left: auto; margin-right: 6px; width: 15px; height: 15px; color: #9b9b9b; }
+  .lc-sect { padding: 17px 0 0; }
+  .lc-sect + .lc-sect { margin-top: 34.5px; border-top: 1.5px solid #eaeaea; padding-top: 36px; }
+  .lc-sect h6 { font-size: 21px; font-weight: 500; letter-spacing: -0.015em; color: #2b2b2b; line-height: 26px; margin-bottom: 10.5px; }
+  .lc-row { display: flex; align-items: center; height: 47px; padding-left: 20px; }
+  .lc-row + .lc-row { margin-top: 14.5px; }
+  .lc-row > b { font-size: 19px; font-weight: 500; color: #7c7c7c; letter-spacing: -0.01em; white-space: nowrap; }
+  .lc-q { width: 17px; height: 17px; margin-left: 12px; flex: none; }
+  .lc-row .seg, .lc-row .lc-box { margin-left: auto; width: 242px; }
+  .lc-panel .seg { padding: 3px; gap: 0; border-radius: 10px; background: #f1f1f1; }
+  .lc-panel .seg > span { flex: 1; height: 41px; padding: 0; border-radius: 8px; font-size: 18px; font-weight: 600; color: #6b6b6b; }
+  .lc-panel .seg > span.on { background: #fff; color: var(--blue); box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.035); }
+  .lc-box { display: flex; align-items: center; gap: 10px; height: 47px; padding: 0 16px; border-radius: 10px; background: #f1f1f1; font-size: 18px; font-weight: 600; color: #3a3a3a; letter-spacing: -0.01em; white-space: nowrap; }
+  .lc-box i { width: 9px; height: 9px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.16); margin-left: 2px; }
+  .lc-sync { margin-top: 34px; height: 54px; border-radius: 11px; display: grid; place-items: center; background: #166fe5; color: #fff; font-size: 19px; font-weight: 600; letter-spacing: -0.015em; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18), 0 10px 22px -12px rgba(22, 111, 229, 0.8); }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="lc-bg">
+    <svg viewBox="0 0 1600 1200">
+      <defs>
+        <linearGradient id="sky" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#cbcad1" /><stop offset="0.4" stop-color="#d1cfd6" /><stop offset="0.75" stop-color="#d7d3d7" /><stop offset="1" stop-color="#dcd7d6" /></linearGradient>
+        <linearGradient id="dune" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#b8ab9d" /><stop offset="0.12" stop-color="#ad9c88" /><stop offset="0.36" stop-color="#a28f78" /><stop offset="0.5" stop-color="#8f7b62" /><stop offset="0.6" stop-color="#6a5636" /><stop offset="0.72" stop-color="#8d7953" /><stop offset="0.86" stop-color="#6e5731" /><stop offset="1" stop-color="#5a4520" /></linearGradient>
+        <linearGradient id="hill" x1="0.25" x2="0.75" y1="0.05" y2="0.95"><stop offset="0" stop-color="#8d8f86" /><stop offset="0.22" stop-color="#6f6d58" /><stop offset="0.4" stop-color="#3d3b29" /><stop offset="0.7" stop-color="#2d2a19" /><stop offset="1" stop-color="#3b3119" /></linearGradient>
+        <linearGradient id="ridge" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#a7aaa4" /><stop offset="0.45" stop-color="#7f857f" /><stop offset="0.7" stop-color="#4c524a" /><stop offset="1" stop-color="#2a2a1c" /></linearGradient>
+        <linearGradient id="mist" x1="0" x2="0.7" y1="0" y2="1"><stop offset="0" stop-color="#b9bcb7" /><stop offset="0.35" stop-color="#8e938d" /><stop offset="0.7" stop-color="#5f655e" /><stop offset="1" stop-color="#3f433b" /></linearGradient>
+        <linearGradient id="sand" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#d6cfbf" /><stop offset="0.5" stop-color="#c2b38f" /><stop offset="1" stop-color="#9c8558" /></linearGradient>
+        <filter id="s3" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="3" /></filter>
+        <filter id="s8" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="8" /></filter>
+        <filter id="s16" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="16" /></filter>
+        <filter id="s40" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="40" /></filter>
+        <filter id="tex" x="0" y="0" width="100%" height="100%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.012 0.05" numOctaves="3" seed="7" result="n" />
+          <feColorMatrix in="n" values="0 0 0 0 0.3  0 0 0 0 0.25  0 0 0 0 0.15  0 0 0 0.9 -0.25" />
+          <feComposite in2="SourceGraphic" operator="in" />
+        </filter>
+      </defs>
+      <rect width="1600" height="1200" fill="url(#sky)" />
+      <ellipse cx="1640" cy="330" rx="330" ry="150" fill="#e6e1e2" filter="url(#s40)" />
+      <!-- the dune at the left -->
+      <path d="M -30 452 C 70 449 150 468 240 520 C 340 578 430 660 540 790 L 540 1230 L -30 1230 Z" fill="url(#dune)" filter="url(#s3)" />
+      <path d="M -30 452 C 70 449 150 468 240 520 C 340 578 430 660 540 790 L 540 1230 L -30 1230 Z" fill="#000" filter="url(#tex)" opacity="0.5" />
+      <!-- the big olive hill: its ridge runs from the bottom left up to the right edge -->
+      <path id="hillp" d="M 470 1240 C 640 1090 820 940 1000 790 C 1160 655 1320 520 1450 428 C 1500 400 1560 390 1640 386 L 1640 1240 Z" fill="url(#hill)" filter="url(#s3)" />
+      <path d="M 470 1240 C 640 1090 820 940 1000 790 C 1160 655 1320 520 1450 428 C 1500 400 1560 390 1640 386 L 1640 1240 Z" fill="#000" filter="url(#tex)" opacity="0.4" />
+      <!-- haze along the ridge, and the lit crest at the right -->
+      <path d="M 470 1240 C 640 1090 820 940 1000 790 C 1160 655 1320 520 1450 428" fill="none" stroke="#b9bcb6" stroke-width="150" opacity="0.75" filter="url(#s40)" />
+      <path d="M 1430 446 C 1490 410 1550 398 1640 394" fill="none" stroke="#a39478" stroke-width="40" opacity="0.85" filter="url(#s8)" />
+      <!-- the misty grey peak seen through the code window -->
+      <path d="M 540 1240 C 680 1090 830 920 960 828 C 1030 786 1100 792 1170 850 C 1250 916 1330 1020 1400 1240 Z" fill="url(#mist)" filter="url(#s16)" opacity="0.9" />
+      <path d="M 560 1180 C 700 1040 850 890 975 820 C 1040 785 1100 800 1150 845" fill="none" stroke="#e4e4e2" stroke-width="90" opacity="0.6" filter="url(#s40)" />
+      <!-- pale sand along the bottom -->
+      <path d="M 300 1240 C 420 1170 600 1128 820 1128 C 1000 1128 1150 1160 1260 1240 Z" fill="url(#sand)" filter="url(#s8)" />
+    </svg>
+  </div>
+  <div class="grain"></div>
+
+  <div class="lc-win">
+    <div class="lc-main">
+      <h3>Custom Code</h3>
+      <p class="lc-desc">Custom code can be added to all or a selection of pages across the published website. <a>Learn more</a></p>
+      <div class="lc-scripts">Scripts</div>
+      <div class="lc-table">
+        <div class="lc-tr th"><span class="c1">Name</span><span class="c2">Placement</span></div>
+        <div class="lc-tr td">
+          <span class="c1"><span class="lc-grip"><i></i><i></i><i></i><i></i></span><span class="app rankbox"><svg><use href="#lg-rankbox"/></svg></span>Rankbox structured data</span>
+          <span class="c2">End of &lt;head&gt;</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="lc-code">
+    <div class="lc-ct"><span class="app rankbox"><svg><use href="#lg-rankbox"/></svg></span>Rankbox structured data<em>· End of &lt;head&gt;</em></div>
+    <div class="lc-pre" id="code"></div>
+  </div>
+
+  <div class="lc-panel">
+    <div class="lc-head"><span class="app rankbox"><svg><use href="#lg-rankbox"/></svg></span>Rankbox<svg class="lc-x"><use href="#ic-x"/></svg></div>
+
+    <div class="lc-sect">
+      <h6>Structured data</h6>
+      <div class="lc-row"><b>Article JSON-LD</b><svg class="lc-q"><use href="#lc-help"/></svg><span class="seg"><span>Off</span><span class="on">On</span></span></div>
+    </div>
+
+    <div class="lc-sect">
+      <h6>Live URLs</h6>
+      <div class="lc-row"><b>Report to Rankbox</b><svg class="lc-q"><use href="#lc-help"/></svg><span class="seg"><span>Off</span><span class="on">On</span></span></div>
+      <div class="lc-row"><b>Collection path</b><span class="lc-box">/blog</span></div>
+      <div class="lc-row"><b>Follow slug changes</b><span class="seg"><span class="on">Off</span><span>On</span></span></div>
+    </div>
+
+    <div class="lc-sect">
+      <h6>Sync</h6>
+      <div class="lc-row"><b>Status</b><span class="lc-box"><i></i>Up to date</span></div>
+      <div class="lc-row"><b>Articles</b><span class="lc-box">8 synced</span></div>
+      <div class="lc-sync">Sync articles</div>
+    </div>
+  </div>
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="lc-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#dcdcdc"/><path d="M9.3 9.4a2.8 2.8 0 0 1 5.4 1c0 1.9-2.7 2.3-2.7 4M12 17.6v.1" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></symbol>
+  </svg>
+</div>
+<script>
+  // The block, as pretty-printed JSON-LD. Each line: [indent levels, html].
+  const C = (t) => `<span class="cm">${t}</span>`, T = (t) => `<span class="tg">${t}</span>`,
+        K = (t) => `<span class="k">"${t}"</span>`, S = (t) => `<span class="s">"${t}"</span>`, P = (t) => `<span class="p">${t}</span>`;
+  const lines = [
+    [0, C("&lt;!-- Rankbox structured data --&gt;")],
+    [0, `${P("&lt;")}${T("script")} <span class="k">type</span>${P("=")}${S("application/ld+json")}${P("&gt;")}`],
+    [0, P("{")],
+    [1, `${K("@context")}${P(":")} ${S("https://schema.org")}${P(",")}`],
+    [1, `${K("@graph")}${P(": [")}`],
+    [2, `${P("{")} ${K("@type")}${P(":")} ${S("Organization")}${P(",")} ${K("name")}${P(":")} ${S("Brightloop")} ${P("},")}`],
+    [2, `${P("{")} ${K("@type")}${P(":")} ${S("Blog")}${P(",")} ${K("url")}${P(":")} ${S("https://brightloop.app/blog")} ${P("},")}`],
+    [2, P("{")],
+    [3, `${K("@type")}${P(":")} ${S("BlogPosting")}${P(",")}`],
+    [3, `${K("headline")}${P(":")} ${S("Usage-Based Pricing, Explained")}${P(",")}`],
+    [3, `${K("url")}${P(":")} ${S("https://brightloop.app/blog/usage-based-pricing")}${P(",")}`],
+    [3, `${K("keywords")}${P(":")} ${S("Pricing, SaaS")}`],
+    [2, P("},")],
+    [2, P("{")],
+    [3, `${K("@type")}${P(":")} ${S("BlogPosting")}${P(",")}`],
+  ];
+  const ch = 9.63; // Menlo advance at 16px
+  document.getElementById("code").innerHTML = lines.map(([lv, html]) => {
+    const guides = Array.from({ length: lv }, (_, i) => `<u style="left:${(i * 2 + 0.5) * ch - 1}px"></u>`).join("");
+    return `<span class="l">${guides}${"  ".repeat(lv)}${html}</span>`;
+  }).join("");
+</script>
+</body>
+</html>

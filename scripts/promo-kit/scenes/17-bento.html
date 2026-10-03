@@ -1,0 +1,204 @@
+<!doctype html>
+<!-- 17 · Bento. After Checkout Page's "One platform for everything you sell":
+     a centred headline with a grey subline over five dark cards, three on top
+     and two wide below, each a white title and one white UI card with an
+     outline check chip. The five are the product's own areas. Backlinks and
+     Reddit are still rolling out (credits and reply drafts, paid plans). -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x3" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<script src="../kit/kit.js"></script>
+<style>
+  html, body { background: #101012; }
+  .bt-field { position: absolute; inset: 0; z-index: -3; background: radial-gradient(1400px 800px at 50% 0%, #1c1b1e 0%, #161518 40%, #121214 70%, #0f0f11 100%); }
+  .f-grid { --gs: 48px; --gl: 0.022; -webkit-mask-image: radial-gradient(80% 70% at 50% 45%, #000 30%, transparent 100%); mask-image: radial-gradient(80% 70% at 50% 45%, #000 30%, transparent 100%); }
+  .grain { --grain: 0.07; }
+
+  .bt-h { position: absolute; left: 0; right: 0; top: 50px; text-align: center; font-size: 64px; font-weight: 700; line-height: 1.1; letter-spacing: -0.045em; color: #fff; }
+  .bt-sub { position: absolute; left: 0; right: 0; top: 134px; text-align: center; font-size: 28px; font-weight: 500; letter-spacing: -0.01em; color: #9b9ba2; }
+
+  /* ------------------------------------------------------------ bento */
+  .bt-card { position: absolute; padding-top: 30px; border-radius: 24px; background: #17161b; box-shadow: inset 0 0 0 1.5px #27262b; }
+  .bt-card.top { top: 208px; width: 448px; height: 459px; }
+  .bt-card.bot { top: 705px; width: 696px; height: 475px; }
+  .bt-card > h3 { text-align: center; font-size: 26px; font-weight: 700; letter-spacing: -0.03em; color: #fff; }
+
+  .bt-ui { margin: 22px auto 0; padding: 18px; border-radius: 16px; background: #fff; color: #111114; }
+  .top .bt-ui { width: 412px; }
+
+  .ochip { height: 32px; padding: 0 12px; gap: 7px; border-width: 1.8px; font-size: 14.5px; letter-spacing: 0.09em; color: #111114; }
+  .ochip svg { width: 14px; height: 14px; }
+
+  .bt-btn { height: 46px; border-radius: 10px; background: var(--blue); color: #fff; display: grid; place-items: center; font-size: 17px; font-weight: 650; letter-spacing: -0.015em; box-shadow: 0 8px 16px -10px rgba(24, 119, 242, 0.8); }
+  .bt-cap { font-size: 14.5px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #8e8e96; }
+  .bt-hr { height: 1px; background: #ececef; }
+
+  /* Research */
+  .bt-topic { display: flex; align-items: center; gap: 12px; }
+  .bt-ic { width: 46px; height: 46px; flex: none; border-radius: 12px; display: grid; place-items: center; background: #fff; box-shadow: inset 0 0 0 1.5px #e7e7ea; color: var(--blue); }
+  .bt-ic svg { width: 24px; height: 24px; }
+  .bt-topic b { display: block; font-size: 17px; font-weight: 700; letter-spacing: -0.015em; }
+  .bt-topic small { display: block; margin-top: 2px; font-size: 15px; font-weight: 500; color: #8e8e96; }
+  .bt-topic .ochip { margin-left: auto; }
+  .bt-qs { margin: 14px 0 16px; padding: 4px 14px; border-radius: 12px; background: #f5f5f7; }
+  .bt-q { padding: 9px 0; }
+  .bt-q + .bt-q { border-top: 1px solid #e7e7eb; }
+  .bt-q small { display: block; font-size: 15px; font-weight: 500; color: #8e8e96; }
+  .bt-q b { display: block; margin-top: 1px; font-size: 16.5px; font-weight: 600; letter-spacing: -0.015em; white-space: nowrap; }
+
+  /* Writing */
+  .bt-seg { display: flex; justify-content: center; gap: 10px; }
+  .bt-seg span { width: 150px; height: 42px; border-radius: 999px; display: grid; place-items: center; font-size: 17px; font-weight: 600; letter-spacing: -0.015em; }
+  .bt-seg .bt-act { box-shadow: inset 0 0 0 2px #111114; color: #111114; }
+  .bt-seg .off { background: #f2f2f4; color: #55555c; }
+  .bt-tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 16px; }
+  .bt-tile { height: 74px; border-radius: 12px; background: #f2f2f4; display: grid; place-content: center; text-align: center; }
+  .bt-tile .bt-cap { font-size: 14px; }
+  .bt-tile b { margin-top: 3px; font-size: 21px; font-weight: 700; letter-spacing: -0.02em; color: #55555c; }
+  .bt-tile.bt-act { background: #fff; box-shadow: inset 0 0 0 2px #111114; }
+  .bt-tile.bt-act b { color: #111114; }
+  .bt-chiprow { display: flex; justify-content: center; margin-top: 16px; }
+  .bt-rows { margin: 14px 0 16px; display: grid; gap: 8px; }
+  .bt-row { display: flex; align-items: center; font-size: 16.5px; font-weight: 500; letter-spacing: -0.015em; color: #55555c; }
+  .bt-row b { margin-left: auto; font-weight: 700; color: #111114; }
+  .bt-row svg { margin-left: auto; width: 20px; height: 20px; color: #111114; }
+
+  /* Publishing */
+  .bt-ev { display: flex; align-items: center; gap: 14px; padding-bottom: 16px; }
+  .bt-date { width: 60px; height: 64px; flex: none; border-radius: 12px; box-shadow: inset 0 0 0 1.5px #e7e7ea; display: grid; place-content: center; text-align: center; }
+  .bt-date .bt-cap { font-size: 14px; letter-spacing: 0.08em; }
+  .bt-date b { font-size: 23px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; }
+  .bt-ev b.t { display: flex; align-items: center; gap: 9px; font-size: 17px; font-weight: 700; letter-spacing: -0.015em; }
+  .bt-ev b.t i { width: 11px; height: 11px; border-radius: 3px; background: var(--blue); }
+  .bt-ev small { display: block; margin-top: 4px; font-size: 15px; font-weight: 500; color: #8e8e96; }
+  .bt-on { display: inline-flex; align-items: center; gap: 8px; }
+  .bt-on i { width: 9px; height: 9px; border-radius: 50%; background: #1fb15a; box-shadow: 0 0 0 4px rgba(31, 177, 90, 0.15); }
+  .bt-chipline { display: flex; align-items: center; padding-top: 14px; margin-top: 14px; border-top: 1px solid #ececef; }
+
+  /* Backlinks */
+  .bot .bt-ui.links { width: 580px; padding: 20px 22px 22px; }
+  .bt-lab { display: flex; align-items: center; justify-content: space-between; }
+  .bt-opts { display: grid; gap: 10px; margin-top: 12px; }
+  .bt-opts.three { grid-template-columns: repeat(3, 1fr); }
+  .bt-opts.pages { grid-template-columns: 1.58fr 0.66fr 1.26fr; }
+  .bt-opt { height: 50px; border-radius: 12px; background: #f2f2f4; display: grid; place-items: center; font-size: 16px; font-weight: 700; letter-spacing: -0.015em; color: #55555c; white-space: nowrap; }
+  .bt-opt.bt-act { background: #fff; box-shadow: inset 0 0 0 2px #111114; color: #111114; }
+  .pages .bt-opt { font-size: 15.5px; }
+  .bt-sp { height: 18px; }
+  .bt-credit { display: flex; align-items: center; margin: 18px 0 16px; font-size: 16.5px; font-weight: 500; letter-spacing: -0.015em; color: #55555c; }
+  .bt-credit b { margin-left: auto; font-size: 18px; font-weight: 700; color: #111114; }
+
+  /* Reddit */
+  .bot .bt-ui.rd { width: 600px; padding: 20px 22px 22px; }
+  .bt-rh { display: flex; align-items: center; gap: 12px; }
+  .bt-rh .app { --s: 46px; --r: 12px; }
+  .bt-rh b { display: block; margin-top: 2px; font-size: 16px; font-weight: 700; letter-spacing: -0.015em; white-space: nowrap; }
+  .bt-rh .ochip { margin-left: auto; }
+  .bt-rseg { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px; }
+  .bt-rseg span { height: 44px; border-radius: 999px; display: grid; place-items: center; font-size: 17px; font-weight: 600; letter-spacing: -0.015em; }
+  .bt-rseg .bt-act { box-shadow: inset 0 0 0 2px #111114; color: #111114; }
+  .bt-rseg .off { background: #f2f2f4; color: #55555c; }
+  .bt-reply { margin: 14px 0 16px; padding: 14px 16px; border-radius: 12px; background: #f5f5f7; font-size: 16.5px; line-height: 1.45; font-weight: 500; letter-spacing: -0.01em; color: #2a2a30; }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="bt-field"></div>
+  <div class="f-grid"></div>
+  <div class="grain"></div>
+
+  <h1 class="bt-h">One platform for search and AI traffic</h1>
+  <p class="bt-sub">Research, write, publish, earn links and join Reddit threads from one place</p>
+
+  <!-- Research -->
+  <div class="bt-card top" style="left:80px">
+    <h3>Research</h3>
+    <div class="bt-ui">
+      <div class="bt-topic">
+        <span class="bt-ic"><svg><use href="#ic-chat"/></svg></span>
+        <div><b>usage-based pricing</b><small>5 questions</small></div>
+        <span class="ochip"><svg><use href="#ic-check"/></svg>4 intents</span>
+      </div>
+      <div class="bt-qs">
+        <div class="bt-q"><small>Informational</small><b>How do I bill by usage?</b></div>
+        <div class="bt-q"><small>Commercial</small><b>Is usage-based pricing worth it?</b></div>
+        <div class="bt-q"><small>Comparison</small><b>Stripe Billing or Chargebee?</b></div>
+      </div>
+      <div class="bt-btn">Plan it</div>
+    </div>
+  </div>
+
+  <!-- Writing -->
+  <div class="bt-card top" style="left:576px">
+    <h3>Writing</h3>
+    <div class="bt-ui">
+      <div class="bt-seg"><span class="bt-act">Article</span><span class="off">SEO</span></div>
+      <div class="bt-tiles">
+        <div class="bt-tile"><span class="bt-cap">Words</span><b>1,840</b></div>
+        <div class="bt-tile bt-act"><span class="bt-cap">SEO</span><b>94</b></div>
+        <div class="bt-tile"><span class="bt-cap">Read</span><b>8 min</b></div>
+      </div>
+      <div class="bt-chiprow"><span class="ochip"><svg><use href="#ic-check"/></svg>Ready to rank</span></div>
+      <div class="bt-rows">
+        <div class="bt-row">Keyword in title<svg><use href="#ic-check"/></svg></div>
+        <div class="bt-row">FAQ for AI engines<svg><use href="#ic-check"/></svg></div>
+      </div>
+      <div class="bt-btn">Publish changes</div>
+    </div>
+  </div>
+
+  <!-- Publishing -->
+  <div class="bt-card top" style="left:1072px">
+    <h3>Publishing</h3>
+    <div class="bt-ui">
+      <div class="bt-ev">
+        <div class="bt-date"><span class="bt-cap">Oct</span><b>08</b></div>
+        <div><b class="t"><i></i>Usage-Based Pricing</b><small>brightloop.app/blog · in 6 days</small></div>
+      </div>
+      <div class="bt-hr"></div>
+      <div class="bt-rows" style="margin:14px 0 0">
+        <div class="bt-row">Pace<b>3 times a week</b></div>
+        <div class="bt-row">Autopilot<b class="bt-on"><i></i>On</b></div>
+      </div>
+      <div class="bt-chipline"><span class="ochip"><svg><use href="#ic-check"/></svg>Autopilot</span></div>
+      <div class="bt-btn" style="margin-top:16px">Schedule</div>
+    </div>
+  </div>
+
+  <!-- Backlinks -->
+  <div class="bt-card bot" style="left:80px">
+    <h3>Backlinks</h3>
+    <div class="bt-ui links">
+      <div class="bt-lab"><span class="bt-cap">Credits</span><span class="ochip"><svg><use href="#ic-check"/></svg>Paid plans</span></div>
+      <div class="bt-opts three">
+        <span class="bt-opt bt-act">Get links</span><span class="bt-opt">Give links</span><span class="bt-opt">Overview</span>
+      </div>
+      <div class="bt-sp"></div>
+      <span class="bt-cap">Pages you want links to</span>
+      <div class="bt-opts pages">
+        <span class="bt-opt bt-act">/blog/usage-based-pricing</span><span class="bt-opt">/pricing</span><span class="bt-opt">/blog/value-metric</span>
+      </div>
+      <div class="bt-credit">Credits this month<b>30</b></div>
+      <div class="bt-btn">Get links</div>
+    </div>
+  </div>
+
+  <!-- Reddit -->
+  <div class="bt-card bot" style="left:824px">
+    <h3>Reddit</h3>
+    <div class="bt-ui rd">
+      <div class="bt-rh">
+        <span class="app reddit"><svg><use href="#lg-reddit"/></svg></span>
+        <div><span class="bt-cap">Suggested reply</span><b>r/SaaS · How do you price an API product?</b></div>
+        <span class="ochip"><svg><use href="#ic-check"/></svg>You post it</span>
+      </div>
+      <div class="bt-rseg"><span class="bt-act">Opportunities</span><span class="off">Mentions</span></div>
+      <div class="bt-reply">We moved to per-call pricing last year. What mattered most was a small base fee, so revenue didn’t swing month to month.</div>
+      <div class="bt-btn">Copy reply</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

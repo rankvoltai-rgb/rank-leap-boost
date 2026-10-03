@@ -1,0 +1,174 @@
+<!doctype html>
+<!-- 29 · Publish to Framer, Webflow & more. After Thenty's "Add sign up pages,
+     login & more!": the left half flat brand blue with a three-line caps
+     headline, the right half a faded Framer editor cropped by the edges, and
+     the Rankbox panel in front, open on Integrations: six pastel tiles, each a
+     tiny connect chip in the platform's own colour. The cursor is on Framer's
+     Connect. The publishing add-ons are not live yet (addonLive is false);
+     the user has authorised marketing them as shipped on /integrations. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x3" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<script src="../kit/kit.js"></script>
+<style>
+  html, body { background: #1877f2; }
+  .canvas { background: radial-gradient(900px 700px at 22% 46%, #2581f6 0%, rgba(37, 129, 246, 0) 70%), #1877f2; }
+  .grain { --grain: 0.07; }
+
+  /* ---- headline, vertically centred on the left half */
+  .i-hl { position: absolute; left: 72px; top: 478px; font-size: 78px; line-height: 79px; color: #fff; white-space: nowrap; }
+
+  /* ---- the editor behind: light and a little washed out */
+  .i-ed.fx { left: 928px; top: 69px; width: 760px; height: 1200px; border-radius: 13px 0 0 0; box-shadow: 0 0 0 1px rgba(12, 16, 24, 0.04), 0 40px 90px -30px rgba(2, 24, 80, 0.45); }
+  .i-ed .fx-bar { height: 94px; gap: 19px; padding: 0 0 0 20px; font-size: 19px; color: #8b9097; border-bottom: 1.5px solid #ececec; }
+  .i-ed .fx-menu { height: 48px; padding: 0 12px 0 16px; border-radius: 12px; gap: 8px; box-shadow: 0 4px 12px -4px rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.04); }
+  .i-ed .fx-menu svg { width: 23px; height: 23px; color: #2a2e36; }
+  .i-ed .fx-menu svg + svg { width: 18px; height: 18px; color: #9aa0a8; }
+  .i-ed .fx-tool { gap: 11px; font-weight: 500; }
+  .i-ed .fx-tool > svg { width: 28px; height: 28px; color: #8f949b; }
+  .i-ed .fx-left { --fx-left: 400px; top: 94px; padding: 24px 24px; background: #fafafa; border-right: 1.5px solid #ececec; }
+  .i-ed .fx-tabs { background: #f0f0f1; }
+  .i-ed .fx-tabs > span { height: 48px; font-size: 20px; color: #b2b6bc; }
+  .i-ed .fx-tabs > span.on { color: #8b9097; box-shadow: 0 2px 6px -2px rgba(0, 0, 0, 0.1); }
+  .i-ed .fx-h { margin: 0 8px; position: absolute; left: 24px; right: 24px; font-size: 20px; color: #a3a7ad; }
+  .i-ed .fx-h svg { width: 22px; height: 22px; color: #6b7078; }
+  .i-ed .fx-row { position: absolute; left: 24px; right: 24px; height: 46px; gap: 14px; padding: 0 16px; font-size: 20px; color: #6f747c; }
+  .i-ed .fx-row svg { width: 22px; height: 22px; color: #9a9fa6; }
+  .i-ed .fx-row.on { background: #eef0f2; }
+  .i-ed .fx-canvas { --fx-left: 400px; top: 94px; background: #ececec; }
+  .i-bp { position: absolute; left: 36px; top: 39px; width: 600px; height: 58px; display: flex; align-items: center; gap: 14px; padding: 0 16px; border-radius: 12px; background: #e2e2e3; font-size: 22px; font-weight: 500; color: #9a9ea5; white-space: nowrap; }
+  .i-bp i { width: 32px; height: 32px; border-radius: 8px; background: #a9adb3; display: grid; place-items: center; color: #fff; }
+  .i-bp i svg { width: 16px; height: 16px; }
+  .i-bp b { font-weight: 500; margin-left: 10px; }
+
+  .i-page { position: absolute; left: 36px; top: 117px; width: 640px; height: 1100px; background: #fff; padding: 46px 0 0 28px; }
+  .i-page .bl-logo { font-size: 23px; }
+  .i-page h3 { margin-top: 150px; font-size: 26.5px; line-height: 0.98; width: 210px; color: #0c1018; }
+  .i-page .meta { margin-top: 18px; font-size: 19px; font-weight: 500; color: #7d828c; letter-spacing: -0.01em; white-space: nowrap; }
+  .i-page p { margin-top: 30px; width: 520px; font-size: 18.5px; line-height: 1.6; font-weight: 500; color: #4b5060; letter-spacing: -0.01em; }
+  .i-page p + p { margin-top: 18px; }
+
+  /* ---- the Rankbox panel */
+  .i-pan {
+    position: absolute; left: 850px; top: 160px; width: 400px; height: 912px; z-index: 5;
+    border-radius: 24px; background: #fff; color: #0c1018;
+    box-shadow: 0 0 0 1px rgba(12, 16, 24, 0.05), 0 40px 90px -20px rgba(2, 20, 70, 0.45), 0 12px 30px -12px rgba(2, 20, 70, 0.25);
+  }
+  .i-head { position: absolute; left: 22px; right: 22px; top: 28px; display: flex; align-items: center; }
+  .i-head .wm { font-size: 21px; color: #0c1018; }
+  .i-head .wm svg { color: var(--blue); }
+  .i-head .i-x { margin-left: auto; width: 22px; height: 22px; color: #8a8f99; }
+  .i-back { position: absolute; left: 22px; top: 90px; display: flex; align-items: center; gap: 8px; font-size: 17px; font-weight: 500; color: #6b707a; }
+  .i-back svg { width: 18px; height: 18px; }
+  .i-title { position: absolute; left: 22px; top: 126px; font-size: 38px; color: #0c1018; }
+  .i-search { position: absolute; left: 20px; right: 20px; top: 184px; height: 48px; display: flex; align-items: center; gap: 11px; padding: 0 15px; border-radius: 12px; background: #f5f6f8; box-shadow: inset 0 0 0 1.5px #eef0f2; font-size: 17px; font-weight: 500; color: #9ea3ac; }
+  .i-search svg { width: 20px; height: 20px; color: #7a808a; }
+
+  .i-tiles { position: absolute; left: 20px; top: 252px; width: 360px; display: grid; grid-template-columns: 175px 175px; grid-auto-rows: 180px; gap: 10px; }
+  .i-t { position: relative; border-radius: 12px; background: var(--tb); box-shadow: inset 0 0 0 1px rgba(12, 16, 24, 0.03); }
+  .i-chip { position: absolute; left: 28px; top: 30px; width: 119px; height: 38px; display: flex; align-items: center; gap: 9px; padding: 0 8px; border-radius: 8px; background: #fff; box-shadow: 0 2px 6px -2px rgba(12, 16, 24, 0.14), 0 0 0 1px rgba(12, 16, 24, 0.03); }
+  .i-chip .app { --s: 24px; --r: 6px; }
+  .i-chip .app.square { box-shadow: inset 0 0 0 1.5px #dfe2e6; }
+  .i-chip .app.i-api { --bg: #e8f1ff; --fg: #1877f2; --g: 62%; }
+  .i-chip u { display: block; flex: 1; height: 6px; border-radius: 999px; background: #e6e8ec; text-decoration: none; }
+  .i-chip u + u { flex: none; width: 14px; }
+  .i-go { position: absolute; left: 28px; top: 75px; width: 119px; height: 37px; border-radius: 9px; background: var(--tc); color: #fff; display: grid; place-items: center; font-size: 15px; font-weight: 600; letter-spacing: -0.01em; box-shadow: 0 6px 12px -6px var(--tc), inset 0 1px 0 rgba(255, 255, 255, 0.16); }
+  .i-name { position: absolute; left: 0; right: 0; top: 131px; text-align: center; font-size: 16px; font-weight: 600; letter-spacing: -0.01em; color: var(--tc); }
+
+  .i-tabs { position: absolute; left: 20px; right: 20px; top: 828px; height: 62px; display: flex; align-items: center; justify-content: space-around; padding: 0 8px; border-radius: 16px; background: #fbfbfc; box-shadow: inset 0 0 0 1.5px #e9ebee, 0 4px 10px -6px rgba(12, 16, 24, 0.2); }
+  .i-tabs svg { width: 27px; height: 27px; color: #50555f; }
+  .i-tabs svg.on { color: var(--blue); }
+
+  .i-cur { --cs: 54px; }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="grain"></div>
+
+  <h1 class="i-hl hl-caps">Publish to<br />Framer, Webflow<br />&amp; more!</h1>
+
+  <!-- the Framer editor, behind -->
+  <div class="fx i-ed">
+    <div class="fx-bar">
+      <span class="fx-menu"><svg><use href="#lg-framer"/></svg><svg><use href="#ic-chev-down"/></svg></span>
+      <span class="fx-tool"><svg><use href="#ic-insert"/></svg>Insert</span>
+      <span class="fx-tool"><svg><use href="#ic-layout"/></svg>Layout</span>
+      <span class="fx-tool"><svg><use href="#ic-type"/></svg>Text</span>
+      <span class="fx-tool"><svg><use href="#ic-vector"/></svg>Vector</span>
+      <span class="fx-tool"><svg><use href="#ic-cms"/></svg>CMS</span>
+    </div>
+    <div class="fx-left">
+      <div class="fx-tabs"><span class="on">Pages</span><span>Layers</span><span>Assets</span></div>
+      <div class="fx-h" style="top:120px">Design<svg><use href="#ic-plus"/></svg></div>
+      <div class="fx-h" style="top:190px">Pages<svg><use href="#ic-plus"/></svg></div>
+      <div class="fx-row" style="top:240px"><svg><use href="#ic-home"/></svg>Home</div>
+      <div class="fx-row" style="top:852px"><svg><use href="#ic-doc"/></svg>/blog</div>
+      <div class="fx-row on" style="top:900px"><svg><use href="#ic-doc"/></svg>/blog/:slug</div>
+      <div class="fx-row" style="top:948px"><svg><use href="#ic-doc"/></svg>/pricing</div>
+      <div class="fx-row" style="top:996px"><svg><use href="#ic-doc"/></svg>/changelog</div>
+    </div>
+    <div class="fx-canvas">
+      <div class="i-bp"><i><svg><use href="#ic-play"/></svg></i>Desktop<b>1200</b></div>
+      <div class="i-page">
+        <span class="bl-logo"><i></i>Brightloop</span>
+        <h3 class="hl-caps">Usage-based pricing, explained</h3>
+        <div class="meta">8 min read · Pricing</div>
+        <p>Pick one unit that grows with the value a customer gets, like API calls or seats, and meter it from day one.</p>
+        <p>Bill in arrears, so customers pay for what they used.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- the Rankbox panel, in front -->
+  <div class="i-pan">
+    <div class="i-head">
+      <span class="wm caps"><svg><use href="#lg-rankbox"/></svg>Rankbox</span>
+      <svg class="i-x"><use href="#ic-x"/></svg>
+    </div>
+    <div class="i-back"><svg><use href="#ic-back"/></svg>Back</div>
+    <div class="i-title hl-caps">Integrations</div>
+    <div class="i-search"><svg><use href="#ic-search"/></svg>Search platforms…</div>
+
+    <div class="i-tiles">
+      <div class="i-t" style="--tb:#e6f4ff;--tc:#0099ff">
+        <div class="i-chip"><span class="app framer"><svg><use href="#lg-framer"/></svg></span><u></u><u></u></div>
+        <div class="i-go">Connect</div><div class="i-name">Framer</div>
+      </div>
+      <div class="i-t" style="--tb:#e7f0ff;--tc:#146ef5">
+        <div class="i-chip"><span class="app webflow"><svg><use href="#lg-webflow"/></svg></span><u></u><u></u></div>
+        <div class="i-go">Connect</div><div class="i-name">Webflow</div>
+      </div>
+      <div class="i-t" style="--tb:#ebedfd;--tc:#3858e9">
+        <div class="i-chip"><span class="app wordpress"><svg><use href="#lg-wordpress"/></svg></span><u></u><u></u></div>
+        <div class="i-go">Connect</div><div class="i-name">WordPress</div>
+      </div>
+      <div class="i-t" style="--tb:#ebf4e6;--tc:#5e8e3e">
+        <div class="i-chip"><span class="app shopify"><svg><use href="#lg-shopify"/></svg></span><u></u><u></u></div>
+        <div class="i-go">Connect</div><div class="i-name">Shopify</div>
+      </div>
+      <div class="i-t" style="--tb:#eaf1ff;--tc:#006aff">
+        <div class="i-chip"><span class="app square"><svg><use href="#lg-square"/></svg></span><u></u><u></u></div>
+        <div class="i-go">Connect</div><div class="i-name">Square</div>
+      </div>
+      <div class="i-t" style="--tb:#e4f2ff;--tc:#1877f2">
+        <div class="i-chip"><span class="app i-api"><svg><use href="#ic-code"/></svg></span><u></u><u></u></div>
+        <div class="i-go">Connect</div><div class="i-name">API &amp; MCP</div>
+      </div>
+    </div>
+
+    <div class="i-tabs">
+      <svg><use href="#rb-pulse"/></svg>
+      <svg><use href="#rb-article"/></svg>
+      <svg><use href="#rb-calendar"/></svg>
+      <svg class="on"><use href="#rb-connect"/></svg>
+      <svg><use href="#rb-controls"/></svg>
+    </div>
+  </div>
+
+  <svg class="cur i-cur" style="left:1010px;top:527px"><use href="#ic-cursor"/></svg>
+</div>
+</body>
+</html>

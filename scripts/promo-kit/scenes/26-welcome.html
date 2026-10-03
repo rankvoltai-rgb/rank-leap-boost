@@ -1,0 +1,188 @@
+<!doctype html>
+<!-- 26 · Welcome to Rankbox. After Link Checker's welcome screen: one dark
+     plugin panel dead centre on a grainy two-tone wave, pale at the top left
+     and brand blue rising from the lower right. The panel is the Framer
+     plugin's first screen, in its own words: sync your finished articles into
+     this project's CMS. The plugin is built but not yet approved by Framer. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x3" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<script src="../kit/kit.js"></script>
+<style>
+  html, body { background: #f4f8ff; }
+  .canvas { background: #f4f8ff; }
+
+  /* ---- the field: a soft blue mound, dithered, then heavy overlay grain */
+  .w-field { position: absolute; left: 0; top: 0; width: 1600px; height: 1200px; z-index: 0; }
+  .w-grain { position: absolute; left: 0; top: 0; width: 1600px; height: 1200px; z-index: 1; mix-blend-mode: overlay; opacity: 0.62; pointer-events: none; }
+
+  /* ---- the panel */
+  .w-panel {
+    position: absolute; left: 503px; top: 175px; width: 594px; height: 850px; z-index: 2;
+    border-radius: 36px;
+    background: #141516;
+    color: #fff;
+  }
+  .w-head { position: absolute; left: 26px; top: 27px; right: 26px; height: 30px; display: flex; align-items: center; gap: 19px; }
+  .w-head .app { --s: 30px; --r: 8px; }
+  .w-head b { font-size: 22px; font-weight: 600; letter-spacing: -0.015em; color: #fff; }
+  .w-x { position: absolute; left: 551px; top: 32px; width: 21px; height: 21px; color: #92949b; }
+
+  .w-art { position: absolute; left: 143px; top: 120px; width: 300px; height: 300px; }
+
+  .w-title { position: absolute; left: 0; right: 0; top: 464px; text-align: center; font-size: 40px; font-weight: 700; letter-spacing: -0.03em; line-height: 1; color: #fff; }
+  .w-copy { position: absolute; left: 28px; right: 28px; text-align: center; font-size: 25px; line-height: 36px; font-weight: 500; letter-spacing: -0.012em; color: #cbcdd2; }
+  .w-copy.p1 { top: 523px; }
+  .w-copy.p2 { top: 621px; }
+  .w-rule { position: absolute; left: 25px; right: 25px; top: 746px; height: 1.5px; background: #26282b; }
+  .w-btn {
+    position: absolute; left: 25px; right: 25px; top: 773px; height: 52px;
+    border-radius: 11px;
+    background: #166fe5;
+    display: grid; place-items: center;
+    font-size: 21px; font-weight: 600; letter-spacing: -0.01em; color: #fff;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <!-- Field. Shapes are drawn past the canvas so the dither never samples
+       empty space at the edges. -->
+  <svg class="w-field" viewBox="0 0 1600 1200" aria-hidden="true">
+    <defs>
+      <filter id="w-blur-xl" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="120" /></filter>
+      <filter id="w-blur-lg" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="60" /></filter>
+      <filter id="w-blur-sm" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="28" /></filter>
+      <!-- per-pixel jitter: turns every soft edge into a spray of specks -->
+      <filter id="w-dither" filterUnits="userSpaceOnUse" x="-150" y="-150" width="1900" height="1500" color-interpolation-filters="sRGB">
+        <feTurbulence type="fractalNoise" baseFrequency="0.42" numOctaves="3" seed="7" result="n" />
+        <feDisplacementMap in="SourceGraphic" in2="n" scale="110" xChannelSelector="R" yChannelSelector="G" />
+      </filter>
+      <clipPath id="w-mound-clip"><path id="w-mound" d="M-200 900 C 120 880 360 810 540 670 C 720 530 880 340 1080 258 C 1220 204 1320 142 1420 140 C 1520 138 1600 180 1800 230 L 1800 1400 L -200 1400 Z" /></clipPath>
+    </defs>
+    <g filter="url(#w-dither)">
+      <rect x="-200" y="-200" width="2000" height="1600" fill="#f4f8ff" />
+      <!-- a broad sky haze rising off the wave on the left -->
+      <ellipse cx="40" cy="1010" rx="820" ry="290" fill="#5d9fff" filter="url(#w-blur-xl)" />
+      <g filter="url(#w-blur-sm)">
+        <use href="#w-mound" fill="#2a7af4" />
+        <g clip-path="url(#w-mound-clip)">
+          <!-- a light lip right at the edge, then a saturated band under it -->
+          <use href="#w-mound" fill="none" stroke="#1456e2" stroke-width="230" filter="url(#w-blur-lg)" />
+          <use href="#w-mound" fill="none" stroke="#86baff" stroke-width="120" filter="url(#w-blur-sm)" />
+          <!-- lighter water toward the right edge -->
+          <ellipse cx="1660" cy="600" rx="260" ry="430" fill="#5aa0ff" filter="url(#w-blur-lg)" />
+          <!-- deep blue pooling bottom right and bottom left -->
+          <ellipse cx="1240" cy="1290" rx="760" ry="250" fill="#0b4fd0" filter="url(#w-blur-lg)" />
+          <ellipse cx="120" cy="1150" rx="560" ry="210" fill="#0d52d6" filter="url(#w-blur-lg)" />
+        </g>
+      </g>
+    </g>
+  </svg>
+
+  <svg class="w-grain" viewBox="0 0 1600 1200" aria-hidden="true">
+    <filter id="w-noise" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.4" numOctaves="2" seed="3" stitchTiles="stitch" />
+      <feColorMatrix type="matrix" values="1 0 0 0 0  1 0 0 0 0  1 0 0 0 0  0 0 0 0 1" />
+      <feComponentTransfer>
+        <feFuncR type="linear" slope="3" intercept="-1" />
+        <feFuncG type="linear" slope="3" intercept="-1" />
+        <feFuncB type="linear" slope="3" intercept="-1" />
+      </feComponentTransfer>
+    </filter>
+    <rect width="1600" height="1200" filter="url(#w-noise)" />
+  </svg>
+
+  <div class="w-panel">
+    <div class="w-head">
+      <span class="app rankbox"><svg><use href="#lg-rankbox"/></svg></span>
+      <b>Rankbox</b>
+    </div>
+    <svg class="w-x"><use href="#ic-x"/></svg>
+
+    <!-- Hand-drawn: an article in a browser window, synced into a CMS. -->
+    <svg class="w-art" viewBox="0 0 300 300" aria-hidden="true">
+      <defs>
+        <filter id="w-wobble" x="-5%" y="-5%" width="110%" height="110%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.045" numOctaves="2" seed="9" result="t" />
+          <feDisplacementMap in="SourceGraphic" in2="t" scale="4.2" xChannelSelector="R" yChannelSelector="G" />
+        </filter>
+      </defs>
+      <g filter="url(#w-wobble)" stroke-linecap="round" stroke-linejoin="round">
+        <!-- window, with a pale offset edge for thickness -->
+        <rect x="22" y="22" width="250" height="210" rx="10" fill="#ffffff" />
+        <path d="M265 56 V 225 H 30" fill="none" stroke="#c4d9f7" stroke-width="8" />
+        <rect x="26" y="24" width="248" height="28" rx="8" fill="#1877f2" />
+        <rect x="22" y="22" width="250" height="210" rx="10" fill="none" stroke="#111" stroke-width="3.4" />
+        <path d="M22.5 50 H 271.5" stroke="#111" stroke-width="3.2" />
+        <circle cx="40" cy="36" r="5.6" fill="#fff" stroke="#111" stroke-width="2.8" />
+        <circle cx="57" cy="36" r="5.6" fill="#fff" stroke="#111" stroke-width="2.8" />
+        <circle cx="237" cy="36" r="5.6" fill="#fff" stroke="#111" stroke-width="2.8" />
+        <circle cx="254" cy="36" r="5.6" fill="#fff" stroke="#111" stroke-width="2.8" />
+        <rect x="35" y="60" width="13" height="10" rx="2" fill="none" stroke="#111" stroke-width="2.4" />
+
+        <!-- the article: cover, title, body lines -->
+        <rect x="39" y="81" width="74" height="54" rx="3" fill="#1877f2" />
+        <rect x="35" y="78" width="74" height="54" rx="3" fill="none" stroke="#111" stroke-width="3.2" />
+        <circle cx="54" cy="96" r="6.5" fill="#fff" stroke="#111" stroke-width="2.6" />
+        <path d="M38 128 L 62 108 L 77 120 L 88 111 L 106 128" fill="none" stroke="#111" stroke-width="2.8" />
+        <rect x="129" y="81" width="66" height="22" rx="3" fill="#9cc8ff" />
+        <rect x="126" y="78" width="66" height="22" rx="3" fill="none" stroke="#111" stroke-width="3" />
+        <rect x="207" y="81" width="54" height="54" rx="3" fill="#1877f2" />
+        <rect x="204" y="78" width="54" height="54" rx="3" fill="none" stroke="#111" stroke-width="3.2" />
+        <path d="M126 116 H 186" stroke="#111" stroke-width="3" />
+        <path d="M126 128 H 172" stroke="#111" stroke-width="3" />
+        <rect x="39" y="147" width="44" height="18" rx="3" fill="#9cc8ff" />
+        <rect x="36" y="145" width="44" height="18" rx="3" fill="none" stroke="#111" stroke-width="2.8" />
+        <path d="M36 182 H 92" stroke="#111" stroke-width="3" />
+        <path d="M36 196 H 84" stroke="#111" stroke-width="3" />
+        <path d="M214 160 H 258" stroke="#111" stroke-width="3" />
+        <path d="M222 174 H 258" stroke="#111" stroke-width="3" />
+
+        <!-- the CMS: a database trailing off the corner, like a handle -->
+        <path d="M216 222 V 272 C 216 284 284 284 284 272 V 222" fill="#cfe2ff" />
+        <path d="M219 247 C 223 257 280 257 284 247" fill="none" stroke="#9cc8ff" stroke-width="6" />
+        <path d="M213 219 V 270 C 213 282 281 282 281 270 V 219" fill="none" stroke="#111" stroke-width="3.4" />
+        <path d="M213 245 C 213 256 281 256 281 245" fill="none" stroke="#111" stroke-width="3.2" />
+        <ellipse cx="251" cy="222" rx="34" ry="11" fill="#1877f2" />
+        <ellipse cx="247" cy="219" rx="34" ry="11" fill="none" stroke="#111" stroke-width="3.4" />
+
+        <!-- the sync badge, the hero, over the article: a lens-like ring,
+             a white band, then the brand disc -->
+        <circle cx="158" cy="166" r="64" fill="#4d96ff" />
+        <circle cx="154" cy="162" r="64" fill="none" stroke="#111" stroke-width="3.4" />
+        <circle cx="156" cy="164" r="53" fill="#ffffff" />
+        <circle cx="154" cy="162" r="53" fill="none" stroke="#111" stroke-width="3" />
+        <path d="M112 150 A 44 44 0 0 1 150 117" fill="none" stroke="#dbe8fb" stroke-width="5" />
+        <circle cx="159" cy="167" r="44" fill="#1877f2" />
+        <circle cx="154" cy="162" r="44" fill="none" stroke="#111" stroke-width="3.2" />
+        <!-- two arrows chasing each other: dark under-stroke, white on top -->
+        <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <g stroke="#111" stroke-width="13.5">
+            <path d="M128.4 157.5 A 26 26 0 0 1 176.5 149" />
+            <path d="M183.6 141.6 L 179.5 154.2 L 166.9 151.4" />
+            <path d="M179.6 166.5 A 26 26 0 0 1 131.5 175" />
+            <path d="M124.4 182.4 L 128.5 169.8 L 141.1 172.6" />
+          </g>
+          <g stroke="#fff" stroke-width="7">
+            <path d="M128.4 157.5 A 26 26 0 0 1 176.5 149" />
+            <path d="M183.6 141.6 L 179.5 154.2 L 166.9 151.4" />
+            <path d="M179.6 166.5 A 26 26 0 0 1 131.5 175" />
+            <path d="M124.4 182.4 L 128.5 169.8 L 141.1 172.6" />
+          </g>
+        </g>
+      </g>
+    </svg>
+
+    <div class="w-title">Welcome to Rankbox</div>
+    <p class="w-copy p1">Sync your finished Rankbox articles into this project&rsquo;s CMS.</p>
+    <p class="w-copy p2">Paste your API key and click &ldquo;Connect&rdquo;<br />to start syncing.</p>
+    <div class="w-rule"></div>
+    <div class="w-btn">Connect</div>
+  </div>
+</div>
+</body>
+</html>

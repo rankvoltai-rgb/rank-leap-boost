@@ -1,0 +1,18 @@
+<!doctype html>
+<!-- QA sheet: every non-logo glyph in the sprite. Open after touching kit.js. -->
+<html lang="en"><head><meta charset="utf-8" />
+<link rel="stylesheet" href="./kit.css" />
+<script src="./kit.js"></script>
+<style>
+  .canvas { background:#fff; padding:40px; display:grid; grid-template-columns:repeat(10,1fr); gap:26px 18px; align-content:start; }
+  .c { display:flex; flex-direction:column; align-items:center; gap:10px; font-size:15px; color:#555; }
+  .c svg { width:56px; height:56px; color:#0c1018; }
+</style></head>
+<body><div class="canvas" id="c"></div>
+<script>
+  addEventListener("DOMContentLoaded", () => {
+    const ids = [...document.querySelectorAll("symbol")].map((s) => s.id).filter((i) => !i.startsWith("lg-"));
+    const c = document.getElementById("c");
+    for (const id of ids) c.insertAdjacentHTML("beforeend", `<div class="c"><svg><use href="#${id}"/></svg>${id}</div>`);
+  });
+</script></body></html>

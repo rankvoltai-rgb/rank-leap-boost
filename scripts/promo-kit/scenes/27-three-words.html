@@ -1,0 +1,138 @@
+<!doctype html>
+<!-- 27 · Research. Writing. Publishing. After Thenty's "Payments.
+     Authentication. Protected pages.": a grey field warming into brand blue,
+     three stacked words, the start screen bleeding off the bottom, and the
+     two things around it: the site it writes for, and the landing page's own
+     URL form with the cursor on its button. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x3" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<script src="../kit/kit.js"></script>
+<style>
+  .canvas {
+    background: linear-gradient(180deg, #efeff0 0%, #efeff0 44%, #c9dcf7 60%, #6aa6fa 78%, #1d76f2 100%);
+  }
+  .grain { --grain: 0.12; }
+
+  .brand { position: absolute; left: 0; right: 0; top: 62px; display: flex; justify-content: center; }
+  .brand .wm { font-size: 62px; color: #0c1018; }
+  .brand .wm svg { color: var(--blue); }
+
+  h1 { position: absolute; left: 0; right: 0; top: 166px; text-align: center; font-size: 102px; line-height: 0.9; color: #0c1018; }
+
+  /* the start screen */
+  .start { position: absolute; left: 392px; top: 528px; width: 816px; height: 900px; border-radius: 44px; }
+  .start .lp-head { height: 128px; padding: 0 44px; }
+  .start .lp-head .wm { font-size: 36px; color: #0c1018; }
+  .start .lp-head .wm svg { color: var(--blue); }
+  .start .lp-head .x { width: 34px; height: 34px; }
+  .start h2 { margin-top: 70px; text-align: center; font-size: 50px; line-height: 0.98; color: #0c1018; }
+  .start .choose { margin-top: 26px; text-align: center; font-size: 33px; font-weight: 500; color: #6b707a; letter-spacing: -0.02em; }
+  .ideas {
+    position: relative;
+    margin: 52px 36px 0;
+    height: 300px;
+    padding: 64px 0 0 44px;
+    border-radius: 26px;
+    background: linear-gradient(90deg, #f6f7f9 50%, #eef4ff 100%);
+    box-shadow: inset 0 0 0 2px #e7e9ee;
+    overflow: hidden;
+  }
+  .ideas b { display: block; font-size: 38px; font-weight: 800; letter-spacing: -0.03em; text-transform: uppercase; -webkit-text-stroke: 0.6px currentColor; color: #0c1018; }
+  .ideas p { margin-top: 14px; width: 420px; font-size: 28px; line-height: 1.32; font-weight: 500; color: #6b707a; letter-spacing: -0.015em; }
+  /* a crop of the Articles screen, Ideas tab */
+  .peek { position: absolute; left: 500px; top: 44px; width: 330px; height: 300px; border-radius: 14px; background: #fff; box-shadow: 0 10px 30px -12px rgba(10, 30, 70, 0.3), 0 0 0 1px #e7e9ee; padding: 18px 18px 0; }
+  .peek .t { font-size: 17px; font-weight: 700; color: #0c1018; letter-spacing: -0.01em; }
+  .peek .tabs { display: flex; gap: 14px; margin-top: 10px; padding-bottom: 8px; border-bottom: 1.5px solid #eceef1; font-size: 13px; font-weight: 600; color: #9aa0ab; }
+  .peek .tabs .on { color: var(--blue); box-shadow: 0 9.5px 0 -7.5px var(--blue); }
+  .peek .r { display: flex; align-items: center; gap: 10px; height: 40px; border-bottom: 1px solid #f0f1f4; font-size: 13px; font-weight: 600; color: #262a31; white-space: nowrap; }
+  .peek .r i { width: 8px; height: 8px; border-radius: 50%; background: #c7ccd5; flex: none; }
+  .peek .r em { margin-left: auto; font-style: normal; font-size: 11px; font-weight: 700; color: var(--blue); background: #e8f1ff; padding: 3px 8px; border-radius: 999px; }
+
+  /* the site it writes for, tucked behind the start screen */
+  .site {
+    position: absolute; left: 196px; top: 690px; width: 300px; height: 230px;
+    padding: 44px 0 0 40px;
+    border-radius: 34px;
+    background: #fff;
+    transform: rotate(-4deg);
+    box-shadow: 0 30px 60px -24px rgba(10, 30, 70, 0.35), 0 0 0 1.5px rgba(12, 16, 24, 0.04);
+  }
+  .site .av { width: 92px; height: 92px; border-radius: 50%; background: #fff3e6; display: grid; place-items: center; margin-left: 52px; }
+  .site .av i { width: 52px; height: 52px; border-radius: 50%; border: 12px solid #ff8a1f; display: block; }
+  .site b { display: block; margin-top: 18px; font-size: 32px; font-weight: 800; letter-spacing: -0.035em; color: #0c1018; }
+  .site span { display: block; margin-top: 4px; font-size: 22px; font-weight: 500; color: #8a8f99; }
+  .score {
+    position: absolute; left: 178px; top: 668px;
+    height: 54px; padding: 0 20px;
+    display: flex; align-items: center; gap: 10px;
+    border-radius: 999px;
+    background: #22c55e;
+    color: #fff;
+    font-size: 25px; font-weight: 800; letter-spacing: -0.01em;
+    transform: rotate(-4deg);
+    box-shadow: 0 10px 20px -8px rgba(20, 140, 70, 0.5);
+    z-index: 3;
+  }
+
+  /* the landing page's URL form, in front */
+  .form {
+    position: absolute; left: 1054px; top: 846px; width: 284px; height: 232px;
+    padding: 26px 22px;
+    border-radius: 30px;
+    background: #fff;
+    transform: rotate(-5deg);
+    box-shadow: 0 34px 60px -24px rgba(10, 30, 70, 0.45), 0 0 0 1.5px rgba(12, 16, 24, 0.04);
+    z-index: 4;
+  }
+  .form .in { display: flex; align-items: center; gap: 12px; height: 80px; padding: 0 20px; border-radius: 18px; background: #eef0f3; font-size: 25px; font-weight: 600; color: #262a31; letter-spacing: -0.01em; }
+  .form .in svg { width: 30px; height: 30px; color: #7a808a; flex: none; }
+  .form .go { margin-top: 18px; height: 82px; border-radius: 18px; background: var(--blue); color: #fff; display: grid; place-items: center; font-size: 28px; font-weight: 700; letter-spacing: -0.02em; box-shadow: 0 10px 22px -10px rgba(22, 111, 229, 0.7); }
+  .form .cur { left: 262px; top: 196px; --cs: 92px; }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="grain"></div>
+
+  <div class="brand"><span class="wm caps"><svg><use href="#lg-rankbox"/></svg>Rankbox</span></div>
+  <h1 class="hl-caps">Research.<br />Writing.<br />Publishing.</h1>
+
+  <div class="site">
+    <div class="av"><i></i></div>
+    <b>Brightloop</b>
+    <span>brightloop.app</span>
+  </div>
+  <div class="score">SEO 94</div>
+
+  <div class="lp start">
+    <div class="lp-head">
+      <span class="wm caps"><svg><use href="#lg-rankbox"/></svg>Rankbox</span>
+      <svg class="x"><use href="#ic-x"/></svg>
+    </div>
+    <h2 class="hl-caps">What will you<br />rank for today?</h2>
+    <p class="choose">Choose how to get started</p>
+    <div class="ideas">
+      <b>Ideas</b>
+      <p>Start from the questions buyers ask AI about your market</p>
+      <div class="peek">
+        <div class="t">Articles</div>
+        <div class="tabs"><span>All</span><span class="on">Ideas</span><span>Scheduled</span><span>Published</span></div>
+        <div class="r"><i></i>Is usage-based pricing worth it?<em>Plan it</em></div>
+        <div class="r"><i></i>Stripe Billing or Chargebee?<em>Plan it</em></div>
+        <div class="r"><i></i>How do I price API calls?<em>Plan it</em></div>
+        <div class="r"><i></i>What is a good value metric?<em>Plan it</em></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form">
+    <div class="in"><svg><use href="#ic-globe"/></svg>brightloop.app</div>
+    <div class="go">Get Started Free</div>
+    <svg class="cur"><use href="#ic-cursor"/></svg>
+  </div>
+</div>
+</body>
+</html>

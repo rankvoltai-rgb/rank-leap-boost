@@ -1,0 +1,525 @@
+/*
+ * Rankbox promo kit: the shared look for app-preview, Instagram and ad images.
+ *
+ * Every scene is laid out on a 1600px-wide canvas. Only the height changes per
+ * format (4:3 = 1200, 4:5 = 2000, 1:1 = 1600, 9:16 = 2844), so panels, icons
+ * and type keep one size everywhere and a format only moves things around.
+ * render.sh shoots the canvas and scales it to each channel's pixel size.
+ */
+@font-face {
+  font-family: "Jakarta";
+  src: url("./fonts/plus-jakarta-sans-latin-wght-normal.woff2") format("woff2-variations");
+  font-weight: 200 800;
+}
+
+:root {
+  /* Brand */
+  --blue: #1877f2;
+  --blue-hi: #4b9dff;
+  --blue-deep: #0b3fa0;
+  --night: #01050f;
+
+  /* Dark product surfaces (Framer's dark theme, where the plugin lives) */
+  --panel: #161718;
+  --panel-head: #0f1011;
+  --row: #222325;
+  --row-hi: #2a2b2e;
+  --line: #2b2c2f;
+  --on-dark: #f5f6f7;
+  --on-dark-2: #9b9da4;
+  --on-dark-3: #676a72;
+
+  /* Light product surfaces (the Rankbox dashboard) */
+  --paper: #ffffff;
+  --paper-2: #f4f5f7;
+  --paper-3: #eceef1;
+  --hair: #e5e7eb;
+  --ink: #0c1018;
+  --ink-2: #5a6070;
+  --ink-3: #9aa0ac;
+
+  --green: #2fd36b;
+  --green-ink: #138a43;
+  --green-soft: #e3f8ea;
+  --violet: #a184ff;
+
+  --h: 1200px;
+}
+
+html[data-f="4x5"] { --h: 2000px; }
+html[data-f="1x1"] { --h: 1600px; }
+html[data-f="9x16"] { --h: 2844px; }
+/* LinkedIn banners: profile 1584x396 (4:1) and company cover 4200x700 (6:1). */
+html[data-f="li"] { --h: 400px; }
+html[data-f="lic"] { --h: 267px; }
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body { background: var(--night); overflow: hidden; }
+
+body {
+  font-family: "Jakarta", ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: geometricPrecision;
+  font-feature-settings: "ss01" 0;
+}
+
+.canvas {
+  position: relative;
+  width: 1600px;
+  height: var(--h);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* data-only="4x5 9x16": the element exists only in those formats. Hidden
+   everywhere else; where it shows it keeps its own display (flex, grid…). */
+html[data-f="4x3"] [data-only]:not([data-only~="4x3"]),
+html[data-f="4x5"] [data-only]:not([data-only~="4x5"]),
+html[data-f="1x1"] [data-only]:not([data-only~="1x1"]),
+html[data-f="9x16"] [data-only]:not([data-only~="9x16"]),
+html[data-f="li"] [data-only]:not([data-only~="li"]),
+html[data-f="lic"] [data-only]:not([data-only~="lic"]) { display: none !important; }
+
+.abs { position: absolute; }
+
+/* ---------------------------------------------------------------- fields */
+
+.field { position: absolute; inset: 0; z-index: -2; overflow: hidden; }
+.field .glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(var(--blur, 90px));
+}
+
+/* Film grain over every field, so gradients never band and the light reads
+   as light rather than a CSS swatch. */
+.grain {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: var(--grain, 0.16);
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='260' height='260'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 1.4 -0.2'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+/* ---------------------------------------------------------------- type */
+
+.display {
+  font-weight: 700;
+  letter-spacing: -0.052em;
+  line-height: 0.98;
+  word-spacing: 0.04em;
+  color: #fff;
+}
+.display .accent { color: var(--blue-hi); }
+
+.lockup {
+  display: inline-flex;
+  align-items: center;
+  gap: 22px;
+  color: #fff;
+  font-weight: 650;
+  font-size: 56px;
+  letter-spacing: -0.035em;
+}
+.lockup .app { --s: 72px; }
+
+/* ---------------------------------------------------------------- app tiles */
+
+.app {
+  --s: 120px;
+  --r: 23%;
+  position: relative;
+  width: var(--s);
+  height: var(--s);
+  flex: none;
+  display: grid;
+  place-items: center;
+  border-radius: var(--r);
+  background: var(--bg, #fff);
+  color: var(--fg, #fff);
+  overflow: hidden;
+}
+.app > svg, .app > img { width: var(--g, 58%); height: var(--g, 58%); display: block; }
+/* A faint top light and bottom shade, the way a real app icon is lit. */
+.app::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(180deg, rgba(255,255,255,.16), rgba(255,255,255,0) 42%, rgba(0,0,0,.06));
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.07);
+  pointer-events: none;
+}
+.app.round { --r: 50%; }
+.app.lift { box-shadow: 0 30px 60px -18px rgba(0,0,0,.55), 0 10px 20px -10px rgba(0,0,0,.35); }
+
+/* Floating tiles: tilted in 3D like objects hanging in front of the field. */
+.float {
+  position: absolute;
+  transform: perspective(1100px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) rotateZ(var(--rz, 0deg));
+  box-shadow: 0 40px 70px -20px rgba(0,0,0,.6), 0 14px 26px -12px rgba(0,0,0,.45);
+}
+
+.app.rankbox   { --bg: linear-gradient(160deg, #2f8bff, #1466e0); --fg: #fff; --g: 56%; }
+.app.chatgpt   { --bg: #0d0d0d; --fg: #fff; --g: 60%; }
+.app.claude    { --bg: #d97757; --fg: #fbf3ea; --g: 60%; }
+.app.gemini    { --bg: #fff; --g: 60%; }
+.app.google    { --bg: #fff; --g: 52%; }
+.app.perplexity{ --bg: #0f2427; --fg: #33c3d0; --g: 62%; }
+.app.copilot   { --bg: #fff; --g: 60%; }
+.app.grok      { --bg: #0d0d0d; --fg: #fff; --g: 56%; }
+.app.deepseek  { --bg: #fff; --fg: #4d6bfe; --g: 62%; }
+.app.meta      { --bg: #fff; --g: 58%; }
+.app.mistral   { --bg: #fff8ea; --g: 56%; }
+.app.reddit    { --bg: #ff4500; --fg: #fff; --g: 60%; }
+.app.framer    { --bg: #0d0d0d; --fg: #fff; --g: 52%; }
+.app.webflow   { --bg: #146ef5; --fg: #fff; --g: 60%; }
+.app.wordpress { --bg: #3858e9; --fg: #fff; --g: 62%; }
+.app.shopify   { --bg: #95bf47; --fg: #fff; --g: 58%; }
+.app.square    { --bg: #fff; --fg: #0d0d0d; --g: 50%; }
+.app.api       { --bg: #fff; --fg: #0c1018; --g: 48%; }
+/* On a dark field a black tile needs a rim to keep its edge. */
+.app.rim::after { box-shadow: inset 0 0 0 1.5px rgba(255,255,255,.14); }
+
+/* ---------------------------------------------------------------- dark panel */
+
+.dpanel {
+  position: relative;
+  background: var(--panel);
+  color: var(--on-dark);
+  border-radius: 36px;
+  overflow: hidden;
+  box-shadow:
+    inset 0 0 0 1.5px rgba(255,255,255,.07),
+    0 60px 120px -30px rgba(0,0,0,.75),
+    0 20px 40px -20px rgba(0,0,0,.5);
+}
+.dpanel .head {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  height: 104px;
+  padding: 0 36px;
+  background: var(--panel-head);
+  border-bottom: 1.5px solid var(--line);
+  font-size: 32px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+.dpanel .head .app { --s: 54px; --r: 14px; }
+.close {
+  margin-left: auto;
+  width: 30px;
+  height: 30px;
+  color: var(--on-dark-2);
+}
+.close svg { width: 100%; height: 100%; display: block; }
+
+/* ---------------------------------------------------------------- light card */
+
+.wcard {
+  position: relative;
+  background: var(--paper);
+  color: var(--ink);
+  border-radius: 36px;
+  overflow: hidden;
+  box-shadow:
+    0 0 0 1.5px rgba(255,255,255,.5),
+    0 60px 120px -30px rgba(1,10,40,.55),
+    0 20px 40px -20px rgba(1,10,40,.35);
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  height: 56px;
+  padding: 0 24px;
+  border-radius: 999px;
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+.pill.green { background: var(--green-soft); color: var(--green-ink); }
+.dot { width: 16px; height: 16px; border-radius: 50%; background: var(--green); flex: none; }
+.pill.green .dot { background: #1fb15a; }
+
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 96px;
+  border-radius: 20px;
+  background: var(--blue);
+  color: #fff;
+  font-size: 32px;
+  font-weight: 650;
+  letter-spacing: -0.015em;
+}
+
+/* ==================================================================== v2
+ * Pieces the second batch of references needs again and again. STYLE.md
+ * says when to use each; FACTS.md says what they may say.
+ * ===================================================================== */
+
+/* ------------------------------------------------------------ headlines */
+
+/* Title case, bold (Kompa, Dexter). */
+.hl-title { font-weight: 700; letter-spacing: -0.045em; line-height: 1; word-spacing: 0.03em; }
+/* UPPERCASE, heavy, tight (Thenty, FramerForms). Plus Jakarta stops at 800,
+   so a hairline stroke in the text colour carries it to a black weight. */
+.hl-caps {
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.045em;
+  line-height: 0.88;
+  word-spacing: 0.02em;
+  -webkit-text-stroke: 0.016em currentColor;
+}
+/* A logo tile set into a headline, running from the baseline to the cap
+   line the way the references set theirs. Jakarta's caps are 0.745em tall
+   (0.76em with the .hl-caps stroke), so the tile is 0.76em, lifted 0.125em. */
+.inline-tile {
+  display: inline-grid;
+  place-items: center;
+  width: 0.76em;
+  height: 0.76em;
+  margin: 0 0.12em;
+  border-radius: 0.12em;
+  vertical-align: 0.125em;
+  -webkit-text-stroke: 0;
+  background: var(--bg, #0c1018);
+  color: var(--fg, #fff);
+}
+.inline-tile > svg, .inline-tile > img { width: 0.5em; height: 0.5em; display: block; }
+
+/* ------------------------------------------------------------ wordmarks */
+
+/* The real logo: mark + "Rankbox", semibold, tight. Size it with font-size. */
+.wm { display: inline-flex; align-items: center; gap: 0.36em; font-weight: 600; letter-spacing: -0.03em; line-height: 1; white-space: nowrap; }
+.wm > svg { width: 1em; height: 1em; flex: none; }
+.wm.caps { font-weight: 800; text-transform: uppercase; letter-spacing: -0.035em; -webkit-text-stroke: 0.014em currentColor; }
+
+/* ------------------------------------------------------------ cursors */
+
+/* <svg class="cur" style="left:..;top:.."><use href="#ic-cursor"/></svg>
+   The tip of the arrow is the element's top-left corner. */
+.cur {
+  position: absolute;
+  z-index: 60;
+  width: var(--cs, 76px);
+  height: var(--cs, 76px);
+  margin: calc(var(--cs, 76px) * -0.1) 0 0 calc(var(--cs, 76px) * -0.16);
+  filter: drop-shadow(0 10px 14px rgba(0, 0, 0, 0.3));
+  pointer-events: none;
+}
+/* Labelled multiplayer cursor: <div class="mp" style="left;top"><svg><use href="#ic-mp"/></svg><b>You</b></div> */
+.mp { position: absolute; z-index: 60; }
+.mp > svg { position: absolute; left: -6px; top: -6px; width: 52px; height: 52px; color: var(--mp, var(--blue)); filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.25)); }
+.mp > b {
+  position: absolute;
+  left: 36px; top: 34px;
+  padding: 10px 24px;
+  border-radius: 999px;
+  background: var(--mp, var(--blue));
+  color: #fff;
+  font-size: 34px;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+  box-shadow: 0 10px 24px -10px rgba(10, 60, 160, 0.6);
+}
+
+/* Selection box with handles, laid over a positioned parent. */
+.sel { position: absolute; inset: var(--sel-inset, -16px); border: 3.5px solid var(--blue); pointer-events: none; z-index: 5; }
+.sel > i { position: absolute; width: 22px; height: 22px; border-radius: 50%; background: #fff; border: 3.5px solid var(--blue); }
+.sel > i:nth-child(1) { left: -13px; top: -13px; }
+.sel > i:nth-child(2) { right: -13px; top: -13px; }
+.sel > i:nth-child(3) { left: -13px; bottom: -13px; }
+.sel > i:nth-child(4) { right: -13px; bottom: -13px; }
+
+/* ------------------------------------------------------------ chips, pills */
+
+/* Speech-bubble chip with a pointer tail (Kompa). .tail-l / .tail-r picks the side. */
+.bubble {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  height: var(--bh, 92px);
+  padding: 0 38px;
+  border-radius: 999px;
+  background: var(--bb, var(--blue));
+  color: var(--bc, #fff);
+  font-size: var(--bf, 48px);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  white-space: nowrap;
+}
+.bubble::after {
+  content: "";
+  position: absolute;
+  bottom: -26px;
+  width: 44px;
+  height: 44px;
+  background: var(--bb, var(--blue));
+  clip-path: polygon(0 100%, 30% 0, 100% 42%);
+}
+.bubble.tail-l::after { left: -10px; transform: rotate(-12deg); }
+.bubble.tail-r::after { right: -12px; transform: scaleX(-1) rotate(-12deg); }
+
+/* Feature pill: white capsule, blue icon disc, Title Case label (Kompa). */
+.fpill {
+  display: inline-flex;
+  align-items: center;
+  gap: 30px;
+  height: 116px;
+  padding: 0 52px 0 20px;
+  border-radius: 999px;
+  background: #fff;
+  color: #1b1e24;
+  font-size: 40px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+  box-shadow: 0 0 0 1.5px rgba(16, 24, 40, 0.03), 0 20px 40px -20px rgba(16, 24, 40, 0.3), 0 6px 14px -8px rgba(16, 24, 40, 0.14);
+}
+.fpill .ico { width: 78px; height: 78px; flex: none; border-radius: 50%; background: var(--blue); color: #fff; display: grid; place-items: center; }
+.fpill .ico svg { width: 40px; height: 40px; }
+
+/* Outline check chip, tracked caps (Checkout Page bento). */
+.ochip {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  height: 46px;
+  padding: 0 18px;
+  border-radius: 999px;
+  border: 2px solid currentColor;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.ochip svg { width: 18px; height: 18px; }
+
+/* ------------------------------------------------------------ controls */
+
+.btn.sm { height: 66px; border-radius: 15px; font-size: 26px; }
+.btn.soft { background: #e8f1ff; color: #1561d6; }
+.btn.ghost { background: transparent; color: inherit; }
+.btn.pill { border-radius: 999px; }
+
+/* Segmented control. Light by default; .dark for dark panels. */
+.seg { display: inline-flex; padding: 5px; gap: 2px; border-radius: 14px; background: #eef0f3; }
+.seg > span { height: 54px; padding: 0 26px; display: grid; place-items: center; border-radius: 10px; font-size: 24px; font-weight: 600; color: #7b808a; white-space: nowrap; }
+.seg > span.on { background: #fff; color: var(--blue); box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.03); }
+.seg.dark { background: #26272a; }
+.seg.dark > span { color: #8e9097; }
+.seg.dark > span.on { background: #3a3b3f; color: #fff; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4); }
+
+/* Toggle switch. */
+.toggle { position: relative; width: 80px; height: 46px; flex: none; border-radius: 999px; background: #d6d9df; }
+.toggle::after { content: ""; position: absolute; left: 5px; top: 5px; width: 36px; height: 36px; border-radius: 50%; background: #fff; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.22); }
+.toggle.on { background: var(--blue); }
+.toggle.on::after { left: 39px; }
+
+/* Checkbox. */
+.chk { width: 36px; height: 36px; flex: none; border-radius: 9px; border: 2.5px solid #c9cdd4; background: #fff; display: inline-grid; place-items: center; color: #fff; }
+.chk.on { background: var(--blue); border-color: var(--blue); }
+.chk svg { width: 24px; height: 24px; }
+
+/* ------------------------------------------------------------ light plugin panel */
+
+/* Framer's light plugin window, scaled for the canvas. */
+.lp {
+  position: relative;
+  background: #fff;
+  color: var(--ink);
+  border-radius: 36px;
+  overflow: hidden;
+  box-shadow: 0 0 0 1.5px rgba(12, 16, 24, 0.05), 0 50px 100px -30px rgba(10, 30, 70, 0.4), 0 16px 36px -16px rgba(10, 30, 70, 0.22);
+}
+.lp-head { display: flex; align-items: center; gap: 18px; height: 104px; padding: 0 36px; font-size: 32px; font-weight: 600; letter-spacing: -0.02em; color: #262a31; }
+.lp-head > svg:first-child { width: 44px; height: 44px; color: var(--blue); }
+.lp-head .x { margin-left: auto; width: 30px; height: 30px; color: #8a8f99; }
+.lp-head.rule { border-bottom: 1.5px solid #eceef1; }
+.lp-body { padding: 26px 36px 36px; }
+.lp-back { display: flex; align-items: center; gap: 10px; font-size: 27px; font-weight: 500; color: #6b707a; }
+.lp-back svg { width: 26px; height: 26px; }
+.lp-search { display: flex; align-items: center; gap: 16px; height: 78px; padding: 0 24px; border-radius: 20px; background: #f4f5f7; box-shadow: inset 0 0 0 1.5px #eceef1; font-size: 28px; font-weight: 500; color: #a0a5ae; }
+.lp-search svg { width: 32px; height: 32px; color: #7a808a; }
+
+/* ------------------------------------------------------------ Framer editor */
+
+/* Light Framer editor chrome. Lay .fx-left and .fx-canvas inside .fx. */
+.fx { position: absolute; background: #fff; overflow: hidden; border-radius: 28px 0 0 0; box-shadow: 0 0 0 1.5px rgba(12, 16, 24, 0.05), 0 40px 90px -30px rgba(10, 40, 80, 0.35); }
+.fx-bar { display: flex; align-items: center; gap: 34px; height: 100px; padding: 0 24px; border-bottom: 1.5px solid #eceef0; font-size: 28px; font-weight: 500; color: #50555d; white-space: nowrap; }
+.fx-menu { display: flex; align-items: center; gap: 10px; height: 68px; padding: 0 16px; border-radius: 16px; background: #fff; color: #0c1018; box-shadow: 0 4px 14px -4px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(0, 0, 0, 0.04); }
+.fx-menu svg { width: 30px; height: 30px; }
+.fx-menu svg + svg { width: 22px; height: 22px; color: #6b707a; }
+.fx-tool { display: flex; align-items: center; gap: 12px; }
+.fx-tool > i { width: 38px; height: 38px; border-radius: 9px; background: #7a7f88; color: #fff; display: grid; place-items: center; font-style: normal; font-size: 22px; font-weight: 700; }
+.fx-tool > i svg { width: 24px; height: 24px; }
+.fx-proj { display: flex; align-items: center; gap: 12px; font-weight: 600; color: #22262d; }
+.fx-proj em { font-style: normal; font-weight: 500; color: #9aa0ab; }
+.fx-proj b { height: 38px; padding: 0 12px; border-radius: 9px; background: #e6f0ff; color: #1561d6; font-size: 20px; font-weight: 700; display: grid; place-items: center; letter-spacing: 0.02em; }
+.fx-left { position: absolute; left: 0; top: 100px; bottom: 0; width: var(--fx-left, 420px); padding: 26px 24px; border-right: 1.5px solid #eceef0; background: #fff; }
+.fx-tabs { display: flex; gap: 4px; padding: 6px; border-radius: 16px; background: #f3f4f6; }
+.fx-tabs > span { flex: 1; height: 58px; border-radius: 12px; display: grid; place-items: center; font-size: 26px; font-weight: 500; color: #a0a5ae; }
+.fx-tabs > span.on { background: #fff; color: #0c1018; box-shadow: 0 2px 8px -2px rgba(0, 0, 0, 0.15); }
+.fx-h { margin: 30px 8px 12px; display: flex; align-items: center; justify-content: space-between; font-size: 27px; font-weight: 600; color: #2a2e36; }
+.fx-row { display: flex; align-items: center; gap: 16px; height: 64px; padding: 0 16px; border-radius: 14px; font-size: 27px; font-weight: 500; color: #2a2e36; white-space: nowrap; }
+.fx-row svg { width: 28px; height: 28px; color: #6b707a; flex: none; }
+.fx-row.on { background: #f1f2f4; }
+.fx-row.sel { background: #0f8cff; color: #fff; }
+.fx-row.sel svg { color: #fff; }
+.fx-row.child { padding-left: 54px; background: #e9f3ff; border-radius: 0; }
+.fx-canvas { position: absolute; left: var(--fx-left, 420px); top: 100px; right: 0; bottom: 0; background: #f3f3f4; }
+.fx-bp { display: flex; align-items: center; gap: 12px; height: 54px; padding: 0 16px; border-radius: 10px; background: #e3edf8; color: #1f7fe0; font-size: 22px; font-weight: 600; }
+.fx-bp > i { width: 30px; height: 30px; border-radius: 7px; background: #1f8bff; display: grid; place-items: center; color: #fff; }
+.fx-bp > i svg { width: 16px; height: 16px; }
+.fx-bp .end { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+
+/* ------------------------------------------------------------ Rankbox app */
+
+/* The dashboard's sidebar, as in src/components/dashboard/Sidebar.tsx. */
+.rbside { position: absolute; top: 0; bottom: 0; left: 0; width: var(--rbside, 400px); padding: 30px 22px; background: #fbfbfc; border-right: 1.5px solid #eceef1; }
+.rbside .brand { display: flex; align-items: center; gap: 14px; padding: 6px 14px 22px; font-size: 34px; font-weight: 600; letter-spacing: -0.03em; color: var(--ink); }
+.rbside .brand svg { width: 36px; height: 36px; color: var(--blue); }
+.rbside .sec { margin: 22px 16px 12px; font-size: 17px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: #9aa0ab; }
+.rbside .it { display: flex; align-items: center; gap: 18px; height: 64px; padding: 0 16px; border-radius: 14px; font-size: 27px; font-weight: 500; color: #4b5060; }
+.rbside .it svg { width: 32px; height: 32px; color: #8a8f99; }
+.rbside .it.on { background: var(--blue); color: #fff; font-weight: 600; box-shadow: 0 1px 2px rgba(10, 30, 70, 0.2); }
+.rbside .it.on svg { color: #fff; }
+
+/* ------------------------------------------------------------ sample site */
+
+.bl-logo { display: inline-flex; align-items: center; gap: 0.32em; font-weight: 800; letter-spacing: -0.04em; color: #0c1018; white-space: nowrap; }
+.bl-logo > i { width: 0.8em; height: 0.8em; flex: none; border-radius: 50%; border: 0.19em solid #ff8a1f; display: block; }
+.bl-cover { background: linear-gradient(160deg, #ffbb46 0%, #ff8a1f 55%, #f2641a 100%); }
+
+/* ------------------------------------------------------------ fields */
+
+/* Faint grid, fading out from the centre (Checkout Page). */
+.f-grid {
+  position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, var(--gl, 0.045)) 1.5px, transparent 1.5px),
+    linear-gradient(90deg, rgba(255, 255, 255, var(--gl, 0.045)) 1.5px, transparent 1.5px);
+  background-size: var(--gs, 72px) var(--gs, 72px);
+  -webkit-mask-image: radial-gradient(70% 65% at 50% 40%, #000 30%, transparent 100%);
+          mask-image: radial-gradient(70% 65% at 50% 40%, #000 30%, transparent 100%);
+}
+/* Dot grid (Forms Plugin). */
+.f-dots {
+  position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background-image: radial-gradient(rgba(140, 175, 255, var(--dl, 0.22)) 1.8px, transparent 2.2px);
+  background-size: var(--ds, 22px) var(--ds, 22px);
+  -webkit-mask-image: radial-gradient(80% 70% at 60% 30%, #000 20%, transparent 90%);
+          mask-image: radial-gradient(80% 70% at 60% 30%, #000 20%, transparent 90%);
+}

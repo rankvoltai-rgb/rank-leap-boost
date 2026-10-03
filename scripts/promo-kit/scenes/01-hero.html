@@ -1,0 +1,205 @@
+<!doctype html>
+<!-- 01 · Hero. One big tilted panel carries the headline; the AI engines and
+     publishing platforms hang around it as app tiles. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x3 4x5 1x1 9x16" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<script src="../kit/kit.js"></script>
+<style>
+  .field { background: var(--night); }
+  /* The beam: a bright band rising from the left edge to the top-right
+     corner, with deep navy above and below it. */
+  .beam {
+    position: absolute;
+    left: -300px; top: var(--beam-y, 120px);
+    width: 2300px; height: 560px;
+    transform: rotate(-24deg);
+    border-radius: 50%;
+    background: linear-gradient(90deg, rgba(8,40,140,0) 0%, #0b3fc4 28%, #1d6cf5 55%, #4f9bff 78%, #a9d3ff 100%);
+    filter: blur(80px);
+    opacity: .95;
+  }
+  .beam-core {
+    position: absolute;
+    left: 700px; top: calc(var(--beam-y, 120px) - 30px);
+    width: 1100px; height: 170px;
+    transform: rotate(-24deg);
+    border-radius: 50%;
+    background: linear-gradient(90deg, rgba(120,190,255,0), #8cc6ff 60%, #e3f2ff);
+    filter: blur(60px);
+    opacity: .7;
+  }
+  .pool {
+    position: absolute;
+    left: -260px; top: var(--pool-y, 620px);
+    width: 900px; height: 520px;
+    border-radius: 50%;
+    background: #0a2f8a;
+    filter: blur(130px);
+    opacity: .7;
+  }
+  .pool.r { left: auto; right: -300px; top: var(--pool2-y, 1400px); background: #0d3fb0; display: none; }
+
+  .stage {
+    position: absolute;
+    left: 360px; top: var(--stage-y, 112px);
+    width: 880px;
+    transform: perspective(3200px) rotateX(4deg) rotateY(-7deg) rotateZ(-2.4deg);
+    transform-origin: 50% 0;
+  }
+  .dpanel { width: 880px; height: 3200px; }
+  .body { padding: 68px 52px 0; }
+  h1 { font-size: 104px; text-align: center; }
+  .sub {
+    margin: 34px auto 0;
+    max-width: 780px;
+    text-align: center;
+    font-size: 35px;
+    line-height: 1.34;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    color: var(--on-dark-2);
+  }
+  .rows { margin-top: 64px; display: grid; gap: 28px; }
+  .row {
+    display: flex;
+    align-items: center;
+    gap: 36px;
+    height: 196px;
+    padding: 0 40px;
+    border-radius: 32px;
+    background: var(--row);
+    box-shadow: inset 0 0 0 1.5px rgba(255,255,255,.035);
+  }
+  .row .app { --s: 112px; --r: 26px; }
+  .row b { display: block; font-size: 44px; font-weight: 600; letter-spacing: -0.03em; }
+  .row span { display: block; margin-top: 8px; font-size: 34px; font-weight: 500; letter-spacing: -0.02em; color: var(--on-dark-2); }
+
+  /* Tiles: [left, top] per format. */
+  .t-reddit   { --s:190px; --rz:16deg;  --ry:18deg;  --rx:6deg;  left:214px;  top:500px; }
+  .t-copilot  { --s:206px; --rz:11deg;  --ry:-20deg; --rx:8deg;  left:1238px; top:318px; }
+  .t-deepseek { --s:196px; --rz:13deg;  --ry:-16deg; --rx:-6deg; left:1236px; top:868px; }
+  .t-claude   { --s:224px; --rz:-7deg;  --ry:22deg;  --rx:-4deg; left:36px;   top:214px; }
+  .t-webflow  { --s:226px; --rz:-5deg;  --ry:20deg;  --rx:5deg;  left:70px;   top:730px; }
+  .t-gemini   { --s:204px; --rz:-14deg; --ry:16deg;              left:-50px;  top:1004px; }
+  .t-shopify  { --s:220px; --rz:9deg;   --ry:-10deg; --rx:10deg; left:236px;  top:1050px; }
+  .t-grok     { --s:232px; --rz:14deg;  --ry:-22deg; --rx:-6deg; left:1384px; top:40px; }
+  .t-wordpress{ --s:212px; --rz:-8deg;  --ry:-20deg; --rx:6deg;  left:1372px; top:600px; }
+  .t-google   { --s:200px; --rz:-11deg; --ry:-18deg; --rx:8deg;  left:1428px; top:962px; }
+  .t-mistral  { --s:196px; --rz:-9deg;  --ry:18deg;  --rx:4deg;  display:none; }
+  .t-square   { --s:186px; --rz:10deg;  --ry:-16deg; --rx:6deg;  display:none; }
+
+  /* 4:5 — Instagram feed */
+  html[data-f="4x5"] { --stage-y: 230px; --beam-y: 330px; --pool-y: 1250px; }
+  html[data-f="4x5"] .pool.r { display: block; }
+  html[data-f="4x5"] .t-claude    { top: 330px; }
+  html[data-f="4x5"] .t-reddit    { top: 800px; }
+  html[data-f="4x5"] .t-webflow   { top: 1150px; }
+  html[data-f="4x5"] .t-mistral   { display: grid; left: 40px; top: 1520px; }
+  html[data-f="4x5"] .t-gemini    { top: 1820px; }
+  html[data-f="4x5"] .t-shopify   { top: 1860px; }
+  html[data-f="4x5"] .t-grok      { top: 100px; }
+  html[data-f="4x5"] .t-copilot   { top: 520px; }
+  html[data-f="4x5"] .t-wordpress { top: 900px; }
+  html[data-f="4x5"] .t-deepseek  { top: 1300px; }
+  html[data-f="4x5"] .t-google    { top: 1640px; }
+  html[data-f="4x5"] .t-square    { display: grid; left: 1300px; top: 1880px; }
+
+  /* 1:1 — square feed and ads */
+  html[data-f="1x1"] { --stage-y: 150px; --beam-y: 200px; --pool-y: 980px; }
+  html[data-f="1x1"] .t-claude    { top: 250px; }
+  html[data-f="1x1"] .t-reddit    { top: 640px; }
+  html[data-f="1x1"] .t-webflow   { top: 960px; }
+  html[data-f="1x1"] .t-gemini    { top: 1350px; }
+  html[data-f="1x1"] .t-shopify   { top: 1420px; }
+  html[data-f="1x1"] .t-grok      { top: 60px; }
+  html[data-f="1x1"] .t-copilot   { top: 400px; }
+  html[data-f="1x1"] .t-wordpress { top: 760px; }
+  html[data-f="1x1"] .t-deepseek  { top: 1120px; }
+  html[data-f="1x1"] .t-google    { top: 1350px; }
+
+  /* 9:16 — Stories and Reels. The headline sits below the top 13% and the
+     rows above the bottom 20%, where the app's own overlays go. */
+  html[data-f="9x16"] { --stage-y: 420px; --beam-y: 520px; --pool-y: 1900px; --pool2-y: 2300px; }
+  html[data-f="9x16"] .pool.r { display: block; }
+  html[data-f="9x16"] .stage { transform: perspective(3200px) rotateX(4deg) rotateY(-7deg) rotateZ(-2.4deg) scale(1.2); }
+  html[data-f="9x16"] .t-claude    { left: 20px;   top: 520px; }
+  html[data-f="9x16"] .t-reddit    { left: 40px;   top: 1040px; }
+  html[data-f="9x16"] .t-webflow   { left: 10px;   top: 1520px; }
+  html[data-f="9x16"] .t-mistral   { display: grid; left: 50px; top: 2010px; }
+  html[data-f="9x16"] .t-gemini    { left: -40px;  top: 2470px; }
+  html[data-f="9x16"] .t-shopify   { left: 230px;  top: 2620px; }
+  html[data-f="9x16"] .t-grok      { left: 1370px; top: 170px; }
+  html[data-f="9x16"] .t-copilot   { left: 1360px; top: 740px; }
+  html[data-f="9x16"] .t-wordpress { left: 1390px; top: 1240px; }
+  html[data-f="9x16"] .t-deepseek  { left: 1370px; top: 1760px; }
+  html[data-f="9x16"] .t-google    { left: 1400px; top: 2240px; }
+  html[data-f="9x16"] .t-square    { display: grid; left: 1260px; top: 2640px; }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="field">
+    <div class="pool"></div>
+    <div class="pool r"></div>
+    <div class="beam"></div>
+    <div class="beam-core"></div>
+  </div>
+  <div class="grain"></div>
+
+  <!-- Behind the panel -->
+  <div class="app float reddit t-reddit"><svg><use href="#lg-reddit"/></svg></div>
+  <div class="app float copilot t-copilot"><svg><use href="#lg-copilot"/></svg></div>
+  <div class="app float deepseek t-deepseek"><svg><use href="#lg-deepseek"/></svg></div>
+
+  <div class="stage">
+    <div class="dpanel">
+      <div class="head">
+        <div class="app rankbox"><svg><use href="#lg-rankbox"/></svg></div>
+        Rankbox
+        <span class="close"><svg><use href="#ic-x"/></svg></span>
+      </div>
+      <div class="body">
+        <h1 class="display">Get <span class="accent">AI traffic</span><br />on autopilot</h1>
+        <p class="sub">Research, writing and publishing. No prompts.<br />Just paste your website to start.</p>
+        <div class="rows">
+          <div class="row">
+            <div class="app chatgpt rim"><svg><use href="#lg-chatgpt"/></svg></div>
+            <div><b>ChatGPT</b><span>Get recommended in answers</span></div>
+          </div>
+          <div class="row">
+            <div class="app perplexity rim"><svg><use href="#lg-perplexity"/></svg></div>
+            <div><b>Perplexity</b><span>Get cited as a source</span></div>
+          </div>
+          <div class="row">
+            <div class="app gemini"><img src="../kit/gemini.png" alt="" /></div>
+            <div><b>Gemini</b><span>Show up in AI answers</span></div>
+          </div>
+          <div class="row">
+            <div class="app google"><svg><use href="#lg-google"/></svg></div>
+            <div><b>Google</b><span>Rank in search and AI Overviews</span></div>
+          </div>
+          <div class="row">
+            <div class="app claude"><svg><use href="#lg-claude"/></svg></div>
+            <div><b>Claude</b><span>Get mentioned in answers</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- In front of the panel -->
+  <div class="app float claude t-claude"><svg><use href="#lg-claude"/></svg></div>
+  <div class="app float webflow t-webflow"><svg><use href="#lg-webflow"/></svg></div>
+  <div class="app float mistral t-mistral"><svg><use href="#lg-mistral"/></svg></div>
+  <div class="app float gemini t-gemini"><img src="../kit/gemini.png" alt="" /></div>
+  <div class="app float shopify t-shopify"><svg><use href="#lg-shopify"/></svg></div>
+  <div class="app float grok rim t-grok"><svg><use href="#lg-grok"/></svg></div>
+  <div class="app float wordpress t-wordpress"><svg><use href="#lg-wordpress"/></svg></div>
+  <div class="app float google t-google"><svg><use href="#lg-google"/></svg></div>
+  <div class="app float square t-square"><svg><use href="#lg-square"/></svg></div>
+</div>
+</body>
+</html>

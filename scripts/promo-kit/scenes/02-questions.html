@@ -1,0 +1,214 @@
+<!doctype html>
+<!-- 02 · Buyer questions. The questions people ask AI about a topic, and one of
+     them lifted out and carried into the article as its own section. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x3 4x5 1x1" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<script src="../kit/kit.js"></script>
+<style>
+  .field { background: var(--night); }
+  .g1 { left: -340px; top: 330px; width: 1000px; height: 620px; background: #0a46d0; --blur: 130px; opacity: .85; }
+  .g2 { left: 820px; top: 760px; width: 1200px; height: 700px; background: #2f8cff; --blur: 140px; opacity: .9; }
+  .g3 { left: 1250px; top: 980px; width: 600px; height: 400px; background: #b5dcff; --blur: 110px; opacity: .7; }
+  .g4 { left: 300px; top: -420px; width: 1000px; height: 560px; background: #0a2a78; --blur: 140px; opacity: .55; }
+
+  .top { position: absolute; left: 0; right: 0; top: 54px; display: flex; flex-direction: column; align-items: center; }
+  h1 { margin-top: 30px; font-size: 108px; white-space: nowrap; }
+  .icons { margin-top: 42px; display: flex; gap: 28px; }
+  .icons .app { --s: 86px; box-shadow: 0 0 0 2px rgba(255,255,255,.08), 0 10px 24px -10px rgba(0,0,0,.6); }
+
+  /* left: the plugin panel */
+  .dpanel.q { position: absolute; left: 132px; top: 470px; width: 560px; height: 900px; }
+  .q .sec { padding: 34px 34px 0; }
+  .q .title { display: flex; align-items: center; gap: 20px; font-size: 50px; font-weight: 700; letter-spacing: -0.04em; }
+  .q .title .ic { width: 62px; height: 62px; border-radius: 16px; background: var(--blue); display: grid; place-items: center; color: #fff; }
+  .q .title .ic svg { width: 34px; height: 34px; }
+  .q .title small { margin-left: auto; font-size: 26px; font-weight: 500; letter-spacing: -0.01em; color: var(--on-dark-2); }
+  .q .rule { height: 1.5px; background: var(--line); margin: 30px 0 0; }
+  .q .lab { display: flex; justify-content: space-between; align-items: center; margin-top: 30px; font-size: 25px; font-weight: 500; color: var(--on-dark-2); }
+  .q .lab svg { width: 30px; height: 30px; }
+  .q .input { margin-top: 16px; height: 78px; border-radius: 16px; background: var(--row); display: flex; align-items: center; padding: 0 22px; font-size: 29px; font-weight: 600; letter-spacing: -0.02em; box-shadow: inset 0 0 0 1.5px rgba(255,255,255,.06); }
+  .q .help { margin-top: 22px; font-size: 25px; line-height: 1.4; font-weight: 500; color: var(--on-dark-2); letter-spacing: -0.01em; }
+  .q .lab2 { display: flex; justify-content: space-between; align-items: baseline; margin-top: 34px; font-size: 30px; font-weight: 650; letter-spacing: -0.02em; }
+  .q .lab2 span { font-size: 24px; font-weight: 500; color: var(--on-dark-2); }
+
+  .qrow { display: flex; align-items: center; gap: 16px; padding: 22px 0; border-bottom: 1.5px solid var(--line); }
+  .qrow .t { flex: 1; min-width: 0; }
+  .qrow b { display: block; font-size: 28px; font-weight: 600; letter-spacing: -0.025em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .qrow .src { display: flex; align-items: center; gap: 10px; margin-top: 8px; font-size: 23px; font-weight: 500; color: var(--on-dark-2); }
+  .qrow .src .app { --s: 30px; --r: 50%; }
+  .chip {
+    flex: none;
+    height: 60px; min-width: 92px; padding: 0 20px;
+    border-radius: 14px;
+    display: grid; place-items: center;
+    background: #0d1420;
+    box-shadow: inset 0 0 0 1.5px #2a3446;
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: 27px; font-weight: 600;
+    color: #5aa9ff;
+  }
+
+  /* the lifted row */
+  .lift {
+    position: absolute;
+    left: 98px; top: 1000px;
+    width: 620px;
+    padding: 26px 30px;
+    border-radius: 30px;
+    background: #0e0f10;
+    color: var(--on-dark);
+    box-shadow: inset 0 0 0 1.5px rgba(255,255,255,.08), 0 40px 80px -20px rgba(0,0,0,.8), 0 0 0 10px rgba(0,0,0,.18);
+  }
+  .lift .qrow { border: 0; padding: 0; gap: 20px; }
+  .lift b { font-size: 36px; }
+  .lift .src { font-size: 28px; }
+  .lift .src .app { --s: 36px; }
+  .lift .chip { height: 76px; min-width: 118px; font-size: 34px; border-radius: 18px; }
+
+  /* right: the article */
+  .wcard.art { position: absolute; left: 836px; top: 470px; width: 640px; height: 900px; padding: 50px 50px 0; }
+  .art .h1 { font-size: 46px; font-weight: 750; letter-spacing: -0.04em; line-height: 1.08; }
+  .art .meta { display: flex; gap: 12px; margin-top: 22px; }
+  .art .meta .pill { height: 46px; font-size: 22px; padding: 0 18px; }
+  .art .meta .pill.grey { background: var(--paper-2); color: var(--ink-2); }
+  .art h2 { margin-top: 40px; font-size: 34px; font-weight: 700; letter-spacing: -0.03em; line-height: 1.15; }
+  .art h2.hit { position: relative; margin-left: -16px; margin-right: -16px; padding: 14px 16px; border-radius: 14px; background: #e8f1ff; box-shadow: inset 0 0 0 2px #9cc4ff; color: #0a3a8f; }
+  .art p { margin-top: 16px; font-size: 25px; line-height: 1.5; font-weight: 500; color: #3c4252; letter-spacing: -0.01em; }
+  .art sup { display: inline-grid; place-items: center; min-width: 30px; height: 30px; margin-left: 4px; padding: 0 6px; border-radius: 8px; background: var(--paper-2); color: var(--ink-2); font-size: 18px; font-weight: 700; vertical-align: 4px; }
+
+  .arrow { position: absolute; left: 0; top: 0; width: 1600px; height: var(--h); pointer-events: none; overflow: visible; }
+
+  /* 4:5 */
+  html[data-f="4x5"] .top { top: 120px; }
+  html[data-f="4x5"] h1 { font-size: 150px; line-height: .96; text-align: center; }
+  html[data-f="4x5"] .icons { margin-top: 56px; }
+  html[data-f="4x5"] .dpanel.q, html[data-f="4x5"] .wcard.art { top: 790px; height: 1400px; }
+  html[data-f="4x5"] .g1 { top: 700px; height: 900px; }
+  html[data-f="4x5"] .g2 { top: 1300px; height: 900px; }
+  html[data-f="4x5"] .g3 { top: 1640px; }
+
+  /* 1:1 */
+  html[data-f="1x1"] .top { top: 76px; }
+  html[data-f="1x1"] h1 { font-size: 132px; line-height: .96; text-align: center; }
+  html[data-f="1x1"] .icons { margin-top: 44px; }
+  html[data-f="1x1"] .dpanel.q, html[data-f="1x1"] .wcard.art { top: 660px; height: 1200px; }
+  html[data-f="1x1"] .g1 { top: 560px; height: 800px; }
+  html[data-f="1x1"] .g2 { top: 1040px; height: 800px; }
+  html[data-f="1x1"] .g3 { top: 1300px; }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="field">
+    <div class="glow g4"></div>
+    <div class="glow g1"></div>
+    <div class="glow g2"></div>
+    <div class="glow g3"></div>
+  </div>
+  <div class="grain"></div>
+
+  <div class="top">
+    <div class="lockup"><div class="app rankbox"><svg><use href="#lg-rankbox"/></svg></div>Rankbox</div>
+    <h1 class="display">Answer what <br data-only="4x5 1x1 9x16" />buyers ask AI</h1>
+    <div class="icons">
+      <div class="app round chatgpt rim"><svg><use href="#lg-chatgpt"/></svg></div>
+      <div class="app round claude"><svg><use href="#lg-claude"/></svg></div>
+      <div class="app round gemini"><img src="../kit/gemini.png" alt="" /></div>
+      <div class="app round perplexity rim"><svg><use href="#lg-perplexity"/></svg></div>
+      <div class="app round google"><svg><use href="#lg-google"/></svg></div>
+      <div class="app round copilot"><svg><use href="#lg-copilot"/></svg></div>
+      <div class="app round grok rim"><svg><use href="#lg-grok"/></svg></div>
+      <div class="app round deepseek"><svg><use href="#lg-deepseek"/></svg></div>
+      <div class="app round meta"><svg><use href="#lg-meta"/></svg></div>
+      <div class="app round mistral"><svg><use href="#lg-mistral"/></svg></div>
+    </div>
+  </div>
+
+  <div class="dpanel q">
+    <div class="head">
+      <div class="app rankbox"><svg><use href="#lg-rankbox"/></svg></div>
+      Rankbox
+      <span class="close"><svg><use href="#ic-x"/></svg></span>
+    </div>
+    <div class="sec">
+      <div class="title"><span class="ic"><svg><use href="#ic-chat"/></svg></span>Buyer questions</div>
+      <div class="rule"></div>
+      <div class="lab">Topic <svg><use href="#ic-refresh"/></svg></div>
+      <div class="input">Usage-based pricing</div>
+      <p class="help">Each question buyers ask AI about it becomes a section of your article.</p>
+      <div class="lab2">Questions <span>Click to add</span></div>
+      <div class="qrow" id="slot" style="visibility:hidden; margin-top:30px">
+        <div class="t"><b>How do I bill by usage?</b><div class="src">x</div></div><span class="chip">H2</span>
+      </div>
+      <div class="qrow">
+        <div class="t"><b>Is usage-based pricing worth it?</b><div class="src"><span class="app round gemini"><img src="../kit/gemini.png" alt="" /></span>Asked in Gemini</div></div>
+        <span class="chip">H2</span>
+      </div>
+      <div class="qrow">
+        <div class="t"><b>Stripe Billing or Chargebee?</b><div class="src"><span class="app round perplexity"><svg><use href="#lg-perplexity"/></svg></span>Asked in Perplexity</div></div>
+        <span class="chip">H2</span>
+      </div>
+      <div class="qrow">
+        <div class="t"><b>How do I price API calls?</b><div class="src"><span class="app round claude"><svg><use href="#lg-claude"/></svg></span>Asked in Claude</div></div>
+        <span class="chip">H2</span>
+      </div>
+      <div class="qrow">
+        <div class="t"><b>What is a good value metric?</b><div class="src"><span class="app round google"><svg><use href="#lg-google"/></svg></span>Asked in Google</div></div>
+        <span class="chip">H2</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="lift">
+    <div class="qrow">
+      <div class="t"><b>How do I bill by usage?</b><div class="src"><span class="app round chatgpt rim"><svg><use href="#lg-chatgpt"/></svg></span>Asked in ChatGPT</div></div>
+      <span class="chip" id="from">H2</span>
+    </div>
+  </div>
+
+  <div class="wcard art">
+    <div class="h1">Usage-Based Pricing, Explained</div>
+    <div class="meta"><span class="pill green"><span class="dot"></span>SEO 94</span><span class="pill grey">9 sources</span></div>
+    <h2 class="hit" id="to">How do I bill by usage?</h2>
+    <p>Pick one unit that grows with the value a customer gets, like API calls or seats, and meter it from day one.<sup>1</sup></p>
+    <h2>Is usage-based pricing worth it?</h2>
+    <p>It suits products where usage tracks value. Pair it with a small base fee so revenue stays predictable.<sup>2</sup></p>
+    <h2>Stripe Billing or Chargebee?</h2>
+    <p>Both meter usage and bill in arrears. Pick the one that fits the payment stack you already run.<sup>3</sup></p>
+    <h2>How do I price API calls?</h2>
+    <p>Start from what a call costs you to serve, then price on the value of the result, not the request.<sup>4</sup></p>
+  </div>
+
+  <svg class="arrow" id="arrow">
+    <defs>
+      <marker id="head" viewBox="0 0 20 20" refX="12" refY="10" markerWidth="7" markerHeight="7" orient="auto">
+        <path d="M3 3 L16 10 L3 17" fill="none" stroke="#a184ff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" />
+      </marker>
+    </defs>
+    <path id="curve" fill="none" stroke="#a184ff" stroke-width="5" stroke-linecap="round" marker-end="url(#head)" />
+    <circle id="knob" r="13" fill="#fff" stroke="#a184ff" stroke-width="5" />
+  </svg>
+</div>
+<script>
+  // Seat the lifted row over the first question, then draw the arrow from
+  // its chip to the article heading it becomes.
+  addEventListener("load", () => {
+    const c = document.querySelector(".canvas").getBoundingClientRect();
+    const slot = document.getElementById("slot").getBoundingClientRect();
+    const lift = document.querySelector(".lift");
+    lift.style.top = (slot.top - c.top + slot.height / 2 - lift.offsetHeight / 2) + "px";
+    const a = document.getElementById("from").getBoundingClientRect();
+    const b = document.getElementById("to").getBoundingClientRect();
+    const x1 = a.left - c.left + a.width / 2, y1 = a.top - c.top;
+    const x2 = b.left - c.left - 18, y2 = b.top - c.top + b.height / 2;
+    document.getElementById("curve").setAttribute("d",
+      `M${x1} ${y1} C ${x1 + 10} ${y1 - (y1 - y2) * 0.75}, ${x2 - (x2 - x1) * 0.55} ${y2}, ${x2} ${y2}`);
+    const k = document.getElementById("knob");
+    k.setAttribute("cx", x1); k.setAttribute("cy", y1);
+  });
+</script>
+</body>
+</html>

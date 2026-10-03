@@ -1,0 +1,113 @@
+<!doctype html>
+<!-- 10 · Feature pills. After Kompa's "New Content Weekly" stack: seven white
+     capsules down the left, and on the right the article editor, selected,
+     with "You" holding the corner. The tiles inside are the editor's own
+     metrics and checks. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x3" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<script src="../kit/kit.js"></script>
+<style>
+  .canvas { background: #f3f3f4; }
+
+  .pills { position: absolute; left: 42px; top: 120px; display: grid; gap: 36px; justify-items: start; }
+  .fpill { height: 110px; font-size: 39px; font-weight: 550; gap: 26px; padding-right: 48px; }
+  .fpill .ico { width: 74px; height: 74px; }
+  .fpill .ico svg { width: 38px; height: 38px; }
+
+  /* the app's top bar, above the document */
+  .bar {
+    position: absolute; left: 796px; top: 108px; width: 900px; height: 86px;
+    display: flex; align-items: center; gap: 40px; padding: 0 56px;
+    background: #fff; border-radius: 10px;
+    box-shadow: 0 16px 36px -22px rgba(16, 24, 40, 0.3);
+    font-size: 21px; font-weight: 500; color: #2a2e36;
+  }
+  .bar .wm { font-size: 27px; color: #0c1018; margin-right: 6px; }
+  .bar .wm svg { color: var(--blue); }
+  .bar .on { color: var(--blue); font-weight: 600; }
+
+  /* the document, selected */
+  .doc {
+    position: absolute; left: 696px; top: 254px; width: 1100px; height: 742px;
+    transform: rotate(-1.9deg); transform-origin: 0 0;
+  }
+  .page {
+    position: absolute; inset: 0;
+    background: #fff;
+    box-shadow: 0 30px 60px -30px rgba(16, 24, 40, 0.35);
+    padding: 52px 0 0 58px;
+  }
+  .sel { --sel-inset: 0px; border-width: 3px; }
+  .sel > i { width: 22px; height: 22px; border-width: 3px; }
+  .page h2 { font-size: 66px; font-weight: 800; letter-spacing: -0.035em; line-height: 1.06; color: #0c1018; width: 480px; }
+  .page .meta { position: absolute; left: 566px; top: 46px; width: 520px; font-size: 19.5px; line-height: 1.62; font-weight: 500; color: #7d828c; letter-spacing: -0.005em; }
+  .page .acts { position: absolute; left: 566px; top: 178px; display: flex; gap: 18px; }
+  .page .acts span { height: 48px; padding: 0 20px; border-radius: 13px; display: grid; place-items: center; font-size: 18px; font-weight: 700; letter-spacing: -0.01em; }
+  .page .acts .p { background: var(--blue); color: #fff; box-shadow: 0 8px 16px -10px rgba(22, 111, 229, 0.7); }
+  .page .acts .s { background: #eaf2ff; color: #1561d6; }
+
+  .tiles { position: absolute; left: 60px; top: 276px; width: 1100px; display: grid; grid-template-columns: 466px 220px 220px 240px; grid-auto-rows: 206px; gap: 16px; }
+  .tile { position: relative; border-radius: 14px; background: #f4f4f5; padding: 24px 24px; }
+  .tile svg { width: 34px; height: 34px; color: var(--blue); }
+  .tile p { position: absolute; left: 22px; right: 22px; bottom: 22px; font-size: 18.5px; line-height: 1.38; font-weight: 500; color: #626772; letter-spacing: -0.005em; }
+  .tile p b { color: #2a2e36; font-weight: 600; }
+  .tile.w2 { grid-column: span 2; }
+
+  /* the next card down, cropped by the bottom edge */
+  .stats {
+    position: absolute; left: 750px; top: 1056px; width: 900px; height: 300px;
+    background: #fff; border-radius: 6px;
+    box-shadow: 0 -10px 40px -26px rgba(16, 24, 40, 0.25);
+    display: flex; gap: 0; padding: 106px 0 0 144px;
+  }
+  .stats b { width: 330px; font-size: 64px; font-weight: 600; letter-spacing: -0.03em; color: #0c1018; }
+
+  .mp { left: 688px; top: 258px; }
+  .mp > svg { left: -34px; top: -6px; width: 46px; height: 46px; transform: scaleX(-1); }
+  .mp > b { left: -126px; top: 22px; font-size: 32px; padding: 9px 24px; }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="pills">
+    <div class="fpill"><span class="ico"><svg><use href="#rb-article"/></svg></span>New Articles Every Day</div>
+    <div class="fpill"><span class="ico"><svg><use href="#ic-gauge"/></svg></span>SEO + GEO Scoring</div>
+    <div class="fpill"><span class="ico"><svg><use href="#ic-chat"/></svg></span>Questions Buyers Ask AI</div>
+    <div class="fpill"><span class="ico"><svg><use href="#ic-quote"/></svg></span>Source-Backed Writing</div>
+    <div class="fpill"><span class="ico"><svg><use href="#ic-mic"/></svg></span>Writes In Your Voice</div>
+    <div class="fpill"><span class="ico"><svg><use href="#ic-calendar"/></svg></span>Publishes On Schedule</div>
+    <div class="fpill"><span class="ico"><svg><use href="#ic-wand"/></svg></span>One-Click Rewrites</div>
+  </div>
+
+  <div class="bar">
+    <span class="wm"><svg><use href="#lg-rankbox"/></svg>Rankbox</span>
+    <span>Overview</span><span class="on">Articles</span><span>Calendar</span><span>Rank</span>
+  </div>
+
+  <div class="doc">
+    <div class="page">
+      <h2>What Is a Value Metric?</h2>
+      <p class="meta">What a value metric is, how to pick one that grows with your customers, and how it shapes every tier on your pricing page.</p>
+      <div class="acts"><span class="p">Publish changes</span><span class="s">Improve SEO</span></div>
+      <div class="tiles">
+        <div class="tile"><svg><use href="#ic-clock"/></svg><p><b>6 min read.</b> 1,420 words built around the questions buyers ask AI.</p></div>
+        <div class="tile"><svg><use href="#rb-target"/></svg><p>Keyword in title and introduction.</p></div>
+        <div class="tile"><svg><use href="#ic-quote"/></svg><p>Cites sources buyers trust.</p></div>
+        <div class="tile"><svg><use href="#ic-list"/></svg><p>FAQ for AI engines.</p></div>
+        <div class="tile"><svg><use href="#ic-search"/></svg><p>Meta description, 148 characters.</p></div>
+        <div class="tile"><svg><use href="#rb-chart"/></svg><p>6 sections with clear headings.</p></div>
+        <div class="tile w2"><svg><use href="#ic-check-circle"/></svg><p><b>Strong — ready to rank.</b> 12 of 13 checks passed.</p></div>
+      </div>
+    </div>
+    <div class="sel"><i></i><i></i><i></i><i></i></div>
+  </div>
+
+  <div class="stats"><b>90</b><b>1,420</b><b>12/13</b></div>
+
+  <div class="mp"><svg><use href="#ic-mp"/></svg><b>You</b></div>
+</div>
+</body>
+</html>

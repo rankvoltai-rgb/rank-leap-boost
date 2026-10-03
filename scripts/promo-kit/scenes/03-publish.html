@@ -1,0 +1,188 @@
+<!doctype html>
+<!-- 03 · Publishing. Finished articles on the left flow into the site's CMS on
+     the right, and the platforms Rankbox publishes to sit underneath. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x3 4x5 1x1 9x16" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<script src="../kit/kit.js"></script>
+<style>
+  .field { background: var(--night); }
+  .g1 { left: -300px; top: 520px; width: 1100px; height: 700px; background: #0a3fc0; --blur: 140px; opacity: .85; }
+  .g2 { left: 700px; top: 760px; width: 1300px; height: 760px; background: #2f8cff; --blur: 150px; opacity: .95; }
+  .g3 { left: 1180px; top: 1000px; width: 700px; height: 420px; background: #c9e7ff; --blur: 120px; opacity: .8; }
+  .g4 { left: 400px; top: -460px; width: 900px; height: 560px; background: #0a2a78; --blur: 150px; opacity: .5; }
+
+  .top { position: absolute; left: 0; right: 0; top: 66px; display: flex; flex-direction: column; align-items: center; }
+  h1 { margin-top: 34px; font-size: 100px; white-space: nowrap; }
+
+  .cards { position: absolute; left: 126px; top: 452px; display: grid; gap: 30px; }
+  .card {
+    position: relative;
+    width: 486px; height: 164px;
+    padding: 26px 30px 0 70px;
+    border-radius: 28px;
+    background: #1d1e20;
+    box-shadow: inset 0 0 0 2px rgba(255,255,255,.62), 0 30px 60px -20px rgba(0,0,0,.6);
+    color: var(--on-dark);
+  }
+  .card .dot { position: absolute; left: 32px; top: 37px; width: 22px; height: 22px; background: #4fe08a; box-shadow: 0 0 0 6px rgba(79,224,138,.14); }
+  .card b { display: block; font-size: 30px; font-weight: 600; letter-spacing: -0.03em; white-space: nowrap; }
+  .card span { display: block; margin-top: 8px; font-size: 24px; font-weight: 500; color: var(--on-dark-2); letter-spacing: -0.01em; }
+  .card time { position: absolute; right: 26px; top: 22px; font-size: 19px; font-weight: 500; color: var(--on-dark-2); }
+
+  .wires { position: absolute; left: 0; top: 0; width: 1600px; height: var(--h); overflow: visible; }
+
+  .wcard.cms { position: absolute; left: 843px; top: 398px; width: 900px; height: 652px; border-radius: 36px 0 0 36px; }
+  .cms .bar { display: flex; align-items: center; gap: 24px; height: 122px; padding: 0 34px; border-bottom: 1.5px solid var(--hair); }
+  .cms .bar .app { --s: 74px; --r: 18px; }
+  .cms .bar b { font-size: 42px; font-weight: 700; letter-spacing: -0.04em; }
+  .cms .bar .pill { margin-left: auto; margin-right: 92px; }
+  table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+  th { height: 70px; padding: 0 0 0 32px; text-align: left; background: var(--paper-2); font-size: 23px; font-weight: 500; color: var(--ink-2); letter-spacing: -0.01em; }
+  td { height: 104px; padding: 0 0 0 32px; border-bottom: 1.5px solid var(--hair); font-size: 25px; font-weight: 600; letter-spacing: -0.02em; white-space: nowrap; overflow: hidden; }
+  td.dim { color: var(--ink-2); font-weight: 500; }
+  td.num { font-variant-numeric: tabular-nums; }
+  .ttl { display: flex; align-items: center; gap: 18px; }
+  .thumb { width: 54px; height: 54px; border-radius: 14px; flex: none; display: grid; place-items: center; font-size: 21px; font-weight: 700; letter-spacing: -0.02em; }
+  .t1 { background: #ffe4dc; color: #e2552c; }
+  .t2 { background: #dceaff; color: #1a62d6; }
+  .t3 { background: #ece3ff; color: #7346d9; }
+  .t4 { background: #dff6e9; color: #12804a; }
+  .new { display: inline-flex; align-items: center; height: 50px; padding: 0 20px; border-radius: 12px; background: var(--green-soft); color: var(--green-ink); font-size: 23px; font-weight: 600; }
+  .skel td { height: 100px; }
+  .sk { height: 22px; border-radius: 999px; background: #e9ebef; }
+  .skc { width: 54px; height: 54px; border-radius: 14px; background: #e9ebef; }
+
+  .foot { position: absolute; left: 0; right: 0; top: 1092px; display: flex; align-items: center; justify-content: center; gap: 26px; }
+  .foot p { margin-right: 26px; font-size: 42px; font-weight: 500; letter-spacing: -0.035em; color: #fff; }
+  .foot .app { --s: 82px; box-shadow: 0 0 0 2px rgba(255,255,255,.1), 0 10px 24px -10px rgba(0,0,0,.5); }
+
+  /* 4:5 */
+  html[data-f="4x5"] .top { top: 176px; }
+  html[data-f="4x5"] h1 { font-size: 150px; line-height: .96; text-align: center; white-space: normal; }
+  html[data-f="4x5"] .cards { top: 706px; }
+  html[data-f="4x5"] .wcard.cms { top: 650px; height: 900px; }
+  html[data-f="4x5"] .foot { top: 1676px; }
+  html[data-f="4x5"] .g1 { top: 1000px; }
+  html[data-f="4x5"] .g2 { top: 1340px; }
+  html[data-f="4x5"] .g3 { top: 1680px; }
+
+  /* 1:1 */
+  html[data-f="1x1"] .top { top: 110px; }
+  html[data-f="1x1"] h1 { font-size: 132px; line-height: .96; text-align: center; white-space: normal; }
+  html[data-f="1x1"] .cards { top: 606px; }
+  html[data-f="1x1"] .wcard.cms { top: 552px; }
+  html[data-f="1x1"] .foot { top: 1300px; }
+  html[data-f="1x1"] .g1 { top: 820px; }
+  html[data-f="1x1"] .g2 { top: 1080px; }
+  html[data-f="1x1"] .g3 { top: 1320px; }
+
+  /* 9:16 */
+  html[data-f="9x16"] .top { top: 440px; }
+  html[data-f="9x16"] h1 { font-size: 150px; line-height: .96; text-align: center; white-space: normal; }
+  html[data-f="9x16"] .cards { top: 992px; }
+  html[data-f="9x16"] .wcard.cms { top: 936px; height: 900px; }
+  html[data-f="9x16"] .foot { top: 1960px; }
+  html[data-f="9x16"] .g1 { top: 1300px; height: 900px; }
+  html[data-f="9x16"] .g2 { top: 1700px; height: 1000px; }
+  html[data-f="9x16"] .g3 { top: 2150px; }
+  html[data-f="9x16"] .g4 { top: 0; }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="field">
+    <div class="glow g4"></div>
+    <div class="glow g1"></div>
+    <div class="glow g2"></div>
+    <div class="glow g3"></div>
+  </div>
+  <div class="grain"></div>
+
+  <div class="top">
+    <div class="lockup"><div class="app rankbox"><svg><use href="#lg-rankbox"/></svg></div>Rankbox</div>
+    <h1 class="display">New articles <br data-only="4x5 1x1 9x16" />land every day</h1>
+  </div>
+
+  <div class="cards">
+    <div class="card"><i class="dot"></i><time>just now</time><b>Usage-Based Pricing</b><span>usage based pricing</span><span>brightloop.app/blog</span></div>
+    <div class="card"><i class="dot"></i><time>yesterday</time><b>Pricing a SaaS App</b><span>saas pricing</span><span>brightloop.app/blog</span></div>
+    <div class="card"><i class="dot"></i><time>2 days ago</time><b>Freemium or Trial?</b><span>freemium vs free trial</span><span>brightloop.app/blog</span></div>
+    <div class="card" data-only="4x5 9x16"><i class="dot"></i><time>3 days ago</time><b>API Pricing Guide</b><span>api pricing</span><span>brightloop.app/blog</span></div>
+  </div>
+
+  <svg class="wires" id="wires">
+    <defs>
+      <marker id="tip" viewBox="0 0 20 20" refX="14" refY="10" markerWidth="6" markerHeight="6" orient="auto">
+        <path d="M3 3 L16 10 L3 17" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+      </marker>
+    </defs>
+  </svg>
+
+  <div class="wcard cms" id="cms">
+    <div class="bar">
+      <div class="app framer"><svg><use href="#lg-framer"/></svg></div>
+      <b>Framer CMS</b>
+      <span class="pill green"><span class="dot"></span>3 new articles</span>
+    </div>
+    <table>
+      <colgroup><col style="width:390px"><col style="width:120px"><col style="width:170px"><col style="width:220px"></colgroup>
+      <thead><tr><th>Title</th><th>SEO</th><th>Status</th><th>Added</th></tr></thead>
+      <tbody>
+        <tr><td><div class="ttl"><span class="thumb t1">UB</span>Usage-Based Pricing</div></td><td class="num">94</td><td><span class="new">New</span></td><td class="dim">just now</td></tr>
+        <tr><td><div class="ttl"><span class="thumb t2">PS</span>Pricing a SaaS App</div></td><td class="num">91</td><td><span class="new">New</span></td><td class="dim">yesterday</td></tr>
+        <tr><td><div class="ttl"><span class="thumb t3">FT</span>Freemium or Trial?</div></td><td class="num">89</td><td><span class="new">New</span></td><td class="dim">2 days ago</td></tr>
+        <tr data-only="4x5 9x16"><td><div class="ttl"><span class="thumb t4">AP</span>API Pricing Guide</div></td><td class="num">92</td><td><span class="new">New</span></td><td class="dim">3 days ago</td></tr>
+        <tr class="skel"><td><div class="ttl"><span class="skc"></span><span class="sk" style="width:220px"></span></div></td><td><span class="sk" style="display:block;width:56px"></span></td><td><span class="sk" style="display:block;width:96px"></span></td><td><span class="sk" style="display:block;width:130px"></span></td></tr>
+        <tr class="skel" data-only="4x5 9x16"><td><div class="ttl"><span class="skc"></span><span class="sk" style="width:220px"></span></div></td><td><span class="sk" style="display:block;width:56px"></span></td><td><span class="sk" style="display:block;width:96px"></span></td><td><span class="sk" style="display:block;width:130px"></span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="foot">
+    <p>Publishes to:</p>
+    <div class="app round framer rim"><svg><use href="#lg-framer"/></svg></div>
+    <div class="app round webflow"><svg><use href="#lg-webflow"/></svg></div>
+    <div class="app round wordpress"><svg><use href="#lg-wordpress"/></svg></div>
+    <div class="app round shopify"><svg><use href="#lg-shopify"/></svg></div>
+    <div class="app round square"><svg><use href="#lg-square"/></svg></div>
+    <div class="app round api"><svg><use href="#ic-code"/></svg></div>
+  </div>
+</div>
+<script>
+  // Bracket wires: out of each card, down a shared spine, into the CMS.
+  addEventListener("load", () => {
+    const c = document.querySelector(".canvas").getBoundingClientRect();
+    const cards = [...document.querySelectorAll(".card")].filter((e) => e.getClientRects().length).map((e) => e.getBoundingClientRect());
+    const cms = document.getElementById("cms").getBoundingClientRect();
+    const spine = cards[0].right - c.left + 116, r = 26;
+    const mids = cards.map((b) => b.top - c.top + b.height / 2);
+    const x0 = cards[0].right - c.left;
+    const ns = "http://www.w3.org/2000/svg";
+    const add = (d, tip) => {
+      const p = document.createElementNS(ns, "path");
+      p.setAttribute("d", d);
+      p.setAttribute("fill", "none");
+      p.setAttribute("stroke", "rgba(255,255,255,.9)");
+      p.setAttribute("stroke-width", "2.5");
+      p.setAttribute("stroke-linecap", "round");
+      if (tip) p.setAttribute("marker-end", "url(#tip)");
+      document.getElementById("wires").appendChild(p);
+    };
+    const first = mids[0], last = mids[mids.length - 1];
+    const cmsX = cms.left - c.left - 8;
+    add(`M${x0} ${first} H${spine - r} Q${spine} ${first} ${spine} ${first + r} V${last - r} Q${spine} ${last} ${spine - r} ${last} H${x0}`);
+    if (mids.length % 2) {
+      // odd: the middle card's wire runs straight on into the CMS
+      add(`M${x0} ${mids[(mids.length - 1) / 2]} H${cmsX}`, true);
+      mids.slice(1, -1).forEach((m, i) => { if (i !== (mids.length - 3) / 2) add(`M${x0} ${m} H${spine}`); });
+    } else {
+      mids.slice(1, -1).forEach((m) => add(`M${x0} ${m} H${spine}`));
+      add(`M${spine} ${(first + last) / 2} H${cmsX}`, true);
+    }
+  });
+</script>
+</body>
+</html>

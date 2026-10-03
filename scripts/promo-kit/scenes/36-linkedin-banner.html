@@ -1,0 +1,170 @@
+<!doctype html>
+<!-- 36 · LinkedIn banner. Not a reference recreation: the kit's lessons
+     applied to LinkedIn's two banners, the profile background (li, 4:1) and
+     the company page cover (lic, 6:1). One claim, the site hero's own ("Get
+     AI traffic from [engine] on autopilot", with the engine tiles standing in
+     for the names the way the hero's rotating tile does), and one proof: the
+     autopilot switch flipped on, over the calendar it fills.
+
+     The field is 09's brand blue with grain. LinkedIn lays the profile photo
+     (or the Page logo) over the bottom-left, about 220px square on a phone,
+     and phones crop 10–15% off each side, so everything that talks sits
+     between x 440 and the panel, and the left stays open field. The calendar
+     tilts away to the right and bleeds off the right and bottom edges; the
+     switch card is the pop-out, crossing the panel's left edge, with the
+     cursor on the knob.
+
+     Every UI string is the app's own: the calendar's weekday header, "Today",
+     the chip tones (Published, Writing now, Scheduled), and Settings →
+     Autopilot ("Write automatically", "On — writing every day"). The articles
+     are the Brightloop sample's; week two's are its buyer questions, which is
+     what autopilot turns into articles. Pace is one a day, so every day that
+     shows carries one. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="li lic" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<script src="../kit/kit.js"></script>
+<style>
+  .canvas {
+    background:
+      radial-gradient(760px 520px at 1460px 460px, rgba(216, 222, 233, 0.62), rgba(216, 222, 233, 0.3) 46%, rgba(216, 222, 233, 0) 76%),
+      radial-gradient(520px 300px at 1600px 0px, rgba(96, 156, 255, 0.42), rgba(96, 156, 255, 0) 72%),
+      radial-gradient(620px 420px at 120px 400px, rgba(4, 40, 160, 0.34), rgba(4, 40, 160, 0) 70%),
+      linear-gradient(100deg, #0a57f2 0%, #0c5cf3 50%, #1063f3 100%);
+  }
+  .grain { --grain: 0.22; }
+
+  /* ---------------------------------------------------------- claim */
+  .lb-h1 { position: absolute; left: 444px; top: 72px; font-size: 74px; color: #fff; white-space: nowrap; }
+  /* The engine tiles stand where the names would, overlapping like a stack,
+     each ringed in the field's blue so its edge reads. */
+  .lb-t { margin: 0 0 0 -0.15em; box-shadow: 0 0 0 0.05em #0c5bf3; }
+  .lb-h1 br + .lb-t { margin-left: 0; }
+  .lb-t.last { margin-right: 0.24em; }
+  .lb-t > img { width: 0.48em; height: 0.48em; }
+
+  .lb-url {
+    position: absolute; left: 444px; top: 262px; height: 60px; padding: 0 28px 0 20px;
+    display: flex; align-items: center; gap: 12px;
+    border-radius: 999px; background: #fbf9f7;
+    color: #166fe5; font-size: 29px; font-weight: 740; letter-spacing: -0.03em;
+    box-shadow: 0 18px 34px -20px rgba(4, 30, 100, 0.6);
+  }
+  .lb-url svg { width: 29px; height: 29px; }
+
+  /* ---------------------------------------------------------- the calendar */
+  .lb-cal {
+    position: absolute; left: 1112px; top: 40px; width: 900px; height: 520px;
+    transform-origin: 0 0;
+    transform: perspective(2200px) rotateY(-18deg) rotateX(5deg) rotateZ(-3deg);
+    background: #fff; color: var(--ink);
+    border-radius: 30px; overflow: hidden;
+    box-shadow:
+      0 0 0 1.5px rgba(255, 255, 255, 0.5),
+      0 50px 100px -30px rgba(1, 10, 40, 0.55),
+      0 20px 40px -20px rgba(1, 10, 40, 0.35);
+  }
+  .lb-head { display: flex; align-items: center; gap: 14px; height: 72px; padding: 0 24px; border-bottom: 1.5px solid #eceef1; }
+  .lb-head .app { --s: 42px; --r: 11px; }
+  .lb-head b { font-size: 25px; font-weight: 700; letter-spacing: -0.02em; }
+  .lb-head .mo { margin-left: 18px; font-size: 20px; font-weight: 600; color: var(--ink-2); }
+
+  .lb-wd { display: grid; grid-template-columns: repeat(7, 1fr); height: 40px; background: #f7f8fa; border-bottom: 1.5px solid #eceef1; }
+  .lb-wd span { display: flex; align-items: center; padding: 0 12px; font-size: 15px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: #8a909b; }
+
+  .lb-wk { display: grid; grid-template-columns: repeat(7, 1fr); height: 150px; border-bottom: 1.5px solid #eceef1; }
+  .lb-day { display: flex; flex-direction: column; gap: 8px; min-width: 0; padding: 10px; border-right: 1.5px solid #eceef1; }
+  .lb-day:last-child { border-right: 0; }
+  .lb-day.past { background: #f7f8fa; }
+  .lb-day.today { background: rgba(24, 119, 242, 0.05); }
+  .lb-num { display: flex; align-items: center; justify-content: space-between; height: 30px; }
+  .lb-num b { min-width: 30px; height: 30px; padding: 0 5px; display: grid; place-items: center; border-radius: 999px; font-size: 16px; font-weight: 700; }
+  .lb-day.past .lb-num b { color: #8a909b; }
+  .lb-day.today .lb-num b { background: var(--blue); color: #fff; }
+  .lb-num em { font-style: normal; font-size: 15px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--blue); }
+
+  .lb-chip {
+    display: flex; align-items: center; gap: 7px; height: 34px; padding: 0 9px; min-width: 0;
+    border-radius: 9px; border: 1.5px solid;
+    font-size: 15px; font-weight: 600; color: var(--ink); white-space: nowrap;
+  }
+  .lb-chip > span { overflow: hidden; text-overflow: ellipsis; }
+  .lb-chip svg { width: 16px; height: 16px; flex: none; }
+  .lb-chip.pub { border-color: rgba(19, 138, 67, 0.2); background: rgba(19, 138, 67, 0.08); }
+  .lb-chip.pub svg { color: var(--green-ink); }
+  .lb-chip.wr, .lb-chip.sch { border-color: rgba(37, 110, 230, 0.25); background: rgba(37, 110, 230, 0.1); }
+  .lb-spin { width: 15px; height: 15px; flex: none; border-radius: 50%; border: 2.4px solid rgba(37, 110, 230, 0.25); border-top-color: #256ee6; transform: rotate(40deg); }
+  .lb-dot { width: 8px; height: 8px; margin: 0 3px; flex: none; border-radius: 50%; background: #256ee6; }
+
+  /* ---------------------------------------------------------- the pop-out */
+  .lb-pop {
+    position: absolute; left: 860px; top: 246px; width: 420px; padding: 20px 24px 22px;
+    background: #fff; color: var(--ink); border-radius: 26px;
+    transform-origin: 0 0;
+    transform: rotate(-2deg);
+    box-shadow:
+      0 0 0 1.5px rgba(12, 16, 24, 0.04),
+      0 40px 70px -24px rgba(1, 10, 40, 0.6),
+      0 14px 30px -14px rgba(1, 10, 40, 0.4);
+  }
+  .lb-pop b { display: block; font-size: 24px; font-weight: 700; letter-spacing: -0.02em; }
+  .lb-pop .row { margin-top: 12px; display: flex; align-items: center; gap: 14px; font-size: 20px; font-weight: 550; letter-spacing: -0.01em; color: var(--ink-2); white-space: nowrap; }
+  .lb-pop .toggle { width: 70px; height: 40px; }
+  .lb-pop .toggle::after { width: 30px; height: 30px; }
+  .lb-pop .toggle.on::after { left: 35px; }
+  .lb-cur { --cs: 60px; left: 935px; top: 336px; }
+
+  /* ---------------------------------------------------------- company cover, 6:1
+     Shorter, so the claim steps down and the URL goes (the Page has its own
+     website button). The panel and the switch card shrink to fit beside it. */
+  html[data-f="lic"] .lb-h1 { left: 440px; top: 70px; font-size: 62px; }
+  html[data-f="lic"] .lb-cal { left: 1150px; top: 6px; transform: perspective(2200px) rotateY(-18deg) rotateX(5deg) rotateZ(-3deg) scale(0.8); }
+  html[data-f="lic"] .lb-pop { left: 1000px; top: 160px; transform: rotate(-2deg) scale(0.74); }
+  html[data-f="lic"] .lb-cur { --cs: 44px; left: 1057px; top: 221px; }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="grain"></div>
+
+  <h1 class="lb-h1 hl-title">Get AI Traffic From<br /><span class="inline-tile lb-t" style="--bg:#0d0d0d;--fg:#fff"><svg><use href="#lg-chatgpt"/></svg></span><span class="inline-tile lb-t" style="--bg:#d97757;--fg:#fbf3ea"><svg><use href="#lg-claude"/></svg></span><span class="inline-tile lb-t" style="--bg:#fff"><img src="../kit/gemini.png" alt="" /></span><span class="inline-tile lb-t last" style="--bg:#0f2427;--fg:#33c3d0"><svg><use href="#lg-perplexity"/></svg></span>On Autopilot</h1>
+
+  <div class="lb-url" data-only="li"><svg><use href="#lg-rankbox"/></svg>rankbox.xyz</div>
+
+  <div class="lb-cal">
+    <div class="lb-head">
+      <span class="app rankbox"><svg><use href="#lg-rankbox"/></svg></span>
+      <b>Calendar</b>
+      <span class="mo">October 2026</span>
+    </div>
+    <div class="lb-wd"><span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span></div>
+    <div class="lb-wk">
+      <div class="lb-day past"><div class="lb-num"><b>11</b></div><div class="lb-chip pub"><svg><use href="#ic-check"/></svg><span>What Is a Value Metric?</span></div></div>
+      <div class="lb-day past"><div class="lb-num"><b>12</b></div><div class="lb-chip pub"><svg><use href="#ic-check"/></svg><span>Usage-Based Pricing, Explained</span></div></div>
+      <div class="lb-day today"><div class="lb-num"><b>13</b><em>Today</em></div><div class="lb-chip wr"><i class="lb-spin"></i><span>How to Price a SaaS Product</span></div></div>
+      <div class="lb-day"><div class="lb-num"><b>14</b></div><div class="lb-chip sch"><i class="lb-dot"></i><span>Freemium or Free Trial? How to Choose</span></div></div>
+      <div class="lb-day"><div class="lb-num"><b>15</b></div><div class="lb-chip sch"><i class="lb-dot"></i><span>How to A/B Test a Pricing Page</span></div></div>
+      <div class="lb-day"><div class="lb-num"><b>16</b></div><div class="lb-chip sch"><i class="lb-dot"></i><span>Churn vs Retention: The Metrics That Matter</span></div></div>
+      <div class="lb-day"><div class="lb-num"><b>17</b></div><div class="lb-chip sch"><i class="lb-dot"></i><span>Writing Onboarding Emails People Read</span></div></div>
+    </div>
+    <div class="lb-wk">
+      <div class="lb-day"><div class="lb-num"><b>18</b></div><div class="lb-chip sch"><i class="lb-dot"></i><span>What Is Product-Led Growth?</span></div></div>
+      <div class="lb-day"><div class="lb-num"><b>19</b></div><div class="lb-chip sch"><i class="lb-dot"></i><span>Is Usage-Based Pricing Worth It?</span></div></div>
+      <div class="lb-day"><div class="lb-num"><b>20</b></div><div class="lb-chip sch"><i class="lb-dot"></i><span>How Do I Price API Calls?</span></div></div>
+      <div class="lb-day"><div class="lb-num"><b>21</b></div><div class="lb-chip sch"><i class="lb-dot"></i><span>Stripe Billing or Chargebee?</span></div></div>
+      <div class="lb-day"><div class="lb-num"><b>22</b></div><div class="lb-chip sch"><i class="lb-dot"></i><span>How Do I Bill by Usage?</span></div></div>
+      <div class="lb-day"><div class="lb-num"><b>23</b></div><div class="lb-chip sch"><i class="lb-dot"></i><span>What Is a Good Value Metric?</span></div></div>
+      <div class="lb-day"><div class="lb-num"><b>24</b></div></div>
+    </div>
+  </div>
+
+  <div class="lb-pop">
+    <b>Write automatically</b>
+    <div class="row"><span class="toggle on"></span>On — writing every day</div>
+  </div>
+  <svg class="cur lb-cur"><use href="#ic-cursor"/></svg>
+</div>
+</body>
+</html>

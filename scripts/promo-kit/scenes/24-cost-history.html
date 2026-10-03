@@ -1,0 +1,127 @@
+<!doctype html>
+<!-- 24 · Know exactly what every article costs. After Dexter's "Know exactly
+     how much you are spending per prompt": the series field, corner app and AI
+     apps, and a tall tilted history of this billing cycle. Each row is an
+     article and the article credit it used ("Writing uses 1 article credit");
+     the plan row prices a credit: $49.50 a month for 30 credits is $1.65 each.
+     Rows show credits, not dollars: with 12 of 30 used, the money spent so far
+     isn't $1.65 an article, and the app shows no per-article price. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x3" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<script src="../kit/kit.js"></script>
+<style>
+  html, body { background: #000; }
+  .canvas { background: #000; }
+
+  /* ------------------------------------------------ series: field, logo, apps, headline */
+  .yx-field {
+    position: absolute; inset: 0; z-index: -2;
+    background:
+      radial-gradient(70% 60% at 100% 0%, rgba(36, 76, 214, 0.55) 0%, rgba(36, 76, 214, 0) 70%),
+      linear-gradient(to bottom left, #1d3fb8 0%, #132a7c 22%, #07102a 50%, #02050f 76%, #000 100%);
+  }
+  .grain { --grain: 0.13; }
+  .yx-corner { position: absolute; left: 0; top: 0; --s: 84px; --r: 0; }
+  .yx-corner::after { box-shadow: none; }
+  .yx-apps { position: absolute; left: 84px; top: 188px; height: 96px; display: flex; align-items: center; }
+  .yx-claude { width: 76px; height: 76px; color: #d97757; display: block; }
+  .yx-gpt { margin-left: 36px; --s: 83px; --r: 0; --bg: #fff; --fg: #0b0b0b; --g: 72%; }
+  .yx-gpt::after { background: none; box-shadow: none; }
+  .yx-cur { margin-left: 48px; --s: 95px; --r: 23%; --bg: linear-gradient(165deg, #2b2c30 0%, #121214 55%, #0b0b0c 100%); --g: 66%; box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, 0.1), 0 10px 24px -10px rgba(0, 0, 0, 0.7); }
+  .yx-hl { position: absolute; left: 86px; top: 332px; font-size: 98px; line-height: 1.02; color: #f5f5f7; white-space: nowrap; }
+
+  /* ------------------------------------------------ the history, tilted */
+  .ch-panel {
+    position: absolute; left: 960px; top: 43px; width: 940px; height: 1500px;
+    transform: rotate(13.1deg); transform-origin: 0 0;
+    border-radius: 26px; overflow: hidden;
+    background: #1b1b1c;
+    box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, 0.06), 0 50px 110px -24px rgba(0, 0, 0, 0.8), 0 18px 40px -14px rgba(0, 0, 0, 0.5);
+    color: #f2f2f3;
+  }
+  .ch-top { position: absolute; left: 26px; top: 34px; display: flex; align-items: baseline; gap: 18px; white-space: nowrap; }
+  .ch-top b { font-size: 32px; font-weight: 700; letter-spacing: -0.025em; color: #fff; }
+  .ch-top span { font-size: 25px; font-weight: 500; letter-spacing: -0.01em; color: #8d9098; }
+
+  .ch-rows { position: absolute; left: 16px; top: 100px; width: 716px; display: grid; gap: 6px; }
+  .ch-row {
+    display: flex; align-items: center; gap: 18px;
+    height: 80px; padding: 0 16px 0 24px; border-radius: 17px;
+    background: #222224; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.025);
+    white-space: nowrap;
+  }
+  .ch-row .ch-t { flex: none; max-width: 322px; overflow: hidden; text-overflow: ellipsis; font-size: 29px; font-weight: 500; letter-spacing: -0.015em; color: #f2f2f3; }
+  .ch-row .ch-m { flex: none; font-size: 25.5px; font-weight: 500; letter-spacing: -0.01em; color: #868991; }
+  .ch-row .ch-c {
+    margin-left: auto; flex: none;
+    height: 44px; padding: 0 13px; border-radius: 11px;
+    display: grid; place-items: center;
+    background: #2a2a2d; box-shadow: inset 0 0 0 1.5px #3b3b3f;
+    font-size: 22px; font-weight: 650; letter-spacing: 0.02em; color: #dedfe3; font-variant-numeric: tabular-nums;
+  }
+  /* the plan line the prices come from */
+  .ch-row.ch-plan { background: rgba(24, 119, 242, 0.13); box-shadow: inset 0 0 0 1.5px rgba(70, 145, 255, 0.35); }
+  .ch-row.ch-plan .ch-p { font-size: 26px; font-weight: 500; letter-spacing: -0.012em; color: #a9b4c8; }
+  .ch-row.ch-plan .ch-p b { font-weight: 650; color: #fff; }
+  .ch-row.ch-plan .ch-p i { font-style: normal; margin: 0 10px; color: #6f7d96; }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <!-- Cursor's cube, traced from src/assets/connectors/cursor.webp so it stays sharp at 2x. -->
+    <symbol id="ch-cube" viewBox="0 0 24 24">
+      <path d="M12 3.6 19.7 7.7v8.85L12 20.35 4.3 16.55V7.7Z" fill="var(--cube, currentColor)" />
+      <path d="M5.3 7.95h13.7L12.05 19.7 12 12.4Z" fill="var(--cut, #000)" />
+    </symbol>
+  </defs>
+</svg>
+<div class="canvas">
+  <div class="yx-field"></div>
+  <div class="grain"></div>
+
+  <div class="app rankbox yx-corner"><svg><use href="#lg-rankbox"/></svg></div>
+
+  <div class="yx-apps">
+    <svg class="yx-claude"><use href="#lg-claude"/></svg>
+    <div class="app yx-gpt"><svg><use href="#lg-chatgpt"/></svg></div>
+    <div class="app yx-cur" style="--cube:#e9e9ee;--cut:#0d0d0f"><svg><use href="#ch-cube"/></svg></div>
+  </div>
+
+  <h1 class="hl-title yx-hl">Know exactly<br />what every<br />article costs</h1>
+
+  <div class="ch-panel">
+    <div class="ch-top"><b>This cycle</b><span>12 of 30 articles · Business</span></div>
+    <div class="ch-rows" id="rows">
+      <div class="ch-row ch-plan"><span class="ch-p">Plan<i>·</i><b>$49.50 a month</b><i>·</i>30 credits<i>·</i><b>$1.65</b> each</span></div>
+    </div>
+  </div>
+</div>
+<script>
+  // This cycle, newest first: Brightloop's articles at "3 times a week",
+  // each one written from a plan credit worth $49.50 / 30 = $1.65.
+  const rows = [
+    ["Usage-Based Pricing, Explained", 1],
+    ["How to Price a SaaS Product", 4],
+    ["Freemium or Free Trial? How to Choose", 6],
+    ["What Is a Value Metric?", 8],
+    ["How to A/B Test a Pricing Page", 11],
+    ["Churn vs Retention: The Metrics That Matter", 13],
+    ["What Is Product-Led Growth?", 15],
+    ["Writing Onboarding Emails People Read", 18],
+    ["Is Usage-Based Pricing Worth It?", 20],
+    ["Stripe Billing or Chargebee?", 22],
+    ["How Do I Price API Calls?", 25],
+    ["What Is a Good Value Metric?", 27],
+  ];
+  const host = document.getElementById("rows");
+  for (const [t, d] of rows) {
+    host.insertAdjacentHTML("beforeend",
+      `<div class="ch-row"><span class="ch-t">${t}</span><span class="ch-m">Published · ${d}d ago</span><span class="ch-c">1 credit</span></div>`);
+  }
+</script>
+</body>
+</html>

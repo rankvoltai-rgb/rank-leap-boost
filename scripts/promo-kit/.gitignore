@@ -1,0 +1,8 @@
+# 2x masters are ~100 MB and regenerate with ./render.sh; the channel-size
+# images in out/<format>/ are the ones to commit and upload.
+out/*@2x/
+# Third-party reference images: other companies' marketing art, kept for
+# local comparison only. The repo is public, so they never get committed.
+refs/
+# Download bundles, rebuilt from out/ on request.
+zips/

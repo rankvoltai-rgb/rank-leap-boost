@@ -1,0 +1,168 @@
+<!doctype html>
+<!-- 35 · Light or dark, it fits. After Cal.com's light/dark split: one
+     browser window cut down the middle, the same article widget drawn twice,
+     light theme on the left and dark on the right, the hand on the section
+     the reader is on. The claim is true: synced articles take the site's own
+     theme. The page is the sample site's (Brightloop), so no Rankbox branding
+     appears inside it; only the wordmark at the foot, split across the seam.
+     The page is written once in a <template> and cloned into two themed
+     copies, each clipped to its half, so the seam is exact. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x3" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<script src="../kit/kit.js"></script>
+<style>
+  html, body { background: #000; }
+  .canvas { background: #000; }
+
+  /* one themed copy of the whole window */
+  .ld-page {
+    position: absolute; inset: 0; border-radius: 30px; overflow: hidden;
+    background: var(--bg); color: var(--t1);
+  }
+  .ld-page::after { content: ""; position: absolute; inset: 0; border-radius: inherit; box-shadow: inset 0 0 0 1.5px var(--rim); pointer-events: none; }
+  .ld-light { clip-path: inset(0 800px 0 0); }
+  .ld-dark { clip-path: inset(0 0 0 800px); }
+
+  .ld-light {
+    --bg: #f7f7f7; --rim: #e4e4e6; --bar: #ffffff; --bar-line: #e7e7e7; --url: #efefef; --url-t: #2f3336; --chrome: #adadad;
+    --sk: #efefef; --card: #ffffff; --card-line: #e7e7e7; --col-line: #eaeaea;
+    --strip: #fafafa; --strip-i: #f0f0f0; --strip-lit: #ffe6cc; --strip-lit2: #ffd3a8;
+    --t1: #0b0b0c; --t2: #383a3c; --t3: #303435; --t-ic: #676871; --t-mute: #adadad;
+    --tile: #f0f0f0; --tile-t: #0b0b0c; --pick: #111112; --pick-t: #ffffff; --wm: #0e0e0e;
+  }
+  .ld-dark {
+    --bg: #0f0f0f; --rim: #1c1c1e; --bar: #0f0f0f; --bar-line: #383838; --url: #262626; --url-t: #d4d4d8; --chrome: #6e6e72;
+    --sk: #262626; --card: #171717; --card-line: #252525; --col-line: #252525;
+    --strip: #1c1c1e; --strip-i: #262628; --strip-lit: #5a3410; --strip-lit2: #7a4512;
+    --t1: #ffffff; --t2: #d4d4d8; --t3: #d4d4d8; --t-ic: #a1a1a6; --t-mute: #a3a3a3;
+    --tile: #38383a; --tile-t: #ffffff; --pick: #f6f6f6; --pick-t: #0e0e0e; --wm: #ffffff;
+  }
+
+  /* browser chrome */
+  .ld-bar { position: absolute; left: 0; right: 0; top: 0; height: 92px; background: var(--bar); border-bottom: 1.5px solid var(--bar-line); }
+  .ld-nav { position: absolute; top: 34px; width: 25px; height: 25px; color: var(--chrome); }
+  .ld-url { position: absolute; left: 205px; top: 20px; width: 1252px; height: 52px; border-radius: 26px; background: var(--url); display: flex; align-items: center; gap: 12px; padding-left: 20px; font-size: 23px; font-weight: 500; letter-spacing: -0.01em; color: var(--url-t); white-space: nowrap; }
+  .ld-url svg { width: 23px; height: 23px; flex: none; }
+  .ld-av { position: absolute; left: 1478px; top: 24px; width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(150deg, #b9b1dd, #7f74a8); box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, 0.18); display: grid; place-items: center; color: rgba(255, 255, 255, 0.85); }
+  .ld-av svg { width: 26px; height: 26px; }
+  .ld-kebab { position: absolute; left: 1550px; top: 35px; display: grid; gap: 4px; }
+  .ld-kebab i { width: 5px; height: 5px; border-radius: 50%; background: #4c4c4c; }
+
+  /* page skeleton */
+  .ld-sk { position: absolute; background: var(--sk); border-radius: 999px; }
+
+  /* the article widget */
+  .ld-card {
+    position: absolute; left: 211px; top: 362px; width: 1179px; height: 675px;
+    display: grid; grid-template-columns: 464px minmax(0, 1fr);
+    border-radius: 16px; background: var(--card);
+    box-shadow: inset 0 0 0 1.5px var(--card-line);
+    overflow: hidden;
+  }
+  .ld-col + .ld-col { border-left: 1.5px solid var(--col-line); }
+
+  .ld-about { position: relative; padding: 0 40px; }
+  .ld-strip { position: absolute; left: 8px; right: 8px; top: 8px; height: 151px; border-radius: 14px; overflow: hidden; background: var(--strip); display: grid; grid-template-columns: repeat(10, 1fr); grid-auto-rows: 1fr; gap: 5px; padding: 5px; -webkit-mask-image: linear-gradient(180deg, #000 45%, transparent); mask-image: linear-gradient(180deg, #000 45%, transparent); box-shadow: inset 0 0 0 1.5px var(--card-line); }
+  .ld-strip i { border-radius: 8px; background: var(--strip-i); }
+  .ld-strip i.o { background: var(--strip-lit); }
+  .ld-strip i.o2 { background: var(--strip-lit2); }
+  .ld-logo { position: relative; display: inline-flex; align-items: center; margin-top: 130px; height: 48px; padding: 0 16px 0 13px; border-radius: 13px; background: var(--card); box-shadow: inset 0 0 0 1.5px var(--card-line), 0 0 0 4px var(--card); font-size: 21px; }
+  .ld-logo .bl-logo { color: var(--t1); }
+  .ld-k { margin-top: 12px; font-size: 23px; font-weight: 500; color: var(--t2); letter-spacing: -0.01em; }
+  .ld-about h2 { margin-top: 9px; font-size: 32px; line-height: 1.16; font-weight: 700; letter-spacing: -0.04em; color: var(--t1); }
+  .ld-about p { margin-top: 14px; font-size: 22px; line-height: 1.2; font-weight: 500; color: var(--t3); letter-spacing: -0.01em; }
+  .ld-facts { margin-top: 44px; display: grid; gap: 19px; }
+  .ld-facts div { display: flex; align-items: center; gap: 14px; font-size: 23px; font-weight: 500; color: var(--t3); letter-spacing: -0.01em; white-space: nowrap; }
+  .ld-facts svg { width: 26px; height: 26px; color: var(--t-ic); flex: none; }
+
+  /* right: on this page */
+  .ld-toc { position: relative; }
+  .ld-h { position: absolute; top: 47px; font-size: 23px; font-weight: 500; letter-spacing: -0.01em; color: var(--t1); white-space: nowrap; line-height: 28px; }
+  .ld-h.a { right: 592px; }
+  .ld-h.b { left: 126.5px; }
+  .ld-chev { position: absolute; top: 46px; width: 26px; height: 26px; color: var(--t1); }
+  .ld-row { position: absolute; left: 0; right: 0; height: 86px; }
+  .ld-num { position: absolute; left: 47.5px; width: 60px; top: 0; height: 100%; display: grid; place-items: center; font-size: 23px; font-weight: 500; color: var(--t-mute); }
+  .ld-row.on .ld-num { color: var(--t1); font-weight: 600; }
+  .ld-tile { position: absolute; left: 126.5px; right: 39px; top: 0; height: 100%; border-radius: 9px; background: var(--tile); display: flex; align-items: center; padding-left: 26px; font-size: 23px; font-weight: 500; letter-spacing: -0.01em; color: var(--tile-t); white-space: nowrap; }
+  .ld-row.on .ld-tile { background: var(--pick); color: var(--pick-t); font-weight: 600; }
+
+  .ld-foot { position: absolute; left: 0; right: 0; top: 1150px; display: flex; justify-content: center; }
+  .ld-foot .wm { font-size: 30px; color: var(--wm); }
+
+  .ld-hand { position: absolute; left: 1086px; top: 593px; width: 40px; height: 40px; z-index: 5; filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.45)); }
+</style>
+</head>
+<body>
+<div class="canvas" id="canvas">
+  <svg class="ld-hand" viewBox="0 0 24 24"><use href="#ic-hand"/></svg>
+</div>
+
+<template id="page">
+  <div class="ld-bar">
+    <svg class="ld-nav" style="left:34px"><use href="#ic-back"/></svg>
+    <svg class="ld-nav" style="left:90px;transform:scaleX(-1)"><use href="#ic-back"/></svg>
+    <svg class="ld-nav" style="left:147px"><use href="#ic-refresh"/></svg>
+    <div class="ld-url"><svg><use href="#ic-lock"/></svg>brightloop.app/blog/usage-based-pricing</div>
+    <div class="ld-av"><svg><use href="#ic-user"/></svg></div>
+    <div class="ld-kebab"><i></i><i></i><i></i></div>
+  </div>
+
+  <div class="ld-sk" style="left:53px;top:136px;width:32px;height:32px"></div>
+  <div class="ld-sk" style="left:107px;top:143px;width:93px;height:18px"></div>
+  <div class="ld-sk" style="left:220px;top:143px;width:93px;height:18px"></div>
+  <div class="ld-sk" style="left:1451px;top:135px;width:96px;height:34px"></div>
+  <div class="ld-sk" style="left:694px;top:225px;width:212px;height:12px"></div>
+  <div class="ld-sk" style="left:659px;top:251px;width:282px;height:13px"></div>
+  <div class="ld-sk" style="left:760px;top:285px;width:80px;height:25px"></div>
+
+  <div class="ld-card">
+    <div class="ld-col ld-about">
+      <div class="ld-strip" data-strip></div>
+      <div class="ld-logo"><span class="bl-logo"><i></i>Brightloop</span></div>
+      <div class="ld-k">Pricing</div>
+      <h2>Usage-Based Pricing,<br />Explained</h2>
+      <p>How usage-based pricing works, and when to add a base fee.</p>
+      <div class="ld-facts">
+        <div><svg><use href="#ic-clock"/></svg>8 min read</div>
+        <div><svg><use href="#rb-article"/></svg>1,840 words</div>
+        <div><svg><use href="#ic-globe"/></svg>brightloop.app/blog</div>
+      </div>
+    </div>
+
+    <div class="ld-col ld-toc">
+      <span class="ld-h a">On this</span><span class="ld-h b">page</span>
+      <svg class="ld-chev" style="left:586.5px"><use href="#ic-chev-left"/></svg>
+      <svg class="ld-chev" style="left:638.5px"><use href="#ic-chev-right"/></svg>
+      <div class="ld-row on" style="top:180px"><span class="ld-num">1</span><span class="ld-tile">How do I bill by usage?</span></div>
+      <div class="ld-row" style="top:273px"><span class="ld-num">2</span><span class="ld-tile">Is it worth it?</span></div>
+      <div class="ld-row" style="top:366px"><span class="ld-num">3</span><span class="ld-tile">Stripe Billing or Chargebee?</span></div>
+      <div class="ld-row" style="top:459px"><span class="ld-num">4</span><span class="ld-tile">How do I price API calls?</span></div>
+      <div class="ld-row" style="top:552px"><span class="ld-num">5</span><span class="ld-tile">FAQ</span></div>
+    </div>
+  </div>
+
+  <div class="ld-foot"><span class="wm"><svg><use href="#lg-rankbox"/></svg>Rankbox</span></div>
+</template>
+
+<script>
+  // Two copies of one page: light clipped to the left half, dark to the right.
+  const canvas = document.getElementById("canvas");
+  const tpl = document.getElementById("page");
+  for (const theme of ["ld-light", "ld-dark"]) {
+    const page = document.createElement("div");
+    page.className = `ld-page ${theme}`;
+    page.appendChild(tpl.content.cloneNode(true));
+    canvas.insertBefore(page, canvas.firstChild);
+  }
+  // The header strip: a soft wall of tiles, a few lit in Brightloop orange.
+  const lit = { 2: "o", 13: "o2", 16: "o", 25: "o" };
+  document.querySelectorAll("[data-strip]").forEach((strip) => {
+    for (let i = 0; i < 30; i++) strip.insertAdjacentHTML("beforeend", `<i class="${lit[i] || ""}"></i>`);
+  });
+</script>
+</body>
+</html>

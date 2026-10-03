@@ -1,0 +1,164 @@
+<!doctype html>
+<!-- 23 · Select a line. Rewrite it in one click. After Dexter's "Select and
+     work directly in the canvas": the same field, corner app and AI apps as 22,
+     and a tilted editor: the selection and its rewrite in the dark side panel,
+     the editor's four AI actions in the glowing box at its foot, and the
+     Brightloop article on the light canvas with the section selected.
+     The actions and "Undo" are the editor's real labels (FACTS). -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x3" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<script src="../kit/kit.js"></script>
+<style>
+  html, body { background: #000; }
+  .canvas { background: #000; }
+
+  /* ------------------------------------------------ series: field, logo, apps, headline */
+  .yx-field {
+    position: absolute; inset: 0; z-index: -2;
+    background:
+      radial-gradient(70% 60% at 100% 0%, rgba(36, 76, 214, 0.55) 0%, rgba(36, 76, 214, 0) 70%),
+      linear-gradient(to bottom left, #1d3fb8 0%, #132a7c 22%, #07102a 50%, #02050f 76%, #000 100%);
+  }
+  .grain { --grain: 0.13; }
+  .yx-corner { position: absolute; left: 0; top: 0; --s: 84px; --r: 0; }
+  .yx-corner::after { box-shadow: none; }
+  .yx-apps { position: absolute; left: 84px; top: 246px; height: 96px; display: flex; align-items: center; }
+  .yx-claude { width: 76px; height: 76px; color: #d97757; display: block; }
+  .yx-gpt { margin-left: 36px; --s: 83px; --r: 0; --bg: #fff; --fg: #0b0b0b; --g: 72%; }
+  .yx-gpt::after { background: none; box-shadow: none; }
+  .yx-cur { margin-left: 48px; --s: 95px; --r: 23%; --bg: linear-gradient(165deg, #2b2c30 0%, #121214 55%, #0b0b0c 100%); --g: 66%; box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, 0.1), 0 10px 24px -10px rgba(0, 0, 0, 0.7); }
+  .yx-hl { position: absolute; left: 86px; top: 349px; font-size: 98px; line-height: 1.02; color: #f5f5f7; white-space: nowrap; }
+
+  /* ------------------------------------------------ the editor, tilted */
+  .se-win {
+    position: absolute; left: 802px; top: 78px; width: 1300px; height: 1400px;
+    transform: rotate(12.7deg); transform-origin: 0 0;
+    border-radius: 24px 0 0 0; overflow: hidden;
+    background: #111112;
+    box-shadow: 0 0 0 1.5px rgba(255, 255, 255, 0.06), 0 50px 100px -24px rgba(0, 0, 0, 0.75), 0 18px 36px -14px rgba(0, 0, 0, 0.5);
+  }
+  .se-side { position: absolute; left: 0; top: 0; bottom: 0; width: 508px; background: #1a1a1b; box-shadow: inset -1.5px 0 0 #2a2a2c; color: #f2f2f3; }
+
+  .se-chip {
+    display: inline-flex; align-items: center; gap: 9px;
+    height: 36px; padding: 0 13px 0 10px; border-radius: 9px;
+    background: rgba(37, 105, 235, 0.16); box-shadow: inset 0 0 0 1.5px #2e6fdb;
+    color: #62abff; font-size: 19px; font-weight: 650; letter-spacing: -0.008em; white-space: nowrap;
+  }
+  .se-chip svg { width: 19px; height: 19px; flex: none; }
+
+  .se-sel {
+    position: absolute; left: 66px; top: 32px; width: 424px;
+    padding: 15px 20px 19px;
+    border-radius: 18px; background: #262729;
+    box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, 0.05);
+  }
+  .se-nw { white-space: nowrap; }
+  .se-sel p { margin-top: 12px; font-size: 21px; line-height: 1.42; font-weight: 450; letter-spacing: -0.01em; color: #f4f4f5; }
+
+  .se-out { position: absolute; left: 22px; top: 246px; width: 464px; }
+  .se-out .se-k { font-size: 19px; font-weight: 600; letter-spacing: -0.005em; color: #8f929a; }
+  .se-out p { margin-top: 8px; font-size: 21px; line-height: 1.45; font-weight: 450; letter-spacing: -0.01em; color: #f2f2f3; }
+  .se-undo {
+    margin-top: 18px; display: inline-flex; align-items: center; gap: 9px;
+    height: 38px; padding: 0 14px 0 11px; border-radius: 10px;
+    background: #252629; box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, 0.05);
+    font-size: 18px; font-weight: 600; color: #c9cbd1; letter-spacing: -0.005em;
+  }
+  .se-undo svg { width: 19px; height: 19px; color: #a7aab2; }
+
+  /* the editor's AI actions, in the box the reference uses for its composer */
+  .se-acts {
+    position: absolute; left: 18px; top: 830px; width: 472px; padding: 12px;
+    border-radius: 22px; background: #1d1e21;
+    box-shadow: 0 0 0 2px #2f72e4, 0 0 24px 2px rgba(47, 114, 228, 0.45), inset 0 0 16px rgba(47, 114, 228, 0.12);
+  }
+  .se-acts .se-cap { padding: 6px 12px 10px; font-size: 16px; font-weight: 700; letter-spacing: 0.14em; color: #7f828b; }
+  .se-row { display: flex; align-items: center; gap: 15px; height: 56px; padding: 0 14px; border-radius: 13px; font-size: 21px; font-weight: 550; letter-spacing: -0.012em; color: #e8e9ec; }
+  .se-row svg { width: 24px; height: 24px; color: #9a9da5; flex: none; }
+  .se-row.se-on { background: rgba(37, 105, 235, 0.2); box-shadow: inset 0 0 0 1.5px rgba(76, 150, 255, 0.5); color: #9ccaff; }
+  .se-row.se-on svg { color: #6fb2ff; }
+  .se-row .se-kbd { margin-left: auto; height: 30px; padding: 0 10px; border-radius: 8px; background: rgba(37, 105, 235, 0.22); display: grid; place-items: center; font-size: 15px; font-weight: 700; color: #8cc2ff; letter-spacing: 0.02em; }
+
+  /* ------------------------------------------------ the article on the canvas */
+  .se-page { position: absolute; left: 516px; top: 0; right: 0; bottom: 0; background: #f7f6f2; box-shadow: inset 2px 0 0 #3f93d8; color: #1b1915; }
+  .se-page .se-kick { position: absolute; left: 50px; top: 98px; font-size: 15px; font-weight: 700; letter-spacing: 0.14em; color: #e2711b; }
+  .se-page h3 { position: absolute; left: 48px; top: 128px; width: 640px; font-size: 43px; line-height: 1.08; font-weight: 700; letter-spacing: -0.035em; }
+  .se-page .se-intro { position: absolute; left: 50px; top: 252px; width: 600px; font-size: 19px; line-height: 1.5; font-weight: 500; color: #77726a; letter-spacing: -0.005em; }
+  .se-sec { position: absolute; left: 34px; width: 322px; padding: 16px 18px 18px; }
+  .se-sec b { display: block; font-size: 24px; font-weight: 700; letter-spacing: -0.025em; color: #1b1915; }
+  .se-sec p { margin-top: 9px; font-size: 18.5px; line-height: 1.5; font-weight: 500; color: #4f4b45; letter-spacing: -0.005em; }
+  .se-sec.se-picked { box-shadow: 0 0 0 2px #1877f2; }
+  .se-sec.se-picked p span { background: rgba(24, 119, 242, 0.2); box-shadow: 0 0 0 2px rgba(24, 119, 242, 0.2); border-radius: 2px; color: #24324a; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+  .se-sec.se-picked > i { position: absolute; left: -9px; top: -9px; width: 18px; height: 18px; border-radius: 50%; background: #fff; box-shadow: inset 0 0 0 2px #1877f2; }
+  .se-sec.se-picked > i::after { content: ""; position: absolute; inset: 5px; border-radius: 50%; background: #1877f2; }
+  .se-sec.se-guide { outline: 2px dashed #3d8ff5; outline-offset: 0; }
+  .se-fig { position: absolute; left: 52px; width: 430px; height: 190px; border-radius: 16px; overflow: hidden; }
+  .se-fig::before { content: ""; position: absolute; right: -80px; top: -110px; width: 380px; height: 380px; border-radius: 50%; background: radial-gradient(closest-side, rgba(255, 238, 205, 0.75), rgba(255, 238, 205, 0)); }
+  .se-fig > i { position: absolute; z-index: 1; left: 22px; top: 20px; width: 30px; height: 30px; border-radius: 50%; border: 7px solid #fff; }
+  .se-bars { position: absolute; z-index: 1; left: 26px; bottom: 0; display: flex; align-items: flex-end; gap: 12px; }
+  .se-bars b { width: 34px; border-radius: 9px 9px 0 0; background: rgba(255, 255, 255, 0.82); box-shadow: 0 -8px 20px -10px rgba(160, 60, 0, 0.5); }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <!-- Cursor's cube, traced from src/assets/connectors/cursor.webp so it stays sharp at 2x. -->
+    <symbol id="se-cube" viewBox="0 0 24 24">
+      <path d="M12 3.6 19.7 7.7v8.85L12 20.35 4.3 16.55V7.7Z" fill="var(--cube, currentColor)" />
+      <path d="M5.3 7.95h13.7L12.05 19.7 12 12.4Z" fill="var(--cut, #000)" />
+    </symbol>
+    <!-- Undo arrow (the editor toolbar's Undo2). -->
+    <symbol id="se-undo" viewBox="0 0 24 24">
+      <g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14 4 9l5-5" /><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11" /></g>
+    </symbol>
+  </defs>
+</svg>
+<div class="canvas">
+  <div class="yx-field"></div>
+  <div class="grain"></div>
+
+  <div class="app rankbox yx-corner"><svg><use href="#lg-rankbox"/></svg></div>
+
+  <div class="yx-apps">
+    <svg class="yx-claude"><use href="#lg-claude"/></svg>
+    <div class="app yx-gpt"><svg><use href="#lg-chatgpt"/></svg></div>
+    <div class="app yx-cur" style="--cube:#e9e9ee;--cut:#0d0d0f"><svg><use href="#se-cube"/></svg></div>
+  </div>
+
+  <h1 class="hl-title yx-hl">Select a line.<br />Rewrite it in<br />one click.</h1>
+
+  <div class="se-win">
+    <div class="se-side">
+      <div class="se-sel">
+        <span class="se-chip"><svg><use href="#ic-type"/></svg>How do I bill by usage?</span>
+        <p>Pick one unit that grows with the value a customer gets, and meter it from <span class="se-nw">day one.</span></p>
+      </div>
+      <div class="se-out">
+        <div class="se-k">Rewritten:</div>
+        <p>Pick one value metric, like API calls or seats, that grows with the value a customer gets. Meter it from day one, and add a small base fee so revenue stays predictable.</p>
+        <span class="se-undo"><svg><use href="#se-undo"/></svg>Undo</span>
+      </div>
+      <div class="se-acts">
+        <div class="se-row se-on"><svg><use href="#ic-gauge"/></svg>Improve SEO</div>
+        <div class="se-row"><svg><use href="#ic-wand"/></svg>Rewrite</div>
+        <div class="se-row"><svg><use href="#ic-plus"/></svg>Expand</div>
+        <div class="se-row"><svg><use href="#ic-list"/></svg>Shorten</div>
+      </div>
+    </div>
+    <div class="se-page">
+      <div class="se-kick">PRICING</div>
+      <h3>Usage-Based<br />Pricing, Explained</h3>
+      <p class="se-intro">Usage-based pricing charges customers for what they use. Here's how to pick a unit, meter it and price it.</p>
+      <div class="se-sec se-picked" style="top:344px"><i></i><b>How do I bill by usage?</b><p><span>Pick one unit that grows with the value a customer gets, and meter it from day one.</span></p></div>
+      <div class="se-sec se-guide" style="top:566px"><b>Is usage-based pricing worth it?</b><p>It is when usage tracks value: customers start small and pay more as they grow.</p></div>
+      <div class="se-fig bl-cover" style="top:790px"><i></i><span class="se-bars"><b style="height:40px"></b><b style="height:62px"></b><b style="height:54px"></b><b style="height:86px"></b><b style="height:106px"></b><b style="height:130px"></b><b style="height:156px"></b></span></div>
+      <div class="se-sec" style="top:1000px"><b>Stripe Billing or Chargebee?</b><p>Both meter usage. The choice comes down to how you invoice and who runs billing.</p></div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

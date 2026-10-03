@@ -1,0 +1,88 @@
+<!doctype html>
+<!-- 21 · Scored for Google and AI answers. After FramerForms' "POWER UP YOUR
+     FORM WITH LOGIC": a flat brand-blue field, the headline on the left, and
+     on the right a card cropped by the top and right edges with the two
+     scores as buttons. A pale node under them sends a connector that branches
+     into the two checklists below, the second cropped by the right edge.
+     Every label is the editor's real SEO checklist (FACTS); values are the
+     sample article's (Brightloop, "usage based pricing"). -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x3" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<script src="../kit/kit.js"></script>
+<style>
+  .canvas { background: #1a6ff2; }
+  .grain { --grain: 0.06; }
+
+  .sc-hl { position: absolute; left: 75px; top: 465px; font-size: 90px; line-height: 1; color: #fff; white-space: nowrap; }
+
+  .sc-card { position: absolute; background: #fff; border-radius: 26px; box-shadow: 0 30px 60px -24px rgba(3, 20, 80, 0.45), 0 8px 18px -10px rgba(3, 20, 80, 0.25); }
+  .sc-card > * { position: absolute; }
+
+  /* the top card: a field, then the two scores */
+  .sc-top { left: 1086px; top: -40px; width: 640px; height: 305px; }
+  .sc-top .bar { left: 36px; top: 44px; width: 640px; height: 92px; border-radius: 18px; background: #eff0f2; }
+  .sc-top .b { top: 188px; width: 250px; height: 80px; border-radius: 16px; background: #0b3fa0; color: #fff; display: grid; place-items: center; font-size: 26px; font-weight: 700; letter-spacing: -0.015em; }
+  .sc-top .b1 { left: 36px; }
+  .sc-top .b2 { left: 304px; }
+
+  .sc-node { position: absolute; left: 1354px; top: 238px; width: 54px; height: 54px; border-radius: 50%; background: #bfe1ff; z-index: 3; }
+  .sc-wire { position: absolute; left: 0; top: 0; width: 1600px; height: 1200px; overflow: visible; z-index: 2; }
+
+  /* the checklists */
+  .sc-a { left: 800px; top: 432px; width: 530px; height: 900px; }
+  .sc-b { left: 1402px; top: 427px; width: 560px; height: 588px; }
+  .sc-card h3 { left: 36px; top: 29px; font-size: 30px; font-weight: 700; letter-spacing: -0.025em; color: #101318; line-height: 1; white-space: nowrap; }
+  .sc-card .lbl { left: 36px; font-size: 22px; font-weight: 500; letter-spacing: -0.01em; color: #6f737b; line-height: 1; white-space: nowrap; }
+  .sc-card .fld { left: 36px; width: 458px; height: 82px; border-radius: 18px; background: #f1f2f4; display: flex; align-items: center; gap: 12px; padding: 0 22px; font-size: 24px; font-weight: 600; letter-spacing: -0.015em; color: #262a31; white-space: nowrap; }
+  .sc-b .fld { width: 488px; }
+  .sc-card .fld .ok { width: 28px; height: 28px; color: #12b981; flex: none; }
+  .sc-card .fld .chev { margin-left: auto; width: 28px; height: 28px; color: #8d929b; }
+  .sc-b .pass { left: 36px; top: 472px; width: 488px; height: 77px; border-radius: 16px; background: #10bf86; color: #fff; display: flex; align-items: center; gap: 12px; padding: 0 22px; font-size: 24px; font-weight: 700; letter-spacing: -0.015em; white-space: nowrap; }
+  .sc-b .pass svg { width: 28px; height: 28px; color: #fff; flex: none; }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="grain"></div>
+
+  <h1 class="hl-caps sc-hl">Scored for<br />Google and<br />AI answers</h1>
+
+  <div class="sc-card sc-top">
+    <div class="bar"></div>
+    <div class="b b1">Google</div>
+    <div class="b b2">AI answers</div>
+  </div>
+
+  <svg class="sc-wire" viewBox="0 0 1600 1200" fill="none" stroke="#bfe1ff" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M1381 290 V316 A30 30 0 0 1 1351 346 H1095 A30 30 0 0 0 1065 376 V424" />
+    <path d="M1381 316 A30 30 0 0 0 1411 346 H1620" />
+    <path d="M1031 391 L1065 425 L1099 391" />
+  </svg>
+  <div class="sc-node"></div>
+
+  <div class="sc-card sc-a">
+    <h3>Google</h3>
+    <div class="lbl" style="top: 118px">Focus keyword set</div>
+    <div class="fld" style="top: 160px">usage based pricing<svg class="ok"><use href="#ic-check-circle"/></svg></div>
+    <div class="lbl" style="top: 295px">Keyword in title</div>
+    <div class="fld" style="top: 337px">Usage-Based Pricing, Explained<svg class="ok"><use href="#ic-check-circle"/></svg></div>
+    <div class="lbl" style="top: 472px">Meta description</div>
+    <div class="fld" style="top: 515px">148 characters<svg class="ok"><use href="#ic-check-circle"/></svg></div>
+    <div class="lbl" style="top: 650px">Clear section structure</div>
+    <div class="fld" style="top: 692px">7 sections<svg class="chev"><use href="#ic-chev-down"/></svg></div>
+  </div>
+
+  <div class="sc-card sc-b">
+    <h3>AI answers</h3>
+    <div class="lbl" style="top: 118px">FAQ for AI engines</div>
+    <div class="fld" style="top: 161px">5 questions<svg class="ok"><use href="#ic-check-circle"/></svg></div>
+    <div class="lbl" style="top: 295px">Scannable lists</div>
+    <div class="fld" style="top: 338px">3 lists<svg class="ok"><use href="#ic-check-circle"/></svg></div>
+    <div class="pass"><svg><use href="#ic-check-ring"/></svg>Strong — ready to rank.</div>
+  </div>
+</div>
+</body>
+</html>
