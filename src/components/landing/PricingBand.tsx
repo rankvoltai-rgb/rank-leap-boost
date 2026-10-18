@@ -122,7 +122,7 @@ function MonthStrip({ mode, perArticle }: { mode: Mode; perArticle: number }) {
       <div
         role="img"
         aria-label={`${days} days, with one article published on each`}
-        className="relative mt-6 flex h-14 items-end gap-[3px] sm:gap-1"
+        className="relative mt-10 flex h-14 items-end gap-[3px] sm:gap-1"
       >
         {Array.from({ length: days }, (_, i) => {
           const lit = mode === "month" || i === 0;
