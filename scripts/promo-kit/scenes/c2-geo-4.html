@@ -1,0 +1,110 @@
+<!doctype html>
+<!-- Cluster 2 · slide 4 of 4 · The turn: "who does this for me?" Rankbox,
+     automatically. The headline mirrors slide 1 (grey line, then the answer
+     in ink). The card is the Settings page's own Autopilot section, switched
+     on ("On — writing every day"), above the viewer's articles at one honest
+     moment: one published, with the slide 3 signals it passed (the Rank page
+     measures those on published articles), one writing, one scheduled. Stage
+     pills follow StagePill in src/components/dashboard/article-parts.tsx.
+     The offer lives in OFFER below, so every concept can share it: $49.50 a
+     month and 30 articles a month (src/data/pricing.ts). The trial is 7 days
+     in the product (TRIAL_DAYS, unchanged since it was written); the brief
+     says 2, so this follows the product until the user decides. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x5" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<link rel="stylesheet" href="c2/c2.css" />
+<script src="../kit/kit.js"></script>
+<style>
+  .s4-card { left: 110px; top: 604px; width: 1380px; padding: 54px 58px 26px; }
+  .s4-ap { display: flex; align-items: center; gap: 26px; padding-bottom: 44px; border-bottom: 2px solid #eef0f3; }
+  .s4-ap .ic { width: 98px; height: 98px; border-radius: 28px; background: #e8f1ff; color: var(--blue); display: grid; place-items: center; flex: none; }
+  .s4-ap .ic svg { width: 56px; height: 56px; }
+  .s4-ap b { display: block; font-size: 52px; font-weight: 750; letter-spacing: -0.03em; color: #0c1018; }
+  .s4-ap span { display: block; margin-top: 6px; font-size: 32px; font-weight: 500; color: #6b7280; }
+  .s4-sw { margin-left: auto; display: flex; flex-direction: column; align-items: flex-end; gap: 12px; font-size: 30px; font-weight: 600; color: #1d222c; white-space: nowrap; }
+  .s4-sw i { position: relative; width: 128px; height: 74px; border-radius: 999px; background: var(--blue); display: block; }
+  .s4-sw i::after { content: ""; position: absolute; right: 7px; top: 7px; width: 60px; height: 60px; border-radius: 50%; background: #fff; box-shadow: 0 2px 6px rgba(6, 40, 110, 0.3); }
+
+  .s4-qh { display: flex; align-items: center; gap: 14px; padding: 42px 0 18px; font-size: 34px; font-weight: 700; color: #1d222c; }
+  .s4-qh svg { width: 38px; height: 38px; color: var(--blue); }
+  .s4-qh em { font-style: normal; font-weight: 500; color: #8a909c; }
+  .s4-row { display: grid; grid-template-columns: 1fr auto; column-gap: 24px; align-items: start; padding: 42px 0; border-top: 2px solid #f1f2f5; }
+  .s4-row .t { font-size: 43px; font-weight: 650; letter-spacing: -0.022em; line-height: 1.2; color: #12161f; }
+  .s4-row .ch { margin-top: 16px; display: flex; flex-wrap: wrap; gap: 10px; }
+  .s4-row .ch span { height: 54px; padding: 0 20px; border-radius: 999px; background: #eef4ff; color: #1561d6; display: inline-flex; align-items: center; gap: 9px; font-size: 27px; font-weight: 650; }
+  .s4-row .ch svg { width: 22px; height: 22px; }
+  .s4-row .wr { margin-top: 22px; height: 14px; width: 62%; border-radius: 99px; background: #eef0f3; position: relative; overflow: hidden; }
+  .s4-row .wr i { position: absolute; left: 0; top: 0; bottom: 0; width: 58%; border-radius: inherit; background: linear-gradient(90deg, #9cc4ff, var(--blue)); }
+  .s4-row .when { margin-top: 14px; font-size: 30px; font-weight: 500; color: #8a909c; }
+  .s4-row.dim .t { color: #4a505c; }
+
+  /* StagePill: success / info (spinner) / neutral */
+  .s4-pill { height: 56px; padding: 0 22px; border-radius: 999px; display: inline-flex; align-items: center; gap: 10px; font-size: 28px; font-weight: 650; white-space: nowrap; }
+  .s4-pill.pub { background: #e6f6ec; color: #138a43; box-shadow: inset 0 0 0 2px #cdeed9; }
+  .s4-pill.wri { background: #e9f1ff; color: #1561d6; box-shadow: inset 0 0 0 2px #d3e3fb; }
+  .s4-pill.sch { background: #f1f2f5; color: #6b7280; box-shadow: inset 0 0 0 2px #e4e7ec; }
+  .s4-pill svg { width: 24px; height: 24px; }
+
+  .s4-offer { position: absolute; left: 110px; right: 110px; top: 1690px; display: flex; align-items: center; gap: 22px; }
+  .s4-terms { flex: 1; font-size: 34px; font-weight: 600; color: #3a4252; letter-spacing: -0.02em; line-height: 1.35; }
+  .s4-terms b { color: #0c1018; font-weight: 750; font-size: 44px; letter-spacing: -0.03em; }
+  .s4-go { height: 116px; padding: 0 46px; border-radius: 28px; background: var(--blue); color: #fff; display: flex; align-items: center; gap: 16px; font-size: 40px; font-weight: 650; letter-spacing: -0.02em; white-space: nowrap; box-shadow: 0 18px 34px -16px rgba(22, 111, 229, 0.8); }
+  .s4-go svg { width: 40px; height: 40px; }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="c2-dots"></div>
+  <div class="c2-top">
+    <div class="c2-prog"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></div>
+    <div class="c2-step">Done for you</div>
+    <div class="c2-logo"><svg><use href="#lg-rankbox"/></svg>Rankbox</div>
+  </div>
+  <h1 class="c2-hl"><span class="dim">So who does this for you?</span><br />Rankbox. Automatically.</h1>
+
+  <div class="c2-card s4-card">
+    <div class="s4-ap">
+      <span class="ic"><svg><use href="#rb-autopilot"/></svg></span>
+      <div><b>Autopilot</b><span>Whether it writes, and how often.</span></div>
+      <div class="s4-sw"><i></i>On — writing every day</div>
+    </div>
+    <div class="s4-qh"><svg><use href="#rb-article"/></svg>Articles<em>yoursite.com</em></div>
+    <div class="s4-row">
+      <div>
+        <div class="t">What’s the Best Planning Tool for a Small Team?</div>
+        <div class="ch"><span><svg><use href="#ic-check"/></svg>Answers up front</span><span><svg><use href="#ic-check"/></svg>FAQ section</span><span><svg><use href="#ic-check"/></svg>Cites sources</span></div>
+      </div>
+      <span class="s4-pill pub">Published</span>
+    </div>
+    <div class="s4-row">
+      <div>
+        <div class="t">Kanban vs Gantt: Which Fits a Small Team?</div>
+        <div class="wr"><i></i></div>
+      </div>
+      <span class="s4-pill wri"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" fill="none" stroke="#c4d8f7" stroke-width="2.6"/><path d="M12 3.5a8.5 8.5 0 0 1 8.5 8.5" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"/></svg>Writing</span>
+    </div>
+    <div class="s4-row dim">
+      <div>
+        <div class="t">How to Run a Weekly Planning Meeting</div>
+        <div class="when">Writes tomorrow</div>
+      </div>
+      <span class="s4-pill sch">Scheduled</span>
+    </div>
+  </div>
+
+  <div class="s4-offer">
+    <div class="s4-terms" id="terms"></div>
+    <div class="s4-go">Get Started Free<svg><use href="#ic-arrow-right"/></svg></div>
+  </div>
+</div>
+<script>
+  // One offer for every concept in the set. Change it here and re-render.
+  const OFFER = { price: "$49.50/month", articles: "30 articles a month", trial: "7-day free trial" };
+  document.getElementById("terms").innerHTML =
+    `<b>${OFFER.price}</b><br />${OFFER.articles} · ${OFFER.trial}`;
+</script>
+</body>
+</html>

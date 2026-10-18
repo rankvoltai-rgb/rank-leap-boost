@@ -1,0 +1,120 @@
+<!doctype html>
+<!-- Cluster 6 · slide 2 of 3 · The calm argument, as an argument, not a
+     ratio (the brief's watch-out: "one citation beats 50 backlinks" can't be
+     proven). Links were how search engines judged trust; an AI answer quotes
+     a passage instead. The visual shows the quote's journey: a generic AI
+     answer (no engine's UI) lifts one sentence from a page, and the page is
+     marked with why it was easy to quote: it answers the question clearly,
+     cites its sources, and is easy to lift (short, headed sections).
+     Plotbright (plotbright.io) is one of the spec's web-checked fictional
+     brands. Body copy on the page is skeleton lines, so the page carries no
+     invented facts or invented sources. No number on this slide, not even in
+     the sample answer: the ad's one figure is the invoice. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x5" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<link rel="stylesheet" href="ads/ads.css" />
+<script src="../kit/kit.js"></script>
+<script src="ads/ads.js"></script>
+<style>
+  .ad-hl { --hl-size: 92px; }
+
+  /* the AI answer that quotes the page */
+  .x06-ans { left: 110px; top: 628px; width: 1380px; padding: 40px 44px 44px; }
+  .x06-ask { display: flex; align-items: center; gap: 20px; height: 96px; padding: 0 32px; border-radius: 999px; box-shadow: inset 0 0 0 2px #e3e6eb; font-size: 36px; font-weight: 500; color: #1d222c; letter-spacing: -0.015em; }
+  .x06-ask svg { width: 38px; height: 38px; color: #8a909c; flex: none; }
+  .x06-ans .ad-answer { margin-top: 28px; }
+  .x06-q { background: #dceaff; border-radius: 10px; padding: 2px 8px; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+
+  /* the page it quoted */
+  .x06-page { left: 110px; top: 1262px; width: 1380px; height: 900px; overflow: hidden; }
+  .x06-url { display: flex; align-items: center; gap: 16px; height: 90px; padding: 0 40px; border-bottom: 2px solid #eef0f3; font-size: 29px; font-weight: 500; color: #6b7280; }
+  .x06-url svg { width: 30px; height: 30px; color: #9aa0ab; }
+  .x06-url b { font-weight: 650; color: #1d222c; }
+  .x06-body { position: relative; padding: 44px 56px 0; width: 900px; }
+  .x06-h1 { font-size: 50px; font-weight: 750; letter-spacing: -0.035em; line-height: 1.1; color: #0c1018; }
+  .x06-lead { margin-top: 26px; font-size: 37px; font-weight: 550; line-height: 1.38; letter-spacing: -0.015em; color: #1d222c; }
+  .x06-lead mark { background: linear-gradient(180deg, transparent 8%, #d3e4ff 8%, #d3e4ff 92%, transparent 92%); color: #0c1018; padding: 0 4px; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+  .x06-sup { display: inline-grid; place-items: center; min-width: 38px; height: 38px; padding: 0 9px; margin-left: 6px; border-radius: 9px; background: #e8f1ff; color: #1561d6; font-size: 24px; font-weight: 750; vertical-align: 6px; }
+  .x06-sk { margin-top: 22px; display: grid; gap: 16px; }
+  .x06-sk i { display: block; height: 18px; border-radius: 99px; background: #eceef2; }
+  .x06-h2 { margin-top: 38px; font-size: 38px; font-weight: 700; letter-spacing: -0.025em; color: #12161f; }
+  .x06-srcs { margin-top: 40px; padding-top: 28px; border-top: 2px solid #eef0f3; display: flex; align-items: center; gap: 16px; font-size: 30px; font-weight: 650; color: #3a4252; }
+  .x06-srcs i { display: block; height: 18px; border-radius: 99px; background: #cfe0fb; }
+
+  /* why it was easy to quote: margin notes pinned to the page */
+  .x06-why { position: absolute; left: 1066px; display: flex; align-items: center; gap: 14px; height: 70px; padding: 0 28px 0 18px; border-radius: 999px; background: var(--blue); color: #fff; font-size: 31px; font-weight: 650; letter-spacing: -0.015em; white-space: nowrap; box-shadow: 0 14px 26px -14px rgba(22, 111, 229, 0.8); }
+  .x06-why svg { width: 34px; height: 34px; padding: 6px; border-radius: 50%; background: rgba(255,255,255,.22); box-sizing: content-box; }
+  .x06-why::before { content: ""; position: absolute; right: 100%; top: 50%; width: var(--lead, 60px); border-top: 3px dashed #9fc2f5; }
+
+  /* the quote's path from page to answer */
+  .x06-path { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 5; overflow: visible; }
+  .x06-quoted { position: absolute; z-index: 6; height: 58px; padding: 0 22px; border-radius: 999px; background: #fff; box-shadow: inset 0 0 0 2.5px #9fc2f5, 0 10px 20px -12px rgba(12, 30, 70, 0.3); display: inline-flex; align-items: center; gap: 10px; font-size: 27px; font-weight: 700; color: #1561d6; white-space: nowrap; }
+  .x06-quoted svg { width: 28px; height: 28px; }
+</style>
+</head>
+<body>
+<div class="canvas ad">
+  <div class="ad-dots"></div>
+  <div class="ad-top">
+    <div class="ad-prog"><i class="on"></i><i class="on"></i><i></i></div>
+    <div class="ad-step">What AI answers quote</div>
+    <div class="ad-logo"><svg><use href="#lg-rankbox"/></svg>Rankbox</div>
+  </div>
+  <h1 class="ad-hl"><span class="dim">Links were how search engines judged trust.</span><br />AI answers work differently.</h1>
+
+  <div class="ad-card x06-ans" id="ans">
+    <div class="x06-ask"><svg><use href="#ic-search"/></svg>How should a small team run a weekly planning meeting?</div>
+    <div class="ad-answer">
+      <div class="lab"><svg><use href="#ic-sparkle"/></svg>AI answer</div>
+      <p id="q-ans"><span class="x06-q">Keep it short and use a fixed agenda: what shipped, what’s next and what’s blocked.</span><span class="ad-cite">1</span></p>
+      <div class="ad-chips"><span class="ad-chip"><i></i>plotbright.io</span></div>
+    </div>
+  </div>
+
+  <div class="ad-card x06-page" id="page">
+    <div class="x06-url"><svg><use href="#ic-lock"/></svg><span><b>plotbright.io</b>/blog/weekly-planning-meeting</span></div>
+    <div class="x06-body">
+      <div class="x06-h1">How to Run a Weekly Planning Meeting</div>
+      <p class="x06-lead" id="lead"><mark>Keep it short and use a fixed agenda: what shipped, what’s next and what’s blocked.</mark><span class="x06-sup">1</span></p>
+      <div class="x06-sk"><i style="width:94%"></i></div>
+      <div class="x06-h2" id="h2">What to cover each week</div>
+      <div class="x06-sk"><i style="width:88%"></i></div>
+      <div class="x06-srcs" id="srcs">Sources<i style="width:260px"></i><i style="width:180px"></i></div>
+    </div>
+  </div>
+
+  <div class="x06-why" id="w1"><svg><use href="#ic-check"/></svg>Answers clearly</div>
+  <div class="x06-why" id="w2"><svg><use href="#ic-check"/></svg>Easy to lift</div>
+  <div class="x06-why" id="w3"><svg><use href="#ic-check"/></svg>Cites sources</div>
+
+  <svg class="x06-path" id="path"></svg>
+  <div class="x06-quoted" id="quoted"><svg><use href="#ic-arrow-up"/></svg>Quoted from this page</div>
+</div>
+<script>
+  // Pin each note to the line it explains, and draw the quote's path from
+  // the highlighted sentence on the page up to the answer.
+  document.fonts.ready.then(() => {
+    const C = document.querySelector(".canvas").getBoundingClientRect();
+    const box = (id) => { const r = document.getElementById(id).getBoundingClientRect(); return { x: r.left - C.left, y: r.top - C.top, w: r.width, h: r.height }; };
+    const pin = (note, target) => {
+      const t = box(target), n = document.getElementById(note);
+      n.style.top = (t.y + t.h / 2 - 35) + "px";
+    };
+    pin("w1", "lead"); pin("w2", "h2"); pin("w3", "srcs");
+
+    // the bridge: a pill in the gap between answer and page, with short
+    // dotted stubs to each card, under the quoted sentence
+    const ans = box("ans"), page = box("page"), q = document.getElementById("quoted");
+    const x = 330, gy0 = ans.y + ans.h, gy1 = page.y;
+    const p = document.getElementById("path");
+    p.setAttribute("viewBox", "0 0 1600 2000");
+    p.innerHTML = `<path d="M${x} ${gy0 + 2} L${x} ${gy1 - 2}" stroke="#7fb0f7" stroke-width="4" stroke-dasharray="2 11" stroke-linecap="round" fill="none"/>`;
+    q.style.left = (x - 40) + "px";
+    q.style.top = ((gy0 + gy1) / 2 - 29) + "px";
+  });
+</script>
+</body>
+</html>

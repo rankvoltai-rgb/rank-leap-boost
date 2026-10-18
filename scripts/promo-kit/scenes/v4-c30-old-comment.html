@@ -1,0 +1,216 @@
+<!doctype html>
+<!-- Variant 4 · Cluster 30 "The anonymous commenter beat you", one image.
+     Replica of FeedSpring 2 ("Your design, your rules. Style directly in
+     Framer."): the FeedSpring frame (blue wash, lockup + pill, light
+     two-line headline, 2x2 checklist), a browser bleeding off the bottom with
+     a grid of cards, one card lifted out over the browser's left edge with a
+     hand cursor, and the plugin panel on the right (header, an entity block
+     with a status chip, a field with a copy button and a note, then a grid of
+     cards with one popped out over the panel's left edge).
+     Here the browser is a generic forum (neutral greys, no Reddit colours,
+     logo, "r/" or vote layout) and the panel is Rankbox's Reddit page with a
+     thread open: its own tabs and labels ("Suggested reply", "Copy reply",
+     "How this was ranked", the ranking signals). Rankbox drafts; the person
+     posts ("What happens next is yours."). The reply opens with a
+     disclosure. Velomint and Taskwren are invented. Reddit Presence is
+     rolling out on paid plans (flagged in the ad copy). -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x5" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<link rel="stylesheet" href="ads4/ads4.css" />
+<script src="../kit/kit.js"></script>
+<script src="ads/ads.js"></script>
+<script src="ads4/ads4.js"></script>
+<style>
+  .y30-hl { position: absolute; left: 106px; top: 214px; font-size: 116px; }
+  .y30-browser .bar .url { margin: 0 0 0 110px; min-width: 0; }
+  .y30-num { position: absolute; left: 116px; top: 712px; font-size: 36px; font-weight: 400; letter-spacing: -0.015em; color: #fff; }
+  .y30-num b { font-weight: 700; }
+  .y30-num small { display: block; margin-top: 10px; font-size: 25px; color: rgba(255, 255, 255, 0.78); letter-spacing: 0; }
+
+  /* the forum, generic */
+  .y30-site { padding: 40px 56px 0; }
+  .y30-nav { display: flex; align-items: center; gap: 34px; font-size: 26px; color: #6b707a; }
+  .y30-nav b { display: inline-flex; align-items: center; gap: 12px; margin-right: auto; font-size: 30px; font-weight: 700; color: var(--v4-ink); letter-spacing: -0.02em; }
+  .y30-nav b i { width: 38px; height: 38px; border-radius: 11px; background: #e6e9ee; color: #8a909c; display: grid; place-items: center; }
+  .y30-nav b i svg { width: 24px; height: 24px; }
+  .y30-crumb { margin-top: 50px; display: flex; align-items: center; gap: 10px; font-size: 24px; font-weight: 600; color: #9aa0ac; }
+  .y30-crumb svg { width: 20px; height: 20px; }
+  .y30-h1 { margin-top: 12px; font-size: 50px; font-weight: 700; letter-spacing: -0.035em; color: var(--v4-ink); }
+  .y30-grid { margin-top: 34px; display: grid; grid-template-columns: repeat(3, 384px); gap: 24px; }
+  .y30-t { padding: 28px 28px 26px; border-radius: 24px; background: #fff; box-shadow: inset 0 0 0 2px #edf0f4; }
+  .y30-t h4 { font-size: 28px; font-weight: 700; line-height: 1.22; letter-spacing: -0.02em; color: var(--v4-ink); }
+  .y30-t p { margin-top: 12px; font-size: 24px; line-height: 1.36; color: #6b707a; }
+  .y30-who { margin-top: 20px; display: flex; align-items: center; gap: 12px; font-size: 24px; font-weight: 600; color: #3a4150; }
+  .y30-who i { width: 44px; height: 44px; border-radius: 50%; background: #e6e9ee; color: #8a909c; display: grid; place-items: center; flex: none; }
+  .y30-who i svg { width: 24px; height: 24px; }
+  .y30-who span { margin-left: auto; font-weight: 500; color: #9aa0ac; }
+  .y30-stat { margin-top: 18px; padding-top: 16px; border-top: 2px solid #f0f2f5; display: flex; gap: 26px; font-size: 24px; font-weight: 600; color: #8a909c; }
+  .y30-stat span { display: inline-flex; align-items: center; gap: 8px; }
+  .y30-stat svg { width: 24px; height: 24px; }
+
+  /* the lifted thread */
+  .y30-lift { left: 62px; top: 1262px; width: 590px; padding: 38px 40px 34px; z-index: 12; transform: rotate(-2.5deg); }
+  .y30-lift h4 { font-size: 38px; font-weight: 700; line-height: 1.18; letter-spacing: -0.03em; color: var(--v4-ink); }
+  .y30-lift p { margin-top: 14px; font-size: 29px; line-height: 1.36; color: #5a6070; letter-spacing: -0.01em; }
+  .y30-lift .y30-who { margin-top: 26px; font-size: 27px; gap: 14px; }
+  .y30-lift .y30-who i { width: 54px; height: 54px; background: var(--v4-tint); color: var(--v4-blue); }
+  .y30-lift .y30-who i svg { width: 30px; height: 30px; }
+  .y30-lift .y30-stat { font-size: 27px; margin-top: 22px; padding-top: 20px; }
+  .y30-lift .y30-stat svg { width: 28px; height: 28px; }
+
+  /* the Rankbox panel: Reddit, a thread open */
+  .y30-panel { left: 990px; top: 650px; width: 540px; height: 1206px; z-index: 26; }
+  .y30-panel .ph .who { margin-left: auto; width: 46px; height: 46px; border-radius: 50%; background: var(--v4-tint); color: var(--v4-blue); display: grid; place-items: center; font-size: 24px; font-weight: 700; }
+  .y30-tabs { display: flex; gap: 6px; margin: 24px 30px 0; padding: 6px; border-radius: 16px; background: #f4f6f9; }
+  .y30-tabs span { flex: 1; height: 50px; border-radius: 12px; display: grid; place-items: center; font-size: 24px; font-weight: 600; color: #8a909c; }
+  .y30-tabs span.on { flex: 1.45; background: #fff; color: var(--v4-ink); box-shadow: 0 2px 6px rgba(10, 30, 70, 0.1); }
+  .y30-pb { padding: 0 30px; }
+  .y30-back { margin-top: 26px; display: inline-flex; align-items: center; gap: 6px; font-size: 24px; font-weight: 600; color: var(--v4-ink-2); }
+  .y30-back svg { width: 24px; height: 24px; }
+  .y30-thread { margin-top: 18px; display: flex; gap: 20px; }
+  .y30-thread > i { width: 72px; height: 72px; border-radius: 20px; background: var(--v4-tint); color: var(--v4-blue); display: grid; place-items: center; flex: none; }
+  .y30-thread > i svg { width: 40px; height: 40px; }
+  .y30-thread b { display: block; font-size: 29px; font-weight: 700; line-height: 1.2; letter-spacing: -0.02em; }
+  .y30-thread .meta { margin-top: 12px; display: flex; align-items: center; gap: 12px; font-size: 24px; color: var(--v4-ink-2); }
+  .y30-chip { height: 42px; padding: 0 16px; border-radius: 12px; display: inline-flex; align-items: center; gap: 8px; background: var(--v4-tint); color: var(--v4-blue); font-size: 24px; font-weight: 650; white-space: nowrap; }
+  .y30-chip i { width: 12px; height: 12px; border-radius: 50%; background: currentColor; }
+  .y30-lab { margin-top: 32px; font-size: 24px; font-weight: 700; color: var(--v4-ink); letter-spacing: -0.005em; }
+  .y30-reply { margin-top: 12px; padding: 20px 22px; border-radius: 18px; background: #f6f8fb; box-shadow: inset 0 0 0 2px #e6eaf0; font-size: 25px; line-height: 1.42; color: #2a2f3a; letter-spacing: -0.01em; }
+  .y30-act { margin-top: 16px; display: flex; align-items: center; gap: 16px; }
+  .y30-act .note { flex: 1; font-size: 24px; line-height: 1.3; color: var(--v4-ink-2); }
+  .y30-copy { height: 64px; padding: 0 24px; border-radius: 16px; background: var(--v4-btn); color: #fff; display: inline-flex; align-items: center; gap: 10px; font-size: 25px; font-weight: 650; white-space: nowrap; box-shadow: 0 12px 22px -12px rgba(22, 111, 229, 0.8); }
+  .y30-copy svg { width: 26px; height: 26px; }
+  .y30-sig { margin-top: 14px; display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .y30-c { height: 200px; padding: 22px; display: flex; flex-direction: column; border-radius: 20px; box-shadow: inset 0 0 0 2px var(--v4-line); }
+  .y30-c i { width: 50px; height: 50px; border-radius: 50%; background: var(--v4-tint); color: var(--v4-blue); display: grid; place-items: center; }
+  .y30-c i svg { width: 26px; height: 26px; }
+  .y30-c b { display: block; margin-top: auto; font-size: 26px; font-weight: 650; letter-spacing: -0.02em; line-height: 1.15; }
+  .y30-c span { display: block; margin-top: 4px; font-size: 24px; color: var(--v4-ink-2); }
+  .y30-c.ghost { opacity: 0.35; }
+
+  /* the popped signal */
+  .y30-pop { left: 898px; top: 1414px; width: 384px; padding: 28px 32px 30px; z-index: 27; transform: rotate(-2deg); }
+  .y30-pop i { width: 68px; height: 68px; border-radius: 50%; background: var(--v4-tint); color: var(--v4-blue); display: grid; place-items: center; }
+  .y30-pop i svg { width: 36px; height: 36px; }
+  .y30-pop b { display: block; margin-top: 16px; font-size: 38px; font-weight: 700; letter-spacing: -0.03em; }
+  .y30-pop span { display: block; margin-top: 8px; font-size: 27px; color: var(--v4-ink-2); }
+  .y30-pop .bar { margin-top: 22px; height: 12px; border-radius: 6px; background: var(--v4-blue); }
+</style>
+</head>
+<body>
+<div class="canvas v4">
+  <div class="v4-field-blue"></div>
+  <div class="v4-bokeh">
+    <i style="left:-190px; top:1460px; width:460px; height:460px"></i>
+    <i style="left:860px; top:520px; width:230px; height:230px; opacity:.6"></i>
+    <i style="left:1450px; top:1420px; width:330px; height:330px"></i>
+  </div>
+  <div class="grain" style="--grain:.07"></div>
+
+  <div class="v4-lock" style="left:110px; top:100px">
+    <span class="wm"><svg><use href="#lg-rankbox"/></svg>Rankbox</span>
+    <span class="v4-pill"><svg><use href="#ic-sparkle"/></svg>AI search</span>
+  </div>
+  <h1 class="v4-hl-light y30-hl">Show up in the<br />threads AI reads.</h1>
+
+  <div class="v4-checks on-blue" style="left:116px; top:528px; grid-template-columns: auto auto">
+    <div class="v4-check"><i><svg><use href="#ic-check"/></svg></i>Finds AI-cited threads</div>
+    <div class="v4-check"><i><svg><use href="#ic-check"/></svg></i>Drafts a helpful reply</div>
+    <div class="v4-check"><i><svg><use href="#ic-check"/></svg></i>You post it yourself</div>
+    <div class="v4-check"><i><svg><use href="#ic-check"/></svg></i>Weekly sweep</div>
+  </div>
+  <p class="y30-num"><b>40.1%</b> of AI citations pointed to Reddit.<small>Source: Semrush study of 150,000 AI citations, June 2025</small></p>
+
+  <div class="v4-browser y30-browser" style="left:160px; top:880px; width:1250px; height:1300px">
+    <div class="bar"><span class="d" style="background:#ff5f57"></span><span class="d" style="background:#febc2e"></span><span class="d" style="background:#28c840"></span>
+      <span class="url"><svg><use href="#ic-lock-solid"/></svg>forum.example/tools</span></div>
+    <div class="y30-site">
+      <div class="y30-nav"><b><i><svg><use href="#ic-chat"/></svg></i>Forum</b><span>Latest</span><span>Top</span><span>Categories</span></div>
+      <div class="y30-crumb">Forum<svg><use href="#ic-chev-right"/></svg>Software<svg><use href="#ic-chev-right"/></svg>Project tools</div>
+      <div class="y30-h1">Project tools</div>
+      <div class="y30-grid">
+        <div class="y30-t" style="visibility:hidden">
+          <h4>Velomint or Taskwren for a small team?</h4>
+          <p>Five of us, mostly client work. Which is easier to roll out?</p>
+          <div class="y30-who"><i><svg><use href="#ic-user"/></svg></i>maya_builds<span>2 days ago</span></div>
+          <div class="y30-stat"><span><svg><use href="#ic-chev-up"/></svg>48</span><span><svg><use href="#ic-chat"/></svg>31</span></div>
+        </div>
+        <div class="y30-t">
+          <h4>How do you keep weekly planning short?</h4>
+          <p>Ours runs past an hour. What does a 20-minute one look like?</p>
+          <div class="y30-who"><i><svg><use href="#ic-user"/></svg></i>ops_dan<span>5 hours ago</span></div>
+          <div class="y30-stat"><span><svg><use href="#ic-chev-up"/></svg>22</span><span><svg><use href="#ic-chat"/></svg>17</span></div>
+        </div>
+        <div class="y30-t">
+          <h4>Moving off spreadsheets: what worked?</h4>
+          <p>Forty projects in one sheet and it’s starting to break.</p>
+          <div class="y30-who"><i><svg><use href="#ic-user"/></svg></i>jen_k<span>1 day ago</span></div>
+          <div class="y30-stat"><span><svg><use href="#ic-chev-up"/></svg>35</span><span><svg><use href="#ic-chat"/></svg>24</span></div>
+        </div>
+        <div class="y30-t" style="visibility:hidden">
+          <h4>Is a Gantt view worth paying for?</h4>
+          <p>Nobody on our team opens it. Curious if yours does.</p>
+          <div class="y30-who"><i><svg><use href="#ic-user"/></svg></i>tom_r<span>3 days ago</span></div>
+          <div class="y30-stat"><span><svg><use href="#ic-chev-up"/></svg>12</span><span><svg><use href="#ic-chat"/></svg>9</span></div>
+        </div>
+        <div class="y30-t">
+          <h4>What do you use for client sign-off?</h4>
+          <p>Email threads keep losing the final version.</p>
+          <div class="y30-who"><i><svg><use href="#ic-user"/></svg></i>studio_lee<span>4 days ago</span></div>
+          <div class="y30-stat"><span><svg><use href="#ic-chev-up"/></svg>19</span><span><svg><use href="#ic-chat"/></svg>14</span></div>
+        </div>
+        <div class="y30-t" style="visibility:hidden">
+          <h4>Tool for a team of three?</h4>
+          <p>Free tier is fine. We just need boards.</p>
+          <div class="y30-who"><i><svg><use href="#ic-user"/></svg></i>sam_p<span>6 days ago</span></div>
+          <div class="y30-stat"><span><svg><use href="#ic-chev-up"/></svg>8</span><span><svg><use href="#ic-chat"/></svg>11</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="v4-pop y30-lift">
+    <h4>Velomint or Taskwren for a small team?</h4>
+    <p>Five of us, mostly client work. Which is easier to roll out?</p>
+    <div class="y30-who"><i><svg><use href="#ic-user"/></svg></i>maya_builds<span>2 days ago</span></div>
+    <div class="y30-stat"><span><svg><use href="#ic-chev-up"/></svg>48</span><span><svg><use href="#ic-chat"/></svg>31 comments</span></div>
+  </div>
+  <i class="v4-hand" style="left:540px; top:1588px"></i>
+
+  <div class="v4-panel y30-panel">
+    <div class="ph"><span class="tile"><svg><use href="#lg-rankbox"/></svg></span>Reddit<span class="who">V</span></div>
+    <div class="y30-tabs"><span class="on">Opportunities</span><span>Mentions</span><span>Settings</span></div>
+    <div class="y30-pb">
+      <div class="y30-back"><svg><use href="#ic-chev-left"/></svg>Back</div>
+      <div class="y30-thread">
+        <i><svg><use href="#rb-thread"/></svg></i>
+        <div><b>Velomint or Taskwren for a small team?</b>
+          <div class="meta"><span class="y30-chip"><i></i>Draft waiting</span>Project tools</div></div>
+      </div>
+      <div class="y30-lab">Suggested reply</div>
+      <div class="y30-reply">Disclosure: I work on Velomint. For five people on client work, start with one shared board and a weekly plan…</div>
+      <div class="y30-act"><span class="note">What happens next is yours. Post it yourself.</span><span class="y30-copy"><svg><use href="#ic-copy"/></svg>Copy reply</span></div>
+      <div class="y30-lab">How this was ranked</div>
+      <div class="y30-sig">
+        <div class="y30-c ghost"><i><svg><use href="#ic-sparkle"/></svg></i><b>AI-cited</b><span>In an AI answer</span></div>
+        <div class="y30-c"><i><svg><use href="#ic-clock"/></svg></i><b>Fresh</b><span>2 days ago</span></div>
+        <div class="y30-c"><i><svg><use href="#ic-chat"/></svg></i><b>Votes and comments</b><span>48 · 31</span></div>
+        <div class="y30-c"><i><svg><use href="#ic-search"/></svg></i><b>Ranks on Google</b><span>Position 4</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="v4-pop y30-pop">
+    <i><svg><use href="#ic-sparkle"/></svg></i>
+    <b>AI-cited</b>
+    <span>Cited in an AI answer</span>
+    <div class="bar"></div>
+  </div>
+
+  <div class="v4-fade" style="--fade:#1f74ee; height:300px"></div>
+</div>
+</body>
+</html>

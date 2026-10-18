@@ -1,0 +1,134 @@
+<!doctype html>
+<!-- Variant 3 · Cluster 36 "Ask your phone for a specialist" (local), one
+     image for all four trades. "Selected", blue field: one huge white voice
+     waveform runs across the poster like an audio track. Four spoken
+     questions (law, dental, med spa, contractor) are pinned to moments on it
+     as white chips, two above the track and two below, each with the two
+     names the assistant said back. One answer is selected: the names that got
+     picked. Generic voice: a plain mic and speaker glyph, no Siri, Alexa or
+     Google look. No number on this ad. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x5" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<link rel="stylesheet" href="ads3/ads3.css" />
+<script src="../kit/kit.js"></script>
+<script src="ads/ads.js"></script>
+<script src="ads3/ads3.js"></script>
+<style>
+  .y36-top { position: absolute; left: 100px; right: 100px; top: 96px; display: flex; align-items: center; }
+  .y36-top .v3-kick { margin-left: auto; }
+  .y36-hl { position: absolute; left: 94px; right: 60px; top: 214px; font-size: 150px; letter-spacing: -0.06em; word-spacing: 0.07em; line-height: 1; white-space: nowrap; }
+  .y36-sub { position: absolute; left: 100px; right: 100px; top: 384px; font-size: 56px; font-weight: 600; }
+
+  /* the track */
+  .y36-wave { position: absolute; left: 0; top: 0; width: 1600px; height: 2000px; pointer-events: none; }
+
+  /* the spoken questions, pinned to the track */
+  .y36-chip { position: absolute; width: 680px; padding: 32px 36px 34px; border-radius: 34px; background: #fff; color: var(--v3-ink); box-shadow: 0 40px 70px -34px rgba(4, 50, 150, 0.6); }
+  .y36-q { display: flex; gap: 18px; align-items: flex-start; }
+  .y36-q .mic { flex: none; width: 54px; height: 54px; border-radius: 50%; background: var(--v3-blue); color: #fff; display: grid; place-items: center; margin-top: -2px; }
+  .y36-q .mic svg { width: 28px; height: 28px; }
+  .y36-q q { quotes: none; font-size: 38px; font-weight: 720; line-height: 1.16; letter-spacing: -0.03em; color: var(--v3-ink); text-wrap: balance; }
+  .y36-a { margin-top: 26px; display: flex; gap: 18px; align-items: flex-start; }
+  .y36-a .spk { flex: none; width: 54px; height: 40px; display: grid; place-items: center; color: var(--v3-blue); }
+  .y36-a .spk svg { width: 34px; height: 34px; }
+  .y36-a span { font-size: 34px; font-weight: 600; line-height: 1.22; letter-spacing: -0.02em; color: var(--v3-ink); }
+  .y36-a .v3-pick { display: block; width: fit-content; padding: 6px 16px 10px 14px; margin: -6px 0 0 -14px; line-height: 1.22; --k: 26px; --st: 4px; color: #fff; }
+  .y36-a { margin-top: 30px; }
+  #cur { width: 56px; height: 74px; }
+</style>
+</head>
+<body>
+<div class="canvas v3 blue">
+  <div class="v3-wash"></div>
+  <div class="v3-px"></div>
+
+  <div class="y36-top">
+    <span class="v3-logo"><svg><use href="#lg-rankbox"/></svg>Rankbox</span>
+    <span class="v3-kick">For law firms, dentists, med spas and contractors</span>
+  </div>
+  <h1 class="v3-hl y36-hl">They asked out&nbsp;loud.</h1>
+  <p class="v3-sub y36-sub">Was your name in the answer?</p>
+
+  <svg class="y36-wave" id="wave" viewBox="0 0 1600 2000"></svg>
+
+  <div class="y36-chip" data-pin="300" style="left:100px; top:556px">
+    <div class="y36-q"><span class="mic"><svg><use href="#ic-mic"/></svg></span><q>“Who’s the best personal injury lawyer near&nbsp;me?”</q></div>
+    <div class="y36-a"><span class="spk"><svg><use href="#y36-spk"/></svg></span><span class="v3-pick inv-b" id="pick">Halvorsen Pike Law and<br />Marrowell Legal.</span></div>
+  </div>
+  <div class="y36-chip" data-pin="1060" style="left:820px; top:556px">
+    <div class="y36-q"><span class="mic"><svg><use href="#ic-mic"/></svg></span><q>“Who’s the best family dentist near&nbsp;me?”</q></div>
+    <div class="y36-a"><span class="spk"><svg><use href="#y36-spk"/></svg></span><span>Juniperline Dental and Quarrystone&nbsp;Dental.</span></div>
+  </div>
+  <div class="y36-chip" data-pin="560" style="left:100px; top:1336px">
+    <div class="y36-q"><span class="mic"><svg><use href="#ic-mic"/></svg></span><q>“What’s the best med spa near&nbsp;me?”</q></div>
+    <div class="y36-a"><span class="spk"><svg><use href="#y36-spk"/></svg></span><span>Aurevine Med Spa and Cielmere&nbsp;Aesthetics.</span></div>
+  </div>
+  <div class="y36-chip" data-pin="1300" style="left:820px; top:1336px">
+    <div class="y36-q"><span class="mic"><svg><use href="#ic-mic"/></svg></span><q>“Who’s the best kitchen remodeler near&nbsp;me?”</q></div>
+    <div class="y36-a"><span class="spk"><svg><use href="#y36-spk"/></svg></span><span>Kestrelford Builders and Ironmere&nbsp;Remodeling.</span></div>
+  </div>
+
+  <i class="v3-cur w" id="cur"></i>
+
+  <div class="v3-close">
+    <svg class="mk"><use href="#lg-rankbox"/></svg>
+    <p>Rankbox writes the answers your clients ask for, so AI has your business to&nbsp;name.<span data-offer="line"></span></p>
+    <div class="v3-go"><span data-offer="cta"></span><svg><use href="#ic-arrow-right"/></svg></div>
+  </div>
+
+  <!-- a plain speaker glyph for the generic assistant's reply -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><symbol id="y36-spk" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="currentColor"/><path d="M15.5 9a4 4 0 0 1 0 6M18.5 6.5a7.5 7.5 0 0 1 0 11"/></g></symbol></defs></svg>
+</div>
+<script>
+  // The track: one voice waveform across the poster, bars symmetric about a
+  // centre line, shaped by a few spoken bursts (seeded, so every render is
+  // the same). Each chip is pinned to a moment on it: a stem from the chip
+  // to a ring on the centre line, with the bars parted around the ring.
+  document.fonts.ready.then(() => {
+    const svg = document.getElementById("wave");
+    const NS = "http://www.w3.org/2000/svg";
+    const cy = 1072, amp = 200, bw = 12, step = 21;
+    let seed = 11;
+    const rnd = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647; };
+    // spoken words: [start, end, loudness], with short silences between
+    const words = [[-20, 150, 0.7], [178, 300, 0.95], [326, 520, 0.8], [548, 640, 0.55], [664, 900, 1], [926, 1010, 0.6], [1034, 1236, 0.9], [1262, 1420, 0.75], [1446, 1620, 0.85]];
+    const chips = [...document.querySelectorAll(".y36-chip")];
+    const pins = chips.map((c) => +c.dataset.pin);
+    const add = (tag, attrs) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); svg.appendChild(e); return e; };
+
+    for (let x = -4; x < 1610; x += step) {
+      const c = x + bw / 2;
+      const w = words.find(([a, b]) => c >= a && c <= b);
+      let h = 6;
+      if (w) {
+        const t = (c - w[0]) / (w[1] - w[0]);
+        const shape = Math.pow(Math.sin(Math.PI * Math.min(Math.max(t, 0.04), 0.96)), 0.7);
+        h = Math.max(10, amp * w[2] * shape * (0.42 + 0.58 * rnd()));
+      }
+      // part the bars around each pin
+      const near = Math.min(...pins.map((p) => Math.abs(c - p)));
+      if (near < 30) continue;
+      add("rect", { x, y: cy - h, width: bw, height: 2 * h, rx: bw / 2, fill: "#fff" });
+    }
+    // stems and rings
+    const canvas = document.querySelector(".canvas").getBoundingClientRect();
+    chips.forEach((chip, i) => {
+      const r = chip.getBoundingClientRect();
+      const top = r.top - canvas.top, bot = r.bottom - canvas.top;
+      const x = pins[i];
+      const above = bot < cy;
+      add("line", { x1: x, y1: above ? bot : top, x2: x, y2: cy, stroke: "#fff", "stroke-width": 5, "stroke-linecap": "round" });
+      add("circle", { cx: x, cy, r: 18, fill: "#1877f2", stroke: "#fff", "stroke-width": 6 });
+    });
+    // the cursor, its tip just past the selection's end handle
+    const pk = document.getElementById("pick").getBoundingClientRect();
+    const cur = document.getElementById("cur");
+    cur.style.left = (pk.right - canvas.left + 4) + "px";
+    cur.style.top = (pk.bottom - canvas.top + 16) + "px";
+  });
+</script>
+</body>
+</html>

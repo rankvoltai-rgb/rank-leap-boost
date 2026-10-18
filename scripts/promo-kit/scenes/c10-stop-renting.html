@@ -1,0 +1,74 @@
+<!doctype html>
+<!-- Cluster 10 · Stop renting clicks. Single poster, 4x5. Black and electric
+     blue on light grey. One graph, labelled "Illustrative", no axis values:
+     paid clicks climb in steps (each step a bigger budget) and drop to zero
+     the moment the budget is paused; owned answers start slower and
+     compound, and keep going after. The owned line stays under the paid
+     one until the pause: honest about the short term. The non-negotiable
+     line is the headline. The one number, small, with its source:
+     WordStream Google Ads Benchmarks 2025, cost per click up in 87% of
+     industries. Rankbox appears only in the .ad-turn band. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x5" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<link rel="stylesheet" href="ads/ads.css" />
+<script src="../kit/kit.js"></script>
+<script src="ads/ads.js"></script>
+<style>
+  .ad-hl { --hl-y: 124px; --hl-size: 113px; letter-spacing: -0.052em; line-height: 1; white-space: nowrap; }
+
+  .x10-chart { position: absolute; left: 110px; top: 478px; width: 1380px; height: 1040px; overflow: visible; }
+  .x10-chart text { font-family: "Jakarta", sans-serif; }
+  .x10-ill { position: absolute; right: 110px; top: 404px; height: 54px; padding: 0 22px; border-radius: 999px; box-shadow: inset 0 0 0 2.5px #c9ced6; display: inline-flex; align-items: center; font-size: 26px; font-weight: 650; color: #6b7280; letter-spacing: 0.01em; }
+
+  .x10-stat { position: absolute; left: 110px; right: 110px; bottom: 364px; font-size: 40px; font-weight: 600; letter-spacing: -0.022em; color: #1d222c; }
+  .x10-stat b { font-weight: 800; color: #0c1018; }
+</style>
+</head>
+<body>
+<div class="canvas ad">
+  <div class="ad-dots"></div>
+  <h1 class="ad-hl">Stop renting clicks.<br /><span class="blue">Own the recommendation.</span></h1>
+
+  <span class="x10-ill">Illustrative</span>
+  <svg class="x10-chart" viewBox="0 0 1380 1040">
+    <!-- axes, no values -->
+    <path d="M40 40 V940 H1380" fill="none" stroke="#c3c8d0" stroke-width="3" />
+    <text x="40" y="20" font-size="27" font-weight="650" fill="#8a909c">Leads</text>
+    <text x="1380" y="990" font-size="27" font-weight="650" fill="#8a909c" text-anchor="end">Time</text>
+
+    <!-- the pause -->
+    <path d="M1040 127.8 V931.2" stroke="#0c1018" stroke-width="3" stroke-dasharray="4 14" stroke-linecap="round" opacity=".55" />
+    <g transform="translate(1062 672.2)">
+      <rect x="0" y="-26" width="9" height="30" rx="2" fill="#0c1018" />
+      <rect x="16" y="-26" width="9" height="30" rx="2" fill="#0c1018" />
+      <text x="40" y="0" font-size="32" font-weight="750" fill="#0c1018" letter-spacing="-0.6">Budget paused</text>
+    </g>
+
+    <!-- owned answers: slower start, compounds, keeps going -->
+    <path d="M40 935.6 C500 929.0 900 764.4 1380 94.9" fill="none" stroke="#1877f2" stroke-width="14" stroke-linecap="round" />
+    <circle cx="1380" cy="94.9" r="17" fill="#1877f2" />
+    <circle cx="1380" cy="94.9" r="30" fill="#1877f2" opacity=".16" />
+
+    <!-- paid clicks: steps up with each bigger budget, then a cliff -->
+    <path d="M40 874.1 H250 V764.4 H460 V643.7 H670 V512.0 H880 V380.2 H1040 V940 H1380" fill="none" stroke="#0c1018" stroke-width="14" stroke-linejoin="round" stroke-linecap="round" />
+
+    <!-- direct labels -->
+    <text x="862" y="358.3" font-size="40" font-weight="750" fill="#0c1018" text-anchor="end" letter-spacing="-1">Paid clicks</text>
+    <text x="270" y="610.7" font-size="27" font-weight="600" fill="#6b7280">Each step: a bigger budget</text>
+    <text x="1340" y="81.7" font-size="40" font-weight="750" fill="#1877f2" text-anchor="end" letter-spacing="-1">Owned answers</text>
+  </svg>
+
+  <p class="x10-stat">Cost per click rose in <b>87%</b> of industries.</p>
+  <div class="ad-src lift">Source: WordStream Google Ads Benchmarks 2025</div>
+
+  <div class="ad-turn">
+    <div class="ad-logo"><svg><use href="#lg-rankbox"/></svg>Rankbox</div>
+    <p>Pages built to be cited, written for you every day on autopilot.</p>
+    <div class="ad-go"><span data-offer="cta"></span><svg><use href="#ic-arrow-right"/></svg></div>
+  </div>
+</div>
+</body>
+</html>

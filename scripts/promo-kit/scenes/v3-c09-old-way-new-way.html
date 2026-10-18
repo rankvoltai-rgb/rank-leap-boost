@@ -1,0 +1,127 @@
+<!doctype html>
+<!-- Variant 3 · Cluster 9 "Old way vs. new way" (SEO agency), one image.
+     "Selected", white field. The brief's non-negotiable question is the
+     headline. Under it, two hang tags on strings from one rail: the agency's
+     (outline, soft blue, its price struck, hanging low and crooked) and
+     Rankbox's (solid, selected, hanging straight). $4,000/month and the
+     6-month contract are the spec's fictional proposal terms (content, not a
+     stat); the plan price is read from ads.js. "Cancel in one click" is the
+     product's own string. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x5" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<link rel="stylesheet" href="ads3/ads3.css" />
+<script src="../kit/kit.js"></script>
+<script src="ads/ads.js"></script>
+<script src="ads3/ads3.js"></script>
+<style>
+  .y09-ask { position: absolute; left: 100px; right: 100px; top: 100px; font-size: 58px; font-weight: 700; letter-spacing: -0.035em; line-height: 1; color: var(--v3-ink); }
+  .y09-hl { position: absolute; left: 100px; right: 80px; top: 196px; font-size: 122px; text-indent: -0.42em; padding-left: 0.42em; margin-left: -0.42em; }
+
+  /* the rail, the strings */
+  .y09-rig { position: absolute; left: 0; top: 0; width: 1600px; height: 2000px; overflow: visible; pointer-events: none; }
+
+  /* the tags: a face layer with a real punched hole (the string shows
+     through it), so the selection handles on the tag itself stay unclipped */
+  .y09-tag { position: absolute; width: 540px; height: 700px; padding: 124px 50px 0; transform-origin: 50% 72px; }
+  .y09-tag .face { position: absolute; inset: 0; border-radius: 12px;
+    -webkit-mask: radial-gradient(circle at 50% 72px, transparent 21px, #000 22.5px); mask: radial-gradient(circle at 50% 72px, transparent 21px, #000 22.5px); }
+  .y09-tag .hole { position: absolute; left: 50%; top: 50px; width: 44px; height: 44px; margin-left: -22px; border-radius: 50%; }
+  .y09-tag .lab, .y09-tag .amt, .y09-tag .per { position: relative; }
+  .y09-tag .lab { display: flex; align-items: center; gap: 12px; font-size: 34px; font-weight: 700; letter-spacing: -0.02em; }
+  .y09-tag .lab svg { width: 40px; height: 40px; }
+  .y09-tag .amt { margin-top: 62px; font-size: 130px; font-weight: 800; letter-spacing: -0.065em; line-height: 0.8; white-space: nowrap; }
+  .y09-tag .per { margin-top: 18px; font-size: 52px; font-weight: 700; letter-spacing: -0.03em; }
+  .y09-tag .term { position: absolute; left: 50px; right: 50px; bottom: 58px; padding-top: 34px; font-size: 46px; font-weight: 700; letter-spacing: -0.03em; line-height: 1.08; }
+
+  .y09-old { left: 140px; top: 846px; transform: rotate(-7deg); color: var(--v3-soft); }
+  .y09-old .face { background: #fff; box-shadow: inset 0 0 0 6px var(--v3-soft); }
+  .y09-old .hole { box-shadow: inset 0 0 0 6px var(--v3-soft); }
+  .y09-old .lab { color: var(--v3-ink-2); }
+  .y09-old .term { border-top: 4px solid var(--v3-line); }
+  .y09-old .amt { display: inline-block; }
+  .y09-old .amt::after { content: ""; position: absolute; left: -16px; right: -18px; top: 46%; height: 18px; border-radius: 9px; background: var(--v3-blue); transform: rotate(-9deg); }
+
+  .y09-new.v3-pick { display: block; position: absolute; left: 920px; top: 774px; margin: 0; padding: 124px 50px 0; line-height: 1; background: transparent; transform: rotate(3deg); --k: 38px; --st: 6px; }
+  .y09-new .face { background: var(--v3-blue); }
+  .y09-new .lab { color: #fff; }
+  .y09-new .term { border-top: 4px solid rgba(255, 255, 255, 0.4); color: #fff; }
+</style>
+</head>
+<body>
+<div class="canvas v3">
+  <div class="v3-wash"></div>
+  <div class="v3-px"></div>
+
+  <p class="y09-ask">Before you hire an SEO agency, ask:</p>
+  <h1 class="v3-hl y09-hl">“What’s your strategy for getting cited in ChatGPT and&nbsp;Perplexity?”</h1>
+
+  <svg class="y09-rig" viewBox="0 0 1600 2000" fill="none" stroke-linecap="round">
+    <path d="M100 640 H 1500" stroke="#1877f2" stroke-width="6" />
+  </svg>
+
+  <div class="y09-tag y09-old">
+    <i class="face"></i><i class="hole"></i>
+    <div class="lab">Agency proposal</div>
+    <div class="amt">$4,000</div>
+    <div class="per">/month</div>
+    <div class="term">6-month contract</div>
+  </div>
+
+  <div class="y09-tag y09-new v3-pick">
+    <i class="face"></i><i class="hole"></i>
+    <div class="lab"><svg><use href="#lg-rankbox"/></svg>Rankbox</div>
+    <div class="amt" id="y09-price">$49.50</div>
+    <div class="per" id="y09-per">/month</div>
+    <div class="term">Cancel in one click</div>
+  </div>
+  <!-- strings: a loop from a pin on the rail, threaded through each hole, white-edged so it reads on the blue tag -->
+  <svg class="y09-rig" viewBox="0 0 1600 2000" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path id="y09-h1" stroke="#fff" stroke-width="13" /><path id="y09-s1" stroke="#8dbcfa" stroke-width="5" />
+    <path id="y09-h2" stroke="#fff" stroke-width="13" /><path id="y09-s2" stroke="#1877f2" stroke-width="5" />
+    <circle id="y09-p1" r="13" fill="#fff" stroke="#8dbcfa" stroke-width="6" />
+    <circle id="y09-p2" r="13" fill="#1877f2" />
+  </svg>
+  <i class="v3-cur" id="y09-cur"></i>
+
+  <div class="v3-close">
+    <svg class="mk"><use href="#lg-rankbox"/></svg>
+    <p>The autonomous alternative to an&nbsp;agency.<span data-offer="line"></span></p>
+    <div class="v3-go"><span data-offer="cta"></span><svg><use href="#ic-arrow-right"/></svg></div>
+  </div>
+</div>
+<script>
+  (function () {
+    // The plan price comes from ads.js, split into the amount and its period.
+    const m = String(window.OFFER.price).match(/^([^/]+)(\/.*)?$/);
+    document.getElementById("y09-price").textContent = m[1];
+    document.getElementById("y09-per").textContent = m[2] || "";
+
+    const cv = document.querySelector(".canvas").getBoundingClientRect();
+    const at = (el) => { const r = el.getBoundingClientRect(); return [r.left + r.width / 2 - cv.left, r.top + r.height / 2 - cv.top]; };
+    // Each string loops from a pin on the rail down through its tag's hole and back.
+    [["1", ".y09-old .hole", 24], ["2", ".y09-new .hole", -6]].forEach(([n, h, dx]) => {
+      const [x, y] = at(document.querySelector(h));
+      const px = x + dx, r = 10;
+      const d = `M${px - 3} 640 L${x - r} ${y} A ${r} ${r} 0 0 0 ${x + r} ${y} L${px + 3} 640`;
+      document.getElementById("y09-s" + n).setAttribute("d", d);
+      document.getElementById("y09-h" + n).setAttribute("d", d);
+      const p = "y09-p" + n;
+      const pin = document.getElementById(p);
+      pin.setAttribute("cx", px); pin.setAttribute("cy", 640);
+    });
+    // Cursor on the selection's end handle (bottom right of the selected tag).
+    const t = document.querySelector(".y09-new");
+    const w = t.offsetWidth, hgt = t.offsetHeight, a = 3 * Math.PI / 180;
+    const ox = t.offsetLeft + w / 2, oy = t.offsetTop + 72;
+    const ex = ox + (w / 2) * Math.cos(a) - (hgt - 72) * Math.sin(a);
+    const ey = oy + (w / 2) * Math.sin(a) + (hgt - 72) * Math.cos(a);
+    const cur = document.getElementById("y09-cur");
+    cur.style.left = (ex + 6) + "px";
+    cur.style.top = (ey + 30) + "px";
+  })();
+</script>
+</body>
+</html>

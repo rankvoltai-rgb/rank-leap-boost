@@ -1,0 +1,175 @@
+<!doctype html>
+<!-- f04 · The receipt. Freestyle, universal. Market fit: an owner weighs what
+     content costs, so the ad prices it. The headline is the site's own claim
+     (landing Pricing: "for less than you'd pay for a single freelance
+     article"). The crossed-out lines are the SaaS page's "What it takes off
+     the content budget" stack, generalised and shown without prices, so no
+     number on the receipt is anyone's but Rankbox's: $49.50 a month for 30
+     articles (src/data/pricing.ts), $1.65 each at the plan level, 7-day
+     trial, "No charge today". Backlink credits are in the plan as sold but
+     the exchange is still rolling out. Formats: 4x5 feed, 9x16 Reel. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x5 9x16" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<script src="../kit/kit.js"></script>
+<style>
+  .canvas { background: #1877f2; }
+  .r4-field {
+    position: absolute; inset: 0; z-index: -2;
+    background:
+      radial-gradient(60% 36% at 18% 14%, rgba(150, 205, 255, 0.5) 0%, rgba(150, 205, 255, 0) 70%),
+      radial-gradient(70% 45% at 85% 70%, rgba(100, 180, 255, 0.4) 0%, rgba(100, 180, 255, 0) 70%),
+      radial-gradient(80% 40% at 0% 100%, rgba(16, 92, 214, 0.7) 0%, rgba(16, 92, 214, 0) 70%),
+      #1877f2;
+  }
+  .grain { --grain: 0.1; }
+  .r4-px { position: absolute; inset: 0; z-index: -1; pointer-events: none; }
+  .r4-px i { position: absolute; display: block; background: #fff; border-radius: 3px; }
+
+  .r4-logo { position: absolute; left: 104px; top: var(--logo-y, 100px); display: flex; align-items: center; gap: 18px; color: #fff; font-size: 50px; font-weight: 600; letter-spacing: -0.03em; }
+  .r4-logo svg { width: 54px; height: 54px; }
+  .r4-hl { position: absolute; left: 98px; top: var(--hl-y, 214px); color: #fff; font-size: 122px; font-weight: 700; letter-spacing: -0.05em; line-height: 0.99; word-spacing: 0.02em; text-shadow: 0 10px 40px rgba(10, 70, 190, 0.22); }
+  .r4-hl .soft { color: #bfe0ff; }
+
+  /* ---------- the receipt ---------- */
+  .r4-wrap {
+    position: absolute; left: var(--rc-x, 330px); top: var(--rc-y, 690px); width: 960px;
+    transform: rotate(-4deg); transform-origin: 50% 0;
+    filter: drop-shadow(0 50px 60px rgba(6, 46, 140, 0.45)) drop-shadow(0 12px 16px rgba(6, 46, 140, 0.25));
+  }
+  .r4-paper {
+    position: relative; padding: 76px 70px 90px;
+    background: linear-gradient(90deg, #f3f4f0 0%, #fffffb 7%, #fffffb 93%, #f3f4f0 100%);
+    font-family: "SF Mono", ui-monospace, Menlo, monospace; color: #1c2027;
+    -webkit-mask:
+      conic-gradient(from 135deg at top, #0000, #000 1deg 89deg, #0000 90deg) 50% 0 / 40px 20px repeat-x,
+      conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) 50% 100% / 40px 20px repeat-x,
+      linear-gradient(#000 0 0) 0 19px / 100% calc(100% - 38px) no-repeat;
+            mask:
+      conic-gradient(from 135deg at top, #0000, #000 1deg 89deg, #0000 90deg) 50% 0 / 40px 20px repeat-x,
+      conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) 50% 100% / 40px 20px repeat-x,
+      linear-gradient(#000 0 0) 0 19px / 100% calc(100% - 38px) no-repeat;
+  }
+  .r4-paper::after {
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background: repeating-linear-gradient(180deg, rgba(0, 0, 0, 0.012) 0 2px, transparent 2px 5px);
+  }
+  .r4-top { text-align: center; }
+  .r4-top .m { display: inline-flex; align-items: center; gap: 14px; font-family: "Jakarta", sans-serif; font-size: 44px; font-weight: 700; letter-spacing: -0.03em; color: #0c1018; }
+  .r4-top .m svg { width: 44px; height: 44px; color: var(--blue); }
+  .r4-top p { margin-top: 14px; font-size: 30px; letter-spacing: 0.08em; color: #5d6370; }
+  .r4-cut { margin: 34px 0; border-top: 3px dashed #c9ccd3; }
+  .r4-line { position: relative; display: flex; justify-content: space-between; align-items: baseline; font-size: 38px; line-height: 1; padding: 17px 0; letter-spacing: -0.01em; }
+  .r4-line .x { color: #8a8f99; }
+  .r4-head { font-size: 30px; letter-spacing: 0.08em; color: #5d6370; padding-bottom: 6px; }
+  .r4-inc { font-size: 33px; color: #2a2f38; padding: 10px 0 10px 4px; }
+  .r4-inc::before { content: "+ "; color: var(--blue); font-weight: 700; }
+  .r4-plan { font-size: 40px; font-weight: 700; color: #0c1018; }
+  .r4-total { font-size: 48px; font-weight: 800; color: #0c1018; padding: 22px 0; }
+  .r4-total .amt { position: relative; }
+  .r4-foot { text-align: center; font-size: 30px; line-height: 1.6; color: #4a505c; letter-spacing: 0.02em; }
+  .r4-bars { margin: 30px auto 0; width: 520px; height: 90px; background: repeating-linear-gradient(90deg, #1c2027 0 3px, transparent 3px 7px, #1c2027 7px 12px, transparent 12px 15px, #1c2027 15px 16px, transparent 16px 21px); opacity: .85; }
+
+  /* marker: blue strikes and a ring round the total, drawn by script */
+  .r4-ink { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+
+  /* the one accent: a price sticker */
+  .r4-sticker {
+    position: absolute; z-index: 5; left: var(--st-x, 1086px); top: var(--st-y, 940px); width: 330px; height: 330px;
+    transform: rotate(14deg); border-radius: 50%;
+    background: radial-gradient(circle at 38% 30%, #fff1a6 0%, #ffe14d 46%, #ffd21f 100%);
+    box-shadow: 0 30px 50px -18px rgba(6, 46, 140, 0.55), inset 0 -8px 16px rgba(190, 140, 0, 0.18);
+    display: grid; place-content: center; text-align: center; color: #0c1018;
+  }
+  .r4-sticker b { display: block; font-size: 104px; font-weight: 800; letter-spacing: -0.05em; line-height: 0.95; }
+  .r4-sticker span { display: block; margin-top: 8px; font-size: 36px; font-weight: 650; letter-spacing: -0.02em; }
+  .r4-sticker::after { content: ""; position: absolute; inset: 14px; border-radius: 50%; border: 3px dashed rgba(12, 16, 24, 0.22); }
+
+  /* Reel */
+  html[data-f="9x16"] { --logo-y: 360px; --hl-y: 462px; --rc-x: 320px; --rc-y: 904px; --st-x: 1062px; --st-y: 1196px; }
+  html[data-f="9x16"] .r4-wrap { transform: rotate(-4deg) scale(1.27); }
+  html[data-f="9x16"] .r4-sticker { transform: rotate(14deg) scale(1.08); }
+  html[data-f="9x16"] .r4-hl { font-size: 132px; }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="r4-field"></div>
+  <div class="r4-px" id="px"></div>
+  <div class="grain"></div>
+
+  <div class="r4-logo"><svg><use href="#lg-rankbox"/></svg>Rankbox</div>
+  <h1 class="r4-hl">A month of content<br /><span class="soft">for less than one</span><br /><span class="soft">freelance article.</span></h1>
+
+  <div class="r4-wrap" id="wrap">
+    <div class="r4-paper" id="paper">
+      <div class="r4-top">
+        <div class="m"><svg><use href="#lg-rankbox"/></svg>Rankbox</div>
+        <p>YOUR CONTENT BUDGET · OCT 2026</p>
+      </div>
+      <div class="r4-cut"></div>
+      <div class="r4-line strike"><span class="x">Content agency retainer</span></div>
+      <div class="r4-line strike"><span class="x">Freelance writers</span></div>
+      <div class="r4-line strike"><span class="x">SEO research tools</span></div>
+      <div class="r4-line strike"><span class="x">On-page SEO checks</span></div>
+      <div class="r4-line strike"><span class="x">Copy-paste publishing</span></div>
+      <div class="r4-cut"></div>
+      <div class="r4-line r4-plan"><span>Rankbox Business</span><span>$49.50</span></div>
+      <div class="r4-inc">30 articles a month, scored</div>
+      <div class="r4-inc">Research and publishing</div>
+      <div class="r4-inc">30 backlink credits</div>
+      <div class="r4-cut"></div>
+      <div class="r4-line r4-total"><span>TOTAL</span><span class="amt" id="amt">$49.50/mo</span></div>
+      <div class="r4-cut"></div>
+      <div class="r4-foot">7-DAY FREE TRIAL<br />No charge today</div>
+      <div class="r4-bars"></div>
+      <svg class="r4-ink" id="ink"></svg>
+    </div>
+  </div>
+
+  <div class="r4-sticker"><div><b>$1.65</b><span>an article</span></div></div>
+</div>
+<script>
+  const PX = [
+    [3,31,14,.10],[7,66,20,.08],[11,9,22,.12],[5,88,16,.09],[16,48,12,.07],[14,79,24,.11],[9,20,10,.07],
+    [27,3,26,.13],[31,94,18,.10],[24,70,12,.07],[38,58,22,.09],[44,88,14,.08],[41,16,10,.06],[52,2,20,.11],
+    [49,97,24,.12],[63,7,24,.14],[68,35,16,.10],[72,62,26,.12],[66,84,14,.09],[79,18,28,.15],[83,47,18,.11],
+    [77,73,22,.13],[86,91,26,.14],[90,5,20,.12],[88,29,14,.09],[93,56,24,.13],[91,68,16,.10],[95,81,22,.12],
+    [97,13,18,.11],[58,44,10,.06],[20,36,12,.08],[35,77,16,.10],
+  ];
+  document.getElementById("px").innerHTML = PX.map(([t, l, s, o]) =>
+    `<i style="top:${t}%;left:${l}%;width:${s}px;height:${s}px;opacity:${o}"></i>`).join("");
+
+  // Hand-drawn marker: a slightly wavering stroke through each old line, and
+  // a loose ring round the total. Deterministic, so every render matches.
+  document.fonts.ready.then(() => {
+    const paper = document.getElementById("paper");
+    const P = paper.getBoundingClientRect();
+    const ink = document.getElementById("ink");
+    ink.setAttribute("viewBox", `0 0 ${paper.offsetWidth} ${paper.offsetHeight}`);
+    // Coordinates in the paper's own (unrotated) space.
+    const local = (el) => {
+      let x = 0, y = 0, n = el;
+      while (n && n !== paper) { x += n.offsetLeft; y += n.offsetTop; n = n.offsetParent; }
+      return { x, y, w: el.offsetWidth, h: el.offsetHeight };
+    };
+    let seed = 7;
+    const rnd = () => { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; };
+    const paths = [];
+    document.querySelectorAll(".strike .x").forEach((x) => {
+      const b = local(x);
+      const y = b.y + b.h * 0.55, x0 = b.x - 18, x1 = b.x + b.w + 26;
+      const mid = (x0 + x1) / 2;
+      const d = `M${x0} ${y + (rnd() - .5) * 6} Q${mid} ${y - 8 + rnd() * 16} ${x1} ${y + (rnd() - .5) * 8}`;
+      paths.push(`<path d="${d}" fill="none" stroke="#1d6ff2" stroke-width="9" stroke-linecap="round" opacity=".88"/>`);
+    });
+    const a = local(document.getElementById("amt"));
+    const cx = a.x + a.w / 2, cy = a.y + a.h / 2, rx = a.w / 2 + 34, ry = a.h / 2 + 30;
+    paths.push(`<path d="M${cx + rx * 0.9} ${cy - ry * 0.75} C${cx + rx * 1.15} ${cy + ry * 0.2}, ${cx + rx * 0.5} ${cy + ry * 1.12}, ${cx - rx * 0.2} ${cy + ry * 1.05} S${cx - rx * 1.1} ${cy + ry * 0.4}, ${cx - rx * 1.02} ${cy - ry * 0.1} S${cx - rx * 0.45} ${cy - ry * 1.15}, ${cx + rx * 0.35} ${cy - ry * 1.08} S${cx + rx * 1.05} ${cy - ry * 0.55}, ${cx + rx * 1.12} ${cy - ry * 0.2}" fill="none" stroke="#1d6ff2" stroke-width="8" stroke-linecap="round" opacity=".9"/>`);
+    ink.innerHTML = paths.join("");
+  });
+</script>
+</body>
+</html>

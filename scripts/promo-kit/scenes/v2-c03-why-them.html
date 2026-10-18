@@ -1,0 +1,115 @@
+<!doctype html>
+<!-- Variant 2 · Cluster 3 "Why them and not me?", one image.
+     Forms Connect hero family (01, f01): a near-black field split by a blue
+     beam, one tilted dark panel, app tiles hanging around it, pixelated. The
+     panel is the buyer's AI chat: the question, then three named brands
+     (Taskwren, Quillvane, Stackmere, the spec's invented rivals) as rows with
+     plain letter tiles, and a dashed empty slot where the viewer isn't. The
+     turn and the readiness-score CTA sit in the close. No statistic, so no
+     source line. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x5" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<link rel="stylesheet" href="ads2/ads2.css" />
+<script src="../kit/kit.js"></script>
+<script src="ads/ads.js"></script>
+<script src="ads2/ads2.js"></script>
+<style>
+  .canvas.v2 { background: #01050f; }
+  .y03-field { position: absolute; inset: 0; z-index: -2; overflow: hidden; background: radial-gradient(90% 60% at 50% 0%, #061433 0%, #01050f 70%); }
+  /* the beam: rising from the lower left to the upper right, behind the panel */
+  .y03-beam { position: absolute; left: -420px; top: 760px; width: 2500px; height: 620px; transform: rotate(-30deg); border-radius: 50%;
+    background: linear-gradient(90deg, rgba(8, 40, 140, 0) 0%, #0b3fc4 26%, #1d6cf5 52%, #4f9bff 76%, #a9d3ff 100%); filter: blur(90px); opacity: .92; }
+  .y03-core { position: absolute; left: 640px; top: 640px; width: 1200px; height: 180px; transform: rotate(-30deg); border-radius: 50%;
+    background: linear-gradient(90deg, rgba(120, 190, 255, 0), #8cc6ff 60%, #e3f2ff); filter: blur(64px); opacity: .62; }
+  .y03-pool { position: absolute; left: -300px; top: 1500px; width: 1000px; height: 600px; border-radius: 50%; background: #0a2f8a; filter: blur(140px); opacity: .7; }
+  .canvas.v2 .grain { --grain: 0.14; }
+
+  .y03-kick { position: absolute; left: 100px; top: 104px; font-size: 38px; font-weight: 600; letter-spacing: -0.02em; color: rgba(255, 255, 255, 0.72); }
+  .y03-hl { position: absolute; left: 92px; top: 166px; font-size: 176px; }
+  .y03-hl .accent { color: #6fb1ff; }
+
+  /* the tilted chat panel */
+  .y03-stage { position: absolute; left: 318px; top: 586px; width: 980px;
+    transform: perspective(3200px) rotateX(4deg) rotateY(-8deg) rotateZ(-2.6deg); transform-origin: 50% 0; }
+  .y03-stage .dpanel { width: 980px; }
+  .y03-head { display: flex; align-items: center; gap: 18px; height: 104px; padding: 0 38px; background: var(--panel-head); border-bottom: 1.5px solid var(--line); font-size: 32px; font-weight: 600; letter-spacing: -0.02em; }
+  .y03-head .ai { width: 54px; height: 54px; border-radius: 50%; background: #23324d; color: #8cc6ff; display: grid; place-items: center; }
+  .y03-head .ai svg { width: 30px; height: 30px; }
+  .y03-head .x { margin-left: auto; width: 30px; height: 30px; color: var(--on-dark-2); }
+  .y03-body { padding: 40px 44px 46px; }
+  .y03-ask { margin-left: auto; width: max-content; max-width: 800px; padding: 26px 34px; border-radius: 34px 34px 10px 34px; background: var(--blue); color: #fff; font-size: 38px; font-weight: 550; line-height: 1.3; letter-spacing: -0.02em; }
+  .y03-lead { margin-top: 34px; display: flex; align-items: center; gap: 16px; font-size: 36px; font-weight: 550; letter-spacing: -0.02em; color: var(--on-dark); }
+  .y03-lead svg { width: 36px; height: 36px; color: #8cc6ff; }
+  .y03-rows { margin-top: 24px; display: grid; gap: 18px; }
+  .y03-row { display: flex; align-items: center; gap: 30px; height: 140px; padding: 0 36px 0 28px; border-radius: 30px; background: var(--row); box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, .035); }
+  .y03-row .n { width: 30px; font-size: 32px; font-weight: 600; color: var(--on-dark-3); }
+  .y03-row .lt { width: 92px; height: 92px; flex: none; border-radius: 24px; display: grid; place-items: center; font-size: 50px; font-weight: 800; letter-spacing: -0.04em; background: var(--lb); color: var(--lc); }
+  .y03-row b { display: block; font-size: 44px; font-weight: 650; letter-spacing: -0.03em; }
+  .y03-row span { display: block; margin-top: 6px; font-size: 31px; font-weight: 500; letter-spacing: -0.02em; color: var(--on-dark-2); }
+  /* the slot the viewer isn't in: an annotation, not part of the answer */
+  .y03-row.you { background: transparent; box-shadow: none; outline: 3px dashed rgba(111, 177, 255, .75); outline-offset: -3px; height: 128px; }
+  .y03-row.you .lt { background: transparent; outline: 3px dashed rgba(111, 177, 255, .6); outline-offset: -3px; color: #6fb1ff; font-size: 46px; }
+  .y03-row.you b { color: #fff; }
+  .y03-row.you span { color: #8cc6ff; font-weight: 600; }
+
+  /* pixelated AI tiles hanging around the panel */
+  .y03-t { position: absolute; z-index: 3; border-radius: 23%; }
+  .y03-t .pxl-wrap { position: relative; box-shadow: 0 40px 70px -20px rgba(0, 0, 0, .6), 0 14px 26px -12px rgba(0, 0, 0, .45); }
+
+  /* the close: the score, then the offer */
+  .v2-close { bottom: 96px; padding-left: 30px; }
+  .y03-gauge { position: relative; width: 132px; height: 132px; flex: none; border-radius: 30px; background: #eef4ff; display: grid; place-items: center; }
+  .y03-gauge svg { position: absolute; inset: 14px; width: 104px; height: 104px; }
+  .y03-gauge b { position: relative; top: 4px; font-size: 62px; font-weight: 800; color: var(--blue); letter-spacing: -0.04em; }
+  .v2-close p { flex: 1; font-size: 37px; font-weight: 700; line-height: 1.2; letter-spacing: -0.025em; color: #0c1018; }
+  .v2-close p .s { display: block; margin-top: 6px; font-size: 28px; font-weight: 550; color: #3a4252; letter-spacing: -0.015em; }
+  .v2-close p .o { display: block; margin-top: 8px; font-size: 25px; font-weight: 500; color: #5a6070; white-space: nowrap; letter-spacing: -0.01em; }
+  .v2-go { height: 104px; padding: 0 36px; font-size: 36px; }
+</style>
+</head>
+<body>
+<div class="canvas v2">
+  <div class="y03-field"><div class="y03-pool"></div><div class="y03-beam"></div><div class="y03-core"></div></div>
+  <div class="grain"></div>
+
+  <div class="y03-kick">Your buyer just asked AI.</div>
+  <h1 class="y03-hl display">Why them,<br /><span class="accent">not you?</span></h1>
+
+  <!-- AI tiles, pixelated -->
+  <div class="y03-t float" style="left:1170px; top:150px; transform:perspective(1100px) rotateX(6deg) rotateY(-20deg) rotateZ(10deg)"><div class="pxl-wrap" style="--s:196px"><canvas class="pxl" data-logo="chatgpt" data-px="10" style="--s:196px"></canvas></div></div>
+  <div class="y03-t float" style="left:1400px; top:420px; transform:perspective(1100px) rotateX(-6deg) rotateY(-22deg) rotateZ(-9deg)"><div class="pxl-wrap" style="--s:176px"><canvas class="pxl" data-logo="perplexity" data-px="10" style="--s:176px"></canvas></div></div>
+  <div class="y03-t float" style="left:1372px; top:900px; transform:perspective(1100px) rotateX(5deg) rotateY(-18deg) rotateZ(8deg)"><div class="pxl-wrap" style="--s:204px"><canvas class="pxl" data-logo="gemini" data-px="10" style="--s:204px"></canvas></div></div>
+  <div class="y03-t float" style="left:1420px; top:1290px; transform:perspective(1100px) rotateX(4deg) rotateY(-20deg) rotateZ(-7deg)"><div class="pxl-wrap" style="--s:168px"><canvas class="pxl" data-logo="copilot" data-px="10" style="--s:168px"></canvas></div></div>
+  <div class="y03-t float" style="left:84px; top:720px; transform:perspective(1100px) rotateX(-4deg) rotateY(20deg) rotateZ(-10deg)"><div class="pxl-wrap" style="--s:190px"><canvas class="pxl" data-logo="claude" data-px="10" style="--s:190px"></canvas></div></div>
+  <div class="y03-t float" style="left:-40px; top:1110px; transform:perspective(1100px) rotateX(6deg) rotateY(18deg) rotateZ(12deg)"><div class="pxl-wrap" style="--s:176px"><canvas class="pxl" data-logo="deepseek" data-px="10" style="--s:176px"></canvas></div></div>
+
+  <div class="y03-stage">
+    <div class="dpanel">
+      <div class="y03-head"><span class="ai"><svg><use href="#ic-sparkle"/></svg></span>AI assistant<span class="x"><svg><use href="#ic-x"/></svg></span></div>
+      <div class="y03-body">
+        <div class="y03-ask">What’s the best project management software for a 40-person team?</div>
+        <div class="y03-lead"><svg><use href="#ic-sparkle"/></svg>Three strong options:</div>
+        <div class="y03-rows">
+          <div class="y03-row"><span class="n">1</span><span class="lt" style="--lb:#fff; --lc:#0c1018">T</span><div><b>Taskwren</b><span>Easy to roll out across teams</span></div></div>
+          <div class="y03-row"><span class="n">2</span><span class="lt" style="--lb:#1877f2; --lc:#fff">Q</span><div><b>Quillvane</b><span>Strongest for client work</span></div></div>
+          <div class="y03-row"><span class="n">3</span><span class="lt" style="--lb:#e8f1ff; --lc:#1561d6">S</span><div><b>Stackmere</b><span>Best reporting</span></div></div>
+          <div class="y03-row you"><span class="n"></span><span class="lt">?</span><div><b>Your brand</b><span>Not in the answer</span></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="v2-close">
+    <div class="y03-gauge">
+      <svg viewBox="0 0 100 100"><path d="M22 78 A38 38 0 1 1 78 78" fill="none" stroke="#bcd3f7" stroke-width="10" stroke-linecap="round"/></svg>
+      <b>?</b>
+    </div>
+    <p>It’s not luck. It’s structure.<span class="s">Check your AI readiness score free with Rankbox.</span><span class="o" data-offer="line"></span></p>
+    <div class="v2-go"><span data-offer="cta"></span><svg><use href="#ic-arrow-right"/></svg></div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,138 @@
+<!doctype html>
+<!-- Variant 3 · Cluster 15 "The press release nobody read", one image.
+     "Selected", sky field: on the left a paper plane folded from a press
+     release, its dashed flight path nosediving into a heap of faded pages
+     ("Syndicated to pages almost nobody reads"); on the right a neat ream of
+     sheets, one per article (count read from ads.js), labelled with the
+     article count: the selected thing. Two prices on one line beneath:
+     $850+ with its exact source line, and the plan price from ads.js. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x5" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<link rel="stylesheet" href="ads3/ads3.css" />
+<script src="../kit/kit.js"></script>
+<script src="ads/ads.js"></script>
+<script src="ads3/ads3.js"></script>
+<style>
+  .y15-top { position: absolute; left: 100px; right: 100px; top: 96px; display: flex; align-items: center; }
+  .y15-top .v3-kick { margin-left: auto; }
+  .y15-hl { position: absolute; left: 96px; right: 100px; top: 222px; font-size: 128px; line-height: 0.98; }
+
+  .y15-art { position: absolute; left: 0; top: 0; width: 1600px; height: 2000px; pointer-events: none; overflow: visible; }
+
+  /* A: the plane and where it lands */
+  .y15-heap { position: absolute; left: 448px; top: 1124px; width: 420px; height: 200px; }
+  .y15-heap i { position: absolute; width: 150px; height: 190px; border-radius: 10px; background: #fff; box-shadow: inset 0 0 0 4px var(--v3-soft); }
+  .y15-heap i.f { background: #f6faff; box-shadow: inset 0 0 0 4px var(--v3-line); }
+  .y15-heap i.f::before, .y15-heap i.f::after { background: var(--v3-sky); }
+  .y15-heap i::before, .y15-heap i::after { content: ""; position: absolute; left: 24px; height: 10px; border-radius: 5px; background: var(--v3-sky-2); }
+  .y15-heap i::before { top: 34px; width: 90px; }
+  .y15-heap i::after { top: 62px; width: 70px; }
+  .y15-nobody { position: absolute; left: 100px; top: 1110px; width: 320px; font-size: 32px; font-weight: 650; line-height: 1.22; letter-spacing: -0.02em; color: var(--v3-ink-2); }
+
+  /* B: the ream, selected */
+  .y15-ream.v3-pick { position: absolute; left: 880px; top: 560px; width: 620px; display: block; padding: 40px 48px 52px; border-radius: 6px; --k: 34px; --st: 5px; }
+  .y15-ream h3 { font-size: 52px; font-weight: 780; letter-spacing: -0.04em; line-height: 1; color: #fff; }
+  .y15-ream svg { display: block; margin-top: 44px; width: 524px; height: 520px; overflow: visible; }
+
+  /* the two prices, one line */
+  .y15-price { position: absolute; top: 1420px; }
+  .y15-price b { display: block; font-size: 132px; font-weight: 800; letter-spacing: -0.065em; line-height: 0.8; color: var(--v3-blue); white-space: nowrap; }
+  .y15-price b small { font-size: 44px; font-weight: 700; letter-spacing: -0.03em; margin-left: 8px; }
+  .y15-price p { margin-top: 26px; font-size: 34px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.2; color: var(--v3-ink); }
+  .y15-price .v3-src { display: block; margin-top: 10px; width: 660px; font-weight: 500; }
+  .y15 .v3-close p { text-wrap: balance; }
+</style>
+</head>
+<body>
+<div class="canvas v3 sky y15">
+  <div class="v3-wash"></div>
+  <div class="v3-px"></div>
+
+  <div class="y15-top">
+    <span class="v3-logo"><svg><use href="#lg-rankbox"/></svg>Rankbox</span>
+    <span class="v3-kick">Digital PR, built for AI answers</span>
+  </div>
+  <h1 class="v3-hl y15-hl">One press release,<br />or a month of answers?</h1>
+
+  <!-- flight path: launch, the plane at its apex, nosedive into the heap -->
+  <svg class="y15-art" viewBox="0 0 1600 2000" fill="none" stroke="#1877f2" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M-30 900 C 30 790, 80 700, 168 652" stroke-dasharray="20 20" />
+    <path d="M587 916 C 690 950, 708 1050, 620 1136" stroke-dasharray="20 20" />
+    <path d="M584 1144 L 560 1116" /><path d="M616 1102 L 616 1068" /><path d="M658 1140 L 684 1114" />
+    <g transform="translate(150 612) rotate(20) scale(1.15)" stroke-width="4.4">
+      <path d="M440 118 L170 138 L70 238 Z" fill="#d5e7ff" />
+      <path d="M440 118 L170 138 L204 190 Z" fill="#c4dcfd" />
+      <path d="M440 118 L0 0 L170 138 Z" fill="#fff" />
+      <text x="0" y="0" transform="translate(122 66) rotate(15)" fill="#1877f2" stroke="none" font-family="Jakarta" font-size="24" font-weight="800" letter-spacing="2.4">PRESS RELEASE</text>
+    </g>
+  </svg>
+
+  <div class="y15-nobody">Syndicated to pages almost nobody&nbsp;reads</div>
+  <div class="y15-heap">
+    <i class="f" style="left:0; top:30px; transform:rotate(-14deg)"></i>
+    <i class="f" style="left:226px; top:24px; transform:rotate(18deg)"></i>
+    <i style="left:112px; top:0; transform:rotate(6deg)"></i>
+  </div>
+
+  <div class="v3-pick y15-ream">
+    <h3 id="y15-count"></h3>
+    <svg id="y15-stack" viewBox="0 0 524 520"></svg>
+  </div>
+
+  <div class="y15-price" style="left:100px">
+    <b>$850+</b>
+    <p>One national wire release<span class="v3-src">Source: published national wire list prices,<br />400-word release, 2025</span></p>
+  </div>
+  <div class="y15-price" style="left:880px">
+    <b id="y15-b"></b>
+    <p>On your own site, written to be&nbsp;quoted</p>
+  </div>
+
+  <div class="v3-close">
+    <svg class="mk"><use href="#lg-rankbox"/></svg>
+    <p>Rankbox is an always-on PR engine aimed at what AI&nbsp;reads.<span data-offer="line"></span></p>
+    <div class="v3-go"><span data-offer="cta"></span><svg><use href="#ic-arrow-right"/></svg></div>
+  </div>
+</div>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const O = window.OFFER;
+    // The ream's label and B's price come from ads.js.
+    document.getElementById("y15-count").textContent = O.articles;
+    const [amt, per] = O.price.split("/");
+    document.getElementById("y15-b").innerHTML = `${amt}<small>/${per}</small>`;
+
+    // One sheet per article: a ream drawn in white on the blue selection.
+    const n = parseInt(O.articles, 10) || 30;
+    const t = 10.5;                       // sheet thickness
+    const top = 180, x0 = 20, x1 = 420, back = 100, rise = top; // top face: (x0+back,0)-(x1+back,0)-(x1,top)-(x0,top)
+    const h = n * t;
+    const P = [];
+    // front and side faces
+    P.push(`<path d="M${x0} ${top} H${x1} V${top + h} H${x0} Z" fill="#fff"/>`);
+    P.push(`<path d="M${x1} ${top} L${x1 + back} 0 V${h} L${x1} ${top + h} Z" fill="#eaf3ff"/>`);
+    for (let i = 1; i < n; i++) {
+      const y = top + i * t;
+      P.push(`<path d="M${x0} ${y} H${x1} L${x1 + back} ${y - rise}" stroke="#1877f2" stroke-width="2.6" fill="none" opacity="0.75"/>`);
+    }
+    // the top sheet: an article
+    P.push(`<path d="M${x0 + back} 0 H${x1 + back} L${x1} ${top} H${x0} Z" fill="#fff"/>`);
+    P.push(`<g transform="matrix(1 0 ${-back / top} 1 ${x0 + back} 0)">
+      <text x="36" y="48" fill="#0c1018" font-family="Jakarta" font-size="25" font-weight="600">yoursite.com</text>
+      <rect x="36" y="70" width="270" height="22" rx="11" fill="#1877f2"/>
+      <rect x="36" y="110" width="320" height="12" rx="6" fill="#c4dcfd"/>
+      <rect x="36" y="136" width="250" height="12" rx="6" fill="#c4dcfd"/>
+    </g>`);
+    // outline
+    P.push(`<path d="M${x0} ${top} L${x0 + back} 0 H${x1 + back} V${h} L${x1} ${top + h} H${x0} Z M${x0} ${top} H${x1} L${x1 + back} 0 M${x1} ${top} V${top + h}" fill="none" stroke="#fff" stroke-width="4" stroke-linejoin="round"/>`);
+    const svg = document.getElementById("y15-stack");
+    svg.setAttribute("viewBox", `0 0 ${x1 + back + 4} ${top + h + 4}`);
+    svg.style.height = `${(top + h + 4) * (524 / (x1 + back + 4))}px`;
+    svg.innerHTML = P.join("");
+  });
+</script>
+</body>
+</html>

@@ -26,15 +26,26 @@ const TINTS = [
 const TILE =
   "flex shrink-0 items-center justify-center overflow-hidden rounded-lg bg-white shadow-sm transition-transform hover:-translate-y-0.5";
 
-/** `className` carries the size and ring, which differ per placement. */
-export function BrandTile({ brand, className }: { brand: Brand; className?: string }) {
+/** `className` carries the size and ring, which differ per placement.
+ *  `label` overrides the native hover title; null drops it, for a placement
+ *  that draws its own tooltip. */
+export function BrandTile({
+  brand,
+  className,
+  label,
+}: {
+  brand: Brand;
+  className?: string;
+  label?: string | null;
+}) {
   const [failed, setFailed] = useState(false);
+  const title = label === null ? undefined : (label ?? brand.name);
   const src = brand.src ?? (brand.domain ? brandIconUrl(brand.domain) : null);
 
   if (!src || failed) {
     const tint = TINTS[[...brand.name].reduce((sum, c) => sum + c.charCodeAt(0), 0) % TINTS.length];
     return (
-      <span className={cn(TILE, className)} title={brand.name}>
+      <span className={cn(TILE, className)} title={title}>
         <span
           className={cn(
             "flex h-5 w-5 items-center justify-center rounded-md bg-gradient-to-br text-[0.62rem] font-bold text-white",
@@ -54,7 +65,7 @@ export function BrandTile({ brand, className }: { brand: Brand; className?: stri
       <img
         src={src}
         alt={brand.name}
-        title={brand.name}
+        title={title}
         loading="lazy"
         onError={() => setFailed(true)}
         className={cn(
@@ -65,7 +76,7 @@ export function BrandTile({ brand, className }: { brand: Brand; className?: stri
     );
   }
   return (
-    <span className={cn(TILE, className)} title={brand.name}>
+    <span className={cn(TILE, className)} title={title}>
       <img
         src={src}
         alt={brand.name}

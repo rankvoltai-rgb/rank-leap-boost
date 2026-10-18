@@ -1,0 +1,128 @@
+<!doctype html>
+<!-- Cluster 22 · single image · "CAC creep". A slide from the viewer's own
+     board deck: "Acquisition cost by quarter", Q1–Q4, paid channels' bars
+     rising every quarter against an "Owned answers" cost line that stays flat
+     (a flat monthly price), and a supporting strip where owned answers' live
+     pages pile up quarter on quarter. Labelled "Illustrative" in the chart
+     header: no axis values, no dollar figures, no CAC numbers anywhere (the
+     source's $38 vs $420 was invented). Rankbox only in the .ad-turn band. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x5" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<link rel="stylesheet" href="ads/ads.css" />
+<script src="../kit/kit.js"></script>
+<script src="ads/ads.js"></script>
+<style>
+  .canvas.ad { --hl-y: 132px; --hl-size: 100px; }
+
+  .x22-deck { left: 110px; top: 556px; width: 1380px; padding: 46px 56px 0; overflow: hidden; }
+  .x22-meta { display: flex; align-items: center; justify-content: space-between; font-size: 26px; font-weight: 650; color: #8a909c; letter-spacing: -0.005em; }
+  .x22-meta .x22-sec { font-size: 25px; font-weight: 750; letter-spacing: 0.14em; text-transform: uppercase; color: #6b7280; }
+  .x22-title { margin-top: 26px; display: flex; align-items: center; gap: 22px; }
+  .x22-title h2 { font-size: 56px; font-weight: 750; letter-spacing: -0.035em; color: #0c1018; }
+  .x22-ill { margin-left: auto; height: 56px; padding: 0 22px; border-radius: 999px; box-shadow: inset 0 0 0 2.5px #d5d9e0; color: #4a5160; font-size: 27px; font-weight: 700; display: inline-flex; align-items: center; gap: 10px; white-space: nowrap; }
+  .x22-ill svg { width: 28px; height: 28px; color: #8a909c; }
+  .x22-legend { margin-top: 22px; display: flex; gap: 40px; font-size: 29px; font-weight: 600; color: #3a4252; }
+  .x22-legend span { display: inline-flex; align-items: center; gap: 14px; }
+  .x22-legend .sw { width: 30px; height: 30px; border-radius: 8px; background: #c3c9d2; }
+  .x22-legend .ln { width: 44px; height: 7px; border-radius: 4px; background: var(--blue); position: relative; }
+  .x22-legend .ln::after { content: ""; position: absolute; left: 50%; top: 50%; width: 16px; height: 16px; margin: -8px 0 0 -8px; border-radius: 50%; background: #fff; box-shadow: inset 0 0 0 4.5px var(--blue); }
+
+  /* plot: no axis values on purpose */
+  .x22-plot { position: relative; margin-top: 34px; height: 430px; }
+  .x22-grid { position: absolute; inset: 0 0 0 0; }
+  .x22-grid i { position: absolute; left: 0; right: 0; height: 0; border-top: 2px dashed #e6e8ec; }
+  .x22-grid i.base { border-top: 3px solid #d5d9e0; }
+  .x22-bars { position: absolute; left: 0; right: 0; bottom: 0; top: 0; display: grid; grid-template-columns: repeat(4, 1fr); align-items: end; }
+  .x22-bars > div { position: relative; display: flex; justify-content: center; height: 100%; align-items: flex-end; }
+  .x22-bars b { display: block; width: 136px; border-radius: 16px 16px 0 0; background: #c9ced6; }
+  .x22-bars > div:nth-child(4) b { background: #9aa3b0; }
+  .x22-up { position: absolute; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 8px; white-space: nowrap; font-size: 28px; font-weight: 750; color: #1d222c; letter-spacing: -0.015em; }
+  .x22-up svg { width: 30px; height: 30px; }
+  .x22-line { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+  .x22-flat { position: absolute; height: 52px; padding: 0 16px; border-radius: 999px; background: #e8f1ff; color: #1561d6; font-size: 26px; font-weight: 750; display: inline-flex; align-items: center; white-space: nowrap; transform: translateY(-50%); box-shadow: inset 0 0 0 2px #cfe0fb; }
+
+  .x22-q { display: grid; grid-template-columns: repeat(4, 1fr); margin-top: 18px; text-align: center; font-size: 30px; font-weight: 700; color: #4a5160; }
+
+  /* the supporting strip: owned answers' pages pile up */
+  .x22-strip { margin: 30px -56px 0; padding: 30px 56px 40px; border-top: 2px solid #eef0f3; background: #fafbfc; }
+  .x22-strip h3 { display: flex; align-items: center; gap: 12px; font-size: 29px; font-weight: 700; color: #1d222c; letter-spacing: -0.015em; }
+  .x22-strip h3 svg { width: 34px; height: 34px; color: var(--blue); }
+  .x22-strip h3 em { font-style: normal; font-weight: 500; color: #8a909c; }
+  .x22-piles { margin-top: 20px; display: grid; grid-template-columns: repeat(4, 1fr); align-items: end; height: 166px; }
+  .x22-pile { display: flex; flex-wrap: wrap-reverse; justify-content: center; gap: 8px; width: 190px; margin: 0 auto; }
+  .x22-pile i { width: 31px; height: 36px; border-radius: 6px; background: var(--blue); display: block; position: relative; box-shadow: 0 3px 6px -3px rgba(10, 60, 160, 0.5); }
+  .x22-pile i::after { content: ""; position: absolute; left: 7px; right: 7px; top: 9px; height: 3px; border-radius: 2px; background: rgba(255, 255, 255, 0.8); box-shadow: 0 7px 0 rgba(255, 255, 255, 0.55), -3px 14px 0 rgba(255, 255, 255, 0.55); }
+</style>
+</head>
+<body>
+<div class="canvas ad">
+  <div class="ad-dots"></div>
+  <h1 class="ad-hl">CAC went up again<br />this quarter.<br /><span class="dim">One channel doesn’t.</span></h1>
+
+  <div class="ad-card x22-deck">
+    <div class="x22-meta"><span class="x22-sec">Unit economics</span><span>Board update · Q4</span></div>
+    <div class="x22-title">
+      <h2>Acquisition cost by quarter</h2>
+      <span class="x22-ill"><svg><use href="#ic-info"/></svg>Illustrative</span>
+    </div>
+    <div class="x22-legend">
+      <span><i class="sw"></i>Paid channels</span>
+      <span><i class="ln"></i>Owned answers</span>
+    </div>
+
+    <div class="x22-plot" id="plot">
+      <div class="x22-grid"><i style="top:0"></i><i style="top:25%"></i><i style="top:50%"></i><i style="top:75%"></i><i class="base" style="top:100%"></i></div>
+      <div class="x22-bars">
+        <div><b style="height:36%"></b></div>
+        <div><b style="height:51%"></b></div>
+        <div><b style="height:66%"></b></div>
+        <div><b style="height:84%"></b><span class="x22-up" style="bottom:calc(84% + 18px)"><svg><use href="#ic-arrow-up"/></svg>Up again</span></div>
+      </div>
+      <svg class="x22-line" id="line"></svg>
+      <span class="x22-flat" id="flat">Flat price</span>
+    </div>
+    <div class="x22-q"><span>Q1</span><span>Q2</span><span>Q3</span><span>Q4</span></div>
+
+    <div class="x22-strip">
+      <h3><svg><use href="#rb-article"/></svg>Owned answers<em>· pages live</em></h3>
+      <div class="x22-piles">
+        <div class="x22-pile" data-n="5"></div>
+        <div class="x22-pile" data-n="10"></div>
+        <div class="x22-pile" data-n="15"></div>
+        <div class="x22-pile" data-n="20"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ad-turn">
+    <div class="ad-logo"><svg><use href="#lg-rankbox"/></svg>Rankbox</div>
+    <p>Owned answers on autopilot, for one flat monthly price.</p>
+    <div class="ad-go"><span data-offer="cta"></span><svg><use href="#ic-arrow-right"/></svg></div>
+  </div>
+</div>
+<script>
+  // page tiles: each quarter adds to the pile
+  document.querySelectorAll(".x22-pile").forEach((p) => {
+    p.innerHTML = "<i></i>".repeat(+p.dataset.n);
+  });
+  // the flat owned-answers line, through the centre of each quarter
+  document.fonts.ready.then(() => {
+    const plot = document.getElementById("plot");
+    const w = plot.clientWidth, h = plot.clientHeight;
+    const y = h * (1 - 0.2);
+    const xs = [0, 1, 2, 3].map((i) => (i + 0.5) * (w / 4));
+    const svg = document.getElementById("line");
+    svg.setAttribute("viewBox", `0 0 ${w} ${h}`);
+    svg.innerHTML =
+      `<line x1="${xs[0]}" y1="${y}" x2="${xs[3]}" y2="${y}" stroke="#1877f2" stroke-width="8" stroke-linecap="round"/>` +
+      xs.map((x) => `<circle cx="${x}" cy="${y}" r="15" fill="#fff" stroke="#1877f2" stroke-width="7"/>`).join("");
+    const flat = document.getElementById("flat");
+    flat.style.left = ((xs[2] + xs[3]) / 2 - flat.offsetWidth / 2) + "px";
+    flat.style.top = (y - 62) + "px";
+  });
+</script>
+</body>
+</html>

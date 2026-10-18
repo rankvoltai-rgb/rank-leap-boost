@@ -1,0 +1,104 @@
+<!doctype html>
+<!-- Variant 3 · Cluster 47 "The 40-word search", one image.
+     "Selected", white field: a technical drawing of two searches. The old
+     search ("best crm") sits in a tiny box with a short dimension line; the
+     buyer's prompt today is typeset big, with a dimension line twelve times
+     longer. Both lines are drawn to scale (2 : 24) and both labels are
+     counted from the text in script, so nothing can drift. The one detail
+     two-word content can't answer, "Stripe recurring billing", is selected. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x5" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<link rel="stylesheet" href="ads3/ads3.css" />
+<script src="../kit/kit.js"></script>
+<script src="ads/ads.js"></script>
+<script src="ads3/ads3.js"></script>
+<style>
+  .y47-top { position: absolute; left: 100px; right: 100px; top: 96px; display: flex; align-items: center; }
+  .y47-top .v3-kick { margin-left: auto; }
+  .y47-hl { position: absolute; left: 96px; right: 100px; top: 212px; font-size: 136px; }
+
+  /* section labels, set like drawing annotations */
+  .y47-tag { position: absolute; left: 100px; font-size: 26px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--v3-ink-2); }
+
+  /* then: the tiny two-word search */
+  .y47-box { position: absolute; left: 100px; top: 636px; display: inline-flex; align-items: center; gap: 12px; height: 58px; padding: 0 22px 0 18px; border: 4px solid var(--v3-blue); border-radius: 999px; background: #fff; white-space: nowrap; }
+  .y47-box svg { width: 26px; height: 26px; color: var(--v3-blue); flex: none; }
+  .y47-box span { font-size: 28px; font-weight: 600; letter-spacing: -0.01em; color: var(--v3-ink); line-height: 1; }
+  .y47-d2 > b { left: auto; right: auto; transform: translate(0, -50%); }
+
+  /* now: the prompt, typeset */
+  .y47-q { position: absolute; left: 100px; width: 1404px; top: 920px; font-size: 94px; font-weight: 680; line-height: 1.25; letter-spacing: -0.042em; color: var(--v3-blue); }
+  .y47-q .v3-pick { line-height: 0.96; padding: 0.03em 0.09em 0.2em 0.08em; margin: 0 0.02em; vertical-align: -0.17em; --k: 0.17em; --st: 0.036em; }
+  .y47-q .nw { white-space: nowrap; }
+  .y47-caret { display: inline-block; width: 7px; height: 0.86em; margin-left: 10px; vertical-align: -0.1em; border-radius: 4px; background: var(--v3-blue); }
+  .y47-ask { position: absolute; left: 100px; display: inline-flex; align-items: center; gap: 10px; font-size: 26px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--v3-ink-2); }
+</style>
+</head>
+<body>
+<div class="canvas v3">
+  <div class="v3-wash"></div>
+  <div class="v3-grid"></div>
+
+  <div class="y47-top">
+    <span class="v3-logo"><svg><use href="#lg-rankbox"/></svg>Rankbox</span>
+    <span class="v3-kick">How buyers search now</span>
+  </div>
+  <h1 class="v3-hl y47-hl">Your buyers stopped typing two&nbsp;words.</h1>
+
+  <span class="y47-tag" style="top:584px">Then</span>
+  <div class="y47-box" id="box"><svg><use href="#ic-search"/></svg><span id="old">best crm</span></div>
+  <div class="v3-dim y47-d2" id="d2"><b id="n2"></b></div>
+
+  <span class="y47-tag" id="nowtag" style="top:852px">Now</span>
+  <p class="y47-q" id="q">Recommend a CRM for a <span class="nw">4-person</span> consulting firm that needs <span class="v3-pick">Stripe recurring billing</span>, a clean pipeline view and no bloat, under $50 a&nbsp;month.<span class="y47-caret"></span></p>
+  <div class="v3-dim y47-d24" id="d24"><b id="n24"></b></div>
+
+  <div class="v3-close">
+    <svg class="mk"><use href="#lg-rankbox"/></svg>
+    <p>Rankbox finds the detailed questions your buyers ask and writes an answer for each.<span data-offer="line"></span></p>
+    <div class="v3-go"><span data-offer="cta"></span><svg><use href="#ic-arrow-right"/></svg></div>
+  </div>
+</div>
+<script>
+  // Both dimension lines are measured, labelled and scaled from the text
+  // itself: the labels count the words, the long line spans the prompt's
+  // widest line, and the short one is drawn to the same scale (2 : 24), with
+  // "best crm" sized to fill it exactly.
+  const words = (el) => el.textContent.trim().split(/\s+/).length;
+  document.fonts.ready.then(() => {
+    const canvas = document.querySelector(".canvas").getBoundingClientRect();
+    const q = document.getElementById("q"), old = document.getElementById("old");
+    const nq = words(q), no = words(old);
+
+    // widest rendered line of the prompt, and its bottom edge
+    const r = document.createRange(); r.selectNodeContents(q);
+    let right = 0, bottom = 0, left = Infinity;
+    for (const b of r.getClientRects()) { if (b.width < 2) continue; left = Math.min(left, b.left); right = Math.max(right, b.right); bottom = Math.max(bottom, b.bottom); }
+    const long = right - left;
+    const d24 = document.getElementById("d24");
+    d24.style.left = (left - canvas.left) + "px";
+    d24.style.width = long + "px";
+    d24.style.top = (bottom - canvas.top + 64) + "px";
+    document.getElementById("n24").textContent = nq + " words";
+
+    // the short line, to scale; fit "best crm" to it
+    const short = long * no / nq;
+    old.style.fontSize = "100px";
+    const at100 = old.getBoundingClientRect().width;
+    old.style.fontSize = (100 * short / at100).toFixed(2) + "px";
+    const o = old.getBoundingClientRect();
+    const d2 = document.getElementById("d2");
+    d2.style.left = (o.left - canvas.left) + "px";
+    d2.style.width = o.width + "px";
+    const box = document.getElementById("box").getBoundingClientRect();
+    d2.style.top = (box.bottom - canvas.top + 46) + "px";
+    const n2 = document.getElementById("n2");
+    n2.textContent = no + " words";
+    n2.style.left = (o.width + 28) + "px";
+  });
+</script>
+</body>
+</html>

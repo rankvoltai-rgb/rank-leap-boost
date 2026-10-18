@@ -1,0 +1,195 @@
+<!doctype html>
+<!-- Variant 4 · Cluster 20 "Before you hire a fractional CMO", one image.
+     Replica of Cal.com (ref-37, with ref-35/36): one browser window filling
+     the frame, cut down the middle into two themes of the same page, a faint
+     page skeleton, one two-column widget centred on the page with the seam
+     running through its right column, a small hand on the picked row, and
+     the wordmark at the foot straddling the seam. Cal.com's dark half
+     becomes sky (no dark surfaces); its light half stays white.
+     The page is Rankbox's onboarding: step 1 (Website, Brand name, What you
+     do, "Find my keywords", the 20-second note) in the left column, step 3
+     "Your first month of content" in the right, its autopilot queue shown
+     as Day 1–7: the one week the quote asks for. The cluster's quote is the
+     page heading, calm, exactly as variant 1 has it, with no attribution.
+     $8,000 a month is the brief's framing of the decision, not a stat.
+     The page is written once in a <template> and cloned into two themed
+     copies, each clipped to its half, so the seam is exact. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x5" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<link rel="stylesheet" href="ads4/ads4.css" />
+<script src="../kit/kit.js"></script>
+<script src="ads/ads.js"></script>
+<script src="ads4/ads4.js"></script>
+<style>
+  html, body { background: #fff; }
+  .canvas { background: #fff; }
+
+  .y20-page { position: absolute; inset: 0; overflow: hidden; background: var(--bg); color: var(--t1); }
+  .y20-white { clip-path: inset(0 800px 0 0); }
+  .y20-sky { clip-path: inset(0 0 0 800px); }
+  .y20-white {
+    --bg: #f6f7f8; --bar: #ffffff; --bar-line: #e7e8ea; --url: #eff0f2; --url-t: #2f3336; --chrome: #a9adb3;
+    --sk: #ebecee; --card: #ffffff; --card-line: #e6e7ea; --col-line: #ebecee;
+    --strip: #fafafb; --strip-i: #f1f2f4; --lit: #e3edfc; --lit2: #cfe0f9;
+    --t1: #0c1018; --t2: #50555f; --t3: #2f3440; --t-ic: #747985; --t-mute: #a3a7ae;
+    --tile: #f3f4f6; --field: #ffffff; --field-line: #e3e5e9; --hint: #8a8f99;
+  }
+  .y20-sky {
+    --bg: #d3e5fc; --bar: #e4effe; --bar-line: #c4daf7; --url: #c6dcf9; --url-t: #22375a; --chrome: #6f8fbd;
+    --sk: #bfd6f6; --card: #e8f2fe; --card-line: #bcd4f5; --col-line: #c8dcf7;
+    --strip: #dfecfd; --strip-i: #d0e3fb; --lit: #acccf6; --lit2: #8fbaf3;
+    --t1: #0c1018; --t2: #34476a; --t3: #22314d; --t-ic: #4f6d99; --t-mute: #6a85ac;
+    --tile: #ffffff; --field: #ffffff; --field-line: #bfd6f5; --hint: #5d7aa4;
+  }
+
+  /* browser chrome */
+  .y20-bar { position: absolute; left: 0; right: 0; top: 0; height: 108px; background: var(--bar); border-bottom: 2px solid var(--bar-line); }
+  .y20-nav { position: absolute; top: 39px; width: 30px; height: 30px; color: var(--chrome); }
+  .y20-url { position: absolute; left: 216px; top: 22px; width: 1236px; height: 64px; border-radius: 32px; background: var(--url); display: flex; align-items: center; gap: 14px; padding-left: 24px; font-size: 28px; font-weight: 500; letter-spacing: -0.01em; color: var(--url-t); white-space: nowrap; }
+  .y20-url svg { width: 26px; height: 26px; flex: none; }
+  .y20-av { position: absolute; left: 1474px; top: 26px; width: 56px; height: 56px; border-radius: 50%; background: linear-gradient(150deg, #8fbaf8, #3f86ec); display: grid; place-items: center; color: rgba(255, 255, 255, 0.92); box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.25); }
+  .y20-av svg { width: 32px; height: 32px; }
+  .y20-kebab { position: absolute; left: 1554px; top: 40px; display: grid; gap: 5px; }
+  .y20-kebab i { width: 6px; height: 6px; border-radius: 50%; background: var(--chrome); }
+
+  /* faint page skeleton */
+  .y20-sk { position: absolute; background: var(--sk); border-radius: 999px; }
+
+  /* the heading: the quote */
+  .y20-cap { position: absolute; left: 0; right: 0; top: 248px; text-align: center; font-size: 25px; font-weight: 650; letter-spacing: 0.16em; text-transform: uppercase; color: var(--t-mute); }
+  .y20-q { position: absolute; left: 150px; right: 150px; top: 300px; text-align: center; font-size: 66px; font-weight: 550; line-height: 1.17; letter-spacing: -0.033em; color: var(--t1); text-wrap: balance; }
+  .y20-q em { font-style: normal; color: #1877f2; }
+
+  /* the widget */
+  .y20-card { position: absolute; left: 150px; top: 710px; width: 1300px; height: 1090px; display: grid; grid-template-columns: 520px minmax(0, 1fr); border-radius: 22px; background: var(--card); box-shadow: inset 0 0 0 2px var(--card-line); overflow: hidden; }
+  .y20-col + .y20-col { border-left: 2px solid var(--col-line); }
+
+  /* left: step 1 */
+  .y20-one { position: relative; padding: 0 46px; }
+  .y20-strip { position: absolute; left: 10px; right: 10px; top: 10px; height: 172px; border-radius: 16px; overflow: hidden; background: var(--strip); display: grid; grid-template-columns: repeat(9, 1fr); grid-auto-rows: 1fr; gap: 6px; padding: 6px; -webkit-mask-image: linear-gradient(180deg, #000 45%, transparent); mask-image: linear-gradient(180deg, #000 45%, transparent); box-shadow: inset 0 0 0 2px var(--card-line); }
+  .y20-strip i { border-radius: 10px; background: var(--strip-i); }
+  .y20-strip i.o { background: var(--lit); }
+  .y20-strip i.o2 { background: var(--lit2); }
+  .y20-logo { position: relative; margin-top: 140px; display: inline-flex; align-items: center; gap: 14px; height: 62px; padding: 0 20px 0 12px; border-radius: 16px; background: var(--card); box-shadow: inset 0 0 0 2px var(--card-line), 0 0 0 5px var(--card); font-size: 28px; font-weight: 750; letter-spacing: -0.03em; color: var(--t1); }
+  .y20-logo i { width: 40px; height: 40px; border-radius: 11px; background: #c9dcf7; box-shadow: inset 0 0 0 2px #b4cdf2; }
+  .y20-step { margin-top: 22px; font-size: 24px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #1877f2; }
+  .y20-one h2 { margin-top: 10px; font-size: 44px; line-height: 1.1; font-weight: 700; letter-spacing: -0.04em; color: var(--t1); }
+  .y20-lab { margin-top: 34px; display: flex; justify-content: space-between; align-items: baseline; font-size: 24px; font-weight: 600; color: var(--t2); }
+  .y20-lab span { font-weight: 500; color: var(--hint); }
+  .y20-in { margin-top: 12px; height: 74px; display: flex; align-items: center; gap: 14px; padding: 0 20px; border-radius: 16px; background: var(--field); box-shadow: inset 0 0 0 2px var(--field-line); font-size: 28px; font-weight: 500; color: var(--t1); letter-spacing: -0.01em; white-space: nowrap; }
+  .y20-in svg { width: 28px; height: 28px; color: var(--t-ic); flex: none; }
+  .y20-in.brand { font-size: 32px; font-weight: 650; letter-spacing: -0.025em; }
+  .y20-in.brand i { width: 40px; height: 40px; border-radius: 11px; background: #c9dcf7; box-shadow: inset 0 0 0 2px #b4cdf2; }
+  .y20-in.txt { height: auto; padding: 18px 20px; white-space: normal; font-size: 26px; line-height: 1.38; align-items: flex-start; }
+  .y20-go { margin-top: 36px; height: 78px; border-radius: 16px; background: #166fe5; color: #fff; display: flex; align-items: center; justify-content: center; gap: 14px; font-size: 28px; font-weight: 650; letter-spacing: -0.015em; box-shadow: 0 12px 22px -14px rgba(22, 111, 229, 0.85); }
+  .y20-go svg { width: 28px; height: 28px; }
+  .y20-note { margin-top: 18px; font-size: 24px; line-height: 1.36; color: var(--t2); text-align: center; }
+
+  /* right: step 3 */
+  .y20-three { position: relative; padding: 0 46px 0 50px; }
+  .y20-three .y20-step { margin-top: 52px; }
+  .y20-h3 { margin-top: 12px; display: flex; align-items: center; font-size: 40px; font-weight: 650; letter-spacing: -0.035em; color: var(--t1); white-space: nowrap; }
+  .y20-prog { position: absolute; right: 46px; top: 46px; display: flex; gap: 16px; }
+  .y20-prog span { width: 128px; font-size: 24px; font-weight: 600; color: var(--t1); }
+  .y20-prog span::before { content: ""; display: block; height: 7px; margin-bottom: 10px; border-radius: 4px; background: #1877f2; }
+  .y20-sub { margin-top: 12px; width: 640px; font-size: 25px; line-height: 1.38; color: var(--t2); }
+  .y20-grp { margin-top: 34px; display: flex; align-items: center; gap: 16px; }
+  .y20-grp i { width: 50px; height: 50px; border-radius: 13px; background: var(--field); box-shadow: inset 0 0 0 2px var(--field-line); color: #1877f2; display: grid; place-items: center; flex: none; }
+  .y20-grp i svg { width: 28px; height: 28px; }
+  .y20-grp b { display: block; font-size: 27px; font-weight: 650; letter-spacing: -0.015em; color: var(--t1); }
+  .y20-grp span { display: block; margin-top: 2px; font-size: 24px; color: var(--t2); }
+  .y20-rows { margin-top: 24px; display: grid; gap: 12px; }
+  .y20-row { display: grid; grid-template-columns: 96px minmax(0, 1fr); align-items: center; height: 84px; }
+  .y20-row .d { font-size: 24px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--t-mute); }
+  .y20-row .t { height: 100%; display: flex; align-items: center; padding: 0 26px; border-radius: 14px; background: var(--tile); font-size: 27px; font-weight: 550; letter-spacing: -0.015em; color: var(--t1); white-space: nowrap; overflow: hidden; }
+  .y20-row.on .d { color: var(--t1); }
+  .y20-row.on .t { background: #1877f2; color: #fff; font-weight: 650; box-shadow: 0 12px 22px -14px rgba(22, 111, 229, 0.8); }
+
+  .y20-foot { position: absolute; left: 0; right: 0; top: 1870px; display: flex; justify-content: center; }
+  .y20-foot .wm { font-size: 44px; color: var(--t1); }
+  .y20-foot .wm svg { color: #1877f2; }
+
+  .y20-hand { position: absolute; left: 1338px; top: 1108px; width: 58px; height: 58px; z-index: 5; filter: drop-shadow(0 5px 7px rgba(10, 30, 70, 0.35)); }
+</style>
+</head>
+<body>
+<div class="canvas v4" id="canvas">
+  <svg class="y20-hand" viewBox="0 0 24 24"><use href="#ic-hand"/></svg>
+</div>
+
+<template id="page">
+  <div class="y20-bar">
+    <svg class="y20-nav" style="left:40px"><use href="#ic-back"/></svg>
+    <svg class="y20-nav" style="left:102px;transform:scaleX(-1)"><use href="#ic-back"/></svg>
+    <svg class="y20-nav" style="left:164px"><use href="#ic-refresh"/></svg>
+    <div class="y20-url"><svg><use href="#ic-lock"/></svg>rankbox.xyz/onboarding</div>
+    <div class="y20-av"><svg><use href="#ic-user"/></svg></div>
+    <div class="y20-kebab"><i></i><i></i><i></i></div>
+  </div>
+
+  <div class="y20-sk" style="left:60px;top:150px;width:40px;height:40px"></div>
+  <div class="y20-sk" style="left:122px;top:160px;width:112px;height:20px"></div>
+  <div class="y20-sk" style="left:256px;top:160px;width:112px;height:20px"></div>
+  <div class="y20-sk" style="left:1424px;top:148px;width:116px;height:42px"></div>
+
+  <div class="y20-cap">Advice for founders</div>
+  <p class="y20-q">“Before you spend $8,000&nbsp;a&nbsp;month on a fractional CMO to fix organic growth, spend <em>one&nbsp;week</em> finding out what’s already possible.”</p>
+
+  <div class="y20-card">
+    <div class="y20-col y20-one">
+      <div class="y20-strip" data-strip></div>
+      <div class="y20-logo"><i></i>yoursite</div>
+      <div class="y20-step">Step 1 of 3</div>
+      <h2>Is this your brand?</h2>
+      <div class="y20-lab">Website</div>
+      <div class="y20-in"><svg><use href="#ic-globe"/></svg>yoursite.com</div>
+      <div class="y20-lab">Brand name</div>
+      <div class="y20-in brand"><i></i>Yoursite</div>
+      <div class="y20-lab">What you do<span>Briefs every article</span></div>
+      <div class="y20-in txt">A weekly planner for small teams: one shared plan, simple boards, nothing to set up.</div>
+      <div class="y20-go">Find my keywords<svg><use href="#ic-arrow-right"/></svg></div>
+      <div class="y20-note">Next, we analyze your site. It takes about 20 seconds.</div>
+    </div>
+
+    <div class="y20-col y20-three">
+      <div class="y20-prog"><span>Brand</span><span>Keywords</span><span>Plan</span></div>
+      <div class="y20-step">Step 3 of 3</div>
+      <div class="y20-h3">Your first month of content</div>
+      <div class="y20-sub">One article per keyword, filling the gaps your site doesn’t answer yet, in the order we’ll publish them.</div>
+      <div class="y20-grp"><i><svg><use href="#rb-calendar"/></svg></i><div><b>Autopilot queue</b><span>One article a day, in the order we’ll publish them</span></div></div>
+      <div class="y20-rows">
+        <div class="y20-row on"><span class="d">Day 1</span><span class="t">How to Plan a Week as a Small Team</span></div>
+        <div class="y20-row"><span class="d">Day 2</span><span class="t">Taskwren Alternatives for Small Teams</span></div>
+        <div class="y20-row"><span class="d">Day 3</span><span class="t">Kanban or a Weekly Plan? How to Choose</span></div>
+        <div class="y20-row"><span class="d">Day 4</span><span class="t">How to Replace Standups With a Digest</span></div>
+        <div class="y20-row"><span class="d">Day 5</span><span class="t">How to Run a Weekly Planning Meeting</span></div>
+        <div class="y20-row"><span class="d">Day 6</span><span class="t">Do Small Teams Need a Planning Tool?</span></div>
+        <div class="y20-row"><span class="d">Day 7</span><span class="t">What Is a Weekly Plan Template?</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="y20-foot"><span class="wm"><svg><use href="#lg-rankbox"/></svg>Rankbox</span></div>
+</template>
+
+<script>
+  // Two copies of one page: white clipped to the left half, sky to the right.
+  const canvas = document.getElementById("canvas");
+  const tpl = document.getElementById("page");
+  for (const theme of ["y20-white", "y20-sky"]) {
+    const page = document.createElement("div");
+    page.className = `y20-page ${theme}`;
+    page.appendChild(tpl.content.cloneNode(true));
+    canvas.insertBefore(page, canvas.firstChild);
+  }
+  // The header strip: a soft wall of tiles, a few lit in brand-blue tints.
+  const lit = { 2: "o", 12: "o2", 15: "o", 23: "o" };
+  document.querySelectorAll("[data-strip]").forEach((strip) => {
+    for (let i = 0; i < 27; i++) strip.insertAdjacentHTML("beforeend", `<i class="${lit[i] || ""}"></i>`);
+  });
+</script>
+</body>
+</html>

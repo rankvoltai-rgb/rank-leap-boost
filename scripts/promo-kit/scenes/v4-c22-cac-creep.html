@@ -1,0 +1,219 @@
+<!doctype html>
+<!-- Variant 4 · Cluster 22 "CAC creep", one image.
+     Replica of Checkout Page's bento ("One platform for everything you
+     sell"): a centred headline with a grey subline over five tiles, three
+     on top and two wide below, each a centred title and one white UI card
+     with an outline check chip and a full-width button. The dark field goes
+     light: grey-blue paper with the faint grid, tiles one step lighter,
+     buttons and selected states in brand blue. The five tiles are real
+     Rankbox screens: Plan & Billing (the plan row), the usage meter, the
+     Calendar, the Rank page's "What AI engines look for" and Articles. No
+     chart, no CAC figures. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x5" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<link rel="stylesheet" href="ads4/ads4.css" />
+<script src="../kit/kit.js"></script>
+<script src="ads/ads.js"></script>
+<script src="ads4/ads4.js"></script>
+<style>
+  .y22-grid { position: absolute; inset: 0; z-index: -2; pointer-events: none;
+    background-image: linear-gradient(rgba(24, 60, 120, 0.05) 1.5px, transparent 1.5px), linear-gradient(90deg, rgba(24, 60, 120, 0.05) 1.5px, transparent 1.5px);
+    background-size: 58px 58px; background-position: 22px 0;
+    -webkit-mask-image: radial-gradient(85% 70% at 50% 30%, #000 30%, transparent 100%); mask-image: radial-gradient(85% 70% at 50% 30%, #000 30%, transparent 100%); }
+
+  .y22-lock { position: absolute; left: 0; right: 0; top: 92px; display: flex; justify-content: center; align-items: center; gap: 14px; font-size: 46px; font-weight: 600; letter-spacing: -0.035em; color: var(--v4-ink); }
+  .y22-lock svg { width: 52px; height: 52px; color: var(--v4-blue); }
+  .y22-hl { position: absolute; left: 0; right: 0; top: 186px; text-align: center; font-size: 112px; font-weight: 750; letter-spacing: -0.052em; line-height: 1.0; color: var(--v4-ink); }
+  .y22-sub { position: absolute; left: 0; right: 0; top: 426px; text-align: center; font-size: 38px; font-weight: 500; letter-spacing: -0.02em; color: #7d8492; }
+
+  /* ------------------------------------------------------------ bento */
+  .y22-tile { position: absolute; padding-top: 34px; border-radius: 30px; background: rgba(255, 255, 255, 0.55); box-shadow: inset 0 0 0 2px #e1e6ee, 0 30px 60px -48px rgba(20, 40, 90, 0.35); }
+  .y22-tile.top { top: 526px; width: 458px; height: 616px; }
+  .y22-tile.bot { top: 1176px; width: 704px; height: 752px; }
+  .y22-tile > h3 { text-align: center; font-size: 34px; font-weight: 700; letter-spacing: -0.03em; color: var(--v4-ink); }
+
+  .y22-ui { position: absolute; left: 26px; right: 26px; top: 100px; bottom: 26px; padding: 26px; border-radius: 22px; background: #fff; color: var(--v4-ink); display: flex; flex-direction: column;
+    box-shadow: 0 0 0 1.5px rgba(10, 30, 70, 0.05), 0 26px 50px -30px rgba(20, 40, 90, 0.4), 0 8px 18px -12px rgba(20, 40, 90, 0.18); }
+  .bot .y22-ui { left: 40px; right: 40px; padding: 30px 32px; }
+
+  .y22-chip { display: inline-flex; align-items: center; gap: 10px; height: 46px; padding: 0 18px; border-radius: 999px; box-shadow: inset 0 0 0 2.5px var(--v4-ink); font-size: 24px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; white-space: nowrap; color: var(--v4-ink); }
+  .y22-chip svg { width: 22px; height: 22px; }
+  .y22-cap { font-size: 24px; font-weight: 650; letter-spacing: 0.09em; text-transform: uppercase; color: #8a909c; }
+  .y22-btn { margin-top: auto; height: 76px; flex: none; border-radius: 16px; background: var(--v4-btn); color: #fff; display: grid; place-items: center; font-size: 29px; font-weight: 650; letter-spacing: -0.015em; box-shadow: 0 14px 24px -14px rgba(22, 111, 229, 0.85); }
+  .y22-hr { height: 2px; background: #eef0f4; flex: none; }
+  .y22-row { display: flex; align-items: center; font-size: 26px; font-weight: 500; letter-spacing: -0.015em; color: var(--v4-ink-2); white-space: nowrap; }
+  .y22-row b { margin-left: auto; font-weight: 700; color: var(--v4-ink); }
+  .y22-ic { width: 60px; height: 60px; flex: none; border-radius: 15px; display: grid; place-items: center; background: var(--v4-tint); color: var(--v4-blue); }
+  .y22-ic svg { width: 32px; height: 32px; }
+  .y22-on { display: inline-flex; align-items: center; gap: 10px; }
+  .y22-on i { width: 12px; height: 12px; border-radius: 50%; background: var(--v4-blue); box-shadow: 0 0 0 5px rgba(24, 119, 242, 0.16); }
+
+  /* Plan & Billing */
+  .y22-plan { display: flex; align-items: center; gap: 16px; padding: 22px 20px; border-radius: 18px; box-shadow: inset 0 0 0 3px var(--v4-blue); background: #f4f8ff; }
+  .y22-plan b { display: block; font-size: 30px; font-weight: 700; letter-spacing: -0.025em; }
+  .y22-plan small { display: block; margin-top: 2px; font-size: 25px; font-weight: 500; color: var(--v4-ink-2); }
+  .y22-plan .pr { margin-left: auto; text-align: right; }
+  .y22-plan .pr b { color: var(--v4-blue); }
+  .y22-inc { margin-top: 22px; display: grid; gap: 14px; }
+
+  /* Usage */
+  .y22-meter-h { display: flex; align-items: baseline; gap: 12px; margin-top: 18px; }
+  .y22-meter-h b { font-size: 64px; font-weight: 750; letter-spacing: -0.045em; line-height: 1; }
+  .y22-meter-h span { font-size: 28px; font-weight: 500; color: var(--v4-ink-2); }
+  .y22-meter { margin-top: 20px; height: 18px; border-radius: 9px; background: #edf0f5; overflow: hidden; }
+  .y22-meter i { display: block; width: 40%; height: 100%; border-radius: 9px; background: var(--v4-blue); }
+  .y22-note { margin-top: 18px; font-size: 25px; line-height: 1.36; font-weight: 500; color: var(--v4-ink-2); }
+  .y22-site { margin-top: 18px; display: flex; align-items: center; gap: 14px; padding: 16px 18px; border-radius: 16px; background: #f5f7fa; font-size: 26px; font-weight: 600; letter-spacing: -0.015em; }
+  .y22-site i { width: 40px; height: 40px; border-radius: 11px; background: #c9dcf7; flex: none; }
+  .y22-site span { margin-left: auto; font-weight: 500; color: var(--v4-ink-2); }
+
+  /* Calendar */
+  .y22-ev { display: flex; align-items: center; gap: 16px; }
+  .y22-date { width: 82px; height: 88px; flex: none; border-radius: 16px; box-shadow: inset 0 0 0 2px #e6e9ef; display: grid; place-content: center; text-align: center; }
+  .y22-date .y22-cap { font-size: 24px; letter-spacing: 0.06em; }
+  .y22-date b { font-size: 34px; font-weight: 750; letter-spacing: -0.03em; line-height: 1.05; }
+  .y22-ev .t { font-size: 26px; font-weight: 700; line-height: 1.2; letter-spacing: -0.02em; }
+  .y22-ev .t i { display: inline-block; width: 14px; height: 14px; margin-right: 8px; border-radius: 4px; background: var(--v4-blue); vertical-align: 2px; }
+  .y22-ev small { display: block; margin-top: 4px; font-size: 24px; font-weight: 500; color: var(--v4-ink-2); }
+  .y22-wk { margin-top: 22px; display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+  .y22-wk span { text-align: center; font-size: 24px; font-weight: 600; color: var(--v4-ink-3); }
+  .y22-wk div { height: 76px; border-radius: 12px; background: #f6f8fb; padding: 8px; font-size: 24px; font-weight: 600; color: #8a909c; }
+  .y22-wk div i { display: block; margin-top: 6px; height: 22px; border-radius: 6px; background: var(--v4-tint); box-shadow: inset 3px 0 0 var(--v4-blue); }
+  .y22-wk div i.p { background: var(--v4-blue); box-shadow: none; }
+  .y22-wk div.today { background: #fff; box-shadow: inset 0 0 0 3px var(--v4-blue); color: var(--v4-blue); }
+
+  /* Rank: What AI engines look for */
+  .y22-rh { display: flex; align-items: center; gap: 16px; }
+  .y22-rh b { display: block; font-size: 30px; font-weight: 700; letter-spacing: -0.025em; }
+  .y22-rh small { display: block; margin-top: 2px; font-size: 24px; font-weight: 500; color: var(--v4-ink-2); }
+  .y22-rh .y22-chip { margin-left: auto; }
+  .y22-six { margin-top: 24px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .y22-six.two { grid-template-columns: 1fr 1fr; }
+  .y22-six div { height: 90px; padding: 0 22px; border-radius: 16px; background: #f4f6f9; display: flex; flex-direction: column; justify-content: center; font-size: 25px; font-weight: 700; letter-spacing: -0.02em; color: #4a5160; }
+  .y22-six div small { display: block; margin-top: 4px; font-size: 24px; font-weight: 500; color: var(--v4-ink-3); }
+  .y22-six div.on { background: #fff; box-shadow: inset 0 0 0 3px var(--v4-blue); color: var(--v4-ink); }
+  .y22-six div.on small { color: var(--v4-blue); }
+
+  /* Articles */
+  .y22-seg { margin-top: 22px; display: grid; grid-template-columns: 0.7fr 0.8fr 1.1fr 1.1fr; gap: 8px; padding: 6px; border-radius: 16px; background: #f2f4f7; }
+  .y22-seg span { height: 54px; border-radius: 11px; display: grid; place-items: center; font-size: 24px; font-weight: 600; color: #8a909c; }
+  .y22-seg span.on { background: #fff; color: var(--v4-ink); box-shadow: 0 2px 6px rgba(10, 30, 70, 0.1); }
+  .y22-arts { margin-top: 10px; }
+  .y22-art { display: flex; align-items: center; gap: 24px; padding: 18px 0; border-bottom: 2px solid #f0f2f5; }
+  .y22-art b { font-size: 27px; font-weight: 650; line-height: 1.22; letter-spacing: -0.02em; }
+  .y22-stage { margin-left: auto; flex: none; height: 42px; padding: 0 14px; border-radius: 10px; display: inline-flex; align-items: center; gap: 8px; font-size: 24px; font-weight: 650; background: var(--v4-tint); color: var(--v4-blue); }
+  .y22-stage i { width: 11px; height: 11px; border-radius: 50%; background: currentColor; }
+  .y22-stage.pub { background: var(--v4-blue); color: #fff; }
+</style>
+</head>
+<body>
+<div class="canvas v4">
+  <div class="v4-field-paper"></div>
+  <div class="y22-grid"></div>
+  <div class="v4-aura" style="left:200px; top:-300px; width:1200px; height:460px; background:#d6e6ff; opacity:.7"></div>
+  <div class="grain" style="--grain:.05"></div>
+
+  <div class="y22-lock"><svg><use href="#lg-rankbox"/></svg>Rankbox</div>
+  <h1 class="y22-hl">CAC went up again.<br />One cost didn’t.</h1>
+  <p class="y22-sub">Research, writing and publishing for one flat monthly price</p>
+
+  <!-- Plan & Billing -->
+  <div class="y22-tile top" style="left:74px">
+    <h3>Plan &amp; Billing</h3>
+    <div class="y22-ui">
+      <div class="y22-plan">
+        <span class="y22-ic" style="background:var(--v4-blue); color:#fff"><svg><use href="#rb-card"/></svg></span>
+        <div><b>Business</b><small>1 site</small></div>
+        <div class="pr"><b>$49.50</b><small>a month</small></div>
+      </div>
+      <div class="y22-inc">
+        <div class="y22-row">Articles<b>30</b></div>
+        <div class="y22-row">Backlink credits<b>30</b></div>
+        <div class="y22-row">Reddit reply drafts<b>30</b></div>
+      </div>
+      <div style="margin-top:22px"><span class="y22-chip"><svg><use href="#ic-check"/></svg>7-day trial</span></div>
+      <div class="y22-btn">Manage plan</div>
+    </div>
+  </div>
+
+  <!-- Usage meter -->
+  <div class="y22-tile top" style="left:571px">
+    <h3>Article credits</h3>
+    <div class="y22-ui">
+      <div class="y22-rh"><span style="font-size:26px; font-weight:600; color:var(--v4-ink-2)">This cycle</span><span class="y22-chip" style="margin-left:auto"><svg><use href="#ic-check"/></svg>Business</span></div>
+      <div class="y22-meter-h"><b>12</b><span>of 30 used</span></div>
+      <div class="y22-meter"><i></i></div>
+      <div class="y22-note">Writing uses 1 article credit · 18 left this month</div>
+      <div class="y22-site"><i></i>yoursite.com<span>12 / 30</span></div>
+      <div class="y22-btn">Write now</div>
+    </div>
+  </div>
+
+  <!-- Calendar -->
+  <div class="y22-tile top" style="left:1068px">
+    <h3>Calendar</h3>
+    <div class="y22-ui">
+      <div class="y22-ev">
+        <div class="y22-date"><span class="y22-cap">Oct</span><b>14</b></div>
+        <div><div class="t"><i></i>Do Small Teams Need a Project Tool?</div><small>Writes on Oct 14</small></div>
+      </div>
+      <div class="y22-wk" id="wk"></div>
+      <div class="y22-row" style="margin-top:22px">Pace<b>every day</b></div>
+      <div style="margin-top:20px"><span class="y22-chip"><svg><use href="#ic-check"/></svg>Autopilot</span></div>
+      <div class="y22-btn">Schedule</div>
+    </div>
+  </div>
+
+  <!-- Rank: What AI engines look for -->
+  <div class="y22-tile bot" style="left:74px">
+    <h3>Rank</h3>
+    <div class="y22-ui">
+      <div class="y22-rh">
+        <div><b>What AI engines look for</b><small>How many of your published articles have each</small></div>
+      </div>
+      <div class="y22-six two">
+        <div class="on">Answers up front<small>30 of 30</small></div>
+        <div>FAQ section<small>30 of 30</small></div>
+        <div>Clear sections<small>30 of 30</small></div>
+        <div>Cites sources<small>28 of 30</small></div>
+        <div>Depth<small>27 of 30</small></div>
+        <div>Easy to read<small>30 of 30</small></div>
+      </div>
+      <div class="y22-row" style="margin-top:24px">Avg. SEO score<b>92</b></div>
+      <div class="y22-btn">Improve</div>
+    </div>
+  </div>
+
+  <!-- Articles -->
+  <div class="y22-tile bot" style="left:822px">
+    <h3>Articles</h3>
+    <div class="y22-ui">
+      <div class="y22-rh">
+        <span class="y22-ic"><svg><use href="#rb-article"/></svg></span>
+        <div><b>Articles</b><small>yoursite.com</small></div>
+      </div>
+      <div class="y22-seg"><span class="on">All</span><span>Ideas</span><span>Scheduled</span><span>Published</span></div>
+      <div class="y22-arts">
+        <div class="y22-art"><b>How Do I Run a Weekly Planning Meeting?</b><span class="y22-stage pub"><i></i>Published</span></div>
+        <div class="y22-art"><b>What’s the Best Planning Tool for a Small Team?</b><span class="y22-stage pub"><i></i>Published</span></div>
+        <div class="y22-art"><b>Do Small Teams Need a Project Tool?</b><span class="y22-stage"><i></i>Scheduled</span></div>
+      </div>
+      <div class="y22-btn">Plan it</div>
+    </div>
+  </div>
+</div>
+<script>
+  // The week of Oct 12, 2026 (Mon–Fri). Autopilot writes every day; Monday
+  // and Tuesday are published, today is Wednesday the 14th.
+  const wk = document.getElementById("wk");
+  let h = ["Mon","Tue","Wed","Thu","Fri"].map((d) => `<span>${d}</span>`).join("");
+  [12, 13, 14, 15, 16].forEach((d) => {
+    h += `<div class="${d === 14 ? "today" : ""}">${d}<i class="${d < 14 ? "p" : ""}"></i></div>`;
+  });
+  wk.innerHTML = h;
+</script>
+</body>
+</html>

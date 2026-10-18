@@ -1,0 +1,161 @@
+<!doctype html>
+<!-- Variant 4 · Cluster 12 "What is the AI saying about you", one image.
+     Replica of Outseta 3 ("Protect content"): a soft pastel field (here sky
+     and white), the product panel on the LEFT from the top edge bleeding off
+     the bottom with stacked setting rows, and on the right an app tile, a
+     heavy two-line headline and a muted three-line sub. The panel is
+     Rankbox's Settings: "Your brand" (Brand name, Website, What you sell)
+     and "How autopilot writes" (Audience, Tone, Writing style, House rules),
+     every label and description as the app writes it. The "What you sell"
+     field is lifted out with a hand cursor: the right facts, in writing. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x5" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<link rel="stylesheet" href="ads4/ads4.css" />
+<script src="../kit/kit.js"></script>
+<script src="ads/ads.js"></script>
+<script src="ads4/ads4.js"></script>
+<style>
+  /* the field: Outseta's soft pastel, in sky and white */
+  .y12-field { position: absolute; inset: 0; z-index: -3;
+    background: linear-gradient(165deg, #d9e9ff 0%, #ebf3ff 30%, #f8fbff 55%, #ffffff 72%, #eef5ff 100%); }
+
+  /* right column: tile, heavy headline, muted sub */
+  .y12-tile { position: absolute; left: 1000px; width: 100px; height: 100px; border-radius: 24px; background: linear-gradient(160deg, #3d8ffa, #1667e0); color: #fff; display: grid; place-items: center;
+    box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, 0.25), 0 18px 34px -16px rgba(22, 103, 224, 0.75); }
+  .y12-tile svg { width: 60px; height: 60px; }
+  .y12-hl { position: absolute; left: 994px; font-size: 112px; }
+  .y12-sub { position: absolute; left: 1000px; width: 540px; font-size: 44px; font-weight: 500; line-height: 1.24; letter-spacing: -0.03em; color: #6b7486; }
+
+  /* the Settings panel */
+  .y12-panel { left: 85px; top: 85px; width: 830px; height: 2100px; border-radius: 34px;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.9), 0 0 0 3px #e3eaf4, 0 50px 110px -40px rgba(20, 60, 140, 0.35); }
+  .y12-panel .ph { height: 96px; padding: 0 40px; font-size: 30px; font-weight: 600; letter-spacing: -0.02em; }
+  .y12-panel .ph .tile { width: 46px; height: 46px; border-radius: 12px; }
+  .y12-panel .ph .tile svg { width: 28px; height: 28px; }
+  .y12-panel .ph .crumb { color: var(--v4-ink-3); font-weight: 500; }
+  .y12-body { padding: 44px 44px 0; }
+  .y12-sec { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; }
+  .y12-sec h3 { font-size: 38px; font-weight: 700; letter-spacing: -0.03em; }
+  .y12-desc { margin-top: 8px; font-size: 26px; line-height: 1.32; color: var(--v4-ink-2); }
+  .y12-saved { flex: none; display: inline-flex; align-items: center; gap: 8px; padding-bottom: 4px; font-size: 24px; font-weight: 500; color: var(--v4-ink-2); }
+  .y12-saved svg { width: 26px; height: 26px; color: var(--v4-blue); }
+  .y12-box { margin-top: 24px; border-radius: 24px; box-shadow: inset 0 0 0 2px var(--v4-line); }
+  .y12-row { padding: 32px 34px; }
+  .y12-row + .y12-row { border-top: 2px solid var(--v4-line); }
+  .y12-row label { display: block; font-size: 31px; font-weight: 600; letter-spacing: -0.02em; color: var(--v4-ink); }
+  .y12-row .d { margin-top: 6px; font-size: 25px; line-height: 1.34; color: var(--v4-ink-2); }
+  .y12-in { margin-top: 18px; height: 80px; padding: 0 26px; border-radius: 16px; display: flex; align-items: center; background: #fff; box-shadow: inset 0 0 0 2px #e2e6ec; font-size: 30px; font-weight: 500; letter-spacing: -0.01em; color: var(--v4-ink); }
+  .y12-in.area { height: auto; padding: 18px 24px; align-items: flex-start; line-height: 1.42; }
+  .y12-in.ghost { color: rgba(12, 16, 24, 0.14); background: #f5f9ff; box-shadow: inset 0 0 0 2px #cfe0fb; }
+  .y12-in.rules { color: var(--v4-ink-3); }
+  .y12-chips { margin-top: 20px; display: flex; flex-wrap: wrap; gap: 12px; }
+  .y12-chips span { height: 56px; padding: 0 24px; border-radius: 28px; display: inline-flex; align-items: center; font-size: 25px; font-weight: 500; color: var(--v4-ink-2); box-shadow: inset 0 0 0 2px #e2e6ec; background: #fff; }
+  .y12-chips span.on { background: var(--v4-btn); color: #fff; box-shadow: none; }
+  .y12-chips span.own { box-shadow: none; background-image: none; outline: 2px dashed #d5dae2; outline-offset: -2px; }
+  .y12-gap { height: 56px; }
+
+  /* the lifted "What you sell" field */
+  .y12-lift { width: 700px; padding: 34px 36px 36px; z-index: 12; transform: rotate(-3deg); }
+  .y12-lift label { display: flex; align-items: center; gap: 14px; font-size: 32px; font-weight: 650; letter-spacing: -0.02em; }
+  .y12-lift label i { width: 50px; height: 50px; border-radius: 14px; background: var(--v4-tint); color: var(--v4-blue); display: grid; place-items: center; }
+  .y12-lift label i svg { width: 28px; height: 28px; }
+  .y12-lift .val { margin-top: 22px; padding: 22px 26px; border-radius: 18px; box-shadow: inset 0 0 0 3px var(--v4-blue), 0 0 0 7px rgba(24, 119, 242, 0.14); font-size: 31px; font-weight: 500; line-height: 1.42; letter-spacing: -0.012em; color: var(--v4-ink); }
+  .y12-lift .val b { font-weight: 650; }
+  .y12-lift .val .caret { display: inline-block; width: 3px; height: 36px; margin-left: 2px; vertical-align: -6px; background: var(--v4-blue); }
+</style>
+</head>
+<body>
+<div class="canvas v4">
+  <div class="y12-field"></div>
+  <div class="v4-aura" style="left:880px; top:-220px; width:900px; height:700px; background:#b9d6ff; opacity:.55"></div>
+  <div class="v4-aura" style="left:1050px; top:1700px; width:800px; height:500px; background:#cfe2ff; opacity:.6"></div>
+  <div class="grain" style="--grain:.05"></div>
+
+  <div class="v4-panel y12-panel">
+    <div class="ph"><span class="tile"><svg><use href="#lg-rankbox"/></svg></span>Rankbox <span class="crumb">/ Settings</span><svg class="x"><use href="#ic-x"/></svg></div>
+    <div class="y12-body">
+      <div class="y12-sec">
+        <h3>Your brand</h3>
+        <span class="y12-saved"><svg><use href="#ic-check"/></svg>Saved</span>
+      </div>
+      <p class="y12-desc">Who autopilot writes for. Every article is built around this.</p>
+      <div class="y12-box">
+        <div class="y12-row">
+          <label>Brand name</label>
+          <div class="y12-in">Yoursite</div>
+        </div>
+        <div class="y12-row">
+          <label>Website</label>
+          <div class="y12-in">yoursite.com</div>
+        </div>
+        <div class="y12-row" id="slot-row">
+          <label>What you sell</label>
+          <div class="d">Two or three sentences on what you offer and who it’s for. The writer uses it to tie every article back to you.</div>
+          <div class="y12-in area ghost" id="slot">Yoursite is a planning tool for teams of 3 to 20. Free 14-day trial, no card. Works with Slack, HubSpot and Google Calendar.</div>
+        </div>
+      </div>
+
+      <div class="y12-gap"></div>
+      <div class="y12-sec"><h3>How autopilot writes</h3></div>
+      <p class="y12-desc">The voice every article is written in. Changes apply to the next article it writes.</p>
+      <div class="y12-box">
+        <div class="y12-row">
+          <label>Audience</label>
+          <div class="d">Who’s reading. It sets what the writer explains and what it can assume.</div>
+          <div class="y12-in">Small business owners</div>
+        </div>
+        <div class="y12-row">
+          <label>Tone</label>
+          <div class="d">How it feels to read.</div>
+          <div class="y12-chips"><span>Professional</span><span class="on">Friendly</span><span>Confident</span><span>Conversational</span><span>Authoritative</span><span>Playful</span><span class="own">Your own</span></div>
+        </div>
+        <div class="y12-row">
+          <label>Writing style</label>
+          <div class="d">How ideas are laid out on the page.</div>
+          <div class="y12-chips"><span>Balanced</span><span class="on">Concise and actionable</span><span>In-depth and data-driven</span><span>Story-led</span><span>Step-by-step</span><span class="own">Your own</span></div>
+        </div>
+        <div class="y12-row">
+          <label>House rules</label>
+          <div class="d">Anything the writer must always or never do. One rule per line works best.</div>
+          <div class="y12-in area rules">Say “teams”, not “users”.<br />Never name competitors.<br />Use US spelling.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="v4-pop y12-lift" id="lift">
+    <label><i><svg><use href="#ic-tag"/></svg></i>What you sell</label>
+    <div class="val">Yoursite is a planning tool for teams of 3 to 20. <b>Free 14-day trial</b>, no card. Works with <b>Slack, HubSpot and Google Calendar</b>.<span class="caret"></span></div>
+  </div>
+  <i class="v4-hand" id="hand"></i>
+
+  <div class="y12-tile" id="tile"><svg><use href="#lg-rankbox"/></svg></div>
+  <h1 class="v4-hl-heavy y12-hl" id="hl">Give AI the<br />right facts.</h1>
+  <p class="y12-sub" id="sub">Every article is built<br />around what you<br />actually sell.</p>
+
+  <div class="v4-fade" style="--fade:#f2f7ff; height:220px"></div>
+</div>
+<script>
+  // Seat the lifted field over its slot (shifted right, out over the panel's
+  // edge), the hand on it, and the right column under it.
+  addEventListener("load", () => {
+    const c = document.querySelector(".canvas").getBoundingClientRect();
+    const s = document.getElementById("slot").getBoundingClientRect();
+    const lift = document.getElementById("lift");
+    const top = s.top - c.top - 236;
+    lift.style.left = "470px";
+    lift.style.top = top + "px";
+    const hand = document.getElementById("hand");
+    hand.style.left = "1000px";
+    hand.style.top = (top + lift.offsetHeight - 122) + "px";
+    const y0 = top + lift.offsetHeight + 110;
+    document.getElementById("tile").style.top = y0 + "px";
+    document.getElementById("hl").style.top = (y0 + 146) + "px";
+    document.getElementById("sub").style.top = (y0 + 396) + "px";
+  });
+</script>
+</body>
+</html>

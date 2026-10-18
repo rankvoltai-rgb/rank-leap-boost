@@ -1,0 +1,115 @@
+<!doctype html>
+<!-- Variant 3 · Cluster 11 "Inbound didn't die, it moved" (B2B), one image.
+     "Selected", white field: a moving box drawn in blue line, stencilled
+     INBOUND with "this side up" arrows, travelling along a dashed path from
+     an inbox tray to an AI chat bubble. The bubble, a buyer asking AI for a
+     shortlist, is where it lands: the selected thing. The one number (Half,
+     G2) set as type under it, then the close. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x5" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<link rel="stylesheet" href="ads3/ads3.css" />
+<script src="../kit/kit.js"></script>
+<script src="ads/ads.js"></script>
+<script src="ads3/ads3.js"></script>
+<style>
+  .y11-top { position: absolute; left: 100px; right: 100px; top: 96px; display: flex; align-items: center; }
+  .y11-top .v3-kick { margin-left: auto; }
+  .y11-hl { position: absolute; left: 96px; right: 100px; top: 222px; font-size: 150px; line-height: 0.96; }
+
+  /* the trip: inbox → dashed path → AI chat */
+  .y11-path { position: absolute; left: 0; top: 0; width: 1600px; height: 2000px; pointer-events: none; }
+  .y11-inbox { position: absolute; left: 100px; top: 1000px; width: 330px; }
+  .y11-inbox svg { display: block; width: 330px; height: 250px; }
+  .y11-lab { margin-top: 22px; font-size: 32px; font-weight: 700; letter-spacing: -0.02em; color: var(--v3-ink); }
+  .y11-lab span { display: block; margin-top: 4px; font-size: 26px; font-weight: 500; color: var(--v3-ink-2); }
+
+  /* the moving box */
+  .y11-box { position: absolute; left: 530px; top: 540px; width: 480px; height: 417px; transform: rotate(-6deg); transform-origin: 50% 60%; }
+  .y11-box svg { position: absolute; inset: 0; width: 480px; height: 417px; overflow: visible; }
+  .y11-face { position: absolute; left: 21px; top: 125px; width: 334px; height: 271px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; padding-top: 40px; }
+  .y11-face b { font-size: 66px; font-weight: 800; letter-spacing: 0.02em; line-height: 1; color: var(--v3-blue); }
+  .y11-up { display: flex; align-items: center; gap: 12px; font-size: 26px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--v3-ink); }
+  .y11-up svg { position: static; width: 48px; height: 40px; }
+
+  /* the bubble: where it lands */
+  .y11-chat.v3-pick { position: absolute; left: 1000px; top: 990px; width: 500px; display: block; padding: 34px 38px 40px; border-radius: 6px; --k: 32px; --st: 5px; }
+  .y11-chat .ask { display: flex; align-items: center; gap: 12px; font-size: 28px; font-weight: 650; letter-spacing: -0.01em; color: rgba(255, 255, 255, 0.86); }
+  .y11-chat .ask svg { width: 32px; height: 32px; }
+  .y11-chat p { margin-top: 16px; font-size: 42px; text-wrap: balance; font-weight: 720; line-height: 1.12; letter-spacing: -0.03em; color: #fff; }
+  .y11-chat .tail { position: absolute; left: 56px; bottom: -40px; width: 56px; height: 42px; background: var(--v3-blue); clip-path: polygon(0 0, 100% 0, 0 100%); }
+
+  /* the one number */
+  .y11-num { position: absolute; left: 100px; right: 100px; top: 1424px; display: flex; align-items: flex-start; gap: 46px; }
+  .y11-num b { font-size: 214px; font-weight: 800; letter-spacing: -0.07em; line-height: 0.74; color: var(--v3-blue); padding-top: 6px; }
+  .y11-num p { padding-top: 0; font-size: 42px; font-weight: 650; line-height: 1.2; letter-spacing: -0.025em; color: var(--v3-ink); }
+  .y11-num .v3-src { display: block; margin-top: 14px; }
+  .y11 .v3-close p { text-wrap: balance; }
+</style>
+</head>
+<body>
+<div class="canvas v3 y11">
+  <div class="v3-wash"></div>
+  <div class="v3-px"></div>
+
+  <div class="y11-top">
+    <span class="v3-logo"><svg><use href="#lg-rankbox"/></svg>Rankbox</span>
+    <span class="v3-kick">For B2B software teams</span>
+  </div>
+  <h1 class="v3-hl y11-hl">Inbound didn’t die.<br />It moved.</h1>
+
+  <!-- dashed route, behind everything it connects -->
+  <svg class="y11-path" viewBox="0 0 1600 2000" fill="none" stroke="#1877f2" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M265 975 C 280 800, 400 712, 560 704 L 980 690 C 1150 690, 1262 790, 1268 952" stroke-dasharray="20 20" />
+    <path d="M1238 926 L 1268 960 L 1298 926" />
+    <!-- speed lines behind the box -->
+    <path d="M452 778 L 512 772" /><path d="M424 828 L 508 822" /><path d="M456 878 L 506 874" />
+  </svg>
+
+  <div class="y11-inbox">
+    <svg viewBox="0 0 330 250" fill="none" stroke="#1877f2" stroke-width="6" stroke-linejoin="round" stroke-linecap="round">
+      <path d="M48 20 H282 L326 136 V216 Q326 244 298 244 H32 Q4 244 4 216 V136 Z" fill="#fff" />
+      <path d="M4 136 H104 L128 182 H202 L226 136 H326 V216 Q326 244 298 244 H32 Q4 244 4 216 Z" fill="#eaf3ff" />
+      <path d="M96 64 H234" stroke="#8dbcfa" /><path d="M84 98 H246" stroke="#8dbcfa" />
+    </svg>
+    <div class="y11-lab">Your inbox<span>Cold pitches, no replies</span></div>
+  </div>
+
+  <div class="y11-box">
+    <svg viewBox="0 0 460 400" fill="none" stroke="#1877f2" stroke-width="5" stroke-linejoin="round" stroke-linecap="round">
+      <!-- top, side, front -->
+      <path d="M20 120 L120 50 H440 L340 120 Z" fill="#eaf3ff" />
+      <path d="M340 120 L440 50 V310 L340 380 Z" fill="#d5e7ff" />
+      <path d="M20 120 H340 V380 H20 Z" fill="#fff" />
+      <!-- flap seam and tape -->
+      <path d="M70 85 H390" stroke="#8dbcfa" />
+      <path d="M160 120 L260 50 H300 L200 120 Z" fill="#c4dcfd" />
+      <path d="M160 120 H200 V176 H160 Z" fill="#c4dcfd" />
+    </svg>
+    <div class="y11-face">
+      <b>INBOUND</b>
+      <span class="y11-up"><svg viewBox="0 0 48 40" fill="none" stroke="#1877f2" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 30V8M6 16l8-8 8 8M34 30V8M26 16l8-8 8 8M4 36h40" /></svg>This side up</span>
+    </div>
+  </div>
+
+  <div class="v3-pick y11-chat">
+    <div class="ask"><svg><use href="#ic-sparkle"/></svg>A buyer, asking AI</div>
+    <p>“Shortlist of project tools for a 50‑person ops team?”</p>
+    <i class="tail"></i>
+  </div>
+
+  <div class="y11-num">
+    <b>Half</b>
+    <p>of B2B software buyers now start their research with an AI chatbot more often than with&nbsp;Google.<span class="v3-src">Source: G2 research, 2026</span></p>
+  </div>
+
+  <div class="v3-close">
+    <svg class="mk"><use href="#lg-rankbox"/></svg>
+    <p>Rankbox writes the pages built to put you on the&nbsp;shortlist.<span data-offer="line"></span></p>
+    <div class="v3-go"><span data-offer="cta"></span><svg><use href="#ic-arrow-right"/></svg></div>
+  </div>
+</div>
+</body>
+</html>

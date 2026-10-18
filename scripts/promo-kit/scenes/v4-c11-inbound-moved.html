@@ -1,0 +1,129 @@
+<!doctype html>
+<!-- Variant 4 · Cluster 11 "Inbound didn't die, it moved", one image.
+     Replica of Framer Forms Connect ("Submissions land in real time"): a
+     centred lockup, a huge centred headline, three stacked cards on the
+     left wired by a bracket into one arrow, and a table panel on the right
+     bleeding off the edge (header with logo, name and a status pill, column
+     headers, three rows with initial tiles and status chips, skeleton rows),
+     with a line along the foot. The navy field goes light: a brand-blue
+     wash with a white glow; the dark cards go white. Left: questions buyers
+     ask AI (grouped by intent, as generate_ai_questions groups them). Right:
+     the Rankbox Articles list for yoursite.com, one article per question;
+     the new row is lifted out with a hand cursor. The foot carries the one
+     number and its source instead of the services logos. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x5" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<link rel="stylesheet" href="ads4/ads4.css" />
+<script src="../kit/kit.js"></script>
+<script src="ads/ads.js"></script>
+<script src="ads4/ads4.js"></script>
+<style>
+  .y11-field { position: absolute; inset: 0; z-index: -3;
+    background: radial-gradient(70% 45% at 92% 100%, rgba(214, 236, 255, 0.95) 0%, rgba(150, 200, 255, 0.5) 40%, rgba(120, 180, 255, 0) 75%),
+                radial-gradient(60% 40% at 0% 70%, rgba(20, 90, 220, 0.55) 0%, rgba(20, 90, 220, 0) 70%),
+                linear-gradient(180deg, #1c6cea 0%, #2479f0 40%, #3a8cf6 75%, #5aa4fb 100%); }
+
+  .y11-lock { position: absolute; left: 0; right: 0; top: 104px; display: flex; justify-content: center; align-items: center; gap: 18px; font-size: 62px; font-weight: 600; letter-spacing: -0.035em; color: #fff; }
+  .y11-lock svg { width: 68px; height: 68px; }
+  .y11-hl { position: absolute; left: 0; right: 0; top: 226px; text-align: center; font-size: 146px; font-weight: 750; letter-spacing: -0.055em; line-height: 0.98; color: #fff; }
+
+  /* ------------------------------------------------------------ question cards */
+  .y11-q { position: absolute; left: 92px; width: 524px; height: 250px; padding: 38px 34px 0 84px; border-radius: 30px; background: #fff; color: var(--v4-ink);
+    box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.9), 0 34px 60px -30px rgba(4, 40, 120, 0.55); }
+  .y11-q .dot { position: absolute; left: 34px; top: 50px; width: 24px; height: 24px; border-radius: 50%; background: var(--v4-blue); box-shadow: 0 0 0 7px rgba(24, 119, 242, 0.16); }
+  .y11-q b { display: block; font-size: 36px; font-weight: 650; line-height: 1.2; letter-spacing: -0.025em; }
+  .y11-q .meta { margin-top: 16px; font-size: 28px; font-weight: 500; line-height: 1.32; letter-spacing: -0.01em; color: var(--v4-ink-2); }
+  .y11-q .meta span { display: block; color: var(--v4-ink-3); }
+
+  .y11-wires { position: absolute; left: 0; top: 0; width: 1600px; height: 2000px; overflow: visible; z-index: 2; pointer-events: none; }
+
+  /* ------------------------------------------------------------ Articles table */
+  .y11-tbl { position: absolute; left: 744px; top: 612px; width: 920px; border-radius: 36px 0 0 36px; background: #fff; color: var(--v4-ink); overflow: hidden;
+    box-shadow: 0 50px 100px -40px rgba(4, 40, 120, 0.55), 0 18px 40px -20px rgba(4, 40, 120, 0.3); }
+  .y11-th { display: flex; align-items: center; gap: 22px; height: 140px; padding: 0 34px; border-bottom: 2px solid var(--v4-line); }
+  .y11-th .tile { width: 78px; height: 78px; border-radius: 18px; background: linear-gradient(160deg, #2f8bff, #1466e0); color: #fff; display: grid; place-items: center; flex: none; }
+  .y11-th .tile svg { width: 42px; height: 42px; }
+  .y11-th b { font-size: 48px; font-weight: 700; letter-spacing: -0.04em; }
+  .y11-th small { font-size: 26px; font-weight: 500; color: var(--v4-ink-3); margin-left: -6px; }
+  .y11-th .pill { margin-left: auto; margin-right: 58px; height: 60px; padding: 0 26px; border-radius: 16px; display: inline-flex; align-items: center; gap: 12px; background: var(--v4-tint); color: var(--v4-blue); font-size: 27px; font-weight: 650; white-space: nowrap; }
+  .y11-th .pill i { width: 14px; height: 14px; border-radius: 50%; background: var(--v4-blue); }
+  .y11-cols, .y11-row { display: grid; grid-template-columns: 456px 226px 1fr; align-items: center; padding-left: 34px; }
+  .y11-cols { height: 78px; background: #f6f8fb; font-size: 26px; font-weight: 500; color: var(--v4-ink-2); border-bottom: 2px solid var(--v4-line); }
+  .y11-row { height: 172px; border-bottom: 2px solid var(--v4-line); }
+  .y11-ttl { display: flex; align-items: center; gap: 18px; padding-right: 26px; }
+  .y11-ttl i { width: 64px; height: 64px; flex: none; border-radius: 16px; display: grid; place-items: center; font-style: normal; font-size: 24px; font-weight: 700; letter-spacing: -0.02em; }
+  .y11-ttl b { font-size: 30px; font-weight: 650; line-height: 1.2; letter-spacing: -0.02em; }
+  .y11-stage { justify-self: start; height: 54px; padding: 0 20px; border-radius: 13px; display: inline-flex; align-items: center; gap: 10px; font-size: 27px; font-weight: 650; background: var(--v4-tint); color: var(--v4-blue); white-space: nowrap; }
+  .y11-stage i { width: 12px; height: 12px; border-radius: 50%; background: currentColor; }
+  .y11-stage.pub { background: var(--v4-blue); color: #fff; }
+  .y11-date { font-size: 28px; font-weight: 500; color: var(--v4-ink-2); white-space: nowrap; }
+  .y11-row.ghost > * { visibility: hidden; }
+  .y11-row.ghost { background: #f8fafc; }
+  .y11-sk { height: 22px; border-radius: 11px; background: #eceff3; }
+  .y11-skc { width: 60px; height: 60px; border-radius: 16px; background: #eceff3; flex: none; }
+  .y11-row.skel { height: 124px; }
+
+  /* the new row, lifted */
+  .y11-lift { left: 704px; top: 990px; width: 930px; height: 184px; border-radius: 28px; z-index: 12; transform: rotate(-1.6deg); padding-left: 46px; grid-template-columns: 482px 236px 1fr; background: #fff;
+    box-shadow: inset 0 0 0 3px #8dbcfa, 0 0 0 1.5px rgba(10, 30, 70, 0.05), 0 50px 90px -30px rgba(4, 40, 120, 0.55), 0 20px 40px -18px rgba(4, 40, 120, 0.35); border-bottom: 0; }
+  .y11-lift .y11-ttl b { font-size: 33px; }
+  .y11-lift .y11-ttl i { width: 70px; height: 70px; font-size: 26px; }
+
+  .y11-num { position: absolute; left: 0; right: 0; top: 1700px; margin: 0 auto; width: 1340px; text-align: center; font-size: 44px; font-weight: 500; line-height: 1.28; letter-spacing: -0.025em; color: #fff; text-wrap: balance; }
+  .y11-num b { font-weight: 750; }
+  .y11-num small { display: block; margin-top: 16px; font-size: 27px; font-weight: 500; letter-spacing: -0.01em; color: rgba(255, 255, 255, 0.82); }
+</style>
+</head>
+<body>
+<div class="canvas v4">
+  <div class="y11-field"></div>
+  <div class="grain" style="--grain:.07"></div>
+
+  <div class="y11-lock"><svg><use href="#lg-rankbox"/></svg>Rankbox</div>
+  <h1 class="y11-hl">Inbound didn’t die.<br />It moved.</h1>
+
+  <div class="y11-q" style="top:662px"><i class="dot"></i><b>What should ops look for in a project tool?</b><div class="meta">A buyer asks AI<span>Informational</span></div></div>
+  <div class="y11-q" style="top:970px"><i class="dot"></i><b>Best project tools for a 50-person ops team?</b><div class="meta">A buyer asks AI<span>Commercial</span></div></div>
+  <div class="y11-q" style="top:1278px"><i class="dot"></i><b>Taskwren alternatives for a 50-person team</b><div class="meta">A buyer asks AI<span>Comparison</span></div></div>
+
+  <svg class="y11-wires" viewBox="0 0 1600 2000">
+    <defs>
+      <marker id="tip" viewBox="0 0 20 20" refX="15" refY="10" markerWidth="5" markerHeight="5" orient="auto">
+        <path d="M3 3 L16 10 L3 17" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" />
+      </marker>
+    </defs>
+    <g fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" opacity=".95">
+      <path d="M616 787 H644 Q674 787 674 817 V1373 Q674 1403 644 1403 H616" />
+      <path d="M616 1095 H690" marker-end="url(#tip)" />
+    </g>
+  </svg>
+
+  <div class="y11-tbl">
+    <div class="y11-th"><span class="tile"><svg><use href="#lg-rankbox"/></svg></span><b>Articles</b><small>yoursite.com</small><span class="pill"><i></i>Autopilot on</span></div>
+    <div class="y11-cols"><span>Article</span><span>Stage</span><span>Writes on</span></div>
+    <div class="y11-row">
+      <div class="y11-ttl"><i style="background:#eaf3ff; color:#1877f2">WO</i><b>What Ops Should Look For in a Project Tool</b></div>
+      <span class="y11-stage pub"><i></i>Published</span><span class="y11-date">Oct 6</span>
+    </div>
+    <div class="y11-row ghost"><div class="y11-ttl"><i></i><b>x</b></div><span></span><span></span></div>
+    <div class="y11-row">
+      <div class="y11-ttl"><i style="background:#e4eeff; color:#0b57d0">TA</i><b>Taskwren Alternatives for Ops Teams</b></div>
+      <span class="y11-stage"><i></i>Scheduled</span><span class="y11-date">Oct 14</span>
+    </div>
+    <div class="y11-row skel"><div class="y11-ttl"><span class="y11-skc"></span><span class="y11-sk" style="width:250px"></span></div><span class="y11-sk" style="width:130px"></span><span class="y11-sk" style="width:110px"></span></div>
+    <div class="y11-row skel" style="border-bottom:0"><div class="y11-ttl"><span class="y11-skc"></span><span class="y11-sk" style="width:200px"></span></div><span class="y11-sk" style="width:130px"></span><span class="y11-sk" style="width:110px"></span></div>
+  </div>
+
+  <div class="v4-pop y11-row y11-lift">
+    <div class="y11-ttl"><i style="background:#1877f2; color:#fff">BP</i><b>Best Project Tools for Ops Teams, Compared</b></div>
+    <span class="y11-stage"><i></i>Writing</span><span class="y11-date">Today</span>
+  </div>
+  <i class="v4-hand" style="left:1196px; top:1128px"></i>
+
+  <p class="y11-num"><b>Half</b> of B2B software buyers now start their research with an AI chatbot more often than with Google.<small>Source: G2 research, 2026</small></p>
+</div>
+</body>
+</html>

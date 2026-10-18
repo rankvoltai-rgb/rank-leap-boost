@@ -1,0 +1,70 @@
+<!doctype html>
+<!-- Variant 3 · Cluster 3 "Why them and not me?", one image.
+     "Selected", white field. The AI's answer set as a typographic poster:
+     the buyer's question small, the answer huge, and the three names it
+     gave are selected (the one ad with three picks: they got picked). Under
+     them an empty dashed slot, "your brand", with the cursor hovering over
+     it. The close: it's not luck, it's structure, plus the free readiness
+     score. No statistic in this cluster, so no source line. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x5" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<link rel="stylesheet" href="ads3/ads3.css" />
+<script src="../kit/kit.js"></script>
+<script src="ads/ads.js"></script>
+<script src="ads3/ads3.js"></script>
+<style>
+  .y03-top { position: absolute; left: 100px; right: 100px; top: 96px; display: flex; align-items: center; }
+  .y03-top .v3-kick { margin-left: auto; }
+  .y03-hl { position: absolute; left: 96px; right: 100px; top: 200px; font-size: 124px; white-space: nowrap; }
+
+  /* Q and A, set like an interview: small question, the answer huge */
+  .y03-qa { position: absolute; left: 100px; right: 100px; }
+  .y03-qa .lab { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; font-size: 26px; font-weight: 750; letter-spacing: 0.1em; text-transform: uppercase; color: var(--v3-ink-2); }
+  .y03-qa .lab svg { width: 30px; height: 30px; color: var(--v3-blue); }
+  .y03-q { top: 392px; }
+  .y03-q p { font-size: 40px; font-weight: 600; line-height: 1.22; letter-spacing: -0.025em; color: var(--v3-ink); white-space: nowrap; }
+  .y03-a { top: 530px; }
+  .y03-a .lead { font-size: 70px; font-weight: 750; letter-spacing: -0.045em; line-height: 1; color: var(--v3-blue); }
+  .y03-a p { margin-top: 26px; font-size: 192px; font-weight: 800; line-height: 1.2; letter-spacing: -0.058em; color: var(--v3-blue); }
+  /* selection boxes span ascender to descender, like a phone's; the Q tail stays inside */
+  .y03-a .v3-pick { line-height: 0.8; padding: 0.05em 0.07em 0.19em; margin: 0 0.035em 0 0; --k: 30px; --st: 5px; }
+
+  .y03-you { position: absolute; left: 100px; top: 1390px; font-size: 192px; font-weight: 800; letter-spacing: -0.058em; color: var(--v3-soft); }
+  .y03-you .v3-slot { line-height: 0.8; padding: 0.05em 0.1em 0.19em 0.07em; border-width: 6px; border-radius: 12px; opacity: 1; }
+  .y03-close p em { display: block; margin-top: 4px; font-style: normal; font-size: 30px; font-weight: 600; letter-spacing: -0.015em; color: var(--v3-ink); }
+</style>
+</head>
+<body>
+<div class="canvas v3">
+  <div class="v3-wash"></div>
+
+  <div class="y03-top">
+    <span class="v3-logo"><svg><use href="#lg-rankbox"/></svg>Rankbox</span>
+  </div>
+  <h1 class="v3-hl y03-hl">Why them, not&nbsp;you?</h1>
+
+  <div class="y03-qa y03-q">
+    <div class="lab">Your buyer asked AI</div>
+    <p>“What’s the best project management software for a 40‑person team?”</p>
+  </div>
+
+  <div class="y03-qa y03-a">
+    <div class="lab"><svg><use href="#ic-sparkle"/></svg>AI answer</div>
+    <div class="lead">For a 40‑person team:</div>
+    <p><span class="v3-pick">Taskwren</span>,<br /><span class="v3-pick">Quillvane</span>or<br /><span class="v3-pick">Stackmere</span>.</p>
+  </div>
+
+  <div class="y03-you"><span class="v3-slot">your brand</span></div>
+  <i class="v3-cur" style="left:1090px; top:1494px"></i>
+
+  <div class="v3-close y03-close">
+    <svg class="mk"><use href="#lg-rankbox"/></svg>
+    <p>It’s not luck. It’s structure.<em>Check your AI readiness score, free.</em><span data-offer="line"></span></p>
+    <div class="v3-go"><span data-offer="cta"></span><svg><use href="#ic-arrow-right"/></svg></div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,139 @@
+<!doctype html>
+<!-- Variant 2 · Cluster 22 "CAC creep", one image.
+     Checkout Page bento (17, 16): near-black field with a faint grid, a
+     centred white headline with its grey second line, then dark bento tiles,
+     each a white title over one white UI card with outline check chips.
+     Two tiles side by side do the comparison: "Paid channels", bars rising
+     Q1 to Q4, against "Owned answers", a flat price line over published
+     pages piling up. The close is the third, wide tile. Illustrative: no
+     axis values, no dollar figures, no CAC numbers anywhere. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x5" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<link rel="stylesheet" href="ads2/ads2.css" />
+<script src="../kit/kit.js"></script>
+<script src="ads/ads.js"></script>
+<script src="ads2/ads2.js"></script>
+<style>
+  html, body { background: #101012; }
+  .canvas.v2.y22 { background: #101012; }
+  .y22-field { position: absolute; inset: 0; z-index: -3; background: radial-gradient(1800px 1100px at 50% 0%, #1d1c20 0%, #161518 40%, #121214 70%, #0f0f11 100%); }
+  .y22 .f-grid { --gs: 64px; --gl: 0.03; -webkit-mask-image: radial-gradient(85% 70% at 50% 40%, #000 30%, transparent 100%); mask-image: radial-gradient(85% 70% at 50% 40%, #000 30%, transparent 100%); }
+  .canvas.v2.y22 .grain { --grain: 0.07; }
+
+  .y22-hl { position: absolute; left: 60px; right: 60px; top: 104px; text-align: center; font-size: 94px; font-weight: 700; line-height: 1.02; letter-spacing: -0.048em; color: #fff; text-wrap: balance; }
+  .y22-hl span { color: #8e8e96; }
+
+  /* ------------------------------------------------ bento */
+  .y22-card { position: absolute; border-radius: 40px; background: #17161b; box-shadow: inset 0 0 0 2px #27262b; }
+  .y22-card > h3 { margin-top: 44px; text-align: center; font-size: 44px; font-weight: 700; letter-spacing: -0.035em; color: #fff; }
+  .y22-l { left: 100px; top: 470px; width: 682px; height: 1140px; }
+  .y22-r { left: 818px; top: 470px; width: 682px; height: 1140px; }
+
+  .y22-ui { position: absolute; left: 34px; right: 34px; top: 132px; bottom: 34px; padding: 34px 34px 30px; border-radius: 28px; background: #fff; color: #111114; display: flex; flex-direction: column; }
+  .y22-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+  .y22-cap { font-size: 25px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #8e8e96; white-space: nowrap; }
+  .y22 .ochip { height: 50px; padding: 0 18px; gap: 10px; border-width: 2.5px; font-size: 24px; letter-spacing: 0.08em; color: #111114; }
+  .y22 .ochip svg { width: 22px; height: 22px; }
+  .y22 .ochip.blue { color: var(--blue); }
+  .y22-hr { height: 2px; background: #ececef; margin: 26px 0; }
+
+  /* plots: no axis values on purpose */
+  .y22-plot { position: relative; flex: 1; margin-top: 26px; }
+  .y22-plot .gl { position: absolute; left: 0; right: 0; border-top: 2px dashed #e7e8ec; }
+  .y22-plot .base { position: absolute; left: 0; right: 0; bottom: 0; border-top: 3px solid #d5d8de; }
+  .y22-cols { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(4, 1fr); align-items: end; }
+  .y22-cols > div { position: relative; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; }
+  .y22-bar { width: 92px; border-radius: 16px 16px 0 0; background: #d0d4db; }
+  .y22-bar.now { background: #111114; }
+  .y22-up { position: absolute; display: flex; align-items: center; gap: 8px; font-size: 27px; font-weight: 700; letter-spacing: -0.015em; color: #111114; white-space: nowrap; }
+  .y22-up svg { width: 26px; height: 26px; }
+  .y22-axis { display: grid; grid-template-columns: repeat(4, 1fr); margin-top: 16px; text-align: center; font-size: 30px; font-weight: 700; letter-spacing: -0.01em; color: #55555c; }
+  .y22-foot { margin-top: 22px; padding-top: 22px; border-top: 2px solid #ececef; display: flex; align-items: center; gap: 14px; font-size: 27px; font-weight: 600; letter-spacing: -0.015em; color: #55555c; }
+  .y22-foot svg { width: 30px; height: 30px; color: #8e8e96; flex: none; }
+
+  /* owned answers: a flat price line, then pages piling up */
+  .y22-price { position: relative; height: 210px; margin-top: 10px; }
+  .y22-price svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+  .y22-pages { position: relative; flex: 1; margin-top: 4px; }
+  .y22-stack { display: grid; grid-template-columns: repeat(2, 50px); gap: 9px; justify-content: center; align-content: end; }
+  .y22-stack i { width: 50px; height: 50px; border-radius: 11px; background: var(--blue); display: grid; place-items: center; color: #fff; }
+  .y22-stack i svg { width: 30px; height: 30px; }
+
+  /* ------------------------------------------------ the close: the wide tile */
+  .y22-close { left: 100px; top: 1652px; width: 1400px; height: 236px; display: flex; align-items: center; gap: 30px; padding: 0 34px 0 50px; }
+  .y22-close > svg { width: 70px; height: 70px; flex: none; color: #fff; }
+  .y22-close p { flex: 1; font-size: 37px; font-weight: 650; line-height: 1.22; letter-spacing: -0.025em; color: #fff; }
+  .y22-close p span { display: block; margin-top: 10px; font-size: 27px; font-weight: 500; letter-spacing: -0.01em; color: #9b9ba2; white-space: nowrap; }
+</style>
+</head>
+<body>
+<div class="canvas v2 y22">
+  <div class="y22-field"></div>
+  <div class="f-grid"></div>
+  <div class="grain"></div>
+
+  <h1 class="y22-hl">CAC went up again this quarter.<br /><span>One channel doesn’t.</span></h1>
+
+  <!-- paid channels: bars climbing -->
+  <div class="y22-card y22-l">
+    <h3>Paid channels</h3>
+    <div class="y22-ui">
+      <div class="y22-row"><span class="y22-cap">CAC</span><span class="ochip"><svg><use href="#ic-info"/></svg>Illustrative</span></div>
+      <div class="y22-plot">
+        <i class="gl" style="top:0%"></i><i class="gl" style="top:25%"></i><i class="gl" style="top:50%"></i><i class="gl" style="top:75%"></i><i class="base"></i>
+        <div class="y22-cols">
+          <div><b class="y22-bar" style="height:34%"></b></div>
+          <div><b class="y22-bar" style="height:51%"></b></div>
+          <div><b class="y22-bar" style="height:69%"></b></div>
+          <div><b class="y22-bar now" style="height:90%"></b><span class="y22-up" style="bottom:calc(90% + 14px)"><svg><use href="#ic-arrow-up"/></svg>Again</span></div>
+        </div>
+      </div>
+      <div class="y22-axis"><span>Q1</span><span>Q2</span><span>Q3</span><span>Q4</span></div>
+      <div class="y22-foot"><svg><use href="#ic-refresh"/></svg>Paid for again, every customer</div>
+    </div>
+  </div>
+
+  <!-- owned answers: flat price, pages compounding -->
+  <div class="y22-card y22-r">
+    <h3>Owned answers</h3>
+    <div class="y22-ui">
+      <div class="y22-row"><span class="y22-cap">Monthly price</span><span class="ochip blue"><svg><use href="#ic-check"/></svg>Flat</span></div>
+      <div class="y22-price">
+        <svg viewBox="0 0 546 210" preserveAspectRatio="none"><line x1="0" y1="105" x2="546" y2="105" stroke="#e7e8ec" stroke-width="2" stroke-dasharray="7 6"/></svg>
+        <div class="y22-cols" id="nodes"></div>
+      </div>
+      <div class="y22-hr" style="margin:6px 0 22px"></div>
+      <div class="y22-row"><span class="y22-cap">Pages live</span><span class="ochip blue"><svg><use href="#ic-check"/></svg>Compounds</span></div>
+      <div class="y22-pages">
+        <i class="base" style="position:absolute;left:0;right:0;bottom:0;border-top:3px solid #d5d8de"></i>
+        <div class="y22-cols" id="stacks"></div>
+      </div>
+      <div class="y22-axis"><span>Q1</span><span>Q2</span><span>Q3</span><span>Q4</span></div>
+      <div class="y22-foot"><svg><use href="#rb-article"/></svg>Published once, still working</div>
+    </div>
+  </div>
+
+  <!-- the close -->
+  <div class="y22-card y22-close">
+    <svg><use href="#lg-rankbox"/></svg>
+    <p>Rankbox writes owned answers on autopilot, for one flat monthly price.<span data-offer="line"></span></p>
+    <div class="v2-go"><span data-offer="cta"></span><svg><use href="#ic-arrow-right"/></svg></div>
+  </div>
+</div>
+<script>
+  // The flat price: one blue line, a node per quarter, all at one height.
+  const nodes = document.getElementById("nodes");
+  nodes.insertAdjacentHTML("beforebegin", `<svg viewBox="0 0 546 210" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%"><line x1="68" y1="105" x2="478" y2="105" stroke="#1877f2" stroke-width="11" stroke-linecap="round"/></svg>`);
+  for (let q = 0; q < 4; q++) nodes.insertAdjacentHTML("beforeend", `<div style="justify-content:center"><i style="width:44px;height:44px;border-radius:50%;background:#fff;box-shadow:inset 0 0 0 10px #1877f2;display:block"></i></div>`);
+  // Pages live: each quarter keeps last quarter's pages and adds more.
+  const stacks = document.getElementById("stacks");
+  [4, 6, 8, 10].forEach((n) => {
+    const tiles = Array.from({ length: n }, () => `<i><svg><use href="#rb-article"/></svg></i>`).join("");
+    stacks.insertAdjacentHTML("beforeend", `<div><div class="y22-stack">${tiles}</div></div>`);
+  });
+</script>
+</body>
+</html>

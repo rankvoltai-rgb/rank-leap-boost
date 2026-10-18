@@ -1,0 +1,83 @@
+/*
+ * Ad set, variant type 4: "Replica". Each image faithfully replicates one of
+ * the user's SaaS reference ads (layout, type voice, depth, crop), with real
+ * Rankbox product UI as the hero and the cluster's message as the headline.
+ * No drawn metaphors: the product proves the claim. Brand blue + white, black
+ * text. Load after ../kit/kit.css.
+ */
+:root {
+  --v4-blue: #1877f2;
+  --v4-btn: #166fe5;
+  --v4-ink: #0c1018;
+  --v4-ink-2: #5a6070;
+  --v4-ink-3: #9aa0ac;
+  --v4-line: #e9ecf1;
+  --v4-soft: #f5f7fa;
+  --v4-tint: #eaf3ff;
+}
+
+.canvas.v4 { background: #fff; color: var(--v4-ink); }
+
+/* ------------------------------------------------------------ fields */
+/* FeedSpring: a bright brand-blue wash, lighter at the top. */
+.v4-field-blue { position: absolute; inset: 0; z-index: -3;
+  background: radial-gradient(90% 55% at 70% 30%, rgba(120, 180, 255, 0.35) 0%, rgba(120, 180, 255, 0) 70%),
+              linear-gradient(180deg, #3b8af7 0%, #2a7ff4 45%, #1f74ee 100%); }
+/* Soft out-of-focus discs at the edges (FeedSpring's depth). */
+.v4-bokeh { position: absolute; inset: 0; z-index: -2; pointer-events: none; overflow: hidden; }
+.v4-bokeh i { position: absolute; border-radius: 50%; background: radial-gradient(circle at 40% 35%, #5aa0ff 0%, #2f7ff2 60%, #2a78ee 100%); filter: blur(2px); opacity: 0.9; }
+/* Formflow / Outseta: near-white with a soft aura (in brand blues). */
+.v4-field-aura { position: absolute; inset: 0; z-index: -3; background: #fff; }
+.v4-aura { position: absolute; z-index: -2; border-radius: 50%; filter: blur(70px); pointer-events: none; }
+/* Noteframe: light grey-blue paper. */
+.v4-field-paper { position: absolute; inset: 0; z-index: -3; background: #f3f5f9; }
+
+/* ------------------------------------------------------------ lockup */
+.v4-lock { position: absolute; display: flex; align-items: center; gap: 22px; }
+.v4-lock .wm { display: inline-flex; align-items: center; gap: 14px; font-size: 52px; font-weight: 600; letter-spacing: -0.035em; color: #fff; }
+.v4-lock .wm svg { width: 58px; height: 58px; }
+.v4-pill { display: inline-flex; align-items: center; gap: 10px; height: 56px; padding: 0 24px; border-radius: 28px; background: rgba(255, 255, 255, 0.82); color: var(--v4-blue); font-size: 30px; font-weight: 600; letter-spacing: -0.01em;
+  box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, 0.9), 0 8px 18px -10px rgba(10, 60, 160, 0.5); }
+.v4-pill svg { width: 30px; height: 30px; }
+
+/* ------------------------------------------------------------ type */
+.v4-hl-light { font-weight: 400; letter-spacing: -0.035em; line-height: 1.04; color: #fff; }
+.v4-hl-heavy { font-weight: 800; letter-spacing: -0.055em; line-height: 0.98; color: var(--v4-ink); }
+.v4-hl-caps { font-weight: 800; letter-spacing: -0.03em; line-height: 0.94; text-transform: uppercase; color: var(--v4-ink); font-stretch: 85%; }
+
+/* Feature checklist (FeedSpring 2x2, Formflow column). */
+.v4-checks { position: absolute; display: grid; gap: 34px 46px; }
+.v4-check { display: flex; align-items: center; gap: 18px; font-size: 38px; font-weight: 400; letter-spacing: -0.015em; white-space: nowrap; }
+.v4-check i { flex: none; width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; }
+.v4-check i svg { width: 26px; height: 26px; }
+.v4-checks.on-blue .v4-check { color: #fff; }
+.v4-checks.on-blue .v4-check i { background: rgba(255, 255, 255, 0.32); box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.35); color: #fff; }
+.v4-checks.on-white .v4-check { color: var(--v4-ink); }
+.v4-checks.on-white .v4-check i { background: var(--v4-blue); color: #fff; }
+
+/* ------------------------------------------------------------ browser */
+.v4-browser { position: absolute; background: #fff; border-radius: 34px 34px 0 0; overflow: hidden;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.55), 0 40px 90px -40px rgba(4, 40, 120, 0.55); }
+.v4-browser .bar { height: 104px; display: flex; align-items: center; padding: 0 40px; gap: 14px; border-bottom: 2px solid #f0f2f5; }
+.v4-browser .bar .d { width: 22px; height: 22px; border-radius: 50%; }
+.v4-browser .bar .url { margin: 0 auto; height: 58px; padding: 0 34px; min-width: 520px; border-radius: 14px; background: #f4f5f7; display: flex; align-items: center; justify-content: center; gap: 14px; font-size: 28px; color: #8a909c; }
+.v4-browser .bar .url svg { width: 24px; height: 24px; }
+
+/* ------------------------------------------------------------ plugin panel */
+.v4-panel { position: absolute; background: #fff; color: var(--v4-ink); border-radius: 34px; overflow: hidden;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.7), 0 50px 100px -40px rgba(4, 40, 120, 0.55), 0 18px 40px -20px rgba(4, 40, 120, 0.35); }
+.v4-panel .ph { height: 84px; display: flex; align-items: center; gap: 14px; padding: 0 30px; border-bottom: 2px solid var(--v4-line); font-size: 26px; font-weight: 500; }
+.v4-panel .ph .tile { width: 38px; height: 38px; border-radius: 10px; background: var(--v4-blue); color: #fff; display: grid; place-items: center; }
+.v4-panel .ph .tile svg { width: 24px; height: 24px; }
+.v4-panel .ph .x { margin-left: auto; width: 26px; height: 26px; color: #8a909c; }
+
+/* The lifted element: scaled out of its panel, stronger shadow. */
+.v4-pop { position: absolute; background: #fff; border-radius: 30px;
+  box-shadow: 0 0 0 1.5px rgba(10, 30, 70, 0.06), 0 50px 90px -30px rgba(4, 40, 120, 0.5), 0 20px 40px -18px rgba(4, 40, 120, 0.35); }
+
+/* Hand cursor (ads4.js fills it). */
+.v4-hand { position: absolute; width: 92px; height: 92px; z-index: 30; filter: drop-shadow(0 8px 10px rgba(4, 30, 90, 0.25)); }
+.v4-hand svg { width: 100%; height: 100%; display: block; }
+
+/* Bottom fade into the field (set --fade to the field colour). */
+.v4-fade { position: absolute; left: 0; right: 0; bottom: 0; z-index: 25; pointer-events: none; background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, var(--fade) 82%); }

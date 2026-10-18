@@ -1,5 +1,7 @@
-import { ArrowUpRight } from "lucide-react";
-import { Reveal, Eyebrow } from "./shared";
+import { ArrowUpRight, FileText } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Reveal } from "./shared";
+import { Accent, Band, LINE, SectionHead, Spacer } from "./frame";
 
 const ARTICLES = [
   {
@@ -34,43 +36,62 @@ const ARTICLES = [
   },
 ];
 
+/* An index of the sample articles, one hairline row each, like a published
+   feed: number, the site it ran on, the headline and standfirst, its format. */
 export function ExampleArticles() {
   return (
-    <section id="examples" className="border-t border-border bg-surface/40 py-24 sm:py-32">
-      <div className="mx-auto max-w-6xl px-5">
-        <Reveal className="mx-auto max-w-2xl text-center">
-          <Eyebrow className="mb-4">Sample output</Eyebrow>
-          <h2 className="font-display text-balance text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
-            AI articles that get cited
-          </h2>
-          <p className="mt-4 text-balance text-lg text-muted-foreground">
-            Nobody will guess these were written by AI. Packed with images, internal links, real
-            data, and the structure both Google and AI answer engines reward.
-          </p>
-        </Reveal>
-        <div className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+    <section id="examples" className="scroll-mt-16">
+      <Spacer />
+      <SectionHead
+        icon={FileText}
+        eyebrow="Sample output"
+        title={
+          <>
+            AI articles <Accent>that get cited</Accent>
+          </>
+        }
+        subtitle="Nobody will guess these were written by AI. Packed with images, internal links, real data, and the structure both Google and AI answer engines reward."
+      />
+      <Band>
+        <ol className={cn("divide-y", "divide-ink/[0.07]")}>
           {ARTICLES.map((a, i) => (
-            <Reveal key={a.title} delay={(i % 3) * 0.06}>
-              <article className="group flex h-full flex-col rounded-2xl border border-border bg-card p-6 shadow-elevation transition-all hover:-translate-y-1 hover:shadow-elevation-lg">
-                <div className="mb-4 flex items-center justify-between gap-3">
-                  <span className="flex items-center gap-2 text-xs font-medium text-muted-foreground">
-                    <span className="flex h-6 w-6 items-center justify-center rounded-md border border-border bg-surface text-[0.65rem] font-semibold uppercase text-ink">
+            <li key={a.title}>
+              <Reveal delay={(i % 3) * 0.04}>
+                <article className="group grid gap-3 px-6 py-6 transition-colors duration-300 hover:bg-[color-mix(in_oklab,var(--surface)_40%,white)] sm:px-8 md:grid-cols-[3rem_13rem_1fr_auto] md:items-center md:gap-6 lg:px-10">
+                  <span className="hidden font-mono text-xs text-muted-foreground/70 tabular-nums md:block">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <span className="flex items-center gap-2.5 text-[0.8rem] font-medium text-muted-foreground">
+                    <span className="flex h-7 w-7 items-center justify-center rounded-md border border-ink/[0.08] bg-white text-[0.7rem] font-semibold uppercase text-ink shadow-[0_1px_2px_rgba(16,24,40,0.05)]">
                       {a.domain[0]}
                     </span>
                     {a.domain}
                   </span>
-                  <ArrowUpRight className="h-4 w-4 shrink-0 text-muted-foreground transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-                </div>
-                <h3 className="text-base font-semibold leading-snug text-ink">{a.title}</h3>
-                <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">{a.body}</p>
-                <span className="mt-5 inline-flex w-fit items-center gap-1.5 rounded-full border border-border bg-surface/60 px-2.5 py-0.5 text-[0.7rem] font-medium text-muted-foreground">
-                  Article · 5 min read
-                </span>
-              </article>
-            </Reveal>
+                  <div className="min-w-0">
+                    <h3 className="text-[1.02rem] font-semibold leading-snug tracking-tight text-ink">
+                      {a.title}
+                    </h3>
+                    <p className="mt-1 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+                      {a.body}
+                    </p>
+                  </div>
+                  <span className="flex items-center gap-3">
+                    <span
+                      className={cn(
+                        "inline-flex w-fit items-center rounded-md border bg-white px-2 py-0.5 text-[0.7rem] font-medium whitespace-nowrap text-muted-foreground",
+                        LINE,
+                      )}
+                    >
+                      Article · 5 min read
+                    </span>
+                    <ArrowUpRight className="hidden h-4 w-4 shrink-0 text-muted-foreground transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-brand-blue md:block" />
+                  </span>
+                </article>
+              </Reveal>
+            </li>
           ))}
-        </div>
-      </div>
+        </ol>
+      </Band>
     </section>
   );
 }

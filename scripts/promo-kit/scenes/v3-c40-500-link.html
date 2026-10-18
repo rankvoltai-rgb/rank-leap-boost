@@ -1,0 +1,94 @@
+<!doctype html>
+<!-- Variant 3 · Cluster 40 "The $508.95 link", one image.
+     "Selected", blue field: a backlink priced like jewellery. Two giant
+     interlocking chain links drawn in white line, one labelled "someone
+     else’s site", with a price tag hanging off it on a string. The price on
+     the tag, the survey average, is the selected thing. The number is worded
+     as the survey worded it (an acceptable price, not a market price), with
+     variant 1’s source line. No outcome stats about what a link gets you. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x5" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<link rel="stylesheet" href="ads3/ads3.css" />
+<script src="../kit/kit.js"></script>
+<script src="ads/ads.js"></script>
+<script src="ads3/ads3.js"></script>
+<style>
+  .y40-top { position: absolute; left: 100px; right: 100px; top: 96px; display: flex; align-items: center; }
+  .y40-top .v3-kick { margin-left: auto; }
+  .y40-hl { position: absolute; left: 92px; right: 60px; top: 206px; font-size: 176px; white-space: nowrap; }
+  .y40-sub { position: absolute; left: 100px; right: 100px; top: 410px; }
+
+  /* the chain (and the back strand of the string, which the link hides) */
+  .y40-chain { position: absolute; left: 0; top: 0; width: 1600px; height: 2000px; overflow: visible; pointer-events: none; z-index: 1; }
+  .y40-chain text { font-family: "Jakarta", sans-serif; font-size: 40px; font-weight: 700; letter-spacing: -0.02em; fill: #fff; }
+  .y40-knot { position: absolute; left: 0; top: 0; width: 1600px; height: 2000px; pointer-events: none; z-index: 3; }
+
+  /* the tag hangs from its hole: (638, 1260) on the canvas */
+  .y40-tag { position: absolute; z-index: 2; left: 298px; top: 1208px; width: 680px; padding: 94px 40px 40px; border-radius: 34px; border: 6px solid #fff; background: #388af4; text-align: center; transform: rotate(-4deg); transform-origin: 340px 52px; }
+  .y40-tag .hole { position: absolute; left: 50%; top: 24px; width: 44px; height: 44px; margin-left: -22px; border-radius: 50%; border: 6px solid #fff; background: var(--v3-blue); }
+  .y40-tag .what { font-size: 36px; font-weight: 650; letter-spacing: -0.02em; color: #fff; }
+  .y40-tag .v3-pick { margin-top: 36px; font-size: 138px; font-weight: 800; letter-spacing: -0.06em; line-height: 0.74; padding: 0.1em 0.1em 0.12em 0.07em; --k: 0.2em; --st: 0.028em; }
+  .y40-tag .avg { margin-top: 28px; font-size: 36px; font-weight: 600; letter-spacing: -0.015em; color: #fff; }
+
+  .v3-px i:nth-child(18), .v3-px i:nth-child(22) { display: none; } /* squares that would sit on the tag’s edge and under the source */
+  .y40-src { position: absolute; left: 1050px; width: 460px; top: 1500px; }
+</style>
+</head>
+<body>
+<div class="canvas v3 blue">
+  <div class="v3-wash"></div>
+  <div class="v3-px"></div>
+
+  <div class="y40-top">
+    <span class="v3-logo"><svg><use href="#lg-rankbox"/></svg>Rankbox</span>
+    <span class="v3-kick">Before you buy another backlink</span>
+  </div>
+  <h1 class="v3-hl y40-hl">The $508.95 link.</h1>
+  <p class="v3-sub y40-sub">What SEO pros call a fair price for one good backlink.</p>
+
+  <!-- Two links on one axis, rotated. A (upper right) is someone else’s
+       site; the tag hangs off B, your end. B is painted first, A over it, then B again inside the lower
+       crossing so the two read as interlocked. -->
+  <svg class="y40-chain" viewBox="0 0 1600 2000">
+    <defs>
+      <path id="y40-A" fill-rule="evenodd" d="M20 -185 H390 A185 185 0 0 1 390 185 H20 A185 185 0 0 1 20 -185 Z M20 -87 H390 A87 87 0 0 1 390 87 H20 A87 87 0 0 1 20 -87 Z" />
+      <path id="y40-B" fill-rule="evenodd" d="M-390 -185 H-20 A185 185 0 0 1 -20 185 H-390 A185 185 0 0 1 -390 -185 Z M-390 -87 H-20 A87 87 0 0 1 -20 87 H-390 A87 87 0 0 1 -390 -87 Z" />
+      <clipPath id="y40-low" clipPathUnits="userSpaceOnUse"><rect x="-175" y="30" width="350" height="175" /></clipPath>
+    </defs>
+    <!-- back strand of the string: shows in the link's hole, hidden by the link, shows again below it -->
+    <path d="M630 1251 V974" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" />
+    <g transform="translate(800 830) rotate(-24)">
+      <g fill="#388af4" stroke="#fff" stroke-width="6" stroke-linejoin="round">
+        <use href="#y40-B" />
+        <use href="#y40-A" />
+        <use href="#y40-B" clip-path="url(#y40-low)" />
+      </g>
+      <text x="215" y="-136" text-anchor="middle" dominant-baseline="central">someone else’s site</text>
+    </g>
+    <!-- front strand, over the link and round the top of the loop -->
+    <path d="M646 1251 V974 A8 8 0 0 0 630 974" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+  </svg>
+
+  <div class="y40-tag">
+    <i class="hole"></i>
+    <div class="what">1 high-quality backlink</div>
+    <span class="v3-pick">$508.95</span>
+    <div class="avg">(survey average)</div>
+  </div>
+  <!-- the two strands run over the tag's lip into the hole -->
+  <svg class="y40-knot" viewBox="0 0 1600 2000"><path d="M630 1195 V1251 M646 1195 V1251" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" /></svg>
+  <i class="v3-cur w" style="left:900px; top:1526px"></i>
+
+  <div class="v3-src y40-src">Source: average acceptable price for one high-quality link, Editorial.Link survey of 518 SEO professionals, 2026</div>
+
+  <div class="v3-close">
+    <svg class="mk"><use href="#lg-rankbox"/></svg>
+    <p>Rankbox builds authority on your own domain, for less than one link.<span data-offer="line"></span></p>
+    <div class="v3-go"><span data-offer="cta"></span><svg><use href="#ic-arrow-right"/></svg></div>
+  </div>
+</div>
+</body>
+</html>

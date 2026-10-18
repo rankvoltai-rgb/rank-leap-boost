@@ -1,0 +1,144 @@
+/*
+ * The ad set's visual system (the user's Creative Director's Brief): clean
+ * light-grey or dark SaaS surfaces, white cards, ONE accent (electric blue),
+ * data-forward, like a product screenshot someone shared. Cluster 2
+ * (scenes/c2-*) is the exemplar; every other cluster builds on this file.
+ *
+ * Canvases: 4x5 is 1600 x 2000 (→ 1080 x 1350), 9x16 is 1600 x 2844
+ * (→ 1080 x 1920). AI assistants, search pages, forums and phones are drawn
+ * generic on purpose: never a real product's logo or layout as the focus.
+ *
+ * Load after ../kit/kit.css. Add `ad-dark` to .canvas for a dark surface.
+ */
+
+/* ------------------------------------------------------------ surfaces */
+.canvas.ad { background: #f2f3f5; }
+.canvas.ad.ad-dark { background: #0b0d12; color: #eef1f6; }
+.ad-dots {
+  position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background-image: radial-gradient(rgba(12, 16, 24, 0.07) 1.6px, transparent 2px);
+  background-size: 28px 28px;
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, rgba(0, 0, 0, 0.25) 60%, transparent 100%);
+          mask-image: linear-gradient(180deg, #000 0%, rgba(0, 0, 0, 0.25) 60%, transparent 100%);
+}
+.ad-dark .ad-dots { background-image: radial-gradient(rgba(255, 255, 255, 0.07) 1.6px, transparent 2px); }
+
+/* ------------------------------------------------------------ chrome */
+/* Top bar: carousel progress + step name on the left, logo on the right.
+   The logo is the bare mark, never the app tile, and it never appears on
+   a carousel's first slide. */
+.ad-top { position: absolute; left: 110px; right: 110px; top: var(--top-y, 92px); display: flex; align-items: center; gap: 28px; z-index: 30; }
+.ad-prog { display: flex; gap: 10px; }
+.ad-prog i { width: 66px; height: 9px; border-radius: 99px; background: #d9dde3; display: block; }
+.ad-prog i.on { background: var(--blue); }
+.ad-dark .ad-prog i { background: #2a2f3a; }
+.ad-dark .ad-prog i.on { background: var(--blue-hi); }
+.ad-step { font-size: 30px; font-weight: 600; color: #6b7280; letter-spacing: -0.01em; }
+.ad-dark .ad-step { color: #9aa3b2; }
+.ad-logo { margin-left: auto; display: flex; align-items: center; gap: 12px; font-size: 36px; font-weight: 600; letter-spacing: -0.03em; color: #0c1018; white-space: nowrap; }
+.ad-logo svg { width: 38px; height: 38px; color: var(--blue); flex: none; }
+.ad-dark .ad-logo { color: #fff; }
+.ad-dark .ad-logo svg { color: #fff; }
+.ad-swipe { margin-left: auto; display: flex; align-items: center; gap: 12px; font-size: 30px; font-weight: 600; color: #6b7280; }
+.ad-swipe svg { width: 34px; height: 34px; }
+
+/* ------------------------------------------------------------ type */
+.ad-hl { position: absolute; left: 104px; right: 104px; top: var(--hl-y, 186px); font-size: var(--hl-size, 104px); font-weight: 700; letter-spacing: -0.048em; line-height: 1.02; color: #0c1018; text-wrap: balance; }
+.ad-hl .dim { color: #8a909c; }
+.ad-hl .blue { color: var(--blue); }
+.ad-dark .ad-hl { color: #fff; }
+.ad-dark .ad-hl .dim { color: #7f8899; }
+.ad-dark .ad-hl .blue { color: var(--blue-hi); }
+.ad-sub { font-size: 42px; font-weight: 500; line-height: 1.3; letter-spacing: -0.025em; color: #4a5160; text-wrap: balance; }
+.ad-dark .ad-sub { color: #aab2c0; }
+/* The one number, when the ad has one. */
+.ad-num { font-size: var(--num-size, 300px); font-weight: 800; letter-spacing: -0.065em; line-height: 0.9; color: var(--blue); }
+.ad-dark .ad-num { color: var(--blue-hi); }
+/* Where the number comes from: small, always on the slide that shows it. */
+.ad-src { position: absolute; left: 110px; right: 110px; bottom: var(--src-y, 90px); font-size: 26px; font-weight: 500; color: #8a909c; letter-spacing: -0.005em; }
+.ad-dark .ad-src { color: #6f7889; }
+/* On a single image with an .ad-turn band, lift the source line above it. */
+.ad-src.lift { bottom: calc(var(--turn-y, 110px) + 200px); }
+
+/* ------------------------------------------------------------ surfaces in the scene */
+.ad-card {
+  position: absolute; background: #fff; border-radius: 36px; color: #0c1018;
+  box-shadow: 0 0 0 2px #e6e8ec, 0 40px 80px -40px rgba(12, 30, 70, 0.25), 0 12px 30px -18px rgba(12, 30, 70, 0.14);
+}
+.ad-card.dark { background: #151922; color: #eef1f6; box-shadow: 0 0 0 2px #232938, 0 40px 80px -40px rgba(0, 0, 0, 0.7); }
+.ad-card.flow { position: relative; }
+
+/* Stylised AI answer: generic, no engine's UI. Label is "AI answer". */
+.ad-answer { border-radius: 26px; background: #f2f7ff; box-shadow: inset 0 0 0 2px #cfe0fb; padding: 34px 38px 36px; color: #1d222c; }
+.ad-answer .lab { display: flex; align-items: center; gap: 12px; font-size: 29px; font-weight: 700; color: #1561d6; letter-spacing: -0.01em; }
+.ad-answer .lab svg { width: 34px; height: 34px; color: var(--blue); }
+.ad-answer p { margin-top: 18px; font-size: 38px; line-height: 1.42; font-weight: 500; letter-spacing: -0.015em; }
+.ad-answer p b { font-weight: 750; color: #0c1018; }
+.ad-answer ol, .ad-answer ul { margin-top: 18px; padding-left: 0; list-style: none; display: grid; gap: 16px; }
+.ad-answer li { font-size: 36px; line-height: 1.35; font-weight: 500; letter-spacing: -0.015em; }
+.ad-chips { margin-top: 22px; display: flex; flex-wrap: wrap; gap: 12px; }
+.ad-chip { height: 54px; padding: 0 20px; border-radius: 999px; background: #fff; box-shadow: inset 0 0 0 2px #d9e6fa; display: inline-flex; align-items: center; gap: 10px; font-size: 26px; font-weight: 600; color: #3a4252; white-space: nowrap; }
+.ad-chip i { width: 22px; height: 22px; border-radius: 50%; background: #c9d9f5; display: block; flex: none; }
+/* Numbered source pill inside an answer: [1] */
+.ad-cite { display: inline-grid; place-items: center; min-width: 40px; height: 40px; padding: 0 10px; margin: 0 4px; border-radius: 10px; background: #dfeaff; color: #1561d6; font-size: 24px; font-weight: 750; vertical-align: 4px; }
+
+/* ------------------------------------------------------------ chat */
+.ad-q { margin-left: auto; max-width: 86%; padding: 26px 32px; border-radius: 30px 30px 8px 30px; background: var(--blue); color: #fff; font-size: 38px; line-height: 1.32; font-weight: 550; letter-spacing: -0.015em; }
+.ad-q.grey { background: #eceef2; color: #12161f; }
+.ad-a { font-size: 38px; line-height: 1.42; font-weight: 500; letter-spacing: -0.015em; color: #1d222c; }
+.ad-dark .ad-a { color: #e4e8ef; }
+.ad-typing { display: inline-flex; gap: 12px; padding: 26px 30px; border-radius: 30px; background: #eceef2; }
+.ad-typing i { width: 18px; height: 18px; border-radius: 50%; background: #9aa0ab; display: block; }
+.ad-typing i:nth-child(2) { opacity: .7; }
+.ad-typing i:nth-child(3) { opacity: .4; }
+
+/* ------------------------------------------------------------ devices */
+/* A generic phone: no maker's notch or buttons, just a bezel and a screen. */
+.ad-phone { position: absolute; width: var(--pw, 780px); height: var(--ph, 1560px); border-radius: 110px; background: #0e1015; padding: 26px; box-shadow: 0 0 0 3px #2a2e38, 0 70px 120px -40px rgba(12, 30, 70, 0.55), 0 24px 50px -20px rgba(12, 30, 70, 0.35); }
+.ad-phone-screen { position: relative; width: 100%; height: 100%; border-radius: 86px; background: #fff; overflow: hidden; }
+.ad-phone-bar { display: flex; justify-content: space-between; align-items: center; height: 96px; padding: 0 56px; font-size: 30px; font-weight: 650; color: #12161f; }
+.ad-phone-bar i { width: 64px; height: 26px; border-radius: 8px; background: #12161f; display: block; opacity: .85; }
+
+/* A generic browser window with tabs. */
+.ad-browser { position: absolute; border-radius: 30px; background: #fff; overflow: hidden; box-shadow: 0 0 0 2px #e1e4e9, 0 50px 100px -40px rgba(12, 30, 70, 0.35), 0 16px 34px -18px rgba(12, 30, 70, 0.18); }
+.ad-tabs { display: flex; align-items: flex-end; gap: 6px; height: 96px; padding: 0 24px; background: #e8eaee; }
+.ad-tab { display: flex; align-items: center; gap: 14px; height: 70px; padding: 0 30px; border-radius: 20px 20px 0 0; font-size: 27px; font-weight: 600; color: #6b7280; max-width: 420px; white-space: nowrap; overflow: hidden; }
+.ad-tab.on { background: #fff; color: #12161f; }
+.ad-tab i { width: 28px; height: 28px; border-radius: 8px; background: #c9ced6; display: block; flex: none; }
+.ad-tab.new { width: 70px; padding: 0; justify-content: center; font-size: 40px; color: #8a909c; }
+.ad-url { display: flex; align-items: center; gap: 16px; height: 86px; margin: 0; padding: 0 30px; border-bottom: 2px solid #eceef2; font-size: 28px; font-weight: 500; color: #4a5160; }
+.ad-url span { flex: 1; height: 58px; border-radius: 999px; background: #f2f3f5; display: flex; align-items: center; padding: 0 26px; }
+
+/* ------------------------------------------------------------ handwriting */
+/* UGC energy: a quick handwritten note stuck on, never more than a few words. */
+.ad-note { position: absolute; padding: 26px 34px; background: #fff7c2; color: #2a2a2a; font-family: "Marker Felt", "Noteworthy", cursive; font-size: 52px; line-height: 1.1; transform: rotate(var(--rot, -4deg)); box-shadow: 0 18px 30px -16px rgba(60, 50, 0, 0.45); }
+
+/* ------------------------------------------------------------ the offer */
+/* Every closing slide ends on the same offer. Text comes from ads.js. */
+.ad-offer { position: absolute; left: 110px; right: 110px; bottom: var(--offer-y, 120px); display: flex; align-items: center; gap: 22px; z-index: 20; }
+.ad-terms { flex: 1; font-size: 34px; font-weight: 600; color: #3a4252; letter-spacing: -0.02em; line-height: 1.35; }
+.ad-terms b { display: block; color: #0c1018; font-weight: 750; font-size: 44px; letter-spacing: -0.03em; }
+.ad-dark .ad-terms { color: #aab2c0; }
+.ad-dark .ad-terms b { color: #fff; }
+.ad-go { height: 116px; padding: 0 46px; border-radius: 28px; background: var(--blue); color: #fff; display: flex; align-items: center; gap: 16px; font-size: 40px; font-weight: 650; letter-spacing: -0.02em; white-space: nowrap; box-shadow: 0 18px 34px -16px rgba(22, 111, 229, 0.8); }
+.ad-go svg { width: 40px; height: 40px; }
+
+/* A single-image ad's turn: one band at the foot with the logo, one line and
+   the call to action. The top of the image stays the viewer's world. */
+.ad-turn { position: absolute; left: 110px; right: 110px; bottom: var(--turn-y, 110px); display: flex; align-items: center; gap: 30px; padding: 34px 40px; border-radius: 34px; background: #fff; box-shadow: 0 0 0 2px #e6e8ec, 0 30px 60px -30px rgba(12, 30, 70, 0.3); z-index: 20; }
+.ad-turn .ad-logo { margin-left: 0; font-size: 34px; }
+.ad-turn p { flex: 1; font-size: 33px; font-weight: 600; line-height: 1.3; letter-spacing: -0.02em; color: #1d222c; }
+.ad-turn .ad-go { height: 100px; padding: 0 36px; font-size: 34px; border-radius: 24px; }
+.ad-dark .ad-turn { background: #151922; box-shadow: 0 0 0 2px #232938; }
+.ad-dark .ad-turn p { color: #e4e8ef; }
+
+/* A small label for a variant ("For dental practices"). */
+.ad-tag { display: inline-flex; align-items: center; gap: 12px; height: 66px; padding: 0 26px; border-radius: 999px; background: #e8f1ff; color: #1561d6; font-size: 30px; font-weight: 650; letter-spacing: -0.01em; white-space: nowrap; }
+.ad-tag svg { width: 32px; height: 32px; }
+.ad-dark .ad-tag { background: #16233d; color: #8cbcff; }
+
+/* ------------------------------------------------------------ 9x16 safe area */
+/* Stories and Reels cover the top ~330 and bottom ~620 canvas px. */
+html[data-f="9x16"] { --top-y: 360px; --hl-y: 460px; --src-y: 640px; --offer-y: 660px; --turn-y: 660px; }
+
+:root { --blue-hi: #4b9dff; }

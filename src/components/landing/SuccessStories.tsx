@@ -1,7 +1,9 @@
-import { Reveal, Avatar, Eyebrow } from "./shared";
-import { CitationChip } from "./chat";
+import { MessageSquareQuote, TrendingUp } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Reveal, Avatar } from "./shared";
 import { AI_MARKS } from "./ai-logos";
 import { AVATARS } from "./avatars";
+import { Accent, Band, LINE, LINE_FILL, PANEL, SectionHead, Spacer } from "./frame";
 
 const STORIES = [
   {
@@ -76,69 +78,83 @@ function EngineBadge({ name }: { name: string }) {
   const found = AI_MARKS.find((m) => m.name === name) ?? AI_MARKS[0];
   const Mark = found.Mark;
   return (
-    <span className="flex items-center gap-1.5 text-[0.7rem] font-medium text-muted-foreground">
-      <span className="flex h-5 w-5 items-center justify-center rounded-md border border-border bg-background">
-        <Mark className="h-3 w-3" />
+    <span className="flex items-center gap-2 text-[0.8rem] font-medium text-ink">
+      <span className="flex h-6 w-6 items-center justify-center rounded-md border border-ink/[0.08] bg-white shadow-[0_1px_2px_rgba(16,24,40,0.05)]">
+        <Mark className="h-3.5 w-3.5" />
       </span>
       {name}
     </span>
   );
 }
 
-export function SuccessStories() {
+/* One founder's result: the question a buyer asked, the answer that named
+   their brand, what it brought in, and who they are. Cells share hairlines
+   rather than floating as cards, like Rankaria's grids. */
+function Story({ s }: { s: (typeof STORIES)[number] }) {
   return (
-    <section id="proof" className="py-24 sm:py-32">
-      <div className="mx-auto max-w-6xl px-5">
-        <Reveal className="mx-auto max-w-2xl text-center">
-          <Eyebrow className="mb-4">Real answers, real brands</Eyebrow>
-          <h2 className="font-display text-balance text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
-            Founders already getting cited
-          </h2>
-          <p className="mt-4 text-balance text-lg text-muted-foreground">
-            From page-one rankings to getting quoted inside ChatGPT and Perplexity answers —
-            early results from founders who started on brand-new domains.
-          </p>
-        </Reveal>
+    <article className="group flex h-full flex-col bg-white p-6 transition-colors duration-300 hover:bg-[color-mix(in_oklab,var(--surface)_35%,white)] sm:p-7">
+      <div className="flex items-center justify-between gap-2">
+        <EngineBadge name={s.engine} />
+        <span className="rounded-md border border-ink/[0.07] bg-white px-2 py-0.5 text-[0.68rem] font-medium text-muted-foreground">
+          {s.period}
+        </span>
+      </div>
 
-        <div className="mt-16 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {STORIES.map((s, i) => (
-            <Reveal key={s.name} delay={(i % 3) * 0.06}>
-              <article className="flex h-full flex-col rounded-2xl border border-border bg-card p-6 shadow-elevation transition-all hover:-translate-y-1 hover:shadow-elevation-lg">
-                <div className="flex items-center justify-between gap-2">
-                  <EngineBadge name={s.engine} />
-                  <span className="rounded-full bg-secondary px-2 py-0.5 text-[0.65rem] font-medium text-muted-foreground">
-                    {s.period}
-                  </span>
-                </div>
+      <div className={cn("mt-5 space-y-3 rounded-xl border border-ink/[0.06] p-3.5", PANEL)}>
+        <p className="ml-auto w-fit max-w-[90%] rounded-lg border border-ink/[0.07] bg-white px-3 py-2 text-[0.8rem] leading-snug text-ink shadow-[0_1px_2px_rgba(16,24,40,0.04)]">
+          {s.question}
+        </p>
+        <p className="text-[0.8rem] leading-relaxed text-ink/80">
+          <span className="font-semibold text-ink underline decoration-brand-blue/60 decoration-2 underline-offset-[3px]">
+            {s.answer}
+          </span>{" "}
+          {s.after}
+        </p>
+      </div>
 
-                <div className="mt-4 space-y-2.5 rounded-xl border border-border bg-surface/50 p-3.5">
-                  <p className="ml-auto w-fit max-w-[90%] rounded-2xl rounded-br-sm bg-ink px-3 py-1.5 text-xs leading-snug text-background">
-                    {s.question}
-                  </p>
-                  <p className="text-xs leading-relaxed text-ink">
-                    <span className="font-semibold underline decoration-volt decoration-2 underline-offset-2">
-                      {s.answer}
-                    </span>{" "}
-                    {s.after}
-                  </p>
-                </div>
+      <span className="mt-4 inline-flex w-fit items-center gap-1.5 rounded-md bg-cta-soft px-2 py-1 text-[0.75rem] font-semibold text-brand-blue">
+        <TrendingUp className="h-3.5 w-3.5" />
+        {s.stat}
+      </span>
 
-                <div className="mt-4">
-                  <CitationChip>{s.stat}</CitationChip>
-                </div>
-
-                <div className="mt-5 flex items-center gap-3 border-t border-border pt-4">
-                  <Avatar name={s.name} src={s.avatar} className="h-9 w-9" />
-                  <div className="min-w-0">
-                    <p className="truncate text-sm font-semibold text-ink">{s.name}</p>
-                    <p className="truncate text-xs text-muted-foreground">{s.role}</p>
-                  </div>
-                </div>
-              </article>
-            </Reveal>
-          ))}
+      <div className={cn("mt-auto flex items-center gap-3 border-t pt-5", LINE)}>
+        <Avatar name={s.name} src={s.avatar} className="h-9 w-9 ring-white" />
+        <div className="min-w-0">
+          <p className="truncate text-sm font-semibold text-ink">{s.name}</p>
+          <p className="truncate text-xs text-muted-foreground">{s.role}</p>
         </div>
       </div>
+    </article>
+  );
+}
+
+export function SuccessStories() {
+  return (
+    <section id="proof" className="scroll-mt-16">
+      <Spacer />
+      <SectionHead
+        icon={MessageSquareQuote}
+        eyebrow="Real answers, real brands"
+        title={
+          <>
+            Founders already <Accent>getting cited</Accent>
+          </>
+        }
+        subtitle="From page-one rankings to getting quoted inside ChatGPT and Perplexity answers — early results from founders who started on brand-new domains."
+      />
+      <Band>
+        <div className={cn("grid gap-px md:grid-cols-2 lg:grid-cols-3", LINE_FILL)}>
+          {/* White on a still wrapper, so a cell fading in never shows the
+              hairline fill behind it as a grey block. */}
+          {STORIES.map((s, i) => (
+            <div key={s.name} className="bg-white">
+              <Reveal delay={(i % 3) * 0.06} className="h-full">
+                <Story s={s} />
+              </Reveal>
+            </div>
+          ))}
+        </div>
+      </Band>
     </section>
   );
 }

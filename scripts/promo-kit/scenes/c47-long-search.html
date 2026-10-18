@@ -1,0 +1,78 @@
+<!doctype html>
+<!-- Cluster 47 · "The 40-word search" · single image. Then and now: a tiny,
+     old-style search box with "best crm" (2 words) above a long prompt typed
+     into a generic AI chat box (24 words, counted exactly: "4-person" and
+     "$50" are one word each). The length gap is the joke. The four marked
+     words mark the "whole situation" the primary text names: team size,
+     tools, deal-breakers, budget. No engine's UI or logo. Rankbox appears
+     only in the bottom band. The cluster's name says 40 words; the prompt
+     the spec gives is 24, so the label says 24. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x5" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<link rel="stylesheet" href="ads/ads.css" />
+<script src="../kit/kit.js"></script>
+<script src="ads/ads.js"></script>
+<style>
+  .x47-k { font-size: 30px; font-weight: 650; color: #8a909c; letter-spacing: -0.01em; }
+  .x47-count { height: 56px; padding: 0 22px; border-radius: 999px; display: inline-flex; align-items: center; font-size: 28px; font-weight: 700; white-space: nowrap; }
+
+  /* then: a small, old-style search box */
+  .x47-then { position: absolute; left: 110px; top: 494px; }
+  .x47-then .row { margin-top: 18px; display: flex; align-items: center; gap: 22px; }
+  .x47-old { display: flex; height: 78px; border-radius: 10px; box-shadow: inset 0 0 0 2px #c9ced6; background: #fff; overflow: hidden; }
+  .x47-old span { width: 330px; display: flex; align-items: center; padding: 0 22px; font-size: 32px; font-weight: 500; color: #1d222c; }
+  .x47-old em { display: grid; place-items: center; padding: 0 22px; background: #eceef2; border-left: 2px solid #c9ced6; color: #6b7280; font-style: normal; }
+  .x47-old em svg { width: 30px; height: 30px; }
+  .x47-count.two { background: #eceef2; color: #6b7280; }
+
+  /* now: the whole situation, typed into a chat box */
+  .x47-now { position: absolute; left: 110px; right: 110px; top: 740px; }
+  .x47-box { margin-top: 18px; padding: 36px 56px 36px; }
+  .x47-box.ad-card { position: relative; }
+  .x47-p { font-size: 70px; font-weight: 550; line-height: 1.86; letter-spacing: -0.03em; color: #0c1018; }
+  .x47-m { position: relative; text-decoration: underline 6px #8fb8f5; text-decoration-skip-ink: none; text-underline-offset: 14px; }
+  .x47-m::before { content: attr(data-k); position: absolute; left: 0; top: -30px; font-size: 25px; font-weight: 700; letter-spacing: 0; line-height: 1; color: #1561d6; white-space: nowrap; }
+  .x47-caret { display: inline-block; width: 6px; height: 78px; margin-left: 8px; vertical-align: -10px; border-radius: 3px; background: var(--blue); }
+  .x47-foot { margin-top: 10px; padding-top: 28px; border-top: 2px solid #f0f1f4; display: flex; align-items: center; gap: 18px; }
+  .x47-count.long { background: var(--blue); color: #fff; }
+  .x47-foot .x47-k { font-size: 28px; }
+  .x47-send { margin-left: auto; width: 84px; height: 84px; border-radius: 50%; background: var(--blue); color: #fff; display: grid; place-items: center; }
+  .x47-send svg { width: 42px; height: 42px; }
+</style>
+</head>
+<body>
+<div class="canvas ad">
+  <div class="ad-dots"></div>
+  <h1 class="ad-hl">Your buyers stopped typing two words.</h1>
+
+  <div class="x47-then">
+    <div class="x47-k">Then</div>
+    <div class="row">
+      <div class="x47-old"><span>best crm</span><em><svg><use href="#ic-search"/></svg></em></div>
+      <span class="x47-count two">2 words</span>
+    </div>
+  </div>
+
+  <div class="x47-now">
+    <div class="x47-k">Now</div>
+    <div class="ad-card x47-box">
+      <p class="x47-p">Recommend a CRM for a <span class="x47-m" data-k="team size">4-person</span> consulting firm that needs <span class="x47-m" data-k="tools">Stripe</span> recurring billing, a clean pipeline view and <span class="x47-m" data-k="deal-breakers">no bloat</span>, <span class="x47-m" data-k="budget">under $50</span> a month.<i class="x47-caret"></i></p>
+      <div class="x47-foot">
+        <span class="x47-count long">24 words</span>
+        <span class="x47-k">Ask AI</span>
+        <span class="x47-send"><svg><use href="#ic-arrow-up"/></svg></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="ad-turn">
+    <div class="ad-logo"><svg><use href="#lg-rankbox"/></svg>Rankbox</div>
+    <p>Rankbox finds the detailed questions your buyers ask and writes an answer for each.</p>
+    <div class="ad-go"><span data-offer="cta"></span><svg><use href="#ic-arrow-right"/></svg></div>
+  </div>
+</div>
+</body>
+</html>

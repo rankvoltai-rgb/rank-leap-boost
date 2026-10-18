@@ -1,0 +1,87 @@
+<!doctype html>
+<!-- Variant 3 · Cluster 22 "CAC creep", one image.
+     "Selected", blue field. Paid CAC drawn as a white-line staircase that
+     climbs one step every quarter, Q1 to Q4; under it one long flat plank,
+     the same width, "Owned answers · one flat price", is the selected thing.
+     Illustrative: no figures, no axis values. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x5" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<link rel="stylesheet" href="ads3/ads3.css" />
+<script src="../kit/kit.js"></script>
+<script src="ads/ads.js"></script>
+<script src="ads3/ads3.js"></script>
+<style>
+  .y22-top { position: absolute; left: 100px; right: 100px; top: 96px; display: flex; align-items: center; }
+  .y22-top .v3-kick { margin-left: auto; }
+  .y22-hl { position: absolute; left: 94px; right: 60px; top: 222px; font-size: 162px; text-wrap: nowrap; }
+
+  /* the staircase, white line on blue */
+  .y22-draw { position: absolute; left: 0; top: 0; width: 1600px; height: 2000px; pointer-events: none; }
+  .y22-q { position: absolute; width: 335px; text-align: center; font-size: 44px; font-weight: 760; letter-spacing: -0.03em; color: #fff; }
+  .y22-lab { position: absolute; left: 100px; top: 800px; }
+  .y22-lab b { display: block; font-size: 84px; font-weight: 780; letter-spacing: -0.05em; line-height: 1; color: #fff; }
+  .y22-lab i { display: inline-flex; align-items: center; gap: 10px; margin-top: 22px; height: 52px; padding: 0 22px; border-radius: 999px; border: 3px solid rgba(255, 255, 255, 0.75); font-style: normal; font-size: 26px; font-weight: 650; color: #fff; }
+  .y22-up { position: absolute; display: inline-flex; align-items: center; gap: 10px; height: 60px; padding: 0 24px; border-radius: 999px; background: #fff; color: var(--v3-blue); font-size: 30px; font-weight: 750; letter-spacing: -0.01em; }
+  .y22-up svg { width: 30px; height: 30px; }
+
+  /* the plank: the selection */
+  .y22-plank.v3-pick { position: absolute; left: 160px; width: 1340px; top: 1466px; height: 140px; margin: 0; padding: 0 48px; display: flex; align-items: center; justify-content: space-between; border-radius: 6px; --k: 34px; --st: 6px; }
+  /* the start knob sits on the plank's lit top face: ring it in blue so it stays crisp */
+  .y22-plank.v3-pick::before { width: 42px; left: -21px; top: -42px;
+    background: radial-gradient(circle closest-side, #fff 66%, var(--v3-blue) 70%, var(--v3-blue) 95%, transparent 100%) 50% 0 / 42px 42px no-repeat,
+                linear-gradient(#fff, #fff) 50% 0 / 6px 100% no-repeat; }
+  .y22-plank b { font-size: 62px; font-weight: 780; letter-spacing: -0.045em; line-height: 1; }
+  .y22-plank em { font-style: normal; font-size: 30px; font-weight: 650; letter-spacing: -0.01em; color: var(--v3-ink-2); }
+</style>
+</head>
+<body>
+<div class="canvas v3 blue">
+  <div class="v3-wash"></div>
+  <div class="v3-grid"></div>
+
+  <div class="y22-top">
+    <span class="v3-logo"><svg><use href="#lg-rankbox"/></svg>Rankbox</span>
+    <span class="v3-kick">Board update · Q4</span>
+  </div>
+  <h1 class="v3-hl y22-hl">CAC went up again<br />this quarter.</h1>
+
+  <svg class="y22-draw" viewBox="0 0 1600 2000" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <!-- treads (lit tops) and risers (receding faces), then the side profile in front -->
+    <g fill="rgba(255,255,255,0.42)">
+      <path d="M160 1200 H495 L431 1154 H96 Z" /><path d="M495 1060 H830 L766 1014 H431 Z" />
+      <path d="M830 920 H1165 L1101 874 H766 Z" /><path d="M1165 780 H1500 L1436 734 H1101 Z" />
+    </g>
+    <g fill="rgba(255,255,255,0.2)">
+      <path d="M160 1330 V1200 L96 1154 V1284 Z" /><path d="M495 1200 V1060 L431 1014 V1154 Z" />
+      <path d="M830 1060 V920 L766 874 V1014 Z" /><path d="M1165 920 V780 L1101 734 V874 Z" />
+    </g>
+    <path d="M160 1330 V1200 H495 V1060 H830 V920 H1165 V780 H1500 V1330 Z" fill="rgba(255,255,255,0.1)" />
+  </svg>
+
+  <div class="y22-q" style="left:160px; top:1238px">Q1</div>
+  <div class="y22-q" style="left:495px; top:1238px">Q2</div>
+  <div class="y22-q" style="left:830px; top:1238px">Q3</div>
+  <div class="y22-q" style="left:1165px; top:1238px">Q4</div>
+
+  <div class="y22-lab"><b>Paid CAC</b><i>Illustrative</i></div>
+  <span class="y22-up" style="left:1230px; top:640px"><svg><use href="#ic-arrow-up"/></svg>Up again</span>
+
+  <svg class="y22-draw" viewBox="0 0 1600 2000" fill="none" stroke="#fff" stroke-width="6" stroke-linejoin="round">
+    <!-- the plank's top face and end grain, same depth as the stairs -->
+    <path d="M160 1466 H1500 L1436 1420 H96 Z" fill="rgba(255,255,255,0.42)" />
+    <path d="M160 1466 V1606 L96 1560 V1420 Z" fill="rgba(255,255,255,0.2)" />
+  </svg>
+  <div class="v3-pick y22-plank"><b>Owned answers · one flat price</b><em>Q1 → Q4</em></div>
+  <i class="v3-cur w" style="left:1494px; top:1638px"></i>
+
+  <div class="v3-close">
+    <svg class="mk"><use href="#lg-rankbox"/></svg>
+    <p>Rankbox writes owned answers on autopilot.<span data-offer="line"></span></p>
+    <div class="v3-go"><span data-offer="cta"></span><svg><use href="#ic-arrow-right"/></svg></div>
+  </div>
+</div>
+</body>
+</html>

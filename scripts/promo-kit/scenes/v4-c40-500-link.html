@@ -1,0 +1,218 @@
+<!doctype html>
+<!-- Variant 4 · Cluster 40 "The $500 link", one image.
+     Replica of Thenty ("SELL DIGITAL PRODUCTS WITH STRIPE"): a flat
+     saturated field (Thenty's orange → brand blue), a three-line heavy caps
+     headline top-left with a logo tile set into a line (here a white tile
+     with the dashboard's Backlinks glyph, no third-party mark), and the app
+     window bleeding off the right and bottom: top bar, page sidebar, a
+     tinted strip, and a split card (Thenty's dark order summary → a light
+     blue credits summary; its payment form → "Pages you want links to"),
+     with the black arrow cursor on one row, here lifted out of the card.
+     The app is Rankbox's Backlinks page (real tabs and labels); the credits
+     are the Business plan's 30 backlink credits. No link outcomes are shown:
+     only states the app has (Verified, Waiting for a relevant host, 1 link in
+     progress). $508.95 is the price SEO pros called acceptable in the
+     Editorial.Link survey, so it's marked "(survey average)" with the
+     source. Backlinks is rolling out: flag before paid use. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x5" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<link rel="stylesheet" href="ads4/ads4.css" />
+<script src="../kit/kit.js"></script>
+<script src="ads/ads.js"></script>
+<script src="ads4/ads4.js"></script>
+<style>
+  .y40-field { position: absolute; inset: 0; z-index: -3;
+    background: radial-gradient(1200px 820px at 16% 6%, #2a84f7 0%, rgba(42, 132, 247, 0) 70%), #1877f2; }
+
+  /* ---- headline */
+  .y40-hl { position: absolute; left: 78px; top: 96px; font-size: 132px; line-height: 0.94; color: #fff; white-space: nowrap; }
+  .y40-hl .inline-tile { --bg: #fff; --fg: #1877f2; border-radius: 0.14em; margin: 0 0.13em 0 0.02em; box-shadow: 0 10px 24px -12px rgba(4, 30, 100, 0.55); }
+  .y40-hl .inline-tile > svg { width: 0.56em; height: 0.56em; }
+  .y40-hl small { display: inline-block; margin-left: 0.2em; font-size: 38px; font-weight: 600; letter-spacing: -0.01em; text-transform: none; -webkit-text-stroke: 0; color: rgba(255, 255, 255, 0.86); vertical-align: 0.06em; }
+  .y40-hl .pd { margin: 0 -0.045em; }
+  .y40-src { position: absolute; left: 82px; top: 528px; width: 860px; font-size: 25px; font-weight: 500; line-height: 1.38; letter-spacing: -0.005em; color: rgba(255, 255, 255, 0.78); }
+
+  /* ---- the app window */
+  .y40-win { position: absolute; left: 78px; top: 664px; width: 1600px; height: 1500px; border-radius: 20px 0 0 0; background: #fff; overflow: hidden;
+    box-shadow: 0 40px 90px -36px rgba(2, 24, 80, 0.5); }
+  .y40-bar { position: absolute; left: 0; top: 0; right: 0; height: 110px; display: flex; align-items: center; padding-left: 22px; border-bottom: 2px solid #eeeff1; white-space: nowrap; }
+  .y40-menu { display: flex; align-items: center; gap: 12px; height: 62px; padding: 0 16px 0 18px; border-radius: 14px; background: #fff; box-shadow: 0 4px 12px -4px rgba(0, 0, 0, 0.18), 0 0 0 1.5px rgba(0, 0, 0, 0.05); font-size: 26px; font-weight: 650; letter-spacing: -0.025em; color: var(--v4-ink); }
+  .y40-menu svg.mk { width: 30px; height: 30px; color: var(--v4-blue); }
+  .y40-menu svg.cv { width: 22px; height: 22px; color: #7a808a; }
+  .y40-crumb { display: flex; align-items: center; gap: 14px; margin-left: 36px; padding-left: 36px; border-left: 2px solid #eceef1; height: 44px; font-size: 26px; font-weight: 600; color: #2a2e36; letter-spacing: -0.015em; }
+  .y40-crumb i { width: 40px; height: 40px; border-radius: 10px; background: var(--v4-tint); display: grid; place-items: center; color: var(--v4-blue); }
+  .y40-crumb i svg { width: 26px; height: 26px; }
+  .y40-proj { position: absolute; left: 800px; top: 0; height: 110px; display: flex; align-items: center; gap: 12px; font-size: 26px; font-weight: 600; letter-spacing: -0.015em; color: #2a2e36; }
+  .y40-proj em { font-style: normal; font-weight: 500; color: #9aa0ab; }
+  .y40-proj b { margin-left: 6px; height: 38px; padding: 0 13px; border-radius: 9px; background: var(--v4-tint); color: #1561d6; font-size: 24px; font-weight: 700; letter-spacing: 0.04em; display: grid; place-items: center; }
+
+  /* sidebar */
+  .y40-side { position: absolute; left: 0; top: 110px; width: 380px; bottom: 0; padding: 44px 22px 0; border-right: 2px solid #eeeff1; background: #fbfbfc; }
+  .y40-sec { margin: 0 16px 12px; font-size: 24px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #9aa0ab; }
+  .y40-sec.acc { margin-top: 52px; }
+  .y40-it { display: flex; align-items: center; gap: 18px; height: 74px; margin-bottom: 14px; padding: 0 18px; border-radius: 14px; font-size: 28px; font-weight: 500; letter-spacing: -0.012em; color: #4b5060; }
+  .y40-it svg { width: 30px; height: 30px; color: #8a8f99; flex: none; }
+  .y40-it.on { background: var(--v4-blue); color: #fff; font-weight: 600; box-shadow: 0 2px 4px rgba(10, 30, 70, 0.2); }
+  .y40-it.on svg { color: #fff; }
+
+  /* page */
+  .y40-main { position: absolute; left: 380px; top: 110px; right: 0; bottom: 0; background: #f3f4f6; }
+  .y40-strip { position: absolute; left: 50px; top: 46px; width: 1038px; height: 64px; display: flex; align-items: center; gap: 6px; padding: 0 12px 0 12px; border-radius: 14px; background: #dde9fb; white-space: nowrap; }
+  .y40-strip > i { width: 34px; height: 34px; margin-right: 10px; border-radius: 9px; background: var(--v4-blue); display: grid; place-items: center; color: #fff; }
+  .y40-strip > i svg { width: 22px; height: 22px; }
+  .y40-strip .tab { height: 46px; padding: 0 18px; border-radius: 10px; display: grid; place-items: center; font-size: 25px; font-weight: 600; letter-spacing: -0.01em; color: #4f7fc4; }
+  .y40-strip .tab.on { background: #fff; color: #1561d6; box-shadow: 0 2px 6px rgba(10, 40, 100, 0.12); }
+  .y40-strip .end { margin-left: auto; display: flex; align-items: center; gap: 10px; font-size: 25px; font-weight: 600; color: #1767d8; }
+  .y40-strip .end i { width: 34px; height: 34px; border-radius: 9px; background: #c7dbf8; display: grid; place-items: center; }
+  .y40-strip .end i svg { width: 20px; height: 20px; }
+
+  /* the split card */
+  .y40-card { position: absolute; left: 46px; top: 140px; width: 1046px; height: 1300px; display: flex; background: #fff; box-shadow: 0 1px 0 rgba(12, 16, 24, 0.04); }
+  .y40-sum { position: relative; width: 520px; flex: none; background: linear-gradient(180deg, #e6f0fd 0%, #edf4fe 100%); padding: 56px 58px 0 66px; }
+  .y40-form { position: relative; flex: 1; padding: 52px 46px 0 46px; }
+
+  .y40-logo { display: flex; align-items: center; gap: 12px; margin-left: -34px; font-size: 40px; font-weight: 750; letter-spacing: -0.035em; color: var(--v4-ink); }
+  .y40-logo svg { width: 24px; height: 24px; color: #6b7a92; }
+  .y40-logo i { width: 40px; height: 40px; border-radius: 11px; background: #c9dcf7; box-shadow: inset 0 0 0 2px #b6cff3; }
+  .y40-k { margin-top: 52px; font-size: 26px; font-weight: 500; color: #4f6280; letter-spacing: -0.01em; }
+  .y40-big { margin-top: 8px; font-size: 76px; font-weight: 650; letter-spacing: -0.04em; line-height: 1; color: var(--v4-ink); }
+  .y40-big small { font-size: 34px; font-weight: 550; letter-spacing: -0.02em; color: #4f6280; margin-left: 10px; }
+  .y40-hint { margin-top: 14px; font-size: 24px; color: #5a6a84; }
+  .y40-line { margin-top: 60px; display: flex; gap: 20px; }
+  .y40-line + .y40-line { margin-top: 44px; }
+  .y40-line .ico { width: 62px; height: 62px; flex: none; border-radius: 14px; background: var(--v4-blue); display: grid; place-items: center; color: #fff; box-shadow: 0 8px 16px -10px rgba(22, 103, 224, 0.8); }
+  .y40-line .ico.soft { background: #fff; color: var(--v4-blue); box-shadow: inset 0 0 0 2px #cfe0f7; }
+  .y40-line .ico svg { width: 34px; height: 34px; }
+  .y40-line .tx { flex: 1; min-width: 0; padding-top: 2px; }
+  .y40-line .tx div { display: flex; justify-content: space-between; font-size: 27px; font-weight: 650; letter-spacing: -0.015em; color: var(--v4-ink); }
+  .y40-line .tx div b { font-weight: 700; color: var(--v4-blue); }
+  .y40-line .tx div b.m { color: var(--v4-ink); }
+  .y40-line .tx p { margin-top: 6px; font-size: 24px; line-height: 1.35; color: #5a6a84; }
+  .y40-chip { margin: 50px 0 0 82px; display: inline-flex; align-items: center; gap: 10px; height: 54px; padding: 0 20px; border-radius: 12px; background: #fff; box-shadow: inset 0 0 0 2px #cfe0f7; font-size: 24px; font-weight: 650; color: var(--v4-blue); }
+  .y40-chip svg { width: 24px; height: 24px; }
+  .y40-tot { margin: 54px 0 0 82px; padding-top: 40px; border-top: 2px solid #d3e2f7; display: flex; justify-content: space-between; font-size: 28px; font-weight: 650; letter-spacing: -0.015em; color: var(--v4-ink); }
+  .y40-tot b { font-weight: 750; }
+
+  /* right: the targets */
+  .y40-btn { height: 92px; border-radius: 14px; background: var(--v4-btn); color: #fff; display: flex; align-items: center; justify-content: center; gap: 14px; font-size: 30px; font-weight: 650; letter-spacing: -0.015em; box-shadow: 0 14px 26px -16px rgba(22, 111, 229, 0.9); }
+  .y40-btn svg { width: 30px; height: 30px; }
+  .y40-or { margin-top: 30px; display: flex; align-items: center; gap: 18px; font-size: 24px; font-weight: 600; color: #9aa0ab; letter-spacing: 0.04em; }
+  .y40-or::before, .y40-or::after { content: ""; flex: 1; height: 2px; background: #eceef1; }
+  .y40-h { margin-top: 46px; font-size: 29px; font-weight: 650; letter-spacing: -0.02em; color: var(--v4-ink); }
+  .y40-sub { margin-top: 10px; font-size: 24px; line-height: 1.38; color: #6b7280; }
+  .y40-t { margin-top: 24px; padding: 24px 24px 22px; border-radius: 16px; background: #fff; box-shadow: inset 0 0 0 2px #e6e8ec; }
+  .y40-t .u { font-size: 26px; font-weight: 650; letter-spacing: -0.015em; color: var(--v4-ink); white-space: nowrap; }
+  .y40-t .pill { margin-top: 12px; display: inline-flex; align-items: center; gap: 10px; height: 42px; padding: 0 16px; border-radius: 21px; background: var(--v4-tint); color: #1561d6; font-size: 24px; font-weight: 600; white-space: nowrap; }
+  .y40-t .pill i { width: 10px; height: 10px; border-radius: 50%; background: currentColor; }
+  .y40-t .anc { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 10px; }
+  .y40-t .anc span { height: 42px; padding: 0 16px; border-radius: 21px; background: #f4f5f7; box-shadow: inset 0 0 0 1.5px #e4e6ea; display: inline-flex; align-items: center; font-size: 24px; color: #2a2f3a; white-space: nowrap; }
+  .y40-t.ghost { opacity: 0.4; }
+
+  /* the lifted row */
+  .y40-lift { left: 996px; top: 1448px; width: 584px; padding: 32px 34px 30px; border-radius: 22px; z-index: 14; transform: rotate(-2.5deg); }
+  .y40-lift .u { font-size: 31px; }
+  .y40-lift .pill { height: 48px; font-size: 26px; }
+  .y40-lift .anc { flex-wrap: nowrap; }
+  .y40-lift .anc span { height: 48px; padding: 0 15px; font-size: 24px; }
+  .y40-lift .meta { margin-top: 16px; font-size: 25px; color: #6b7280; }
+  .y40-cur { --cs: 72px; }
+</style>
+</head>
+<body>
+<div class="canvas v4">
+  <div class="y40-field"></div>
+  <div class="grain" style="--grain:.07"></div>
+
+  <h1 class="y40-hl hl-caps">One good<br /><span class="inline-tile"><svg><use href="#rb-link"/></svg></span>backlink:<br />$508<span class="pd">.</span>95<span class="pd">.</span><small>(survey average)</small></h1>
+  <p class="y40-src">Source: average acceptable price for one high-quality link, Editorial.Link survey of 518 SEO professionals, 2026</p>
+
+  <div class="y40-win">
+    <div class="y40-bar">
+      <div class="y40-menu"><svg class="mk"><use href="#lg-rankbox"/></svg>Rankbox<svg class="cv"><use href="#ic-chev-down"/></svg></div>
+      <div class="y40-crumb"><i><svg><use href="#rb-link"/></svg></i>Backlinks</div>
+      <div class="y40-proj">yoursite <em>· yoursite.com</em><b>BUSINESS</b></div>
+    </div>
+
+    <div class="y40-side">
+      <div class="y40-sec">Workspace</div>
+      <div class="y40-it"><svg><use href="#rb-pulse"/></svg>Overview</div>
+      <div class="y40-it"><svg><use href="#rb-article"/></svg>Articles</div>
+      <div class="y40-it"><svg><use href="#rb-calendar"/></svg>Calendar</div>
+      <div class="y40-it"><svg><use href="#rb-radar"/></svg>Rank</div>
+      <div class="y40-it on"><svg><use href="#rb-link"/></svg>Backlinks</div>
+      <div class="y40-it"><svg><use href="#rb-thread"/></svg>Reddit</div>
+      <div class="y40-it"><svg><use href="#rb-connect"/></svg>Integrations</div>
+      <div class="y40-sec acc">Account</div>
+      <div class="y40-it"><svg><use href="#rb-studio"/></svg>Studio</div>
+      <div class="y40-it"><svg><use href="#rb-card"/></svg>Plan &amp; Billing</div>
+      <div class="y40-it"><svg><use href="#rb-controls"/></svg>Settings</div>
+    </div>
+
+    <div class="y40-main">
+      <div class="y40-strip">
+        <i><svg><use href="#rb-link"/></svg></i>
+        <span class="tab">Overview</span><span class="tab on">Get links</span><span class="tab">Give links</span><span class="tab">Settings</span>
+        <span class="end"><i><svg><use href="#ic-check"/></svg></i>yoursite.com</span>
+      </div>
+
+      <div class="y40-card">
+        <div class="y40-sum">
+          <div class="y40-logo"><svg><use href="#ic-back"/></svg><i></i>yoursite</div>
+          <div class="y40-k">Credits to spend</div>
+          <div class="y40-big">29<small>credits</small></div>
+          <div class="y40-hint">1 held for links in progress</div>
+          <div class="y40-line">
+            <span class="ico"><svg><use href="#rb-card"/></svg></span>
+            <div class="tx">
+              <div>Monthly grant<b>+30</b></div>
+              <p>monthly plan grant · Oct 1</p>
+            </div>
+          </div>
+          <div class="y40-line">
+            <span class="ico soft"><svg><use href="#rb-link"/></svg></span>
+            <div class="tx">
+              <div>Held for a link<b class="m">−1</b></div>
+              <p>/blog/weekly-plan · Oct 3</p>
+            </div>
+          </div>
+          <div class="y40-chip"><svg><use href="#ic-check"/></svg>Domain verified</div>
+          <div class="y40-tot">Credits to spend<b>29</b></div>
+        </div>
+
+        <div class="y40-form">
+          <div class="y40-btn"><svg><use href="#ic-plus"/></svg>Add a target</div>
+                    <div class="y40-h">Pages you want links to</div>
+          <div class="y40-sub">Each target is a page on yoursite.com with a few ways to link to it.</div>
+          <div class="y40-t">
+            <div class="u">yoursite.com/features</div>
+            <div class="pill"><i></i>Waiting for a relevant host · 2 days</div>
+            <div class="anc"><span>“weekly planning tool”</span><span>“small team planner”</span></div>
+          </div>
+          <div class="y40-t ghost">
+            <div class="u">yoursite.com/blog/weekly-plan</div>
+            <div class="pill"><i></i>1 link in progress</div>
+            <div class="anc"><span>“how to plan a week”</span><span>“weekly plan guide”</span></div>
+          </div>
+          <div class="y40-t">
+            <div class="u">yoursite.com/templates</div>
+            <div class="pill"><i></i>Waiting for a relevant host · 5 days</div>
+            <div class="anc"><span>“planning templates”</span><span>“sprint plan template”</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="v4-pop y40-t y40-lift">
+    <div class="u">yoursite.com/blog/weekly-plan</div>
+    <div class="pill"><i></i>1 link in progress</div>
+    <div class="anc"><span>“how to plan a week”</span><span>“weekly plan guide”</span></div>
+    <div class="meta">Topics: planning · up to 4/month · priority 5</div>
+  </div>
+  <svg class="cur y40-cur" style="left:1338px;top:1552px"><use href="#ic-cursor"/></svg>
+</div>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!doctype html>
+<!-- Variant 3 · Cluster 35 "When did you last calculate CAC?", one image.
+     "Selected", white field. One object: a desk calculator drawn in blue
+     line, tilted, whose display reads "CAC = ?" and whose keys spell the
+     formula (Spend ÷ New customers =). Stuck over its edge, upright, the
+     selected note: "Last calculated: ?". No figures anywhere. Deliberately
+     unlike Cluster 22 (blue field, staircase): white, vertical, one object. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x5" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<link rel="stylesheet" href="ads3/ads3.css" />
+<script src="../kit/kit.js"></script>
+<script src="ads/ads.js"></script>
+<script src="ads3/ads3.js"></script>
+<style>
+  .y35-top { position: absolute; left: 100px; right: 100px; top: 96px; display: flex; align-items: center; }
+  .y35-top .v3-kick { margin-left: auto; }
+  .y35-hl { position: absolute; left: 94px; right: 60px; top: 214px; font-size: 136px; text-wrap: nowrap; }
+
+  /* the calculator */
+  .y35-calc { position: absolute; left: 380px; top: 626px; width: 840px; height: 980px; padding: 40px 46px 50px; border-radius: 70px; background: #fff; border: 6px solid var(--v3-blue); box-shadow: var(--v3-shadow); transform: rotate(-4deg); }
+  .y35-sol { display: flex; justify-content: flex-start; gap: 6px; height: 44px; padding-left: 10px; }
+  .y35-sol i { width: 48px; height: 44px; border: 4px solid var(--v3-blue); background: var(--v3-sky-2); border-radius: 6px; }
+  .y35-disp { margin-top: 26px; height: 230px; border-radius: 30px; background: var(--v3-sky); box-shadow: inset 0 0 0 4px var(--v3-line); display: flex; align-items: center; justify-content: flex-end; padding: 0 40px; font-size: 140px; font-weight: 780; letter-spacing: -0.05em; color: var(--v3-blue); white-space: nowrap; }
+  .y35-disp em { font-style: normal; margin-left: 0.18em; }
+  .y35-keys { margin-top: 36px; display: grid; grid-template-columns: repeat(4, 1fr); grid-auto-rows: 92px; gap: 20px; }
+  .y35-keys b { display: flex; align-items: center; justify-content: center; border-radius: 24px; border: 4px solid var(--v3-line); font-size: 44px; font-weight: 650; letter-spacing: -0.02em; color: var(--v3-blue); }
+  .y35-keys b.f { grid-column: span 3; justify-content: flex-start; padding-left: 34px; border: 5px solid var(--v3-blue); font-size: 46px; font-weight: 760; letter-spacing: -0.03em; }
+  .y35-keys b.o { font-size: 58px; font-weight: 600; }
+  .y35-keys b.op { background: var(--v3-blue); border-color: var(--v3-blue); color: #fff; font-size: 60px; font-weight: 700; }
+
+  /* the selected note */
+  .y35-note.v3-pick { position: absolute; right: 100px; top: 586px; margin: 0; padding: 32px 40px 34px; display: flex; align-items: center; gap: 20px; border-radius: 6px; font-size: 60px; font-weight: 780; letter-spacing: -0.04em; line-height: 1; white-space: nowrap; --k: 34px; --st: 6px; }
+  .y35-note svg { width: 56px; height: 56px; }
+</style>
+</head>
+<body>
+<div class="canvas v3">
+  <div class="v3-wash"></div>
+  <div class="v3-px"></div>
+
+  <div class="y35-top">
+    <span class="v3-logo"><svg><use href="#lg-rankbox"/></svg>Rankbox</span>
+    <span class="v3-kick">Month-end check</span>
+  </div>
+  <h1 class="v3-hl y35-hl">When did you last<br />calculate your CAC?</h1>
+
+  <div class="y35-calc">
+    <div class="y35-sol"><i></i><i></i><i></i><i></i></div>
+    <div class="y35-disp">CAC =<em>?</em></div>
+    <div class="y35-keys">
+      <b class="f">Spend</b><b class="op">÷</b>
+      <b class="f">New customers</b><b class="op">=</b>
+      <b>7</b><b>8</b><b>9</b><b class="o">×</b>
+      <b>4</b><b>5</b><b>6</b><b class="o">−</b>
+      <b>1</b><b>2</b><b>3</b><b class="o">+</b>
+    </div>
+  </div>
+
+  <div class="v3-pick y35-note"><svg><use href="#ic-clock"/></svg>Last calculated: ?</div>
+  <i class="v3-cur" style="left:1494px; top:752px"></i>
+
+  <div class="v3-close">
+    <svg class="mk"><use href="#lg-rankbox"/></svg>
+    <p>Rankbox is a fixed monthly cost that builds a channel which&nbsp;compounds.<span data-offer="line"></span></p>
+    <div class="v3-go"><span data-offer="cta"></span><svg><use href="#ic-arrow-right"/></svg></div>
+  </div>
+</div>
+</body>
+</html>

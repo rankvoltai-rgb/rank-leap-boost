@@ -1,0 +1,150 @@
+<!doctype html>
+<!-- Cluster 13 · slide 2 of 2 · The turn. The shelf space from slide 1 is
+     earned by pages, so this slide shows the pages: two posts on the
+     viewer's own store blog, the buying guide and the comparison the spec
+     names, drawn as blog cards (product world, not a dashboard). Rankbox
+     writes blog articles; it does not edit product listings or add product
+     schema, so nothing here touches a product page. No "Published to
+     Shopify": the Shopify app isn't in the App Store yet. The chips are two of
+     the six signals on the Rank page ("What AI engines look for"). The free
+     first step is the AI Search Readiness Check, with its own strings ("Page
+     URL", "Run the check"). The offer comes from ads/ads.js. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x5 9x16" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<link rel="stylesheet" href="ads/ads.css" />
+<script src="../kit/kit.js"></script>
+<script src="ads/ads.js"></script>
+<style>
+  :root { --x13-sub-y: 432px; --x13-posts-y: 640px; --x13-scan-y: 1342px; }
+  html[data-f="9x16"] { --x13-sub-y: 720px; --x13-posts-y: 930px; --x13-scan-y: 1632px; }
+
+  .x13-sub { position: absolute; left: 110px; right: 160px; top: var(--x13-sub-y); }
+  .x13-sub b { color: #0c1018; font-weight: 700; }
+
+  .x13-posts { position: absolute; left: 110px; right: 110px; top: var(--x13-posts-y); display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+  .x13-post { position: relative; overflow: hidden; }
+  .x13-cover { position: relative; height: 300px; background: linear-gradient(180deg, #f6f4f1, #edeae4); border-radius: 36px 36px 0 0; }
+  .x13-cover svg { position: absolute; left: 50%; top: 50%; width: 616px; height: 231px; transform: translate(-50%, -50%); overflow: visible; }
+  .x13-vs { position: absolute; left: 50%; top: 50%; width: 84px; height: 84px; margin: -36px 0 0 -42px; border-radius: 50%; background: #fff; display: grid; place-items: center; font-size: 32px; font-weight: 750; letter-spacing: -0.02em; color: #0c1018; box-shadow: 0 0 0 2px #e6e8ec, 0 10px 22px -10px rgba(12, 30, 70, 0.35); }
+  .x13-body { padding: 30px 38px 38px; }
+  .x13-meta { display: flex; align-items: center; gap: 16px; }
+  .x13-kind { height: 50px; padding: 0 20px; border-radius: 999px; background: #e8f1ff; color: #1561d6; display: inline-flex; align-items: center; font-size: 27px; font-weight: 650; letter-spacing: -0.01em; white-space: nowrap; }
+  .x13-url { font-size: 27px; font-weight: 500; color: #8a909c; white-space: nowrap; }
+  .x13-title { margin-top: 20px; font-size: 46px; font-weight: 700; letter-spacing: -0.03em; line-height: 1.12; color: #0c1018; text-wrap: balance; }
+  .x13-sig { margin-top: 22px; display: flex; flex-wrap: wrap; gap: 10px; }
+  .x13-sig span { height: 50px; padding: 0 18px; border-radius: 999px; background: #f1f3f6; color: #3a4252; display: inline-flex; align-items: center; gap: 8px; font-size: 25px; font-weight: 600; white-space: nowrap; }
+  .x13-sig svg { width: 22px; height: 22px; color: var(--blue); }
+
+  .x13-scan { left: 110px; right: 110px; top: var(--x13-scan-y); padding: 38px 40px; display: grid; grid-template-columns: 96px 1fr; column-gap: 28px; align-items: center; }
+  .x13-scan .ic { width: 96px; height: 96px; border-radius: 28px; background: #e8f1ff; color: var(--blue); display: grid; place-items: center; }
+  .x13-scan .ic svg { width: 56px; height: 56px; }
+  .x13-scan h2 { font-size: 46px; font-weight: 750; letter-spacing: -0.03em; color: #0c1018; line-height: 1.1; }
+  .x13-scan h2 span { display: block; margin-top: 8px; font-size: 30px; font-weight: 500; letter-spacing: -0.012em; color: #6b7280; }
+  .x13-field { grid-column: 1 / -1; margin-top: 30px; display: flex; gap: 16px; }
+  .x13-field .in { flex: 1; height: 96px; padding: 0 30px; border-radius: 22px; background: #f4f5f7; box-shadow: inset 0 0 0 2px #e4e7ec; display: flex; align-items: center; gap: 16px; font-size: 36px; font-weight: 500; color: #1d222c; letter-spacing: -0.015em; }
+  .x13-field .in em { font-style: normal; font-size: 27px; font-weight: 600; color: #8a909c; }
+  .x13-field .in i { width: 3px; height: 44px; background: var(--blue); display: block; margin-left: -10px; }
+  .x13-field .run { height: 96px; padding: 0 36px; border-radius: 22px; background: #e8f1ff; color: #1561d6; box-shadow: inset 0 0 0 2px #cfe0fb; display: flex; align-items: center; gap: 12px; font-size: 34px; font-weight: 700; letter-spacing: -0.02em; white-space: nowrap; }
+  .x13-field .run svg { width: 34px; height: 34px; }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <filter id="x13-soft" x="-20%" y="-200%" width="140%" height="500%"><feGaussianBlur stdDeviation="7" /></filter>
+    <radialGradient id="x13-cream" cx=".45" cy=".4" r=".7"><stop offset="0" stop-color="#fbf8f2"/><stop offset=".75" stop-color="#ece5d8"/><stop offset="1" stop-color="#d9d0c0"/></radialGradient>
+    <!-- oat stoneware: the viewer's own products, no brand -->
+    <linearGradient id="x13-oat-side" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#9c8c72"/><stop offset=".28" stop-color="#e3d8c4"/><stop offset=".6" stop-color="#c9baa1"/><stop offset="1" stop-color="#8f7f66"/></linearGradient>
+    <linearGradient id="x13-oat-lid" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#eee5d4"/><stop offset="1" stop-color="#c3b296"/></linearGradient>
+    <!-- stainless steel -->
+    <linearGradient id="x13-st-side" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#6f7782"/><stop offset=".26" stop-color="#eef0f3"/><stop offset=".5" stop-color="#a9b0b9"/><stop offset=".74" stop-color="#dfe3e8"/><stop offset="1" stop-color="#666e79"/></linearGradient>
+    <radialGradient id="x13-st-in" cx=".42" cy=".38" r=".75"><stop offset="0" stop-color="#f7f8fa"/><stop offset=".55" stop-color="#cdd2d9"/><stop offset="1" stop-color="#9aa2ad"/></radialGradient>
+    <linearGradient id="x13-st-handle" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#e3e6ea"/><stop offset="1" stop-color="#8d95a0"/></linearGradient>
+
+    <!-- Buying guide cover: a pan, a lidded pot and a saucepan -->
+    <symbol id="x13-guide" viewBox="0 54 570 200" overflow="visible">
+      <ellipse cx="290" cy="226" rx="240" ry="13" fill="#3a3020" opacity=".16" filter="url(#x13-soft)"/>
+      <g transform="rotate(14 74 100)"><rect x="4" y="92" width="74" height="17" rx="8.5" fill="#9c8c72"/></g>
+      <path d="M70 100 A100 34 0 0 0 270 100 L266 118 A96 32 0 0 1 74 118 Z" fill="url(#x13-oat-side)"/>
+      <ellipse cx="170" cy="100" rx="100" ry="34" fill="#d7cab3"/>
+      <ellipse cx="170" cy="102" rx="89" ry="27" fill="url(#x13-cream)"/>
+      <rect x="188" y="146" width="26" height="15" rx="7.5" fill="#9c8c72"/>
+      <rect x="386" y="146" width="26" height="15" rx="7.5" fill="#8f7f66"/>
+      <path d="M208 132 L208 204 A92 26 0 0 0 392 204 L392 132 Z" fill="url(#x13-oat-side)"/>
+      <path d="M204 132 A96 48 0 0 1 396 132 A96 27 0 0 1 204 132 Z" fill="url(#x13-oat-lid)"/>
+      <path d="M204 132 A96 27 0 0 0 396 132" fill="none" stroke="#b3a286" stroke-width="4"/>
+      <path d="M240 112 Q274 94 316 92" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity=".55"/>
+      <rect x="288" y="76" width="24" height="14" rx="4" fill="#8f7f66"/>
+      <ellipse cx="300" cy="76" rx="21" ry="8" fill="#b3a286"/>
+      <g transform="rotate(-16 505 150)"><rect x="505" y="143" width="58" height="15" rx="7.5" fill="#8f7f66"/></g>
+      <path d="M399 152 L399 204 A56 17 0 0 0 511 204 L511 152 Z" fill="url(#x13-oat-side)"/>
+      <ellipse cx="455" cy="152" rx="56" ry="17" fill="#d7cab3"/>
+      <ellipse cx="455" cy="153" rx="48" ry="13" fill="url(#x13-cream)"/>
+    </symbol>
+
+    <!-- Comparison cover: a ceramic pan and a stainless pan -->
+    <symbol id="x13-versus" viewBox="-12 64 600 160" overflow="visible">
+      <ellipse cx="280" cy="206" rx="250" ry="13" fill="#2a2e35" opacity=".16" filter="url(#x13-soft)"/>
+      <g transform="rotate(12 40 136)"><rect x="-26" y="127" width="70" height="18" rx="9" fill="#9c8c72"/></g>
+      <path d="M36 136 A112 38 0 0 0 260 136 L254 158 A106 35 0 0 1 42 158 Z" fill="url(#x13-oat-side)"/>
+      <ellipse cx="148" cy="136" rx="112" ry="38" fill="#d7cab3"/>
+      <ellipse cx="148" cy="139" rx="100" ry="31" fill="url(#x13-cream)"/>
+      <path d="M78 126 Q112 114 156 113" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity=".75"/>
+      <g transform="rotate(-12 520 136)"><rect x="516" y="129" width="76" height="13" rx="6.5" fill="url(#x13-st-handle)"/><circle cx="580" cy="135.5" r="3.6" fill="#eceae5"/></g>
+      <path d="M300 136 A112 38 0 0 0 524 136 L518 158 A106 35 0 0 1 306 158 Z" fill="url(#x13-st-side)"/>
+      <ellipse cx="412" cy="136" rx="112" ry="38" fill="#c9ced5"/>
+      <ellipse cx="412" cy="139" rx="102" ry="32" fill="url(#x13-st-in)"/>
+      <ellipse cx="412" cy="141" rx="60" ry="17" fill="none" stroke="#fff" stroke-width="2" opacity=".5"/>
+      <path d="M340 126 Q374 114 418 113" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity=".8"/>
+    </symbol>
+  </defs>
+</svg>
+
+<div class="canvas ad">
+  <div class="ad-dots"></div>
+  <div class="ad-top">
+    <div class="ad-prog"><i class="on"></i><i class="on"></i></div>
+    <div class="ad-step">The free shelf space</div>
+    <div class="ad-logo"><svg><use href="#lg-rankbox"/></svg>Rankbox</div>
+  </div>
+  <h1 class="ad-hl">The shelf space<br />that doesn’t bill per click.</h1>
+  <p class="ad-sub x13-sub"><b>Rankbox writes the buying guides and comparisons</b> those questions land on, for your store’s blog.</p>
+
+  <div class="x13-posts">
+    <div class="ad-card flow x13-post">
+      <div class="x13-cover"><svg><use href="#x13-guide"/></svg></div>
+      <div class="x13-body">
+        <div class="x13-meta"><span class="x13-kind">Buying guide</span><span class="x13-url">yourstore.com/blog</span></div>
+        <div class="x13-title">Best Ceramic Cookware Under $150</div>
+        <div class="x13-sig"><span><svg><use href="#ic-check"/></svg>Answers up front</span><span><svg><use href="#ic-check"/></svg>Cites sources</span></div>
+      </div>
+    </div>
+    <div class="ad-card flow x13-post">
+      <div class="x13-cover"><svg><use href="#x13-versus"/></svg><span class="x13-vs">vs</span></div>
+      <div class="x13-body">
+        <div class="x13-meta"><span class="x13-kind">Comparison</span><span class="x13-url">yourstore.com/blog</span></div>
+        <div class="x13-title">Ceramic vs Stainless Steel: Which Lasts?</div>
+        <div class="x13-sig"><span><svg><use href="#ic-check"/></svg>Clear sections</span><span><svg><use href="#ic-check"/></svg>Cites sources</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ad-card x13-scan">
+    <span class="ic"><svg><use href="#ic-gauge"/></svg></span>
+    <h2>Scan your store’s AI readiness, free.<span>AI Search Readiness Check · about ten seconds</span></h2>
+    <div class="x13-field">
+      <div class="in"><em>Page URL</em>yourstore.com<i></i></div>
+      <div class="run">Run the check<svg><use href="#ic-arrow-right"/></svg></div>
+    </div>
+  </div>
+
+  <div class="ad-offer">
+    <div class="ad-terms"><b data-offer="price"></b><span data-offer="articles"></span> · <span data-offer="trial"></span></div>
+    <div class="ad-go"><span data-offer="cta"></span><svg><use href="#ic-arrow-right"/></svg></div>
+  </div>
+</div>
+</body>
+</html>

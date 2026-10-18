@@ -8,7 +8,15 @@ shot with headless Chrome. Edit a scene, re-run, never hand-edit a PNG.
 ./render.sh 03-publish           # one scene
 ./render.sh 03-publish 4x5       # one scene, one format
 open gallery.html                # every scene beside its reference
+python3 export.py                # copy renders into the ad-content library
 ```
+
+`export.py` is how finished images reach the user: one folder per concept
+(Ad set / Freestyle / Product showcase), every variant of that concept inside
+it (sizes, use cases, carousel slides, dark and light), and the 2x masters in
+`high-res/`. The library path lives in the git-ignored `export-dest.txt`.
+Add each new concept to `LIBRARY` in `export.py` and re-run it after
+rendering. Images are delivered as plain folders, never zips.
 
 | Format | Use | Output |
 | --- | --- | --- |
@@ -47,6 +55,15 @@ references sit in `refs/` (git-ignored: other companies' art, local only);
 | `08-framer-editor` | Rank Framer sites in AI search (light) | 4x3 4x5 |
 | `09`–`35` | Round 2: one scene per reference 11–37 (see `gallery.html`) | 4x3 |
 | `36-linkedin-banner` | Get AI traffic on autopilot (no reference: the kit's style on LinkedIn's banners) | li lic |
+| `f01-buyers-ask-ai` | Freestyle (no reference): your customers are asking AI, Rankbox writes the answers. Local-business use case (SF BBQ) | 4x3 |
+| `f02-month-*` | Freestyle Reel: paste your website, get a month of content (onboarding's three steps). Variants: `bbq` restaurant, `coffee` store, `saas`, `dental`. Built from `scenes/f02/` | 9x16 |
+| `f03-autopilot-orbit` | Freestyle, universal: Get AI traffic on autopilot. Ten answer engines orbiting the Autopilot settings, bright blue, no dark elements | 4x5 9x16 |
+| `f04-receipt` | Freestyle, universal: a month of content for less than one freelance article. The old content budget crossed out on a receipt | 4x5 9x16 |
+| `c2-geo-1`…`4` | Ad set, Cluster 2 (GEO): a four-slide explainer carousel. Light-grey, one accent, no third-party logos; the offer is one `OFFER` constant in slide 4 | 4x5 |
+| `c03`…`c47-*` | Ad set, the other 21 briefed clusters (3, 6, 9–13, 15, 20, 22–24, 29, 30, 33–36, 40, 45, 47): carousels and singles in the same system as Cluster 2 (`scenes/ads/`), one verified number with its source each. Ad copy and the build spec live in git-ignored `brief/` | 4x5, some 9x16 |
+| `v2-c*` | Ad set, variant type 2: one single image per cluster in the kit's earlier look (blue fields, floating tiles, tilted panels), AI logos only pixelated or blurred (`scenes/ads2/`). Exported into each cluster's `Variant 2 - single image/` folder | 4x5 |
+| `v3-c*` | Ad set, variant type 3 "Selected": the lead's own campaign. One poster per cluster in brand blue and white only (no dark colours), the one thing that matters selected like text (`.v3-pick`), AI logos as two-colour mosaics (`scenes/ads3/`). `python3 scenes/ads3/palette.py <png>` checks the palette. Exported into `Variant 3 - blue and white/` | 4x5 |
+| `v4-c*` | Ad set, variant type 4 "Replica": each cluster replicates one of the user's SaaS reference ads (FeedSpring, Formflow, Noteframe, Outseta, Consentbit and the round 1–2 refs) with real Rankbox UI from FACTS.md as the hero (`scenes/ads4/`, spec in git-ignored `brief/variant4-spec.md`). Exported into `Variant 4 - SaaS replica/`. Variant 3 is on hold (`EXPORT_V3`) | 4x5 |
 
 ## How it fits together
 

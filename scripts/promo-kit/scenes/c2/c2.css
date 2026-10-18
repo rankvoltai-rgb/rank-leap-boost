@@ -1,0 +1,50 @@
+/*
+ * Cluster 2 · "The new name for the game" (GEO). A four-slide explainer
+ * carousel, 4x5 (1600 x 2000 canvas → 1080 x 1350).
+ *
+ * The brief's visual system: light-grey SaaS surface, white cards, one accent
+ * (electric blue), data-forward, like a product screenshot someone shared.
+ * No third-party logos or copied AI/search UI: the answer box and results
+ * page are drawn generic on purpose. Rankbox doesn't appear on slide 1.
+ */
+.canvas { background: #f2f3f5; }
+.c2-dots {
+  position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background-image: radial-gradient(rgba(12, 16, 24, 0.07) 1.6px, transparent 2px);
+  background-size: 28px 28px;
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, rgba(0, 0, 0, 0.25) 60%, transparent 100%);
+          mask-image: linear-gradient(180deg, #000 0%, rgba(0, 0, 0, 0.25) 60%, transparent 100%);
+}
+
+/* the carousel's own chrome: progress, step name, logo from slide 2 on */
+.c2-top { position: absolute; left: 110px; right: 110px; top: 92px; display: flex; align-items: center; gap: 28px; }
+.c2-prog { display: flex; gap: 10px; }
+.c2-prog i { width: 66px; height: 9px; border-radius: 99px; background: #d9dde3; display: block; }
+.c2-prog i.on { background: var(--blue); }
+.c2-step { font-size: 30px; font-weight: 600; color: #6b7280; letter-spacing: -0.01em; }
+.c2-logo { margin-left: auto; display: flex; align-items: center; gap: 12px; font-size: 36px; font-weight: 600; letter-spacing: -0.03em; color: #0c1018; }
+.c2-logo svg { width: 38px; height: 38px; color: var(--blue); }
+
+.c2-hl { position: absolute; left: 104px; right: 104px; top: 186px; font-size: 104px; font-weight: 700; letter-spacing: -0.048em; line-height: 1.02; color: #0c1018; text-wrap: balance; }
+.c2-hl .dim { color: #8a909c; }
+.c2-hl .blue { color: var(--blue); }
+
+.c2-swipe { position: absolute; right: 110px; bottom: 84px; display: flex; align-items: center; gap: 12px; font-size: 30px; font-weight: 600; color: #6b7280; }
+.c2-swipe svg { width: 34px; height: 34px; }
+.c2-src { position: absolute; left: 110px; bottom: 90px; font-size: 26px; font-weight: 500; color: #8a909c; letter-spacing: -0.005em; }
+
+/* a white surface, like a shared screenshot */
+.c2-card {
+  position: absolute; background: #fff; border-radius: 36px;
+  box-shadow: 0 0 0 2px #e6e8ec, 0 40px 80px -40px rgba(12, 30, 70, 0.25), 0 12px 30px -18px rgba(12, 30, 70, 0.14);
+}
+
+/* the stylised answer box (generic, not any engine's UI) */
+.c2-answer { border-radius: 26px; background: #f2f7ff; box-shadow: inset 0 0 0 2px #cfe0fb; padding: 34px 38px 36px; }
+.c2-answer .lab { display: flex; align-items: center; gap: 12px; font-size: 29px; font-weight: 700; color: #1561d6; letter-spacing: -0.01em; }
+.c2-answer .lab svg { width: 34px; height: 34px; color: var(--blue); }
+.c2-answer p { margin-top: 18px; font-size: 38px; line-height: 1.42; font-weight: 500; color: #1d222c; letter-spacing: -0.015em; }
+.c2-answer p b { font-weight: 750; color: #0c1018; }
+.c2-chips { margin-top: 22px; display: flex; gap: 12px; }
+.c2-chips span { height: 54px; padding: 0 20px; border-radius: 999px; background: #fff; box-shadow: inset 0 0 0 2px #d9e6fa; display: inline-flex; align-items: center; gap: 10px; font-size: 26px; font-weight: 600; color: #3a4252; }
+.c2-chips span i { width: 22px; height: 22px; border-radius: 50%; background: #c9d9f5; display: block; }

@@ -1,0 +1,122 @@
+<!doctype html>
+<!-- Cluster 33 · single image · "Rank #1, still invisible" (AI Overviews).
+     They won the ranking war and lost anyway: on a phone, the AI answer
+     swallows the screen and cites three other brands (Taskwren, Quillvane,
+     Stackmere: invented, no company found, 2026-10-04). The screen ends at a
+     dashed fold that runs across the whole ad; the page carries on past the
+     phone's edge as a ghost, and that's where the viewer's #1 result sits,
+     dimmed. Generic search and answer UI, no engine's logo or layout. Almost
+     no text: the headline, the phone, and the .ad-turn band, the only place
+     Rankbox appears. No number on this ad. Overlaps Cluster 2's opening: run
+     one per ad set. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x5 9x16" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<link rel="stylesheet" href="ads/ads.css" />
+<script src="../kit/kit.js"></script>
+<script src="ads/ads.js"></script>
+<style>
+  /* Headline in the left column, its last line resting on the fold. */
+  .x33-hl { right: auto; width: 600px; top: auto; --hl-size: 128px; line-height: 0.98; }
+
+  /* The phone bleeds off the top edge, so it can be full size. */
+  .x33-phone { left: 736px; top: -330px; --pw: 790px; --ph: 1640px; }
+  .x33-screen { padding: 0 32px; }
+  .x33-screen .ad-phone-bar { margin: 0 -32px; padding: 0 64px; }
+  .x33-search { margin-top: 284px; display: flex; align-items: center; gap: 16px; height: 86px; padding: 0 28px; border-radius: 999px; box-shadow: inset 0 0 0 2px #e3e6eb; font-size: 30px; font-weight: 500; color: #1d222c; letter-spacing: -0.015em; white-space: nowrap; }
+  .x33-search svg { width: 34px; height: 34px; color: #8a909c; flex: none; }
+
+  .x33-answer { margin-top: 24px; height: 1200px; padding: 34px 34px 0; position: relative; overflow: hidden; }
+  .x33-answer p { margin-top: 16px; font-size: 34px; line-height: 1.4; }
+  .x33-list { margin-top: 26px; list-style: none; display: grid; gap: 26px; }
+  .x33-list li { display: grid; grid-template-columns: 56px 1fr; column-gap: 20px; align-items: start; font-size: 31px; line-height: 1.32; font-weight: 500; color: #4a5160; letter-spacing: -0.015em; }
+  .x33-list li b { display: block; font-size: 35px; font-weight: 750; color: #0c1018; letter-spacing: -0.022em; }
+  .x33-list li i { width: 56px; height: 56px; border-radius: 16px; background: #fff; box-shadow: inset 0 0 0 2px #d9e6fa; display: grid; place-items: center; font-style: normal; font-size: 27px; font-weight: 750; color: #1561d6; }
+  .x33-src { margin-top: 34px; font-size: 25px; font-weight: 650; color: #6b7280; letter-spacing: 0.02em; }
+  .x33-answer .ad-chips { margin-top: 14px; flex-wrap: nowrap; gap: 10px; }
+  .x33-answer .ad-chip { height: 56px; padding: 0 18px; font-size: 26px; gap: 9px; }
+  .x33-answer .ad-chip i { width: 20px; height: 20px; background: #b9cff3; }
+  /* and the answer keeps going */
+  .x33-more { margin-top: 40px; display: grid; gap: 20px; }
+  .x33-more i { display: block; height: 22px; border-radius: 99px; background: #dce7f8; }
+
+  /* Fold and ghost come before the phone in the markup, so the phone sits
+     on top of both. */
+  /* The fold: one dashed rule across the whole ad, level with the bottom of
+     the phone's screen. */
+  .x33-fold { position: absolute; left: 110px; right: 0; height: 0; border-top: 4px dashed #a3abb8; }
+  .x33-fold span { position: absolute; left: 0; top: 18px; font-size: 25px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: #8a909c; }
+
+  /* Below it the page carries on outside the phone: a ghost of the screen
+     holding the viewer's #1 result, dimmed. */
+  .x33-ghost { position: absolute; left: 762px; width: 738px; height: 300px; border-radius: 0 0 40px 40px; background: rgba(255, 255, 255, 0.55); box-shadow: inset 0 0 0 2px #e1e4ea;
+    -webkit-mask-image: linear-gradient(180deg, #000 50%, transparent 100%);
+            mask-image: linear-gradient(180deg, #000 50%, transparent 100%); }
+  .x33-res { padding: 44px 34px; }
+  .x33-rank { display: inline-flex; align-items: center; gap: 14px; height: 70px; padding: 0 28px 0 12px; border-radius: 999px; background: #e4e7ec; color: #7d8492; font-size: 32px; font-weight: 650; letter-spacing: -0.015em; }
+  .x33-rank b { height: 50px; padding: 0 14px; border-radius: 999px; background: #a3abb8; color: #fff; display: grid; place-items: center; font-weight: 800; font-size: 30px; }
+  .x33-res .t { margin-top: 20px; font-size: 33px; font-weight: 650; color: #a3a9b4; letter-spacing: -0.02em; line-height: 1.25; }
+
+  /* 9x16: a taller phone, everything that talks inside y 360–2200 */
+  html[data-f="9x16"] .x33-hl { --hl-size: 128px; }
+  html[data-f="9x16"] .x33-phone { left: 720px; top: 334px; --pw: 790px; --ph: 1436px; }
+  html[data-f="9x16"] .x33-search { margin-top: 40px; }
+  html[data-f="9x16"] .x33-answer { height: 1400px; }
+  html[data-f="9x16"] .x33-ghost { left: 746px; width: 738px; }
+</style>
+</head>
+<body>
+<div class="canvas ad">
+  <div class="ad-dots"></div>
+  <h1 class="ad-hl x33-hl" id="hl">Rank #1.<br /><span class="dim">Still below the&nbsp;fold.</span></h1>
+
+  <div class="x33-fold" id="fold"><span>The fold</span></div>
+
+  <div class="x33-ghost" id="ghost">
+    <div class="x33-res">
+      <span class="x33-rank"><b>#1</b> · yoursite.com</span>
+      <div class="t">Best Project Management Software for Small Teams</div>
+    </div>
+  </div>
+
+  <div class="ad-phone x33-phone" id="phone">
+    <div class="ad-phone-screen x33-screen">
+      <div class="ad-phone-bar"><span>9:41</span><i></i></div>
+      <div class="x33-search"><svg><use href="#ic-search"/></svg>best project management software</div>
+      <div class="ad-answer x33-answer">
+        <div class="lab"><svg><use href="#ic-sparkle"/></svg>AI answer</div>
+        <p>For most teams, three tools come up again and again:</p>
+        <ul class="x33-list">
+          <li><i>1</i><span><b>Taskwren</b>Easy to roll out across teams</span></li>
+          <li><i>2</i><span><b>Quillvane</b>Strongest for client work</span></li>
+          <li><i>3</i><span><b>Stackmere</b>Best reporting</span></li>
+        </ul>
+        <div class="ad-chips"><span class="ad-chip"><i></i>Taskwren</span><span class="ad-chip"><i></i>Quillvane</span><span class="ad-chip"><i></i>Stackmere</span></div>
+        <div class="x33-more"><i style="width: 94%"></i><i style="width: 100%"></i><i style="width: 72%"></i><i style="width: 88%"></i><i style="width: 96%"></i><i style="width: 58%"></i><i style="width: 90%"></i><i style="width: 80%"></i><i style="width: 97%"></i><i style="width: 66%"></i><i style="width: 92%"></i><i style="width: 84%"></i></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ad-turn">
+    <div class="ad-logo"><svg><use href="#lg-rankbox"/></svg>Rankbox</div>
+    <p>Be one of the sources the answer cites. Rankbox is built for that.</p>
+    <div class="ad-go">Check your site free<svg><use href="#ic-arrow-right"/></svg></div>
+  </div>
+</div>
+<script>
+  // The fold sits on the screen's bottom edge; the ghost page hangs from it,
+  // and the headline's last line rests just above it.
+  document.fonts.ready.then(() => {
+    const c = document.querySelector(".canvas").getBoundingClientRect();
+    const p = document.getElementById("phone").getBoundingClientRect();
+    const screenBottom = p.bottom - c.top - 26;
+    document.getElementById("fold").style.top = screenBottom + "px";
+    document.getElementById("ghost").style.top = screenBottom + "px";
+    const hl = document.getElementById("hl");
+    hl.style.top = (screenBottom - 56 - hl.getBoundingClientRect().height) + "px";
+  });
+</script>
+</body>
+</html>

@@ -492,6 +492,45 @@
   animation: hero-float 6s ease-in-out infinite;
 }
 
+/* Landing marquees (testimonials, feature tags): the track holds its items
+   twice, so sliding it by half lands the second copy exactly where the first
+   began and the loop never jumps. */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@utility animate-marquee {
+  animation: marquee var(--marquee-duration, 60s) linear infinite;
+}
+
+/* Landing hero entrance. Plain CSS rather than a motion component, so the
+   server-rendered copy animates in on first paint instead of sitting at
+   opacity 0 until the bundle hydrates. Each line passes its own
+   --rise-delay for the stagger. Gate it behind `motion-safe:` so reduced
+   motion shows the copy at once. */
+@keyframes hero-rise {
+  0% {
+    opacity: 0;
+    transform: translateY(14px);
+    filter: blur(6px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@utility animate-hero-rise {
+  animation: hero-rise 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: var(--rise-delay, 0s);
+}
+
 /* Hero pixels fade in and out on their own staggered cycles. Peak opacity is
    passed per-pixel as --pixel-opacity so each square keeps its own weight. */
 @keyframes pixel-blink {

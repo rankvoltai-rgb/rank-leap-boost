@@ -1,0 +1,133 @@
+<!doctype html>
+<!-- Variant 4 · Cluster 33 "Rank #1, still invisible", one image.
+     Replica of Formflow 2 ("Building any form you can imagine."): white field
+     with a soft grainy aura pooling around a frosted card on the right and a
+     strong glow under it, the app tile + wordmark, a heavy black 3-line
+     headline at the left, five tilted chips scattered bottom-left and one
+     chip dragged into the card under the hand cursor, with a blue drop line
+     (round endpoints) across the card where it lands. The card is Rankbox's
+     Rank page: "See where you rank — and what to do next" and its Next best
+     moves (real move formats and actions: Plan it, Schedule, Improve, Write
+     now). The chips are the Rank page's six "What AI engines look for"
+     signals; "Answers up front" lands on the move that's missing it. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x5" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<link rel="stylesheet" href="ads4/ads4.css" />
+<script src="../kit/kit.js"></script>
+<script src="ads/ads.js"></script>
+<script src="ads4/ads4.js"></script>
+<style>
+  .y33-lock { position: absolute; left: 110px; top: 110px; display: flex; align-items: center; gap: 18px; font-size: 44px; font-weight: 650; letter-spacing: -0.03em; }
+  .y33-lock .tile { width: 66px; height: 66px; border-radius: 16px; background: linear-gradient(160deg, #3d8ffa, #1667e0); color: #fff; display: grid; place-items: center; box-shadow: 0 10px 20px -10px rgba(22, 103, 224, 0.7); }
+  .y33-lock .tile svg { width: 40px; height: 40px; }
+  .y33-hl { position: absolute; left: 104px; top: 372px; font-size: 106px; }
+
+  /* the frosted card: Rank */
+  .y33-card { position: absolute; left: 744px; top: 220px; width: 762px; padding: 44px 36px 40px; border-radius: 36px; z-index: 5;
+    background: rgba(255, 255, 255, 0.72); -webkit-backdrop-filter: blur(28px) saturate(1.3); backdrop-filter: blur(28px) saturate(1.3);
+    box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.95), 0 0 0 1.5px rgba(30, 80, 160, 0.08), 0 60px 120px -40px rgba(22, 90, 200, 0.45), 0 20px 40px -24px rgba(22, 90, 200, 0.25); }
+  .y33-hd { display: flex; align-items: center; gap: 16px; font-size: 32px; font-weight: 650; letter-spacing: -0.02em; }
+  .y33-hd .tile { width: 54px; height: 54px; border-radius: 14px; background: var(--v4-blue); color: #fff; display: grid; place-items: center; }
+  .y33-hd .tile svg { width: 32px; height: 32px; }
+  .y33-hd .site { margin-left: auto; height: 50px; padding: 0 20px; border-radius: 25px; background: #fff; box-shadow: inset 0 0 0 2px var(--v4-line); display: inline-flex; align-items: center; gap: 10px; font-size: 24px; font-weight: 500; color: var(--v4-ink-2); letter-spacing: 0; }
+  .y33-hd .site svg { width: 24px; height: 24px; color: #8a909c; }
+  .y33-card h2 { margin-top: 40px; font-size: 48px; font-weight: 750; line-height: 1.12; letter-spacing: -0.035em; text-wrap: balance; }
+
+  .y33-stats { margin-top: 36px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .y33-stat { padding: 28px 28px 30px; border-radius: 22px; background: #fff; box-shadow: inset 0 0 0 2px var(--v4-line); }
+  .y33-stat span { display: block; font-size: 24px; font-weight: 500; color: var(--v4-ink-2); }
+  .y33-stat b { display: block; margin-top: 10px; font-size: 58px; font-weight: 750; letter-spacing: -0.04em; line-height: 1; }
+  .y33-stat .bar { margin-top: 18px; height: 12px; border-radius: 6px; background: #edf1f6; overflow: hidden; display: flex; }
+  .y33-stat .bar i { display: block; height: 100%; }
+
+  .y33-sec { margin-top: 50px; font-size: 34px; font-weight: 700; letter-spacing: -0.025em; }
+  .y33-sec + p { margin-top: 8px; font-size: 25px; line-height: 1.32; color: var(--v4-ink-2); text-wrap: pretty; }
+  .y33-moves { margin-top: 28px; display: grid; gap: 18px; }
+  .y33-mv { display: flex; align-items: center; gap: 20px; padding: 32px 24px; border-radius: 22px; background: #fff; box-shadow: inset 0 0 0 2px var(--v4-line); }
+  .y33-mv .ic { flex: none; width: 62px; height: 62px; border-radius: 16px; background: #f5f7fa; box-shadow: inset 0 0 0 2px #e8ebf0; color: #6b7280; display: grid; place-items: center; }
+  .y33-mv .ic svg { width: 30px; height: 30px; }
+  .y33-mv .tx { flex: 1; min-width: 0; }
+  .y33-mv .tx b { display: block; font-size: 29px; font-weight: 650; line-height: 1.2; letter-spacing: -0.02em; color: var(--v4-ink); }
+  .y33-mv .tx span { display: block; margin-top: 8px; font-size: 25px; line-height: 1.3; color: var(--v4-ink-2); }
+  .y33-mv .go { flex: none; height: 60px; padding: 0 24px; border-radius: 14px; display: grid; place-items: center; font-size: 26px; font-weight: 650; color: var(--v4-ink); background: #fff; box-shadow: inset 0 0 0 2px #e3e7ee; white-space: nowrap; }
+  .y33-mv .go.solid { background: var(--v4-btn); color: #fff; box-shadow: 0 12px 22px -12px rgba(22, 111, 229, 0.85); }
+
+  /* the drop indicator: blue line, round endpoints */
+  .y33-drop { position: absolute; z-index: 8; height: 6px; border-radius: 3px; background: var(--v4-blue); box-shadow: 0 0 0 4px rgba(24, 119, 242, 0.14); }
+  .y33-drop::before, .y33-drop::after { content: ""; position: absolute; top: 50%; width: 22px; height: 22px; margin-top: -11px; border-radius: 50%; background: #fff; box-shadow: inset 0 0 0 5px var(--v4-blue); }
+  .y33-drop::before { left: -11px; }
+  .y33-drop::after { right: -11px; }
+
+  /* the chips (the Rank page's six signals) */
+  .y33-chip { position: absolute; will-change: transform; display: flex; align-items: center; gap: 18px; height: 104px; padding: 0 40px 0 32px; border-radius: 22px; background: #fff; font-size: 33px; font-weight: 500; letter-spacing: -0.01em; color: var(--v4-ink); white-space: nowrap;
+    box-shadow: 0 0 0 1.5px rgba(10, 30, 70, 0.05), 0 30px 50px -24px rgba(20, 50, 120, 0.4), 0 10px 20px -12px rgba(20, 50, 120, 0.2); }
+  .y33-chip svg { width: 32px; height: 32px; color: #7a808c; }
+  .y33-chip.drag { z-index: 20; height: 120px; padding: 0 46px 0 36px; font-size: 38px; font-weight: 600; color: var(--v4-blue); box-shadow: inset 0 0 0 2.5px #8dbcfa, 0 50px 80px -30px rgba(20, 70, 170, 0.55), 0 18px 30px -14px rgba(20, 70, 170, 0.3); }
+  .y33-chip.drag svg { width: 38px; height: 38px; color: var(--v4-blue); }
+</style>
+</head>
+<body>
+<div class="canvas v4">
+  <div class="v4-field-aura"></div>
+  <!-- aura pooling around the card, a strong glow under it -->
+  <div class="v4-aura" style="left:700px; top:-200px; width:1100px; height:620px; background:#8fbcff; opacity:.55"></div>
+  <div class="v4-aura" style="left:1180px; top:500px; width:700px; height:900px; background:#6aa6ff; opacity:.42"></div>
+  <div class="v4-aura" style="left:560px; top:820px; width:520px; height:700px; background:#b7d3ff; opacity:.5"></div>
+  <div class="v4-aura" style="left:780px; top:1560px; width:900px; height:520px; background:#4d95ff; opacity:.55"></div>
+  <div class="v4-aura" style="left:880px; top:1790px; width:560px; height:220px; background:#1f74ee; opacity:.45; filter:blur(60px)"></div>
+  <div class="v4-aura" style="left:-260px; top:1700px; width:1000px; height:500px; background:#a9c9ff; opacity:.45"></div>
+  <div class="v4-aura" style="left:-220px; top:-260px; width:760px; height:420px; background:#c4dbff; opacity:.5"></div>
+  <div class="grain" style="--grain:.06"></div>
+
+  <div class="y33-lock"><span class="tile"><svg><use href="#lg-rankbox"/></svg></span>Rankbox</div>
+  <h1 class="v4-hl-heavy y33-hl">Ranking #1<br />isn’t enough<br />anymore.</h1>
+
+  <div class="y33-card">
+    <div class="y33-hd"><span class="tile"><svg><use href="#rb-radar"/></svg></span>Rank<span class="site"><svg><use href="#ic-globe"/></svg>yoursite.com</span></div>
+    <h2>See where you rank — and what to do next</h2>
+    <div class="y33-stats">
+      <div class="y33-stat"><span>Market coverage</span><b>38%</b><div class="bar"><i style="width:38%; background:var(--v4-blue)"></i><i style="width:27%; background:#9cc6fb"></i></div></div>
+      <div class="y33-stat"><span>Avg. SEO score</span><b>91</b><div class="bar"><i style="width:91%; background:var(--v4-blue)"></i></div></div>
+    </div>
+    <div class="y33-sec">Next best moves</div>
+    <p>What would grow your traffic most right now — new demand first, then fixes, then timing.</p>
+    <div class="y33-moves">
+      <div class="y33-mv"><span class="ic"><svg><use href="#rb-target"/></svg></span><div class="tx"><b>Answer “team planning tool”</b><span>1,300 searches a month · rising · no article yet</span></div><span class="go solid">Plan it</span></div>
+      <div class="y33-mv"><span class="ic"><svg><use href="#rb-calendar"/></svg></span><div class="tx"><b>Schedule “Weekly Planning Template”</b><span>The idea is ready — autopilot writes it once it’s on the schedule</span></div><span class="go">Schedule</span></div>
+      <div class="y33-mv"><span class="ic"><svg><use href="#rb-article"/></svg></span><div class="tx"><b>Strengthen “How to Run a Weekly Planning Meeting”</b><span>SEO score 64 · missing answers up front</span></div><span class="go">Improve</span></div>
+      <div class="y33-mv"><span class="ic"><svg><use href="#lg-rankbox"/></svg></span><div class="tx"><b>Publish “Taskwren Alternatives” sooner</b><span>Scheduled for Nov 3 — write it now and its visits arrive sooner</span></div><span class="go">Write now</span></div>
+    </div>
+  </div>
+
+  <div class="y33-drop" style="left:778px; top:0; width:694px" id="drop"></div>
+
+  <!-- scattered chips, bottom-left -->
+  <div class="y33-chip" style="left:150px; top:850px; transform:rotate(-6deg)"><svg><use href="#ic-help"/></svg>FAQ section</div>
+  <div class="y33-chip" style="left:96px; top:1480px; transform:rotate(4deg)"><svg><use href="#ic-list"/></svg>Clear sections</div>
+  <div class="y33-chip" style="left:170px; top:1660px; transform:rotate(-4deg)"><svg><use href="#ic-quote"/></svg>Cites sources</div>
+  <div class="y33-chip" style="left:480px; top:1560px; transform:rotate(8deg)"><svg><use href="#ic-layers"/></svg>Depth</div>
+  <div class="y33-chip" style="left:110px; top:1820px; transform:rotate(3deg)"><svg><use href="#ic-eye"/></svg>Easy to read</div>
+
+  <div class="y33-chip drag" id="drag" style="left:352px; top:0; transform:rotate(-5deg)"><svg><use href="#ic-bolt"/></svg>Answers up front</div>
+  <i class="v4-hand" id="hand" style="left:0; top:0; transform:rotate(-8deg)"></i>
+</div>
+<script>
+  // Place the drop line in the gap above the move that's missing the signal,
+  // and the dragged chip + hand just above it.
+  document.addEventListener("DOMContentLoaded", () => document.fonts.ready.then(() => {
+    const mv = document.querySelectorAll(".y33-mv")[2].getBoundingClientRect();
+    const y = Math.round(mv.top - 9 - 3);
+    const drop = document.getElementById("drop");
+    drop.style.top = y + "px";
+    const drag = document.getElementById("drag");
+    drag.style.top = (y - 128) + "px";
+    const hand = document.getElementById("hand");
+    hand.style.left = "660px";
+    hand.style.top = (y - 52) + "px";
+  }));
+</script>
+</body>
+</html>

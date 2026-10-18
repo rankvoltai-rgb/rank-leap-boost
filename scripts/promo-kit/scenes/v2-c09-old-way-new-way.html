@@ -1,0 +1,130 @@
+<!doctype html>
+<!-- Variant 2 · Cluster 9 "Old way vs. new way" (SEO agency), one image.
+     Checkout Page family (16, 17): near-black field with a faint grid, a
+     big centred headline, cards in a row. The brief's non-negotiable
+     question is the headline. Two cards carry the comparison with weight:
+     the agency proposal is heavy (dark, dense, a thick bound proposal and a
+     contract, sitting low and tipped down); Rankbox is light (white, airy,
+     one switch: the product's real "Write automatically" toggle at "every
+     day"), floating higher with a blue glow. $4,000/month and the 6-month
+     contract are the spec's fictional proposal terms (content, not a stat).
+     No fraction or ratio, no citation tracking; Rankbox's price, articles,
+     trial and CTA come from ads.js. ChatGPT and Perplexity are named in
+     text only, no marks. No agency is named. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x5" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<link rel="stylesheet" href="ads2/ads2.css" />
+<script src="../kit/kit.js"></script>
+<script src="ads/ads.js"></script>
+<script src="ads2/ads2.js"></script>
+<style>
+  html, body { background: #0e0e10; }
+  .canvas.v2 { background: #0e0e10; }
+  .y09-field { position: absolute; inset: 0; z-index: -3; background: radial-gradient(1500px 1100px at 50% 16%, #1b1a1e 0%, #141416 44%, #0e0e10 74%, #09090b 100%); }
+  .f-grid { --gs: 64px; --gl: 0.03; -webkit-mask-image: radial-gradient(80% 70% at 50% 46%, #000 25%, transparent 95%); mask-image: radial-gradient(80% 70% at 50% 46%, #000 25%, transparent 95%); }
+  .canvas.v2 .grain { --grain: 0.08; }
+
+  .y09-kick { position: absolute; left: 0; right: 0; top: 112px; text-align: center; font-size: 46px; font-weight: 600; letter-spacing: -0.025em; color: #9b9da4; }
+  .y09-hl { position: absolute; left: 90px; right: 90px; top: 196px; text-align: center; font-size: 100px; font-weight: 700; line-height: 1.02; letter-spacing: -0.05em; word-spacing: 0.02em; color: #fff; text-wrap: balance; }
+  .y09-hl em { font-style: normal; color: #5aa9ff; }
+
+  /* ------------------------------------------------ the heavy card */
+  .y09-old { position: absolute; left: 100px; top: 700px; width: 680px; height: 1180px; padding: 44px 48px; border-radius: 34px; background: #222226; color: #b9bbc1;
+    transform: rotate(-2.4deg); transform-origin: 50% 100%;
+    box-shadow: inset 0 0 0 1.5px #303036, 0 60px 90px -30px rgba(0, 0, 0, 0.9), 0 20px 30px -14px rgba(0, 0, 0, 0.7); }
+  .y09-docs { position: relative; height: 430px; }
+  /* the contract behind */
+  .y09-contract { position: absolute; left: 250px; top: -6px; width: 330px; height: 400px; padding: 30px 30px; border-radius: 10px; background: #cfd1d6; transform: rotate(5deg); box-shadow: 0 20px 30px -16px rgba(0, 0, 0, 0.7); }
+  .y09-contract b { display: block; font-size: 25px; font-weight: 700; color: #3a3d45; letter-spacing: -0.01em; }
+  .y09-contract i { display: block; margin-top: 14px; height: 9px; border-radius: 5px; background: #a9acb4; }
+  .y09-contract i:nth-of-type(3n) { width: 72%; }
+  .y09-contract i:nth-of-type(4n+1) { width: 88%; }
+  /* the bound proposal, thick */
+  .y09-binder { position: absolute; left: 10px; top: 100px; width: 330px; }
+  .y09-cover { position: relative; z-index: 2; height: 170px; padding: 28px 26px; border-radius: 8px 8px 2px 2px; background: #e2e3e7; border-top: 16px solid #55585f; }
+  .y09-cover b { display: block; font-size: 26px; font-weight: 700; color: #2c2f36; letter-spacing: -0.01em; }
+  .y09-cover i { display: block; margin-top: 14px; height: 9px; width: 80%; border-radius: 5px; background: #b3b6bd; }
+  .y09-cover i + i { width: 62%; }
+  .y09-clip { position: absolute; z-index: 3; left: 112px; top: -42px; width: 106px; height: 44px; border: 9px solid #55585f; border-bottom: 0; border-radius: 12px 12px 0 0; }
+  .y09-pages { height: 132px; margin: 0 4px; border-radius: 0 0 6px 6px; background: repeating-linear-gradient(180deg, #d4d6db 0 3px, #9fa2aa 3px 5px); box-shadow: 0 24px 34px -18px rgba(0, 0, 0, 0.85); }
+
+  .y09-lab { font-size: 36px; font-weight: 650; letter-spacing: -0.02em; color: #9b9da4; }
+  .y09-old .price { margin-top: 18px; padding-bottom: 26px; border-bottom: 2px solid #34343a; font-size: 80px; font-weight: 750; letter-spacing: -0.045em; color: #e4e5e9; line-height: 1; }
+  .y09-row { display: flex; align-items: center; gap: 22px; padding: 26px 0; border-bottom: 2px solid #34343a; font-size: 38px; font-weight: 550; letter-spacing: -0.02em; }
+  .y09-old .y09-row::before { content: ""; width: 26px; height: 4px; border-radius: 2px; background: #6b6e76; flex: none; }
+  .y09-sign { position: absolute; left: 48px; right: 48px; bottom: 50px; display: flex; align-items: center; gap: 18px; color: #6b6e76; font-size: 34px; font-weight: 600; }
+  .y09-sign::after { content: ""; flex: 1; height: 3px; background: #45464d; }
+
+  /* ------------------------------------------------ the light card */
+  .y09-new { position: absolute; left: 828px; top: 636px; width: 680px; height: 1196px; padding: 44px 48px; border-radius: 34px; background: #fff; color: #0c1018;
+    transform: rotate(1.8deg); transform-origin: 50% 0;
+    box-shadow: 0 0 0 1.5px rgba(255, 255, 255, 0.7), 0 0 120px -10px rgba(24, 119, 242, 0.55), 0 70px 120px -40px rgba(24, 119, 242, 0.6); }
+  .y09-auto { height: 350px; border-radius: 26px; background: radial-gradient(120% 90% at 50% 0%, #eaf3ff 0%, #f5f9ff 60%, #fafcff 100%); box-shadow: inset 0 0 0 2px #e1ecfb; padding: 30px 34px; display: flex; flex-direction: column; justify-content: center; }
+  .y09-auto .t { display: flex; align-items: center; gap: 14px; font-size: 28px; font-weight: 650; color: #1561d6; letter-spacing: -0.01em; }
+  .y09-auto .t svg { width: 34px; height: 34px; color: var(--blue); }
+  .y09-switch { margin-top: 24px; display: flex; align-items: center; gap: 24px; padding: 30px 30px; border-radius: 22px; background: #fff; box-shadow: 0 18px 34px -18px rgba(20, 70, 160, 0.35), 0 0 0 1.5px #e6ecf5; }
+  .y09-switch span { flex: 1; font-size: 36px; font-weight: 650; letter-spacing: -0.025em; color: #0c1018; white-space: nowrap; }
+  .y09-switch .toggle { width: 112px; height: 64px; }
+  .y09-switch .toggle::after { left: 7px; top: 7px; width: 50px; height: 50px; }
+  .y09-switch .toggle.on::after { left: 55px; }
+  .y09-pace { margin-top: 22px; padding: 0 8px; display: flex; justify-content: space-between; font-size: 30px; font-weight: 550; color: #5a6070; letter-spacing: -0.015em; }
+  .y09-pace b { color: #0c1018; font-weight: 650; }
+
+  .y09-name { margin-top: 36px; display: flex; align-items: center; gap: 16px; font-size: 40px; font-weight: 650; letter-spacing: -0.03em; color: #0c1018; }
+  .y09-name svg { width: 46px; height: 46px; color: var(--blue); }
+  .y09-new .price { margin-top: 14px; padding-bottom: 24px; border-bottom: 2px solid #eef0f3; font-size: 80px; font-weight: 750; letter-spacing: -0.045em; color: var(--blue); line-height: 1; white-space: nowrap; }
+  .y09-new .y09-row { padding: 22px 0; border-bottom-color: #eef0f3; color: #1d222c; line-height: 1.18; }
+  .y09-new .y09-row svg { width: 40px; height: 40px; color: var(--blue); flex: none; }
+  .y09-go { position: absolute; left: 48px; right: 48px; bottom: 44px; }
+  .y09-go .v2-go { justify-content: center; height: 112px; }
+  .y09-go small { display: block; margin-top: 16px; text-align: center; font-size: 27px; font-weight: 550; color: #5a6070; }
+</style>
+</head>
+<body>
+<div class="canvas v2">
+  <div class="y09-field"></div>
+  <div class="f-grid"></div>
+  <div class="grain"></div>
+
+  <div class="y09-kick">Before you hire an SEO agency, ask:</div>
+  <h1 class="y09-hl">“What’s your strategy for getting <em>cited in ChatGPT and Perplexity?</em>”</h1>
+
+  <div class="y09-old">
+    <div class="y09-docs">
+      <div class="y09-contract"><b>Service agreement</b><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      <div class="y09-binder">
+        <div class="y09-clip"></div>
+        <div class="y09-cover"><b>SEO proposal</b><i></i><i></i></div>
+        <div class="y09-pages"></div>
+      </div>
+    </div>
+    <div class="y09-lab">Agency proposal</div>
+    <div class="price">$4,000/month</div>
+    <div class="y09-row">6-month contract</div>
+    <div class="y09-row">Monthly PDF report</div>
+    <div class="y09-row">A few blog posts a month</div>
+    <div class="y09-sign">× Sign here</div>
+  </div>
+
+  <div class="y09-new">
+    <div class="y09-auto">
+      <div class="t"><svg><use href="#rb-autopilot"/></svg>Autopilot</div>
+      <div class="y09-switch"><span>Write automatically</span><i class="toggle on"></i></div>
+      <div class="y09-pace"><span>Pace</span><b>every day</b></div>
+    </div>
+    <div class="y09-name"><svg><use href="#lg-rankbox"/></svg>Rankbox</div>
+    <div class="price" data-offer="price"></div>
+    <div class="y09-row"><svg><use href="#ic-check-circle"/></svg>Cancel in one click</div>
+    <div class="y09-row"><svg><use href="#ic-check-circle"/></svg><span data-offer="articles"></span></div>
+    <div class="y09-row"><svg><use href="#ic-check-circle"/></svg><span>Scored for Google<br />and AI answers</span></div>
+    <div class="y09-go">
+      <div class="v2-go"><span data-offer="cta"></span><svg><use href="#ic-arrow-right"/></svg></div>
+      <small data-offer="trial"></small>
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!doctype html>
+<!-- Cluster 29 · slide 2 of 3 · The second tab. Same browser as slide 1, in
+     the same place, so the swipe reads as one moment: the pricing tab is
+     still open, a new tab holds a generic AI chat (no engine's UI, name or
+     logo), the prospect's question is sent and the answer hasn't arrived:
+     typing dots, then empty space where it will land. The tension lives in
+     that gap. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x5" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<link rel="stylesheet" href="ads/ads.css" />
+<script src="../kit/kit.js"></script>
+<script src="ads/ads.js"></script>
+<style>
+  .x29-win { left: 110px; top: 500px; width: 1380px; height: 1580px; }
+  .x29-fav { width: 30px; height: 30px; flex: none; }
+  .x29-tab-ai svg { width: 30px; height: 30px; color: var(--blue); flex: none; }
+  .x29-url svg { width: 30px; height: 30px; color: var(--blue); flex: none; }
+  .x29-url span { gap: 14px; color: #8a909c; }
+
+  .x29-chat { position: relative; padding: 140px 90px 0; }
+  .x29-chat .ad-q { width: fit-content; max-width: none; padding: 38px 46px; border-radius: 42px 42px 10px 42px; font-size: 60px; line-height: 1.24; font-weight: 600; letter-spacing: -0.03em; box-shadow: 0 24px 40px -24px rgba(22, 111, 229, 0.7); }
+  .x29-sent { margin-top: 18px; text-align: right; font-size: 27px; font-weight: 600; color: #9aa0ab; }
+  .x29-ai { margin-top: 96px; display: flex; align-items: center; gap: 24px; }
+  .x29-av { width: 92px; height: 92px; border-radius: 50%; background: #e8f1ff; color: var(--blue); display: grid; place-items: center; flex: none; }
+  .x29-av svg { width: 46px; height: 46px; }
+  .x29-ai .ad-typing { gap: 22px; padding: 44px 50px; border-radius: 40px 40px 40px 10px; }
+  .x29-ai .ad-typing i { width: 30px; height: 30px; }
+
+  .x29-box { position: absolute; left: 90px; right: 90px; top: 1268px; display: flex; align-items: center; gap: 20px; height: 124px; padding: 0 22px 0 44px; border-radius: 999px; box-shadow: inset 0 0 0 2px #e1e4e9, 0 18px 40px -26px rgba(12, 30, 70, 0.3); font-size: 36px; font-weight: 500; color: #9aa0ab; }
+  .x29-box span { flex: 1; }
+  .x29-box i { width: 84px; height: 84px; border-radius: 50%; background: #e6e8ec; color: #fff; display: grid; place-items: center; }
+  .x29-box i svg { width: 40px; height: 40px; }
+</style>
+</head>
+<body>
+<div class="canvas ad">
+  <div class="ad-dots"></div>
+  <div class="ad-top">
+    <div class="ad-prog"><i class="on"></i><i class="on"></i><i></i></div>
+    <div class="ad-step">The second tab</div>
+    <div class="ad-logo"><svg><use href="#lg-rankbox"/></svg>Rankbox</div>
+  </div>
+  <h1 class="ad-hl">Then they open a second tab. <span class="dim">This answer decides the sale.</span></h1>
+
+  <div class="ad-browser x29-win">
+    <div class="ad-tabs">
+      <div class="ad-tab"><svg class="x29-fav" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="6" fill="#8a909c"/><path d="M8.5 7v10h7.5" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Pricing — Loomvale</div>
+      <div class="ad-tab on x29-tab-ai"><svg><use href="#ic-sparkle"/></svg>New chat</div>
+      <div class="ad-tab new">+</div>
+    </div>
+    <div class="ad-url x29-url"><span><svg><use href="#ic-sparkle"/></svg>AI assistant</span></div>
+
+    <div class="x29-chat">
+      <div class="ad-q">Is Loomvale worth it?<br />Is there anything cheaper?</div>
+      <div class="x29-sent">Sent just now</div>
+      <div class="x29-ai">
+        <span class="x29-av"><svg><use href="#ic-sparkle"/></svg></span>
+        <span class="ad-typing"><i></i><i></i><i></i></span>
+      </div>
+    </div>
+    <div class="x29-box"><span>Ask anything</span><i><svg><use href="#ic-arrow-up"/></svg></i></div>
+  </div>
+</div>
+</body>
+</html>

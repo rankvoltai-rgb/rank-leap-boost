@@ -1,0 +1,140 @@
+<!doctype html>
+<!-- Variant 2 · Cluster 6 "The invoice you regret", one image.
+     f04 energy (the freestyle receipt): bright blue field with white pixel
+     squares, a tactile paper object tilted across the frame, hand-drawn
+     blue marker, a sticker slapped on. Here the paper is a clean invoice,
+     not a thermal receipt: this month's link building retainer, a "renews
+     every month" rubber stamp, line items in words only, the $4,500.00
+     total struck through by hand. The turn is the sticker ("Put the retainer
+     into your own site."); Rankbox appears only in the close. $4,500.00 is
+     the spec's fictional invoice amount (content, not a stat); the agency
+     isn't named. No ratio, no statistic, so no source line. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x5" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<link rel="stylesheet" href="ads2/ads2.css" />
+<script src="../kit/kit.js"></script>
+<script src="ads/ads.js"></script>
+<script src="ads2/ads2.js"></script>
+<style>
+  .y06-hl { position: absolute; left: 96px; top: 100px; font-size: 104px; white-space: nowrap; }
+
+  /* ---------- the invoice ---------- */
+  .y06-wrap { position: absolute; left: 190px; top: 430px; width: 1180px; transform: rotate(-5deg); transform-origin: 50% 0;
+    filter: drop-shadow(0 50px 60px rgba(6, 46, 140, 0.45)) drop-shadow(0 12px 16px rgba(6, 46, 140, 0.25)); }
+  .y06-under { position: absolute; inset: 0; border-radius: 12px; background: #eef1f6; transform: rotate(4.5deg) translate(26px, -8px); }
+  .y06-inv { position: relative; padding: 70px 80px 56px; border-radius: 12px; background: linear-gradient(180deg, #ffffff 0%, #fbfbf8 100%); color: #12161f; font-variant-numeric: tabular-nums; }
+  .y06-inv::after { content: ""; position: absolute; left: 0; right: 0; top: 52%; height: 2px; pointer-events: none;
+    background: linear-gradient(90deg, rgba(12, 16, 24, 0), rgba(12, 16, 24, 0.05) 20%, rgba(12, 16, 24, 0.05) 80%, rgba(12, 16, 24, 0)); }
+
+  .y06-title { font-size: 90px; font-weight: 750; letter-spacing: -0.045em; line-height: 0.95; color: #0c1018; }
+  .y06-from { margin-top: 16px; font-size: 32px; font-weight: 500; color: #6b7280; letter-spacing: -0.012em; }
+
+  /* rubber stamp */
+  .y06-stamp { position: absolute; right: 76px; top: 70px; padding: 14px 26px; border: 6px solid #2b3446; border-radius: 14px; color: #2b3446; transform: rotate(9deg); opacity: .62; text-align: center;
+    font-size: 30px; font-weight: 800; letter-spacing: 0.1em; line-height: 1.12; text-transform: uppercase;
+    -webkit-mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.55' numOctaves='2' seed='3'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -2.6 2.1'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+            mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.55' numOctaves='2' seed='3'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -2.6 2.1'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); }
+  .y06-stamp::before { content: ""; position: absolute; inset: 6px; border: 2.5px solid #2b3446; border-radius: 8px; }
+
+  .y06-meta { margin-top: 48px; display: grid; grid-template-columns: 1fr 1fr; gap: 30px; padding: 28px 0; border-top: 2.5px solid #eceef1; border-bottom: 2.5px solid #eceef1; }
+  .y06-meta span { display: block; font-size: 25px; font-weight: 650; letter-spacing: 0.08em; text-transform: uppercase; color: #9aa0ab; }
+  .y06-meta b { display: block; margin-top: 10px; font-size: 38px; font-weight: 650; letter-spacing: -0.02em; color: #12161f; white-space: nowrap; }
+
+  .y06-item { margin-top: 40px; display: flex; justify-content: space-between; align-items: baseline; gap: 30px; }
+  .y06-item b { font-size: 46px; font-weight: 700; letter-spacing: -0.025em; color: #0c1018; }
+  .y06-item em { font-style: normal; font-size: 44px; font-weight: 600; letter-spacing: -0.02em; color: #12161f; }
+  .y06-sub { margin-top: 20px; list-style: none; display: grid; gap: 12px; }
+  .y06-sub li { display: flex; align-items: center; gap: 20px; font-size: 34px; font-weight: 500; color: #5a6070; letter-spacing: -0.015em; }
+  .y06-sub li::before { content: ""; width: 11px; height: 11px; border-radius: 50%; background: #b9bec8; flex: none; }
+
+  .y06-total { margin-top: 42px; padding-top: 34px; border-top: 3px solid #12161f; display: flex; justify-content: space-between; align-items: center; }
+  .y06-total span { font-size: 42px; font-weight: 700; letter-spacing: -0.02em; color: #12161f; }
+  .y06-amt { position: relative; font-size: 160px; font-weight: 800; letter-spacing: -0.05em; line-height: 1; color: #0c1018; }
+  .y06-foot { margin-top: 38px; padding-top: 26px; border-top: 2.5px dashed #e1e4e9; font-size: 30px; font-weight: 500; color: #8a909c; }
+  .y06-ink { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+
+  /* ---------- the sticker: the turn ---------- */
+  .y06-sticker { position: absolute; z-index: 5; left: 790px; top: 1392px; padding: 34px 76px 40px 46px; border-radius: 34px; background: linear-gradient(160deg, #2f8bff, #1466e0); color: #fff;
+    transform: rotate(6deg);
+    box-shadow: 0 0 0 10px #fff, 0 40px 60px -18px rgba(3, 25, 90, 0.6), 0 14px 22px -10px rgba(3, 25, 90, 0.4); }
+  .y06-sticker b { display: block; font-size: 58px; font-weight: 800; letter-spacing: -0.04em; line-height: 1.02; white-space: nowrap; }
+  .y06-sticker::after { content: ""; position: absolute; right: -10px; bottom: -10px; width: 64px; height: 64px; border-radius: 0 0 34px 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0) 49%, #e3e9f3 50%, #ffffff 78%); box-shadow: -6px -6px 12px -6px rgba(3, 25, 90, 0.35); }
+
+  .v2-close { bottom: 96px; }
+  .v2-close p { flex: 1; font-size: 34px; font-weight: 650; line-height: 1.24; letter-spacing: -0.02em; color: #0c1018; }
+  .v2-close p span { display: block; margin-top: 10px; font-size: 26px; font-weight: 500; color: #4a5160; white-space: nowrap; }
+  .v2-close .v2-logo { color: var(--blue); }
+  .v2-close .v2-logo svg { width: 58px; height: 58px; }
+</style>
+</head>
+<body>
+<div class="canvas v2">
+  <div class="v2-field"></div>
+  <div class="v2-px"></div>
+  <div class="grain"></div>
+
+  <h1 class="v2-hl y06-hl">Paying every month for links<br /><span class="soft">nobody reads?</span></h1>
+
+  <div class="y06-wrap" id="wrap">
+    <div class="y06-under"></div>
+    <div class="y06-inv" id="paper">
+      <div class="y06-title">Invoice</div>
+      <div class="y06-from">From your link building agency</div>
+      <div class="y06-stamp">Renews<br />every month</div>
+      <div class="y06-meta">
+        <div><span>Billed to</span><b>yoursite.com</b></div>
+        <div><span>Period</span><b>October 2026</b></div>
+      </div>
+      <div class="y06-item"><b>Monthly link building retainer</b><em>$4,500.00</em></div>
+      <ul class="y06-sub">
+        <li>Guest post placements</li>
+        <li>Outreach and reporting</li>
+      </ul>
+      <div class="y06-total"><span>Total due</span><div class="y06-amt" id="amt">$4,500.00</div></div>
+      <div class="y06-foot">Next invoice: November 1</div>
+      <svg class="y06-ink" id="ink"></svg>
+    </div>
+  </div>
+
+  <div class="y06-sticker"><b>Put the retainer<br />into your own site.</b></div>
+
+  <div class="v2-close">
+    <span class="v2-logo"><svg><use href="#lg-rankbox"/></svg></span>
+    <p>Rankbox writes citable articles<br />for your site, every day.<span data-offer="line"></span></p>
+    <div class="v2-go"><span data-offer="cta"></span><svg><use href="#ic-arrow-right"/></svg></div>
+  </div>
+</div>
+<script>
+  // One thick felt-marker stroke through the total and a shorter return
+  // pass, drawn in the invoice's own space. Deterministic.
+  document.fonts.ready.then(() => {
+    const paper = document.getElementById("paper");
+    const ink = document.getElementById("ink");
+    ink.setAttribute("viewBox", `0 0 ${paper.offsetWidth} ${paper.offsetHeight}`);
+    const local = (el) => {
+      let x = 0, y = 0, n = el;
+      while (n && n !== paper) { x += n.offsetLeft; y += n.offsetTop; n = n.offsetParent; }
+      return { x, y, w: el.offsetWidth, h: el.offsetHeight };
+    };
+    const a = local(document.getElementById("amt"));
+    const y = a.y + a.h * 0.52;
+    const x0 = a.x - 50, x1 = a.x + a.w + 40, L = x1 - x0;
+    const s1 = `M${x0} ${y + 30} C${x0 + L * 0.3} ${y + 12}, ${x0 + L * 0.65} ${y - 8}, ${x1} ${y - 28}`;
+    const s2 = `M${x1 - 30} ${y - 6} C${x1 - L * 0.4} ${y + 8}, ${x0 + L * 0.3} ${y + 26}, ${x0 + 90} ${y + 44}`;
+    ink.innerHTML =
+      `<defs><filter id="felt" x="-5%" y="-60%" width="110%" height="220%">` +
+      `<feTurbulence type="fractalNoise" baseFrequency="0.04 0.5" numOctaves="2" seed="4"/>` +
+      `<feDisplacementMap in="SourceGraphic" scale="9" xChannelSelector="R" yChannelSelector="G"/></filter></defs>` +
+      `<g filter="url(#felt)" stroke-linecap="round" fill="none">` +
+      `<path d="${s1}" stroke="#1d6ff2" stroke-width="34" opacity=".9"/>` +
+      `<path d="${s1}" stroke="#0f5fd8" stroke-width="10" opacity=".22" transform="translate(0 -7)"/>` +
+      `<path d="${s2}" stroke="#1d6ff2" stroke-width="18" opacity=".78"/>` +
+      `</g>`;
+  });
+</script>
+</body>
+</html>

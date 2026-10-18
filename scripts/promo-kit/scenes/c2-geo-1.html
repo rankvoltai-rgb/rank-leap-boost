@@ -1,0 +1,87 @@
+<!doctype html>
+<!-- Cluster 2 · slide 1 of 4 · What changed. The viewer's own world: a search
+     for their category where an AI answer now sits on top and names someone
+     else (Taskwren: invented, no web presence as of 2026-10-04; the site's
+     own SaaS sample, Plannora, is a real company), and the regular
+     results, theirs still first, are squeezed underneath. Generic search and
+     answer UI, no engine's logo or layout. No Rankbox on this slide. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x5" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<link rel="stylesheet" href="c2/c2.css" />
+<script src="../kit/kit.js"></script>
+<style>
+  .s1-screen { left: 110px; top: 610px; width: 1380px; height: 1520px; padding: 40px 46px; overflow: hidden; }
+  .s1-search { display: flex; align-items: center; gap: 20px; height: 100px; padding: 0 32px; border-radius: 999px; box-shadow: inset 0 0 0 2px #e3e6eb; font-size: 38px; font-weight: 500; color: #1d222c; letter-spacing: -0.015em; }
+  .s1-search svg { width: 40px; height: 40px; color: #8a909c; }
+  .c2-answer { margin-top: 34px; }
+  .s1-why { margin-top: 20px; list-style: none; display: grid; gap: 14px; }
+  .s1-why li { display: flex; align-items: center; gap: 16px; font-size: 34px; font-weight: 500; color: #2a2f38; letter-spacing: -0.015em; }
+  .s1-why li::before { content: ""; width: 12px; height: 12px; border-radius: 50%; background: var(--blue); flex: none; }
+
+  /* the old results, squeezed under the answer */
+  .s1-results { position: relative; margin-top: 24px; transform: scaleY(0.84); transform-origin: 50% 0; }
+  .s1-res { padding: 22px 6px 24px; border-top: 2px solid #f0f1f4; }
+  .s1-res .u { font-size: 26px; font-weight: 500; color: #8a909c; }
+  .s1-res .t { margin-top: 8px; font-size: 36px; font-weight: 650; color: #1d222c; letter-spacing: -0.02em; }
+  .s1-res .sn { margin-top: 8px; font-size: 27px; color: #9aa0ab; line-height: 1.4; }
+  .s1-res.you { position: relative; }
+  .s1-res.you::before { content: ""; position: absolute; left: -22px; right: -22px; top: 6px; bottom: 6px; border-radius: 18px; box-shadow: inset 0 0 0 3px var(--blue); }
+  .s1-res.faded { opacity: .45; }
+  .s1-fade { position: absolute; left: 0; right: 0; bottom: 0; height: 300px; background: linear-gradient(180deg, rgba(255,255,255,0), #fff 80%); }
+
+  /* the "You" tag, pinned to their result */
+  .s1-you { position: absolute; z-index: 10; }
+  .s1-you svg { position: absolute; left: -8px; top: -8px; width: 54px; height: 54px; color: var(--blue); filter: drop-shadow(0 6px 10px rgba(10, 60, 160, 0.3)); }
+  .s1-you b { position: absolute; left: 38px; top: 36px; padding: 10px 26px; border-radius: 999px; background: var(--blue); color: #fff; font-size: 34px; font-weight: 650; white-space: nowrap; box-shadow: 0 10px 24px -10px rgba(10, 60, 160, 0.6); }
+
+  .c2-swipe { top: 78px; bottom: auto; z-index: 12; }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="c2-dots"></div>
+  <div class="c2-top">
+    <div class="c2-prog"><i class="on"></i><i></i><i></i><i></i></div>
+    <div class="c2-step">What changed</div>
+  </div>
+  <h1 class="c2-hl"><span class="dim">You still rank #1.</span><br />The answer above you names someone else.</h1>
+
+  <div class="c2-card s1-screen">
+    <div class="s1-search"><svg><use href="#ic-search"/></svg>best planning tool for a small team</div>
+    <div class="c2-answer">
+      <div class="lab"><svg><use href="#ic-sparkle"/></svg>AI answer</div>
+      <p>For a small team, <b>Taskwren</b> is the most recommended pick. It’s built for teams that find heavier tools too much.</p>
+      <ul class="s1-why">
+        <li>Replaces daily standups with a short digest</li>
+        <li>Sets up in an afternoon, not a quarter</li>
+        <li>Plans, tasks and deadlines in one place</li>
+      </ul>
+      <div class="c2-chips"><span><i></i>taskwren.com</span><span>+3 sources</span></div>
+    </div>
+    <div class="s1-results">
+      <div class="s1-res you" id="you"><div class="u">yoursite.com › blog</div><div class="t">The 9 Best Planning Tools for Small Teams</div><div class="sn">We compared nine planners on price, setup time and how well they scale…</div></div>
+      <div class="s1-res faded"><div class="u">another-site.com › reviews</div><div class="t">Best Project Planning Apps, Tested</div></div>
+      <div class="s1-res faded"><div class="u">forum.example › threads</div><div class="t">What do small teams use for planning?</div></div>
+      <div class="s1-res faded"><div class="u">guide.example › software</div><div class="t">Planning Software Buyer’s Guide</div></div>
+      <div class="s1-res faded"><div class="u">news.example › tools</div><div class="t">The Planning Apps Teams Switched To</div></div>
+    </div>
+    <div class="s1-fade"></div>
+  </div>
+
+  <div class="s1-you" id="tag"><svg><use href="#ic-mp"/></svg><b>You</b></div>
+  <div class="c2-swipe">Swipe<svg><use href="#ic-arrow-right"/></svg></div>
+</div>
+<script>
+  document.fonts.ready.then(() => {
+    const c = document.querySelector(".canvas").getBoundingClientRect();
+    const r = document.getElementById("you").getBoundingClientRect();
+    const tag = document.getElementById("tag");
+    tag.style.left = (r.right - c.left - 150) + "px";
+    tag.style.top = (r.top - c.top + r.height * 0.55) + "px";
+  });
+</script>
+</body>
+</html>

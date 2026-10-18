@@ -1,0 +1,214 @@
+<!doctype html>
+<!-- f01 · Your customers are asking AI. Freestyle: no reference, the kit's
+     language on a concept of its own, for the local-business use case. A
+     tilted wall of the questions people ask AI about BBQ in San Francisco,
+     coloured by the four intents the question tool returns (Informational,
+     Commercial, Comparison, Transactional). One is lifted out with the cursor
+     on "Plan it", and a connector carries it into the article it becomes,
+     drawn as the editor's own details panel (Status, Writes on, Est. traffic,
+     Competition, AI signal). The restaurant is left unnamed on purpose, so it
+     can't read as a real SF business. Today is Oct 3, 2026; Oct 8 is the
+     following Thursday. Traffic is a sample number. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x3" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<script src="../kit/kit.js"></script>
+<style>
+  :root {
+    --q-info: #5aa9ff;
+    --q-comm: #3ddc97;
+    --q-comp: #ffb547;
+    --q-tran: #b79bff;
+  }
+  .canvas { background: #030817; }
+  .field { background: radial-gradient(120% 90% at 50% 0%, #071431 0%, #030817 60%); }
+  .g1 { left: 760px; top: 720px; width: 1200px; height: 760px; background: #1559e0; --blur: 170px; opacity: .55; }
+  .g2 { left: 1180px; top: 960px; width: 600px; height: 420px; background: #4d9bff; --blur: 130px; opacity: .45; }
+  .g3 { left: -300px; top: -260px; width: 900px; height: 520px; background: #12317a; --blur: 150px; opacity: .45; }
+  .f-dots { --dl: 0.1; --ds: 26px; }
+  .grain { --grain: 0.13; }
+
+  /* ---------- copy ---------- */
+  .fs-lock { position: absolute; left: 88px; top: 74px; display: flex; align-items: center; gap: 16px; color: #fff; font-size: 36px; font-weight: 600; letter-spacing: -0.03em; }
+  .fs-lock svg { width: 46px; height: 46px; }
+  .fs-hl { position: absolute; left: 84px; top: 168px; font-size: 92px; font-weight: 700; letter-spacing: -0.047em; line-height: 1.03; word-spacing: 0.03em; white-space: nowrap; }
+  .fs-hl .q { display: block; color: #86aefc; }
+  .fs-hl .a { display: block; color: #fff; }
+  .fs-key { position: absolute; left: 90px; top: 392px; display: flex; gap: 34px; font-size: 23px; font-weight: 500; letter-spacing: -0.01em; color: #9db0d3; }
+  .fs-key span { display: inline-flex; align-items: center; gap: 11px; }
+  .fs-key i { width: 12px; height: 12px; border-radius: 50%; background: var(--c); box-shadow: 0 0 0 4px color-mix(in oklab, var(--c) 22%, transparent); }
+
+  /* ---------- the wall of questions ---------- */
+  .fs-wall {
+    position: absolute; left: -260px; top: 512px; width: 2120px;
+    display: grid; gap: 18px;
+    transform: rotate(-6deg); transform-origin: 50% 50%;
+    -webkit-mask-image: linear-gradient(90deg, transparent 4%, #000 20%, #000 82%, transparent 98%);
+            mask-image: linear-gradient(90deg, transparent 4%, #000 20%, #000 82%, transparent 98%);
+  }
+  .fs-row { display: flex; gap: 18px; white-space: nowrap; }
+  .fs-row.r1, .fs-row.r5 { opacity: .42; filter: blur(1.2px); }
+  .fs-row.r2, .fs-row.r4 { opacity: .78; }
+  .fs-q {
+    flex: none; display: inline-flex; align-items: center; gap: 14px;
+    height: 66px; padding: 0 28px 0 24px; border-radius: 999px;
+    background: rgba(140, 170, 255, 0.07);
+    box-shadow: inset 0 0 0 1.5px rgba(160, 190, 255, 0.11);
+    font-size: 25px; font-weight: 500; letter-spacing: -0.015em; color: #cdd9f3;
+  }
+  .fs-q::before { content: ""; width: 12px; height: 12px; border-radius: 50%; background: var(--c); flex: none; }
+  .fs-q.i { --c: var(--q-info); } .fs-q.c { --c: var(--q-comm); } .fs-q.p { --c: var(--q-comp); } .fs-q.t { --c: var(--q-tran); }
+  /* The one being planned: it keeps its place in the wall and is lifted out. */
+  .fs-q.pick { visibility: hidden; }
+  .fs-lift {
+    position: absolute; z-index: 20;
+    display: inline-flex; align-items: center; gap: 16px;
+    height: 80px; padding: 0 12px 0 28px; border-radius: 999px;
+    background: #fff; color: #0c1018;
+    font-size: 30px; font-weight: 650; letter-spacing: -0.02em; white-space: nowrap;
+    transform: rotate(-6deg);
+    box-shadow: 0 0 0 7px rgba(24, 119, 242, 0.32), 0 30px 60px -18px rgba(0, 0, 0, 0.75), 0 0 60px 4px rgba(24, 119, 242, 0.35);
+  }
+  .fs-lift::before { content: ""; width: 14px; height: 14px; border-radius: 50%; background: var(--q-comm); box-shadow: 0 0 0 5px rgba(61, 220, 151, 0.2); flex: none; }
+  .fs-lift .go { height: 56px; padding: 0 22px; border-radius: 999px; background: var(--blue); color: #fff; display: grid; place-items: center; font-size: 23px; font-weight: 650; letter-spacing: -0.01em; }
+
+  /* ---------- the article it becomes ---------- */
+  .fs-card {
+    position: absolute; left: 930px; top: 738px; width: 760px; height: 600px; z-index: 10;
+    border-radius: 30px; background: #fff; color: var(--ink);
+    padding: 30px 44px 0;
+    box-shadow: 0 0 0 1.5px rgba(255, 255, 255, 0.6), 0 50px 110px -30px rgba(0, 4, 20, 0.85), 0 18px 40px -20px rgba(0, 4, 20, 0.6);
+  }
+  .fs-crumb { display: flex; align-items: center; gap: 12px; height: 40px; font-size: 21px; font-weight: 500; color: #8a909c; }
+  .fs-crumb svg.mk { width: 26px; height: 26px; color: var(--blue); }
+  .fs-crumb svg.ch { width: 18px; height: 18px; color: #b3b8c2; }
+  .fs-crumb b { color: #2a2f3a; font-weight: 600; }
+  .fs-title { margin-top: 14px; width: 640px; font-size: 41px; font-weight: 750; letter-spacing: -0.035em; line-height: 1.08; }
+  .fs-chips { margin-left: 14px; display: flex; gap: 10px; }
+  .fs-chips span { height: 40px; padding: 0 16px; border-radius: 999px; display: inline-flex; align-items: center; gap: 9px; font-size: 18.5px; font-weight: 600; }
+  .fs-chips .in { background: #e3f8ee; color: #137a49; }
+  .fs-chips .in::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: #1fb56b; }
+  .fs-chips .kw { background: #f2f3f6; color: #5a6070; font-weight: 500; }
+  .fs-props { margin-top: 20px; border-top: 1.5px solid #eceef2; }
+  .fs-prop { display: flex; align-items: center; height: 51px; border-bottom: 1.5px solid #f1f2f5; font-size: 21px; }
+  .fs-prop > span:first-child { width: 220px; color: #7d838f; font-weight: 500; }
+  .fs-prop > span:last-child { font-weight: 600; color: #1d222c; display: inline-flex; align-items: center; gap: 10px; }
+  .fs-stage { height: 38px; padding: 0 15px; border-radius: 999px; background: #e8f1ff; color: #1561d6; display: inline-flex; align-items: center; gap: 9px; font-size: 18.5px; font-weight: 650; }
+  .fs-stage::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: var(--blue); }
+  .fs-mo { color: #8a909c; font-weight: 500; }
+  .fs-bars { display: inline-flex; align-items: flex-end; gap: 3px; }
+  .fs-bars i { width: 6px; border-radius: 99px; background: #e2e5ea; }
+  .fs-bars i:nth-child(1) { height: 13px; background: #1f9d57; } .fs-bars i:nth-child(2) { height: 17px; } .fs-bars i:nth-child(3) { height: 21px; }
+  .fs-bars.mid i:nth-child(1), .fs-bars.mid i:nth-child(2) { background: #e0a100; }
+  .fs-low { font-size: 17px; font-weight: 500; color: #7d838f; }
+  .fs-ai { height: 38px; padding: 0 14px; border-radius: 999px; box-shadow: inset 0 0 0 1.5px #e6e8ec; display: inline-flex; align-items: center; gap: 5px; }
+  .fs-ai svg { width: 23px; height: 23px; color: #e07a5f; }
+  .fs-ai small { margin-left: 4px; font-size: 14.5px; font-weight: 700; letter-spacing: 0.05em; color: #7d838f; }
+  .fs-write { margin-top: 26px; width: 210px; height: 66px; border-radius: 16px; background: var(--blue); color: #fff; display: grid; place-items: center; font-size: 23px; font-weight: 650; letter-spacing: -0.015em; box-shadow: 0 12px 24px -12px rgba(22, 111, 229, 0.8); }
+
+  .fs-wire { position: absolute; inset: 0; width: 1600px; height: var(--h); z-index: 15; overflow: visible; pointer-events: none; }
+  .cur { --cs: 82px; }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="field">
+    <div class="glow g3"></div>
+    <div class="glow g1"></div>
+    <div class="glow g2"></div>
+  </div>
+  <div class="f-dots"></div>
+  <div class="grain"></div>
+
+  <div class="fs-lock"><svg><use href="#lg-rankbox"/></svg>Rankbox</div>
+  <h1 class="fs-hl"><span class="q">Your customers are asking AI.</span><span class="a">Rankbox writes the answers.</span></h1>
+  <div class="fs-key">
+    <span style="--c: var(--q-info)"><i></i>Informational</span>
+    <span style="--c: var(--q-comm)"><i></i>Commercial</span>
+    <span style="--c: var(--q-comp)"><i></i>Comparison</span>
+    <span style="--c: var(--q-tran)"><i></i>Transactional</span>
+  </div>
+
+  <div class="fs-wall">
+    <div class="fs-row r1" style="margin-left: 40px">
+      <span class="fs-q i">What is Texas-style brisket?</span><span class="fs-q p">Brisket or pulled pork?</span><span class="fs-q i">How long is brisket smoked?</span><span class="fs-q t">BBQ open late near me</span><span class="fs-q c">Best ribs near the Mission?</span><span class="fs-q i">What's a burnt end?</span><span class="fs-q p">Dry rub or saucy ribs?</span>
+    </div>
+    <div class="fs-row r2" style="margin-left: 210px">
+      <span class="fs-q c">Best brisket in San Francisco?</span><span class="fs-q i">What wood is best for smoking?</span><span class="fs-q p">Texas or Kansas City BBQ?</span><span class="fs-q i">Is tri-tip real BBQ?</span><span class="fs-q t">Order brisket for pickup</span><span class="fs-q c">Good BBQ for a group dinner?</span><span class="fs-q p">Smoked or grilled chicken?</span>
+    </div>
+    <div class="fs-row r3" style="margin-left: 300px">
+      <span class="fs-q i">What sides go with brisket?</span><span class="fs-q c pick" id="pick">Best BBQ restaurant in SF?</span><span class="fs-q p">Food truck or sit-down BBQ?</span><span class="fs-q i">What is a smoke ring?</span><span class="fs-q c">Best BBQ catering in the Bay?</span><span class="fs-q t">Book a table for 8 tonight</span><span class="fs-q i">Is BBQ gluten free?</span>
+    </div>
+    <div class="fs-row r4" style="margin-left: 120px">
+      <span class="fs-q t">BBQ catering quote for 50</span><span class="fs-q i">What does low and slow mean?</span><span class="fs-q c">Best pulled pork in SF?</span><span class="fs-q p">Beef ribs or pork ribs?</span><span class="fs-q i">Do BBQ places take reservations?</span><span class="fs-q c">Best BBQ for a birthday dinner?</span><span class="fs-q i">What is Santa Maria BBQ?</span>
+    </div>
+    <div class="fs-row r5" style="margin-left: 260px">
+      <span class="fs-q p">Brisket plate or sandwich?</span><span class="fs-q i">How is BBQ sauce made?</span><span class="fs-q t">BBQ delivery in the Mission</span><span class="fs-q c">Top-rated BBQ near Dolores Park?</span><span class="fs-q i">How spicy is Nashville hot?</span><span class="fs-q p">Mesquite or oak smoke?</span>
+    </div>
+  </div>
+
+  <div class="fs-lift" id="lift">Best BBQ restaurant in SF?<span class="go" id="go">Plan it</span></div>
+
+  <svg class="fs-wire" id="wire">
+    <defs>
+      <marker id="fs-tip" viewBox="0 0 20 20" refX="13" refY="10" markerWidth="6" markerHeight="6" orient="auto">
+        <path d="M3 3 L16 10 L3 17" fill="none" stroke="#5aa2ff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" />
+      </marker>
+      <filter id="fs-glow" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="6" /></filter>
+    </defs>
+    <path id="wire-glow" fill="none" stroke="#1877f2" stroke-width="10" stroke-linecap="round" opacity=".55" filter="url(#fs-glow)" />
+    <path id="wire-line" fill="none" stroke="#5aa2ff" stroke-width="4.5" stroke-linecap="round" marker-end="url(#fs-tip)" />
+    <circle id="wire-knob" r="10" fill="#030817" stroke="#5aa2ff" stroke-width="4.5" />
+  </svg>
+
+  <div class="fs-card" id="card">
+    <div class="fs-crumb"><svg class="mk"><use href="#lg-rankbox"/></svg><b>Articles</b><svg class="ch"><use href="#ic-chev-right"/></svg>Scheduled<span class="fs-chips"><span class="in">Commercial</span></span></div>
+    <div class="fs-title">Where to Get the Best BBQ<br />in San Francisco</div>
+    <div class="fs-props">
+      <div class="fs-prop"><span>Status</span><span><span class="fs-stage">Scheduled</span></span></div>
+      <div class="fs-prop"><span>Writes on</span><span>Oct 8</span></div>
+      <div class="fs-prop"><span>Est. traffic</span><span><span>590<span class="fs-mo">/mo</span></span></span></div>
+      <div class="fs-prop"><span>Competition</span><span><span class="fs-bars mid"><i></i><i></i><i></i></span><span class="fs-low">Medium</span></span></div>
+      <div class="fs-prop"><span>AI signal</span><span><span class="fs-ai"><svg viewBox="0 0 24 24"><path d="M12 3c.5 3-2 4-3.3 6.2A5.5 5.5 0 1 0 18 13c0-2.4-1.3-3.7-2.6-5.2-.6 1-1.3 1.6-2 1.8C13.2 7 13 4.8 12 3Z" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg><svg viewBox="0 0 24 24"><path d="M12 3c.5 3-2 4-3.3 6.2A5.5 5.5 0 1 0 18 13c0-2.4-1.3-3.7-2.6-5.2-.6 1-1.3 1.6-2 1.8C13.2 7 13 4.8 12 3Z" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg><svg viewBox="0 0 24 24"><path d="M12 3c.5 3-2 4-3.3 6.2A5.5 5.5 0 1 0 18 13c0-2.4-1.3-3.7-2.6-5.2-.6 1-1.3 1.6-2 1.8C13.2 7 13 4.8 12 3Z" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg><small>AI</small></span></span></div>
+    </div>
+    <div class="fs-write">Write now</div>
+  </div>
+
+  <svg class="cur" id="cur"><use href="#ic-cursor"/></svg>
+</div>
+<script>
+  // Lay the lifted question over its slot in the wall, park the cursor on its
+  // "Plan it", and run the connector from it down into the article card.
+  document.fonts.ready.then(() => {
+    const c = document.querySelector(".canvas").getBoundingClientRect();
+    const box = (el) => { const b = el.getBoundingClientRect(); return { x: b.left - c.left, y: b.top - c.top, w: b.width, h: b.height }; };
+    const slot = box(document.getElementById("pick"));
+    const lift = document.getElementById("lift");
+    const lw = lift.offsetWidth, lh = lift.offsetHeight;
+    const cx = slot.x + slot.w / 2, cy = slot.y + slot.h / 2;
+    lift.style.left = (cx - lw / 2 + 40) + "px";
+    lift.style.top = (cy - lh / 2 - 6) + "px";
+
+    const go = box(document.getElementById("go"));
+    const cur = document.getElementById("cur");
+    cur.style.left = (go.x + go.w * 0.84) + "px";
+    cur.style.top = (go.y + go.h * 0.82) + "px";
+
+    const L = box(lift), card = box(document.getElementById("card"));
+    const x1 = L.x + L.w * 0.34, y1 = L.y + L.h - 4;
+    const yT = card.y + 186, x2 = card.x - 14, r = 34;
+    const d = `M${x1} ${y1} V${yT - r} Q${x1} ${yT} ${x1 + r} ${yT} H${x2}`;
+    for (const id of ["wire-glow", "wire-line"]) document.getElementById(id).setAttribute("d", d);
+    // Any pill the wire runs across sinks back, so the line never strikes
+    // through a question.
+    const hit = (b) => (x1 > b.x - 14 && x1 < b.x + b.w + 14 && b.y + b.h > y1 && b.y < yT + 12) ||
+                       (yT > b.y - 12 && yT < b.y + b.h + 12 && b.x + b.w > x1 && b.x < x2);
+    document.querySelectorAll(".fs-q:not(.pick)").forEach((q) => { if (hit(box(q))) q.style.opacity = "0.06"; });
+    const k = document.getElementById("wire-knob");
+    k.setAttribute("cx", x1); k.setAttribute("cy", y1 + 4);
+  });
+</script>
+</body>
+</html>

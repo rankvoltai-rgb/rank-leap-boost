@@ -1,0 +1,91 @@
+<!doctype html>
+<!-- Cluster 12 · slide 2 of 2 · The turn. How to check: the free AI
+     Visibility Prompt Kit (rankbox.xyz/tools/ai-visibility-prompt-generator).
+     Its real templates (src/components/tools/AiVisibilityPromptKit.tsx) with
+     "your brand" filled in. All four rows come out of one kit (no competitor
+     entered): "{brand} vs {rival}" only appears when you name a competitor,
+     and then "Cheaper alternatives to {brand}" doesn't, so the scorecard
+     shows one that can exist. Ticks mean "Mentioned", as in the tool, and the
+     instruction line is the tool's own ("Tick the ones that mention you.").
+     Rankbox doesn't monitor AI or correct a model: it writes the pages that
+     give AI the right facts. Offer from ads.js. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x5" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<link rel="stylesheet" href="ads/ads.css" />
+<script src="../kit/kit.js"></script>
+<script src="ads/ads.js"></script>
+<style>
+  .x12-kit { left: 110px; top: 520px; width: 1380px; padding: 50px 56px 30px; }
+  .x12-kh { display: flex; align-items: center; gap: 28px; padding-bottom: 38px; border-bottom: 2px solid #eef0f3; }
+  .x12-kh .ic { width: 100px; height: 100px; border-radius: 28px; background: #e8f1ff; color: var(--blue); display: grid; place-items: center; flex: none; }
+  .x12-kh .ic svg { width: 56px; height: 56px; }
+  .x12-kh h2 { font-size: 50px; font-weight: 750; letter-spacing: -0.035em; color: #0c1018; line-height: 1.05; }
+  .x12-kh h2 span { display: block; margin-top: 10px; font-size: 32px; font-weight: 500; color: #6b7280; letter-spacing: -0.015em; }
+  .x12-kh .ad-tag { margin-left: auto; align-self: flex-start; }
+
+  .x12-how { padding: 32px 0 10px; font-size: 30px; font-weight: 600; color: #8a909c; letter-spacing: -0.01em; }
+  .x12-row { position: relative; display: flex; align-items: center; gap: 34px; padding: 36px 0; border-top: 2px solid #f1f2f5; }
+  .x12-how + .x12-row { border-top: 0; }
+  .x12-box { width: 62px; height: 62px; border-radius: 16px; flex: none; display: grid; place-items: center; box-shadow: inset 0 0 0 3px #d5d9e0; background: #fff; }
+  .x12-box.on { background: var(--blue); box-shadow: none; color: #fff; }
+  .x12-box.on svg { width: 40px; height: 40px; }
+  .x12-box.hover { box-shadow: inset 0 0 0 3px var(--blue), 0 0 0 8px #e3eeff; }
+  .x12-row p { font-size: 42px; font-weight: 600; letter-spacing: -0.025em; color: #12161f; line-height: 1.2; }
+  .x12-row.off p { color: #3a4252; font-weight: 550; }
+  .x12-b { display: inline-block; padding: 0 14px; border-radius: 12px; background: #eef4ff; color: #1561d6; box-shadow: inset 0 0 0 2px #d6e5fc; line-height: 1.32; }
+  .x12-more { padding: 30px 0 24px; border-top: 2px solid #f1f2f5; font-size: 32px; font-weight: 600; color: #8a909c; }
+  .x12-cur { position: absolute; width: 66px; height: 66px; filter: drop-shadow(0 8px 10px rgba(12, 16, 24, 0.3)); z-index: 5; }
+
+  .x12-turn { position: absolute; left: 110px; right: 110px; top: 1530px; font-size: 46px; font-weight: 500; line-height: 1.3; letter-spacing: -0.025em; color: #4a5160; text-wrap: balance; }
+  .x12-turn b { color: #0c1018; font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="canvas ad">
+  <div class="ad-dots"></div>
+  <div class="ad-top">
+    <div class="ad-prog"><i class="on"></i><i class="on"></i></div>
+    <div class="ad-step">Check it yourself</div>
+    <div class="ad-logo"><svg><use href="#lg-rankbox"/></svg>Rankbox</div>
+  </div>
+  <h1 class="ad-hl">Check what AI tells your buyers. <span class="blue">Free.</span></h1>
+
+  <div class="ad-card x12-kit">
+    <div class="x12-kh">
+      <span class="ic"><svg><use href="#ic-sparkle"/></svg></span>
+      <h2>AI Visibility Prompt Kit<span>30 buyer prompts, one scorecard</span></h2>
+      <span class="ad-tag">Free tool</span>
+    </div>
+    <div class="x12-how">Paste each prompt into ChatGPT, Perplexity and Gemini. Tick the ones that mention you.</div>
+    <div class="x12-row"><span class="x12-box on"><svg><use href="#ic-check"/></svg></span><p><span class="x12-b">Your brand</span> pricing — is it worth it?</p></div>
+    <div class="x12-row"><span class="x12-box on"><svg><use href="#ic-check"/></svg></span><p>Who is <span class="x12-b">your brand</span> best for?</p></div>
+    <div class="x12-row off"><span class="x12-box hover" id="tick"></span><p>Cheaper alternatives to <span class="x12-b">your brand</span></p></div>
+    <div class="x12-row off"><span class="x12-box"></span><p>What do people say about <span class="x12-b">your brand</span>?</p></div>
+    <div class="x12-more">+ 26 more buyer prompts</div>
+  </div>
+  <svg class="x12-cur" id="cur"><use href="#ic-cursor"/></svg>
+
+  <p class="x12-turn"><b>When an answer is wrong,</b> Rankbox writes the clear, sourced pages that give AI the right facts to quote.</p>
+
+  <div class="ad-offer">
+    <div class="ad-terms"><b data-offer="price"></b><span data-offer="articles"></span> · <span data-offer="trial"></span></div>
+    <div class="ad-go"><span data-offer="cta"></span><svg><use href="#ic-arrow-right"/></svg></div>
+  </div>
+</div>
+<script>
+  // Put the cursor on the box being ticked, after the font has laid out.
+  document.fonts.ready.then(() => {
+    const c = document.querySelector(".canvas").getBoundingClientRect();
+    const b = document.getElementById("tick").getBoundingClientRect();
+    const cur = document.getElementById("cur");
+    // the arrow's tip sits at (5, 3) of the sprite's 32-unit box
+    const k = cur.getBoundingClientRect().width / 32;
+    cur.style.left = (b.left - c.left + b.width * 0.48 - 5 * k) + "px";
+    cur.style.top = (b.top - c.top + b.height * 0.56 - 3 * k) + "px";
+  });
+</script>
+</body>
+</html>

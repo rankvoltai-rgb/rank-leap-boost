@@ -1,0 +1,129 @@
+<!doctype html>
+<!-- Cluster 15 · "The press release nobody read" · single image, 4x5. A cost
+     comparison where visual weight does the arguing. Both sides use the same
+     sheet in the same isometric view: option A is one sheet lying flat, $850+,
+     with faint syndicated copies drifting off; option B is that sheet thirty
+     times over, a solid block, for the plan price. The one number is $850
+     (published national wire list prices, 400-word release, 2025), with its
+     source. No wire service is named or drawn. Rankbox appears only on side
+     B, as the spec allows. B's price, article count, trial and button come
+     from ads/ads.js; the block's sheet count and badge read the same
+     constant, so they follow the offer. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x5" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<link rel="stylesheet" href="ads/ads.css" />
+<script src="../kit/kit.js"></script>
+<script src="ads/ads.js"></script>
+<style>
+  .canvas.ad { --hl-y: 150px; }
+
+  .x15-cmp { position: absolute; left: 110px; right: 110px; top: 446px; display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: start; }
+  .x15-opt { position: relative; padding: 46px 48px 48px; border-radius: 36px; }
+  .x15-opt.a { background: #e7e9ed; box-shadow: inset 0 0 0 2px #dde0e5; }
+  .x15-opt.b { background: #fff; box-shadow: 0 0 0 4px var(--blue), 0 50px 90px -40px rgba(22, 90, 200, 0.4), 0 14px 30px -18px rgba(12, 30, 70, 0.2); }
+
+  .x15-head { height: 176px; }
+  .x15-kick { display: flex; align-items: center; justify-content: space-between; height: 42px; font-size: 28px; font-weight: 650; letter-spacing: 0.01em; color: #8a909c; text-transform: uppercase; }
+  .x15-kick .ad-logo { font-size: 32px; text-transform: none; letter-spacing: -0.03em; }
+  .x15-kick .ad-logo svg { width: 34px; height: 34px; }
+  .x15-title { margin-top: 16px; font-size: 46px; font-weight: 750; letter-spacing: -0.03em; line-height: 1.1; color: #0c1018; text-wrap: balance; }
+  .x15-opt.a .x15-title { color: #3a4252; }
+
+  /* The sheet, laid flat in an isometric view: rotate, then squash. Every
+     sheet on both sides is this one element, so A and B compare fairly. */
+  .x15-vis { position: relative; height: 560px; }
+  .x15-iso { position: absolute; left: 50%; bottom: -16px; width: 270px; height: 340px; margin-left: -135px; border-radius: 14px; background: #fff; padding: 34px 32px; box-shadow: inset 0 0 0 2px #d3d9e3; transform: translate(var(--x, 0px), var(--y, 0px)) scale(var(--s, 1)) scaleY(0.577) rotate(-45deg); }
+  .x15-iso i { display: block; height: 14px; margin-top: 18px; border-radius: 99px; background: #e3e6eb; }
+  .x15-iso i:first-child { margin-top: 0; }
+  .x15-iso i.t { height: 22px; background: #b9c0cb; }
+  .x15-iso i.s { width: 58%; }
+  .x15-iso i.m { width: 78%; }
+  .x15-iso i.q { height: 18px; background: #bcd5fb; }
+  .x15-iso.edge { padding: 0; background: #fff; box-shadow: inset 0 0 0 2px #cbd6e6, inset 0 -26px 0 #edf2f9; }
+  .x15-iso.top { box-shadow: inset 0 0 0 2px #c4d3ec; }
+  .x15-iso.ghost { box-shadow: inset 0 0 0 2px #cfd4dc; }
+  .x15-floor { position: absolute; left: 50%; bottom: 8px; width: 420px; height: 70px; margin-left: -210px; border-radius: 50%; background: rgba(12, 30, 70, 0.22); filter: blur(22px); }
+  .x15-opt.a .x15-floor { opacity: .55; }
+
+  .x15-count { position: absolute; z-index: 60; left: 50%; min-width: 100px; height: 100px; padding: 0 22px; border-radius: 999px; background: var(--blue); color: #fff; display: grid; place-items: center; font-size: 46px; font-weight: 800; letter-spacing: -0.03em; box-shadow: 0 14px 26px -10px rgba(22, 90, 200, 0.6), 0 0 0 6px #fff; }
+
+  .x15-cap { height: 104px; padding-top: 34px; font-size: 32px; font-weight: 550; letter-spacing: -0.015em; line-height: 1.25; color: #6b7280; text-wrap: balance; }
+  .x15-opt.b .x15-cap { color: #1d222c; font-weight: 650; }
+
+  .x15-price { margin-top: 28px; padding-top: 30px; border-top: 2px solid rgba(12, 16, 24, 0.08); }
+  .x15-price b { display: block; font-size: 112px; font-weight: 800; letter-spacing: -0.055em; line-height: 0.95; color: #3a4252; white-space: nowrap; }
+  .x15-price b small { font-size: 46px; font-weight: 700; letter-spacing: -0.03em; color: inherit; margin-left: 4px; }
+  .x15-opt.b .x15-price b { color: var(--blue); }
+  .x15-price span { display: block; margin-top: 14px; font-size: 30px; font-weight: 550; color: #8a909c; letter-spacing: -0.01em; }
+  .x15-opt.b .x15-go { margin-top: 30px; justify-content: center; height: 108px; font-size: 38px; }
+
+  .x15-or { position: absolute; left: 50%; top: 718px; width: 92px; height: 92px; margin-left: -46px; border-radius: 50%; background: #fff; display: grid; place-items: center; font-size: 34px; font-weight: 750; color: #6b7280; box-shadow: 0 0 0 2px #e3e6eb, 0 14px 26px -14px rgba(12, 30, 70, 0.3); z-index: 5; }
+</style>
+</head>
+<body>
+<div class="canvas ad">
+  <div class="ad-dots"></div>
+  <h1 class="ad-hl">One press release,<br /><span class="dim">or a month of answers?</span></h1>
+
+  <div class="x15-cmp">
+    <div class="x15-opt a">
+      <div class="x15-head">
+        <div class="x15-kick">Option A</div>
+        <div class="x15-title">One national wire release</div>
+      </div>
+      <div class="x15-vis" id="vis-a"><div class="x15-floor"></div></div>
+      <div class="x15-cap">Syndicated to pages almost nobody reads</div>
+      <div class="x15-price"><b>$850+</b><span>for one release</span></div>
+    </div>
+
+    <div class="x15-opt b">
+      <div class="x15-head">
+        <div class="x15-kick">Option B<span class="ad-logo"><svg><use href="#lg-rankbox"/></svg>Rankbox</span></div>
+        <div class="x15-title">A month of content built to be quoted</div>
+      </div>
+      <div class="x15-vis" id="vis-b"><div class="x15-floor"></div></div>
+      <div class="x15-cap"><span data-offer="articles"></span>, on your own site</div>
+      <div class="x15-price"><b data-offer="price" id="bprice"></b><span data-offer="trial"></span></div>
+      <div class="ad-go x15-go"><span data-offer="cta"></span><svg><use href="#ic-arrow-right"/></svg></div>
+    </div>
+    <div class="x15-or">or</div>
+  </div>
+
+  <div class="ad-src">Source: published national wire list prices, 400-word release, 2025</div>
+</div>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    // B's price, set by ads.js: keep the amount large and the period small.
+    const p = document.getElementById("bprice");
+    const [amt, per] = p.textContent.split("/");
+    if (per) p.innerHTML = `${amt}<small>/${per}</small>`;
+
+    const page = (cls, style, body) => `<div class="x15-iso ${cls}" style="${style}">${body}</div>`;
+    const lines = (q) => `<i class="t"></i><i class="t s"></i>${q ? '<i class="q"></i>' : "<i></i>"}<i></i><i class="m"></i><i></i><i class="s"></i><i></i><i class="m"></i>`;
+
+    // A: one sheet lying flat, and its syndicated copies drifting off, fading.
+    let a = "";
+    [[-120, -236, 0.6, 0.32], [130, -300, 0.5, 0.2], [-14, -384, 0.4, 0.11]].forEach(([x, y, s, o]) => {
+      a += page("ghost", `--x:${x}px;--y:${y}px;--s:${s};opacity:${o}`, lines(false));
+    });
+    a += page("", "", lines(false));
+    document.getElementById("vis-a").insertAdjacentHTML("beforeend", a);
+
+    // B: the same sheet, once per article in the offer, stacked into a block.
+    const n = parseInt(window.OFFER.articles, 10) || 30;
+    const dz = 7;
+    let b = "";
+    for (let i = 0; i < n; i++) {
+      const top = i === n - 1;
+      b += page(top ? "top" : "edge", `--y:${-i * dz}px;z-index:${i + 1}`, top ? lines(true) : "");
+    }
+    // the count sits on the block's right corner
+    b += `<div class="x15-count" style="margin-left:${118}px;bottom:${(n - 1) * dz + 196}px">${n}</div>`;
+    document.getElementById("vis-b").insertAdjacentHTML("beforeend", b);
+  });
+</script>
+</body>
+</html>

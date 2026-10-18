@@ -1,0 +1,159 @@
+<!doctype html>
+<!-- Variant 4 · Cluster 34 "Burner domains", one image.
+     Replica of Formflow 3 ("Create complex multi-step forms easily with
+     visualized flow."): white field with a soft grainy aura, the app tile +
+     wordmark, a heavy black headline at the left, and two stacked cards: a
+     back card up and to the right, a front card lower-left, each with a
+     header (icon + title), an inner field card (type chip + toggle, a
+     question, a grey description, an input), option rows with branch icons,
+     a dashed add row, and a round blue "+" button with a glow.
+     Back card: the questions buyers ask AI (MCP intents). Front card:
+     Settings, Autopilot: "Write automatically" ON, Pace (the five paces from
+     FACTS, "Every day" selected), the plan line, "+ Add a keyword". Every
+     settings string is the app's own (dashboard.settings.tsx). -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x5" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<link rel="stylesheet" href="ads4/ads4.css" />
+<script src="../kit/kit.js"></script>
+<script src="ads/ads.js"></script>
+<script src="ads4/ads4.js"></script>
+<style>
+  .y34-lock { position: absolute; left: 110px; top: 110px; display: flex; align-items: center; gap: 18px; font-size: 44px; font-weight: 650; letter-spacing: -0.03em; }
+  .y34-lock .tile { width: 66px; height: 66px; border-radius: 16px; background: linear-gradient(160deg, #3d8ffa, #1667e0); color: #fff; display: grid; place-items: center; box-shadow: 0 10px 20px -10px rgba(22, 103, 224, 0.7); }
+  .y34-lock .tile svg { width: 40px; height: 40px; }
+  .y34-hl { position: absolute; left: 104px; top: 262px; font-size: 136px; }
+
+  .y34-card { position: absolute; background: #fff; border-radius: 34px; padding: 34px 34px 38px;
+    box-shadow: 0 0 0 2px #eceff4, 0 50px 100px -40px rgba(20, 60, 140, 0.4), 0 16px 34px -20px rgba(20, 60, 140, 0.2); }
+  .y34-hd { display: flex; align-items: center; gap: 16px; font-size: 33px; font-weight: 700; letter-spacing: -0.025em; }
+  .y34-hd .tile { flex: none; width: 58px; height: 58px; border-radius: 16px; display: grid; place-items: center; background: var(--v4-blue); color: #fff; box-shadow: 0 10px 18px -10px rgba(22, 111, 229, 0.8); }
+  .y34-hd .tile svg { width: 32px; height: 32px; }
+  .y34-hd small { display: block; margin-top: 2px; font-size: 24px; font-weight: 500; letter-spacing: 0; color: var(--v4-ink-2); }
+  .y34-hd .more { margin-left: auto; width: 34px; height: 34px; color: #9aa0ac; }
+
+  /* inner field card */
+  .y34-field { margin-top: 26px; padding: 22px 26px 24px; border-radius: 24px; background: #f8fafc; box-shadow: inset 0 0 0 2px #edf0f4; }
+  .y34-field .top { display: flex; align-items: center; }
+  .y34-chip { display: inline-flex; align-items: center; gap: 10px; height: 46px; padding: 0 16px; border-radius: 12px; background: #fff; box-shadow: inset 0 0 0 2px #e4e8ee; font-size: 24px; font-weight: 600; color: var(--v4-ink-2); }
+  .y34-chip svg { width: 24px; height: 24px; color: var(--v4-blue); }
+  .y34-tog { margin-left: auto; width: 84px; height: 48px; border-radius: 24px; background: var(--v4-blue); position: relative; box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.04); }
+  .y34-tog::after { content: ""; position: absolute; right: 5px; top: 5px; width: 38px; height: 38px; border-radius: 50%; background: #fff; box-shadow: 0 2px 6px rgba(10, 40, 100, 0.3); }
+  .y34-field .q { margin-top: 16px; font-size: 34px; font-weight: 700; letter-spacing: -0.025em; color: var(--v4-ink); }
+  .y34-field .ds { margin-top: 8px; font-size: 25px; line-height: 1.34; color: var(--v4-ink-2); text-wrap: balance; }
+  .y34-input { margin-top: 14px; height: 68px; padding: 0 22px; border-radius: 16px; background: #fff; box-shadow: inset 0 0 0 2px #e4e8ee; display: flex; align-items: center; gap: 12px; font-size: 27px; color: var(--v4-ink); }
+  .y34-input i { width: 14px; height: 14px; border-radius: 50%; background: var(--v4-blue); box-shadow: 0 0 0 5px rgba(24, 119, 242, 0.16); }
+  .y34-input.ph { color: #9aa0ac; }
+  .y34-input svg { margin-left: auto; width: 26px; height: 26px; color: #9aa0ac; }
+
+  .y34-lab { margin-top: 24px; display: flex; align-items: baseline; font-size: 28px; font-weight: 700; letter-spacing: -0.02em; }
+  .y34-lab span { margin-left: auto; font-size: 24px; font-weight: 500; color: var(--v4-ink-3); letter-spacing: 0; }
+  .y34-opts { margin-top: 12px; display: grid; gap: 10px; }
+  .y34-opt { display: flex; align-items: center; gap: 18px; height: 72px; padding: 0 22px; border-radius: 18px; background: #fff; box-shadow: inset 0 0 0 2px #edf0f4; font-size: 28px; font-weight: 500; color: #2a2f3a; white-space: nowrap; }
+  .y34-opt .br { flex: none; width: 46px; height: 46px; border-radius: 12px; background: #f2f5f9; color: #8a93a3; display: grid; place-items: center; }
+  .y34-opt .br svg { width: 26px; height: 26px; }
+  .y34-opt .rd { margin-left: auto; flex: none; width: 34px; height: 34px; border-radius: 50%; box-shadow: inset 0 0 0 2.5px #d5dbe4; }
+  .y34-opt.on { background: #f3f8ff; box-shadow: inset 0 0 0 2.5px #8dbcfa; color: var(--v4-blue); font-weight: 650; }
+  .y34-opt.on .br { background: var(--v4-blue); color: #fff; }
+  .y34-opt.on .rd { background: var(--v4-blue); box-shadow: none; display: grid; place-items: center; color: #fff; }
+  .y34-opt.on .rd svg { width: 20px; height: 20px; }
+  .y34-opt .it { margin-left: auto; flex: none; height: 44px; padding: 0 16px; border-radius: 11px; display: inline-flex; align-items: center; font-size: 24px; font-weight: 600; color: var(--v4-blue); background: var(--v4-tint); }
+  .y34-opt.q { font-size: 27px; min-width: 0; }
+  .y34-opt.q span.t { min-width: 0; }
+  .y34-opt.q span.t { overflow: hidden; text-overflow: ellipsis; }
+  .y34-note { margin-top: 16px; font-size: 25px; color: var(--v4-ink-2); }
+  .y34-note b { color: var(--v4-ink); font-weight: 650; }
+  .y34-add { margin-top: 16px; height: 72px; border-radius: 18px; border: 2.5px dashed #b9cbe4; display: flex; align-items: center; justify-content: center; gap: 12px; font-size: 27px; font-weight: 600; color: var(--v4-blue); }
+  .y34-add svg { width: 26px; height: 26px; }
+
+  /* back card: questions buyers ask AI */
+  .y34-back { left: 818px; top: 150px; width: 692px; z-index: 3; }
+  .y34-qs { margin-top: 10px; gap: 12px; }
+  .y34-qs .y34-opt { height: 84px; }
+  .y34-grp { margin-top: 16px; height: 44px; display: flex; align-items: center; justify-content: flex-end; }
+  .y34-grp span { height: 44px; padding: 0 16px; border-radius: 11px; display: inline-flex; align-items: center; font-size: 24px; font-weight: 650; color: var(--v4-blue); background: var(--v4-tint); }
+  /* front card: Settings, Autopilot */
+  .y34-front { left: 110px; top: 756px; width: 742px; z-index: 6; padding-bottom: 70px; }
+
+  .y34-plus { position: absolute; z-index: 9; width: 112px; height: 112px; border-radius: 50%; background: linear-gradient(160deg, #3d8ffa, #166fe5); color: #fff; display: grid; place-items: center;
+    box-shadow: 0 0 0 10px rgba(24, 119, 242, 0.12), 0 0 60px 10px rgba(24, 119, 242, 0.35), 0 20px 30px -12px rgba(22, 111, 229, 0.8); }
+  .y34-plus svg { width: 52px; height: 52px; }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute">
+  <symbol id="y34-branch" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="5" r="2.4"/><circle cx="6" cy="19" r="2.4"/><circle cx="18" cy="8" r="2.4"/><path d="M6 7.4v9.2"/><path d="M18 10.4c0 4-4.2 4.4-9.8 6.6"/></g></symbol>
+</svg>
+<div class="canvas v4">
+  <div class="v4-field-aura"></div>
+  <div class="v4-aura" style="left:-220px; top:-260px; width:900px; height:420px; background:#7fb6ff; opacity:.5"></div>
+  <div class="v4-aura" style="left:560px; top:-300px; width:900px; height:440px; background:#a9c4ff; opacity:.55"></div>
+  <div class="v4-aura" style="left:1150px; top:-220px; width:800px; height:440px; background:#5aa2ff; opacity:.5"></div>
+  <div class="v4-aura" style="left:1050px; top:900px; width:800px; height:900px; background:#8fbcff; opacity:.45"></div>
+  <div class="v4-aura" style="left:-200px; top:1840px; width:1000px; height:420px; background:#9cc8ff; opacity:.55"></div>
+  <div class="v4-aura" style="left:780px; top:1860px; width:1000px; height:420px; background:#7aa8ff; opacity:.5"></div>
+  <div class="grain" style="--grain:.06"></div>
+
+  <div class="y34-lock"><span class="tile"><svg><use href="#lg-rankbox"/></svg></span>Rankbox</div>
+  <h1 class="v4-hl-heavy y34-hl">There’s an<br />easier<br />pipeline.</h1>
+
+  <!-- back card -->
+  <div class="y34-card y34-back">
+    <div class="y34-hd"><span class="tile"><svg><use href="#ic-chat"/></svg></span>Questions buyers ask AI<svg class="more"><use href="#ic-more"/></svg></div>
+    <div class="y34-field">
+      <div class="top"><span class="y34-chip"><svg><use href="#ic-search"/></svg>Topic</span></div>
+      <div class="y34-input">project tool for a small team<svg><use href="#ic-refresh"/></svg></div>
+    </div>
+    <div class="y34-opts y34-qs">
+      <div class="y34-grp"><span>Commercial</span></div>
+      <div class="y34-opt q"><span class="br"><svg><use href="#y34-branch"/></svg></span><span class="t">Which project tool should we use?</span></div>
+      <div class="y34-opt q"><span class="br"><svg><use href="#y34-branch"/></svg></span><span class="t">Best planning tool for remote teams</span></div>
+      <div class="y34-opt q"><span class="br"><svg><use href="#y34-branch"/></svg></span><span class="t">Is Taskwren worth the price?</span></div>
+      <div class="y34-grp"><span>Comparison</span></div>
+      <div class="y34-opt q"><span class="br"><svg><use href="#y34-branch"/></svg></span><span class="t">Taskwren vs Quillvane for small teams</span></div>
+      <div class="y34-opt q"><span class="br"><svg><use href="#y34-branch"/></svg></span><span class="t">Cheaper alternatives to Taskwren</span></div>
+      <div class="y34-grp"><span>Informational</span></div>
+      <div class="y34-opt q"><span class="br"><svg><use href="#y34-branch"/></svg></span><span class="t">How long should planning take?</span></div>
+      <div class="y34-opt q"><span class="br"><svg><use href="#y34-branch"/></svg></span><span class="t">How do I plan a team’s week?</span></div>
+      <div class="y34-opt q"><span class="br"><svg><use href="#y34-branch"/></svg></span><span class="t">What should a weekly plan include?</span></div>
+      <div class="y34-grp"><span>Transactional</span></div>
+      <div class="y34-opt q"><span class="br"><svg><use href="#y34-branch"/></svg></span><span class="t">Project tool with a free trial</span></div>
+      <div class="y34-opt q"><span class="br"><svg><use href="#y34-branch"/></svg></span><span class="t">Taskwren pricing for 10 users</span></div>
+    </div>
+  </div>
+
+  <!-- front card -->
+  <div class="y34-card y34-front">
+    <div class="y34-hd"><span class="tile"><svg><use href="#rb-autopilot"/></svg></span><div>Autopilot<small>Whether it writes, and how often.</small></div><svg class="more"><use href="#ic-more"/></svg></div>
+    <div class="y34-field">
+      <div class="top"><span class="y34-chip"><svg><use href="#ic-gear"/></svg>Settings</span><span class="y34-tog"></span></div>
+      <div class="q">Write automatically</div>
+      <div class="ds">Pause any time — scheduled articles wait, nothing is lost.</div>
+      <div class="y34-input"><i></i>On — writing every day</div>
+    </div>
+    <div class="y34-lab">Pace<span>How many articles a week</span></div>
+    <div class="y34-opts">
+      <div class="y34-opt on"><span class="br"><svg><use href="#y34-branch"/></svg></span>Every day<span class="rd"><svg><use href="#ic-check"/></svg></span></div>
+      <div class="y34-opt"><span class="br"><svg><use href="#y34-branch"/></svg></span>5 times a week<span class="rd"></span></div>
+      <div class="y34-opt"><span class="br"><svg><use href="#y34-branch"/></svg></span>3 times a week<span class="rd"></span></div>
+      <div class="y34-opt"><span class="br"><svg><use href="#y34-branch"/></svg></span>Twice a week<span class="rd"></span></div>
+      <div class="y34-opt"><span class="br"><svg><use href="#y34-branch"/></svg></span>Once a week<span class="rd"></span></div>
+    </div>
+    <div class="y34-note">About <b>30 articles a month</b> · your plan covers 30.</div>
+    <div class="y34-add"><svg><use href="#ic-plus"/></svg>Add a keyword</div>
+  </div>
+
+  <span class="y34-plus" id="plus"><svg><use href="#ic-plus"/></svg></span>
+</div>
+<script>
+  document.addEventListener("DOMContentLoaded", () => document.fonts.ready.then(() => {
+    const f = document.querySelector(".y34-front").getBoundingClientRect();
+    const p = document.getElementById("plus");
+    p.style.left = (f.left + f.width / 2 - 56) + "px";
+    p.style.top = (f.bottom - 56) + "px";
+  }));
+</script>
+</body>
+</html>

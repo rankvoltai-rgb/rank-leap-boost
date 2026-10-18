@@ -1,0 +1,89 @@
+<!doctype html>
+<!-- Cluster 35 · single image · "When did you last calculate CAC?" A calm
+     finance dashboard (generic, no BI product's layout) with the hero tile
+     "Blended customer acquisition cost", its formula, every value empty
+     ("$ —", "Payback period: —") and "Last calculated: ?" highlighted. The two
+     inputs of the formula sit beside it, empty too. NO figures anywhere: the
+     source's $420 / $380 / $38 CAC and payback months were invented. Rankbox
+     only in the .ad-turn band. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x5" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<link rel="stylesheet" href="ads/ads.css" />
+<script src="../kit/kit.js"></script>
+<script src="ads/ads.js"></script>
+<style>
+  .canvas.ad { --hl-y: 150px; }
+
+  .x35-dash { left: 110px; top: 520px; width: 1380px; padding: 40px 48px 48px; }
+  .x35-bar { display: flex; align-items: center; gap: 16px; font-size: 34px; font-weight: 700; letter-spacing: -0.02em; color: #1d222c; }
+  .x35-bar > svg { width: 40px; height: 40px; color: var(--blue); }
+  .x35-bar .seg { margin-left: auto; }
+  .x35-bar .seg > span { font-size: 26px; height: 56px; }
+
+  .x35-tile { position: relative; margin-top: 34px; padding: 44px 48px 40px; border-radius: 30px; background: #fff; box-shadow: inset 0 0 0 2px #e6e8ec; }
+  .x35-lab { display: flex; align-items: center; gap: 14px; font-size: 40px; font-weight: 700; letter-spacing: -0.025em; color: #0c1018; }
+  .x35-lab svg { width: 36px; height: 36px; color: #9aa0ab; }
+  .x35-f { margin-top: 18px; display: inline-flex; align-items: center; gap: 14px; height: 64px; padding: 0 24px; border-radius: 16px; background: #f4f5f7; font-size: 30px; font-weight: 600; color: #4a5160; letter-spacing: -0.012em; }
+  .x35-f i { font-style: normal; font-weight: 750; color: #0c1018; }
+  .x35-val { margin-top: 30px; display: grid; grid-template-columns: auto 1fr; align-items: end; gap: 60px; }
+  .x35-big { font-size: 220px; font-weight: 700; letter-spacing: -0.05em; line-height: 0.92; color: #aab1bc; white-space: nowrap; }
+  .x35-big span { color: #c3c9d2; font-weight: 800; }
+  .x35-f i { font-size: 42px; line-height: 1; position: relative; top: -3px; }
+
+  /* empty trend: gridlines and nothing on them */
+  .x35-trend { position: relative; height: 196px; margin-bottom: 46px; }
+  .x35-trend i { position: absolute; left: 0; right: 0; border-top: 2px dashed #e3e6eb; }
+  .x35-trend i.base { border-top: 3px solid #e3e6eb; }
+  .x35-trend .q { position: absolute; left: 0; right: 0; bottom: -46px; display: flex; justify-content: space-around; font-size: 26px; font-weight: 650; color: #9aa0ab; }
+
+  .x35-foot { margin-top: 44px; padding-top: 34px; border-top: 2px solid #eef0f3; display: flex; align-items: center; gap: 40px; }
+  .x35-kv { font-size: 36px; font-weight: 600; color: #4a5160; letter-spacing: -0.015em; white-space: nowrap; }
+  .x35-kv b { color: #0c1018; font-weight: 800; margin-left: 6px; }
+  .x35-hi { margin-left: auto; position: relative; display: inline-flex; align-items: center; gap: 16px; height: 92px; padding: 0 18px 0 26px; border-radius: 22px; background: #e3eeff; box-shadow: inset 0 0 0 3px #9cc4ff, 0 14px 30px -16px rgba(22, 111, 229, 0.55); font-size: 38px; font-weight: 650; color: #1d222c; letter-spacing: -0.02em; }
+  .x35-hi svg { width: 40px; height: 40px; color: var(--blue); }
+  .x35-hi b { display: inline-grid; place-items: center; width: 62px; height: 62px; border-radius: 50%; background: var(--blue); color: #fff; font-size: 38px; font-weight: 800; }
+
+  .x35-ins { margin-top: 26px; display: grid; grid-template-columns: 1fr 1fr; gap: 26px; }
+  .x35-in { padding: 32px 36px; border-radius: 26px; box-shadow: inset 0 0 0 2px #e6e8ec; }
+  .x35-in .l { font-size: 30px; font-weight: 650; color: #4a5160; letter-spacing: -0.015em; }
+  .x35-in .v { margin-top: 10px; font-size: 76px; font-weight: 750; letter-spacing: -0.04em; color: #c3c9d2; line-height: 1; }
+</style>
+</head>
+<body>
+<div class="canvas ad">
+  <div class="ad-dots"></div>
+  <h1 class="ad-hl">When did you last calculate your CAC?</h1>
+
+  <div class="ad-card x35-dash">
+    <div class="x35-bar"><svg><use href="#rb-chart"/></svg>Finance overview<div class="seg"><span>Month</span><span class="on">Quarter</span><span>Year</span></div></div>
+
+    <div class="x35-tile">
+      <div class="x35-lab">Blended customer acquisition cost<svg><use href="#ic-info"/></svg></div>
+      <div class="x35-f">Sales and marketing spend<i>÷</i>new customers</div>
+      <div class="x35-val">
+        <div class="x35-big">$ <span>—</span></div>
+        <div class="x35-trend"><i style="top:0"></i><i style="top:33%"></i><i style="top:66%"></i><i class="base" style="top:100%"></i><div class="q"><span>Q1</span><span>Q2</span><span>Q3</span><span>Q4</span></div></div>
+      </div>
+      <div class="x35-foot">
+        <div class="x35-kv">Payback period:<b>—</b></div>
+        <span class="x35-hi"><svg><use href="#ic-clock"/></svg>Last calculated:<b>?</b></span>
+      </div>
+    </div>
+
+    <div class="x35-ins">
+      <div class="x35-in"><div class="l">Sales and marketing spend</div><div class="v">$ —</div></div>
+      <div class="x35-in"><div class="l">New customers</div><div class="v">—</div></div>
+    </div>
+  </div>
+
+  <div class="ad-turn">
+    <div class="ad-logo"><svg><use href="#lg-rankbox"/></svg>Rankbox</div>
+    <p>A fixed monthly cost that builds a channel which compounds.</p>
+    <div class="ad-go"><span data-offer="cta"></span><svg><use href="#ic-arrow-right"/></svg></div>
+  </div>
+</div>
+</body>
+</html>

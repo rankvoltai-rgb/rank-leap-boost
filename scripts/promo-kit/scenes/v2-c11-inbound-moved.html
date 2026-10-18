@@ -1,0 +1,162 @@
+<!doctype html>
+<!-- Variant 2 · Cluster 11 "Inbound didn't die, it moved", one image.
+     Forms Connect family (03): night-navy field with blue light pooling at
+     the foot, dark outlined cards on the left wired into a white table that
+     bleeds off the right edge. The left column changes on the way down: the
+     cold pitches at the top have faded (nothing connects to them), the
+     buyer's questions to AI below are lit and wired into the table, which is
+     the AI shortlist they produce (Taskwren, Quillvane, Stackmere) with an
+     empty "yoursite.com" row. The one number, "Half" (G2 research, 2026),
+     sits under it with its source; Rankbox appears only in the close. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x5" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<link rel="stylesheet" href="ads2/ads2.css" />
+<script src="../kit/kit.js"></script>
+<script src="ads/ads.js"></script>
+<script src="ads2/ads2.js"></script>
+<style>
+  .canvas.v2 { background: var(--night); }
+  .y11-field { position: absolute; inset: 0; z-index: -2; overflow: hidden; background: var(--night); }
+  .y11-field .glow { position: absolute; border-radius: 50%; filter: blur(var(--blur, 140px)); }
+  .y11-g1 { left: -360px; top: 1240px; width: 1200px; height: 760px; background: #0a3fc0; opacity: .9; }
+  .y11-g2 { left: 560px; top: 1500px; width: 1400px; height: 800px; background: #2f8cff; opacity: .95; --blur: 160px; }
+  .y11-g3 { left: 300px; top: -520px; width: 1000px; height: 640px; background: #0a2a78; opacity: .55; }
+  .y11-g4 { left: 1000px; top: 640px; width: 900px; height: 700px; background: #123fa8; opacity: .45; }
+
+  .y11-hl { position: absolute; left: 0; right: 0; top: 104px; text-align: center; font-size: 132px; }
+  .y11-hl .soft { color: #6fb0ff; }
+
+  /* the left column: cold pitches fading out, then the questions buyers ask AI */
+  .y11-col { position: absolute; left: 100px; top: 478px; width: 540px; display: grid; gap: 22px; }
+  .y11-card { position: relative; padding: 26px 30px 26px 92px; border-radius: 28px; background: #1d1e20; color: var(--on-dark);
+    box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.62), 0 30px 60px -20px rgba(0, 0, 0, 0.6); }
+  .y11-card > svg { position: absolute; left: 30px; top: 28px; width: 38px; height: 38px; }
+  .y11-card b { display: block; font-size: 30px; font-weight: 600; line-height: 1.24; letter-spacing: -0.025em; text-wrap: balance; }
+  .y11-card span { display: block; margin-top: 8px; font-size: 24px; font-weight: 500; color: var(--on-dark-2); letter-spacing: -0.01em; }
+  .y11-card.ask > svg { color: #6fb0ff; }
+  .y11-card.cold { background: #111317; box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.14); }
+  .y11-card.cold > svg { color: #6b6e76; }
+  .y11-card.cold b { color: #9a9ca3; font-weight: 550; }
+  .y11-card.cold span { color: #6b6e76; }
+  .y11-card.cold em { position: absolute; right: 26px; top: 26px; font-style: normal; font-size: 24px; font-weight: 600; color: #6b6e76; }
+
+  .y11-wires { position: absolute; left: 0; top: 0; width: 1600px; height: 2000px; overflow: visible; pointer-events: none; }
+
+  /* the shortlist: a white table bleeding off the right edge */
+  .y11-tab { position: absolute; left: 820px; top: 640px; width: 800px; border-radius: 36px 0 0 36px; }
+  .y11-bar { display: flex; align-items: center; gap: 18px; height: 112px; padding: 0 34px; border-bottom: 1.5px solid var(--hair); }
+  .y11-bar > i { width: 62px; height: 62px; border-radius: 16px; background: #e8f1ff; display: grid; place-items: center; color: var(--blue); }
+  .y11-bar > i svg { width: 34px; height: 34px; }
+  .y11-bar b { font-size: 38px; font-weight: 700; letter-spacing: -0.035em; }
+  .y11-th { display: flex; align-items: center; gap: 22px; height: 64px; padding: 0 34px; background: var(--paper-2); font-size: 24px; font-weight: 500; color: var(--ink-2); }
+  .y11-row { display: flex; align-items: center; gap: 22px; height: 104px; padding: 0 34px; border-bottom: 1.5px solid var(--hair); font-size: 30px; font-weight: 650; letter-spacing: -0.02em; white-space: nowrap; }
+  .y11-row .n { width: 48px; height: 48px; border-radius: 13px; background: var(--paper-3); display: grid; place-items: center; font-size: 25px; font-weight: 700; color: var(--ink-2); flex: none; }
+  .y11-row .v, .y11-th .v { width: 236px; flex: none; }
+  .y11-th .v { margin-left: 70px; }
+  .y11-row .w { font-size: 26px; font-weight: 500; color: var(--ink-2); letter-spacing: -0.01em; }
+  .y11-row.you { position: relative; isolation: isolate; border-bottom: 0; color: var(--blue); }
+  .y11-row.you::before { content: ""; position: absolute; left: 18px; right: 18px; top: 12px; bottom: 12px; border-radius: 20px; border: 3px dashed #9cc3fb; background: #f4f8ff; z-index: -1; }
+  .y11-row.you .n { background: #fff; color: var(--blue); box-shadow: inset 0 0 0 2.5px #9cc3fb; }
+  .y11-row.you .w { color: #5a86c8; }
+
+  /* the one number */
+  .y11-num { position: absolute; left: 100px; right: 100px; top: 1346px; display: flex; align-items: center; gap: 40px; }
+  .y11-num b { font-size: 196px; font-weight: 800; letter-spacing: -0.06em; line-height: 0.8; color: #fff; }
+  .y11-num span { font-size: 38px; font-weight: 600; line-height: 1.24; letter-spacing: -0.022em; color: #fff; text-wrap: balance; }
+  .y11-src { top: 1560px; }
+
+  .y11-tile { position: absolute; z-index: 4; }
+  .v2-close { bottom: 96px; }
+  .v2-close p { flex: 1; font-size: 35px; font-weight: 650; line-height: 1.24; letter-spacing: -0.02em; color: #0c1018; }
+  .v2-close p span { display: block; margin-top: 10px; font-size: 26px; font-weight: 500; color: #4a5160; white-space: nowrap; }
+  .v2-close .v2-logo svg { color: var(--blue); width: 60px; height: 60px; }
+</style>
+</head>
+<body>
+<div class="canvas v2">
+  <div class="y11-field">
+    <div class="glow y11-g3"></div>
+    <div class="glow y11-g4"></div>
+    <div class="glow y11-g1"></div>
+    <div class="glow y11-g2"></div>
+  </div>
+  <div class="grain" style="--grain:.14"></div>
+
+  <h1 class="y11-hl v2-hl">Inbound didn’t die.<br /><span class="soft">It moved.</span></h1>
+
+  <div class="y11-col">
+    <div class="y11-card cold" style="opacity:.42"><svg><use href="#ic-mail"/></svg><em>No reply</em><b>Just following up</b><span>Cold email · unread</span></div>
+    <div class="y11-card cold" style="opacity:.7"><svg><use href="#ic-mail"/></svg><em>No reply</em><b>Quick question</b><span>Cold email · unread</span></div>
+    <div class="y11-card ask"><svg><use href="#ic-sparkle"/></svg><b>“Shortlist of project tools for a 50-person ops team”</b></div>
+    <div class="y11-card ask"><svg><use href="#ic-sparkle"/></svg><b>“Which project tool has the best reporting?”</b></div>
+    <div class="y11-card ask"><svg><use href="#ic-sparkle"/></svg><b>“Best project tool for client work?”</b></div>
+  </div>
+
+  <svg class="y11-wires" id="y11-wires">
+    <defs>
+      <marker id="y11-tip" viewBox="0 0 20 20" refX="14" refY="10" markerWidth="6" markerHeight="6" orient="auto">
+        <path d="M3 3 L16 10 L3 17" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+      </marker>
+    </defs>
+  </svg>
+
+  <!-- where the buyers went: AI apps, pixelated, floating over the table -->
+  <div class="y11-tile" style="left:1300px; top:420px; transform:perspective(1100px) rotateX(6deg) rotateY(-18deg) rotateZ(9deg)"><div class="pxl-wrap" style="--s:150px"><canvas class="pxl" data-logo="chatgpt" data-px="10" style="--s:150px"></canvas></div></div>
+  <div class="y11-tile" style="left:1090px; top:470px; transform:perspective(1100px) rotateX(-4deg) rotateY(-20deg) rotateZ(-8deg)"><div class="pxl-wrap" style="--s:118px"><canvas class="pxl" data-logo="perplexity" data-px="10" style="--s:118px"></canvas></div></div>
+  <div class="y11-tile" style="left:1436px; top:574px; transform:perspective(1100px) rotateX(4deg) rotateY(-16deg) rotateZ(-6deg)"><div class="pxl-wrap" style="--s:126px"><canvas class="pxl" data-logo="claude" data-px="10" style="--s:126px"></canvas></div></div>
+
+  <div class="wcard y11-tab" id="y11-tab">
+    <div class="y11-bar"><i><svg><use href="#ic-sparkle"/></svg></i><b>The AI shortlist</b></div>
+    <div class="y11-th"><span class="v">Vendor</span>Named for</div>
+    <div class="y11-row"><span class="n">1</span><span class="v">Taskwren</span><span class="w">easy to roll out</span></div>
+    <div class="y11-row"><span class="n">2</span><span class="v">Quillvane</span><span class="w">client work</span></div>
+    <div class="y11-row"><span class="n">3</span><span class="v">Stackmere</span><span class="w">reporting</span></div>
+    <div class="y11-row you"><span class="n">?</span><span class="v">yoursite.com</span><span class="w">not on it yet</span></div>
+  </div>
+
+  <div class="y11-num"><b>Half</b><span>of B2B software buyers now start their research with an AI chatbot more often than with Google.</span></div>
+  <div class="v2-src y11-src">Source: G2 research, 2026</div>
+
+  <div class="v2-close">
+    <span class="v2-logo"><svg><use href="#lg-rankbox"/></svg></span>
+    <p>Rankbox writes the pages built<br />to put you on the shortlist.<span data-offer="line"></span></p>
+    <div class="v2-go"><span data-offer="cta"></span><svg><use href="#ic-arrow-right"/></svg></div>
+  </div>
+</div>
+<script>
+  // 03's bracket wires: out of each question card, down a shared spine, into
+  // the shortlist. The cold pitches get a short dashed stub that goes nowhere.
+  addEventListener("load", () => {
+    const c = document.querySelector(".canvas").getBoundingClientRect();
+    const svg = document.getElementById("y11-wires");
+    const ns = "http://www.w3.org/2000/svg";
+    const add = (d, o = {}) => {
+      const p = document.createElementNS(ns, "path");
+      p.setAttribute("d", d);
+      p.setAttribute("fill", "none");
+      p.setAttribute("stroke", o.stroke || "rgba(255,255,255,.9)");
+      p.setAttribute("stroke-width", "2.5");
+      p.setAttribute("stroke-linecap", "round");
+      if (o.dash) p.setAttribute("stroke-dasharray", o.dash);
+      if (o.tip) p.setAttribute("marker-end", "url(#y11-tip)");
+      svg.appendChild(p);
+    };
+    const asks = [...document.querySelectorAll(".y11-card.ask")].map((e) => e.getBoundingClientRect());
+    const tab = document.getElementById("y11-tab").getBoundingClientRect();
+    const x0 = asks[0].right - c.left, spine = x0 + 84, r = 26;
+    const mids = asks.map((b) => b.top - c.top + b.height / 2);
+    const first = mids[0], last = mids[mids.length - 1], mid = mids[1];
+    const tabX = tab.left - c.left - 8;
+    add(`M${x0} ${first} H${spine - r} Q${spine} ${first} ${spine} ${first + r} V${last - r} Q${spine} ${last} ${spine - r} ${last} H${x0}`);
+    add(`M${x0} ${mid} H${tabX}`, { tip: true });
+    document.querySelectorAll(".y11-card.cold").forEach((e) => {
+      const b = e.getBoundingClientRect(), y = b.top - c.top + b.height / 2;
+      add(`M${b.right - c.left} ${y} H${b.right - c.left + 56}`, { stroke: "rgba(255,255,255,.22)", dash: "2 12" });
+    });
+  });
+</script>
+</body>
+</html>

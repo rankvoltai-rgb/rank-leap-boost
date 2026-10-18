@@ -1,0 +1,74 @@
+<!doctype html>
+<!-- Variant 3 · Cluster 2 "The new name for the game" (GEO), one image.
+     "Selected": white field, blue only. The idea as a type edit: SEO's S is
+     struck out and a selected G takes its place, so the poster reads GEO,
+     spelled out underneath (the brief's non-negotiable). Three engine tiles
+     as blue mosaics, the one number in a solid blue card, the close. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x5" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<link rel="stylesheet" href="ads3/ads3.css" />
+<script src="../kit/kit.js"></script>
+<script src="ads/ads.js"></script>
+<script src="ads3/ads3.js"></script>
+<style>
+  .y02-top { position: absolute; left: 100px; right: 100px; top: 96px; display: flex; align-items: center; }
+  .y02-top .v3-kick { margin-left: auto; }
+  .y02-hl { position: absolute; left: 100px; right: 100px; top: 214px; font-size: 112px; }
+
+  /* the edit: struck S, dashed lead, selected G */
+  .y02-word { position: absolute; left: 92px; top: 560px; font-size: 470px; font-weight: 800; letter-spacing: -0.07em; line-height: 0.8; color: var(--v3-blue); white-space: nowrap; }
+  .y02-word .v3-pick { line-height: 0.74; padding: 0.03em 0.075em 0.055em 0.06em; margin-right: 0.05em; vertical-align: top; --k: 0.085em; --st: 0.014em; }
+  .y02-s { position: absolute; left: 236px; top: 392px; transform: rotate(-6deg); font-size: 150px; font-weight: 800; letter-spacing: -0.05em; line-height: 1; color: var(--v3-soft); }
+  .y02-s::after { content: ""; position: absolute; left: -14px; right: -14px; top: 52%; height: 14px; border-radius: 7px; background: var(--v3-blue); transform: rotate(-12deg); }
+
+  /* engines, as two-colour mosaics */
+  .y02-eng { position: absolute; }
+
+  .y02-exp { position: absolute; left: 100px; right: 100px; top: 1110px; font-size: 76px; font-weight: 500; letter-spacing: -0.045em; line-height: 1; color: var(--v3-blue); white-space: nowrap; }
+  .y02-exp b { font-weight: 800; }
+  .y02-sub { position: absolute; left: 100px; width: 1240px; top: 1218px; }
+
+  .y02-num { left: 100px; right: 100px; top: 1420px; height: 260px; display: flex; align-items: center; gap: 44px; padding: 0 56px; }
+  .y02-num b { font-size: 168px; font-weight: 800; letter-spacing: -0.065em; line-height: 1; }
+  .y02-num p { font-size: 40px; font-weight: 650; line-height: 1.2; letter-spacing: -0.02em; }
+  .y02-num .v3-src { display: block; margin-top: 14px; color: rgba(255, 255, 255, 0.85); }
+</style>
+</head>
+<body>
+<div class="canvas v3">
+  <div class="v3-wash"></div>
+  <div class="v3-px"></div>
+
+  <div class="y02-top">
+    <span class="v3-logo"><svg><use href="#lg-rankbox"/></svg>Rankbox</span>
+    <span class="v3-kick">The new name for the game</span>
+  </div>
+  <h1 class="v3-hl y02-hl">SEO got a new first&nbsp;letter.</h1>
+
+  <span class="y02-s">S</span>
+  <div class="y02-word"><span class="v3-pick">G</span>EO</div>
+  <i class="v3-cur" style="left:494px; top:968px"></i>
+
+  <canvas class="v3-pxl float y02-eng" data-logo="chatgpt" data-px="11" data-tile="white" style="--s:150px; left:1312px; top:520px; transform:rotate(8deg)"></canvas>
+  <canvas class="v3-pxl float y02-eng" data-logo="gemini" data-px="11" data-tile="sky" style="--s:132px; left:1400px; top:716px; transform:rotate(-7deg)"></canvas>
+  <canvas class="v3-pxl float y02-eng" data-logo="perplexity" data-px="11" data-tile="blue" data-tone="white" style="--s:140px; left:1300px; top:880px; transform:rotate(6deg)"></canvas>
+
+  <div class="y02-exp"><b>G</b>enerative <b>E</b>ngine <b>O</b>ptimization</div>
+  <p class="v3-sub y02-sub">Getting your brand named inside the AI answer, not just ranked below&nbsp;it.</p>
+
+  <div class="v3-card solid y02-num">
+    <b>58%</b>
+    <p>fewer clicks for the #1 result when an AI Overview sits above&nbsp;it.<span class="v3-src">Source: Ahrefs study, 300,000 keywords, Dec 2025</span></p>
+  </div>
+
+  <div class="v3-close">
+    <svg class="mk"><use href="#lg-rankbox"/></svg>
+    <p>Rankbox does GEO for you, automatically.<span data-offer="line"></span></p>
+    <div class="v3-go"><span data-offer="cta"></span><svg><use href="#ic-arrow-right"/></svg></div>
+  </div>
+</div>
+</body>
+</html>

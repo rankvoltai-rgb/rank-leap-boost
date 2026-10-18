@@ -1,0 +1,114 @@
+<!doctype html>
+<!-- Cluster 9 · Old way vs. new way (SEO agency). Single image, 4x5. The
+     brief's non-negotiable question is the headline. Below it a clean
+     side-by-side, readable across a room: the agency proposal on the left,
+     heavy (grey, dense, a thick bound proposal and a long contract drawn as
+     documents, a signature line), Rankbox on the right, light (white, airy,
+     blue). Rows are paired so the eye reads across: price, commitment,
+     output, reporting. The proposal's $4,000/month is the spec's fictional
+     proposal price (content, not a stat); no fraction or ratio anywhere,
+     and no citation tracking for Rankbox (it doesn't ship). Rankbox's price
+     and articles come from ads.js. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x5" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<link rel="stylesheet" href="ads/ads.css" />
+<script src="../kit/kit.js"></script>
+<script src="ads/ads.js"></script>
+<style>
+  .ad-hl { --hl-y: 104px; --hl-size: 106px; line-height: 1.02; }
+  .x09-ask { display: block; font-size: 66px; letter-spacing: -0.04em; margin-bottom: 20px; }
+  .x09-q { display: block; text-indent: -0.42em; }
+
+  .x09-col { position: absolute; top: 700px; width: 670px; height: 1200px; border-radius: 40px; padding: 44px 48px 48px; }
+  .x09-old { left: 110px; background: #cfd3d9; color: #2a2f38; box-shadow: inset 0 0 0 2px #cdd1d8; }
+  .x09-new { left: 820px; background: #fff; color: #0c1018; box-shadow: 0 0 0 2px #e6e8ec, 0 50px 90px -40px rgba(12, 60, 160, 0.35), 0 14px 30px -18px rgba(12, 30, 70, 0.16); }
+
+  /* top band: what you're handed */
+  .x09-top { position: relative; height: 462px; }
+  .x09-label { position: absolute; left: 0; bottom: 20px; font-size: 44px; font-weight: 750; letter-spacing: -0.03em; }
+  .x09-old .x09-label { color: #3a4050; }
+
+  /* the heavy side: a long contract behind a thick bound proposal */
+  .x09-contract { position: absolute; left: 300px; top: -120px; width: 290px; height: 450px; border-radius: 8px; background: #f3f4f6; transform: rotate(5deg); padding: 26px 24px; box-shadow: 0 0 0 2px #c3c8d0, 0 16px 26px -14px rgba(20, 30, 50, 0.4); }
+  .x09-contract b { display: block; font-size: 25px; font-weight: 750; color: #3a4050; letter-spacing: -0.01em; }
+  .x09-contract i { display: block; height: 7px; margin-top: 11px; border-radius: 4px; background: #c6cbd3; }
+  .x09-report { position: absolute; left: 0; top: 30px; width: 330px; height: 196px; border-radius: 8px; background: #eef0f3; padding: 44px 26px 0; box-shadow: 0 0 0 2px #bfc4cc; }
+  .x09-report::before { content: ""; position: absolute; left: -2px; right: -2px; top: -2px; height: 22px; border-radius: 8px 8px 0 0; background: #6b7280; }
+  .x09-report::after {
+    content: ""; position: absolute; left: 8px; right: -10px; top: calc(100% + 2px); height: 118px; border-radius: 0 0 8px 8px;
+    background: repeating-linear-gradient(180deg, #f6f7f8 0 5px, #b9bec7 5px 7px);
+    box-shadow: 0 0 0 2px #bfc4cc, 0 22px 30px -16px rgba(20, 30, 50, 0.45);
+  }
+  .x09-report b { display: block; font-size: 30px; font-weight: 750; letter-spacing: -0.02em; color: #2a2f38; }
+  .x09-report i { display: block; height: 8px; margin-top: 14px; border-radius: 4px; background: #c6cbd3; }
+  .x09-clip { position: absolute; left: 132px; top: 14px; width: 64px; height: 34px; border-radius: 8px 8px 4px 4px; border: 6px solid #4a505c; border-bottom: 0; z-index: 2; }
+
+  /* the light side */
+  .x09-logo { position: absolute; left: 0; bottom: 18px; font-size: 50px; gap: 16px; }
+  .x09-logo svg { width: 52px; height: 52px; }
+  .x09-art { position: absolute; left: 0; right: 0; top: 34px; padding: 26px 30px 28px; border-radius: 26px; background: #fff; box-shadow: 0 0 0 2px #e3ebf8, 0 22px 40px -24px rgba(12, 60, 160, 0.35); }
+  .x09-art .h { display: flex; align-items: center; justify-content: space-between; font-size: 25px; font-weight: 600; color: #8a909c; }
+  .x09-art .h span { height: 44px; padding: 0 18px; border-radius: 999px; background: #e6f6ec; color: #138a43; box-shadow: inset 0 0 0 2px #cdeed9; display: inline-flex; align-items: center; font-size: 25px; font-weight: 650; }
+  .x09-art .t { margin-top: 14px; font-size: 32px; font-weight: 700; letter-spacing: -0.022em; line-height: 1.22; color: #12161f; }
+  .x09-art .ch { margin-top: 16px; display: flex; gap: 10px; }
+  .x09-art .ch span { height: 46px; padding: 0 16px; border-radius: 999px; background: #eef4ff; color: #1561d6; display: inline-flex; align-items: center; gap: 8px; font-size: 25px; font-weight: 650; white-space: nowrap; }
+  .x09-art .ch svg { width: 22px; height: 22px; }
+
+  /* the paired rows */
+  .x09-row { display: flex; align-items: center; gap: 22px; height: 120px; text-wrap: balance; border-top: 2.5px solid rgba(12, 16, 24, 0.09); font-size: 38px; font-weight: 650; letter-spacing: -0.022em; line-height: 1.18; }
+  .x09-new .x09-row { border-top-color: #eef0f3; }
+  .x09-row.price { font-size: 66px; font-weight: 800; letter-spacing: -0.045em; }
+  .x09-old .x09-row { color: #2a2f38; }
+  .x09-old .x09-row::before { content: ""; width: 34px; height: 6px; border-radius: 3px; background: #9097a3; flex: none; }
+  .x09-old .x09-row.price::before { display: none; }
+  .x09-new .x09-row svg { width: 44px; height: 44px; color: var(--blue); flex: none; }
+  .x09-new .x09-row.price { color: var(--blue); }
+
+  /* the last line: sign for six months, or start free */
+  .x09-end { position: absolute; left: 48px; right: 48px; bottom: 48px; height: 116px; }
+  .x09-sign { display: flex; align-items: flex-end; gap: 16px; height: 100%; padding-bottom: 14px; font-size: 30px; font-weight: 600; color: #6b7280; }
+  .x09-sign::after { content: ""; flex: 1; height: 0; border-bottom: 3px solid #8a909c; margin-bottom: 12px; }
+  .x09-sign b { font-size: 54px; font-weight: 500; color: #4a505c; line-height: 1; }
+  .x09-end .ad-go { height: 116px; justify-content: center; }
+</style>
+</head>
+<body>
+<div class="canvas ad">
+  <div class="ad-dots"></div>
+  <h1 class="ad-hl"><span class="x09-ask">Before you hire an SEO agency, ask:</span><span class="blue x09-q">“What’s your strategy for getting cited in ChatGPT and Perplexity?”</span></h1>
+
+  <div class="x09-col x09-old">
+    <div class="x09-top">
+      <div class="x09-contract"><b>Service agreement</b><i></i><i style="width:84%"></i><i></i><i style="width:92%"></i><i></i><i style="width:70%"></i><i></i><i style="width:88%"></i><i></i><i style="width:62%"></i><i></i><i style="width:90%"></i><i></i><i style="width:76%"></i><i></i><i style="width:86%"></i><i></i><i style="width:58%"></i><i></i><i style="width:80%"></i></div>
+      <div class="x09-clip"></div>
+      <div class="x09-report"><b>SEO proposal</b><i></i><i style="width:80%"></i><i style="width:90%"></i><i style="width:56%"></i></div>
+      <div class="x09-label">Agency proposal</div>
+    </div>
+    <div class="x09-row price">$4,000/month</div>
+    <div class="x09-row">6-month contract</div>
+    <div class="x09-row">A few blog posts a month</div>
+    <div class="x09-row">Monthly PDF report</div>
+    <div class="x09-end"><div class="x09-sign"><b>×</b></div></div>
+  </div>
+
+  <div class="x09-col x09-new">
+    <div class="x09-top">
+      <div class="ad-logo x09-logo"><svg><use href="#lg-rankbox"/></svg>Rankbox</div>
+      <div class="x09-art">
+        <div class="h">yoursite.com<span>Published</span></div>
+        <div class="t">What’s the Best Planning Tool for a Small Team?</div>
+        <div class="ch"><span><svg><use href="#ic-check"/></svg>Answers up front</span><span><svg><use href="#ic-check"/></svg>Cites sources</span></div>
+      </div>
+    </div>
+    <div class="x09-row price" data-offer="price"></div>
+    <div class="x09-row"><svg><use href="#ic-check-circle"/></svg>Cancel in one click</div>
+    <div class="x09-row"><svg><use href="#ic-check-circle"/></svg><span data-offer="articles"></span></div>
+    <div class="x09-row"><svg><use href="#ic-check-circle"/></svg>Scored for Google and AI answers</div>
+    <div class="x09-end"><div class="ad-go"><span data-offer="cta"></span><svg><use href="#ic-arrow-right"/></svg></div></div>
+  </div>
+</div>
+</body>
+</html>

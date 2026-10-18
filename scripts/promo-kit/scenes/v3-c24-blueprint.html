@@ -1,0 +1,102 @@
+<!doctype html>
+<!-- Variant 3 · Cluster 24 "The blueprint" (AI search visibility), one image.
+     "Selected", blue field: a literal blueprint. A citable page drawn in white
+     line on blue grid paper, bleeding off the right edge, with the three
+     pillars as numbered callouts on the left, leader lines into the parts of
+     the page they describe. The answer-up-front block is the selected thing.
+     The one number (up to 40%) hangs off pillar 2 with its source. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x5" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<link rel="stylesheet" href="ads3/ads3.css" />
+<script src="../kit/kit.js"></script>
+<script src="ads/ads.js"></script>
+<script src="ads3/ads3.js"></script>
+<style>
+  .y24-top { position: absolute; left: 100px; right: 100px; top: 96px; display: flex; align-items: center; }
+  .y24-save { margin-left: auto; display: inline-flex; align-items: center; gap: 12px; height: 64px; padding: 0 26px; border-radius: 999px; background: #fff; color: var(--v3-blue); font-size: 28px; font-weight: 700; }
+  .y24-save svg { width: 28px; height: 28px; }
+  .y24-kick { position: absolute; left: 100px; top: 236px; font-size: 38px; font-weight: 600; letter-spacing: -0.02em; color: rgba(255, 255, 255, 0.88); }
+  .y24-hl { position: absolute; left: 92px; top: 290px; font-size: 210px; letter-spacing: -0.065em; }
+
+  /* the drawing */
+  .y24-page { position: absolute; left: 650px; top: 600px; width: 1080px; height: 860px; border-radius: 28px; border: 4px solid #fff; background: rgba(255, 255, 255, 0.07); }
+  .y24-bar { position: absolute; left: 0; right: 0; top: 0; height: 84px; border-bottom: 3px solid rgba(255, 255, 255, 0.55); }
+  .y24-bar i { position: absolute; top: 30px; width: 20px; height: 20px; border-radius: 50%; border: 3px solid #fff; }
+  .y24-url { position: absolute; left: 150px; top: 20px; height: 44px; padding: 0 22px; border-radius: 999px; border: 3px solid rgba(255, 255, 255, 0.7); font-size: 25px; font-weight: 600; line-height: 38px; color: #fff; }
+  .y24-h1 { position: absolute; left: 60px; top: 132px; width: 600px; height: 46px; border-radius: 10px; background: #fff; }
+  .y24-q { position: absolute; left: 60px; display: flex; align-items: center; gap: 16px; }
+  .y24-q b { width: 40px; height: 40px; border-radius: 50%; border: 3px solid #fff; display: grid; place-items: center; font-size: 25px; font-weight: 800; color: #fff; }
+  .y24-q i { display: block; height: 16px; border-radius: 8px; background: rgba(255, 255, 255, 0.75); }
+  .y24-ans.v3-pick { position: absolute; left: 60px; top: 276px; width: 760px; height: 196px; padding: 30px 34px; display: block; --k: 30px; --st: 5px; border-radius: 6px; }
+  .y24-ans .lab { font-size: 26px; font-weight: 750; letter-spacing: -0.01em; color: var(--v3-blue); }
+  .y24-ans i { display: block; height: 15px; margin-top: 18px; border-radius: 8px; background: var(--v3-sky-2); }
+  .y24-ans i.s { position: relative; }
+  .y24-ans i.s::after { content: "1"; position: absolute; right: -50px; top: -12px; width: 36px; height: 36px; border-radius: 9px; background: var(--v3-blue); color: #fff; font-size: 24px; font-weight: 800; display: grid; place-items: center; }
+  .y24-p { position: absolute; left: 60px; top: 504px; width: 720px; }
+  .y24-p i { display: block; height: 12px; margin-bottom: 20px; border-radius: 6px; background: rgba(255, 255, 255, 0.45); }
+
+  /* callouts */
+  .y24-call { position: absolute; left: 100px; width: 470px; }
+  .y24-call .n { display: grid; place-items: center; width: 64px; height: 64px; border-radius: 50%; background: #fff; color: var(--v3-blue); font-size: 36px; font-weight: 800; }
+  .y24-call h3 { margin-top: 18px; font-size: 46px; font-weight: 760; letter-spacing: -0.035em; line-height: 1.02; color: #fff; }
+  .y24-call p { margin-top: 10px; font-size: 30px; font-weight: 500; line-height: 1.3; letter-spacing: -0.01em; color: rgba(255, 255, 255, 0.9); }
+  .y24-lead { position: absolute; left: 0; top: 0; width: 1600px; height: 2000px; pointer-events: none; }
+  /* the blueprint's title block, holding the one number */
+  .y24-tb { position: absolute; left: 900px; top: 1372px; width: 600px; display: flex; background: #fff; color: var(--v3-blue); border-radius: 6px; box-shadow: 0 0 0 4px #fff, 0 40px 70px -30px rgba(4, 50, 150, 0.55); }
+  .y24-tb > div { padding: 22px 26px; }
+  .y24-tb .c1 { border-right: 3px solid var(--v3-line); display: flex; flex-direction: column; justify-content: center; }
+  .y24-tb .c1 span { font-size: 26px; font-weight: 700; color: var(--v3-ink-2); }
+  .y24-tb .c1 b { font-size: 104px; font-weight: 800; letter-spacing: -0.06em; line-height: 0.88; }
+  .y24-tb .c2 { flex: 1; font-size: 30px; font-weight: 650; line-height: 1.22; letter-spacing: -0.015em; color: var(--v3-ink); }
+  .y24-tb .c2 small { display: block; margin-bottom: 8px; font-size: 24px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--v3-ink-2); }
+  .y24-src { position: absolute; left: 100px; width: 740px; top: 1530px; }
+</style>
+</head>
+<body>
+<div class="canvas v3 blue">
+  <div class="v3-wash"></div>
+  <div class="v3-grid"></div>
+
+  <div class="y24-top">
+    <span class="v3-logo"><svg><use href="#lg-rankbox"/></svg>Rankbox</span>
+    <span class="y24-save"><svg viewBox="0 0 24 24"><path d="M6 3h12v18l-6-4.5L6 21z" fill="currentColor"/></svg>Save this</span>
+  </div>
+  <div class="y24-kick">How to improve brand visibility in AI search</div>
+  <h1 class="v3-hl y24-hl">The blueprint.</h1>
+
+  <div class="y24-page">
+    <div class="y24-bar"><i style="left:34px"></i><i style="left:66px"></i><i style="left:98px"></i><span class="y24-url">yoursite.com/guide</span></div>
+    <div class="y24-h1"></div>
+    <div class="y24-q" style="top:204px"><b>?</b><i style="width:420px"></i></div>
+    <div class="v3-pick y24-ans"><div class="lab">The answer, up front</div><i style="width:96%"></i><i class="s" style="width:80%"></i><i style="width:62%"></i></div>
+    <div class="y24-p"><i style="width:100%"></i><i style="width:88%"></i></div>
+    <div class="y24-q" style="top:590px"><b>?</b><i style="width:520px"></i></div>
+    <div class="y24-q" style="top:660px"><b>?</b><i style="width:460px"></i></div>
+    <div class="y24-q" style="top:730px"><b>?</b><i style="width:500px"></i></div>
+  </div>
+
+  <svg class="y24-lead" viewBox="0 0 1600 2000" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-dasharray="2 14">
+    <path d="M520 726 L 700 755" /><path d="M560 986 L 700 974" /><path d="M556 1256 L 700 1280" />
+  </svg>
+
+  <div class="y24-call" style="top:620px"><span class="n">1</span><h3>Make it readable</h3><p>One H1, question headings. Let AI crawlers&nbsp;in.</p></div>
+  <div class="y24-call" style="top:880px"><span class="n">2</span><h3>Make it quotable</h3><p>The answer first, with stats, quotes and&nbsp;sources.</p></div>
+  <div class="y24-call" style="top:1150px"><span class="n">3</span><h3>Answer every question</h3><p>What buyers ask AI, answered one by&nbsp;one.</p></div>
+
+  <div class="y24-tb">
+    <div class="c1"><span>Up to</span><b>40%</b></div>
+    <div class="c2"><small>Pillar 2 · tested</small>more visible in AI answers with quotes, stats and&nbsp;sources</div>
+  </div>
+  <div class="v3-src y24-src">Source: “GEO: Generative Engine Optimization”,<br />Aggarwal et al., KDD 2024</div>
+
+  <div class="v3-close">
+    <svg class="mk"><use href="#lg-rankbox"/></svg>
+    <p>Rankbox writes to this blueprint, every day.<span data-offer="line"></span></p>
+    <div class="v3-go"><span data-offer="cta"></span><svg><use href="#ic-arrow-right"/></svg></div>
+  </div>
+</div>
+</body>
+</html>

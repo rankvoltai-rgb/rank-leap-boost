@@ -1,0 +1,174 @@
+<!doctype html>
+<!-- Cluster 34 · single image · "Burner domains" (cold email). A two-panel
+     comic drawn with UI and simple shapes, no people. Panel 1, "The outbound
+     grind": a generic sending dashboard (burner domains #1 and #2 burned, #3
+     warming, day 21), a send counter, a sweating dashboard, two empty mugs
+     and a fresh one, and the one reply: "Please stop emailing me." Panel 2,
+     "Meanwhile…": a calm buyer asks a generic AI assistant which tool to use,
+     it names a vendor (Taskwren, the set's fictional rival), the buyer books a
+     demo, tea steams. The humour is the situation: no reply rates, no
+     percentages. Rankbox only in the .ad-turn band. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x5" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<link rel="stylesheet" href="ads/ads.css" />
+<script src="../kit/kit.js"></script>
+<script src="ads/ads.js"></script>
+<style>
+  .canvas.ad { --hl-y: 124px; }
+
+  /* ---------------------------------------------------------- comic panels */
+  .x34-panel { position: absolute; left: 110px; width: 1380px; height: 652px; border-radius: 22px; border: 5px solid #0c1018; overflow: hidden; box-shadow: 0 40px 80px -40px rgba(12, 30, 70, 0.3); }
+  .x34-panel.one { top: 300px; background: #e9ecf0; }
+  .x34-panel.two { top: 990px; background: #f5f8fe; }
+  .x34-panel.one::before { content: ""; position: absolute; inset: 0; background-image: radial-gradient(rgba(12, 16, 24, 0.1) 2.4px, transparent 2.8px); background-size: 20px 20px; -webkit-mask-image: linear-gradient(135deg, #000 0%, rgba(0,0,0,0.15) 55%, #000 100%); mask-image: linear-gradient(135deg, #000 0%, rgba(0,0,0,0.15) 55%, #000 100%); }
+  .x34-cap { position: absolute; left: -5px; top: -5px; z-index: 10; height: 74px; padding: 0 30px; border: 5px solid #0c1018; border-radius: 22px 0 18px 0; background: #fff; display: flex; align-items: center; font-size: 28px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: #0c1018; white-space: nowrap; }
+  .two .x34-cap { background: var(--blue); color: #fff; }
+
+  /* ---------------------------------------------------------- panel 1 */
+  .x34-dash { position: absolute; left: 60px; top: 122px; width: 700px; padding: 34px 38px 30px; border-radius: 26px; background: #fff; box-shadow: 0 0 0 3px #0c1018, 0 24px 40px -24px rgba(12, 16, 24, 0.45); transform: rotate(-2deg); }
+  .x34-dh { display: flex; align-items: center; gap: 14px; font-size: 32px; font-weight: 750; letter-spacing: -0.02em; color: #0c1018; }
+  .x34-dh svg { width: 36px; height: 36px; color: #4a5160; }
+  .x34-live { margin-left: auto; height: 48px; padding: 0 18px; border-radius: 999px; background: #f1f2f5; color: #4a5160; font-size: 25px; font-weight: 700; display: inline-flex; align-items: center; gap: 10px; }
+  .x34-live i { width: 13px; height: 13px; border-radius: 50%; background: #0c1018; display: block; }
+  .x34-dom { margin-top: 22px; display: grid; gap: 10px; }
+  .x34-d { display: flex; align-items: center; gap: 14px; height: 62px; padding: 0 20px; border-radius: 16px; background: #f6f7f9; font-size: 28px; font-weight: 600; color: #3a4252; letter-spacing: -0.012em; white-space: nowrap; }
+  .x34-d .st { margin-left: auto; font-size: 25px; font-weight: 750; color: #8a909c; }
+  .x34-d.burned { color: #9aa0ab; }
+  .x34-d.burned span:first-child { text-decoration: line-through; text-decoration-thickness: 3px; }
+  .x34-d.warm { height: auto; padding: 18px 20px 20px; flex-wrap: wrap; background: #fff; box-shadow: inset 0 0 0 3px #0c1018; color: #0c1018; font-weight: 700; }
+  .x34-d.warm svg { width: 34px; height: 34px; color: #0c1018; }
+  .x34-bar { flex-basis: 100%; height: 16px; margin-top: 14px; border-radius: 99px; background: #eceef2; overflow: hidden; }
+  .x34-bar i { display: block; width: 92%; height: 100%; border-radius: inherit; background: repeating-linear-gradient(-45deg, #4a5160 0 12px, #6b7280 12px 24px); }
+  .x34-sent { margin-top: 22px; display: flex; align-items: baseline; gap: 16px; font-size: 27px; font-weight: 650; color: #6b7280; }
+  .x34-sent b { font-size: 50px; font-weight: 800; letter-spacing: -0.035em; color: #0c1018; }
+
+  /* the one reply, popping out */
+  .x34-reply { position: absolute; left: 736px; top: 104px; z-index: 5; width: 584px; padding: 28px 32px 30px; border-radius: 26px; background: #fff; box-shadow: 0 0 0 4px #0c1018, 0 30px 50px -24px rgba(12, 16, 24, 0.55); transform: rotate(2.5deg); }
+  .x34-rh { display: flex; align-items: center; gap: 14px; font-size: 26px; font-weight: 700; color: #6b7280; white-space: nowrap; }
+  .x34-rh .av { width: 54px; height: 54px; border-radius: 50%; background: #e6e9ee; display: grid; place-items: center; font-size: 26px; font-weight: 750; color: #4a5160; }
+  .x34-rh em { font-style: normal; color: #0c1018; }
+  .x34-reply p { margin-top: 16px; font-size: 48px; font-weight: 750; letter-spacing: -0.03em; line-height: 1.1; color: #0c1018; text-wrap: balance; }
+  .x34-zap { position: absolute; z-index: 6; width: 110px; height: 110px; }
+
+  .x34-mugs { position: absolute; right: 26px; bottom: -8px; width: 420px; height: 330px; }
+  .x34-sweat { position: absolute; z-index: 7; width: 64px; height: 92px; }
+
+  /* ---------------------------------------------------------- panel 2 */
+  .x34-chat { position: absolute; left: 60px; top: 120px; width: 856px; padding: 30px 36px 34px; border-radius: 26px; background: #fff; box-shadow: 0 0 0 3px #0c1018, 0 24px 40px -24px rgba(12, 16, 24, 0.35); }
+  .x34-chat .ad-q { font-size: 34px; padding: 22px 28px; max-width: 92%; }
+  .x34-chat .ad-answer { margin-top: 22px; padding: 26px 30px 28px; }
+  .x34-chat .ad-answer p { margin-top: 12px; font-size: 33px; line-height: 1.38; }
+  .x34-chat .ad-answer .lab { font-size: 26px; }
+  .x34-chat .ad-chips { margin-top: 16px; }
+  .x34-chat .ad-chip { height: 48px; font-size: 25px; }
+  .x34-chat .x34-book { margin-top: 22px; }
+
+  .x34-tea { position: absolute; right: 64px; bottom: 36px; width: 250px; height: 260px; }
+  .x34-say { position: absolute; left: 936px; top: 70px; z-index: 4; width: 420px; height: 260px; overflow: visible; }
+  .x34-saytxt { position: absolute; left: 936px; top: 70px; z-index: 5; width: 410px; height: 176px; display: grid; place-items: center; font-size: 42px; font-weight: 800; letter-spacing: -0.03em; color: #0c1018; white-space: nowrap; }
+  .x34-chat .ad-q { text-wrap: balance; }
+</style>
+</head>
+<body>
+<div class="canvas ad">
+  <div class="ad-dots"></div>
+  <h1 class="ad-hl">There’s an easier pipeline.</h1>
+
+  <!-- PANEL 1 -->
+  <div class="x34-panel one" id="p1">
+    <div class="x34-cap">The outbound grind</div>
+
+    <div class="x34-dash" id="dash">
+      <div class="x34-dh"><svg><use href="#ic-send"/></svg>Cold outreach<span class="x34-live"><i></i>Sending</span></div>
+      <div class="x34-dom">
+        <div class="x34-d burned"><span>Burner domain #1</span><span class="st">Burned</span></div>
+        <div class="x34-d burned"><span>Burner domain #2</span><span class="st">Burned</span></div>
+        <div class="x34-d warm"><svg><use href="#rb-flame"/></svg>Warming burner domain #3 · day 21<div class="x34-bar"><i></i></div></div>
+      </div>
+      <div class="x34-sent">Sent this week<b>4,800</b></div>
+    </div>
+
+    <svg class="x34-sweat" id="sweat" viewBox="0 0 64 92"><path d="M32 4 C 44 30, 58 46, 58 62 A 26 26 0 0 1 6 62 C 6 46, 20 30, 32 4 Z" fill="#a9cbff" stroke="#0c1018" stroke-width="5" stroke-linejoin="round"/><path d="M20 60 q 0 12 10 16" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round"/></svg>
+
+    <div class="x34-reply" id="reply">
+      <div class="x34-rh"><span class="av">R</span><span><em>New reply</em> · Re: Quick question</span></div>
+      <p>“Please stop emailing me.”</p>
+    </div>
+    <svg class="x34-zap" id="zap" viewBox="0 0 110 110"><g stroke="#0c1018" stroke-width="7" stroke-linecap="round"><path d="M70 14 L62 40"/><path d="M96 38 L72 52"/><path d="M40 8 L44 34"/></g></svg>
+
+    <!-- two empty mugs and the fresh one -->
+    <svg class="x34-mugs" viewBox="0 0 420 330">
+      <g fill="#fff" stroke="#0c1018" stroke-width="5" stroke-linejoin="round" opacity="0.5">
+        <rect x="10" y="196" width="92" height="118" rx="14"/>
+        <path d="M102 220 h10 a22 22 0 0 1 0 44 h-10" fill="none"/>
+        <rect x="132" y="204" width="92" height="110" rx="14"/>
+        <path d="M224 226 h10 a20 20 0 0 1 0 40 h-10" fill="none"/>
+      </g>
+      <g fill="#fff" stroke="#0c1018" stroke-width="6" stroke-linejoin="round">
+        <rect x="262" y="150" width="110" height="164" rx="16"/>
+        <path d="M372 182 h10 a26 26 0 0 1 0 52 h-10" fill="none"/>
+      </g>
+      <rect x="274" y="164" width="86" height="10" rx="5" fill="#6b4a2e" opacity="0.85"/>
+      <g fill="none" stroke="#6b7280" stroke-width="6" stroke-linecap="round">
+        <path d="M290 132 c -12 -16 12 -24 0 -42 c -12 -18 10 -26 2 -40"/>
+        <path d="M317 132 c -12 -16 12 -24 0 -42 c -12 -18 10 -26 2 -40"/>
+        <path d="M344 132 c -12 -16 12 -24 0 -42 c -12 -18 10 -26 2 -40"/>
+      </g>
+    </svg>
+  </div>
+
+  <!-- PANEL 2 -->
+  <div class="x34-panel two" id="p2">
+    <div class="x34-cap">Meanwhile…</div>
+
+    <div class="x34-chat">
+      <div class="ad-q">Which project tool should our ops team use?</div>
+      <div class="ad-answer">
+        <div class="lab"><svg><use href="#ic-sparkle"/></svg>AI answer</div>
+        <p>Teams like yours usually go with <b>Taskwren</b>: quick to roll out, clear reporting.</p>
+        <div class="ad-chips"><span class="ad-chip"><i></i>taskwren.com</span></div>
+      </div>
+    </div>
+
+    <svg class="x34-say" viewBox="0 0 420 260">
+      <path d="M 240 166.7 C 268 196, 320 224, 410 250 C 352 214, 322 188, 300 157.86 A 195 80 0 1 0 240 166.7 Z" fill="#fff" stroke="#0c1018" stroke-width="5" stroke-linejoin="round"/>
+    </svg>
+    <div class="x34-saytxt">Booking a demo.</div>
+    <!-- tea, one slow curl of steam -->
+    <svg class="x34-tea" viewBox="0 0 250 260">
+      <path d="M125 120 c -22 -26 24 -40 0 -70 c -14 -18 4 -34 14 -40" fill="none" stroke="#9cc4ff" stroke-width="7" stroke-linecap="round"/>
+      <g fill="#fff" stroke="#0c1018" stroke-width="6" stroke-linejoin="round">
+        <path d="M44 140 h162 c 0 52 -32 86 -81 86 c -49 0 -81 -34 -81 -86 Z"/>
+        <path d="M206 158 h10 a22 22 0 0 1 0 44 h-16" fill="none"/>
+        <ellipse cx="125" cy="236" rx="110" ry="18"/>
+      </g>
+      <rect x="58" y="146" width="134" height="10" rx="5" fill="#c9a36a" opacity="0.7"/>
+    </svg>
+  </div>
+
+  <div class="ad-turn">
+    <div class="ad-logo"><svg><use href="#lg-rankbox"/></svg>Rankbox</div>
+    <p>Rankbox writes answers to what buyers ask AI, every day.</p>
+    <div class="ad-go"><span data-offer="cta"></span><svg><use href="#ic-arrow-right"/></svg></div>
+  </div>
+</div>
+<script>
+  document.fonts.ready.then(() => {
+    const p1 = document.getElementById("p1").getBoundingClientRect();
+    const d = document.getElementById("dash").getBoundingClientRect();
+    const sweat = document.getElementById("sweat");
+    sweat.style.left = (d.left - p1.left - 26) + "px";
+    sweat.style.top = (d.top - p1.top + 150) + "px";
+    const r = document.getElementById("reply").getBoundingClientRect();
+    const zap = document.getElementById("zap");
+    zap.style.left = (r.right - p1.left - 46) + "px";
+    zap.style.top = (r.top - p1.top - 64) + "px";
+    zap.style.transform = "scaleX(-1)";
+
+  });
+</script>
+</body>
+</html>

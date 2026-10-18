@@ -40,7 +40,7 @@ function SocialButton({ children, onClick }: { children: ReactNode; onClick: () 
     <button
       type="button"
       onClick={onClick}
-      className="inline-flex w-full items-center justify-center gap-2.5 rounded-xl border border-border bg-card px-4 py-3 text-sm font-semibold text-ink shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
+      className="inline-flex h-11 w-full items-center justify-center gap-2.5 rounded-lg border border-ink/[0.1] bg-white px-4 text-[0.9rem] font-medium text-ink shadow-[0_1px_2px_rgba(16,24,40,0.04)] transition-[border-color,background-color,box-shadow] duration-200 hover:border-ink/[0.18] hover:bg-ink/[0.02] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-cta/20"
     >
       {children}
     </button>
@@ -55,10 +55,10 @@ function ComingSoonButton({ children, label }: { children: ReactNode; label: str
       disabled
       aria-label={`${label} sign-in — coming soon`}
       title="Coming soon"
-      className="group relative inline-flex w-full cursor-not-allowed items-center justify-center gap-2.5 rounded-xl border border-dashed border-border bg-surface/60 px-4 py-3 text-sm font-semibold text-muted-foreground"
+      className="group relative inline-flex h-11 w-full cursor-not-allowed items-center justify-center gap-2.5 rounded-lg border border-dashed border-ink/[0.14] bg-white px-4 text-[0.9rem] font-medium text-muted-foreground"
     >
       {children}
-      <span className="absolute -top-2 right-2 rounded-full bg-ink px-1.5 py-0.5 text-[0.6rem] font-bold uppercase tracking-wide text-background">
+      <span className="absolute -top-2 right-2 rounded-md bg-cta-soft px-1.5 py-0.5 text-[0.6rem] font-bold uppercase tracking-wide text-cta ring-1 ring-cta/20">
         Soon
       </span>
     </button>

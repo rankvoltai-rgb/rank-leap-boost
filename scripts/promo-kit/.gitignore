@@ -6,3 +6,7 @@ out/*@2x/
 refs/
 # Download bundles, rebuilt from out/ on request.
 zips/
+# The user's ad briefs: internal strategy, kept out of the public repo.
+brief/
+# Where export.py copies the library: a local path, kept out of the repo.
+export-dest.txt

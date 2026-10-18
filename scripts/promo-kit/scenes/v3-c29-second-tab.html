@@ -1,0 +1,86 @@
+<!doctype html>
+<!-- Variant 3 · Cluster 29 "The second tab" (pricing prompt), one image.
+     "Selected", blue field: two giant browser tabs as flat shapes. Behind,
+     "Pricing — Loomvale" in white outline; in front, the active white tab of
+     a generic AI chat, its title selected: "Is Loomvale worth it?". The page
+     under it holds the full question and the typing dots: the half-second
+     before the answer that decides the sale. No engine's name, logo or UI. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x5" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<link rel="stylesheet" href="ads3/ads3.css" />
+<script src="../kit/kit.js"></script>
+<script src="ads/ads.js"></script>
+<script src="ads3/ads3.js"></script>
+<style>
+  .y29-top { position: absolute; left: 100px; right: 100px; top: 96px; display: flex; align-items: center; }
+  .y29-top .v3-kick { margin-left: auto; }
+  .y29-hl { position: absolute; left: 94px; right: 60px; top: 232px; font-size: 128px; text-wrap: nowrap; }
+
+  /* the tab strip */
+  .y29-tab { position: absolute; }
+  .y29-tab svg.sh { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+  .y29-tab .in { position: absolute; top: 0; display: flex; align-items: center; white-space: nowrap; }
+  .y29-back { left: 56px; top: 694px; width: 640px; height: 216px; }
+  .y29-back .in { left: 62px; bottom: 14px; gap: 18px; color: #fff; font-size: 46px; font-weight: 600; letter-spacing: -0.03em; }
+  .y29-back .fav { width: 54px; height: 54px; flex: none; border-radius: 15px; border: 5px solid #fff; display: grid; place-items: center; font-size: 28px; font-weight: 800; }
+  .y29-front { left: 600px; top: 670px; width: 1080px; height: 242px; z-index: 2; }
+  .y29-front .in { left: 84px; bottom: 30px; gap: 26px; color: var(--v3-blue); font-size: 78px; font-weight: 750; letter-spacing: -0.045em; }
+  .y29-front .ai { width: 70px; height: 70px; flex: none; color: var(--v3-blue); }
+  .y29-front .v3-pick { padding: 0.07em 0.13em 0.11em; margin: 0; --k: 26px; --st: 5px; }
+
+  /* the page under the active tab: the answer, not written yet */
+  .y29-page { position: absolute; left: 56px; right: -60px; top: 910px; height: 400px; background: #fff; border-radius: 0 0 0 40px; z-index: 1; box-shadow: 0 50px 90px -40px rgba(4, 50, 150, 0.55); }
+  .y29-typing { position: absolute; left: 62px; top: 84px; display: flex; gap: 22px; padding: 40px 48px; border-radius: 14px 52px 52px 52px; background: var(--v3-sky); }
+  .y29-typing i { width: 40px; height: 40px; border-radius: 50%; background: var(--v3-blue); }
+  .y29-skel { position: absolute; left: 62px; top: 262px; width: 1340px; }
+  .y29-skel i { display: block; height: 20px; margin-bottom: 26px; border-radius: 10px; background: var(--v3-sky); }
+
+  .y29-sub { position: absolute; left: 100px; right: 100px; top: 1480px; font-size: 80px; font-weight: 750; letter-spacing: -0.045em; line-height: 1.04; color: #fff; }
+</style>
+</head>
+<body>
+<div class="canvas v3 blue">
+  <div class="v3-wash"></div>
+  <div class="v3-dots"></div>
+
+  <div class="y29-top">
+    <span class="v3-logo"><svg><use href="#lg-rankbox"/></svg>Rankbox</span>
+    <span class="v3-kick">For SaaS founders</span>
+  </div>
+  <h1 class="v3-hl y29-hl">Right before they buy,<br />they open a second&nbsp;tab.</h1>
+
+  <!-- behind: their pricing page, as an outline tab -->
+  <div class="y29-tab y29-back">
+    <svg class="sh" viewBox="0 0 640 216" preserveAspectRatio="none" fill="rgba(255,255,255,0.1)" stroke="#fff" stroke-width="5" stroke-linejoin="round">
+      <path d="M0 216 Q 28 216 28 188 L 28 42 Q 28 4 66 4 L 574 4 Q 612 4 612 42 L 612 188 Q 612 216 640 216" />
+    </svg>
+    <div class="in"><span class="fav">L</span>Pricing — Loomvale</div>
+  </div>
+
+  <!-- in front: the AI chat they opened, active, its title selected -->
+  <div class="y29-tab y29-front">
+    <svg class="sh" viewBox="0 0 1080 242" preserveAspectRatio="none" fill="#fff">
+      <path d="M0 242 Q 32 242 32 210 L 32 44 Q 32 0 76 0 L 1004 0 Q 1048 0 1048 44 L 1048 210 Q 1048 242 1080 242 Z" />
+    </svg>
+    <div class="in"><svg class="ai"><use href="#ic-sparkle"/></svg><span class="v3-pick inv-b">Is Loomvale worth it?</span></div>
+  </div>
+
+  <div class="y29-page">
+    <div class="y29-typing"><i></i><i style="opacity:.55"></i><i style="opacity:.25"></i></div>
+    <div class="y29-skel"><i style="width:100%"></i><i style="width:72%"></i></div>
+  </div>
+  <i class="v3-cur" style="left:1493px; top:852px"></i>
+
+  <p class="y29-sub">This answer decides the&nbsp;sale.</p>
+
+  <div class="v3-close">
+    <svg class="mk"><use href="#lg-rankbox"/></svg>
+    <p>Rankbox writes your side of the story.<span data-offer="line"></span></p>
+    <div class="v3-go"><span data-offer="cta"></span><svg><use href="#ic-arrow-right"/></svg></div>
+  </div>
+</div>
+</body>
+</html>

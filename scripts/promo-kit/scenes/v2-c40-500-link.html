@@ -1,0 +1,143 @@
+<!doctype html>
+<!-- Variant 2 · Cluster 40 "The $508.95 link", one image.
+     Frameship family (07 "Rankbox for Framer"): a light grey field washing
+     into sky blue, a centred heavy-caps line where the wordmark sat, one tall
+     white panel with uppercase rows and little thumbnails, and thick grey
+     dashed leads from the things on either side into the panel's edges.
+     Here the panel is the invoice for one link at the survey average, the
+     lead on the right comes from the site that paid (yours), the lead on the
+     left goes to the site that got the paragraph (someone else's), and the
+     last row is the joke: added to your site, 0 pages. The number is what SEO pros
+     call an acceptable price, worded as the survey worded it. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x5" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<link rel="stylesheet" href="ads2/ads2.css" />
+<script src="../kit/kit.js"></script>
+<script src="ads/ads.js"></script>
+<script src="ads2/ads2.js"></script>
+<style>
+  html, body { background: #f0f0f0; }
+  .canvas.v2 { background: linear-gradient(180deg, #f0f0f0 0%, #eef0f2 36%, #d6ebff 66%, #b3daff 86%, #a4d2ff 100%); color: #0c1018; }
+  .canvas.v2 .grain { --grain: 0.08; }
+
+  /* ------------------------------------------------------------ headline */
+  .y40-hl { position: absolute; left: 0; right: 0; top: 104px; display: flex; justify-content: center; align-items: center; gap: 30px; color: #0c1018; font-size: 128px; line-height: 1; white-space: nowrap; }
+  .y40-hl .p { color: var(--blue); }
+  .y40-hl .t { width: 116px; height: 116px; flex: none; border-radius: 28px; background: #0c1018; color: #fff; display: grid; place-items: center; -webkit-text-stroke: 0; }
+  .y40-hl .t svg { width: 66px; height: 66px; }
+  .y40-sub { position: absolute; left: 0; right: 0; top: 268px; text-align: center; font-size: 42px; font-weight: 500; letter-spacing: -0.025em; color: #3a4252; }
+
+  /* ------------------------------------------------------------ the invoice panel */
+  .y40-panel {
+    position: absolute; left: 380px; top: 420px; width: 840px; height: 1124px;
+    border-radius: 48px; background: #fff; overflow: hidden;
+    box-shadow: 0 0 0 1.5px rgba(12, 16, 24, .04), 0 40px 80px -30px rgba(10, 40, 80, .28), 0 10px 30px -14px rgba(10, 40, 80, .16);
+  }
+  .y40-hd { display: flex; align-items: center; gap: 18px; height: 120px; padding: 0 40px 0 44px; border-bottom: 2px solid #eef0f2; font-size: 40px; font-weight: 600; letter-spacing: -0.03em; color: #2a2e36; }
+  .y40-hd > svg { width: 44px; height: 44px; color: #2a2e36; }
+  .y40-paid { margin-left: auto; display: inline-flex; align-items: center; gap: 10px; height: 60px; padding: 0 24px 0 18px; border-radius: 999px; box-shadow: inset 0 0 0 3px #0c1018; font-size: 30px; font-weight: 700; color: #0c1018; }
+  .y40-paid svg { width: 28px; height: 28px; }
+  .y40-x { width: 34px; height: 34px; color: #6b707a; margin-left: 18px; }
+  .y40-main { padding: 40px 44px 0; }
+  .y40-main h2 { font-size: 64px; font-weight: 800; letter-spacing: -0.035em; text-transform: uppercase; color: #0c1018; line-height: 0.98; word-spacing: 0.1em; -webkit-text-stroke: 0.012em currentColor; }
+  .y40-main .by { margin-top: 18px; font-size: 31px; font-weight: 500; letter-spacing: -0.02em; color: #4a5160; }
+  .y40-main .by b { font-weight: 650; color: #0c1018; }
+
+  .y40-rows { margin-top: 36px; display: grid; gap: 20px; }
+  .y40-row { position: relative; display: flex; align-items: center; height: 180px; padding: 0 30px 0 36px; border-radius: 26px; background: #f5f6f7; box-shadow: inset 0 0 0 1.5px #eceef0; }
+  .y40-row .l b { display: block; font-size: 38px; font-weight: 800; letter-spacing: -0.02em; text-transform: uppercase; color: #0c1018; line-height: 1; white-space: nowrap; }
+  .y40-row .l span { display: block; margin-top: 12px; font-size: 27px; font-weight: 500; letter-spacing: -0.015em; color: #6b707a; white-space: nowrap; }
+  .y40-row .go { width: 38px; height: 38px; color: #6b707a; margin-left: 22px; flex: none; }
+  .y40-th { margin-left: auto; flex: none; }
+
+  /* thumbnails */
+  .y40-price { height: 96px; padding: 0 28px; border-radius: 22px; background: #fff; display: grid; place-items: center; font-size: 52px; font-weight: 800; letter-spacing: -0.04em; color: #0c1018; box-shadow: 0 8px 20px -8px rgba(10, 40, 80, .28); }
+  .y40-doc { position: relative; width: 150px; height: 120px; border-radius: 16px; background: #fff; padding: 18px 18px; box-shadow: 0 8px 20px -8px rgba(10, 40, 80, .28); }
+  .y40-doc i { display: block; height: 9px; border-radius: 5px; background: #d6dae0; margin-top: 10px; }
+  .y40-doc i:first-child { margin-top: 0; height: 12px; width: 70%; background: #2a2e36; }
+  .y40-doc i.hl { height: 14px; background: #a9cbff; box-shadow: inset 0 -4px 0 #1877f2; }
+  .y40-zero { width: 128px; height: 128px; border-radius: 28px; background: #fff; display: grid; place-items: center; font-size: 104px; font-weight: 800; letter-spacing: -0.05em; color: var(--blue); line-height: 1; box-shadow: 0 8px 20px -8px rgba(10, 40, 80, .28), inset 0 0 0 3px #d5e6ff; }
+  .y40-row.z { background: #eef5ff; box-shadow: inset 0 0 0 2px #cfe0fb; }
+
+  /* ------------------------------------------------------------ the two sites */
+  .y40-site { position: absolute; z-index: 3; width: 236px; }
+  .y40-tile { position: relative; width: 236px; height: 236px; border-radius: 48px; background: #fff; padding: 34px 30px 0; box-shadow: 0 0 0 1.5px rgba(12, 16, 24, .04), 0 34px 60px -24px rgba(10, 40, 80, .4), 0 10px 22px -12px rgba(10, 40, 80, .22); }
+  .y40-tile .bar { display: flex; align-items: center; gap: 10px; }
+  .y40-tile .bar i { width: 20px; height: 20px; border-radius: 50%; background: #c9d0da; display: block; flex: none; }
+  .y40-tile .bar u { display: block; flex: 1; height: 12px; border-radius: 6px; background: #e3e6eb; }
+  .y40-tile .ln { display: block; height: 12px; border-radius: 6px; background: #e3e6eb; margin-top: 16px; }
+  .y40-tile .ln.hl { height: 18px; background: #a9cbff; box-shadow: inset 0 -5px 0 #1877f2; }
+  .y40-tile .empty { margin-top: 22px; height: 112px; border-radius: 18px; border: 4px dashed #c9d0da; display: grid; place-items: center; color: #b4bac4; }
+  .y40-tile .empty svg { width: 40px; height: 40px; }
+  .y40-tile .bar.you i { background: #1877f2; }
+  .y40-site em { display: block; margin-top: 26px; text-align: center; font-style: normal; font-size: 30px; font-weight: 800; letter-spacing: -0.02em; text-transform: uppercase; line-height: 1.08; color: #0c1018; -webkit-text-stroke: 0.01em currentColor; }
+  .y40-site.l { left: 84px; top: 600px; transform: rotate(-6deg); }
+  .y40-site.r { left: 1282px; top: 790px; transform: rotate(6deg); }
+
+  .y40-dash { position: absolute; left: 0; top: 0; width: 1600px; height: 2000px; overflow: visible; pointer-events: none; z-index: 2; }
+  .y40-dash path { stroke: #6f8496; stroke-width: 16; stroke-linecap: round; stroke-dasharray: 26 30; fill: none; }
+
+  /* the source, in the panel's foot (Frameship's status line) */
+  .y40-foot { position: absolute; left: 0; right: 0; bottom: 0; padding: 30px 44px 36px; border-top: 2px solid #eef0f2; background: #fff; font-size: 25px; font-weight: 500; line-height: 1.4; color: #5a6070; letter-spacing: -0.005em; text-wrap: balance; }
+
+  /* ------------------------------------------------------------ close */
+  .v2-close { bottom: 96px; }
+  .v2-close p { flex: 1; font-size: 36px; font-weight: 650; line-height: 1.25; letter-spacing: -0.02em; color: #0c1018; }
+  .v2-close p span { display: block; margin-top: 8px; font-size: 26px; font-weight: 500; color: #4a5160; white-space: nowrap; }
+  .v2-close .v2-logo svg { color: var(--blue); width: 58px; height: 58px; }
+</style>
+</head>
+<body>
+<div class="canvas v2">
+  <div class="grain"></div>
+
+  <h1 class="y40-hl hl-caps"><span class="t"><svg><use href="#ic-link"/></svg></span><span>The <span class="p">$508.95</span> link</span></h1>
+  <p class="y40-sub">What SEO pros call a fair price for one good backlink.</p>
+
+  <svg class="y40-dash" id="dash"><path id="dl" /><path id="dr" /></svg>
+
+  <div class="y40-site r" id="you">
+    <div class="y40-tile"><div class="bar you"><i></i><u></u></div><div class="empty"><svg><use href="#ic-plus"/></svg></div></div>
+    <em>Your site</em>
+  </div>
+  <div class="y40-site l" id="them">
+    <div class="y40-tile"><div class="bar"><i></i><u></u></div><span class="ln" style="width:92%"></span><span class="ln" style="width:78%"></span><span class="ln hl" style="width:86%"></span><span class="ln" style="width:64%"></span></div>
+    <em>Someone<br />else’s site</em>
+  </div>
+
+  <div class="y40-panel" id="panel">
+    <div class="y40-hd"><svg><use href="#ic-doc"/></svg>Invoice<span class="y40-paid"><svg><use href="#ic-check"/></svg>Paid</span><svg class="y40-x"><use href="#ic-x"/></svg></div>
+    <div class="y40-main">
+      <h2>1 high-quality<br />backlink</h2>
+      <div class="by">Billed to <b>yoursite.com</b></div>
+      <div class="y40-rows">
+        <div class="y40-row" id="rprice"><div class="l"><b>Price</b><span>Survey average</span></div><div class="y40-th y40-price">$508.95</div></div>
+        <div class="y40-row" id="rbought"><div class="l"><b>What it bought</b><span>A paragraph on someone<br />else’s website</span></div><div class="y40-th y40-doc"><i></i><i></i><i class="hl"></i><i style="width:60%"></i></div></div>
+        <div class="y40-row z" id="rzero"><div class="l"><b>Added to your site</b><span>Pages you own</span></div><div class="y40-th y40-zero">0</div></div>
+      </div>
+    </div>
+    <div class="y40-foot">Source: average acceptable price for one high-quality link, Editorial.Link survey of 518 SEO professionals, 2026</div>
+  </div>
+
+  <div class="v2-close">
+    <span class="v2-logo"><svg><use href="#lg-rankbox"/></svg></span>
+    <p>Rankbox builds authority on your own domain, for less than one link.<span data-offer="line"></span></p>
+    <div class="v2-go"><span data-offer="cta"></span><svg><use href="#ic-arrow-right"/></svg></div>
+  </div>
+</div>
+<script>
+  // Dashed leads, as 07 draws them: from under someone else's site into the
+  // "What it bought" row, and from under your site into "Added to your site 0".
+  addEventListener("load", () => {
+    const c = document.querySelector(".canvas").getBoundingClientRect();
+    const r = (id) => { const b = document.getElementById(id).getBoundingClientRect(); return { l: b.left - c.left, t: b.top - c.top, r: b.right - c.left, b: b.bottom - c.top, w: b.width, h: b.height }; };
+    const you = r("you"), them = r("them"), zero = r("rzero"), bought = r("rbought"), P = r("panel");
+    document.getElementById("dl").setAttribute("d", `M${them.l + them.w / 2 + 8} ${them.b + 26} L ${P.l - 10} ${bought.t + bought.h / 2 + 10}`);
+    document.getElementById("dr").setAttribute("d", `M${you.l + you.w / 2 - 8} ${you.b + 26} L ${P.r + 10} ${zero.t + zero.h / 2 + 10}`);
+  });
+</script>
+</body>
+</html>

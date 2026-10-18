@@ -1,0 +1,201 @@
+<!doctype html>
+<!-- Variant 2 · Cluster 13 "The free shelf space" (Shopify), one image.
+     Kompa isometric hero family (09): a brand-blue field with a pale glow,
+     and one isometric sheet of white slabs floating over it: the shopper's
+     question, an "AI answer" tag and the three drawn product cards
+     (Saltpine, Hearthwell, Emberlane, the spec's invented cookware brands;
+     prices are product-card content). A flat blue pointer sits on the top
+     pick with the question the ad is about. The one number is Adobe's, with
+     its source on the blue field. Shopify is named in text only, no logo; no
+     AI-engine marks at all. Rankbox only in the close.
+
+     The plane follows 09's camera: perspective(9000px) rotateX(53deg)
+     rotateZ(-43.5deg); slab edges are stacks of zero-blur shadows along the
+     in-plane vector that projects to "straight down" (-1.144, 1.205 per px).
+     The cookware drawings are the variant 1 symbols, copied with y13- ids. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x5" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<link rel="stylesheet" href="ads2/ads2.css" />
+<script src="../kit/kit.js"></script>
+<script src="ads/ads.js"></script>
+<script src="ads2/ads2.js"></script>
+<style>
+  .canvas.v2 {
+    background:
+      radial-gradient(1100px 900px at 1180px 1260px, rgba(216, 222, 233, 0.6), rgba(216, 222, 233, 0.3) 46%, rgba(216, 222, 233, 0) 76%),
+      radial-gradient(700px 520px at 1600px 0px, rgba(96, 156, 255, 0.45), rgba(96, 156, 255, 0) 72%),
+      linear-gradient(170deg, #0a57f2 0%, #0c5cf3 50%, #1063f3 100%);
+  }
+  .canvas.v2 .grain { --grain: 0.2; }
+
+  /* hook: a Kompa bubble chip, then the headline */
+  .y13-who { position: absolute; left: 100px; top: 100px; }
+  .y13-who .bubble { --bb: #fff; --bc: var(--blue); --bh: 92px; --bf: 46px; padding: 0 36px; font-weight: 700; letter-spacing: -0.025em; }
+  .y13-hl { position: absolute; left: 94px; top: 232px; font-size: 128px; color: #fff; }
+
+  /* ---------------------------------------------------------- the plane */
+  .y13-iso { position: absolute; left: 200px; top: 1020px; width: 0; height: 0; transform-origin: 0 0;
+    transform: perspective(9000px) rotateX(53deg) rotateZ(-43.5deg) scale(0.9); }
+  .y13-s { position: absolute; background: #fff; border-radius: 34px; color: #0c1018; overflow: hidden;
+    box-shadow:
+      -1.14px 1.2px 0 #eef0f3, -2.29px 2.41px 0 #ebedf1, -3.43px 3.62px 0 #e8eaee,
+      -4.58px 4.82px 0 #e5e7ec, -5.72px 6.03px 0 #e2e5ea, -6.86px 7.23px 0 #dfe2e8,
+      -8.01px 8.44px 0 #dcdfe5, -9.15px 9.64px 0 #d8dce3, -10.3px 10.85px 0 #d4d8e0,
+      -11.44px 12.05px 0 #cdd2db,
+      -14px 9px 16px rgba(3, 26, 104, 0.3),
+      -40px 26px 60px rgba(3, 26, 104, 0.2); }
+
+  .y13-q { left: 0; top: 0; width: 1400px; height: 128px; border-radius: 64px; display: flex; align-items: center; gap: 22px; padding: 0 44px; font-size: 46px; font-weight: 600; letter-spacing: -0.02em; }
+  .y13-q svg { width: 46px; height: 46px; color: #8a909c; flex: none; }
+  .y13-tag { left: 0; top: 176px; height: 84px; border-radius: 42px; display: flex; align-items: center; gap: 14px; padding: 0 34px; background: #eaf2ff; color: #1561d6; font-size: 38px; font-weight: 700; letter-spacing: -0.01em; white-space: nowrap; }
+  .y13-tag svg { width: 38px; height: 38px; }
+
+  .y13-card { top: 306px; width: 440px; height: 610px; border-radius: 36px; }
+  .y13-card.top { box-shadow: inset 0 0 0 6px var(--blue),
+      -1.14px 1.2px 0 #eef0f3, -2.29px 2.41px 0 #ebedf1, -3.43px 3.62px 0 #e8eaee,
+      -4.58px 4.82px 0 #e5e7ec, -5.72px 6.03px 0 #e2e5ea, -6.86px 7.23px 0 #dfe2e8,
+      -8.01px 8.44px 0 #dcdfe5, -9.15px 9.64px 0 #d8dce3, -10.3px 10.85px 0 #d4d8e0,
+      -11.44px 12.05px 0 #cdd2db,
+      -14px 9px 16px rgba(3, 26, 104, 0.3),
+      -40px 26px 60px rgba(3, 26, 104, 0.2); }
+  .y13-tile { position: relative; height: 320px; margin: 14px 14px 0; border-radius: 26px; background: linear-gradient(180deg, #f6f4f1, #eeebe6); overflow: hidden; }
+  .y13-tile svg { position: absolute; left: 50%; top: 50%; width: 380px; height: 192px; transform: translate(-50%, -46%); overflow: visible; }
+  .y13-badge { position: absolute; left: 18px; top: 18px; z-index: 2; height: 62px; padding: 0 24px; border-radius: 999px; background: #0c1018; color: #fff; display: inline-flex; align-items: center; font-size: 36px; font-weight: 700; letter-spacing: -0.01em; }
+  .y13-info { padding: 22px 30px 0; }
+  .y13-brand { font-size: 48px; font-weight: 800; letter-spacing: -0.03em; }
+  .y13-name { margin-top: 2px; font-size: 36px; font-weight: 500; letter-spacing: -0.015em; color: #5a6070; white-space: nowrap; }
+  .y13-buy { margin-top: 18px; display: flex; align-items: center; justify-content: space-between; }
+  .y13-price { font-size: 58px; font-weight: 800; letter-spacing: -0.035em; }
+  .y13-stars { position: relative; width: 150px; height: 28px; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='28' viewBox='0 0 150 28'%3E%3Cg fill='%23d5d9e0'%3E%3Cpath id='s' d='M14 2.2l3.6 7.5 8.2 1.1-6 5.7 1.5 8.1L14 20.7l-7.3 3.9 1.5-8.1-6-5.7 8.2-1.1z'/%3E%3Cuse href='%23s' x='30.5'/%3E%3Cuse href='%23s' x='61'/%3E%3Cuse href='%23s' x='91.5'/%3E%3Cuse href='%23s' x='122'/%3E%3C/g%3E%3C/svg%3E") no-repeat; }
+  .y13-stars i { position: absolute; left: 0; top: 0; bottom: 0; width: var(--r, 100%); overflow: hidden; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='28' viewBox='0 0 150 28'%3E%3Cg fill='%231d222c'%3E%3Cpath id='s' d='M14 2.2l3.6 7.5 8.2 1.1-6 5.7 1.5 8.1L14 20.7l-7.3 3.9 1.5-8.1-6-5.7 8.2-1.1z'/%3E%3Cuse href='%23s' x='30.5'/%3E%3Cuse href='%23s' x='61'/%3E%3Cuse href='%23s' x='91.5'/%3E%3Cuse href='%23s' x='122'/%3E%3C/g%3E%3C/svg%3E") no-repeat; }
+
+  /* the pointer, flat on screen so it reads */
+  .y13-ptr { position: absolute; z-index: 10; }
+  .y13-ptr svg { position: absolute; left: -12px; top: -12px; width: 76px; height: 76px; color: var(--blue); filter: drop-shadow(0 10px 14px rgba(4, 30, 100, 0.4)); }
+  .y13-ptr b { position: absolute; left: -14px; top: 74px; padding: 18px 36px; border-radius: 999px; background: var(--blue); color: #fff; font-size: 46px; font-weight: 750; letter-spacing: -0.025em; white-space: nowrap;
+    box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.9), 0 24px 40px -14px rgba(4, 30, 100, 0.6); }
+
+  /* the one number, a band on the field above the close */
+  .y13-stat { position: absolute; left: 100px; right: 100px; top: 1478px; display: flex; align-items: center; gap: 40px; color: #fff; }
+  .y13-stat b { font-size: 138px; font-weight: 800; letter-spacing: -0.06em; line-height: 0.9; white-space: nowrap; text-shadow: 0 10px 40px rgba(10, 70, 190, 0.25); }
+  .y13-stat span { display: block; font-size: 36px; font-weight: 650; line-height: 1.22; letter-spacing: -0.02em; }
+  .y13-stat em { display: block; margin-top: 12px; font-style: normal; font-size: 26px; font-weight: 500; color: rgba(255, 255, 255, 0.8); white-space: nowrap; }
+
+  .v2-close { bottom: 96px; }
+  .v2-close .v2-logo svg { color: var(--blue); width: 60px; height: 60px; }
+  .v2-close p { flex: 1; font-size: 35px; font-weight: 700; line-height: 1.2; letter-spacing: -0.025em; color: #0c1018; }
+  .v2-close p .s { display: block; margin-top: 6px; font-size: 28px; font-weight: 550; color: #3a4252; letter-spacing: -0.015em; }
+  .v2-close p .o { display: block; margin-top: 8px; font-size: 25px; font-weight: 500; color: #5a6070; white-space: nowrap; letter-spacing: -0.01em; }
+  .v2-go { height: 104px; padding: 0 36px; font-size: 36px; }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <filter id="y13-soft" x="-20%" y="-200%" width="140%" height="500%"><feGaussianBlur stdDeviation="6" /></filter>
+    <!-- sage ceramic -->
+    <linearGradient id="y13-sg-side" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#6d886b"/><stop offset=".28" stop-color="#b7cab3"/><stop offset=".6" stop-color="#97b093"/><stop offset="1" stop-color="#5f7a5d"/></linearGradient>
+    <linearGradient id="y13-sg-lid" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#cfdccc"/><stop offset="1" stop-color="#93ac8f"/></linearGradient>
+    <!-- charcoal pans, cream ceramic inside -->
+    <linearGradient id="y13-ch-side" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#2a2d33"/><stop offset=".3" stop-color="#5d626c"/><stop offset=".62" stop-color="#454952"/><stop offset="1" stop-color="#23262b"/></linearGradient>
+    <radialGradient id="y13-cream" cx=".45" cy=".4" r=".7"><stop offset="0" stop-color="#fbf8f2"/><stop offset=".75" stop-color="#ece5d8"/><stop offset="1" stop-color="#d9d0c0"/></radialGradient>
+    <linearGradient id="y13-wood" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#d2a77a"/><stop offset="1" stop-color="#a87a50"/></linearGradient>
+    <!-- clay stoneware -->
+    <linearGradient id="y13-cl-side" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#94604a"/><stop offset=".28" stop-color="#d9a68b"/><stop offset=".6" stop-color="#bf8569"/><stop offset="1" stop-color="#8a5842"/></linearGradient>
+    <linearGradient id="y13-cl-lid" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#e2b59c"/><stop offset="1" stop-color="#b57b60"/></linearGradient>
+
+    <!-- Saltpine: a lidded stockpot in front of a frying pan -->
+    <symbol id="y13-saltpine" viewBox="16 54 356 180" overflow="visible">
+      <ellipse cx="190" cy="222" rx="150" ry="12" fill="#26331f" opacity=".18" filter="url(#y13-soft)"/>
+      <g transform="rotate(-12 296 92)"><rect x="296" y="84" width="72" height="17" rx="8.5" fill="#6d886b"/></g>
+      <path d="M150 98 A92 32 0 0 0 334 98 L330 116 A88 30 0 0 1 154 116 Z" fill="url(#y13-sg-side)"/>
+      <ellipse cx="242" cy="98" rx="92" ry="32" fill="#adc2a9"/>
+      <ellipse cx="242" cy="100" rx="82" ry="26" fill="url(#y13-cream)"/>
+      <rect x="30" y="136" width="26" height="15" rx="7.5" fill="#6d886b"/>
+      <rect x="212" y="136" width="26" height="15" rx="7.5" fill="#5f7a5d"/>
+      <path d="M48 124 L48 196 A86 24 0 0 0 220 196 L220 124 Z" fill="url(#y13-sg-side)"/>
+      <path d="M48 196 A86 24 0 0 0 220 196" fill="none" stroke="#5f7a5d" stroke-width="2" opacity=".5"/>
+      <path d="M44 124 A90 46 0 0 1 224 124 A90 25 0 0 1 44 124 Z" fill="url(#y13-sg-lid)"/>
+      <path d="M44 124 A90 25 0 0 0 224 124" fill="none" stroke="#7c977a" stroke-width="4"/>
+      <path d="M78 104 Q110 86 150 84" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity=".45"/>
+      <rect x="121" y="70" width="22" height="14" rx="4" fill="#5f7a5d"/>
+      <ellipse cx="132" cy="70" rx="20" ry="8" fill="#7c977a"/>
+    </symbol>
+
+    <!-- Hearthwell: two nested frying pans, cream ceramic inside -->
+    <symbol id="y13-hearthwell" viewBox="20 40 356 180" overflow="visible">
+      <ellipse cx="170" cy="210" rx="150" ry="12" fill="#1b1d22" opacity=".2" filter="url(#y13-soft)"/>
+      <g transform="rotate(-16 318 80)"><rect x="318" y="72" width="52" height="16" rx="8" fill="url(#y13-wood)"/></g>
+      <path d="M156 82 A84 28 0 0 0 324 82 L320 98 A80 26 0 0 1 160 98 Z" fill="url(#y13-ch-side)"/>
+      <ellipse cx="240" cy="82" rx="84" ry="28" fill="#4a4e57"/>
+      <ellipse cx="240" cy="84" rx="75" ry="23" fill="url(#y13-cream)"/>
+      <g transform="rotate(-10 282 150)"><rect x="282" y="141" width="82" height="19" rx="9.5" fill="url(#y13-wood)"/><rect x="282" y="141" width="18" height="19" rx="4" fill="#3a3d44"/></g>
+      <path d="M38 148 A122 42 0 0 0 282 148 L276 172 A116 38 0 0 1 44 172 Z" fill="url(#y13-ch-side)"/>
+      <ellipse cx="160" cy="148" rx="122" ry="42" fill="#50545d"/>
+      <ellipse cx="160" cy="151" rx="110" ry="35" fill="url(#y13-cream)"/>
+      <path d="M78 136 Q120 122 170 121" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity=".7"/>
+    </symbol>
+
+    <!-- Emberlane: a stoneware casserole and a small saucepan -->
+    <symbol id="y13-emberlane" viewBox="14 56 356 180" overflow="visible">
+      <ellipse cx="180" cy="220" rx="150" ry="12" fill="#3a2117" opacity=".18" filter="url(#y13-soft)"/>
+      <g transform="rotate(-18 300 92)"><rect x="300" y="84" width="66" height="15" rx="7.5" fill="#8a5842"/></g>
+      <path d="M210 92 L210 150 A58 18 0 0 0 326 150 L326 92 Z" fill="url(#y13-cl-side)"/>
+      <ellipse cx="268" cy="92" rx="58" ry="18" fill="#c99278"/>
+      <ellipse cx="268" cy="93" rx="50" ry="14" fill="url(#y13-cream)"/>
+      <path d="M22 140 Q22 128 34 128 L44 128 L44 152 L34 152 Q22 152 22 140 Z" fill="#94604a"/>
+      <path d="M248 140 Q248 128 236 128 L226 128 L226 152 L236 152 Q248 152 248 140 Z" fill="#8a5842"/>
+      <path d="M36 128 L36 186 A99 28 0 0 0 234 186 L234 128 Z" fill="url(#y13-cl-side)"/>
+      <path d="M32 128 A103 40 0 0 1 238 128 A103 29 0 0 1 32 128 Z" fill="url(#y13-cl-lid)"/>
+      <path d="M32 128 A103 29 0 0 0 238 128" fill="none" stroke="#a46d54" stroke-width="4"/>
+      <g fill="#8a5842" opacity=".35"><circle cx="90" cy="112" r="2"/><circle cx="118" cy="104" r="1.6"/><circle cx="160" cy="108" r="2"/><circle cx="190" cy="116" r="1.6"/><circle cx="140" cy="118" r="1.4"/><circle cx="72" cy="160" r="2"/><circle cx="120" cy="176" r="1.6"/><circle cx="200" cy="164" r="2"/><circle cx="168" cy="190" r="1.6"/></g>
+      <path d="M70 110 Q100 96 140 94" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity=".4"/>
+      <rect x="120" y="78" width="30" height="14" rx="5" fill="#94604a"/>
+      <ellipse cx="135" cy="78" rx="24" ry="8" fill="#b57b60"/>
+    </symbol>
+  </defs>
+</svg>
+
+<div class="canvas v2">
+  <div class="v2-px"></div>
+  <div class="grain"></div>
+
+  <div class="y13-who"><span class="bubble tail-l">Shopify store owners:</span></div>
+  <h1 class="y13-hl hl-title">AI is picking<br />products now.</h1>
+
+  <div class="y13-iso">
+    <div class="y13-s y13-q"><svg><use href="#ic-search"/></svg>Best non-toxic ceramic cookware under $150?</div>
+    <div class="y13-s y13-tag"><svg><use href="#ic-sparkle"/></svg>AI answer · three picks</div>
+
+    <div class="y13-s y13-card top" style="left:0">
+      <div class="y13-tile"><span class="y13-badge">Top pick</span><svg><use href="#y13-saltpine"/></svg></div>
+      <div class="y13-info"><div class="y13-brand">Saltpine</div><div class="y13-name">Ceramic 8-Piece Set</div>
+        <div class="y13-buy"><span class="y13-price">$139</span><span class="y13-stars"><i style="--r:100%"></i></span></div></div>
+    </div>
+    <div class="y13-s y13-card" style="left:480px">
+      <div class="y13-tile"><svg><use href="#y13-hearthwell"/></svg></div>
+      <div class="y13-info"><div class="y13-brand">Hearthwell</div><div class="y13-name">Everyday Pan Set</div>
+        <div class="y13-buy"><span class="y13-price">$129</span><span class="y13-stars"><i style="--r:90%"></i></span></div></div>
+    </div>
+    <div class="y13-s y13-card" style="left:960px">
+      <div class="y13-tile"><svg><use href="#y13-emberlane"/></svg></div>
+      <div class="y13-info"><div class="y13-brand">Emberlane</div><div class="y13-name">Stoneware Duo</div>
+        <div class="y13-buy"><span class="y13-price">$98</span><span class="y13-stars"><i style="--r:90%"></i></span></div></div>
+    </div>
+  </div>
+
+  <div class="y13-ptr" style="left:985px; top:1212px"><svg><use href="#ic-mp"/></svg><b>How did they get here?</b></div>
+
+  <div class="y13-stat"><b>+4,700%</b><div><span>traffic from AI to US retail sites,<br />year over year</span><em>Source: Adobe Analytics, July 2025 vs July 2024</em></div></div>
+
+  <div class="v2-close">
+    <span class="v2-logo"><svg><use href="#lg-rankbox"/></svg></span>
+    <p>The shelf space that doesn’t bill per click.<span class="s">Rankbox writes the buying guides those questions land on.</span><span class="o" data-offer="line"></span></p>
+    <div class="v2-go"><span data-offer="cta"></span><svg><use href="#ic-arrow-right"/></svg></div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!doctype html>
+<!-- Cluster 11 · slide 3 of 3 · The turn: "Get on the shortlist." What
+     Rankbox actually does, in two steps on one card: the questions buyers ask
+     AI (grouped by intent, as generate_ai_questions groups them:
+     Commercial, Comparison, Informational), then the article it writes for
+     each, at one honest moment (StagePill: one published with the Rank
+     page's signals it passed, one writing, one scheduled). "Built to put you
+     on it": no claim that the pages get anyone onto a shortlist. Offer from
+     ads.js. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x5" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<link rel="stylesheet" href="ads/ads.css" />
+<script src="../kit/kit.js"></script>
+<script src="ads/ads.js"></script>
+<style>
+  .x11-sub { position: absolute; left: 110px; top: 330px; width: 1300px; }
+  .x11-card { left: 110px; top: 560px; width: 1380px; padding: 44px 54px 20px; }
+  .x11-h { display: flex; align-items: center; gap: 16px; font-size: 34px; font-weight: 700; letter-spacing: -0.02em; color: #1d222c; }
+  .x11-h svg { width: 40px; height: 40px; color: var(--blue); }
+  .x11-h em { font-style: normal; font-weight: 500; color: #8a909c; }
+
+  .x11-qs { margin-top: 22px; display: grid; gap: 14px; }
+  .x11-qrow { display: flex; align-items: center; gap: 18px; height: 84px; padding: 0 26px; border-radius: 22px; background: #f6f7f9; box-shadow: inset 0 0 0 2px #eceef2; }
+  .x11-qrow .q { flex: 1; font-size: 33px; font-weight: 600; letter-spacing: -0.018em; color: #1d222c; white-space: nowrap; }
+  .x11-qrow .k { height: 48px; padding: 0 18px; border-radius: 999px; background: #fff; box-shadow: inset 0 0 0 2px #e1e4e9; color: #6b7280; font-size: 25px; font-weight: 650; display: inline-flex; align-items: center; white-space: nowrap; }
+
+  .x11-flow { display: flex; align-items: center; gap: 20px; padding: 22px 0 34px 30px; font-size: 29px; font-weight: 650; color: #1561d6; }
+  .x11-flow i { width: 5px; height: 76px; border-radius: 4px; background: linear-gradient(180deg, #cfe0fb, var(--blue)); position: relative; display: block; }
+  .x11-flow i::after { content: ""; position: absolute; left: -9.5px; bottom: -2px; width: 24px; height: 24px; border-right: 5px solid var(--blue); border-bottom: 5px solid var(--blue); transform: rotate(45deg); box-sizing: border-box; }
+
+  .x11-row { display: grid; grid-template-columns: 1fr auto; column-gap: 24px; align-items: start; padding: 34px 0; border-top: 2px solid #f1f2f5; }
+  .x11-row.first { margin-top: 20px; }
+  .x11-row .t { font-size: 41px; font-weight: 650; letter-spacing: -0.022em; line-height: 1.2; color: #12161f; }
+  .x11-row .ch { margin-top: 16px; display: flex; flex-wrap: wrap; gap: 10px; }
+  .x11-row .ch span { height: 52px; padding: 0 20px; border-radius: 999px; background: #eef4ff; color: #1561d6; display: inline-flex; align-items: center; gap: 9px; font-size: 26px; font-weight: 650; }
+  .x11-row .ch svg { width: 22px; height: 22px; }
+  .x11-row .wr { margin-top: 22px; height: 14px; width: 62%; border-radius: 99px; background: #eef0f3; position: relative; overflow: hidden; }
+  .x11-row .wr i { position: absolute; left: 0; top: 0; bottom: 0; width: 58%; border-radius: inherit; background: linear-gradient(90deg, #9cc4ff, var(--blue)); }
+  .x11-row .when { margin-top: 12px; font-size: 29px; font-weight: 500; color: #8a909c; }
+  .x11-row.x11-later .t { color: #4a505c; }
+
+  .x11-pill { height: 54px; padding: 0 22px; border-radius: 999px; display: inline-flex; align-items: center; gap: 10px; font-size: 27px; font-weight: 650; white-space: nowrap; }
+  .x11-pill.pub { background: #e6f6ec; color: #138a43; box-shadow: inset 0 0 0 2px #cdeed9; }
+  .x11-pill.wri { background: #e9f1ff; color: #1561d6; box-shadow: inset 0 0 0 2px #d3e3fb; }
+  .x11-pill.sch { background: #f1f2f5; color: #6b7280; box-shadow: inset 0 0 0 2px #e4e7ec; }
+  .x11-pill svg { width: 24px; height: 24px; }
+</style>
+</head>
+<body>
+<div class="canvas ad">
+  <div class="ad-dots"></div>
+  <div class="ad-top">
+    <div class="ad-prog"><i class="on"></i><i class="on"></i><i class="on"></i></div>
+    <div class="ad-step">Get on it</div>
+    <div class="ad-logo"><svg><use href="#lg-rankbox"/></svg>Rankbox</div>
+  </div>
+  <h1 class="ad-hl">Get on the shortlist.</h1>
+  <p class="ad-sub x11-sub">Rankbox finds the questions buyers ask AI and writes the pages built to put you on it.</p>
+
+  <div class="ad-card x11-card">
+    <div class="x11-h"><svg><use href="#ic-chat"/></svg>Questions buyers ask AI</div>
+    <div class="x11-qs">
+      <div class="x11-qrow"><span class="q">“Shortlist of project tools for an ops team”</span><span class="k">Commercial</span></div>
+      <div class="x11-qrow"><span class="q">“Taskwren alternatives for a 50-person team”</span><span class="k">Comparison</span></div>
+      <div class="x11-qrow"><span class="q">“What should ops look for in a project tool?”</span><span class="k">Informational</span></div>
+    </div>
+    <div class="x11-flow"><i></i>Rankbox writes a page for each</div>
+    <div class="x11-h"><svg><use href="#rb-article"/></svg>Articles<em>yoursite.com</em></div>
+    <div class="x11-row first">
+      <div>
+        <div class="t">The Best Project Tools for Ops Teams, Compared</div>
+        <div class="ch"><span><svg><use href="#ic-check"/></svg>Answers up front</span><span><svg><use href="#ic-check"/></svg>Cites sources</span><span><svg><use href="#ic-check"/></svg>FAQ section</span></div>
+      </div>
+      <span class="x11-pill pub">Published</span>
+    </div>
+    <div class="x11-row">
+      <div>
+        <div class="t">Taskwren Alternatives for Growing Ops Teams</div>
+        <div class="wr"><i></i></div>
+      </div>
+      <span class="x11-pill wri"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" fill="none" stroke="#c4d8f7" stroke-width="2.6"/><path d="M12 3.5a8.5 8.5 0 0 1 8.5 8.5" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"/></svg>Writing</span>
+    </div>
+    <div class="x11-row x11-later">
+      <div>
+        <div class="t">What Ops Teams Should Look For in a Project Tool</div>
+        <div class="when">Writes tomorrow</div>
+      </div>
+      <span class="x11-pill sch">Scheduled</span>
+    </div>
+  </div>
+
+  <div class="ad-offer">
+    <div class="ad-terms"><b data-offer="price"></b><span data-offer="articles"></span> · <span data-offer="trial"></span></div>
+    <div class="ad-go"><span data-offer="cta"></span><svg><use href="#ic-arrow-right"/></svg></div>
+  </div>
+</div>
+</body>
+</html>

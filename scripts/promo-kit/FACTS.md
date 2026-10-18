@@ -14,7 +14,23 @@ changes, change this file first.
   white mark.
 - Site CTA: "Get Started Free". In-app trial CTA: "Start your 7-day free trial".
 
-## Sample site (never a real customer)
+## Sample brands (never a real company)
+
+Every invented business name and domain gets a web search before it ships.
+Checked 2026-10-04:
+
+- Real, never use: **Plannora** (plannora.io, plannora.com) and **Fernwood
+  Coffee** (fernwoodcoffee.com, a roaster in Victoria, BC). The site's own
+  use-case pages (src/data/personas.ts) present both as fictional samples.
+- Shared with real companies, avoid in new work: **Brightloop** (BrightLoop
+  Local, BrightLoop Media, BrightLoop Inc., a Brightloop power-electronics
+  firm). It's the sample in scenes 02–35 below; swapping it is pending a user
+  decision.
+- No match found, safe: Taskwren (taskwren.com, the ad set's rival brand),
+  Plotbright (plotbright.io), Driftmoor Coffee, Mossbark BBQ, Sablewood Dental,
+  Rye & Rise Bakery.
+
+## Sample site (rounds 1–2)
 
 Brightloop, `brightloop.app`, a SaaS that bills by usage. Logo: an orange ring
 (`#ff8a1f`) + "Brightloop" in heavy type. Its covers are warm orange gradients.

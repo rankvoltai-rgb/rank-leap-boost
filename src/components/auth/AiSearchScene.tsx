@@ -177,6 +177,17 @@ const SPECKS = Array.from({ length: 18 }, () => ({
 function PixelField({ busy }: { busy: boolean }) {
   return (
     <div aria-hidden className="pointer-events-none absolute inset-0 bg-brand-blue">
+      {/* The landing showcase's painted sky, under the pixels, so sign-up
+          continues the picture the visitor just scrolled past. */}
+      <img
+        src="/assets/painting-sky.webp"
+        alt=""
+        width={2200}
+        height={1400}
+        decoding="async"
+        draggable={false}
+        className="absolute inset-0 h-full w-full select-none object-cover"
+      />
       {/* Pixels brighten while the engine reads its sources. */}
       <div
         className="absolute inset-y-0 left-1/2 -translate-x-1/2 transition-opacity duration-700"

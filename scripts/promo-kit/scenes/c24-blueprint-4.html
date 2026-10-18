@@ -1,0 +1,77 @@
+<!doctype html>
+<!-- Cluster 24 · slide 4 of 5 · Pillar 3, Answer every question. Map what
+     buyers ask AI and publish an answer to each, steadily: a list of buyer
+     questions in the ad set's sample category (planning tools), progressing
+     written / writing / next. The list runs off the bottom of the frame
+     because it doesn't end. Generic checklist, not Rankbox's UI: the product
+     waits for slide 5. The meeting article from slides 2 and 3 is written. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x5" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<link rel="stylesheet" href="ads/ads.css" />
+<script src="../kit/kit.js"></script>
+<script src="ads/ads.js"></script>
+<style>
+  .canvas { --hl-size: 120px; --hl-y: 196px; }
+  .x24-n { color: var(--blue); margin-right: 0.26em; }
+  .x24-pts { position: absolute; left: 110px; right: 110px; top: 390px; display: grid; gap: 24px; list-style: none; }
+  .x24-pts li { display: flex; align-items: flex-start; gap: 22px; font-size: 40px; font-weight: 500; line-height: 1.3; letter-spacing: -0.022em; color: #5a6070; }
+  .x24-pts li b { color: #0c1018; font-weight: 700; }
+  .x24-pts svg { width: 44px; height: 44px; color: var(--blue); flex: none; margin-top: 4px; }
+
+  .x24-card { left: 110px; top: 700px; width: 1380px; height: 1420px; padding: 50px 56px 0; overflow: hidden; }
+  .x24-ch { display: flex; align-items: center; gap: 24px; padding-bottom: 36px; border-bottom: 2px solid #eef0f3; }
+  .x24-ch .ic { width: 92px; height: 92px; border-radius: 26px; background: #e8f1ff; color: var(--blue); display: grid; place-items: center; flex: none; }
+  .x24-ch .ic svg { width: 52px; height: 52px; }
+  .x24-ch b { display: block; font-size: 46px; font-weight: 750; letter-spacing: -0.03em; color: #0c1018; }
+  .x24-ch span { display: block; margin-top: 6px; font-size: 31px; font-weight: 500; color: #6b7280; letter-spacing: -0.012em; }
+
+  .x24-row { display: grid; grid-template-columns: 52px 1fr auto; column-gap: 26px; align-items: center; padding: 34px 0; border-bottom: 2px solid #f1f2f5; }
+  .x24-row > svg { width: 52px; height: 52px; color: var(--blue); }
+  .x24-row .t { font-size: 41px; font-weight: 600; letter-spacing: -0.024em; line-height: 1.2; color: #12161f; }
+  .x24-row.next > svg { color: #c3c8d0; }
+  .x24-row.next .t { color: #4a505c; font-weight: 550; }
+  .x24-wr { margin-top: 16px; height: 12px; width: 60%; border-radius: 99px; background: #eef0f3; position: relative; overflow: hidden; }
+  .x24-wr i { position: absolute; left: 0; top: 0; bottom: 0; width: 56%; border-radius: inherit; background: linear-gradient(90deg, #9cc4ff, var(--blue)); }
+  .x24-pill { height: 56px; padding: 0 22px; border-radius: 999px; display: inline-flex; align-items: center; font-size: 28px; font-weight: 650; white-space: nowrap; }
+  .x24-pill.done { background: #e9f1ff; color: #1561d6; box-shadow: inset 0 0 0 2px #d3e3fb; }
+  .x24-pill.now { background: var(--blue); color: #fff; }
+  .x24-pill.next { background: #f1f2f5; color: #6b7280; box-shadow: inset 0 0 0 2px #e4e7ec; }
+  .x24-fade { position: absolute; left: 0; right: 0; top: 960px; bottom: 0; background: linear-gradient(180deg, rgba(255,255,255,0), #fff 340px); pointer-events: none; }
+</style>
+</head>
+<body>
+<div class="canvas ad">
+  <div class="ad-dots"></div>
+  <div class="ad-top">
+    <div class="ad-prog"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div>
+    <div class="ad-step">Pillar 3 of 3</div>
+    <div class="ad-logo"><svg><use href="#lg-rankbox"/></svg>Rankbox</div>
+  </div>
+  <h1 class="ad-hl"><span class="x24-n">3</span>Answer every question.</h1>
+  <ul class="x24-pts">
+    <li><svg><use href="#ic-check-circle"/></svg><span><b>Map what buyers ask AI,</b> in their own words.</span></li>
+    <li><svg><use href="#ic-check-circle"/></svg><span><b>Publish an answer to each,</b> one clear page per question.</span></li>
+    <li><svg><use href="#ic-check-circle"/></svg><span><b>Keep going, steadily,</b> week after week.</span></li>
+  </ul>
+
+  <div class="ad-card x24-card">
+    <div class="x24-ch">
+      <span class="ic"><svg><use href="#ic-chat"/></svg></span>
+      <div><b>What your buyers ask AI</b><span>One answer for each, published steadily</span></div>
+    </div>
+    <div class="x24-row"><svg><use href="#ic-check-circle"/></svg><div class="t">How do I run a weekly planning meeting?</div><span class="x24-pill done">Written</span></div>
+    <div class="x24-row"><svg><use href="#ic-check-circle"/></svg><div class="t">What’s the best planning tool for a small team?</div><span class="x24-pill done">Written</span></div>
+    <div class="x24-row"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" fill="none" stroke="#c4d8f7" stroke-width="2.4"/><path d="M12 3.5a8.5 8.5 0 0 1 8.5 8.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg><div><div class="t">Kanban vs Gantt: which fits a small team?</div><div class="x24-wr"><i></i></div></div><span class="x24-pill now">Writing</span></div>
+    <div class="x24-row next"><svg><use href="#ic-ring"/></svg><div class="t">Is a planning tool worth it for a small business?</div><span class="x24-pill next">Next</span></div>
+    <div class="x24-row next"><svg><use href="#ic-ring"/></svg><div class="t">How do I move my team off spreadsheets?</div><span class="x24-pill next">Next</span></div>
+    <div class="x24-row next"><svg><use href="#ic-ring"/></svg><div class="t">Which planning tool works best for remote teams?</div><span class="x24-pill next">Next</span></div>
+    <div class="x24-row next"><svg><use href="#ic-ring"/></svg><div class="t">How do I get my team to use a planner?</div><span class="x24-pill next">Next</span></div>
+    <div class="x24-row next"><svg><use href="#ic-ring"/></svg><div class="t">Planning tool or project tool: what’s the difference?</div><span class="x24-pill next">Next</span></div>
+    <div class="x24-fade"></div>
+  </div>
+</div>
+</body>
+</html>

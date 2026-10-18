@@ -1,0 +1,156 @@
+<!doctype html>
+<!-- Variant 2 · Cluster 33 "Rank #1, still invisible", one image.
+     Frameship family (08): light grey field with a blue wash, giant heavy
+     caps in ink with a tile set into the line, over a big product surface
+     cropped by the canvas. Here the surface is a generic search page (no
+     Google UI or logo): the AI answer swallows the screen and cites three
+     sources, drawn as pixelated letter tiles (never an engine's mark as a
+     fictional brand's icon). A dashed fold line crosses the whole canvas;
+     under it, faded, the viewer's #1 result. Kept apart from the Cluster 2
+     exemplar on purpose: no blue field, no tilt, no floating engine tiles,
+     a dark close. No number on this ad (variant 1 has none). Taskwren,
+     Quillvane and Stackmere are invented (clusters-spec rule 9). The button
+     keeps variant 1's "Check your site free", since the shared ad links to
+     the free AI readiness check; the offer line comes from ads.js. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x5" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<link rel="stylesheet" href="ads2/ads2.css" />
+<script src="../kit/kit.js"></script>
+<script src="ads/ads.js"></script>
+<script src="ads2/ads2.js"></script>
+<style>
+  .canvas.v2 { background: #efefef; color: #0c1018; }
+  .y33-wash { position: absolute; z-index: -2; border-radius: 50%; pointer-events: none; }
+  .canvas.v2 .grain { --grain: 0.12; }
+
+  /* giant caps, ink, a blue #1 tile set into the first line */
+  .y33-hl { position: absolute; left: 92px; top: 96px; font-size: 156px; color: #0c1018; line-height: 0.86; }
+  .y33-one { display: inline-grid; place-items: center; height: 0.86em; padding: 0 0.16em; margin: 0 0.02em 0 0.12em; border-radius: 0.17em; background: var(--blue); color: #fff; vertical-align: 0.04em; -webkit-text-stroke: 0; font-size: 0.92em; letter-spacing: -0.05em;
+    box-shadow: 0 24px 40px -18px rgba(22, 111, 229, 0.7); }
+
+  .y33-dot { margin-left: -0.09em; }
+
+  /* the search page, cropped by the canvas on the right and bottom */
+  .y33-page { position: absolute; left: 96px; top: 556px; width: 1560px; height: 1520px; border-radius: 30px 0 0 0; background: #fff; overflow: hidden;
+    box-shadow: 0 0 0 1.5px rgba(12, 16, 24, 0.05), 0 40px 90px -30px rgba(10, 40, 80, 0.35); }
+  .y33-bar { display: flex; align-items: center; gap: 22px; height: 112px; padding: 0 30px; border-bottom: 1.5px solid #eceef0; }
+  .y33-dots { display: flex; gap: 12px; }
+  .y33-dots i { width: 20px; height: 20px; border-radius: 50%; background: #dfe2e7; display: block; }
+  .y33-q { margin-left: 18px; width: 1040px; height: 76px; display: flex; align-items: center; gap: 18px; padding: 0 28px; border-radius: 999px; background: #f4f5f7; box-shadow: inset 0 0 0 1.5px #e6e8ec; font-size: 34px; font-weight: 500; color: #1d222c; letter-spacing: -0.015em; }
+  .y33-q svg { width: 34px; height: 34px; color: #8a909c; flex: none; }
+
+  .y33-ans { position: absolute; left: 34px; top: 146px; width: 1640px; height: 762px; overflow: hidden; padding: 40px 48px; border-radius: 32px; background: #f2f7ff; box-shadow: inset 0 0 0 2px #cfe0fb; }
+  .y33-lab { display: flex; align-items: center; gap: 14px; font-size: 32px; font-weight: 700; color: #1561d6; letter-spacing: -0.01em; }
+  .y33-lab svg { width: 38px; height: 38px; color: var(--blue); }
+  .y33-intro { margin-top: 20px; font-size: 44px; font-weight: 500; line-height: 1.3; letter-spacing: -0.02em; color: #1d222c; }
+  .y33-cols { margin-top: 30px; display: flex; gap: 44px; }
+  .y33-list { width: 740px; display: grid; gap: 26px; align-content: start; }
+  .y33-it { display: flex; align-items: center; gap: 26px; }
+  .y33-it .n { width: 64px; height: 64px; flex: none; border-radius: 16px; background: #fff; box-shadow: inset 0 0 0 2px #cfe0fb; display: grid; place-items: center; font-size: 32px; font-weight: 750; color: var(--blue); }
+  .y33-it b { display: block; font-size: 52px; font-weight: 750; letter-spacing: -0.03em; line-height: 1.05; color: #0c1018; }
+  .y33-it span { display: block; margin-top: 6px; font-size: 32px; font-weight: 500; color: #4a5160; letter-spacing: -0.015em; }
+
+  /* the cited sources: pixelated letter tiles */
+  .y33-srcs { width: 520px; display: grid; gap: 18px; align-content: start; }
+  .y33-srcs h5 { display: flex; align-items: center; gap: 12px; font-size: 26px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #6b7fa3; }
+  .y33-srcs h5::after { content: ""; flex: 1; height: 2px; background: #cfe0fb; }
+  .y33-src { display: flex; align-items: center; gap: 22px; height: 112px; padding: 0 28px 0 16px; border-radius: 28px; background: #fff; box-shadow: 0 0 0 2px #dbe7fb, 0 18px 34px -20px rgba(10, 50, 130, 0.4); font-size: 38px; font-weight: 650; letter-spacing: -0.02em; color: #1d222c; white-space: nowrap; }
+  .y33-src em { margin-left: auto; font-style: normal; display: grid; place-items: center; width: 46px; height: 46px; border-radius: 12px; background: var(--blue); color: #fff; font-size: 26px; font-weight: 750; }
+  .y33-src canvas { width: 80px; height: 80px; border-radius: 18px; image-rendering: pixelated; display: block; flex: none; }
+
+  .y33-more { margin-top: 40px; display: grid; gap: 20px; }
+  .y33-more i { display: block; height: 22px; border-radius: 11px; background: #dde8f9; }
+
+  /* below the fold: the viewer's #1 result, faded */
+  .y33-you { position: absolute; left: 82px; top: 966px; width: 1300px; }
+  .y33-you .u { display: flex; align-items: center; gap: 16px; font-size: 30px; font-weight: 600; color: #a3a9b4; }
+  .y33-you .u b { height: 52px; padding: 0 18px; border-radius: 14px; background: #0c1018; color: #fff; display: grid; place-items: center; font-size: 30px; font-weight: 800; }
+  .y33-you .t { margin-top: 14px; font-size: 44px; font-weight: 650; letter-spacing: -0.025em; color: rgba(26, 86, 214, 0.42); }
+  .y33-veil { position: absolute; left: 0; right: 0; top: 0; bottom: 0; z-index: 3; pointer-events: none; background: linear-gradient(180deg, rgba(239, 239, 239, 0) 0%, rgba(239, 239, 239, 0) 1490px, rgba(226, 229, 234, 0.4) 1491px, rgba(226, 229, 234, 0.6) 100%); }
+
+  /* the fold, across the whole canvas */
+  .y33-fold { position: absolute; z-index: 4; left: 0; right: 0; top: 1490px; height: 0; border-top: 5px dashed #0c1018; }
+  .y33-foldlab { position: absolute; z-index: 5; left: 60px; top: 1462px; height: 60px; padding: 0 24px; border-radius: 999px; background: #0c1018; color: #fff; display: flex; align-items: center; font-size: 26px; font-weight: 750; letter-spacing: 0.14em; white-space: nowrap; }
+
+  /* the close: a dark card so it reads over the faded page */
+  .v2-close { z-index: 6; bottom: 96px; background: #0c1018; color: #fff; box-shadow: 0 0 0 8px rgba(255, 255, 255, 0.5), 0 40px 80px -30px rgba(10, 30, 70, 0.6); }
+  .v2-close p { flex: 1; font-size: 36px; font-weight: 650; line-height: 1.22; letter-spacing: -0.02em; color: #fff; }
+  .v2-close p span { display: block; margin-top: 10px; font-size: 26px; font-weight: 500; color: #aab1be; white-space: nowrap; }
+  .v2-close .v2-logo { color: #4b9dff; }
+  .v2-close .v2-logo svg { width: 58px; height: 58px; }
+</style>
+</head>
+<body>
+<div class="canvas v2">
+  <div class="y33-wash" style="left:980px; top:-260px; width:900px; height:760px; background:#7cbcff; filter:blur(140px); opacity:.75"></div>
+  <div class="y33-wash" style="left:-420px; top:1100px; width:900px; height:900px; background:#1877f2; filter:blur(150px); opacity:.5"></div>
+  <div class="grain"></div>
+
+  <h1 class="y33-hl hl-caps">Rank<span class="y33-one">#1</span><span class="y33-dot">.</span><br />Still below<br />the fold.</h1>
+
+  <div class="y33-page">
+    <div class="y33-bar">
+      <div class="y33-dots"><i></i><i></i><i></i></div>
+      <div class="y33-q"><svg><use href="#ic-search"/></svg>best project management software</div>
+    </div>
+
+    <div class="y33-ans">
+      <div class="y33-lab"><svg><use href="#ic-sparkle"/></svg>AI answer</div>
+      <p class="y33-intro">For most teams, three tools come up again and again:</p>
+      <div class="y33-cols">
+        <div class="y33-list">
+          <div class="y33-it"><span class="n">1</span><div><b>Taskwren</b><span>Easy to roll out across teams</span></div></div>
+          <div class="y33-it"><span class="n">2</span><div><b>Quillvane</b><span>Strongest for client work</span></div></div>
+          <div class="y33-it"><span class="n">3</span><div><b>Stackmere</b><span>Best reporting</span></div></div>
+        </div>
+        <div class="y33-srcs">
+          <h5>Sources</h5>
+          <div class="y33-src"><canvas data-l="T" data-c="#0f9d76"></canvas>Taskwren<em>1</em></div>
+          <div class="y33-src"><canvas data-l="Q" data-c="#7b5cff"></canvas>Quillvane<em>2</em></div>
+          <div class="y33-src"><canvas data-l="S" data-c="#f07a2a"></canvas>Stackmere<em>3</em></div>
+        </div>
+      </div>
+      <div class="y33-more"><i style="width:94%"></i><i style="width:88%"></i><i style="width:72%"></i></div>
+    </div>
+
+    <div class="y33-you">
+      <div class="u"><b>#1</b>yoursite.com › blog</div>
+      <div class="t">Best Project Management Software for Small Teams</div>
+    </div>
+  </div>
+
+  <div class="y33-veil"></div>
+  <div class="y33-fold"></div>
+  <div class="y33-foldlab">THE FOLD</div>
+
+  <div class="v2-close">
+    <span class="v2-logo"><svg><use href="#lg-rankbox"/></svg></span>
+    <p>Be one of the sources the answer cites. Rankbox is built for that.<span data-offer="line"></span></p>
+    <div class="v2-go">Check your site free<svg><use href="#ic-arrow-right"/></svg></div>
+  </div>
+</div>
+<script>
+  // The cited sources' icons: a 5x7 pixel letter on a 9x9 tile, drawn at
+  // one canvas pixel per square and scaled up pixelated, so each reads as a
+  // pixel tile (the v2 motif) without borrowing anyone's mark.
+  const GLYPH = {
+    T: ["#####", "..#..", "..#..", "..#..", "..#..", "..#..", "..#.."],
+    Q: [".###.", "#...#", "#...#", "#...#", "#...#", ".###.", "...##"],
+    S: [".####", "#....", "#....", ".###.", "....#", "....#", "####."],
+  };
+  document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll(".y33-src canvas").forEach((cv) => {
+      const n = 9;
+      cv.width = cv.height = n;
+      const ctx = cv.getContext("2d");
+      ctx.fillStyle = cv.dataset.c; ctx.fillRect(0, 0, n, n);
+      ctx.fillStyle = "#fff";
+      GLYPH[cv.dataset.l].forEach((row, y) => [...row].forEach((c, x) => { if (c === "#") ctx.fillRect(x + 2, y + 1, 1, 1); }));
+    });
+  });
+</script>
+</body>
+</html>

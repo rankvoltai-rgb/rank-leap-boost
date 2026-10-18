@@ -1,0 +1,158 @@
+<!doctype html>
+<!-- Variant 2 · Cluster 29 "The second tab", one image.
+     Dexter family (22–24): brand blue falling to black, three app tiles over
+     a white headline, and product windows tilted ~9° bleeding off the edge.
+     Two browser windows stacked: Loomvale's pricing page behind (Starter
+     $29, Team $79 most popular, Scale $199), and in front the second tab, a
+     generic dark AI chat with "Is Loomvale worth it? Is there anything
+     cheaper?" and the typing dots, tagged "This answer decides the sale."
+     AI tiles pixelated; the chat names no engine. Loomvale (loomvale.io) is
+     the set's invented brand. Rankbox only in the close. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x5" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<link rel="stylesheet" href="ads2/ads2.css" />
+<script src="../kit/kit.js"></script>
+<script src="ads/ads.js"></script>
+<script src="ads2/ads2.js"></script>
+<style>
+  html, body { background: #000; }
+  .canvas.v2 { background: #000; }
+  .y29-field { position: absolute; inset: 0; z-index: -2;
+    background:
+      radial-gradient(70% 45% at 100% 0%, rgba(36, 76, 214, 0.6) 0%, rgba(36, 76, 214, 0) 70%),
+      radial-gradient(55% 30% at 40% 62%, rgba(24, 90, 230, 0.32) 0%, rgba(24, 90, 230, 0) 70%),
+      linear-gradient(to bottom left, #1d3fb8 0%, #132a7c 24%, #07102a 52%, #02050f 78%, #000 100%); }
+  .canvas.v2 .grain { --grain: 0.13; }
+
+  .y29-apps { position: absolute; left: 100px; top: 112px; display: flex; gap: 30px; }
+  .y29-apps .pxl-wrap { position: relative; border-radius: 23%; box-shadow: 0 0 0 1.5px rgba(255, 255, 255, 0.08), 0 14px 30px -12px rgba(0, 0, 0, 0.7); }
+  .y29-hl { position: absolute; left: 96px; top: 272px; font-size: 118px; line-height: 1.02; color: #f5f5f7; white-space: nowrap; }
+  .y29-hl .soft { color: #8fb4ff; }
+
+  /* ---------------------------------------- shared browser chrome */
+  .y29-win { position: absolute; transform: rotate(9deg); transform-origin: 0 0; border-radius: 28px 0 0 0; overflow: hidden; }
+  .y29-tabs { display: flex; align-items: flex-end; gap: 6px; height: 88px; padding: 0 22px; }
+  .y29-tab { display: flex; align-items: center; gap: 14px; height: 66px; padding: 0 28px; border-radius: 18px 18px 0 0; font-size: 26px; font-weight: 600; white-space: nowrap; }
+  .y29-tab svg { width: 28px; height: 28px; flex: none; }
+  .y29-tab.new { padding: 0 22px; font-size: 38px; font-weight: 500; }
+  .y29-url { display: flex; align-items: center; height: 82px; padding: 0 26px; }
+  .y29-url span { flex: 1; height: 56px; border-radius: 999px; display: flex; align-items: center; gap: 14px; padding: 0 24px; font-size: 26px; font-weight: 500; }
+  .y29-url svg { width: 28px; height: 28px; flex: none; }
+
+  /* ---------------------------------------- back: the pricing page */
+  .y29-back { left: 610px; top: 562px; width: 1160px; height: 900px; background: #fff; color: #0c1018;
+    box-shadow: 0 0 0 1.5px rgba(255, 255, 255, 0.4), 0 50px 100px -24px rgba(0, 0, 0, 0.75); z-index: 2; }
+  .y29-back .y29-tabs { background: #e8eaee; }
+  .y29-back .y29-tab { color: #6b7280; }
+  .y29-back .y29-tab.on { background: #fff; color: #12161f; }
+  .y29-back .y29-url { border-bottom: 2px solid #eceef2; }
+  .y29-back .y29-url span { background: #f2f3f5; color: #4a5160; }
+  .y29-back .y29-url svg { color: #8a909c; }
+  .y29-back .y29-url b { font-weight: 650; color: #1d222c; }
+  .y29-plans { display: flex; gap: 22px; padding: 46px 40px 0; align-items: flex-start; }
+  .y29-plan { position: relative; width: 300px; flex: none; border-radius: 26px; padding: 30px 30px 30px; box-shadow: inset 0 0 0 2px #e6e8ec; }
+  .y29-plan.top { box-shadow: inset 0 0 0 4px var(--blue), 0 30px 60px -36px rgba(12, 60, 160, 0.5); }
+  .y29-plan h3 { font-size: 36px; font-weight: 750; letter-spacing: -0.03em; }
+  .y29-plan .p { margin-top: 18px; display: flex; align-items: baseline; gap: 4px; }
+  .y29-plan .p b { font-size: 92px; font-weight: 800; letter-spacing: -0.055em; line-height: 1; }
+  .y29-plan .p span { font-size: 28px; font-weight: 600; color: #8a909c; }
+  .y29-plan .go { margin-top: 20px; height: 76px; border-radius: 18px; display: grid; place-items: center; font-size: 27px; font-weight: 700; box-shadow: inset 0 0 0 2px #dfe2e7; color: #1d222c; }
+  .y29-plan.top .go { background: #0f63d6; color: #fff; box-shadow: 0 14px 24px -12px rgba(22, 111, 229, 0.8); }
+  .y29-feat { margin-top: 30px; display: grid; gap: 16px; }
+  .y29-feat div { display: flex; align-items: center; gap: 12px; font-size: 26px; font-weight: 500; color: #3a4252; letter-spacing: -0.01em; white-space: nowrap; }
+  .y29-feat svg { width: 28px; height: 28px; color: var(--blue); flex: none; }
+  .y29-pop { position: absolute; left: 30px; top: -24px; height: 48px; padding: 0 20px; border-radius: 999px; background: var(--blue); color: #fff; display: inline-flex; align-items: center; font-size: 24px; font-weight: 700; white-space: nowrap; }
+
+  /* ---------------------------------------- front: the second tab, a dark AI chat */
+  .y29-front { left: 150px; top: 990px; width: 1640px; height: 1100px; background: #161718; color: #f2f2f3;
+    box-shadow: 0 0 0 1.5px rgba(255, 255, 255, 0.12), 0 0 0 10px rgba(80, 140, 255, 0.08), 0 60px 120px -20px rgba(0, 0, 0, 0.9), 0 0 140px -20px rgba(40, 110, 255, 0.45); z-index: 3; }
+  .y29-front .y29-tabs { background: #0d0e0f; }
+  .y29-front .y29-tab { color: #8e9097; }
+  .y29-front .y29-tab.on { background: #161718; color: #fff; }
+  .y29-front .y29-tab.on svg { color: #6fb2ff; }
+  .y29-front .y29-url { border-bottom: 1.5px solid #2a2b2e; }
+  .y29-front .y29-url span { background: #222325; color: #b9bbc2; }
+  .y29-front .y29-url svg { color: #6fb2ff; }
+  .y29-q { position: absolute; right: 250px; top: 222px; max-width: 820px; padding: 30px 40px; border-radius: 40px 40px 12px 40px; background: var(--blue); color: #fff; font-size: 50px; font-weight: 600; line-height: 1.2; letter-spacing: -0.025em;
+    box-shadow: 0 24px 40px -20px rgba(22, 111, 229, 0.8); }
+  .y29-sent { position: absolute; right: 254px; top: 410px; font-size: 24px; font-weight: 500; color: #8e9097; }
+  .y29-ai { position: absolute; left: 60px; top: 540px; display: flex; align-items: center; gap: 22px; }
+  .y29-av { width: 72px; height: 72px; border-radius: 50%; background: rgba(75, 157, 255, 0.14); box-shadow: inset 0 0 0 1.5px rgba(75, 157, 255, 0.5); display: grid; place-items: center; color: #6fb2ff; }
+  .y29-av svg { width: 36px; height: 36px; }
+  .y29-typing { display: inline-flex; gap: 14px; padding: 30px 34px; border-radius: 34px; background: #26272a; box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, 0.05); }
+  .y29-typing i { width: 20px; height: 20px; border-radius: 50%; background: #b9bbc2; display: block; }
+  .y29-typing i:nth-child(2) { opacity: .65; }
+  .y29-typing i:nth-child(3) { opacity: .35; }
+
+  /* the tag on the half-second before the answer */
+  .y29-tag { position: absolute; z-index: 6; display: inline-flex; align-items: center; height: 78px; padding: 0 32px; border-radius: 999px; background: #fff; color: #0c1018; font-size: 34px; font-weight: 700; letter-spacing: -0.02em; white-space: nowrap;
+    box-shadow: 0 24px 50px -20px rgba(0, 0, 0, 0.8); }
+  .y29-tag::before { content: ""; position: absolute; left: -12px; top: 50%; width: 30px; height: 30px; margin-top: -15px; background: #fff; transform: rotate(45deg); border-radius: 5px; }
+
+  .v2-close { bottom: 96px; z-index: 8; }
+  .v2-close p { flex: 1; text-wrap: balance; font-size: 37px; font-weight: 700; line-height: 1.2; letter-spacing: -0.025em; color: #0c1018; }
+  .v2-close p span { display: block; margin-top: 10px; font-size: 26px; font-weight: 500; color: #4a5160; letter-spacing: -0.01em; white-space: nowrap; }
+  .v2-close .v2-logo svg { color: var(--blue); width: 58px; height: 58px; }
+</style>
+</head>
+<body>
+<div class="canvas v2">
+  <div class="y29-field"></div>
+  <div class="v2-px" style="opacity:.6"></div>
+  <div class="grain"></div>
+
+  <div class="y29-apps">
+    <div class="pxl-wrap" style="--s:96px"><canvas class="pxl" data-logo="claude" data-px="9" style="--s:96px"></canvas></div>
+    <div class="pxl-wrap" style="--s:96px"><canvas class="pxl" data-logo="chatgpt" data-px="9" style="--s:96px"></canvas></div>
+    <div class="pxl-wrap" style="--s:96px"><canvas class="pxl" data-logo="perplexity" data-px="9" style="--s:96px"></canvas></div>
+  </div>
+  <h1 class="y29-hl v2-hl">Right before they buy,<br />they open a second tab.</h1>
+
+  <div class="y29-win y29-back">
+    <div class="y29-tabs">
+      <div class="y29-tab on"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="6" fill="#0c1018"/><path d="M8.5 7v10h7.5" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Pricing — Loomvale</div>
+      <div class="y29-tab new">+</div>
+    </div>
+    <div class="y29-url"><span><svg><use href="#ic-lock"/></svg><em style="font-style:normal"><b>loomvale.io</b>/pricing</em></span></div>
+    <div class="y29-plans">
+      <div class="y29-plan"><h3>Starter</h3><div class="p"><b>$29</b><span>/mo</span></div><div class="go">Start free trial</div></div>
+      <div class="y29-plan top"><span class="y29-pop">Most popular</span><h3>Team</h3><div class="p"><b>$79</b><span>/mo</span></div><div class="go">Start free trial</div></div>
+      <div class="y29-plan"><h3>Scale</h3><div class="p"><b>$199</b><span>/mo</span></div><div class="go">Start free trial</div></div>
+    </div>
+  </div>
+
+  <div class="y29-win y29-front">
+    <div class="y29-tabs">
+      <div class="y29-tab"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="6" fill="#8e9097"/><path d="M8.5 7v10h7.5" fill="none" stroke="#0d0e0f" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Pricing — Loomvale</div>
+      <div class="y29-tab on"><svg><use href="#ic-sparkle"/></svg>New chat</div>
+      <div class="y29-tab new">+</div>
+    </div>
+    <div class="y29-url"><span><svg><use href="#ic-sparkle"/></svg>AI assistant</span></div>
+    <div class="y29-q">Is Loomvale worth it?<br />Is there anything cheaper?</div>
+    <div class="y29-sent">Sent just now</div>
+    <div class="y29-ai"><span class="y29-av"><svg><use href="#ic-sparkle"/></svg></span><span class="y29-typing" id="dots"><i></i><i></i><i></i></span></div>
+  </div>
+
+  <div class="y29-tag" id="tag">This answer decides the sale.</div>
+
+  <div class="v2-close">
+    <span class="v2-logo"><svg><use href="#lg-rankbox"/></svg></span>
+    <p>Rankbox writes the pages that give AI your side of the story.<span data-offer="line"></span></p>
+    <div class="v2-go"><span data-offer="cta"></span><svg><use href="#ic-arrow-right"/></svg></div>
+  </div>
+</div>
+<script>
+  // Pin the tag just right of the typing dots (they sit inside a rotated window).
+  addEventListener("load", () => {
+    const c = document.querySelector(".canvas").getBoundingClientRect();
+    const d = document.getElementById("dots").getBoundingClientRect();
+    const t = document.getElementById("tag");
+    t.style.left = (d.right - c.left + 34) + "px";
+    t.style.top = (d.top - c.top + d.height / 2 - t.offsetHeight / 2) + "px";
+  });
+</script>
+</body>
+</html>

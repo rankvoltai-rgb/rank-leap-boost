@@ -1,0 +1,90 @@
+<!doctype html>
+<!-- Variant 4 · Cluster 36 "Ask your phone for a specialist", one image for
+     all four trades. Replica of Noteframe 2 ("INVITE, COLLABORATE & ASSIGN
+     TEAM MEMBERS"): light grey-blue paper, a centred 4-line condensed caps
+     headline, product cards around the edges (cropped at the top, left and
+     right, tilted) and named multiplayer cursors with tags (here in blue
+     shades). Each card is a Rankbox buyer-question card for one trade: the
+     spoken question from that trade's variant 1 scene, letter for letter,
+     the business it's for (the variant 1 names), its article stage and date.
+     The cursors are the four trades. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x5" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<link rel="stylesheet" href="ads4/ads4.css" />
+<script src="../kit/kit.js"></script>
+<script src="ads/ads.js"></script>
+<script src="ads4/ads4.js"></script>
+<style>
+  .y36-lock { position: absolute; left: 0; right: 0; top: 74px; display: flex; justify-content: center; align-items: center; gap: 14px; font-size: 50px; font-weight: 650; letter-spacing: -0.035em; color: var(--v4-ink); }
+  .y36-lock svg { width: 54px; height: 54px; color: var(--v4-blue); }
+  .y36-hl { position: absolute; left: 0; right: 0; top: 676px; text-align: center; font-family: "Helvetica Neue", "Jakarta", sans-serif; font-stretch: condensed; font-weight: 700; font-size: 164px; line-height: 0.9; letter-spacing: -0.01em; text-transform: uppercase; color: var(--v4-ink); }
+
+  /* buyer-question cards */
+  .y36-card { position: absolute; width: 640px; padding: 34px 38px 30px; border-radius: 28px; background: #fff; z-index: 10;
+    box-shadow: 0 0 0 1.5px rgba(10, 30, 70, 0.05), 0 16px 30px -16px rgba(20, 40, 90, 0.3);
+    filter: drop-shadow(0 30px 30px rgba(20, 40, 90, 0.16)); }
+  .y36-card .row { display: flex; align-items: center; gap: 14px; }
+  .y36-card .tile { width: 50px; height: 50px; border-radius: 14px; background: var(--v4-tint); color: var(--v4-blue); display: grid; place-items: center; font-size: 25px; font-weight: 800; }
+  .y36-card .biz { font-size: 26px; font-weight: 600; letter-spacing: -0.015em; color: #3a4150; }
+  .y36-stage { margin-left: auto; height: 46px; padding: 0 18px; border-radius: 12px; display: inline-flex; align-items: center; gap: 10px; font-size: 24px; font-weight: 650; background: var(--v4-tint); color: var(--v4-blue); }
+  .y36-stage i { width: 13px; height: 13px; border-radius: 50%; background: currentColor; }
+  .y36-stage.pub { background: var(--v4-blue); color: #fff; }
+  .y36-stage.idea { background: #f2f4f7; color: #5a6070; }
+  .y36-card .q { margin-top: 24px; font-size: 35px; font-weight: 650; line-height: 1.24; letter-spacing: -0.022em; color: var(--v4-ink); text-indent: -0.4em; padding-left: 0.4em; text-wrap: balance; }
+  .y36-card .ft { margin-top: 24px; padding-top: 22px; border-top: 2px solid #eff1f4; display: flex; align-items: center; gap: 14px; font-size: 25px; color: var(--v4-ink-2); }
+  .y36-card .ft .chip { height: 42px; padding: 0 14px; border-radius: 10px; background: #f2f4f7; display: inline-flex; align-items: center; font-size: 24px; font-weight: 600; color: #4a5160; }
+  .y36-card .ft svg { width: 26px; height: 26px; color: #7a808c; }
+  .y36-card .ft .btn { margin-left: auto; height: 52px; padding: 0 22px; border-radius: 13px; background: var(--v4-btn); color: #fff; display: inline-flex; align-items: center; font-size: 24px; font-weight: 650; }
+
+  /* multiplayer cursors with a name tag */
+  .y36-mp { position: absolute; z-index: 20; }
+  .y36-mp svg { width: 62px; height: 62px; display: block; filter: drop-shadow(0 6px 8px rgba(20, 60, 160, 0.3)); }
+  .y36-mp b { position: absolute; left: 46px; top: 50px; height: 66px; padding: 0 24px; border-radius: 12px; display: grid; place-items: center; font-size: 34px; font-weight: 650; letter-spacing: -0.02em; color: #fff; white-space: nowrap; box-shadow: 0 14px 24px -12px rgba(20, 60, 160, 0.5); }
+  .y36-mp.left b { left: auto; right: 34px; }
+</style>
+</head>
+<body>
+<div class="canvas v4">
+  <div class="v4-field-paper"></div>
+
+  <!-- top left: law firm -->
+  <div class="y36-card" style="left:-40px; top:-46px; padding:72px 38px 30px 74px; transform:rotate(-3deg)">
+    <div class="row"><span class="tile">H</span><span class="biz">Halvorsen Pike Law</span><span class="y36-stage"><i></i>Writing</span></div>
+    <div class="q">“Who’s the best personal injury lawyer near me who does free consultations?”</div>
+    <div class="ft"><span class="chip">Commercial</span><svg><use href="#ic-calendar"/></svg>Writes on Oct 5</div>
+  </div>
+
+  <!-- top right: dentist -->
+  <div class="y36-card" style="left:986px; top:190px; padding:34px 76px 30px 38px; transform:rotate(4deg)">
+    <div class="row"><span class="tile">J</span><span class="biz">Juniperline Dental</span><span class="y36-stage pub"><i></i>Published</span></div>
+    <div class="q">“Who’s the best family dentist near me that’s taking new patients?”</div>
+    <div class="ft"><span class="chip">Commercial</span><svg><use href="#ic-calendar"/></svg>Published Oct 2</div>
+  </div>
+
+  <!-- bottom left: med spa -->
+  <div class="y36-card" style="left:-40px; top:1478px; padding:34px 38px 30px 74px; transform:rotate(3deg)">
+    <div class="row"><span class="tile">A</span><span class="biz">Aurevine Med Spa</span><span class="y36-stage"><i></i>Scheduled</span></div>
+    <div class="q">“What’s the best med spa near me for skin treatments?”</div>
+    <div class="ft"><span class="chip">Commercial</span><svg><use href="#ic-calendar"/></svg>Writes on Oct 9</div>
+  </div>
+
+  <!-- bottom right: contractor -->
+  <div class="y36-card" style="left:950px; top:1630px; width:680px; padding:34px 76px 30px 50px; transform:rotate(-4deg)">
+    <div class="row"><span class="tile">K</span><span class="biz">Kestrelford Builders</span><span class="y36-stage idea"><i></i>Idea</span></div>
+    <div class="q">“Who’s the best kitchen remodeling contractor near me?”</div>
+    <div class="ft"><span class="chip">Commercial</span><span class="btn">Write now</span></div>
+  </div>
+
+  <div class="y36-lock"><svg><use href="#lg-rankbox"/></svg>Rankbox</div>
+  <h1 class="y36-hl">They asked<br />out loud.<br />Was your name<br />in the answer?</h1>
+
+  <div class="y36-mp" style="left:612px; top:316px"><svg viewBox="0 0 24 24"><path d="M3 2.5l17 7.2-7.3 2.2-3 7.1z" fill="#1877f2" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/></svg><b style="background:#1877f2">Law firm</b></div>
+  <div class="y36-mp" style="left:1252px; top:542px"><svg viewBox="0 0 24 24"><path d="M3 2.5l17 7.2-7.3 2.2-3 7.1z" fill="#0b57d0" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/></svg><b style="background:#0b57d0">Dentist</b></div>
+  <div class="y36-mp" style="left:604px; top:1456px"><svg viewBox="0 0 24 24"><path d="M3 2.5l17 7.2-7.3 2.2-3 7.1z" fill="#4b9dff" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/></svg><b style="background:#4b9dff">Med spa</b></div>
+  <div class="y36-mp left" style="left:914px; top:1728px"><svg viewBox="0 0 24 24"><path d="M3 2.5l17 7.2-7.3 2.2-3 7.1z" fill="#eaf3ff" stroke="#1877f2" stroke-width="1.6" stroke-linejoin="round"/></svg><b style="background:#eaf3ff; color:#0b57d0; box-shadow: inset 0 0 0 2px #b9d5fb, 0 14px 24px -12px rgba(20,60,160,.35)">Contractor</b></div>
+</div>
+</body>
+</html>

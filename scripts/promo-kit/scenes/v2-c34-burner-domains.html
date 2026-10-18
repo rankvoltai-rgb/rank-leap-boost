@@ -1,0 +1,119 @@
+<!doctype html>
+<!-- Variant 2 · Cluster 34 "Burner domains" (cold email), one image.
+     FramerForms family (18): flat brand blue, heavy caps headline, a white
+     panel in strong perspective bleeding off the edge, one piece of it lifted
+     out onto the field as a card with the cursor dragging it. The panel is a
+     generic sending dashboard (no real tool's UI): 4,800 sent this week,
+     burner domains #1 and #2 burned, #3 warming on day 21, and the one reply.
+     The reply is the lifted card: "Please stop emailing me." Pixelated AI
+     tiles float top right: where the buyers went. The turn is in the close.
+     No reply rates, no percentages; 4,800 is fictional UI, as in variant 1. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x5" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<link rel="stylesheet" href="ads2/ads2.css" />
+<script src="../kit/kit.js"></script>
+<script src="ads/ads.js"></script>
+<script src="ads2/ads2.js"></script>
+<style>
+  .canvas.v2.y34 { background: #1a6ff2; }
+  .canvas.v2.y34 .grain { --grain: 0.07; }
+
+  .y34-hl { position: absolute; left: 92px; top: 104px; font-size: 156px; color: #fff; white-space: nowrap; }
+
+  /* ------------------------------------------------ the panel, projected */
+  .y34-panel { position: absolute; left: 0; top: 0; width: 940px; border-radius: 48px; transform-origin: 0 0;
+    transform: translate(64px, 616px) perspective(2200px) rotateY(18deg) rotateX(7deg) rotateZ(3deg);
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.45), 0 60px 110px -40px rgba(3, 22, 80, 0.5); }
+  .y34-head { display: flex; align-items: center; gap: 22px; height: 132px; padding: 0 48px; border-bottom: 2px solid #ececef; font-size: 40px; font-weight: 650; letter-spacing: -0.025em; color: #23262d; }
+  .y34-head .ic { width: 64px; height: 64px; border-radius: 16px; background: #eef0f3; display: grid; place-items: center; color: #4a5160; }
+  .y34-head .ic svg { width: 36px; height: 36px; }
+  .y34-head .live { margin-left: auto; display: inline-flex; align-items: center; gap: 12px; height: 56px; padding: 0 22px; border-radius: 999px; background: #f1f2f4; font-size: 29px; font-weight: 650; color: #3a4252; }
+  .y34-head .live i { width: 13px; height: 13px; border-radius: 50%; background: #0c1018; }
+  .y34-body { padding: 36px 48px 48px; }
+
+  .y34-sent { display: flex; align-items: baseline; gap: 22px; }
+  .y34-sent small { font-size: 30px; font-weight: 600; color: #8a909c; letter-spacing: -0.01em; }
+  .y34-sent b { font-size: 96px; font-weight: 800; letter-spacing: -0.05em; color: #0c1018; line-height: 1; }
+
+  .y34-sec { margin: 40px 0 18px; font-size: 25px; font-weight: 750; letter-spacing: 0.13em; text-transform: uppercase; color: #9aa0ac; }
+  .y34-dom { display: flex; align-items: center; gap: 18px; height: 96px; padding: 0 28px; border-radius: 22px; background: #f4f5f7; font-size: 34px; font-weight: 600; letter-spacing: -0.02em; color: #a2a7b0; }
+  .y34-dom + .y34-dom { margin-top: 14px; }
+  .y34-dom s { text-decoration-thickness: 3px; }
+  .y34-dom em { margin-left: auto; font-style: normal; font-size: 30px; font-weight: 650; color: #9aa0ac; }
+  .y34-dom.warm { display: block; height: auto; padding: 26px 28px 28px; background: #fff; box-shadow: inset 0 0 0 3px #0c1018; color: #0c1018; }
+  .y34-dom.warm .t { display: flex; align-items: center; gap: 14px; }
+  .y34-dom.warm .t svg { width: 34px; height: 34px; }
+  .y34-dom.warm .t em { color: #0c1018; }
+  .y34-bar { margin-top: 20px; height: 22px; border-radius: 999px; background: #eceef1; overflow: hidden; }
+  .y34-bar i { display: block; width: 92%; height: 100%; border-radius: inherit; background: repeating-linear-gradient(-45deg, #3a4252 0 12px, #59616f 12px 24px); }
+
+  .y34-reply { display: flex; align-items: center; gap: 20px; height: 112px; padding: 0 28px; border-radius: 22px; background: #e8f1ff; box-shadow: inset 0 0 0 3px var(--blue); font-size: 32px; font-weight: 600; letter-spacing: -0.02em; color: #1d222c; }
+  .y34-av { width: 56px; height: 56px; border-radius: 50%; background: #d7dbe2; display: grid; place-items: center; font-size: 27px; font-weight: 750; color: #4a5160; flex: none; }
+  .y34-reply span { color: #6b7280; font-weight: 500; }
+
+  /* ------------------------------------------------ the lifted reply */
+  .y34-pop { position: absolute; left: 0; top: 0; z-index: 5; width: 680px; padding: 38px 44px 46px; border-radius: 40px; background: #fff; color: #0c1018; transform-origin: 0 0;
+    transform: translate(808px, 900px) perspective(1800px) rotateY(-10deg) rotateX(5deg) rotateZ(-5deg);
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.9), 0 70px 110px -30px rgba(3, 18, 90, 0.5), 0 14px 26px -12px rgba(3, 20, 80, 0.25); }
+  .y34-pop .from { display: flex; align-items: center; gap: 18px; font-size: 29px; font-weight: 650; letter-spacing: -0.015em; color: #1d222c; white-space: nowrap; }
+  .y34-pop .from span { color: #8a909c; font-weight: 500; }
+  .y34-pop q { display: block; margin-top: 24px; font-size: 76px; font-weight: 800; line-height: 1.02; letter-spacing: -0.045em; quotes: none; }
+  .y34-pop q .oq { margin-left: -0.38em; margin-right: 0.02em; }
+  .y34-pop q .pd { margin-left: -0.05em; }
+  .y34-pop q .cq { margin-left: -0.06em; }
+  .y34-pop q { padding-left: 0.38em; }
+  .y34 .cur { --cs: 124px; left: 1108px; top: 1184px; }
+
+  /* ------------------------------------------------ AI tiles: where the buyers went */
+  .y34-tile { position: absolute; z-index: 4; }
+
+  .v2-close { bottom: 96px; z-index: 8; }
+  .v2-close p { flex: 1; font-size: 36px; font-weight: 650; line-height: 1.24; letter-spacing: -0.02em; color: #0c1018; }
+  .v2-close p span { display: block; margin-top: 8px; font-size: 27px; font-weight: 500; color: #4a5160; white-space: nowrap; }
+  .v2-close .v2-logo svg { color: var(--blue); width: 60px; height: 60px; }
+</style>
+</head>
+<body>
+<div class="canvas v2 y34">
+  <div class="v2-px"></div>
+  <div class="grain"></div>
+
+  <h1 class="y34-hl hl-caps">There’s an<br />easier<br />pipeline.</h1>
+
+  <div class="y34-tile" style="left:1250px; top:118px; transform:perspective(1100px) rotateX(6deg) rotateY(-18deg) rotateZ(8deg)"><div class="pxl-wrap" style="--s:180px"><canvas class="pxl" data-logo="chatgpt" data-px="10" style="--s:180px"></canvas></div></div>
+  <div class="y34-tile" style="left:1110px; top:372px; transform:perspective(1100px) rotateX(-4deg) rotateY(-20deg) rotateZ(-7deg)"><div class="pxl-wrap" style="--s:150px"><canvas class="pxl" data-logo="perplexity" data-px="10" style="--s:150px"></canvas></div></div>
+  <div class="y34-tile" style="left:1330px; top:430px; transform:perspective(1100px) rotateX(5deg) rotateY(-16deg) rotateZ(6deg)"><div class="pxl-wrap" style="--s:164px"><canvas class="pxl" data-logo="claude" data-px="10" style="--s:164px"></canvas></div></div>
+
+  <div class="lp y34-panel">
+    <div class="y34-head"><span class="ic"><svg><use href="#ic-send"/></svg></span>Cold outreach<span class="live"><i></i>Sending</span></div>
+    <div class="y34-body">
+      <div class="y34-sent"><b>4,800</b><small>sent this week</small></div>
+      <div class="y34-sec">New reply</div>
+      <div class="y34-reply"><span class="y34-av">R</span>Re: Quick question</div>
+      <div class="y34-sec">Sending domains</div>
+      <div class="y34-dom"><s>Burner domain #1</s><em>Burned</em></div>
+      <div class="y34-dom"><s>Burner domain #2</s><em>Burned</em></div>
+      <div class="y34-dom warm">
+        <div class="t"><svg><use href="#rb-flame"/></svg>Warming burner domain #3<em>Day 21</em></div>
+        <div class="y34-bar"><i></i></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="y34-pop">
+    <div class="from"><span class="y34-av">R</span>New reply <span>· Re: Quick question</span></div>
+    <q><span class="oq">“</span>Please stop emailing&nbsp;me<span class="pd">.</span><span class="cq">”</span></q>
+  </div>
+  <svg class="cur"><use href="#ic-cursor"/></svg>
+
+  <div class="v2-close">
+    <span class="v2-logo"><svg><use href="#lg-rankbox"/></svg></span>
+    <p>Meanwhile, buyers ask AI which tool to use. Rankbox writes the answers, every day.<span data-offer="line"></span></p>
+    <div class="v2-go"><span data-offer="cta"></span><svg><use href="#ic-arrow-right"/></svg></div>
+  </div>
+</div>
+</body>
+</html>

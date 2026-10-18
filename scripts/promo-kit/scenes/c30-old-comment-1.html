@@ -1,0 +1,100 @@
+<!doctype html>
+<!-- Cluster 30 · slide 1 of 2 · "The anonymous commenter beat you"
+     (Reddit). Two halves: an offhand forum comment from 2021, and today's
+     AI answer quoting it to the viewer's buyer, its [1] wired back up to the
+     post. The forum is generic on purpose: neutral greys, no Reddit colours,
+     snoo, "r/" or vote layout; a breadcrumb instead of a community name. The
+     viewer is Velomint; Velomint and Taskwren are invented (no company
+     found, 2026-10-04). The vote count is UI, not a stat. No number and no
+     Rankbox on this slide. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x5" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<link rel="stylesheet" href="ads/ads.css" />
+<script src="../kit/kit.js"></script>
+<script src="ads/ads.js"></script>
+<style>
+  .x30-hl { --hl-size: 100px; }
+
+  /* then: the old post, a little faded and askew, like a dug-up screenshot */
+  .x30-post { left: 120px; top: 486px; width: 1340px; padding: 44px 52px 40px; background: #fbfbfc; transform: rotate(-1.2deg); }
+  .x30-crumb { display: flex; align-items: center; gap: 12px; font-size: 28px; font-weight: 600; color: #9aa0ab; }
+  .x30-crumb svg { width: 22px; height: 22px; }
+  .x30-title { margin-top: 16px; font-size: 50px; font-weight: 750; letter-spacing: -0.03em; color: #2a2f38; }
+  .x30-who { margin-top: 34px; display: flex; align-items: center; gap: 18px; font-size: 32px; font-weight: 500; color: #8a909c; }
+  .x30-av { width: 70px; height: 70px; border-radius: 50%; background: #e3e6eb; color: #9aa0ab; display: grid; place-items: center; flex: none; }
+  .x30-av svg { width: 36px; height: 36px; }
+  .x30-who b { font-weight: 700; color: #3a4252; }
+  .x30-say { margin-top: 22px; padding-left: 88px; font-size: 47px; line-height: 1.38; font-weight: 500; letter-spacing: -0.02em; color: #3a4252; }
+    .x30-say mark { white-space: nowrap; background: linear-gradient(180deg, transparent 58%, #cfe0fb 58%); color: #0c1018; padding: 0 2px; }
+  .x30-foot { margin-top: 24px; padding-left: 88px; display: flex; align-items: center; gap: 30px; font-size: 29px; font-weight: 600; color: #9aa0ab; }
+  .x30-foot span { display: inline-flex; align-items: center; gap: 8px; }
+  .x30-foot svg { width: 28px; height: 28px; }
+
+  /* now: the answer a buyer gets today */
+  .x30-now { left: 110px; top: 1282px; width: 1380px; padding: 46px 50px 50px; }
+  .x30-now .ad-q { width: fit-content; max-width: 80%; font-size: 42px; padding: 28px 36px; }
+  .x30-now .ad-answer { margin-top: 30px; }
+  .x30-now .ad-answer p { font-size: 54px; line-height: 1.32; font-weight: 550; letter-spacing: -0.025em; }
+  .x30-now .ad-answer .lab { font-size: 31px; }
+  .x30-now .ad-cite { min-width: 54px; height: 54px; font-size: 31px; border-radius: 12px; background: var(--blue); color: #fff; vertical-align: 6px; }
+  .x30-when { margin-left: auto; font-weight: 600; color: #8a909c; font-size: 26px; }
+  .x30-now .lab { display: flex; }
+
+  .x30-wire { position: absolute; inset: 0; z-index: 30; pointer-events: none; overflow: visible; }
+  .x30-stamp { position: absolute; z-index: 31; height: 56px; padding: 0 22px; border-radius: 999px; background: #0c1018; color: #fff; font-size: 26px; font-weight: 650; display: inline-flex; align-items: center; white-space: nowrap; }
+</style>
+</head>
+<body>
+<div class="canvas ad">
+  <div class="ad-dots"></div>
+  <div class="ad-top">
+    <div class="ad-prog"><i class="on"></i><i></i></div>
+    <div class="ad-step">Where the answer came from</div>
+    <div class="ad-swipe">Swipe<svg><use href="#ic-arrow-right"/></svg></div>
+  </div>
+  <h1 class="ad-hl x30-hl">A comment from 2021 is answering your buyers today.</h1>
+
+  <div class="ad-card x30-post" id="post">
+    <div class="x30-crumb">Forum<svg><use href="#ic-chev-right"/></svg>Software<svg><use href="#ic-chev-right"/></svg>Project tools</div>
+    <div class="x30-title">Anyone switched project tools recently?</div>
+    <div class="x30-who"><span class="x30-av"><svg><use href="#ic-user"/></svg></span><b>throwaway_ops_2021</b>· posted 4 years ago</div>
+    <p class="x30-say" id="say">Taskwren is fine but <mark id="mark">Velomint felt clunky</mark><br />when we tried it.</p>
+    <div class="x30-foot"><span><svg><use href="#ic-chev-up"/></svg>2</span><span>Reply</span></div>
+  </div>
+
+  <div class="ad-card x30-now" id="now">
+    <div class="ad-q">Is Velomint good for a small team?</div>
+    <div class="ad-answer">
+      <div class="lab"><svg><use href="#ic-sparkle"/></svg>AI answer<span class="x30-when">Today</span></div>
+      <p>Some users find Velomint clunky compared with Taskwren<span class="ad-cite" id="cite">1</span><span id="dot">.</span></p>
+    </div>
+  </div>
+
+  <svg class="x30-wire" id="wire"></svg>
+</div>
+<script>
+  // Wire [1] back up to the post: out to the right margin, up, and into the
+  // quoted words.
+  document.fonts.ready.then(() => {
+    const c = document.querySelector(".canvas").getBoundingClientRect();
+    const r = (el) => { const b = el.getBoundingClientRect(); return { l: b.left - c.left, r: b.right - c.left, t: b.top - c.top, b: b.bottom - c.top }; };
+    const ci = r(document.getElementById("cite"));
+    const dot = r(document.getElementById("dot"));
+    const mk = r(document.getElementById("mark"));
+    const post = r(document.getElementById("post"));
+    const X = 1546, rad = 44;
+    const x0 = dot.r + 22, y0 = (ci.t + ci.b) / 2;
+    const y1 = (mk.t + mk.b) / 2 + 4;
+    const xEnd = post.r + 22;
+    const d = `M${x0} ${y0} H${X - rad} Q${X} ${y0} ${X} ${y0 - rad} V${y1 + rad} Q${X} ${y1} ${X - rad} ${y1} H${xEnd}`;
+    document.getElementById("wire").innerHTML =
+      `<path d="${d}" fill="none" stroke="#1877f2" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>` +
+      `<circle cx="${x0}" cy="${y0}" r="11" fill="#1877f2" stroke="#fff" stroke-width="4"/>` +
+      `<path d="M${xEnd + 22} ${y1 - 20} L${xEnd} ${y1} L${xEnd + 22} ${y1 + 20}" fill="none" stroke="#1877f2" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>`;
+  });
+</script>
+</body>
+</html>

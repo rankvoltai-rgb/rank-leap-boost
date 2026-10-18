@@ -1,0 +1,118 @@
+<!doctype html>
+<!-- Cluster 6 · slide 3 of 3 · The turn: put the retainer into your own site.
+     Rankbox as "an engine that writes citable articles every day", shown as
+     the product's own Calendar in its Agenda view (FACTS: views Month and
+     Agenda; description "What autopilot has published, and when it writes
+     the rest."), with autopilot's pace set to "every day" (a real Pace
+     option). One honest week on yoursite.com: two published (with the Rank
+     page signals they carry), one writing, two scheduled (STYLE 10: queued
+     articles can't have passed checks yet). Stage pills follow StagePill.
+     The offer comes only from ads.js. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x5" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<link rel="stylesheet" href="ads/ads.css" />
+<script src="../kit/kit.js"></script>
+<script src="ads/ads.js"></script>
+<style>
+  .x06-sub { position: absolute; left: 110px; right: 160px; top: 448px; }
+  .x06-sub b { color: #0c1018; font-weight: 700; }
+
+  .x06-cal { left: 110px; top: 620px; width: 1380px; padding: 46px 52px 18px; }
+  .x06-ch { display: flex; align-items: flex-start; gap: 24px; padding-bottom: 36px; border-bottom: 2px solid #eef0f3; }
+  .x06-ch .ic { width: 88px; height: 88px; border-radius: 26px; background: #e8f1ff; color: var(--blue); display: grid; place-items: center; flex: none; }
+  .x06-ch .ic svg { width: 50px; height: 50px; }
+  .x06-ch b { display: block; font-size: 46px; font-weight: 750; letter-spacing: -0.03em; color: #0c1018; }
+  .x06-ch b em { font-style: normal; font-weight: 500; color: #8a909c; margin-left: 10px; font-size: 34px; letter-spacing: -0.015em; }
+  .x06-ch span { display: block; margin-top: 6px; font-size: 29px; font-weight: 500; color: #6b7280; letter-spacing: -0.01em; }
+  .x06-seg { margin-left: auto; margin-top: 8px; display: inline-flex; padding: 6px; gap: 2px; border-radius: 16px; background: #eef0f3; }
+  .x06-seg > span { margin: 0; height: 58px; padding: 0 26px; display: grid; place-items: center; border-radius: 12px; font-size: 27px; font-weight: 600; color: #7b808a; white-space: nowrap; }
+  .x06-seg > span.on { background: #fff; color: var(--blue); box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.03); }
+
+  .x06-pace { display: flex; align-items: center; gap: 14px; padding: 26px 0; border-bottom: 2px solid #f1f2f5; font-size: 30px; font-weight: 600; color: #1d222c; }
+  .x06-pace svg { width: 36px; height: 36px; color: var(--blue); }
+  .x06-pace em { font-style: normal; font-weight: 500; color: #8a909c; }
+  .x06-pace i { margin-left: auto; position: relative; width: 96px; height: 56px; border-radius: 999px; background: var(--blue); display: block; }
+  .x06-pace i::after { content: ""; position: absolute; right: 6px; top: 6px; width: 44px; height: 44px; border-radius: 50%; background: #fff; box-shadow: 0 2px 6px rgba(6, 40, 110, 0.3); }
+
+  .x06-row { display: grid; grid-template-columns: 112px 1fr auto; column-gap: 28px; align-items: start; padding: 32px 0; border-top: 2px solid #f1f2f5; }
+  .x06-row:first-of-type { border-top: 0; }
+  .x06-day { text-align: center; line-height: 1; }
+  .x06-day span { display: block; font-size: 26px; font-weight: 650; letter-spacing: 0.04em; text-transform: uppercase; color: #8a909c; }
+  .x06-day b { display: block; margin-top: 8px; font-size: 52px; font-weight: 750; letter-spacing: -0.04em; color: #12161f; }
+  .x06-row.today .x06-day b { color: var(--blue); }
+  .x06-t { padding-top: 6px; font-size: 39px; font-weight: 650; letter-spacing: -0.022em; line-height: 1.22; color: #12161f; }
+  .x06-ck { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 10px; }
+  .x06-ck span { height: 50px; padding: 0 18px; border-radius: 999px; background: #eef4ff; color: #1561d6; display: inline-flex; align-items: center; gap: 8px; font-size: 26px; font-weight: 650; }
+  .x06-ck svg { width: 22px; height: 22px; }
+  .x06-wr { margin-top: 20px; height: 14px; width: 60%; border-radius: 99px; background: #eef0f3; position: relative; overflow: hidden; }
+  .x06-wr i { position: absolute; left: 0; top: 0; bottom: 0; width: 56%; border-radius: inherit; background: linear-gradient(90deg, #9cc4ff, var(--blue)); }
+  .x06-row.dim .x06-t { color: #4a505c; }
+
+  /* StagePill: success / info (spinner) / neutral */
+  .x06-pill { margin-top: 6px; height: 54px; padding: 0 22px; border-radius: 999px; display: inline-flex; align-items: center; gap: 10px; font-size: 27px; font-weight: 650; white-space: nowrap; }
+  .x06-pill.pub { background: #e6f6ec; color: #138a43; box-shadow: inset 0 0 0 2px #cdeed9; }
+  .x06-pill.wri { background: #e9f1ff; color: #1561d6; box-shadow: inset 0 0 0 2px #d3e3fb; }
+  .x06-pill.sch { background: #f1f2f5; color: #6b7280; box-shadow: inset 0 0 0 2px #e4e7ec; }
+  .x06-pill svg { width: 24px; height: 24px; }
+</style>
+</head>
+<body>
+<div class="canvas ad">
+  <div class="ad-dots"></div>
+  <div class="ad-top">
+    <div class="ad-prog"><i class="on"></i><i class="on"></i><i class="on"></i></div>
+    <div class="ad-step">A better place for it</div>
+    <div class="ad-logo"><svg><use href="#lg-rankbox"/></svg>Rankbox</div>
+  </div>
+  <h1 class="ad-hl">Put the retainer into your own site.</h1>
+  <p class="ad-sub x06-sub"><b>Rankbox:</b> an engine that writes citable articles every day.</p>
+
+  <div class="ad-card x06-cal">
+    <div class="x06-ch">
+      <span class="ic"><svg><use href="#rb-calendar"/></svg></span>
+      <div><b>Calendar<em>yoursite.com</em></b><span>What autopilot has published, and when it writes the rest.</span></div>
+      <div class="x06-seg"><span>Month</span><span class="on">Agenda</span></div>
+    </div>
+    <div class="x06-pace"><svg><use href="#rb-autopilot"/></svg>Autopilot<em>· every day</em><i></i></div>
+
+    <div class="x06-row">
+      <div class="x06-day"><span>Mon</span><b>12</b></div>
+      <div>
+        <div class="x06-t">What Should a Project Kickoff Agenda Include?</div>
+        <div class="x06-ck"><span><svg><use href="#ic-check"/></svg>Answers up front</span><span><svg><use href="#ic-check"/></svg>Cites sources</span></div>
+      </div>
+      <span class="x06-pill pub">Published</span>
+    </div>
+    <div class="x06-row">
+      <div class="x06-day"><span>Tue</span><b>13</b></div>
+      <div>
+        <div class="x06-t">Kanban or Scrum: Which Suits a Five-Person Team?</div>
+        <div class="x06-ck"><span><svg><use href="#ic-check"/></svg>Clear sections</span><span><svg><use href="#ic-check"/></svg>Cites sources</span></div>
+      </div>
+      <span class="x06-pill pub">Published</span>
+    </div>
+    <div class="x06-row today">
+      <div class="x06-day"><span>Wed</span><b>14</b></div>
+      <div>
+        <div class="x06-t">How Do You Estimate a Project Timeline?</div>
+        <div class="x06-wr"><i></i></div>
+      </div>
+      <span class="x06-pill wri"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" fill="none" stroke="#c4d8f7" stroke-width="2.6"/><path d="M12 3.5a8.5 8.5 0 0 1 8.5 8.5" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"/></svg>Writing</span>
+    </div>
+    <div class="x06-row dim">
+      <div class="x06-day"><span>Thu</span><b>15</b></div>
+      <div><div class="x06-t">Is a Daily Standup Worth It for a Remote Team?</div></div>
+      <span class="x06-pill sch">Scheduled</span>
+    </div>
+  </div>
+
+  <div class="ad-offer">
+    <div class="ad-terms"><b data-offer="price"></b><span data-offer="articles"></span> · <span data-offer="trial"></span></div>
+    <div class="ad-go"><span data-offer="cta"></span><svg><use href="#ic-arrow-right"/></svg></div>
+  </div>
+</div>
+</body>
+</html>

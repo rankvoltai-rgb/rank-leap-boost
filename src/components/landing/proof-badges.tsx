@@ -15,8 +15,9 @@ import { AI_MARKS, GoogleMark } from "./ai-logos";
 type Tone = "onBlue" | "onLight";
 
 /* One wing: a curved stem with lens-shaped leaves, generated from the stem's
-   Bezier so the leaves sit on the curve. The right wing is this one mirrored. */
-function Laurel({ className }: { className?: string }) {
+   Bezier so the leaves sit on the curve. The right wing is this one mirrored.
+   Also frames the landing hero's proof band. */
+export function Laurel({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 52" aria-hidden className={className}>
       <path

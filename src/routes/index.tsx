@@ -1,14 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Navbar } from "@/components/landing/Navbar";
 import { Hero } from "@/components/landing/Hero";
+import { DashboardShowcase } from "@/components/landing/DashboardShowcase";
 import { SuccessStories } from "@/components/landing/SuccessStories";
 import { GrowTraffic } from "@/components/landing/GrowTraffic";
 import { EverythingYouNeed } from "@/components/landing/EverythingYouNeed";
 import { ExampleArticles } from "@/components/landing/ExampleArticles";
-import { Pricing } from "@/components/landing/Pricing";
+import { PricingBand } from "@/components/landing/PricingBand";
 import { Guarantee } from "@/components/landing/Guarantee";
-import { Testimonials } from "@/components/landing/Testimonials";
-import { FinalCTA } from "@/components/landing/FinalCTA";
+import { ClosingCTA } from "@/components/landing/ClosingCTA";
 import { FAQ, FAQS } from "@/components/landing/FAQ";
 import { Footer } from "@/components/landing/Footer";
 import { organizationNode } from "@/data/company";
@@ -78,19 +78,21 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
+    // Pure white, like Rankaria: the page frame's hairlines are drawn for it.
+    <div className="min-h-screen bg-white">
+      {/* White bar on the landing page, so its rails run on into the hero. */}
+      <Navbar tone="light" />
       <main>
         <Hero />
+        <DashboardShowcase />
         <SuccessStories />
         <GrowTraffic />
         <EverythingYouNeed />
         <ExampleArticles />
-        <Pricing />
+        <PricingBand />
         <Guarantee />
-        <Testimonials />
-        <FinalCTA />
         <FAQ />
+        <ClosingCTA />
       </main>
       <Footer />
     </div>

@@ -1,0 +1,135 @@
+<!doctype html>
+<!-- Variant 3 · Cluster 33 "Rank #1, still invisible" (AI Overviews), one
+     image. "Selected", sky field: "above the fold" taken literally. A sheet
+     of paper (a search page) with a real fold across it: above the crease the
+     AI answer fills the page, a solid selected block naming the three tools
+     it cites; below the crease the paper bends away from you, and that's
+     where your #1 result lives. A giant "#1" straddles the crease, its lower
+     half foreshortened and shaded as it goes over the fold. No number on this
+     ad: the picture carries it. Unlike Cluster 2's type edit, this one is an
+     object. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x5" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<link rel="stylesheet" href="ads3/ads3.css" />
+<script src="../kit/kit.js"></script>
+<script src="ads/ads.js"></script>
+<script src="ads3/ads3.js"></script>
+<style>
+  .y33-top { position: absolute; left: 100px; right: 100px; top: 96px; display: flex; align-items: center; }
+  .y33-top .v3-kick { margin-left: auto; }
+  .y33-hl { position: absolute; left: 94px; right: 100px; top: 200px; font-size: 132px; }
+
+  /* the sheet: an upper panel facing you, a lower panel bent away at the crease */
+  .y33-sheet { position: absolute; left: 290px; top: 548px; width: 1020px; --h1: 800px; }
+  .y33-shadow { position: absolute; left: 30px; right: 30px; top: 60px; height: calc(var(--h1) + 120px); border-radius: 40px; background: rgba(24, 119, 242, 0.32); filter: blur(46px); }
+  .y33-up { position: absolute; left: 0; top: 0; width: 100%; height: var(--h1); overflow: hidden; background: #fff; border-radius: 26px 26px 0 0; box-shadow: inset 0 0 0 3px var(--v3-line); }
+  /* the paper curving into the crease */
+  .y33-up::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 70px; background: linear-gradient(rgba(24, 119, 242, 0), rgba(24, 119, 242, 0.1)); }
+  .y33-lowwrap { position: absolute; left: 0; top: var(--h1); width: 100%; height: 640px; perspective: 1500px; perspective-origin: 50% 0; }
+  .y33-low { position: absolute; inset: 0; overflow: hidden; background: #fff; border-radius: 0 0 26px 26px; transform-origin: 50% 0; transform: rotateX(-54deg); box-shadow: inset 0 0 0 3px var(--v3-line); }
+  .y33-low::after { content: ""; position: absolute; inset: 0; background: linear-gradient(rgba(24, 119, 242, 0.24), rgba(24, 119, 242, 0.12) 60%, rgba(24, 119, 242, 0.08)); }
+  .y33-crease { position: absolute; left: 0; right: 0; top: calc(var(--h1) - 2px); height: 4px; background: #fff; box-shadow: 0 -10px 18px -8px rgba(24, 119, 242, 0.35); }
+
+  /* page content, upper panel */
+  .y33-q { position: absolute; left: 56px; right: 56px; top: 46px; height: 76px; display: flex; align-items: center; gap: 16px; padding: 0 28px; border-radius: 999px; border: 4px solid var(--v3-line); font-size: 32px; font-weight: 600; letter-spacing: -0.015em; color: var(--v3-ink); }
+  .y33-q svg { width: 32px; height: 32px; color: var(--v3-blue); flex: none; }
+  .y33-ans.v3-pick { position: absolute; left: 56px; right: 56px; top: 166px; display: block; padding: 40px 50px 44px; margin: 0; line-height: 1; border-radius: 6px; --k: 34px; --st: 5px; }
+  .y33-lab { display: flex; align-items: center; gap: 12px; font-size: 30px; font-weight: 700; letter-spacing: -0.01em; }
+  .y33-lab svg { width: 30px; height: 30px; }
+  .y33-intro { margin-top: 18px; font-size: 34px; font-weight: 500; letter-spacing: -0.02em; line-height: 1.2; color: rgba(255, 255, 255, 0.92); }
+  .y33-names { margin-top: 26px; display: grid; gap: 6px; }
+  .y33-names div { display: flex; align-items: center; gap: 22px; font-size: 80px; font-weight: 780; letter-spacing: -0.05em; line-height: 1.04; }
+  .y33-names em { font-style: normal; display: grid; place-items: center; width: 46px; height: 46px; border-radius: 10px; border: 4px solid #fff; font-size: 26px; font-weight: 800; letter-spacing: 0; }
+
+  /* the giant #1: one copy per panel, cut at the crease */
+  .y33-one { position: absolute; left: 0; right: 0; text-align: center; font-size: 390px; font-weight: 800; letter-spacing: -0.07em; line-height: 1; color: var(--v3-blue); white-space: nowrap; }
+
+  /* page content, lower panel: your result */
+  .y33-res { position: absolute; left: 0; right: 0; text-align: center; }
+  .y33-res .u { font-size: 66px; font-weight: 700; letter-spacing: -0.03em; color: var(--v3-ink); }
+  .y33-res i { display: block; height: 22px; margin: 30px auto 0; border-radius: 11px; background: var(--v3-sky-2); }
+
+  /* the fold line, carried out to the edges */
+  .y33-foldline { position: absolute; left: 0; right: 0; height: 0; border-top: 4px dashed var(--v3-blue); opacity: 0.55; }
+  /* one texture square would sit like a bullet beside the fold label */
+  .y33-px i:nth-child(16) { display: none; }
+  .y33-foldlab { position: absolute; left: 100px; font-size: 26px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--v3-ink-2); }
+</style>
+</head>
+<body>
+<div class="canvas v3 sky">
+  <div class="v3-wash"></div>
+  <div class="v3-px y33-px"></div>
+
+  <div class="y33-top">
+    <span class="v3-logo"><svg><use href="#lg-rankbox"/></svg>Rankbox</span>
+    <span class="v3-kick">For sites that already rank</span>
+  </div>
+  <h1 class="v3-hl y33-hl">Rank #1.<br />Still below the&nbsp;fold.</h1>
+
+  <div class="y33-foldline" id="foldline"></div>
+  <span class="y33-foldlab" id="foldlab">The fold</span>
+
+  <div class="y33-sheet" id="sheet">
+    <div class="y33-shadow"></div>
+    <div class="y33-up" id="up">
+      <div class="y33-q"><svg><use href="#ic-search"/></svg>best project management software</div>
+      <div class="v3-pick y33-ans">
+        <div class="y33-lab"><svg><use href="#ic-sparkle"/></svg>AI answer</div>
+        <p class="y33-intro">Three tools come up again and again:</p>
+        <div class="y33-names">
+          <div>Taskwren<em>1</em></div>
+          <div>Quillvane<em>2</em></div>
+          <div>Stackmere<em>3</em></div>
+        </div>
+      </div>
+      <div class="y33-one" id="oneUp">#1</div>
+    </div>
+    <div class="y33-lowwrap">
+      <div class="y33-low" id="low">
+        <div class="y33-one" id="oneLow">#1</div>
+        <div class="y33-res" id="res"><div class="u">yoursite.com</div><i style="width:640px"></i><i style="width:520px"></i><i style="width:600px"></i></div>
+      </div>
+    </div>
+    <div class="y33-crease"></div>
+  </div>
+
+  <div class="v3-close">
+    <svg class="mk"><use href="#lg-rankbox"/></svg>
+    <p>Be one of the sources the answer cites. Rankbox is built for&nbsp;that.<span data-offer="line"></span></p>
+    <div class="v3-go">Check your site free<svg><use href="#ic-arrow-right"/></svg></div>
+  </div>
+</div>
+<script>
+  // Split the giant #1 exactly at the crease: find the glyphs' optical
+  // centre (baseline minus half the ink height) and place one copy in each
+  // panel so the two halves meet on the fold line.
+  document.fonts.ready.then(() => {
+    const up = document.getElementById("oneUp"), low = document.getElementById("oneLow");
+    const h1 = parseFloat(getComputedStyle(document.getElementById("sheet")).getPropertyValue("--h1"));
+    const cs = getComputedStyle(up);
+    const ctx = document.createElement("canvas").getContext("2d");
+    ctx.font = `${cs.fontWeight} ${cs.fontSize} Jakarta`;
+    const ink = ctx.measureText("#1").actualBoundingBoxAscent;
+    const mark = document.createElement("span");
+    mark.style.cssText = "display:inline-block;width:0;height:0;vertical-align:baseline";
+    up.appendChild(mark);
+    const base = mark.getBoundingClientRect().top - up.getBoundingClientRect().top;
+    mark.remove();
+    const centre = base - ink * 0.5;
+    up.style.top = (h1 - centre) + "px";
+    low.style.top = (-centre) + "px";
+    // the result sits under the #1's lower half
+    document.getElementById("res").style.top = (base - centre + 34) + "px";
+    // fold line + label at the crease, in canvas space
+    const canvas = document.querySelector(".canvas").getBoundingClientRect();
+    const crease = document.getElementById("sheet").getBoundingClientRect().top - canvas.top + h1;
+    document.getElementById("foldline").style.top = (crease - 2) + "px";
+    document.getElementById("foldlab").style.top = (crease - 52) + "px";
+  });
+</script>
+</body>
+</html>

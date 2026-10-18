@@ -1,0 +1,122 @@
+<!doctype html>
+<!-- Variant 3 · Cluster 10 "Stop renting clicks", one image.
+     "Selected", blue field. Rent vs own as two objects: a yard sign drawn in
+     white line, "FOR RENT · CLICKS", whose rider plate carries the one number
+     (cost per click rose in 87% of industries, WordStream), and a key on a
+     tag reading "Owned: your answers", which is the selected thing. No chart,
+     so no illustrative figures to police. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x5" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<link rel="stylesheet" href="ads3/ads3.css" />
+<script src="../kit/kit.js"></script>
+<script src="ads/ads.js"></script>
+<script src="ads3/ads3.js"></script>
+<style>
+  .y10-top { position: absolute; left: 100px; right: 100px; top: 96px; display: flex; align-items: center; }
+  .y10-top .v3-kick { margin-left: auto; }
+  .y10-hl { position: absolute; left: 94px; right: 60px; top: 204px; font-size: 118px; white-space: nowrap; }
+
+  /* the yard sign: post, arm and chains in white line; the board and rider are outlined plates */
+  .y10-rig { position: absolute; left: 0; top: 0; width: 1600px; height: 2000px; overflow: visible; pointer-events: none; }
+  .y10-board { position: absolute; left: 196px; top: 640px; width: 590px; height: 412px; border: 6px solid #fff; border-radius: 18px; overflow: hidden; text-align: center; color: #fff; }
+  .y10-board .for { height: 104px; background: #fff; color: var(--v3-blue); font-size: 52px; font-weight: 800; letter-spacing: 0.16em; line-height: 104px; text-indent: 0.16em; }
+  .y10-board .what { margin-top: 62px; font-size: 154px; font-weight: 800; letter-spacing: -0.05em; line-height: 0.8; }
+  .y10-rider { position: absolute; left: 196px; top: 1106px; width: 590px; height: 228px; border: 6px solid #fff; border-radius: 18px; padding: 28px 34px; color: #fff; }
+  .y10-rider small { display: block; font-size: 26px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255, 255, 255, 0.85); }
+  .y10-rider p { margin-top: 10px; font-size: 38px; font-weight: 650; line-height: 1.1; letter-spacing: -0.025em; }
+  .y10-rider p b { font-size: 92px; font-weight: 800; letter-spacing: -0.06em; line-height: 0.9; vertical-align: -6px; margin-right: 6px; }
+  .y10-src { position: absolute; left: 196px; width: 590px; top: 1366px; }
+
+  /* the key, selected */
+  .y10-key.v3-pick { position: absolute; display: block; left: 880px; top: 590px; width: 620px; height: 860px; margin: 0; padding: 0; border-radius: 8px; --k: 38px; --st: 6px; }
+  .y10-key svg { position: absolute; left: 0; top: 0; width: 620px; height: 860px; overflow: visible; }
+  .y10-tag { position: absolute; left: 56px; top: 600px; width: 528px; height: 200px; border-radius: 20px; background: var(--v3-blue); color: #fff; padding: 34px 30px 0 100px; transform: rotate(-4deg); }
+  .y10-tag::before { content: ""; position: absolute; left: 38px; top: 38px; width: 36px; height: 36px; border-radius: 50%; background: #fff; }
+  .y10-tag small { display: block; font-size: 34px; font-weight: 650; letter-spacing: -0.02em; color: rgba(255, 255, 255, 0.9); }
+  .y10-tag b { display: block; margin-top: 4px; font-size: 60px; font-weight: 800; letter-spacing: -0.045em; line-height: 1; white-space: nowrap; }
+</style>
+</head>
+<body>
+<div class="canvas v3 blue">
+  <div class="v3-wash"></div>
+  <div class="v3-px"></div>
+
+  <div class="y10-top">
+    <span class="v3-logo"><svg><use href="#lg-rankbox"/></svg>Rankbox</span>
+    <span class="v3-kick">Paid clicks vs owned answers</span>
+  </div>
+  <h1 class="v3-hl y10-hl">Stop renting clicks.<br />Own the recommendation.</h1>
+
+  <!-- post, arm, chains, rider hooks, ground -->
+  <svg class="y10-rig" viewBox="0 0 1600 2000" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="128" y="548" width="26" height="1064" rx="6" fill="#fff" stroke="none" />
+    <rect x="128" y="548" width="700" height="22" rx="6" fill="#fff" stroke="none" />
+    <path d="M96 1612 H 870" stroke-width="6" />
+    <g stroke-width="6">
+      <path d="M270 570 v 14 m 0 0 a 9 13 0 1 0 0.1 0 m 0 26 v 30" />
+      <path d="M712 570 v 14 m 0 0 a 9 13 0 1 0 0.1 0 m 0 26 v 30" />
+      <path d="M270 1052 v 18 a 8 8 0 0 0 0 16 v 20" />
+      <path d="M712 1052 v 18 a 8 8 0 0 1 0 16 v 20" />
+    </g>
+  </svg>
+
+  <div class="y10-board">
+    <div class="for">FOR RENT</div>
+    <div class="what">CLICKS</div>
+  </div>
+  <div class="y10-rider">
+    <small>And the rent keeps rising</small>
+    <p>Cost per click rose in<br /><b>87%</b> of industries.</p>
+  </div>
+  <div class="v3-src y10-src">Source: WordStream Google Ads Benchmarks&nbsp;2025</div>
+
+  <div class="v3-pick y10-key">
+    <svg viewBox="0 0 620 860">
+      <!-- the key, pointing down-right; the ring threads its bow -->
+      <g transform="translate(244 226) rotate(30)" fill="#1877f2">
+        <path fill-rule="evenodd" d="M0 -124 a124 124 0 1 1 0 248 a124 124 0 1 1 0 -248 z M0 -52 a52 52 0 1 0 0 104 a52 52 0 1 0 0 -104 z" />
+        <rect x="108" y="-42" width="38" height="84" rx="10" />
+        <rect x="136" y="-26" width="256" height="52" rx="12" />
+        <path d="M278 20 h40 v56 h-40 z M338 20 h54 v78 q0 10 -10 10 h-34 q-10 0 -10 -10 z" />
+      </g>
+      <circle cx="156" cy="350" r="124" stroke="#1877f2" stroke-width="13" fill="none" />
+    </svg>
+    <div class="y10-tag"><small>Owned:</small><b>your answers</b></div>
+    <!-- the tag's string: a loop from the ring through the tag's hole, white-edged over the tag -->
+    <svg viewBox="0 0 620 860" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <path id="y10-h" stroke="#fff" stroke-width="15" /><path id="y10-s" stroke="#1877f2" stroke-width="7" />
+    </svg>
+  </div>
+  <i class="v3-cur w" id="y10-cur"></i>
+
+  <div class="v3-close">
+    <svg class="mk"><use href="#lg-rankbox"/></svg>
+    <p>Rankbox writes pages built to be&nbsp;cited.<span data-offer="line"></span></p>
+    <div class="v3-go"><span data-offer="cta"></span><svg><use href="#ic-arrow-right"/></svg></div>
+  </div>
+</div>
+<script>
+  (function () {
+    // Thread the tag's string from the bottom of the key ring through the tag's hole.
+    const box = document.querySelector(".y10-key").getBoundingClientRect();
+    const tag = document.querySelector(".y10-tag");
+    const tr = tag.getBoundingClientRect();
+    const a = -4 * Math.PI / 180, w = tag.offsetWidth;
+    const cx = tr.left + tr.width / 2 - box.left, cy = tr.top + tr.height / 2 - box.top;
+    const h = tag.offsetHeight, dx = 56 - w / 2, dy = 56 - h / 2; // hole centre, relative to the tag's centre
+    const hx = cx + dx * Math.cos(a) - dy * Math.sin(a), hy = cy + dx * Math.sin(a) + dy * Math.cos(a), r = 9;
+    const d = `M${146} ${470} L${hx - r} ${hy} A ${r} ${r} 0 0 0 ${hx + r} ${hy} L${166} ${470}`;
+    document.getElementById("y10-s").setAttribute("d", d);
+    document.getElementById("y10-h").setAttribute("d", d);
+    // Cursor on the selection's end handle.
+    const cv = document.querySelector(".canvas").getBoundingClientRect();
+    const cur = document.getElementById("y10-cur");
+    cur.style.left = (box.right - cv.left + 4) + "px";
+    cur.style.top = (box.bottom - cv.top + 22) + "px";
+  })();
+</script>
+</body>
+</html>

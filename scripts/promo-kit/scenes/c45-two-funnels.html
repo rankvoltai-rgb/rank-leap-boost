@@ -1,0 +1,179 @@
+<!doctype html>
+<!-- Cluster 45 · single image · "The whitepaper nobody downloads" (demand
+     gen). The hook mirrors the rising search "how AI is changing top-of-funnel
+     demand generation". Two funnels whose shape tells the story: the old one
+     grey, long and leaky (gated whitepaper, form fill, 12 nurture emails,
+     drips escaping at every stage, ending in silence); the new one blue and
+     short (a question to AI, a recommendation, a signup). The one number,
+     with its source: G2's 54% (AI chatbots are the #1 source buyers say
+     influences their shortlist; survey of 1,076 B2B software buyers, March
+     2026, "The Answer Economy"). No "80%", no cost per lead. Rankbox only in
+     the .ad-turn band. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x5" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<link rel="stylesheet" href="ads/ads.css" />
+<script src="../kit/kit.js"></script>
+<script src="ads/ads.js"></script>
+<style>
+  .canvas.ad { --hl-y: 128px; --hl-size: 94px; }
+
+  .x45-col { position: absolute; top: 548px; width: 660px; }
+  .x45-col.x45-old { left: 110px; }
+  .x45-col.x45-new { left: 830px; }
+  .x45-head { display: flex; align-items: center; gap: 14px; font-size: 32px; font-weight: 750; letter-spacing: -0.02em; }
+  .x45-head i { width: 18px; height: 18px; border-radius: 50%; display: block; }
+  .x45-old .x45-head { color: #6b7280; }
+  .x45-old .x45-head i { background: #b4bac4; }
+  .x45-new .x45-head { color: #1561d6; }
+  .x45-new .x45-head i { background: var(--blue); }
+
+  .x45-fun { position: relative; margin-top: 30px; width: 660px; }
+  .x45-fun svg.shape { position: absolute; left: 0; top: 0; overflow: visible; }
+  .x45-lab { position: absolute; left: 0; width: 100%; display: flex; align-items: center; justify-content: center; gap: 12px; font-size: 36px; font-weight: 700; letter-spacing: -0.02em; white-space: nowrap; }
+  .x45-old .x45-lab { color: #3a4252; }
+  .x45-new .x45-lab { color: #0b3fa0; }
+  .x45-new .x45-lab.x45-first { color: #1561d6; }
+
+  .x45-out { position: absolute; left: 50%; transform: translateX(-50%); height: 84px; padding: 0 34px; border-radius: 999px; display: inline-flex; align-items: center; gap: 14px; font-size: 36px; font-weight: 750; letter-spacing: -0.02em; white-space: nowrap; }
+  .x45-out.silence { background: transparent; color: #9aa0ab; box-shadow: inset 0 0 0 3px #d0d5dc; font-style: italic; font-weight: 650; }
+  .x45-out.signup { background: var(--blue); color: #fff; box-shadow: 0 18px 34px -16px rgba(22, 111, 229, 0.8); }
+  .x45-out.signup svg { width: 38px; height: 38px; }
+
+  .x45-stat { position: absolute; left: 830px; width: 660px; }
+  .x45-stat .ad-num { --num-size: 190px; }
+  .x45-stat p { margin-top: 18px; font-size: 40px; font-weight: 600; line-height: 1.24; letter-spacing: -0.028em; color: #0c1018; text-wrap: balance; }
+</style>
+</head>
+<body>
+<div class="canvas ad">
+  <div class="ad-dots"></div>
+  <h1 class="ad-hl">How AI is changing<br />top‑of‑funnel<br />demand generation</h1>
+
+  <div class="x45-col x45-old">
+    <div class="x45-head"><i></i>The old funnel</div>
+    <div class="x45-fun" id="old"></div>
+  </div>
+  <div class="x45-col x45-new">
+    <div class="x45-head"><i></i>The new funnel</div>
+    <div class="x45-fun" id="new"></div>
+  </div>
+
+  <div class="x45-stat" id="stat">
+    <div class="ad-num">54%</div>
+    <p>AI chatbots are now the #1 influence on B2B shortlists.</p>
+  </div>
+
+  <div class="ad-src lift">Source: G2 research, 2026</div>
+
+  <div class="ad-turn">
+    <div class="ad-logo"><svg><use href="#lg-rankbox"/></svg>Rankbox</div>
+    <p>Does the top-of-funnel work inside AI answers.</p>
+    <div class="ad-go"><span data-offer="cta"></span><svg><use href="#ic-arrow-right"/></svg></div>
+  </div>
+</div>
+<script>
+  const NS = "http://www.w3.org/2000/svg";
+  const W = 660, R = 14; // column width, corner rounding (via stroke joins)
+
+  // A funnel: stacked trapezoid bands, then a spout, then what comes out.
+  function funnel(el, o) {
+    const svg = document.createElementNS(NS, "svg");
+    svg.classList.add("shape");
+    let y = 0, w = o.top;
+    const parts = [];
+    o.bands.forEach((b, i) => {
+      const w1 = w - o.taper;
+      parts.push({ y, h: b.h, w0: w, w1, fill: b.fill, label: b.label, cls: b.cls || "" });
+      y += b.h + o.gap; w = w1 - o.gapTaper;
+    });
+    // spout
+    const sp = { y, h: o.spout, w0: o.spoutW + 30, w1: o.spoutW, fill: o.spoutFill };
+    y += o.spout;
+    const poly = (p) => {
+      const x0 = (W - p.w0) / 2, x1 = (W - p.w1) / 2;
+      const pts = [[x0 + R / 2, p.y + R / 2], [x0 + p.w0 - R / 2, p.y + R / 2], [x1 + p.w1 - R / 2, p.y + p.h - R / 2], [x1 + R / 2, p.y + p.h - R / 2]];
+      const e = document.createElementNS(NS, "polygon");
+      e.setAttribute("points", pts.map((q) => q.join(",")).join(" "));
+      e.setAttribute("fill", p.fill); e.setAttribute("stroke", p.fill);
+      e.setAttribute("stroke-width", R); e.setAttribute("stroke-linejoin", "round");
+      svg.appendChild(e);
+    };
+    parts.forEach(poly); poly(sp);
+    // leaks: drops escaping from the sides of the old funnel's bands
+    (o.leaks || []).forEach((lk) => {
+      const p = parts[lk.band];
+      const t = lk.at; // 0..1 down the band
+      const wAt = p.w0 + (p.w1 - p.w0) * t;
+      const side = lk.side;
+      const xEdge = side < 0 ? (W - wAt) / 2 : (W + wAt) / 2;
+      const yEdge = p.y + p.h * t;
+      lk.drops.forEach((d, k) => {
+        const g = document.createElementNS(NS, "path");
+        const cx = xEdge + side * (d.dx), cy = yEdge + d.dy, s = d.s;
+        g.setAttribute("d", `M ${cx} ${cy - s * 1.5} C ${cx + s * 0.9} ${cy - s * 0.2}, ${cx + s} ${cy + s * 0.9}, ${cx} ${cy + s} C ${cx - s} ${cy + s * 0.9}, ${cx - s * 0.9} ${cy - s * 0.2}, ${cx} ${cy - s * 1.5} Z`);
+        g.setAttribute("fill", o.dropFill);
+        g.setAttribute("opacity", d.o);
+        svg.appendChild(g);
+      });
+    });
+    svg.setAttribute("width", W); svg.setAttribute("height", y + 10);
+    svg.setAttribute("viewBox", `0 0 ${W} ${y + 10}`);
+    el.appendChild(svg);
+    parts.forEach((p) => {
+      const l = document.createElement("div");
+      l.className = "x45-lab " + p.cls;
+      l.style.top = p.y + "px"; l.style.height = p.h + "px";
+      l.innerHTML = p.label;
+      el.appendChild(l);
+    });
+    const out = document.createElement("div");
+    out.className = "x45-out " + o.out.cls;
+    out.style.top = (y + o.outGap) + "px";
+    out.innerHTML = o.out.html;
+    el.appendChild(out);
+    el.style.height = (y + o.outGap + 84) + "px";
+    return y + o.outGap + 84;
+  }
+
+  const drip = (dx, dy, s, o) => ({ dx, dy, s, o });
+  document.fonts.ready.then(() => {
+    funnel(document.getElementById("old"), {
+      top: 640, taper: 70, gap: 14, gapTaper: 6,
+      bands: [
+        { h: 180, fill: "#cdd2d9", label: "Gated whitepaper" },
+        { h: 180, fill: "#d8dce2", label: "Form fill" },
+        { h: 180, fill: "#e2e5ea", label: "12 nurture emails" },
+      ],
+      spout: 250, spoutW: 92, spoutFill: "#e2e5ea",
+      dropFill: "#b4bac4",
+      leaks: [
+        { band: 0, at: 0.78, side: -1, drops: [drip(26, 26, 12, 1), drip(30, 78, 9, 0.7), drip(33, 120, 7, 0.45)] },
+        { band: 1, at: 0.7, side: 1, drops: [drip(26, 26, 12, 1), drip(30, 76, 9, 0.7), drip(33, 118, 7, 0.45)] },
+        { band: 2, at: 0.6, side: -1, drops: [drip(26, 26, 12, 1), drip(30, 76, 9, 0.7), drip(33, 118, 7, 0.45)] },
+        { band: 2, at: 0.9, side: 1, drops: [drip(24, 30, 11, 0.9), drip(28, 78, 8, 0.6)] },
+      ],
+      outGap: 34,
+      out: { cls: "silence", html: "Silence" },
+    });
+    const newEnd = funnel(document.getElementById("new"), {
+      top: 640, taper: 90, gap: 14, gapTaper: 6,
+      bands: [
+        { h: 150, fill: "#dbe8fd", label: "A question to AI", cls: "x45-first" },
+        { h: 150, fill: "#a9cbff", label: "A recommendation" },
+      ],
+      spout: 74, spoutW: 150, spoutFill: "#a9cbff",
+      outGap: 26,
+      out: { cls: "signup", html: '<svg><use href="#ic-check"/></svg>A signup' },
+    });
+    // the proof sits in the room the short funnel leaves
+    const col = document.querySelector(".x45-col.x45-new .x45-fun");
+    const c = document.querySelector(".canvas").getBoundingClientRect();
+    const top = col.getBoundingClientRect().top - c.top + newEnd + 110;
+    document.getElementById("stat").style.top = top + "px";
+  });
+</script>
+</body>
+</html>

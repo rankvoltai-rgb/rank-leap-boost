@@ -15,7 +15,7 @@ import {
 
 // The daily articles and the backlink credits are shown on the month panel,
 // so this list holds only what the panel doesn't.
-const INCLUDED = [
+export const INCLUDED = [
   "Answer-space research plan, tailored to your buyers",
   "2,500+ word, source-backed articles",
   "Auto-published to your website",
@@ -23,7 +23,7 @@ const INCLUDED = [
   "Unlimited rewrites and team members",
 ];
 
-const PLATFORMS = [
+export const PLATFORMS = [
   { name: "Google", Mark: GoogleMark },
   { name: "ChatGPT", Mark: ChatGPTMark },
   { name: "Claude", Mark: ClaudeMark },
@@ -47,7 +47,7 @@ const EASE = [0.21, 0.47, 0.32, 0.98] as const;
 /* The section's one moment of motion: the month publishes itself, day 1 to
    day 30, when the card scrolls into view. With reduced motion the tiles
    fade in without moving. */
-function MonthGrid() {
+export function MonthGrid() {
   return (
     <MotionConfig reducedMotion="user">
       <motion.div
@@ -97,7 +97,7 @@ function MonthGrid() {
   );
 }
 
-function MonthStat({ value, label }: { value: number; label: string }) {
+export function MonthStat({ value, label }: { value: number; label: string }) {
   return (
     <div className="px-4 py-3.5 sm:px-5">
       <dt className="sr-only">{label}</dt>

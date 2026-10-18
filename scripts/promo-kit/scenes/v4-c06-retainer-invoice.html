@@ -1,0 +1,195 @@
+<!doctype html>
+<!-- Variant 4 · Cluster 6 "The invoice you regret", one image.
+     Replica of Consentbit 2 ("Ensure Cookie Compliance for Your Website"),
+     made light: a brand-blue wash with faint chevron lines at the edges, the
+     brand mark centred at the top, a centred 2-line medium headline, and the
+     product in a tablet bezel (white frame, hairline, big rounded corners)
+     centred below it, bleeding off the bottom, with a soft white glow behind
+     it. In the bezel: Rankbox's Plan & Billing page (real labels from
+     dashboard.billing.tsx): the Business plan card, what's included, and the
+     site's usage meter. The plan row is lifted out over the bezel's edge with
+     the hand cursor on it. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x5" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<link rel="stylesheet" href="ads4/ads4.css" />
+<script src="../kit/kit.js"></script>
+<script src="ads/ads.js"></script>
+<script src="ads4/ads4.js"></script>
+<style>
+  .y06-glow { position: absolute; z-index: -2; border-radius: 50%; pointer-events: none; }
+  .y06-chev { position: absolute; inset: 0; z-index: -2; width: 1600px; height: 2000px; pointer-events: none; }
+
+  .y06-mk { position: absolute; left: 50%; top: 124px; width: 118px; height: 118px; margin-left: -59px; color: #fff; filter: drop-shadow(0 10px 18px rgba(4, 40, 120, 0.25)); }
+  .y06-hl { position: absolute; left: 0; right: 0; top: 282px; text-align: center; font-size: 88px; font-weight: 500; letter-spacing: -0.035em; line-height: 1.1; color: #fff; }
+
+  /* the tablet */
+  .y06-tab { position: absolute; left: 220px; top: 600px; width: 1160px; height: 1500px; border-radius: 76px; background: #fff; padding: 28px; z-index: 5;
+    box-shadow: inset 0 0 0 2px #fff, 0 0 0 2px rgba(10, 50, 130, 0.16), 0 70px 120px -40px rgba(4, 36, 110, 0.6), 0 24px 50px -24px rgba(4, 36, 110, 0.4); }
+  .y06-tab .cam { position: absolute; left: 50%; top: 10px; width: 10px; height: 10px; margin-left: -5px; border-radius: 50%; background: #d9dee6; }
+  .y06-scr { position: relative; width: 100%; height: 100%; border-radius: 50px; overflow: hidden; background: #f6f7f9; display: flex; }
+  .y06-scr::after { content: ""; position: absolute; inset: 0; border-radius: 50px; box-shadow: inset 0 0 0 2px #e2e6ec; pointer-events: none; z-index: 3; }
+
+  .y06-rail { flex: none; width: 108px; background: #fff; border-right: 2px solid #eceff3; display: flex; flex-direction: column; align-items: center; padding-top: 30px; gap: 12px; }
+  .y06-rail .mk { width: 50px; height: 50px; color: var(--v4-blue); margin-bottom: 26px; }
+  .y06-rail .it { width: 68px; height: 68px; border-radius: 18px; display: grid; place-items: center; color: #7a808c; }
+  .y06-rail .it svg { width: 32px; height: 32px; }
+  .y06-rail .it.on { background: var(--v4-blue); color: #fff; }
+  .y06-rail .sep { width: 52px; height: 2px; background: #eceff3; margin: 10px 0; }
+
+  .y06-main { flex: 1; padding: 46px 54px 0; }
+  .y06-top { display: flex; align-items: flex-start; }
+  .y06-top h3 { font-size: 48px; font-weight: 700; letter-spacing: -0.035em; }
+  .y06-top p { margin-top: 10px; font-size: 27px; color: var(--v4-ink-2); }
+  .y06-top .gh { margin-left: auto; height: 62px; padding: 0 22px; border-radius: 15px; background: #fff; box-shadow: inset 0 0 0 2px #e3e7ed; display: inline-flex; align-items: center; gap: 12px; font-size: 25px; font-weight: 600; color: #2a2f3a; }
+  .y06-top .gh svg { width: 28px; height: 28px; color: #6b707a; }
+
+  .y06-card { margin-top: 30px; background: #fff; border-radius: 26px; box-shadow: inset 0 0 0 2px #e6e9ef; }
+  .y06-card .pad { padding: 36px 40px; }
+  .y06-eyebrow { display: flex; align-items: center; gap: 14px; font-size: 24px; font-weight: 650; letter-spacing: 0.08em; color: var(--v4-ink-3); }
+  .y06-pill { height: 40px; padding: 0 16px; border-radius: 20px; display: inline-flex; align-items: center; gap: 8px; background: var(--v4-tint); color: var(--v4-blue); font-size: 24px; font-weight: 650; letter-spacing: 0; }
+  .y06-pill i { width: 11px; height: 11px; border-radius: 50%; background: currentColor; }
+  .y06-plan { margin-top: 20px; display: flex; align-items: flex-end; }
+  .y06-plan h4 { font-size: 46px; font-weight: 650; letter-spacing: -0.03em; line-height: 1; }
+  .y06-plan p { margin-top: 12px; font-size: 26px; color: var(--v4-ink-2); }
+  .y06-plan .pr { margin-left: auto; font-size: 54px; font-weight: 650; letter-spacing: -0.035em; line-height: 1; }
+  .y06-plan .pr span { font-size: 26px; font-weight: 500; letter-spacing: 0; color: var(--v4-ink-2); }
+  .y06-per { margin-top: 58px; display: flex; font-size: 24px; }
+  .y06-per b { font-weight: 600; }
+  .y06-per span { margin-left: auto; color: var(--v4-ink-3); }
+  .y06-bar { margin-top: 12px; height: 12px; border-radius: 6px; background: #eceff3; overflow: hidden; }
+  .y06-bar i { display: block; height: 100%; border-radius: 6px; background: var(--v4-blue); }
+  .y06-inc { border-top: 2px solid #eff1f4; padding: 28px 40px 32px; }
+  .y06-inc h5 { font-size: 26px; font-weight: 600; }
+  .y06-inc div { margin-top: 15px; display: flex; align-items: center; gap: 16px; font-size: 26px; color: #2a2f3a; }
+  .y06-inc div i { flex: none; width: 34px; height: 34px; border-radius: 50%; background: var(--v4-tint); color: var(--v4-blue); display: grid; place-items: center; }
+  .y06-inc div i svg { width: 20px; height: 20px; }
+
+  .y06-sites .hd { padding: 30px 40px 26px; border-bottom: 2px solid #eff1f4; display: flex; align-items: flex-start; }
+  .y06-sites .hd h5 { font-size: 28px; font-weight: 650; letter-spacing: -0.015em; }
+  .y06-sites .hd p { margin-top: 6px; font-size: 24px; color: var(--v4-ink-2); }
+  .y06-sites .hd a { margin-left: auto; font-size: 24px; font-weight: 600; color: var(--v4-blue); white-space: nowrap; display: inline-flex; align-items: center; gap: 8px; }
+  .y06-sites .hd a svg { width: 24px; height: 24px; }
+  .y06-site { padding: 30px 40px 34px; display: grid; grid-template-columns: auto 1fr auto; gap: 0 20px; align-items: center; }
+  .y06-site .tile { width: 62px; height: 62px; border-radius: 16px; background: #c9dcf7; color: var(--v4-blue); display: grid; place-items: center; font-size: 30px; font-weight: 800; }
+  .y06-site b { display: block; font-size: 28px; font-weight: 600; letter-spacing: -0.015em; }
+  .y06-site small { display: block; margin-top: 4px; font-size: 24px; color: var(--v4-ink-2); }
+  .y06-site .inc { font-size: 26px; font-weight: 600; }
+  .y06-use { grid-column: 1 / -1; margin-top: 26px; }
+  .y06-use .row { display: flex; align-items: baseline; font-size: 25px; }
+  .y06-use .row b { font-weight: 700; }
+  .y06-use .row span { color: var(--v4-ink-2); }
+  .y06-use .row em { margin-left: auto; font-style: normal; color: var(--v4-ink-2); }
+  .y06-use .note { margin-top: 14px; font-size: 24px; color: var(--v4-ink-2); }
+
+  .ghost { opacity: 0.24; }
+
+  /* the lifted plan row */
+  .y06-lift { left: 790px; width: 740px; padding: 34px 40px 36px; z-index: 14; transform: rotate(-3deg); border-radius: 30px;
+    /* a large box-shadow on a rotated box gets cut off flat by Chrome, so the soft one is a filter */
+    box-shadow: 0 0 0 1.5px rgba(10, 30, 70, 0.06), 0 16px 30px -16px rgba(4, 40, 120, 0.4);
+    filter: drop-shadow(0 34px 34px rgba(4, 40, 120, 0.3)); }
+  .y06-lift .y06-eyebrow { font-size: 25px; }
+  .y06-lift .y06-pill { height: 44px; font-size: 25px; }
+  .y06-lift .y06-plan h4 { font-size: 56px; }
+  .y06-lift .y06-plan p { font-size: 29px; color: var(--v4-ink); font-weight: 500; }
+  .y06-lift .y06-plan .pr { font-size: 64px; }
+  .y06-lift .y06-plan .pr span { font-size: 29px; }
+</style>
+</head>
+<body>
+<div class="canvas v4">
+  <div class="v4-field-blue"></div>
+  <div class="y06-glow" style="left:160px; top:470px; width:1280px; height:900px; background:radial-gradient(closest-side, rgba(255,255,255,.5), rgba(255,255,255,0)); filter:blur(40px)"></div>
+  <svg class="y06-chev" viewBox="0 0 1600 2000" fill="none" stroke="#fff" stroke-width="2" stroke-linejoin="round">
+    <g opacity=".16"><path d="M-20 420 L240 940 L-20 1460"/><path d="M-20 540 L180 940 L-20 1340"/><path d="M-20 660 L120 940 L-20 1220"/></g>
+    <g opacity=".16"><path d="M1620 420 L1360 940 L1620 1460"/><path d="M1620 540 L1420 940 L1620 1340"/><path d="M1620 660 L1480 940 L1620 1220"/></g>
+  </svg>
+  <div class="grain" style="--grain:.07"></div>
+
+  <svg class="y06-mk"><use href="#lg-rankbox"/></svg>
+  <h1 class="y06-hl">Swap the retainer for<br />a month of articles.</h1>
+
+  <div class="y06-tab">
+    <span class="cam"></span>
+    <div class="y06-scr">
+      <div class="y06-rail">
+        <svg class="mk"><use href="#lg-rankbox"/></svg>
+        <span class="it"><svg><use href="#rb-pulse"/></svg></span>
+        <span class="it"><svg><use href="#rb-article"/></svg></span>
+        <span class="it"><svg><use href="#rb-calendar"/></svg></span>
+        <span class="it"><svg><use href="#rb-radar"/></svg></span>
+        <span class="it"><svg><use href="#rb-link"/></svg></span>
+        <span class="it"><svg><use href="#rb-thread"/></svg></span>
+        <span class="sep"></span>
+        <span class="it"><svg><use href="#rb-studio"/></svg></span>
+        <span class="it on"><svg><use href="#rb-card"/></svg></span>
+        <span class="it"><svg><use href="#rb-controls"/></svg></span>
+      </div>
+      <div class="y06-main">
+        <div class="y06-top">
+          <div><h3>Plan &amp; Billing</h3><p>One plan, one invoice, every site on it.</p></div>
+          <span class="gh"><svg><use href="#rb-card"/></svg>Card &amp; invoices</span>
+        </div>
+
+        <div class="y06-card">
+          <div class="pad" id="slot">
+            <div class="ghost">
+              <div class="y06-eyebrow">YOUR PLAN<span class="y06-pill"><i></i>Active</span></div>
+              <div class="y06-plan"><div><h4>Business</h4><p>Everything Rankbox does, for one site.</p></div><div class="pr">$49.50<span> / month</span></div></div>
+            </div>
+            <div class="y06-per"><b>Renews Oct 21, 2026</b><span>Sep 21 – Oct 21</span></div>
+            <div class="y06-bar"><i style="width:44%"></i></div>
+          </div>
+          <div class="y06-inc">
+            <h5>Included every month</h5>
+            <div><i><svg><use href="#ic-check"/></svg></i>30 articles researched, written and published a month</div>
+            <div><i><svg><use href="#ic-check"/></svg></i>30 backlink credits in the exchange</div>
+            <div><i><svg><use href="#ic-check"/></svg></i>30 Reddit reply drafts a month</div>
+          </div>
+        </div>
+
+        <div class="y06-card y06-sites">
+          <div class="hd"><div><h5>Sites &amp; usage</h5><p>Every site has its own allowance, on the same invoice and card.</p></div></div>
+          <div class="y06-site">
+            <span class="tile">Y</span>
+            <div><b>yoursite</b><small>yoursite.com · Your plan’s site</small></div>
+            <span class="inc">Included</span>
+            <div class="y06-use">
+              <div class="row"><b>12</b><span>&nbsp;/ 30 articles</span><em>18 left</em></div>
+              <div class="y06-bar"><i style="width:40%"></i></div>
+              <div class="note">Writing uses 1 article credit · 18 left this month</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="v4-pop y06-lift" id="lift">
+    <div class="y06-eyebrow">YOUR PLAN<span class="y06-pill"><i></i>Active</span></div>
+    <div class="y06-plan"><div><h4>Business</h4><p>30 articles a month</p></div><div class="pr" id="go">$49.50<span> / month</span></div></div>
+  </div>
+  <i class="v4-hand" id="hand"></i>
+
+  <div class="v4-fade" style="--fade:#1f74ee; height:240px"></div>
+</div>
+<script>
+  // Seat the lifted plan row over its slot on the plan card, then put the
+  // hand on its price.
+  addEventListener("load", () => {
+    const c = document.querySelector(".canvas").getBoundingClientRect();
+    const s = document.getElementById("slot").getBoundingClientRect();
+    const lift = document.getElementById("lift");
+    lift.style.top = (s.top - c.top - 26) + "px";
+    const b = document.getElementById("go").getBoundingClientRect();
+    const h = document.getElementById("hand");
+    // fingertip sits at (36, 13) of the 92px hand
+    h.style.left = (b.left - c.left + b.width * 0.86 - 36) + "px";
+    h.style.top = (b.bottom - c.top + 4 - 13) + "px";
+  });
+</script>
+</body>
+</html>

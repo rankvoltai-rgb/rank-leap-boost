@@ -1,13 +1,14 @@
 import { useEffect, useState, type CSSProperties } from "react";
 import { ArrowRight, Sparkles } from "lucide-react";
-import { Reveal, Stars } from "./shared";
+import { Stars } from "./shared";
+import { cn } from "@/lib/utils";
 import { setPendingSiteUrl } from "@/lib/pending-site";
 import { brandIconUrl, hostnameFrom } from "@/lib/brand-icon";
 import { BrandTile } from "./used-by";
 import { BRANDS } from "@/data/brands";
-import { RotatingEngine } from "./RotatingEngine";
-import { ChatAnswerCard } from "./chat";
-import { ProofBadges } from "./proof-badges";
+import { EngineTicker } from "./engine-ticker";
+import { MarkDither } from "./hero-dither";
+import { HeroProofBand } from "./hero-proof-band";
 
 /* Scattered white squares drifting over the blue field. Coordinates are fixed
    (not random) so the server and client renders agree. */
@@ -172,7 +173,20 @@ function SiteIcon({ url }: { url: string }) {
   );
 }
 
-export function UrlForm({ url, onChange }: { url: string; onChange: (v: string) => void }) {
+export function UrlForm({
+  url,
+  onChange,
+  variant = "card",
+}: {
+  url: string;
+  onChange: (v: string) => void;
+  /**
+   * `card` (default): the field and button share one raised card.
+   * `split`: the landing hero's flat pair, a hairline field beside a solid
+   * button of the same height, stacking on narrow screens.
+   */
+  variant?: "card" | "split";
+}) {
   const go = () => {
     const trimmed = url.trim();
     // Persist before navigating: this is a full page load, and OAuth adds a
@@ -181,6 +195,39 @@ export function UrlForm({ url, onChange }: { url: string; onChange: (v: string) 
     const q = trimmed ? `?url=${encodeURIComponent(trimmed)}` : "";
     window.location.href = `/auth${q}`;
   };
+  if (variant === "split") {
+    return (
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          go();
+        }}
+        className="group flex w-full flex-col gap-2.5 sm:flex-row"
+      >
+        <label className="flex h-12 min-w-0 shrink-0 cursor-text items-center gap-2.5 rounded-lg border border-ink/[0.1] bg-white px-3.5 shadow-[0_1px_2px_rgba(16,24,40,0.04)] transition-[border-color,box-shadow] duration-200 hover:border-ink/[0.16] focus-within:border-cta/50 focus-within:shadow-[0_0_0_4px_color-mix(in_oklab,var(--cta)_12%,transparent)] sm:flex-1">
+          <SiteIcon url={url} />
+          <input
+            type="text"
+            inputMode="url"
+            autoComplete="url"
+            value={url}
+            onChange={(e) => onChange(e.target.value)}
+            placeholder="Your website URL"
+            className="w-full text-ellipsis bg-transparent text-[0.95rem] text-ink outline-none placeholder:text-muted-foreground"
+            aria-label="Your website URL"
+          />
+        </label>
+        <button
+          type="submit"
+          className="inline-flex h-12 shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-lg bg-cta px-6 text-[0.95rem] font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.16),0_1px_2px_rgba(16,24,40,0.14)] transition-[background-color,transform] duration-150 hover:bg-cta-hover active:scale-[0.985] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-cta/25 sm:w-[13.5rem]"
+        >
+          Get Started Free
+          <ArrowRight className="h-4 w-4 transition-transform duration-200 group-focus-within:translate-x-0.5 group-hover:translate-x-0.5" />
+        </button>
+      </form>
+    );
+  }
+
   return (
     <form
       onSubmit={(e) => {
@@ -239,118 +286,70 @@ export function TrustRow() {
   );
 }
 
+/* The landing hero, after Rankaria: white, framed between hairline rails
+   that run down from the navbar, the copy centred over a dithered Rankbox
+   mark, and a proof band closing the frame. */
+const RAIL = "border-ink/[0.07]";
+
+/* Staggers the CSS entrance (see animate-hero-rise in styles.css). */
+const rise = (delay: number) => ({ "--rise-delay": `${delay}s` }) as CSSProperties;
+
 export function Hero() {
   const [url, setUrl] = useState("");
 
   return (
-    <section
-      id="top"
-      className="relative flex min-h-[calc(100svh-var(--top-chrome))] items-center overflow-hidden bg-brand-blue text-white"
-    >
-      <PixelField />
-      <div className="relative mx-auto w-full max-w-6xl px-5 py-12 lg:py-8">
-        <div className="grid items-center gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-stretch xl:gap-16">
-          {/* LEFT — the promise */}
-          <div className="mx-auto max-w-2xl text-center lg:mx-0 lg:flex lg:max-w-none lg:flex-col lg:justify-center lg:text-left">
-            <Reveal delay={0.05}>
-              {/* The row is exactly as wide as the headline's first line: its width
-                  is set in em of the h1's own sizes (8.09em = "Get ai traffic from"),
-                  so it tracks every breakpoint. Re-measure this if the headline
-                  text changes. Below lg the badges wrap, centred. */}
-              <div className="mb-7 text-[2.4rem] sm:text-[3.5rem] lg:w-[8.09em] lg:max-w-full xl:text-[4rem]">
-                <div className="text-base">
-                  <ProofBadges linked />
-                </div>
-              </div>
-            </Reveal>
+    <section id="top" className="relative bg-white">
+      <div className={cn("relative mx-auto max-w-6xl overflow-hidden border-x", RAIL)}>
+        {/* Faded toward the edges, so the mark sits behind the copy and the
+            rails stay clean. */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 opacity-[0.42] [mask-image:radial-gradient(ellipse_66%_82%_at_50%_50%,#000_50%,transparent_100%)]"
+        >
+          <MarkDither />
+        </div>
 
-            <Reveal delay={0.12}>
-              {/* Sizes are chosen so "Get AI Traffic from" stays on one line in
-                  its column at every breakpoint (measured: 8.32em wide). */}
-              <h1 className="font-display text-[2.4rem] font-bold leading-[1.06] tracking-tight text-white sm:text-[3.5rem] xl:text-[4rem]">
-                {/* Visually-hidden, crawler + screen-reader friendly full sentence */}
-                <span className="sr-only">
-                  Get AI Traffic from ChatGPT, Claude, Gemini and other AI on Autopilot
-                </span>
-                {/* Visual headline: the rotating logo tile stands in for the engine names */}
-                <span aria-hidden>
-                  Get ai traffic from
-                  <br />
-                  <RotatingEngine className="mr-2" />
-                  on autopilot
-                </span>
-              </h1>
-            </Reveal>
+        <div className="relative flex flex-col items-center px-5 pb-16 pt-16 text-center sm:px-8 sm:pb-20 sm:pt-20 lg:pb-[5.5rem] lg:pt-24">
+          <h1 className="font-display text-[2.3rem] font-medium leading-[1.08] tracking-[-0.035em] text-ink min-[400px]:text-[2.6rem] sm:text-[3.5rem] lg:text-[4.15rem]">
+            {/* The full sentence for crawlers and screen readers; the visual
+                line below swaps the engine names for the rolling reel. */}
+            <span className="sr-only">
+              Get AI Traffic from ChatGPT, Claude, Gemini and other AI on Autopilot
+            </span>
+            <span aria-hidden className="block motion-safe:animate-hero-rise" style={rise(0.05)}>
+              Get ai traffic from
+            </span>
+            <span
+              aria-hidden
+              className="mt-[0.04em] flex flex-wrap items-center justify-center gap-x-[0.25em] motion-safe:animate-hero-rise"
+              style={rise(0.14)}
+            >
+              <EngineTicker />
+              <span>on autopilot</span>
+            </span>
+          </h1>
 
-            <Reveal delay={0.19}>
-              <p className="mx-auto mt-6 max-w-lg text-[1.05rem] leading-relaxed text-white/80 lg:mx-0">
-                Publishes daily articles engineered to get your brand cited when buyers ask ChatGPT,
-                Claude, Perplexity, and Google AI Overviews — fully on autopilot.
-              </p>
-            </Reveal>
+          <p
+            className="mt-6 max-w-[41rem] text-balance text-[1.05rem] leading-relaxed text-muted-foreground motion-safe:animate-hero-rise sm:text-[1.15rem]"
+            style={rise(0.24)}
+          >
+            Publishes daily articles engineered to get your brand cited when buyers ask ChatGPT,
+            Claude, Perplexity, and Google AI Overviews — fully on autopilot.
+          </p>
 
-            <Reveal delay={0.26}>
-              <div className="relative mt-8 flex flex-col items-center gap-3 lg:items-start">
-                {/* Sits in the margin around the form, not over it. */}
-                <div className="pointer-events-none absolute -inset-x-10 -inset-y-8">
-                  <PixelField pixels={CTA_PIXELS} seed={11} />
-                </div>
-                {/* Positioned, so the form paints above the pixel layer rather
-                    than getting squares scattered across its white card. */}
-                <div className="relative w-full max-w-xl">
-                  <UrlForm url={url} onChange={setUrl} />
-                </div>
-                <p className="relative text-sm text-white/70">
-                  No credit card required · Free 7-day trial
-                </p>
-              </div>
-            </Reveal>
+          <div
+            className="mt-9 w-full max-w-[37rem] motion-safe:animate-hero-rise"
+            style={rise(0.34)}
+          >
+            <UrlForm url={url} onChange={setUrl} variant="split" />
+            <p className="mt-3.5 text-[0.82rem] text-muted-foreground">
+              No credit card required · Free 7-day trial
+            </p>
           </div>
-
-          {/* RIGHT — the product, live */}
-          <Reveal delay={0.34} y={28} className="mx-auto w-full max-w-lg lg:mx-0 lg:h-full">
-            <div className="flex flex-col lg:h-full">
-              <div className="relative lg:flex-1">
-                <div className="pointer-events-none absolute -inset-12">
-                  <PixelField pixels={CARD_PIXELS} seed={7} />
-                </div>
-                <ChatAnswerCard
-                  /* No engine tab row here: the badges above the headline already
-                     say which engines are covered. */
-                  tabs={false}
-                  /* 37.8rem is the former 42rem less 10%, freeing the strip under
-                     the card for the trust row. The viewport cap is cut by the
-                     same 10% so a short screen shrinks the card instead of
-                     pushing the hero past the fold. */
-                  className="relative lg:h-full lg:min-h-[min(37.8rem,calc((100svh-var(--top-chrome)-4rem)*0.9))]"
-                  prompt="What's the best project management tool for a small startup team?"
-                  answer={
-                    <>
-                      For lean startup teams,{" "}
-                      <span className="font-semibold text-ink underline decoration-volt decoration-2 underline-offset-2">
-                        Plannora
-                      </span>{" "}
-                      is widely recommended — simple boards, built-in automations, and a free tier
-                      for up to 5 people. It&rsquo;s frequently cited as the easiest tool to set up.
-                    </>
-                  }
-                  sources={["plannora.io", "loopcraft.ai", "yardstick.team"]}
-                  /* One citation per line: the taller card has the room, and it
-                     fills space the chat body would otherwise leave blank. */
-                  sourceStyle="rows"
-                />
-              </div>
-
-              {/* Trust row moved out of the left column: it reads as proof of
-                  the answer shown above it, and keeps the left column focused
-                  on the promise and the form. */}
-              <div className="mt-8 flex justify-center lg:justify-start">
-                <TrustRow />
-              </div>
-            </div>
-          </Reveal>
         </div>
       </div>
+
+      <HeroProofBand className="motion-safe:animate-hero-rise" style={rise(0.44)} />
     </section>
   );
 }

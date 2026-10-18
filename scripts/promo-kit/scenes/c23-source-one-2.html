@@ -1,0 +1,129 @@
+<!doctype html>
+<!-- Cluster 23 · slide 2 of 3 · Follow the click. The sources row from
+     slide 1 with the cursor on [1], and the page it opens on top: an article
+     on plotbright.io (invented, no company found, 2026-10-04), "How to Run a
+     Weekly Planning Meeting", tagged "Source 1". Its short answer is the one
+     the AI answer quoted on slide 1: answer up front, which is why it was
+     cited. The answer tab stays open behind it. Generic browser, no
+     engine's logo or layout. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x5" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<link rel="stylesheet" href="ads/ads.css" />
+<script src="../kit/kit.js"></script>
+<script src="ads/ads.js"></script>
+<style>
+  /* the sources row from slide 1, mid-click */
+  .x23-strip { left: 110px; top: 366px; display: flex; align-items: center; gap: 14px; padding: 22px 26px 22px 34px; border-radius: 30px; }
+  .x23-srch { margin-right: 10px; font-size: 27px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #8a909c; }
+  .x23-pill { display: inline-flex; align-items: center; gap: 14px; height: 70px; padding: 0 26px 0 12px; border-radius: 999px; background: #fff; box-shadow: inset 0 0 0 2px #d9e6fa; font-size: 29px; font-weight: 600; color: #3a4252; white-space: nowrap; }
+  .x23-pill b { display: grid; place-items: center; width: 46px; height: 46px; border-radius: 13px; background: #dfeaff; color: #1561d6; font-size: 26px; font-weight: 750; }
+  .x23-pill.on { background: #eaf2ff; box-shadow: inset 0 0 0 3px var(--blue); color: #0c1018; }
+  .x23-pill.on b { background: var(--blue); color: #fff; }
+  .x23-pill.dim { opacity: 0.55; }
+  .x23-tap { position: absolute; z-index: 59; width: 100px; height: 100px; margin: -50px 0 0 -50px; border-radius: 50%; background: rgba(24, 119, 242, 0.14); box-shadow: 0 0 0 3px rgba(24, 119, 242, 0.35), 0 0 0 26px rgba(24, 119, 242, 0.07); }
+
+  /* the page it opens */
+  .x23-win { left: 110px; top: 600px; width: 1380px; height: 1560px; }
+  .x23-win .ad-tab { max-width: 520px; }
+  .x23-win .ad-tab span { overflow: hidden; text-overflow: ellipsis; }
+  .x23-win .ad-tab svg { width: 28px; height: 28px; color: var(--blue); flex: none; }
+  .x23-fav, .ad-tab .x23-fav { width: 30px; height: 30px; border-radius: 9px; background: #0c1018; flex: none; position: relative; }
+  .x23-fav::after { content: ""; position: absolute; left: 8px; top: 8px; width: 14px; height: 14px; border-radius: 50%; background: #fff; }
+  .x23-win .ad-url svg { width: 30px; height: 30px; color: #8a909c; }
+  .x23-win .ad-url b { font-weight: 600; color: #1d222c; }
+
+  .x23-site { padding: 0 76px; }
+  .x23-nav { display: flex; align-items: center; height: 120px; border-bottom: 2px solid #f0f1f4; }
+  .x23-brand { display: flex; align-items: center; gap: 14px; font-size: 36px; font-weight: 800; letter-spacing: -0.04em; color: #0c1018; }
+  .x23-brand .x23-fav { width: 44px; height: 44px; border-radius: 13px; }
+  .x23-brand .x23-fav::after { left: 12px; top: 12px; width: 20px; height: 20px; }
+  .x23-links { margin-left: auto; display: flex; gap: 44px; font-size: 28px; font-weight: 550; color: #6b7280; }
+  .x23-links span:last-child { color: #0c1018; }
+  .x23-crumb { margin-top: 56px; font-size: 27px; font-weight: 650; letter-spacing: 0.1em; text-transform: uppercase; color: #8a909c; }
+  .x23-h1 { margin-top: 18px; font-size: 78px; font-weight: 750; letter-spacing: -0.045em; line-height: 1.04; color: #0c1018; }
+  .x23-by { margin-top: 22px; font-size: 29px; font-weight: 500; color: #8a909c; }
+  .x23-short { margin-top: 44px; padding: 34px 38px; border-radius: 24px; background: #f6f7f9; box-shadow: inset 6px 0 0 #0c1018; }
+  .x23-short b { display: block; font-size: 27px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #6b7280; }
+  .x23-short p { margin-top: 12px; font-size: 38px; font-weight: 500; line-height: 1.42; letter-spacing: -0.015em; color: #1d222c; }
+  .x23-h2 { margin-top: 50px; font-size: 46px; font-weight: 700; letter-spacing: -0.03em; color: #0c1018; }
+  .x23-lines { margin-top: 24px; display: grid; gap: 22px; }
+  .x23-lines i { display: block; height: 22px; border-radius: 99px; background: #eceef2; }
+
+  /* the tag that says where this visit came from */
+  .x23-flag { position: absolute; z-index: 40; display: inline-flex; align-items: center; gap: 14px; height: 76px; padding: 0 16px 0 30px; border-radius: 22px; background: var(--blue); color: #fff; font-size: 32px; font-weight: 650; letter-spacing: -0.01em; white-space: nowrap; box-shadow: 0 18px 34px -16px rgba(22, 111, 229, 0.8); }
+  .x23-flag b { display: grid; place-items: center; width: 50px; height: 50px; border-radius: 14px; background: #fff; color: var(--blue); font-size: 28px; font-weight: 800; }
+  .x23-path { position: absolute; inset: 0; z-index: 35; pointer-events: none; overflow: visible; }
+</style>
+</head>
+<body>
+<div class="canvas ad">
+  <div class="ad-dots"></div>
+  <div class="ad-top">
+    <div class="ad-prog"><i class="on"></i><i class="on"></i><i></i></div>
+    <div class="ad-step">The click</div>
+    <div class="ad-logo"><svg><use href="#lg-rankbox"/></svg>Rankbox</div>
+  </div>
+  <h1 class="ad-hl">Source #1 gets the visit.</h1>
+
+  <div class="ad-card x23-strip">
+    <span class="x23-srch">Sources</span>
+    <span class="x23-pill on" id="one"><b>1</b>plotbright.io</span>
+    <span class="x23-pill dim"><b>2</b>guide.example</span>
+    <span class="x23-pill dim"><b>3</b>forum.example</span>
+  </div>
+
+  <div class="ad-browser x23-win" id="win">
+    <div class="ad-tabs">
+      <div class="ad-tab"><svg><use href="#ic-sparkle"/></svg><span>How do I run a weekly planning…</span></div>
+      <div class="ad-tab on"><i class="x23-fav"></i><span>How to Run a Weekly Planning…</span></div>
+      <div class="ad-tab new">+</div>
+    </div>
+    <div class="ad-url"><svg><use href="#ic-lock"/></svg><span><b>plotbright.io</b>/blog/weekly-planning-meeting</span></div>
+    <div class="x23-site">
+      <div class="x23-nav">
+        <div class="x23-brand"><i class="x23-fav"></i>Plotbright</div>
+        <div class="x23-links"><span>Product</span><span>Pricing</span><span>Blog</span></div>
+      </div>
+      <div class="x23-crumb">Blog · Guides</div>
+      <h2 class="x23-h1">How to Run a Weekly Planning Meeting</h2>
+      <div class="x23-by">By the Plotbright team</div>
+      <div class="x23-short"><b>The short answer</b><p>Keep it short and on a fixed day. Start with last week’s goals, then give every task one owner.</p></div>
+      <div class="x23-h2">Start with last week’s goals</div>
+      <div class="x23-lines"><i style="width: 96%"></i><i style="width: 88%"></i><i style="width: 92%"></i><i style="width: 54%"></i></div>
+      <div class="x23-h2">Give every task one owner</div>
+      <div class="x23-lines"><i style="width: 90%"></i><i style="width: 97%"></i><i style="width: 70%"></i></div>
+    </div>
+  </div>
+
+  <div class="x23-flag" id="flag">Source<b>1</b></div>
+  <svg class="x23-path" id="path"></svg>
+  <div class="x23-tap" id="tap"></div>
+  <svg class="cur" id="cur"><use href="#ic-cursor"/></svg>
+</div>
+<script>
+  document.fonts.ready.then(() => {
+    const c = document.querySelector(".canvas").getBoundingClientRect();
+    const one = document.getElementById("one").getBoundingClientRect();
+    const win = document.getElementById("win").getBoundingClientRect();
+    // cursor tip on pill [1], with the tap under it
+    const tx = one.left - c.left + one.width * 0.8, ty = one.top - c.top + one.height * 0.84;
+    const cur = document.getElementById("cur"), tap = document.getElementById("tap");
+    cur.style.left = tx + "px"; cur.style.top = ty + "px";
+    tap.style.left = tx + "px"; tap.style.top = ty + "px";
+    // the tag sits on the window's top edge, right side
+    const flag = document.getElementById("flag");
+    const fw = flag.getBoundingClientRect().width;
+    const fx = win.right - c.left - 60 - fw, fy = win.top - c.top - 38;
+    flag.style.left = fx + "px"; flag.style.top = fy + "px";
+    // a dashed path from the click to the tag
+    const x0 = tx + 40, y0 = one.bottom - c.top + 26, x1 = fx + fw * 0.5, y1 = fy - 14;
+    document.getElementById("path").innerHTML =
+      `<path d="M${x0} ${y0} C ${x0 + 40} ${y1 - 10}, ${x1 - 260} ${y1 - 60}, ${x1} ${y1}" fill="none" stroke="#1877f2" stroke-width="5" stroke-dasharray="4 14" stroke-linecap="round"/>` +
+      `<path d="M${x1 - 18} ${y1 - 14} L${x1} ${y1} L${x1 - 22} ${y1 + 6}" fill="none" stroke="#1877f2" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>`;
+  });
+</script>
+</body>
+</html>

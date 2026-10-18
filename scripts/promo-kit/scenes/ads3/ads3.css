@@ -1,0 +1,110 @@
+/*
+ * Ad set, variant type 3: "Selected". The lead's own campaign: brand blue
+ * and white (plus tints of that blue) for every field, surface and graphic.
+ * Text: big display headlines in brand blue; smaller copy on white in black
+ * where blue would hurt readability (the user's call, 2026-10-04: "black
+ * text, if necessary"). No dark surfaces, no grey panels, no other hue.
+ *
+ * One graphic idea per ad, drawn like a poster. The signature is the text
+ * selection: the one thing that matters in each ad sits in a solid blue box
+ * with phone-style selection handles (.v3-pick), because the whole pitch is
+ * "AI picks one name; Rankbox gets yours picked". Load after ../kit/kit.css.
+ */
+:root {
+  --v3-blue: #1877f2;    /* brand: fields, big type, buttons, picks */
+  --v3-ink: #0c1018;     /* smaller text on white and sky: black */
+  --v3-ink-2: #4a5160;   /* secondary text on white (kicker, offer, source) */
+  --v3-sky: #eaf3ff;     /* tint field / tile */
+  --v3-sky-2: #d5e7ff;   /* deeper tint */
+  --v3-line: #c4dcfd;    /* hairlines and card edges on white */
+  --v3-soft: #8dbcfa;    /* muted blue for struck or faded things on white */
+  --v3-shadow: 0 34px 70px -34px rgba(24, 119, 242, 0.55), 0 12px 26px -16px rgba(24, 119, 242, 0.35);
+}
+
+/* ------------------------------------------------------------ fields */
+.canvas.v3 { background: #fff; color: var(--v3-ink); }
+.canvas.v3.sky { background: var(--v3-sky); }
+.canvas.v3.blue { background: var(--v3-blue); color: #fff; }
+.v3-wash { position: absolute; inset: 0; z-index: -2; pointer-events: none;
+  background: radial-gradient(60% 34% at 100% 0%, rgba(24, 119, 242, 0.09) 0%, rgba(24, 119, 242, 0) 70%),
+              radial-gradient(70% 36% at 0% 100%, rgba(24, 119, 242, 0.08) 0%, rgba(24, 119, 242, 0) 70%); }
+.blue .v3-wash { background:
+  radial-gradient(70% 40% at 20% 0%, rgba(150, 205, 255, 0.45) 0%, rgba(150, 205, 255, 0) 70%),
+  radial-gradient(80% 45% at 100% 100%, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0) 70%); }
+/* Textures: blueprint grid, dot grid, pixel squares (ads3.js fills .v3-px). */
+.v3-grid { position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background-image: linear-gradient(rgba(24, 119, 242, 0.07) 2px, transparent 2px), linear-gradient(90deg, rgba(24, 119, 242, 0.07) 2px, transparent 2px);
+  background-size: 80px 80px; background-position: -2px -2px; }
+.blue .v3-grid { background-image: linear-gradient(rgba(255, 255, 255, 0.13) 2px, transparent 2px), linear-gradient(90deg, rgba(255, 255, 255, 0.13) 2px, transparent 2px); }
+.v3-dots { position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background-image: radial-gradient(circle, rgba(24, 119, 242, 0.16) 2.5px, transparent 3px); background-size: 40px 40px; }
+.blue .v3-dots { background-image: radial-gradient(circle, rgba(255, 255, 255, 0.2) 2.5px, transparent 3px); }
+.v3-px { position: absolute; inset: 0; z-index: -1; pointer-events: none; }
+.v3-px i { position: absolute; display: block; background: var(--v3-blue); border-radius: 3px; }
+.blue .v3-px i { background: #fff; }
+
+/* ------------------------------------------------------------ type */
+.v3-logo { display: inline-flex; align-items: center; gap: 14px; font-size: 44px; font-weight: 650; letter-spacing: -0.03em; color: var(--v3-blue); white-space: nowrap; }
+.v3-logo svg { width: 50px; height: 50px; flex: none; color: var(--v3-blue); }
+.blue .v3-logo, .blue .v3-logo svg { color: #fff; }
+.v3-kick { font-size: 30px; font-weight: 600; letter-spacing: -0.01em; color: var(--v3-ink-2); }
+.blue .v3-kick { color: rgba(255, 255, 255, 0.85); }
+.v3-hl { font-weight: 760; letter-spacing: -0.055em; line-height: 0.98; color: var(--v3-blue); text-wrap: balance; }
+.v3-hl.ink { color: var(--v3-ink); } /* a black headline, only when a big blue graphic needs the contrast */
+.blue .v3-hl { color: #fff; }
+.v3-sub { font-size: 42px; font-weight: 500; line-height: 1.28; letter-spacing: -0.02em; color: var(--v3-ink); text-wrap: balance; }
+.blue .v3-sub { color: rgba(255, 255, 255, 0.92); }
+.v3-src { font-size: 25px; font-weight: 500; line-height: 1.3; color: var(--v3-ink-2); letter-spacing: -0.005em; }
+.blue .v3-src { color: rgba(255, 255, 255, 0.82); }
+
+/* ------------------------------------------------------------ the signature */
+/* <span class="v3-pick">word</span>: selected text. Blue box, white type,
+   a start handle (knob on top) and an end handle (knob below). On a blue
+   field it inverts to a white box with blue type and white handles. Size
+   follows the font: --k is the knob, --st the stem. */
+.v3-pick { position: relative; display: inline-block; padding: 0.02em 0.1em 0.04em; margin: 0 0.04em; line-height: 1; background: var(--v3-blue); color: #fff; --hc: var(--v3-blue); --k: 0.16em; --st: 0.035em; }
+.v3-pick::before, .v3-pick::after { content: ""; position: absolute; width: var(--k); pointer-events: none;
+  background: radial-gradient(circle closest-side, var(--hc) 96%, transparent 100%) 50% var(--kp) / var(--k) var(--k) no-repeat,
+              linear-gradient(var(--hc), var(--hc)) 50% 0 / var(--st) 100% no-repeat; }
+.v3-pick::before { left: calc(var(--k) / -2); top: calc(var(--k) * -1); bottom: 0; --kp: 0; }
+.v3-pick::after { right: calc(var(--k) / -2); top: 0; bottom: calc(var(--k) * -1); --kp: 100%; }
+.blue .v3-pick, .v3-pick.inv { background: #fff; color: var(--v3-blue); --hc: #fff; }
+.v3-pick.inv-b { background: var(--v3-blue); color: #fff; --hc: var(--v3-blue); }
+.v3-pick.round { border-radius: 0.08em; }
+/* An empty selection: a dashed slot where your name should be. */
+.v3-slot { display: inline-block; border: 0.03em dashed currentColor; border-radius: 0.08em; padding: 0.02em 0.14em; line-height: 1; opacity: 0.85; }
+
+/* Cursor (ads3.js draws it): blue arrow with white edge, or white on blue. */
+.v3-cur { position: absolute; width: 64px; height: 84px; z-index: 20; filter: drop-shadow(0 10px 14px rgba(24, 119, 242, 0.35)); }
+.v3-cur svg { width: 100%; height: 100%; display: block; }
+
+/* ------------------------------------------------------------ surfaces */
+.v3-card { position: absolute; background: #fff; color: var(--v3-ink); border-radius: 36px; box-shadow: inset 0 0 0 3px var(--v3-line), var(--v3-shadow); }
+.blue .v3-card { box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.6), 0 50px 90px -40px rgba(4, 50, 150, 0.55); }
+.v3-card.solid { background: var(--v3-blue); color: #fff; box-shadow: var(--v3-shadow); }
+.v3-card.tint { background: var(--v3-sky); box-shadow: inset 0 0 0 3px var(--v3-line); }
+
+/* Dimension line, for measuring things: <div class="v3-dim" style="left;top;width"><b>2 words</b></div> */
+.v3-dim { position: absolute; height: 0; border-top: 4px solid currentColor; color: var(--v3-blue); }
+.v3-dim::before, .v3-dim::after { content: ""; position: absolute; top: -22px; width: 4px; height: 40px; background: currentColor; }
+.v3-dim::before { left: 0; } .v3-dim::after { right: 0; }
+.v3-dim > b { position: absolute; left: 50%; top: 0; transform: translate(-50%, -50%); padding: 8px 20px; border-radius: 999px; background: var(--v3-blue); color: #fff; font-size: 28px; font-weight: 700; white-space: nowrap; letter-spacing: -0.01em; }
+.blue .v3-dim { color: #fff; }
+.blue .v3-dim > b { background: #fff; color: var(--v3-blue); }
+
+/* ------------------------------------------------------------ AI logos */
+/* <canvas class="v3-pxl" data-logo="chatgpt" data-px="11" data-tile="white" data-tone="blue" style="--s:160px">
+   Any engine's mark as a two-colour mosaic (ads3.js). Never a crisp mark. */
+.v3-pxl { display: block; width: var(--s, 160px); height: var(--s, 160px); image-rendering: pixelated; border-radius: 24%; }
+.v3-pxl.float { box-shadow: var(--v3-shadow); }
+.blue .v3-pxl.float { box-shadow: 0 30px 60px -20px rgba(4, 50, 150, 0.55); }
+
+/* ------------------------------------------------------------ the close */
+.v3-close { position: absolute; left: 100px; right: 100px; bottom: 96px; display: flex; align-items: center; gap: 28px; padding: 28px 28px 28px 42px; border-radius: 36px; background: #fff; color: var(--v3-ink);
+  box-shadow: inset 0 0 0 3px var(--v3-line), var(--v3-shadow); }
+.blue .v3-close { box-shadow: 0 0 0 8px rgba(255, 255, 255, 0.22), 0 40px 80px -30px rgba(4, 50, 150, 0.5); }
+.v3-close .mk { width: 60px; height: 60px; flex: none; color: var(--v3-blue); }
+.v3-close p { flex: 1; font-size: 36px; font-weight: 700; line-height: 1.22; letter-spacing: -0.02em; color: var(--v3-ink); }
+.v3-close p span { display: block; margin-top: 8px; font-size: 26px; font-weight: 500; letter-spacing: -0.01em; color: var(--v3-ink-2); white-space: nowrap; }
+.v3-go { height: 108px; padding: 0 42px; border-radius: 26px; background: var(--v3-blue); color: #fff; display: flex; align-items: center; gap: 14px; font-size: 38px; font-weight: 650; letter-spacing: -0.02em; white-space: nowrap; box-shadow: 0 16px 30px -14px rgba(24, 119, 242, 0.8); }
+.v3-go svg { width: 38px; height: 38px; }

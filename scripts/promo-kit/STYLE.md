@@ -143,7 +143,20 @@ one real piece of product. Everything below serves that.
   Start anything that talks at x 440 or later and keep the left as open field.
 - A banner isn't clickable, so the sign-off is the URL pill, not a button label.
 
-## 10. Before calling a scene done
+## 10. Truth lessons (freestyle and ad set)
+
+- Web-search every invented business name and domain before it ships. Two of
+  the site's own "fictional" samples turned out to be real companies (see
+  FACTS, Sample brands).
+- An ad brief can be out of date: it named the old brand (Rankvolt) and a
+  2-day trial the product doesn't offer. Follow the product, keep the offer in
+  one constant, and tell the user.
+- Show a real moment: queued articles can't have passed checks yet. Show one
+  published (with its checks), one writing, one scheduled.
+- A stat that leads an ad gets verified at the source, and the source goes on
+  the slide in small type.
+
+## 11. Before calling a scene done
 
 - Render, then look at it next to its reference at the same size. Check:
   headline weight and size, how much of the frame the UI fills, where the

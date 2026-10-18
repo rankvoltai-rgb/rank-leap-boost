@@ -1,0 +1,128 @@
+<!doctype html>
+<!-- Variant 4 · Cluster 24 "The blueprint", one image.
+     Replica of ref-12 Kompa ("New Content Weekly" pill stack): light grey
+     field, white capsules with a blue icon disc down the left, the app's top
+     bar card at the top right, the page below it tilted and selected (blue
+     frame, round handles), a "You" multiplayer cursor at the selection's
+     corner, and the next card cropped by the bottom edge. Kompa has no
+     headline; the 4x5 frame gives it one above the composition, in Kompa's
+     own heavy page-title voice, with the one number under it.
+     The pills are the Rank page's "What AI engines look for" (exactly six,
+     their real labels). "Answers up front" is lifted beside the "You"
+     cursor. The page is a Rankbox article in the editor (Publish changes,
+     Improve SEO), its tiles the article's own structure and checks. The
+     article is the set's sample (yoursite.com, a planning tool). -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x5" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<link rel="stylesheet" href="ads4/ads4.css" />
+<script src="../kit/kit.js"></script>
+<script src="ads/ads.js"></script>
+<script src="ads4/ads4.js"></script>
+<style>
+  .y24-field { position: absolute; inset: 0; z-index: -3; background: #f3f3f4; }
+  .y24-hl { position: absolute; left: 58px; top: 104px; font-size: 112px; }
+  .y24-num { position: absolute; left: 62px; top: 360px; font-size: 31px; font-weight: 500; letter-spacing: -0.015em; color: var(--v4-ink-2); }
+  .y24-num b { color: var(--v4-blue); font-weight: 700; }
+  .y24-num small { display: block; margin-top: 8px; font-size: 25px; color: var(--v4-ink-3); letter-spacing: 0; }
+
+  .y24-pills { position: absolute; left: 44px; top: 712px; display: grid; gap: 56px; justify-items: start; }
+  .y24-pills .fpill { height: 128px; font-size: 44px; font-weight: 550; gap: 28px; padding: 0 54px 0 22px; }
+  .y24-pills .fpill .ico { width: 86px; height: 86px; }
+  .y24-pills .fpill .ico svg { width: 44px; height: 44px; }
+  .y24-pills .fpill.lift { position: relative; z-index: 40; transform: translate(6px, 4px) scale(1.08) rotate(-2.5deg); transform-origin: 0 50%;
+    box-shadow: 0 0 0 1.5px rgba(16, 24, 40, 0.04), 0 44px 70px -30px rgba(16, 40, 90, 0.45), 0 14px 26px -14px rgba(16, 40, 90, 0.25); }
+
+  /* the app's top bar */
+  .y24-bar { position: absolute; left: 860px; top: 516px; width: 900px; height: 100px; display: flex; align-items: center; gap: 44px; padding: 0 56px;
+    background: #fff; border-radius: 12px; box-shadow: 0 16px 36px -22px rgba(16, 24, 40, 0.3); font-size: 27px; font-weight: 500; color: #2a2e36; }
+  .y24-bar .wm { display: inline-flex; align-items: center; gap: 12px; font-size: 33px; font-weight: 600; letter-spacing: -0.03em; color: var(--v4-ink); margin-right: 4px; }
+  .y24-bar .wm svg { width: 38px; height: 38px; color: var(--v4-blue); }
+  .y24-bar .on { color: var(--v4-blue); font-weight: 600; }
+
+  /* the article, selected */
+  .y24-doc { position: absolute; left: 772px; top: 668px; width: 1120px; height: 900px; transform: rotate(-1.9deg); transform-origin: 0 0; }
+  .y24-page { position: absolute; inset: 0; background: #fff; box-shadow: 0 30px 60px -30px rgba(16, 24, 40, 0.35); padding: 60px 0 0 60px; }
+  .y24-doc .sel { --sel-inset: 0px; border-width: 4px; }
+  .y24-doc .sel > i { width: 26px; height: 26px; border-width: 4px; }
+  .y24-doc .sel > i:nth-child(1) { left: -15px; top: -15px; }
+  .y24-doc .sel > i:nth-child(3) { left: -15px; bottom: -15px; }
+  .y24-page h2 { width: 480px; font-size: 62px; font-weight: 800; letter-spacing: -0.04em; line-height: 1.04; color: var(--v4-ink); }
+  .y24-page .meta { position: absolute; left: 580px; top: 58px; width: 480px; font-size: 25px; line-height: 1.55; font-weight: 500; color: #7d828c; letter-spacing: -0.005em; }
+  .y24-page .acts { position: absolute; left: 580px; top: 236px; display: flex; gap: 18px; }
+  .y24-page .acts span { height: 60px; padding: 0 24px; border-radius: 15px; display: grid; place-items: center; font-size: 25px; font-weight: 700; letter-spacing: -0.01em; white-space: nowrap; }
+  .y24-page .acts .p { background: var(--v4-btn); color: #fff; box-shadow: 0 10px 18px -10px rgba(22, 111, 229, 0.7); }
+  .y24-page .acts .s { background: var(--v4-tint); color: #1561d6; }
+  .y24-tiles { position: absolute; left: 60px; top: 372px; width: 1180px; display: grid; grid-template-columns: 470px 236px 236px 236px; grid-auto-rows: 230px; gap: 18px; }
+  .y24-tiles.r2 { top: 620px; grid-template-columns: 236px 236px 470px; }
+  .y24-tile { position: relative; border-radius: 16px; background: #f4f4f5; padding: 26px; }
+  .y24-tile svg { width: 38px; height: 38px; color: var(--v4-blue); }
+  .y24-tile p { position: absolute; left: 24px; right: 24px; bottom: 24px; font-size: 24px; line-height: 1.38; font-weight: 500; color: #626772; letter-spacing: -0.005em; }
+  .y24-tile p b { color: #2a2e36; font-weight: 650; }
+  .y24-tile.w2 { grid-column: span 2; }
+  .y24-tile.hi { background: var(--v4-tint); box-shadow: inset 0 0 0 2px #b9d5fb; }
+
+  /* the next card down, cropped */
+  .y24-stats { position: absolute; left: 820px; top: 1690px; width: 900px; height: 400px; background: #fff; border-radius: 8px; box-shadow: 0 -10px 40px -26px rgba(16, 24, 40, 0.25); display: flex; padding: 92px 0 0 120px; }
+  .y24-stats div { width: 300px; }
+  .y24-stats b { display: block; font-size: 72px; font-weight: 600; letter-spacing: -0.035em; color: var(--v4-ink); line-height: 1; }
+  .y24-stats span { display: block; margin-top: 14px; font-size: 26px; font-weight: 500; color: var(--v4-ink-3); }
+
+  /* "You" at the selection's corner */
+  .y24-mp { left: 758px; top: 652px; }
+  .y24-mp > svg { left: -42px; top: -8px; width: 58px; height: 58px; transform: scaleX(-1); }
+  .y24-mp > b { left: -190px; top: -34px; font-size: 40px; padding: 12px 30px; }
+</style>
+</head>
+<body>
+<div class="canvas v4">
+  <div class="y24-field"></div>
+
+  <h1 class="v4-hl-heavy y24-hl">How to improve brand<br />visibility in AI search</h1>
+  <p class="y24-num">Adding quotes, statistics and sources lifted visibility in AI answers by <b>up to 40%</b>.<small>Source: “GEO: Generative Engine Optimization”, Aggarwal et al., KDD 2024</small></p>
+
+  <div class="y24-pills">
+    <div class="fpill lift"><span class="ico"><svg><use href="#ic-bolt"/></svg></span>Answers up front</div>
+    <div class="fpill"><span class="ico"><svg viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M9.6 9.4a2.5 2.5 0 0 1 4.8.9c0 1.7-2.4 2.1-2.4 3.6M12 17v.1"/></g></svg></span>FAQ section</div>
+    <div class="fpill"><span class="ico"><svg><use href="#ic-list"/></svg></span>Clear sections</div>
+    <div class="fpill"><span class="ico"><svg><use href="#ic-quote"/></svg></span>Cites sources</div>
+    <div class="fpill"><span class="ico"><svg><use href="#ic-layers"/></svg></span>Depth</div>
+    <div class="fpill"><span class="ico"><svg><use href="#ic-eye"/></svg></span>Easy to read</div>
+  </div>
+
+  <div class="y24-bar">
+    <span class="wm"><svg><use href="#lg-rankbox"/></svg>Rankbox</span>
+    <span>Overview</span><span class="on">Articles</span><span>Calendar</span><span>Rank</span>
+  </div>
+
+  <div class="y24-doc">
+    <div class="y24-page">
+      <h2>Do Small Teams Need a Project Tool?</h2>
+      <p class="meta">Most teams under ten need one shared board and a weekly plan. Here’s what to look for, and when to switch.</p>
+      <div class="acts"><span class="p">Publish changes</span><span class="s">Improve SEO</span></div>
+      <div class="y24-tiles">
+        <div class="y24-tile hi"><svg><use href="#ic-bolt"/></svg><p><b>The short answer.</b> Yes, once work lives in more than one inbox. Start with one board.</p></div>
+        <div class="y24-tile"><svg><use href="#ic-help"/></svg><p>FAQ for AI engines, 5 questions.</p></div>
+        <div class="y24-tile w2"><svg><use href="#ic-quote"/></svg><p>Cites 4 sources buyers trust.</p></div>
+      </div>
+      <div class="y24-tiles r2">
+        <div class="y24-tile"><svg><use href="#ic-list"/></svg><p>6 sections, clear headings.</p></div>
+        <div class="y24-tile"><svg><use href="#ic-layers"/></svg><p><b>1,420 words</b>, in depth.</p></div>
+        <div class="y24-tile"><svg><use href="#ic-check-circle"/></svg><p><b>Strong — ready to rank.</b> 12 of 13 checks passed.</p></div>
+      </div>
+    </div>
+    <div class="sel"><i></i><i></i><i></i><i></i></div>
+  </div>
+
+  <div class="y24-stats">
+    <div><b>94</b><span>SEO score</span></div>
+    <div><b>1,420</b><span>Words</span></div>
+    <div><b>6 min</b><span>Read time</span></div>
+  </div>
+
+  <div class="mp y24-mp"><svg><use href="#ic-mp"/></svg><b>You</b></div>
+</div>
+</body>
+</html>

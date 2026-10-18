@@ -6,7 +6,8 @@ import { signInWithPassword, signUpWithPassword } from "@/lib/auth";
 import { listSites } from "@/lib/data";
 import { IS_MOCK } from "@/lib/mock/mode";
 import { DEMO_EMAIL, DEMO_PASSWORD } from "@/lib/mock/auth";
-import { Logo, Reveal } from "@/components/landing/shared";
+import { Reveal } from "@/components/landing/shared";
+import { Mark } from "@/components/brand/Mark";
 import { SocialButtons } from "./SocialButtons";
 import { AiSearchScene } from "./AiSearchScene";
 
@@ -27,14 +28,14 @@ function Field({
 }) {
   return (
     <label className="block">
-      <span className="mb-1.5 block text-sm font-medium text-ink">{label}</span>
+      <span className="mb-1.5 block text-[0.85rem] font-medium text-ink">{label}</span>
       <input
         type={type}
         placeholder={placeholder}
         autoComplete={autoComplete}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="h-11 w-full rounded-xl border border-border bg-card px-3.5 text-sm text-ink shadow-sm outline-none transition-colors placeholder:text-muted-foreground focus:border-ink focus:ring-2 focus:ring-ink/10"
+        className="h-11 w-full rounded-lg border border-ink/[0.1] bg-white px-3.5 text-[0.95rem] text-ink shadow-[0_1px_2px_rgba(16,24,40,0.04)] outline-none transition-[border-color,box-shadow] duration-200 placeholder:text-muted-foreground hover:border-ink/[0.16] focus:border-cta/50 focus:shadow-[0_0_0_4px_color-mix(in_oklab,var(--cta)_12%,transparent)]"
       />
     </label>
   );
@@ -73,24 +74,24 @@ export function AuthSplit() {
   }
 
   return (
-    <div className="grid min-h-screen lg:grid-cols-2">
+    <div className="grid min-h-screen bg-white lg:grid-cols-2">
       {/* Form panel */}
-      <div className="flex flex-col px-5 py-8 sm:px-10 lg:px-14">
-        <a href="/" className="shrink-0">
-          <Logo />
+      <div className="flex flex-col px-5 py-6 sm:px-10 lg:px-14">
+        {/* The landing navbar's mark: bare, in brand blue. */}
+        <a href="/" className="flex w-fit shrink-0 items-center gap-2.5">
+          <Mark className="h-6 w-6 text-brand-blue" />
+          <span className="text-[1.2rem] font-semibold tracking-tight text-ink">Rankbox</span>
         </a>
         <div className="flex flex-1 items-center justify-center py-10">
           <div className="w-full max-w-md">
             <Reveal>
-              <h1 className="text-balance text-3xl font-bold leading-[1.1] tracking-tight text-ink sm:text-4xl">
-                Start getting Google &amp; ChatGPT traffic{" "}
-                <span className="rounded-lg bg-brand-blue px-1.5 text-white decoration-clone box-decoration-clone">
-                  in the next 7 days
-                </span>
+              <h1 className="text-balance font-display text-[2rem] font-medium leading-[1.1] tracking-[-0.035em] text-ink sm:text-[2.6rem]">
+                Get Google &amp; ChatGPT traffic{" "}
+                <span className="font-bold text-brand-blue">in 7 days</span>
               </h1>
             </Reveal>
             <Reveal delay={0.06}>
-              <p className="mt-4 text-base leading-relaxed text-muted-foreground">
+              <p className="mt-4 text-[1.02rem] leading-relaxed text-muted-foreground">
                 Automatically research, write, and publish SEO-optimized articles that rank on
                 Google and get cited by AI so you grow traffic without lifting a finger.
               </p>
@@ -104,11 +105,11 @@ export function AuthSplit() {
 
             <Reveal delay={0.16}>
               <div className="my-6 flex items-center gap-3">
-                <span className="h-px flex-1 bg-border" />
-                <span className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                <span className="h-px flex-1 bg-ink/[0.08]" />
+                <span className="text-[0.64rem] font-semibold uppercase tracking-[0.18em] text-muted-foreground/85">
                   or continue with email
                 </span>
-                <span className="h-px flex-1 bg-border" />
+                <span className="h-px flex-1 bg-ink/[0.08]" />
               </div>
             </Reveal>
 
@@ -143,14 +144,14 @@ export function AuthSplit() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-brand-blue px-6 py-3.5 text-sm font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md disabled:opacity-70"
+                  className="group inline-flex h-12 w-full items-center justify-center gap-2 rounded-lg bg-cta px-6 text-[0.95rem] font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.16),0_1px_2px_rgba(16,24,40,0.14)] transition-[background-color,transform] duration-150 hover:bg-cta-hover active:scale-[0.99] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-cta/25 disabled:opacity-70"
                 >
                   {loading ? (
                     <Loader2 className="h-4 w-4 animate-spin" />
                   ) : (
                     <>
                       {mode === "signup" ? "Start my traffic engine" : "Sign in"}
-                      <ArrowRight className="h-4 w-4" />
+                      <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
                     </>
                   )}
                 </button>
@@ -158,7 +159,7 @@ export function AuthSplit() {
             </Reveal>
 
             {IS_MOCK && (
-              <div className="mt-4 flex items-center justify-between gap-3 rounded-xl border border-dashed border-border bg-secondary/40 px-3.5 py-2.5 text-xs text-muted-foreground">
+              <div className="mt-4 flex items-center justify-between gap-3 rounded-lg border border-dashed border-ink/[0.14] bg-white px-3.5 py-2.5 text-xs text-muted-foreground">
                 <span>
                   Mock mode · accounts stay in this browser. Demo:{" "}
                   <span className="font-medium text-ink">{DEMO_EMAIL}</span> / {DEMO_PASSWORD}
@@ -199,7 +200,7 @@ export function AuthSplit() {
                 <button
                   type="button"
                   onClick={() => setMode(mode === "signup" ? "login" : "signup")}
-                  className="font-semibold text-ink hover:underline"
+                  className="font-semibold text-cta underline-offset-2 hover:underline"
                 >
                   {mode === "signup" ? "Sign in" : "Create one"}
                 </button>
@@ -212,8 +213,9 @@ export function AuthSplit() {
       {/* What Rankbox sees: an AI search for a recommendation, the AI Overview
           it returns, and where the brand lands in it. One screen tall and
           pinned, so the whole scene stays in view while the form scrolls. */}
-      <div className="relative hidden lg:sticky lg:top-0 lg:block lg:h-screen lg:self-start">
-        <AiSearchScene className="absolute inset-0" />
+      <div className="relative hidden lg:sticky lg:top-0 lg:block lg:h-screen lg:self-start lg:p-3">
+        {/* Inset from the window edge and rounded, like a framed picture. */}
+        <AiSearchScene className="h-full w-full rounded-[20px] ring-1 ring-black/5" />
       </div>
     </div>
   );

@@ -13,6 +13,7 @@ import { ChevronDown, Menu, X } from "lucide-react";
 import { Link, useRouterState } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
 import { Logo } from "./shared";
+import { Mark } from "@/components/brand/Mark";
 import { MENU_SECTIONS, inSection, type MenuId } from "@/data/nav";
 import { FeaturesMenu, ResourcesMenu } from "./nav-menus";
 import { MobileNav, type TopLink } from "./nav-mobile";
@@ -47,8 +48,42 @@ const MENU_SURFACE = "bg-[color-mix(in_oklab,var(--brand-blue)_72%,var(--brand-b
 
 const EASE = "ease-[cubic-bezier(0.22,1,0.36,1)]";
 
-const TOP_ITEM =
-  "relative flex h-9 items-center gap-1 whitespace-nowrap rounded-full px-3 text-sm font-medium text-white/80 transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70 md:px-2 lg:px-3.5";
+const TOP_ITEM_BASE =
+  "relative flex h-9 items-center gap-1 whitespace-nowrap rounded-full px-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 md:px-2 lg:px-3.5";
+
+/* `blue` is the bar every public page uses. `light` is the landing page's:
+   white, with hairline rails that carry on down through the hero. */
+export type NavTone = "blue" | "light";
+
+const TONES = {
+  blue: {
+    header: "bg-brand-blue",
+    nav: "",
+    item: "text-white/80 hover:text-white focus-visible:ring-white/70",
+    itemOn: "text-white",
+    dot: "bg-white",
+    pill: "bg-white/[0.13]",
+    scrim: "bg-brand-blue-deep/30 backdrop-blur-sm",
+    signIn: "rounded-xl border border-white/30 bg-white/10 text-white hover:bg-white/20",
+    start:
+      "rounded-xl bg-white text-brand-blue shadow-sm hover:-translate-y-0.5 hover:bg-white/90 hover:shadow-md",
+    toggle: "rounded-xl border border-white/30 bg-white/10 text-white",
+  },
+  light: {
+    header: "border-b border-ink/[0.07] bg-white",
+    nav: "border-x border-ink/[0.07]",
+    item: "text-ink/65 hover:text-ink focus-visible:ring-cta/40",
+    itemOn: "text-ink",
+    dot: "bg-ink",
+    pill: "bg-ink/[0.045]",
+    scrim: "bg-ink/[0.08] backdrop-blur-[3px]",
+    signIn:
+      "rounded-lg border border-ink/[0.1] bg-white text-ink shadow-[0_1px_2px_rgba(16,24,40,0.04)] hover:border-ink/[0.16] hover:bg-ink/[0.02]",
+    start:
+      "rounded-lg bg-cta text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.16),0_1px_2px_rgba(16,24,40,0.14)] hover:bg-cta-hover",
+    toggle: "rounded-lg border border-ink/[0.1] bg-white text-ink",
+  },
+} as const;
 
 /* On the landing page itself the router treats "/" → "/" as a no-op, so the
    logo scrolls back to the top instead. */
@@ -59,11 +94,14 @@ function scrollHomeToTop(e: MouseEvent) {
 }
 
 /* Marks the top-level item for the section you're in. */
-function CurrentDot() {
+function CurrentDot({ className = "bg-white" }: { className?: string }) {
   return (
     <span
       aria-hidden
-      className="absolute bottom-0.5 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full bg-white"
+      className={cn(
+        "absolute bottom-0.5 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full",
+        className,
+      )}
     />
   );
 }
@@ -93,7 +131,9 @@ interface Pill {
   slide: boolean;
 }
 
-export function Navbar() {
+export function Navbar({ tone = "blue" }: { tone?: NavTone }) {
+  const t = TONES[tone];
+  const topItem = cn(TOP_ITEM_BASE, t.item);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const [menu, setMenu] = useState<MenuState>({ active: null, last: "features", morph: false });
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -254,19 +294,24 @@ export function Navbar() {
   );
 
   return (
-    <header ref={headerRef} className="sticky top-0 z-50 bg-brand-blue">
+    <header ref={headerRef} className={cn("sticky top-0 z-50", t.header)}>
       {/* Frosted scrim over the page while a menu is open, lifting the menu
           off the hero it opens over. Purely visual — never takes the pointer. */}
       <div
         aria-hidden
         className={cn(
-          "pointer-events-none fixed inset-x-0 bottom-0 top-16 hidden bg-brand-blue-deep/30 backdrop-blur-sm transition-opacity duration-300 md:block",
+          "pointer-events-none fixed inset-x-0 bottom-0 top-16 hidden transition-opacity duration-300 md:block",
+          t.scrim,
           active ? "opacity-100" : "opacity-0",
         )}
       />
       <nav
         aria-label="Main"
-        className="relative mx-auto flex h-16 max-w-6xl items-center justify-between px-5"
+        className={cn(
+          "relative mx-auto flex h-16 max-w-6xl items-center justify-between px-5",
+          tone === "light" && "lg:px-6",
+          t.nav,
+        )}
       >
         {/* The panel's surface, behind both menus: one card that reshapes
             between them rather than two cards that swap. */}
@@ -281,7 +326,15 @@ export function Navbar() {
           )}
         />
         <Link to="/" onClick={scrollHomeToTop} className="relative shrink-0">
-          <Logo inverted />
+          {tone === "light" ? (
+            // On the white bar the mark stands alone in brand blue, untiled.
+            <span className="flex items-center gap-2.5">
+              <Mark className="h-6 w-6 text-brand-blue" />
+              <span className="text-[1.2rem] font-semibold tracking-tight text-ink">Rankbox</span>
+            </span>
+          ) : (
+            <Logo inverted />
+          )}
         </Link>
         <div
           className="hidden items-center gap-0.5 md:flex"
@@ -299,7 +352,8 @@ export function Navbar() {
                 : undefined
             }
             className={cn(
-              "pointer-events-none absolute left-0 top-0 rounded-full bg-white/[0.13]",
+              "pointer-events-none absolute left-0 top-0 rounded-full",
+              t.pill,
               pill?.slide
                 ? cn("transition-[transform,width,opacity] duration-300", EASE)
                 : "transition-opacity duration-150",
@@ -356,7 +410,7 @@ export function Navbar() {
                     flushSync(() => show(id));
                     panelRefs.current[id]?.querySelector<HTMLElement>("a[href]")?.focus();
                   }}
-                  className={cn(TOP_ITEM, open && "text-white")}
+                  className={cn(topItem, open && t.itemOn)}
                 >
                   {label}
                   <ChevronDown
@@ -365,7 +419,7 @@ export function Navbar() {
                       open && "rotate-180",
                     )}
                   />
-                  {inSection(pathname, MENU_SECTIONS[id]) && <CurrentDot />}
+                  {inSection(pathname, MENU_SECTIONS[id]) && <CurrentDot className={t.dot} />}
                 </button>
                 <div
                   id={`nav-menu-${id}`}
@@ -401,10 +455,10 @@ export function Navbar() {
               to={l.to}
               hash={l.hash}
               onPointerEnter={() => setHovered(l.label)}
-              className={cn(TOP_ITEM, l.section && inSection(pathname, l.section) && "text-white")}
+              className={cn(topItem, l.section && inSection(pathname, l.section) && t.itemOn)}
             >
               {l.label}
-              {l.section && inSection(pathname, l.section) && <CurrentDot />}
+              {l.section && inSection(pathname, l.section) && <CurrentDot className={t.dot} />}
             </Link>
           ))}
         </div>
@@ -422,13 +476,19 @@ export function Navbar() {
         <div className="flex items-center gap-2">
           <a
             href="/auth"
-            className="hidden whitespace-nowrap rounded-xl border border-white/30 bg-white/10 px-3 py-2 text-sm font-semibold text-white transition-colors hover:bg-white/20 md:inline-flex lg:px-4"
+            className={cn(
+              "hidden whitespace-nowrap px-3 py-2 text-sm font-semibold transition-colors md:inline-flex lg:px-4",
+              t.signIn,
+            )}
           >
             Sign In
           </a>
           <a
             href="/auth"
-            className="hidden whitespace-nowrap rounded-xl bg-white px-3 py-2 text-sm font-semibold text-brand-blue shadow-sm transition-all hover:-translate-y-0.5 hover:bg-white/90 hover:shadow-md md:inline-flex lg:px-4"
+            className={cn(
+              "hidden whitespace-nowrap px-3 py-2 text-sm font-semibold transition-all md:inline-flex lg:px-4",
+              t.start,
+            )}
           >
             Get Started Free
           </a>
@@ -438,7 +498,10 @@ export function Navbar() {
             aria-expanded={mobileOpen}
             aria-controls="mobile-nav"
             aria-label={mobileOpen ? "Close menu" : "Open menu"}
-            className="relative inline-flex h-10 w-10 items-center justify-center rounded-xl border border-white/30 bg-white/10 text-white md:hidden"
+            className={cn(
+              "relative inline-flex h-10 w-10 items-center justify-center md:hidden",
+              t.toggle,
+            )}
           >
             <Menu
               className={cn(

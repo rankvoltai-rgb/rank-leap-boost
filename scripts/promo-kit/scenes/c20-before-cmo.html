@@ -1,0 +1,59 @@
+<!doctype html>
+<!-- Cluster 20 · Before you hire a fractional CMO. Single image, 4x5, dark
+     editorial quote card that reads like advice from a peer founder:
+     restrained, respectful, for a high-budget, skeptical viewer. The quote
+     is set in Iowan Old Style (ships with macOS; no web font) with no
+     attribution and no invented person, only the caption "Advice for
+     founders". $8,000 a month is the spec's framing of the decision (the
+     brief's hook), not a stat. Rankbox appears only in the dark .ad-turn
+     band, positioned as the step before the CMO, never against them. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x5" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<link rel="stylesheet" href="ads/ads.css" />
+<script src="../kit/kit.js"></script>
+<script src="ads/ads.js"></script>
+<style>
+  /* a soft cool light from the top left, so the dark reads as a surface */
+  .x20-light { position: absolute; inset: 0; z-index: -2; pointer-events: none;
+    background: radial-gradient(70% 45% at 12% 0%, rgba(75, 157, 255, 0.10) 0%, rgba(75, 157, 255, 0) 70%); }
+
+  /* caption, mark and quote, centred in the space above the band */
+  .x20-stack { position: absolute; left: 110px; right: 104px; top: 110px; bottom: 400px; display: flex; flex-direction: column; justify-content: center; }
+  .x20-cap { display: flex; align-items: center; gap: 22px; font-size: 27px; font-weight: 650; letter-spacing: 0.16em; text-transform: uppercase; color: #9aa3b2; }
+  .x20-cap::before { content: ""; width: 56px; height: 4px; border-radius: 2px; background: var(--blue-hi); }
+  .x20-mark { margin: 30px 0 0 -16px; height: 190px; font-family: "Iowan Old Style", Georgia, serif; font-size: 360px; line-height: 1; color: var(--blue-hi); }
+  .x20-quote {
+    font-family: "Iowan Old Style", Georgia, serif; font-size: 116px; font-weight: 400; line-height: 1.12; letter-spacing: -0.014em;
+    color: #f2f4f8; text-wrap: pretty;
+  }
+  .x20-quote em { font-style: italic; }
+
+  /* the band in two rows: the logo, then the line and the call to action */
+  .x20-turn { flex-wrap: wrap; row-gap: 14px; padding: 36px 40px 38px; }
+  .x20-turn .ad-logo { flex-basis: 100%; }
+  .x20-turn p { color: #aab2c0; font-weight: 500; }
+  .x20-turn p b { color: #fff; font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="canvas ad ad-dark">
+  <div class="x20-light"></div>
+  <div class="ad-dots"></div>
+
+  <div class="x20-stack">
+    <div class="x20-cap">Advice for founders</div>
+    <div class="x20-mark">“</div>
+    <blockquote class="x20-quote">Before you spend $8,000&nbsp;a&nbsp;month on a fractional CMO to fix organic growth, spend <em>one&nbsp;week</em> finding out what’s already possible.</blockquote>
+  </div>
+
+  <div class="ad-turn x20-turn">
+    <div class="ad-logo"><svg><use href="#lg-rankbox"/></svg>Rankbox</div>
+    <p><b>Run Rankbox for a week first.</b> If you still hire the CMO, they start with an engine already running.</p>
+    <div class="ad-go"><span data-offer="cta"></span><svg><use href="#ic-arrow-right"/></svg></div>
+  </div>
+</div>
+</body>
+</html>

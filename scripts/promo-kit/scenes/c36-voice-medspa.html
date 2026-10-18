@@ -1,0 +1,98 @@
+<!doctype html>
+<!-- Cluster 36 · "Ask your phone for a specialist" · med spas. A voice
+     moment, not a tech demo: a person's question said out loud, in a big
+     speech bubble with the waveform of their voice, then a short spoken
+     answer from a generic voice assistant (no Siri, no Apple, no engine
+     logo) naming two businesses. Aurevine Med Spa and Cielmere Aesthetics are
+     invented and web-checked (clusters-spec rule 9). No jargon: the
+     audience is local owners. Rankbox appears only in the bottom band. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x5" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<link rel="stylesheet" href="ads/ads.css" />
+<script src="../kit/kit.js"></script>
+<script src="ads/ads.js"></script>
+<style>
+  .x36-tag { height: 82px; padding: 0 34px; font-size: 38px; }
+  .x36-hl { top: 226px; }
+
+  /* the voice moment, centred between the headline and the band */
+  .x36-stage { position: absolute; left: 110px; right: 110px; top: 470px; bottom: 330px; display: flex; flex-direction: column; justify-content: center; gap: 110px; }
+
+  /* the spoken question */
+  .x36-say { position: relative; margin-right: 70px; padding: 58px 64px 50px; border-radius: 56px; background: #fff; box-shadow: 0 0 0 2px #e6e8ec, 0 40px 80px -40px rgba(12, 30, 70, 0.25), 0 12px 30px -18px rgba(12, 30, 70, 0.14); }
+  .x36-say q { display: block; quotes: "“" "”"; font-size: 74px; font-weight: 650; line-height: 1.15; letter-spacing: -0.036em; color: #0c1018; text-wrap: pretty; }
+  .x36-tail { position: absolute; left: 96px; bottom: -60px; width: 96px; height: 66px; }
+  .x36-voice { margin-top: 44px; display: flex; align-items: center; gap: 28px; }
+  .x36-mic { width: 84px; height: 84px; border-radius: 50%; background: var(--blue); color: #fff; display: grid; place-items: center; flex: none; box-shadow: 0 0 0 14px #e8f1ff; }
+  .x36-mic svg { width: 44px; height: 44px; }
+  .x36-wave { flex: 1; height: 110px; display: flex; align-items: center; gap: 8px; }
+  .x36-wave i { flex: 1; min-width: 0; border-radius: 99px; background: var(--blue); display: block; }
+
+  /* the spoken answer */
+  .x36-ans { margin-left: 150px; }
+  .x36-ans .lab { justify-content: space-between; }
+  .x36-ans .lab span { display: flex; align-items: center; gap: 12px; }
+  .x36-ans .lab svg { width: 38px; height: 38px; }
+  .x36-ans .x36-wave { flex: none; width: 220px; height: 44px; gap: 6px; }
+  .x36-ans .x36-wave i { background: #8fb8f5; }
+  .x36-ans p { margin-top: 20px; font-size: 48px; line-height: 1.34; letter-spacing: -0.02em; text-wrap: pretty; }
+</style>
+<script>
+  // A voice waveform: uneven, speech-shaped (bursts with short pauses,
+  // quiet at both ends), fixed seed so every render is the same.
+  document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll(".x36-wave").forEach((w) => {
+      const n = +w.dataset.bars;
+      let s = +w.dataset.seed;
+      const rnd = () => ((s = (s * 9301 + 49297) % 233280) / 233280);
+      let burst = 0;
+      for (let k = 0; k < n; k++) {
+        const t = k / (n - 1);
+        const env = Math.min(1, Math.sin(Math.PI * t) * 1.6);
+        if (burst <= 0) burst = 3 + Math.floor(rnd() * 6);
+        burst--;
+        const pause = burst === 0 && rnd() < 0.5 ? 0.25 : 1;
+        const h = Math.max(0.1, env * pause * (0.22 + 0.78 * rnd()));
+        const i = document.createElement("i");
+        i.style.height = Math.round(h * 100) + "%";
+        w.appendChild(i);
+      }
+    });
+  });
+</script>
+</head>
+<body>
+<div class="canvas ad">
+  <div class="ad-dots"></div>
+  <div class="ad-top">
+    <span class="ad-tag x36-tag">For med spas</span>
+  </div>
+  <h1 class="ad-hl x36-hl">They asked out loud.<br /><span class="dim">Was your name in the answer?</span></h1>
+
+  <div class="x36-stage">
+  <div class="x36-say">
+    <q>What’s the best med spa near me for skin treatments?</q>
+    <div class="x36-voice">
+      <span class="x36-mic"><svg><use href="#ic-mic"/></svg></span>
+      <div class="x36-wave" data-bars="52" data-seed="37"></div>
+    </div>
+    <svg class="x36-tail" viewBox="0 0 92 64" preserveAspectRatio="none"><path d="M0 0H92C72 20 40 44 6 62 18 40 22 18 14 0Z" fill="#fff"/><path d="M92 2C72 20 40 44 6 62 18 40 22 18 14 2" fill="none" stroke="#e6e8ec" stroke-width="2"/></svg>
+  </div>
+
+  <div class="ad-answer x36-ans">
+    <div class="lab"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M15.5 9a4 4 0 0 1 0 6M18.5 6.5a7.5 7.5 0 0 1 0 11"/></svg>Voice assistant</span><div class="x36-wave" data-bars="20" data-seed="5"></div></div>
+    <p><b>Aurevine Med Spa</b> and <b>Cielmere Aesthetics</b> come up most often nearby.</p>
+  </div>
+  </div>
+
+  <div class="ad-turn">
+    <div class="ad-logo"><svg><use href="#lg-rankbox"/></svg>Rankbox</div>
+    <p>Rankbox writes the answers your clients ask for, so AI has your business to name.</p>
+    <div class="ad-go"><span data-offer="cta"></span><svg><use href="#ic-arrow-right"/></svg></div>
+  </div>
+</div>
+</body>
+</html>

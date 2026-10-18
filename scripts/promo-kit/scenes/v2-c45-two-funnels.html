@@ -1,0 +1,147 @@
+<!doctype html>
+<!-- Variant 2 · Cluster 45 "The whitepaper nobody downloads" (demand gen), one
+     image. Forms Plugin family (13 "Plugin panels"): dark navy with a blue
+     glow and a fine dot grid, a centred heavy-caps line on top, two white
+     panels tilted away from each other, and pieces popping off their edges.
+     The left panel is the old funnel, long and leaking at every stage down to
+     "Silence"; the right one is the new funnel, short, with "A signup"
+     popping out of it and the one number (54%, G2) as a lifted card under it.
+     Pixelated AI tiles float where the new funnel starts. The funnel shapes
+     are illustrative: no figures on them. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x5" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<link rel="stylesheet" href="ads2/ads2.css" />
+<script src="../kit/kit.js"></script>
+<script src="ads/ads.js"></script>
+<script src="ads2/ads2.js"></script>
+<style>
+  html, body { background: #01091d; }
+  .canvas.v2 { background: #01091d; }
+
+  /* ------------------------------------------------------------ field */
+  .y45-field { position: absolute; inset: 0; z-index: -3;
+    background:
+      radial-gradient(1300px 1000px at 1500px -80px, #1f63b6 0%, #18529f 16%, #103d7e 34%, #0a2858 54%, #05173a 74%, #020b21 100%); }
+  .y45-dots { position: absolute; inset: 0; z-index: -2; pointer-events: none;
+    background-image: radial-gradient(rgba(175, 205, 255, 0.55) 1.1px, transparent 1.8px);
+    background-size: 11px 11px;
+    -webkit-mask-image: radial-gradient(1300px 1000px at 1460px -20px, rgba(0,0,0,.85) 0%, rgba(0,0,0,.42) 42%, transparent 80%);
+            mask-image: radial-gradient(1300px 1000px at 1460px -20px, rgba(0,0,0,.85) 0%, rgba(0,0,0,.42) 42%, transparent 80%); }
+  .canvas.v2 .grain { --grain: 0.1; }
+
+  /* ------------------------------------------------------------ headline */
+  .y45-hl { position: absolute; left: 0; right: 0; top: 92px; text-align: center; font-size: 100px; color: #fff; line-height: 0.92; }
+  .y45-hl .ai { background: linear-gradient(180deg, #9ccaff 8%, #3d8bff 92%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; -webkit-text-stroke-color: #6fb0ff; }
+
+  /* ------------------------------------------------------------ panels */
+  .y45-panel { position: absolute; background: #fff; color: #262626; border-radius: 30px; overflow: hidden; transform-origin: 0 0;
+    box-shadow: 0 0 0 1.5px rgba(255, 255, 255, 0.55), 0 60px 110px -30px rgba(0, 3, 15, 0.8), 0 18px 40px -18px rgba(0, 3, 15, 0.55); }
+  .y45-old { left: 96px; top: 506px; width: 620px; height: 1080px; transform: rotate(-4.6deg); }
+  .y45-new { left: 880px; top: 490px; width: 600px; height: 640px; transform: rotate(4.4deg); }
+  .y45-head { display: flex; align-items: center; gap: 14px; height: 92px; padding: 0 30px; border-bottom: 1.5px solid #eeeeee; font-size: 32px; font-weight: 700; letter-spacing: -0.025em; color: #262626; }
+  .y45-head .dot { width: 18px; height: 18px; border-radius: 50%; background: #b4bac4; flex: none; }
+  .y45-new .y45-head .dot { background: var(--blue); }
+  .y45-head .xx { margin-left: auto; width: 28px; height: 28px; color: #2b2b2b; }
+
+  .y45-fun { position: relative; height: 960px; }
+  .y45-fun svg.sh { position: absolute; left: 0; top: 0; }
+  .y45-row { position: absolute; left: 50%; transform: translateX(-50%); height: 112px; display: flex; align-items: center; justify-content: center; gap: 14px; border-radius: 22px; font-size: 31px; font-weight: 650; letter-spacing: -0.025em; white-space: nowrap; }
+  .y45-row svg { width: 34px; height: 34px; flex: none; }
+  .y45-old .y45-row { background: #fff; color: #4a4f5a; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), 0 8px 18px -8px rgba(20, 30, 60, 0.22); }
+  .y45-old .y45-row svg { color: #8a909c; }
+  .y45-old .y45-row.end { background: transparent; box-shadow: none; border: 3px dashed #c9cdd4; color: #9aa0ab; font-style: italic; font-weight: 600; }
+  .y45-new .y45-row { background: #fff; color: #12305c; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), 0 8px 18px -8px rgba(24, 80, 180, 0.3); }
+  .y45-new .y45-row svg { color: var(--blue); }
+
+  /* leaks: teardrops falling off the old funnel's sides */
+  .y45-drop { position: absolute; width: var(--d, 22px); height: var(--d, 22px); background: #aab1bd; border-radius: 0 50% 50% 50%; transform: rotate(45deg); opacity: var(--o, 1); }
+
+  /* ------------------------------------------------------------ popouts */
+  .y45-pop { position: absolute; z-index: 5; background: #fff; border-radius: 26px;
+    box-shadow: 0 0 0 1.5px rgba(255, 255, 255, 0.6), 0 40px 70px -24px rgba(0, 3, 15, 0.75), 0 12px 26px -12px rgba(0, 3, 15, 0.5); }
+  .y45-sign { left: 1110px; top: 1038px; display: flex; align-items: center; gap: 20px; height: 120px; padding: 0 40px 0 26px; transform: rotate(-3deg); }
+  .y45-sign .ok { width: 68px; height: 68px; border-radius: 50%; background: var(--blue); color: #fff; display: grid; place-items: center; flex: none; box-shadow: 0 8px 18px -8px rgba(24, 119, 242, 0.8); }
+  .y45-sign .ok svg { width: 38px; height: 38px; }
+  .y45-sign b { display: block; font-size: 40px; font-weight: 750; letter-spacing: -0.03em; color: #0c1018; white-space: nowrap; }
+
+  .y45-stat { left: 846px; top: 1230px; width: 620px; padding: 30px 40px 38px; transform: rotate(2.2deg); }
+  .y45-stat b { display: block; font-size: 180px; font-weight: 800; letter-spacing: -0.06em; line-height: 0.9; color: var(--blue); }
+  .y45-stat p { margin-top: 18px; font-size: 36px; font-weight: 650; line-height: 1.22; letter-spacing: -0.025em; color: #0c1018; text-wrap: balance; }
+
+  .y45-src { left: 862px; right: 96px; bottom: 318px; font-size: 27px; color: rgba(220, 232, 255, 0.82); }
+
+  /* AI tiles where the new funnel starts, pixelated */
+  .y45-tile { position: absolute; z-index: 6; }
+  .y45-tile .pxl-wrap { position: relative; }
+
+  /* ------------------------------------------------------------ close */
+  .v2-close { bottom: 96px; box-shadow: 0 0 0 8px rgba(255, 255, 255, 0.08), 0 40px 80px -30px rgba(0, 3, 15, 0.8); }
+  .v2-close p { flex: 1; font-size: 36px; font-weight: 650; line-height: 1.25; letter-spacing: -0.02em; color: #0c1018; text-wrap: balance; }
+  .v2-close p span { display: block; margin-top: 8px; font-size: 26px; font-weight: 500; color: #4a5160; white-space: nowrap; }
+  .v2-close .v2-logo svg { color: var(--blue); width: 58px; height: 58px; }
+</style>
+</head>
+<body>
+<div class="canvas v2">
+  <div class="y45-field"></div>
+  <div class="y45-dots"></div>
+  <div class="grain"></div>
+
+  <h1 class="y45-hl hl-caps">How <span class="ai">AI</span> is changing<br />top‑of‑funnel<br />demand generation</h1>
+
+  <!-- the old funnel: long, leaking -->
+  <div class="y45-panel y45-old">
+    <div class="y45-head"><i class="dot"></i>The old funnel<svg class="xx"><use href="#ic-x"/></svg></div>
+    <div class="y45-fun" id="oldfun">
+      <svg class="sh" width="620" height="960" viewBox="0 0 620 960"><path d="M40 30 H580 L440 900 H180 Z" fill="#f2f3f6" stroke="#f2f3f6" stroke-width="28" stroke-linejoin="round"/></svg>
+      <div class="y45-row" style="top:56px; width:500px"><svg><use href="#ic-lock"/></svg>Gated whitepaper</div>
+      <div class="y45-row" style="top:276px; width:430px"><svg><use href="#ic-pencil"/></svg>Form fill</div>
+      <div class="y45-row" style="top:496px; width:376px"><svg><use href="#ic-mail"/></svg>12 nurture emails</div>
+      <div class="y45-row end" style="top:740px; width:280px">Silence</div>
+      <!-- leaks -->
+      <i class="y45-drop" style="left:52px; top:196px"></i>
+      <i class="y45-drop" style="left:40px; top:238px; --d:16px; --o:.7"></i>
+      <i class="y45-drop" style="left:32px; top:272px; --d:11px; --o:.45"></i>
+      <i class="y45-drop" style="left:526px; top:414px"></i>
+      <i class="y45-drop" style="left:540px; top:456px; --d:16px; --o:.7"></i>
+      <i class="y45-drop" style="left:550px; top:490px; --d:11px; --o:.45"></i>
+      <i class="y45-drop" style="left:100px; top:636px"></i>
+      <i class="y45-drop" style="left:88px; top:678px; --d:16px; --o:.7"></i>
+      <i class="y45-drop" style="left:80px; top:712px; --d:11px; --o:.45"></i>
+      <i class="y45-drop" style="left:494px; top:660px; --d:18px"></i>
+      <i class="y45-drop" style="left:508px; top:698px; --d:13px; --o:.6"></i>
+    </div>
+  </div>
+
+  <!-- the new funnel: short -->
+  <div class="y45-panel y45-new">
+    <div class="y45-head"><i class="dot"></i>The new funnel<svg class="xx"><use href="#ic-x"/></svg></div>
+    <div class="y45-fun">
+      <svg class="sh" width="600" height="560" viewBox="0 0 600 560"><path d="M40 30 H560 L400 470 H200 Z" fill="#eaf2ff" stroke="#eaf2ff" stroke-width="28" stroke-linejoin="round"/></svg>
+      <div class="y45-row" style="top:56px; width:490px"><svg><use href="#ic-chat"/></svg>A question to AI</div>
+      <div class="y45-row" style="top:236px; width:420px"><svg><use href="#ic-sparkle"/></svg>A recommendation</div>
+    </div>
+  </div>
+
+  <div class="y45-pop y45-sign"><span class="ok"><svg><use href="#ic-check"/></svg></span><b>A signup</b></div>
+
+  <div class="y45-tile float" style="left:1392px; top:372px; transform:perspective(1100px) rotateX(6deg) rotateY(-18deg) rotateZ(9deg); border-radius:23%"><div class="pxl-wrap" style="--s:132px"><canvas class="pxl" data-logo="chatgpt" data-px="10" style="--s:132px"></canvas></div></div>
+  <div class="y45-tile float" style="left:1262px; top:404px; transform:perspective(1100px) rotateX(-4deg) rotateY(-22deg) rotateZ(-8deg); border-radius:23%"><div class="pxl-wrap" style="--s:100px"><canvas class="pxl" data-logo="perplexity" data-px="10" style="--s:100px"></canvas></div></div>
+
+  <div class="y45-pop y45-stat">
+    <b>54%</b>
+    <p>AI chatbots are now the #1 influence on B2B shortlists.</p>
+  </div>
+  <div class="v2-src y45-src">Source: G2 research, 2026</div>
+
+  <div class="v2-close">
+    <span class="v2-logo"><svg><use href="#lg-rankbox"/></svg></span>
+    <p>Rankbox does the top‑of‑funnel work inside AI answers.<span data-offer="line"></span></p>
+    <div class="v2-go"><span data-offer="cta"></span><svg><use href="#ic-arrow-right"/></svg></div>
+  </div>
+</div>
+</body>
+</html>

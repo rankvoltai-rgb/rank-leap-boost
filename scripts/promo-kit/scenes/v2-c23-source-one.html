@@ -1,0 +1,191 @@
+<!doctype html>
+<!-- Variant 2 · Cluster 23 "The citation people actually click", one image.
+     Forms Connect family (02): night field with blue glows, a dark panel on
+     the left and a white card on the right, one row lifted out of the panel
+     and a violet curved arrow carrying it across. Here the dark panel is a
+     generic AI answer, the lifted row is its source [1] (plotbright.io), and
+     the arrow lands on the referral row of Plotbright's own "Traffic sources"
+     card: the click becomes the visit. No figures on the card (no sessions,
+     no %), and it is Plotbright's analytics, not the viewer's and not a
+     Rankbox feature. The one number (780 million) sits under the headline
+     with its source line. AI tiles are pixelated only. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="formats" content="4x5" />
+<link rel="stylesheet" href="../kit/kit.css" />
+<link rel="stylesheet" href="ads2/ads2.css" />
+<script src="../kit/kit.js"></script>
+<script src="ads/ads.js"></script>
+<script src="ads2/ads2.js"></script>
+<style>
+  html, body { background: var(--night); }
+  .canvas.v2 { background: var(--night); }
+  .y23-field .g1 { left: -360px; top: 760px; width: 1100px; height: 900px; background: #0a46d0; --blur: 140px; opacity: .85; }
+  .y23-field .g2 { left: 760px; top: 1180px; width: 1200px; height: 900px; background: #2f8cff; --blur: 150px; opacity: .8; }
+  .y23-field .g3 { left: 1180px; top: 1560px; width: 620px; height: 420px; background: #b5dcff; --blur: 120px; opacity: .55; }
+  .y23-field .g4 { left: 260px; top: -440px; width: 1100px; height: 640px; background: #0a2a78; --blur: 150px; opacity: .6; }
+  .canvas.v2 .grain { --grain: 0.13; }
+
+  /* headline, centred like the Forms Connect hero, with the citation as an inline tile */
+  .y23-hl { position: absolute; left: 0; right: 0; top: 112px; text-align: center; font-size: 156px; }
+  .y23-cite { display: inline-grid; place-items: center; width: 0.74em; height: 0.74em; margin: 0 0.04em 0 0.14em; border-radius: 0.17em; background: var(--blue); color: #fff; font-size: 0.86em; vertical-align: 0.05em; letter-spacing: 0; box-shadow: inset 0 0 0 0.025em rgba(255, 255, 255, 0.35), 0 18px 40px -16px rgba(0, 0, 0, 0.6); }
+  .y23-cite b { font-size: 0.72em; font-weight: 800; line-height: 1; }
+
+  .y23-num { position: absolute; left: 0; right: 0; top: 470px; text-align: center; font-size: 40px; font-weight: 500; line-height: 1.32; letter-spacing: -0.02em; color: rgba(255, 255, 255, 0.86); }
+  .y23-num b { font-weight: 750; color: #fff; }
+  .y23-num b i { font-style: normal; color: #7dbaff; }
+  .y23-src { top: 594px; text-align: center; }
+
+  /* left: the AI answer, dark */
+  .y23-ans { position: absolute; left: 96px; top: 830px; width: 680px; padding-bottom: 14px; }
+  .y23-ans .head { height: 96px; padding: 0 32px; font-size: 30px; gap: 16px; }
+  .y23-spark { width: 54px; height: 54px; border-radius: 50%; background: rgba(75, 157, 255, 0.16); box-shadow: inset 0 0 0 1.5px rgba(75, 157, 255, 0.5); display: grid; place-items: center; color: #6fb2ff; flex: none; }
+  .y23-spark svg { width: 28px; height: 28px; }
+  .y23-ans .sec { padding: 28px 32px 0; }
+  .y23-ask { display: flex; align-items: center; gap: 16px; height: 82px; padding: 0 22px; border-radius: 18px; background: var(--row); box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, 0.06); font-size: 28px; font-weight: 600; letter-spacing: -0.02em; white-space: nowrap; }
+  .y23-ask svg { width: 30px; height: 30px; color: var(--on-dark-2); flex: none; }
+  .y23-ans p { margin-top: 26px; font-size: 30px; line-height: 1.48; font-weight: 500; letter-spacing: -0.015em; color: #e9eaec; }
+  .y23-n { display: inline-grid; place-items: center; min-width: 36px; height: 36px; padding: 0 8px; margin-left: 6px; border-radius: 10px; background: #2b3242; color: #9cc8ff; font-size: 24px; font-weight: 750; vertical-align: 3px; }
+  .y23-n.one { background: var(--blue); color: #fff; }
+  .y23-nw { white-space: nowrap; }
+  .y23-lab { margin-top: 30px; margin-bottom: 22px; font-size: 24px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--on-dark-2); }
+  .y23-row { display: flex; align-items: center; gap: 20px; padding: 18px 0; border-bottom: 1.5px solid var(--line); }
+  .y23-row:last-child { border-bottom: 0; }
+  .y23-row .y23-n { flex: none; margin: 0; width: 52px; height: 52px; font-size: 27px; border-radius: 14px; vertical-align: 0; }
+  .y23-row .t { min-width: 0; }
+  .y23-row b { display: block; font-size: 28px; font-weight: 650; letter-spacing: -0.02em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .y23-row small { display: block; margin-top: 4px; font-size: 24px; font-weight: 500; color: var(--on-dark-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  /* the lifted source row */
+  .y23-lift { position: absolute; left: 66px; width: 740px; padding: 24px 30px; border-radius: 30px; background: #0e0f10; color: var(--on-dark); z-index: 5;
+    box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, 0.1), 0 40px 80px -20px rgba(0, 0, 0, 0.85), 0 0 0 10px rgba(0, 0, 0, 0.2); }
+  .y23-lift .y23-row { border: 0; padding: 0; gap: 22px; }
+  .y23-lift .y23-n { width: 70px; height: 70px; font-size: 36px; border-radius: 18px; }
+  .y23-lift b { font-size: 36px; }
+  .y23-lift small { font-size: 27px; color: #b4b7bf; }
+  .y23-fav { width: 30px; height: 30px; border-radius: 9px; background: #0c1018; flex: none; position: relative; display: inline-block; vertical-align: -6px; margin-right: 10px; box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, 0.35); }
+  .y23-fav::after { content: ""; position: absolute; left: 8px; top: 8px; width: 14px; height: 14px; border-radius: 50%; background: #fff; }
+
+  .y23-fav.inv { background: #fff; box-shadow: none; }
+  .y23-fav.inv::after { background: #0c1018; }
+
+  /* right: Plotbright's traffic sources, no figures */
+  .y23-an { position: absolute; left: 856px; top: 736px; width: 648px; padding: 34px 34px 18px; border-radius: 36px; background: #fff; color: var(--ink);
+    box-shadow: 0 0 0 1.5px rgba(255, 255, 255, 0.5), 0 60px 120px -30px rgba(1, 10, 40, 0.6), 0 20px 40px -20px rgba(1, 10, 40, 0.4); }
+  .y23-anh { display: flex; align-items: center; gap: 18px; }
+  .y23-anh .ic { width: 64px; height: 64px; border-radius: 18px; background: #e8f1ff; color: var(--blue); display: grid; place-items: center; flex: none; }
+  .y23-anh .ic svg { width: 34px; height: 34px; }
+  .y23-anh b { font-size: 36px; font-weight: 750; letter-spacing: -0.03em; }
+  .y23-site { display: flex; align-items: center; gap: 12px; margin-top: 18px; font-size: 27px; font-weight: 650; color: #4a5160; letter-spacing: -0.015em; }
+  .y23-site .y23-fav { margin: 0; vertical-align: 0; box-shadow: none; }
+  .y23-cols { display: flex; justify-content: space-between; margin-top: 24px; padding: 0 18px 12px; border-bottom: 2px solid #eef0f3; font-size: 24px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #9aa0ab; }
+  .y23-tr { position: relative; display: flex; align-items: center; gap: 16px; height: 112px; padding: 0 18px; border-bottom: 2px solid #f1f2f5; }
+  .y23-tr:last-child { border-bottom: 0; }
+  .y23-tr .t b { display: block; font-size: 32px; font-weight: 600; letter-spacing: -0.02em; color: #4a5160; }
+  .y23-tr .t em { display: block; margin-top: 2px; font-style: normal; font-size: 24px; font-weight: 500; color: #9aa0ab; }
+  .y23-tr svg.sp { margin-left: auto; width: 210px; height: 64px; flex: none; overflow: visible; }
+  .y23-tr.hot { margin: 10px -10px; padding: 0 28px; height: 124px; border: 0; border-radius: 24px; background: #eef4ff; box-shadow: inset 0 0 0 3px var(--blue); }
+  .y23-tr.hot .t b { color: #0c1018; font-weight: 750; }
+  .y23-tr.hot .t em { color: #1561d6; font-weight: 650; }
+  .y23-tag { position: absolute; left: 26px; top: -22px; display: inline-flex; align-items: center; gap: 8px; height: 44px; padding: 0 8px 0 16px; border-radius: 12px; background: var(--blue); color: #fff; font-size: 24px; font-weight: 700; box-shadow: 0 10px 20px -10px rgba(22, 111, 229, 0.8); }
+  .y23-tag b { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 8px; background: #fff; color: var(--blue); font-size: 24px; font-weight: 800; }
+
+  .y23-arrow { position: absolute; left: 0; top: 0; width: 1600px; height: 2000px; pointer-events: none; overflow: visible; z-index: 6; }
+
+  .y23-tile { position: absolute; z-index: 4; }
+
+  .v2-close { bottom: 96px; z-index: 8; }
+  .v2-close p { flex: 1; font-size: 38px; font-weight: 700; line-height: 1.2; letter-spacing: -0.025em; color: #0c1018; }
+  .v2-close p span { display: block; margin-top: 10px; font-size: 26px; font-weight: 500; color: #4a5160; letter-spacing: -0.01em; white-space: nowrap; }
+  .v2-close .v2-logo svg { color: var(--blue); width: 58px; height: 58px; }
+</style>
+</head>
+<body>
+<div class="canvas v2">
+  <div class="field y23-field">
+    <div class="glow g4"></div>
+    <div class="glow g1"></div>
+    <div class="glow g2"></div>
+    <div class="glow g3"></div>
+  </div>
+  <div class="v2-px"></div>
+  <div class="grain"></div>
+
+  <h1 class="y23-hl v2-hl">Source<span class="y23-cite"><b>1</b></span><br />gets the visit.</h1>
+
+  <p class="y23-num"><b><i>780 million</i> questions</b> answered by Perplexity in one month.<br />Every answer lists its sources.</p>
+  <div class="v2-src y23-src">Source: Perplexity CEO at Bloomberg Tech, May 2025 figure</div>
+
+  <!-- answer engines, pixelated -->
+  <div class="y23-tile float" style="left:96px; top:96px; transform:perspective(1100px) rotateX(6deg) rotateY(18deg) rotateZ(-10deg); border-radius:23%"><div class="pxl-wrap" style="--s:132px"><canvas class="pxl" data-logo="perplexity" data-px="10" style="--s:132px"></canvas></div></div>
+  <div class="y23-tile float" style="left:1366px; top:150px; transform:perspective(1100px) rotateX(-4deg) rotateY(-20deg) rotateZ(9deg); border-radius:23%"><div class="pxl-wrap" style="--s:140px"><canvas class="pxl" data-logo="chatgpt" data-px="10" style="--s:140px"></canvas></div></div>
+
+  <div class="y23-tile float" style="left:1290px; top:1530px; transform:perspective(1100px) rotateX(4deg) rotateY(-18deg) rotateZ(-8deg); border-radius:23%"><div class="pxl-wrap" style="--s:150px"><canvas class="pxl" data-logo="gemini" data-px="10" style="--s:150px"></canvas></div></div>
+
+  <div class="dpanel y23-ans">
+    <div class="head"><span class="y23-spark"><svg><use href="#ic-sparkle"/></svg></span>AI answer<span class="close"><svg><use href="#ic-x"/></svg></span></div>
+    <div class="sec">
+      <div class="y23-ask"><svg><use href="#ic-search"/></svg>How do I run a weekly planning meeting?</div>
+      <p>Keep it short and on a fixed day. Start with last week’s goals, then give every task one <span class="y23-nw">owner<span class="y23-n one">1</span>.</span> Share the agenda the day <span class="y23-nw">before<span class="y23-n">2</span></span> and end on <span class="y23-nw">decisions<span class="y23-n">3</span>.</span></p>
+      <div class="y23-lab">Sources</div>
+      <div class="y23-row" id="slot" style="visibility:hidden"><span class="y23-n">1</span><div class="t"><b>plotbright.io</b><small>How to Run a Weekly Planning Meeting</small></div></div>
+      <div class="y23-row"><span class="y23-n">2</span><div class="t"><b>guide.example</b><small>Planning meetings, a short guide</small></div></div>
+      <div class="y23-row"><span class="y23-n">3</span><div class="t"><b>forum.example</b><small>How does your team plan the week?</small></div></div>
+    </div>
+  </div>
+
+  <div class="y23-lift" id="lift">
+    <div class="y23-row"><span class="y23-n one" id="from">1</span><div class="t"><b><i class="y23-fav inv"></i>plotbright.io</b><small>How to Run a Weekly Planning Meeting</small></div></div>
+  </div>
+
+  <div class="y23-an">
+    <div class="y23-anh"><span class="ic"><svg><use href="#ic-chart"/></svg></span><b>Traffic sources</b></div>
+    <div class="y23-site"><i class="y23-fav"></i>plotbright.io · last 30 days</div>
+    <div class="y23-cols"><span>Source · medium</span><span>Trend</span></div>
+    <div class="y23-tr"><div class="t"><b>google.com</b><em>Organic</em></div>
+      <svg class="sp" viewBox="0 0 210 64"><polyline points="0,36 30,31 60,38 90,33 120,36 150,30 180,35 210,32" fill="none" stroke="#c4c9d2" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="y23-tr hot" id="to"><span class="y23-tag">Source<b>1</b></span><div class="t"><b>perplexity.ai</b><em>Referral</em></div>
+      <svg class="sp" viewBox="0 0 210 64"><defs><linearGradient id="y23g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1877f2" stop-opacity=".22"/><stop offset="1" stop-color="#1877f2" stop-opacity="0"/></linearGradient></defs><path d="M0,56 L30,53 L60,55 L90,44 L120,40 L150,28 L180,20 L202,6 L202,64 L0,64 Z" fill="url(#y23g)"/><polyline points="0,56 30,53 60,55 90,44 120,40 150,28 180,20 202,6" fill="none" stroke="#1877f2" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="202" cy="6" r="10" fill="#1877f2" stroke="#fff" stroke-width="4"/></svg></div>
+    <div class="y23-tr"><div class="t"><b>Direct</b><em>(none)</em></div>
+      <svg class="sp" viewBox="0 0 210 64"><polyline points="0,33 30,38 60,32 90,36 120,31 150,37 180,33 210,35" fill="none" stroke="#c4c9d2" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="y23-tr"><div class="t"><b>newsletter</b><em>Email</em></div>
+      <svg class="sp" viewBox="0 0 210 64"><polyline points="0,40 30,35 60,42 90,37 120,41 150,36 180,40 210,37" fill="none" stroke="#c4c9d2" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+  </div>
+
+  <svg class="y23-arrow">
+    <defs>
+      <marker id="y23head" viewBox="0 0 20 20" refX="12" refY="10" markerWidth="7" markerHeight="7" orient="auto">
+        <path d="M3 3 L16 10 L3 17" fill="none" stroke="#a184ff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" />
+      </marker>
+    </defs>
+    <path id="y23curve" fill="none" stroke="#a184ff" stroke-width="6" stroke-linecap="round" marker-end="url(#y23head)" />
+    <circle id="y23knob" r="14" fill="#fff" stroke="#a184ff" stroke-width="6" />
+  </svg>
+
+  <div class="v2-close">
+    <span class="v2-logo"><svg><use href="#lg-rankbox"/></svg></span>
+    <p>Rankbox writes pages built to be cited.<span data-offer="line"></span></p>
+    <div class="v2-go"><span data-offer="cta"></span><svg><use href="#ic-arrow-right"/></svg></div>
+  </div>
+</div>
+<script>
+  // Seat the lifted row over source [1], then draw the violet arrow from its
+  // right edge up to the referral row it becomes.
+  addEventListener("load", () => {
+    const c = document.querySelector(".canvas").getBoundingClientRect();
+    const slot = document.getElementById("slot").getBoundingClientRect();
+    const lift = document.getElementById("lift");
+    lift.style.top = (slot.top - c.top + slot.height / 2 - lift.offsetHeight / 2) + "px";
+    const L = lift.getBoundingClientRect();
+    const b = document.getElementById("to").getBoundingClientRect();
+    const x1 = L.right - c.left - 70, y1 = L.top - c.top;
+    const x2 = b.left - c.left - 20, y2 = b.top - c.top + b.height / 2;
+    document.getElementById("y23curve").setAttribute("d",
+      `M${x1} ${y1} C ${x1 + 6} ${y1 - (y1 - y2) * 0.8}, ${x2 - (x2 - x1) * 0.9} ${y2}, ${x2} ${y2}`);
+    const k = document.getElementById("y23knob");
+    k.setAttribute("cx", x1); k.setAttribute("cy", y1);
+  });
+</script>
+</body>
+</html>
