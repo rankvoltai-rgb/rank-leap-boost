@@ -21,11 +21,16 @@ export function DataTable({
   minWidth?: number;
 }) {
   return (
-    <div className={cn("overflow-hidden rounded-card border border-border bg-card", className)}>
+    <div
+      className={cn(
+        "overflow-hidden rounded-card border border-ink/[0.08] bg-card shadow-[0_1px_2px_rgba(16,24,40,0.04)]",
+        className,
+      )}
+    >
       <div className="relative overflow-x-auto">
         <table className="w-full border-collapse text-sm" style={{ minWidth }}>
           <thead>
-            <tr className="border-b border-border bg-secondary/30">
+            <tr className="border-b border-ink/[0.07] bg-[color-mix(in_oklab,var(--surface)_45%,white)]">
               {columns.map((c, i) => (
                 <th
                   key={i}

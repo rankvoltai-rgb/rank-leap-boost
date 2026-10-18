@@ -29,8 +29,8 @@ function Group({
   children: React.ReactNode;
 }) {
   return (
-    <section className="overflow-hidden rounded-2xl border border-border bg-card shadow-1">
-      <header className="flex items-center gap-3 border-b border-border bg-surface/60 px-4 py-3">
+    <section className="overflow-hidden rounded-xl border border-ink/[0.08] bg-card shadow-[0_1px_2px_rgba(16,24,40,0.04)]">
+      <header className="flex items-center gap-3 border-b border-ink/[0.08] bg-surface/60 px-4 py-3">
         <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-card text-brand-blue ring-1 ring-border">
           <Icon className="h-3.5 w-3.5" />
         </span>
@@ -39,7 +39,7 @@ function Group({
           <p className="truncate text-xs text-muted-foreground">{note}</p>
         </div>
       </header>
-      <ol className="divide-y divide-border/70">{children}</ol>
+      <ol className="divide-y divide-ink/[0.07]/70">{children}</ol>
     </section>
   );
 }
@@ -67,7 +67,7 @@ function ArticleRow({ t, when }: { t: DraftTitle; when: string }) {
 function Building() {
   return (
     <div aria-live="polite">
-      <div className="flex items-center gap-3 rounded-2xl border border-border bg-card px-5 py-4 shadow-1">
+      <div className="flex items-center gap-3 rounded-xl border border-ink/[0.08] bg-card px-5 py-4 shadow-[0_1px_2px_rgba(16,24,40,0.04)]">
         <Loader2 className="h-4 w-4 shrink-0 animate-spin text-brand-blue" />
         <p className="text-sm text-ink">
           Finding your content gaps and drafting an article for each keyword…
@@ -75,12 +75,12 @@ function Building() {
       </div>
       <div
         aria-hidden
-        className="mt-4 overflow-hidden rounded-2xl border border-border/70 bg-card opacity-70"
+        className="mt-4 overflow-hidden rounded-xl border border-ink/[0.07] bg-card opacity-70"
       >
         {[78, 64, 84, 58, 70, 62].map((w, i) => (
           <div
             key={i}
-            className="flex items-center gap-4 border-b border-border/60 px-4 py-4 last:border-0"
+            className="flex items-center gap-4 border-b border-ink/[0.07] px-4 py-4 last:border-0"
           >
             <span className="h-2.5 w-10 rounded-full bg-shimmer" />
             <span className="h-3 rounded-full bg-shimmer" style={{ width: `${w * 0.7}%` }} />
@@ -159,12 +159,12 @@ export function Part3Forecast({
       {status === "building" && <Building />}
 
       {status === "failed" && (
-        <div className="flex flex-col items-center gap-4 rounded-2xl border border-border bg-card px-6 py-10 text-center shadow-1">
+        <div className="flex flex-col items-center gap-4 rounded-xl border border-ink/[0.08] bg-card px-6 py-10 text-center shadow-[0_1px_2px_rgba(16,24,40,0.04)]">
           <p className="text-sm text-ink">We couldn't build your content plan.</p>
           <button
             type="button"
             onClick={() => void build()}
-            className="inline-flex h-10 items-center gap-1.5 rounded-xl border border-border bg-card px-4 text-sm font-semibold text-ink transition-colors hover:bg-secondary"
+            className="inline-flex h-10 items-center gap-1.5 rounded-xl border border-ink/[0.08] bg-card px-4 text-sm font-semibold text-ink transition-colors hover:bg-secondary"
           >
             <RefreshCw className="h-3.5 w-3.5" />
             Try again

@@ -4,7 +4,8 @@
       "mcp__claude-in-chrome__tabs_context_mcp",
       "ClaudeInChromeDomain(rankaria.com)",
       "mcp__claude-in-chrome__tabs_create_mcp",
-      "ClaudeInChromeDomain(localhost:5180)"
+      "ClaudeInChromeDomain(localhost:5180)",
+      "ClaudeInChromeDomain(localhost:5181)"
     ]
   }
 }

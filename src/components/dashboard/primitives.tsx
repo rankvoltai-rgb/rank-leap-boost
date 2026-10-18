@@ -15,8 +15,8 @@ export function Panel({
   return (
     <div
       className={cn(
-        "rounded-card border border-border bg-card",
-        hover && "transition-colors duration-200 hover:border-ink/15 hover:bg-secondary/40",
+        "rounded-card border border-ink/[0.08] bg-card shadow-[0_1px_2px_rgba(16,24,40,0.04)]",
+        hover && "transition-colors duration-200 hover:border-ink/[0.14] hover:bg-ink/[0.015]",
         className,
       )}
     >
@@ -38,7 +38,12 @@ export function Tabs<T extends string>({
   className?: string;
 }) {
   return (
-    <div className={cn("flex gap-1 rounded-card border border-border bg-card p-1", className)}>
+    <div
+      className={cn(
+        "flex gap-1 rounded-card border border-ink/[0.08] bg-card p-1 shadow-[0_1px_2px_rgba(16,24,40,0.04)]",
+        className,
+      )}
+    >
       {tabs.map((t) => {
         const active = value === t.id;
         return (
@@ -48,7 +53,11 @@ export function Tabs<T extends string>({
             onClick={() => onChange(t.id)}
             className={cn(
               "flex flex-1 items-center justify-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium transition-all",
-              active ? "bg-cta text-white shadow-sm" : "text-muted-foreground hover:text-ink",
+              // Selected is the soft blue key, as in the rail: blue, never a
+              // heavy fill.
+              active
+                ? "bg-cta-soft text-cta shadow-[inset_0_0_0_1px_color-mix(in_oklab,var(--cta)_16%,transparent)]"
+                : "text-muted-foreground hover:bg-ink/[0.03] hover:text-ink",
             )}
           >
             {t.label}
@@ -56,7 +65,7 @@ export function Tabs<T extends string>({
               <span
                 className={cn(
                   "rounded-full px-1.5 py-0.5 text-[0.62rem] font-semibold tabular-nums",
-                  active ? "bg-white/20 text-white" : "bg-secondary text-muted-foreground",
+                  active ? "bg-cta/12 text-cta" : "bg-ink/[0.05] text-muted-foreground",
                 )}
               >
                 {t.count}
@@ -86,7 +95,7 @@ export function EmptyState({
   return (
     <Panel className={cn("flex flex-col items-center gap-3 px-6 py-14 text-center", className)}>
       {icon && (
-        <span className="grid h-12 w-12 place-items-center rounded-card border border-border bg-secondary text-muted-foreground">
+        <span className="grid h-12 w-12 place-items-center rounded-card border border-ink/[0.08] bg-white text-muted-foreground shadow-[0_1px_2px_rgba(16,24,40,0.05)]">
           {icon}
         </span>
       )}
@@ -131,7 +140,7 @@ export function MetricCard({
           {label}
         </p>
         {icon && (
-          <span className="grid h-7 w-7 shrink-0 place-items-center rounded-lg border border-border bg-secondary text-muted-foreground">
+          <span className="grid h-7 w-7 shrink-0 place-items-center rounded-lg border border-ink/[0.08] bg-white text-muted-foreground">
             {icon}
           </span>
         )}
@@ -185,7 +194,7 @@ export function StatCard({
           {label}
         </p>
         {icon && (
-          <span className="grid h-7 w-7 shrink-0 place-items-center rounded-lg border border-border bg-secondary text-muted-foreground">
+          <span className="grid h-7 w-7 shrink-0 place-items-center rounded-lg border border-ink/[0.08] bg-white text-muted-foreground">
             {icon}
           </span>
         )}
@@ -239,7 +248,7 @@ export function MetricStat({
       <div className="flex items-center justify-between gap-2">
         <p className="text-sm font-medium text-muted-foreground">{label}</p>
         {icon && (
-          <span className="grid h-7 w-7 shrink-0 place-items-center rounded-lg border border-border bg-secondary text-muted-foreground">
+          <span className="grid h-7 w-7 shrink-0 place-items-center rounded-lg border border-ink/[0.08] bg-white text-muted-foreground">
             {icon}
           </span>
         )}
@@ -274,7 +283,7 @@ export function MetricStat({
 }
 
 const PILL_TONES: Record<string, string> = {
-  neutral: "border-border bg-secondary text-muted-foreground",
+  neutral: "border-ink/[0.08] bg-ink/[0.03] text-muted-foreground",
   ink: "border-transparent bg-cta text-white",
   success: "border-success/20 bg-success/10 text-success",
   warning: "border-warning/30 bg-warning/15 text-ink",
@@ -294,7 +303,7 @@ export function Pill({
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1 rounded-sm border px-2.5 py-0.5 text-xs font-medium",
+        "inline-flex items-center gap-1 rounded-md border px-2 py-0.5 text-xs font-medium",
         PILL_TONES[tone],
         className,
       )}
@@ -316,18 +325,19 @@ export function Button({
   // A call to action is blue — never ink. Ink is for text. `solid` and `brand`
   // are the same fill; both names stay so existing call sites keep reading.
   const primary =
-    "bg-cta text-white shadow-[0_1px_2px_color-mix(in_oklab,var(--cta)_35%,transparent)] hover:bg-cta-hover active:translate-y-px";
+    "bg-cta text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.16),0_1px_2px_rgba(16,24,40,0.14)] hover:bg-cta-hover active:scale-[0.99]";
   const variants = {
     solid: primary,
     brand: primary,
-    ghost: "border border-border bg-card text-ink hover:border-ink/15 hover:bg-secondary",
+    ghost:
+      "border border-ink/[0.1] bg-card text-ink shadow-[0_1px_2px_rgba(16,24,40,0.04)] hover:border-ink/[0.16] hover:bg-ink/[0.02]",
     danger:
-      "border border-border bg-card text-muted-foreground hover:border-destructive/40 hover:bg-destructive/10 hover:text-destructive",
+      "border border-ink/[0.1] bg-card text-muted-foreground hover:border-destructive/40 hover:bg-destructive/10 hover:text-destructive",
   };
   return (
     <button
       className={cn(
-        "inline-flex items-center justify-center gap-1.5 rounded-lg px-3.5 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-60",
+        "inline-flex items-center justify-center gap-1.5 rounded-lg px-3.5 py-2 text-sm font-medium transition-[background-color,border-color,color,transform] duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-60",
         variants[variant],
         className,
       )}
@@ -351,12 +361,13 @@ export function PageHeader({
 }) {
   const lg = size === "lg";
   return (
-    <div className="flex flex-wrap items-start justify-between gap-3 border-b border-border pb-6">
+    <div className="flex flex-wrap items-start justify-between gap-3 border-b border-ink/[0.07] pb-6">
       <div>
+        {/* The landing page's heading voice: medium weight, set tight. */}
         <h1
           className={cn(
-            "font-semibold tracking-tight text-ink",
-            lg ? "text-3xl sm:text-[2.5rem] sm:leading-[1.1]" : "text-[1.7rem]",
+            "font-display font-medium tracking-[-0.03em] text-ink",
+            lg ? "text-3xl sm:text-[2.5rem] sm:leading-[1.1]" : "text-[1.85rem] leading-tight",
           )}
         >
           {title}

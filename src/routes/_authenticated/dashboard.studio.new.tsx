@@ -69,7 +69,9 @@ function AddSitePage() {
         </div>
       ) : block ? (
         <div className="max-w-2xl space-y-4">
-          <h1 className="text-[1.7rem] font-semibold tracking-tight text-ink">Add a site</h1>
+          <h1 className="font-display text-[1.85rem] font-medium leading-tight tracking-[-0.03em] text-ink">
+            Add a site
+          </h1>
           <StudioGate block={block} message={null} />
         </div>
       ) : (

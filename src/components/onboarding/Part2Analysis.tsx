@@ -54,7 +54,7 @@ function Scanning({ done }: { done: boolean }) {
 
   return (
     <div aria-live="polite">
-      <div className="rounded-2xl border border-border bg-card p-6 shadow-1 sm:p-7">
+      <div className="rounded-xl border border-ink/[0.08] bg-card p-6 shadow-[0_1px_2px_rgba(16,24,40,0.04)] sm:p-7">
         <div
           role="progressbar"
           aria-label="Analyzing your site"
@@ -107,7 +107,7 @@ function Scanning({ done }: { done: boolean }) {
         {[88, 72, 80, 64].map((w) => (
           <div
             key={w}
-            className="flex items-center gap-4 rounded-xl border border-border/70 bg-card px-4 py-3.5"
+            className="flex items-center gap-4 rounded-xl border border-ink/[0.07] bg-card px-4 py-3.5"
           >
             <span className="h-3 rounded-full bg-shimmer" style={{ width: `${w * 0.5}%` }} />
             <span className="ml-auto h-3 w-12 rounded-full bg-shimmer" />
@@ -277,12 +277,12 @@ function BrandContext({
     .join(" · ");
 
   return (
-    <div className="mt-4 rounded-2xl border border-border bg-surface/50">
+    <div className="mt-4 rounded-xl border border-ink/[0.08] bg-surface/50">
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
-        className="flex w-full items-center gap-3 rounded-2xl px-5 py-4 text-left transition-colors hover:bg-surface"
+        className="flex w-full items-center gap-3 rounded-xl px-5 py-4 text-left transition-colors hover:bg-surface"
       >
         <div className="min-w-0 flex-1">
           <p className="text-sm font-semibold text-ink">
@@ -303,7 +303,7 @@ function BrandContext({
         />
       </button>
       {open && (
-        <div className="space-y-7 border-t border-border px-5 py-6">
+        <div className="space-y-7 border-t border-ink/[0.08] px-5 py-6">
           <div className="grid gap-4 sm:grid-cols-2">
             <Field label="Niche" value={value.niche} onChange={(v) => onChange({ niche: v })} />
             <Field label="Market" value={value.geo} onChange={(v) => onChange({ geo: v })} />
@@ -481,8 +481,8 @@ export function Part2Analysis({
         }
       />
 
-      <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-1">
-        <div className="flex items-center gap-2.5 border-b border-border px-4 py-2.5">
+      <div className="overflow-hidden rounded-xl border border-ink/[0.08] bg-card shadow-[0_1px_2px_rgba(16,24,40,0.04)]">
+        <div className="flex items-center gap-2.5 border-b border-ink/[0.08] px-4 py-2.5">
           <Plus className="h-4 w-4 shrink-0 text-muted-foreground" />
           <input
             value={newKeyword}
@@ -511,7 +511,7 @@ export function Part2Analysis({
         <div
           className={cn(
             ROW,
-            "border-b border-border bg-surface/60 px-4 py-2 text-[0.68rem] font-semibold uppercase tracking-[0.1em] text-muted-foreground",
+            "border-b border-ink/[0.08] bg-surface/60 px-4 py-2 text-[0.68rem] font-semibold uppercase tracking-[0.1em] text-muted-foreground",
           )}
         >
           <span>{value.keywords.length} keywords</span>
@@ -522,7 +522,7 @@ export function Part2Analysis({
         </div>
 
         {value.keywords.length ? (
-          <ul className="divide-y divide-border/70">
+          <ul className="divide-y divide-ink/[0.07]/70">
             {value.keywords.map((kw) => (
               <KeywordRow
                 key={kw.id}
@@ -542,7 +542,7 @@ export function Part2Analysis({
           </p>
         )}
 
-        <div className="flex items-center justify-between border-t border-border bg-surface/60 px-4 py-2.5 text-xs text-muted-foreground">
+        <div className="flex items-center justify-between border-t border-ink/[0.08] bg-surface/60 px-4 py-2.5 text-xs text-muted-foreground">
           <span>Monthly searches, all keywords</span>
           <span className="font-semibold tabular-nums text-ink">
             {totalVolume.toLocaleString()}

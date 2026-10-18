@@ -80,10 +80,10 @@ function SummaryItem({
     <li className="flex items-center gap-3 px-4 py-3.5">
       <span
         className={cn(
-          "flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-xl border",
+          "flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-lg border",
           state === "pending"
-            ? "border-dashed border-border text-muted-foreground/60"
-            : "border-border bg-surface text-ink",
+            ? "border-dashed border-ink/[0.14] text-muted-foreground/60"
+            : "border-ink/[0.08] bg-white text-ink",
         )}
       >
         {icon}
@@ -150,7 +150,17 @@ export function PlanRail({
 
   return (
     <div className="space-y-5">
-      <div className="relative overflow-hidden rounded-2xl bg-brand-blue p-6 text-white shadow-2">
+      <div className="relative isolate overflow-hidden rounded-xl bg-brand-blue p-6 text-white shadow-[0_1px_2px_rgba(4,24,72,0.12),0_18px_40px_-20px_rgba(4,24,72,0.55)]">
+        {/* The landing showcase's painted sky, toned down under the figure. */}
+        <img
+          src="/assets/painting-sky.webp"
+          alt=""
+          aria-hidden
+          decoding="async"
+          draggable={false}
+          className="absolute inset-0 -z-10 h-full w-full select-none object-cover"
+        />
+        <span aria-hidden className="absolute inset-0 -z-10 bg-brand-blue/70" />
         {planned && <Burst key={titles.length} />}
         <div className="flex items-center justify-between gap-3">
           <p className="text-sm font-medium text-white/85">
@@ -175,7 +185,7 @@ export function PlanRail({
       </div>
       <Methodology />
 
-      <ul className="divide-y divide-border rounded-2xl border border-border bg-card">
+      <ul className="divide-y divide-ink/[0.07] rounded-xl border border-ink/[0.08] bg-white shadow-[0_1px_2px_rgba(16,24,40,0.04)]">
         <SummaryItem
           icon={
             logoUrl ? (

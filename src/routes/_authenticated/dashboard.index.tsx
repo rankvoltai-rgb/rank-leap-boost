@@ -599,7 +599,7 @@ function SystemConsole({ siteId }: { siteId: string }) {
       <header className="flex flex-wrap items-end justify-between gap-4">
         <div className="min-w-0">
           <p className="text-sm text-muted-foreground">{dateLine}</p>
-          <h1 className="font-display mt-1 text-3xl font-semibold tracking-tight text-ink sm:text-[2.1rem]">
+          <h1 className="font-display mt-1 text-3xl font-medium tracking-[-0.03em] text-ink sm:text-[2.2rem]">
             {timeGreeting()}
             {firstName ? `, ${firstName}` : ""}
           </h1>

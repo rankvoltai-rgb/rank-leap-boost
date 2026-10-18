@@ -14,7 +14,7 @@ import type { ReactNode } from "react";
 import { motion } from "motion/react";
 import { ArrowLeft, Check, CloudCheck } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Logo } from "@/components/landing/shared";
+import { Mark } from "@/components/brand/Mark";
 import { PARTS, reducedMotion } from "./constants";
 
 export type Step = 1 | 2 | 3;
@@ -74,7 +74,7 @@ function Progress({ active, onStep }: { active: Step; onStep: (step: Step) => vo
                 <span
                   className={cn(
                     "h-1 w-full rounded-full transition-colors duration-300",
-                    done || current ? "bg-brand-blue" : "bg-border",
+                    done || current ? "bg-brand-blue" : "bg-ink/[0.08]",
                     done && "group-hover:bg-brand-blue/70",
                   )}
                 />
@@ -111,11 +111,17 @@ export function OnboardingShell({
   children: ReactNode;
 }) {
   return (
-    <div className="min-h-screen bg-background">
-      <header className="sticky top-0 z-30 border-b border-border/70 bg-background/85 backdrop-blur-md">
-        <div className="mx-auto grid h-16 max-w-[1180px] grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 px-5 sm:grid-cols-[1fr_auto_1fr] sm:gap-4 lg:px-8">
-          <a href="/" className="justify-self-start" aria-label="Rankbox home">
-            <Logo />
+    // White, with the landing page's hairline rails framing the column.
+    <div className="min-h-screen bg-white">
+      <header className="sticky top-0 z-30 border-b border-ink/[0.07] bg-white/90 backdrop-blur-md">
+        <div className="mx-auto grid h-16 max-w-[1180px] grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 px-5 sm:grid-cols-[1fr_auto_1fr] sm:gap-4 lg:px-8 xl:border-x xl:border-ink/[0.07]">
+          <a
+            href="/"
+            className="flex items-center gap-2.5 justify-self-start"
+            aria-label="Rankbox home"
+          >
+            <Mark className="h-6 w-6 text-brand-blue" />
+            <span className="text-[1.2rem] font-semibold tracking-tight text-ink">Rankbox</span>
           </a>
           <Progress active={active} onStep={onStep} />
           <p className="flex items-center gap-1.5 justify-self-end text-xs text-muted-foreground">
@@ -130,11 +136,12 @@ export function OnboardingShell({
         </div>
       </header>
 
-      <div className="mx-auto grid max-w-[1180px] gap-12 px-5 lg:grid-cols-[minmax(0,1fr)_20rem] lg:px-8 xl:gap-20">
+      <div className="mx-auto grid min-h-[calc(100vh-4rem)] max-w-[1180px] gap-12 px-5 lg:grid-cols-[minmax(0,1fr)_21rem] lg:px-8 xl:gap-14 xl:border-x xl:border-ink/[0.07]">
         <main className="min-w-0 pt-8 sm:pt-12 lg:pt-14">
           <div className="mx-auto max-w-[42rem] lg:mx-0">{children}</div>
         </main>
-        <aside className="hidden pt-14 lg:block">
+        {/* Ruled off from the step by a hairline, like the landing's cells. */}
+        <aside className="hidden pt-14 lg:block lg:border-l lg:border-ink/[0.07] lg:pl-10 xl:pl-12">
           <div className="sticky top-[5.5rem]">{rail}</div>
         </aside>
       </div>
@@ -154,10 +161,11 @@ export function StepHeader({
 }) {
   return (
     <header className="mb-8">
-      <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brand-blue">
+      <p className="inline-flex items-center gap-2 rounded-lg border border-ink/[0.08] bg-white px-2.5 py-1 text-[0.78rem] font-medium text-ink shadow-[0_1px_2px_rgba(16,24,40,0.04)]">
+        <span className="h-1.5 w-1.5 rounded-full bg-brand-blue" />
         Step {n} of {PARTS.length}
       </p>
-      <h1 className="font-display mt-2.5 text-balance text-[1.75rem] font-semibold leading-tight tracking-tight text-ink sm:text-[2.125rem]">
+      <h1 className="font-display mt-4 text-balance text-[1.85rem] font-medium leading-[1.12] tracking-[-0.03em] text-ink sm:text-[2.35rem]">
         {title}
       </h1>
       <p className="mt-2.5 max-w-[36rem] text-pretty text-[0.95rem] leading-relaxed text-muted-foreground">
@@ -168,7 +176,7 @@ export function StepHeader({
 }
 
 export const PRIMARY_BUTTON =
-  "inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-xl bg-brand-blue px-5 text-sm font-semibold text-white shadow-2 transition-all hover:-translate-y-0.5 hover:bg-brand-blue/90 active:translate-y-0 disabled:translate-y-0 disabled:opacity-50 sm:px-6";
+  "inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-lg bg-cta px-5 text-sm font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.16),0_1px_2px_rgba(16,24,40,0.14)] transition-[background-color,transform] duration-150 hover:bg-cta-hover active:scale-[0.99] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-cta/25 disabled:opacity-50 disabled:active:scale-100 sm:px-6";
 
 /**
  * The step's footer: Back on the left, a short reassurance, the primary action
@@ -185,13 +193,13 @@ export function ActionBar({
   children: ReactNode;
 }) {
   return (
-    <div className="sticky bottom-0 z-20 -mx-5 mt-10 border-t border-border/70 bg-background/90 px-5 py-4 backdrop-blur-md sm:mx-0 sm:px-0">
+    <div className="sticky bottom-0 z-20 -mx-5 mt-10 border-t border-ink/[0.07] bg-white px-5 py-4 sm:mx-0 sm:px-0">
       <div className="flex items-center gap-3">
         {onBack && (
           <button
             type="button"
             onClick={onBack}
-            className="inline-flex h-11 shrink-0 items-center gap-1.5 rounded-xl px-3 text-sm font-semibold text-muted-foreground transition-colors hover:bg-secondary hover:text-ink"
+            className="inline-flex h-11 shrink-0 items-center gap-1.5 rounded-lg px-3 text-sm font-semibold text-muted-foreground transition-colors hover:bg-ink/[0.04] hover:text-ink"
           >
             <ArrowLeft className="h-4 w-4" />
             Back

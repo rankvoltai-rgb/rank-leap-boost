@@ -151,18 +151,19 @@
      it — white, tinted, deep blue, ink — is an edit to these eight lines and
      nothing else. The rail used to be a #1877f2 field, where white text sat
      at 4.2:1, under AA, and the brand colour meant nothing because every
-     pixel was it. White chrome inverts that: the rail recedes to near-
-     invisible and the blue is spent once, on the page you're on. */
-  --nav: var(--card);
+     pixel was it. Since 2026-10-18 it matches the landing page's replica of
+     the app: a soft grey rail ruled off by a hairline, with the current page
+     held in a soft blue key rather than a solid fill. */
+  --nav: color-mix(in oklab, var(--surface) 55%, white);
   --nav-fg: var(--ink);
   /* Idle items: short of full ink, so the current page is the only thing at
      full strength, but still 10:1 — a navigation label is not fine print. */
   --nav-fg-idle: oklch(0.38 0.02 255);
   --nav-muted: var(--muted-foreground);
-  --nav-hover: var(--secondary);
-  --nav-line: var(--border);
+  --nav-hover: color-mix(in oklab, var(--ink) 4.5%, var(--nav));
+  --nav-line: color-mix(in oklab, var(--ink) 7%, transparent);
   --nav-accent: var(--brand-blue);
-  --nav-key-fg: oklch(1 0 0);
+  --nav-key-fg: var(--cta);
   /* Near-black hero field — softer than #000 under large type. */
   --hero-black: #0a0a0b;
   /* Opaque raised surfaces on the black field (cards, then insets within
@@ -737,8 +738,10 @@
 /* The current item: the brand blue, the one saturated thing on the rail,
    sitting a hair above it. */
 @utility nav-key {
-  background-color: var(--nav-accent);
-  box-shadow: 0 1px 2px color-mix(in oklab, var(--ink) 20%, transparent);
+  background-color: var(--cta-soft);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in oklab, var(--cta) 16%, transparent),
+    0 1px 2px color-mix(in oklab, var(--ink) 5%, transparent);
 }
 
 /* The bar on the rail's edge, with the bloom that makes it read as lit rather

@@ -47,7 +47,7 @@ export function NextStepCard({
       <div className="flex flex-col gap-6 bg-[image:var(--gradient-surface)] p-6 sm:p-7 lg:flex-row lg:items-center">
         <div className="min-w-0 flex-1">
           <p className="text-xs font-semibold uppercase tracking-[0.12em] text-cta">{eyebrow}</p>
-          <h2 className="font-display mt-2 text-xl font-semibold tracking-tight text-ink sm:text-2xl">
+          <h2 className="font-display mt-2 text-xl font-medium tracking-[-0.025em] text-ink sm:text-2xl">
             {title}
           </h2>
           {body && <p className="mt-1.5 max-w-xl text-sm text-muted-foreground">{body}</p>}

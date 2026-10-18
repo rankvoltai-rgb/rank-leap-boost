@@ -91,7 +91,7 @@ function LogoTile({
         onClick={() => inputRef.current?.click()}
         disabled={busy}
         aria-label={logoUrl ? "Replace logo" : "Add logo"}
-        className="group relative flex h-16 w-16 items-center justify-center overflow-hidden rounded-2xl border border-border bg-surface transition-shadow hover:shadow-2 focus-visible:ring-2 focus-visible:ring-volt/30 focus-visible:outline-none"
+        className="group relative flex h-16 w-16 items-center justify-center overflow-hidden rounded-xl border border-ink/[0.08] bg-surface transition-shadow hover:shadow-2 focus-visible:ring-2 focus-visible:ring-cta/30 focus-visible:outline-none"
       >
         {busy ? (
           <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
@@ -115,7 +115,7 @@ function LogoTile({
           type="button"
           onClick={onClear}
           aria-label="Remove logo"
-          className="absolute -right-1.5 -top-1.5 flex h-5 w-5 items-center justify-center rounded-full border border-border bg-card text-muted-foreground shadow-1 transition-colors hover:text-destructive"
+          className="absolute -right-1.5 -top-1.5 flex h-5 w-5 items-center justify-center rounded-full border border-ink/[0.08] bg-card text-muted-foreground shadow-[0_1px_2px_rgba(16,24,40,0.04)] transition-colors hover:text-destructive"
         >
           <X className="h-3 w-3" />
         </button>
@@ -236,7 +236,7 @@ export function Part1Profile({
       <label htmlFor="onboarding-url" className="mb-2 block text-sm font-medium text-ink">
         Website
       </label>
-      <div className="flex h-12 items-center gap-2.5 rounded-xl border border-border bg-card pl-3.5 pr-1.5 shadow-1 transition-[border-color,box-shadow] focus-within:border-volt focus-within:ring-2 focus-within:ring-volt/15">
+      <div className="flex h-12 items-center gap-2.5 rounded-lg border border-ink/[0.1] bg-white pl-3.5 pr-1.5 shadow-[0_1px_2px_rgba(16,24,40,0.04)] transition-[border-color,box-shadow] hover:border-ink/[0.16] focus-within:border-cta/50 focus-within:shadow-[0_0_0_4px_color-mix(in_oklab,var(--cta)_12%,transparent)]">
         <Globe className="h-4 w-4 shrink-0 text-muted-foreground" />
         <input
           id="onboarding-url"
@@ -267,7 +267,7 @@ export function Part1Profile({
         )}
       </div>
 
-      <div className="mt-6 rounded-2xl border border-border bg-card shadow-1">
+      <div className="mt-6 rounded-xl border border-ink/[0.08] bg-card shadow-[0_1px_2px_rgba(16,24,40,0.04)]">
         <div className="flex items-center gap-4 p-5">
           <LogoTile
             logoUrl={value.logoUrl}
@@ -296,7 +296,7 @@ export function Part1Profile({
           </div>
         </div>
 
-        <div className="border-t border-border px-5 pb-4 pt-4">
+        <div className="border-t border-ink/[0.08] px-5 pb-4 pt-4">
           <div className="flex items-baseline justify-between gap-3">
             <label htmlFor="onboarding-pitch" className="text-xs font-medium text-muted-foreground">
               What you do

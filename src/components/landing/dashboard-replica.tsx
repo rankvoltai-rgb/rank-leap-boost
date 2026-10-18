@@ -180,7 +180,7 @@ export function DashboardReplica() {
       className="flex overflow-hidden rounded-xl bg-white text-left shadow-[0_2px_4px_rgba(4,24,72,0.08),0_32px_80px_-24px_rgba(4,24,72,0.55)] ring-1 ring-black/5"
     >
       {/* Sidebar — the app's own navigation, Overview selected. */}
-      <aside className="hidden w-52 shrink-0 flex-col border-r border-ink/[0.06] bg-[color-mix(in_oklab,var(--surface)_70%,white)] p-3 md:flex lg:w-56">
+      <aside className="hidden w-52 shrink-0 flex-col border-r border-ink/[0.06] bg-[color-mix(in_oklab,var(--surface)_55%,white)] p-3 md:flex lg:w-56">
         <div className="flex items-center justify-between px-1.5 pb-4 pt-1">
           <Mark className="h-5 w-5 text-brand-blue" />
           <span className="flex items-center gap-1 rounded-md border border-ink/[0.08] bg-white px-2 py-0.5 text-[0.68rem] font-medium text-ink">
@@ -202,7 +202,7 @@ export function DashboardReplica() {
                     className={cn(
                       "flex items-center gap-2.5 rounded-lg px-2 py-1.5 text-[0.78rem] font-medium",
                       active
-                        ? "bg-white text-ink shadow-[0_1px_2px_rgba(16,24,40,0.06)] ring-1 ring-ink/[0.06]"
+                        ? "bg-cta-soft font-semibold text-cta shadow-[inset_0_0_0_1px_color-mix(in_oklab,var(--cta)_16%,transparent)]"
                         : "text-ink/70",
                     )}
                   >
