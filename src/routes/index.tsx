@@ -80,8 +80,8 @@ function Index() {
   return (
     // Pure white, like Rankaria: the page frame's hairlines are drawn for it.
     <div className="min-h-screen bg-white">
-      {/* White bar on the landing page, so its rails run on into the hero. */}
-      <Navbar tone="light" />
+      {/* Framed: the bar's rails run on into the hero's. */}
+      <Navbar framed />
       <main>
         <Hero />
         <DashboardShowcase />

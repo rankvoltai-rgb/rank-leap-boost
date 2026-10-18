@@ -31,7 +31,7 @@ const ENGINES_IN_ORDER = [...enginesInTier("frontier"), ...enginesInTier("more")
 
 function GroupLabel({ children }: { children: ReactNode }) {
   return (
-    <p className="px-2 pb-1 pt-4 text-[0.65rem] font-semibold uppercase tracking-[0.16em] text-white/65 first:pt-1">
+    <p className="px-2 pb-1 pt-4 text-[0.65rem] font-semibold uppercase tracking-[0.16em] text-muted-foreground/85 first:pt-1">
       {children}
     </p>
   );
@@ -39,7 +39,7 @@ function GroupLabel({ children }: { children: ReactNode }) {
 
 function IconTile({ icon: Icon }: { icon: LucideIcon }) {
   return (
-    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-white/10 text-white ring-1 ring-inset ring-white/20">
+    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-white text-ink/70 shadow-[0_1px_2px_rgba(16,24,40,0.05)] ring-1 ring-inset ring-ink/[0.08]">
       <Icon className="h-4 w-4" />
     </span>
   );
@@ -59,12 +59,12 @@ function Row({
   return (
     <NavLink
       target={target}
-      className="flex min-h-11 items-center gap-3 rounded-xl px-2 py-1.5 text-[0.9375rem] font-medium text-white transition-colors hover:bg-white/10 active:bg-white/15 data-[status=active]:bg-white/10"
+      className="flex min-h-11 items-center gap-3 rounded-lg px-2 py-1.5 text-[0.9375rem] font-medium text-ink transition-colors hover:bg-ink/[0.035] active:bg-ink/[0.06] data-[status=active]:bg-cta-soft data-[status=active]:text-cta"
     >
       {icon}
       <span className={meta ? "shrink-0" : "min-w-0 truncate"}>{children}</span>
       {meta && (
-        <span className="ml-auto min-w-0 truncate pl-2 text-right text-xs text-white/65">
+        <span className="ml-auto min-w-0 truncate pl-2 text-right text-xs text-muted-foreground">
           {meta}
         </span>
       )}
@@ -76,7 +76,7 @@ function MoreRow({ to, children }: { to: string; children: ReactNode }) {
   return (
     <Link
       to={to}
-      className="mt-1 flex min-h-11 items-center gap-1.5 rounded-xl px-2 text-[0.9375rem] font-semibold text-white hover:bg-white/10 active:bg-white/15"
+      className="mt-1 flex min-h-11 items-center gap-1.5 rounded-lg px-2 text-[0.9375rem] font-semibold text-cta hover:bg-cta-soft active:bg-cta-soft"
     >
       {children}
       <ArrowRight className="h-4 w-4" />
@@ -100,18 +100,18 @@ function Section({
   children: ReactNode;
 }) {
   return (
-    <div className="border-b border-white/15">
+    <div className="border-b border-ink/[0.07]">
       <button
         type="button"
         onClick={onToggle}
         aria-expanded={open}
         aria-controls={`mobile-nav-${id}`}
-        className="flex min-h-14 w-full items-center justify-between text-base font-semibold text-white"
+        className="flex min-h-14 w-full items-center justify-between text-base font-semibold text-ink"
       >
         {label}
         <ChevronDown
           className={cn(
-            "h-5 w-5 text-white/70 transition-transform duration-300 motion-reduce:transition-none",
+            "h-5 w-5 text-muted-foreground transition-transform duration-300 motion-reduce:transition-none",
             open && "rotate-180",
           )}
         />
@@ -159,7 +159,7 @@ export function MobileNav({ links, onClose }: { links: readonly TopLink[]; onClo
       id="mobile-nav"
       // Any link closes the sheet, including hash links to the page you're on.
       onClick={(e) => (e.target as HTMLElement).closest("a") && onClose()}
-      className="fixed inset-x-0 bottom-0 top-16 z-40 flex flex-col border-t border-white/15 bg-brand-blue duration-200 animate-in fade-in slide-in-from-top-1 motion-reduce:animate-none md:hidden"
+      className="fixed inset-x-0 bottom-0 top-16 z-40 flex flex-col border-t border-ink/[0.07] bg-white duration-200 animate-in fade-in slide-in-from-top-1 motion-reduce:animate-none md:hidden"
     >
       <nav aria-label="Main" className="flex-1 overflow-y-auto overscroll-contain px-5">
         <Section
@@ -208,7 +208,7 @@ export function MobileNav({ links, onClose }: { links: readonly TopLink[]; onClo
                     key={p.id}
                     id={p.id}
                     title={false}
-                    className="h-6 w-6 ring-white/25"
+                    className="h-6 w-6 ring-ink/[0.08]"
                   />
                 ))}
               </span>
@@ -245,9 +245,9 @@ export function MobileNav({ links, onClose }: { links: readonly TopLink[]; onClo
               icon={
                 // Fetched by domain, so only once the section is opened.
                 section === "resources" ? (
-                  <CompetitorMark competitor={c} onDark className="h-8 w-8 text-xs" />
+                  <CompetitorMark competitor={c} className="h-8 w-8 text-xs" />
                 ) : (
-                  <span aria-hidden className="h-8 w-8 shrink-0 rounded-[26%] bg-white/15" />
+                  <span aria-hidden className="h-8 w-8 shrink-0 rounded-[26%] bg-ink/[0.06]" />
                 )
               }
             >
@@ -263,9 +263,9 @@ export function MobileNav({ links, onClose }: { links: readonly TopLink[]; onClo
                   key={e.slug}
                   target={{ to: "/ai-seo/$engine", params: { engine: e.slug } }}
                   aria-label={`${e.shortName} SEO guide`}
-                  className="inline-flex h-9 items-center gap-2 rounded-full bg-white/10 py-1 pl-1 pr-3.5 text-sm font-medium text-white ring-1 ring-inset ring-white/20 hover:bg-white/20 active:bg-white/25"
+                  className="inline-flex h-9 items-center gap-2 rounded-lg bg-white py-1 pl-1 pr-3 text-sm font-medium text-ink ring-1 ring-inset ring-ink/[0.1] hover:bg-ink/[0.03] active:bg-ink/[0.06]"
                 >
-                  <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white">
+                  <span className="flex h-7 w-7 items-center justify-center rounded-md bg-white ring-1 ring-inset ring-ink/[0.06]">
                     <Mark className="h-3.5 w-3.5" />
                   </span>
                   {e.shortName}
@@ -281,22 +281,22 @@ export function MobileNav({ links, onClose }: { links: readonly TopLink[]; onClo
             key={l.label}
             to={l.to}
             hash={l.hash}
-            className="flex min-h-14 items-center border-b border-white/15 text-base font-semibold text-white last:border-b-0"
+            className="flex min-h-14 items-center border-b border-ink/[0.07] text-base font-semibold text-ink last:border-b-0"
           >
             {l.label}
           </Link>
         ))}
       </nav>
-      <div className="grid grid-cols-2 gap-2 border-t border-white/15 px-5 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3">
+      <div className="grid grid-cols-2 gap-2 border-t border-ink/[0.07] px-5 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3">
         <a
           href="/auth"
-          className="flex h-11 items-center justify-center rounded-xl border border-white/30 bg-white/10 text-sm font-semibold text-white"
+          className="flex h-11 items-center justify-center rounded-lg border border-ink/[0.1] bg-white text-sm font-semibold text-ink shadow-[0_1px_2px_rgba(16,24,40,0.04)]"
         >
           Sign In
         </a>
         <a
           href="/auth"
-          className="flex h-11 items-center justify-center rounded-xl bg-white text-sm font-semibold text-brand-blue shadow-sm"
+          className="flex h-11 items-center justify-center rounded-lg bg-cta text-sm font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.16),0_1px_2px_rgba(16,24,40,0.14)]"
         >
           Get Started Free
         </a>

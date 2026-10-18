@@ -3,9 +3,10 @@
  * mobile sheet shares with them. The shell (triggers, hover intent, the
  * morphing panel behind these) lives in Navbar.tsx.
  *
- * Every menu is two-tone: primary links sit on the panel surface, and the
- * secondary zone (a right rail, a footer band) sits on a deeper tint of the
- * same blue, so the eye lands on the product first and the extras second.
+ * Every menu is two-tone: primary links sit on the white panel, and the
+ * secondary zone (a right rail, a footer band) sits on a soft grey, the
+ * landing page's panel tone, so the eye lands on the product first and the
+ * extras second. Hover and the page you're on pick up the soft blue key.
  */
 import { useState, type ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
@@ -32,7 +33,7 @@ import { TOOL_ICONS } from "@/components/tools/icons";
 import { ENGINE_MARKS } from "./ai-logos";
 
 /** The secondary zone inside a menu: rails and footer bands. */
-const MENU_RAIL = "bg-brand-blue-deep/35";
+const MENU_RAIL = "bg-[color-mix(in_oklab,var(--surface)_55%,white)]";
 
 /* ---------- Primitives ---------- */
 
@@ -65,12 +66,12 @@ export function NavLink({
 }
 
 const FOCUS_RING =
-  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80 focus-visible:ring-offset-0";
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cta/40 focus-visible:ring-offset-0";
 
 function ColumnLabel({ children, action }: { children: ReactNode; action?: ReactNode }) {
   return (
     <div className="flex h-7 items-center justify-between px-2.5">
-      <p className="text-[0.65rem] font-semibold uppercase tracking-[0.16em] text-white/70">
+      <p className="text-[0.65rem] font-semibold uppercase tracking-[0.16em] text-muted-foreground/85">
         {children}
       </p>
       {action}
@@ -84,7 +85,7 @@ function LabelLink({ to, children }: { to: string; children: ReactNode }) {
     <Link
       to={to}
       className={cn(
-        "group -mr-1 inline-flex items-center gap-1 rounded-md px-1 text-xs font-semibold text-white/85 transition-colors hover:text-white",
+        "group -mr-1 inline-flex items-center gap-1 rounded-md px-1 text-xs font-semibold text-cta transition-colors hover:text-cta-hover",
         FOCUS_RING,
       )}
     >
@@ -95,28 +96,30 @@ function LabelLink({ to, children }: { to: string; children: ReactNode }) {
 }
 
 /** The primary row: icon tile, name, one line of what it does. The tile turns
- *  white on hover and on the page you're already on. */
+ *  soft blue on hover and on the page you're already on. */
 function MenuItem({ icon: Icon, title, description, target }: NavEntry) {
   return (
     <NavLink
       target={target}
       className={cn(
-        "group flex items-start gap-3 rounded-xl p-2.5 transition-colors hover:bg-white/10 data-[status=active]:bg-white/10",
+        "group flex items-start gap-3 rounded-lg p-2.5 transition-colors hover:bg-ink/[0.035] data-[status=active]:bg-ink/[0.035]",
         FOCUS_RING,
       )}
     >
-      <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] bg-white/10 text-white ring-1 ring-inset ring-white/20 transition-colors group-hover:bg-white group-hover:text-brand-blue group-hover:ring-white group-focus-visible:bg-white group-focus-visible:text-brand-blue group-data-[status=active]:bg-white group-data-[status=active]:text-brand-blue">
+      <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white text-ink/70 shadow-[0_1px_2px_rgba(16,24,40,0.05)] ring-1 ring-inset ring-ink/[0.08] transition-colors group-hover:bg-cta-soft group-hover:text-cta group-hover:ring-cta/20 group-focus-visible:bg-cta-soft group-focus-visible:text-cta group-data-[status=active]:bg-cta-soft group-data-[status=active]:text-cta group-data-[status=active]:ring-cta/20">
         <Icon className="h-4 w-4" />
       </span>
       <span className="min-w-0">
-        <span className="flex items-center gap-1 text-sm font-semibold text-white">
+        <span className="flex items-center gap-1 text-sm font-semibold text-ink">
           {title}
           <ArrowRight
             aria-hidden
             className="h-3.5 w-3.5 -translate-x-1 opacity-0 transition-all duration-200 group-hover:translate-x-0 group-hover:opacity-100 group-focus-visible:translate-x-0 group-focus-visible:opacity-100 motion-reduce:transition-none"
           />
         </span>
-        <span className="mt-0.5 block text-xs leading-snug text-white/80">{description}</span>
+        <span className="mt-0.5 block text-xs leading-snug text-muted-foreground">
+          {description}
+        </span>
       </span>
     </NavLink>
   );
@@ -138,15 +141,15 @@ function CompactItem({
     <NavLink
       target={target}
       className={cn(
-        "group flex items-center gap-2.5 rounded-lg px-2.5 py-1.5 transition-colors hover:bg-white/10 data-[status=active]:bg-white/10",
+        "group flex items-center gap-2.5 rounded-lg px-2.5 py-1.5 transition-colors hover:bg-ink/[0.035] data-[status=active]:bg-ink/[0.035]",
         FOCUS_RING,
       )}
     >
       {icon}
-      <span className="shrink-0 text-sm font-semibold text-white">{title}</span>
+      <span className="shrink-0 text-sm font-semibold text-ink">{title}</span>
       {/* The meta gives way first: the destination's name never truncates. */}
       {meta && (
-        <span className="ml-auto min-w-0 truncate pl-2 text-right text-xs text-white/65">
+        <span className="ml-auto min-w-0 truncate pl-2 text-right text-xs text-muted-foreground">
           {meta}
         </span>
       )}
@@ -167,7 +170,7 @@ function MoreLink({
     <Link
       to={to}
       className={cn(
-        "group inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-sm font-semibold text-white transition-colors hover:bg-white/10",
+        "group inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-sm font-semibold text-cta transition-colors hover:bg-cta-soft",
         FOCUS_RING,
         className,
       )}
@@ -182,7 +185,7 @@ function MenuFooter({ children }: { children: ReactNode }) {
   return (
     <div
       className={cn(
-        "flex items-center justify-between gap-4 border-t border-white/15 px-3 py-2.5",
+        "flex items-center justify-between gap-4 border-t border-ink/[0.07] px-3 py-2.5",
         MENU_RAIL,
       )}
     >
@@ -197,24 +200,24 @@ function MenuFooter({ children }: { children: ReactNode }) {
  *  the pitch, so the card needs no paragraph. */
 function ScoreCard() {
   return (
-    <div className="mt-auto hidden rounded-xl bg-white/[0.08] p-3.5 ring-1 ring-inset ring-white/15 lg:block">
+    <div className="mt-auto hidden rounded-xl bg-white p-3.5 shadow-[0_1px_2px_rgba(16,24,40,0.05)] ring-1 ring-inset ring-ink/[0.08] lg:block">
       <div className="flex items-center justify-between gap-2">
-        <p className="text-sm font-semibold text-white">Score your site</p>
-        <span className="shrink-0 rounded-full bg-white/10 px-1.5 py-0.5 text-[0.6rem] font-medium uppercase tracking-[0.14em] text-white/70">
+        <p className="text-sm font-semibold text-ink">Score your site</p>
+        <span className="shrink-0 rounded-md bg-ink/[0.05] px-1.5 py-0.5 text-[0.6rem] font-medium uppercase tracking-[0.14em] text-muted-foreground">
           Sample
         </span>
       </div>
       <div className="mt-3 flex items-center justify-between gap-2 text-xs">
-        <span className="truncate text-white/80">yoursite.com · GEO Score</span>
-        <span className="shrink-0 font-semibold text-white">87 · A</span>
+        <span className="truncate text-muted-foreground">yoursite.com · GEO Score</span>
+        <span className="shrink-0 font-semibold text-ink">87 · A</span>
       </div>
-      <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-white/20">
-        <div className="h-full w-[87%] rounded-full bg-white" />
+      <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-ink/[0.06]">
+        <div className="h-full w-[87%] rounded-full bg-cta" />
       </div>
       <a
         href="/auth"
         className={cn(
-          "group mt-3.5 flex items-center justify-center gap-1.5 rounded-lg bg-white px-3 py-2 text-sm font-semibold text-brand-blue shadow-sm transition-colors hover:bg-white/90",
+          "group mt-3.5 flex items-center justify-center gap-1.5 rounded-lg bg-cta px-3 py-2 text-sm font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.16),0_1px_2px_rgba(16,24,40,0.14)] transition-colors hover:bg-cta-hover",
           FOCUS_RING,
         )}
       >
@@ -235,14 +238,14 @@ function PersonaItem({ persona }: { persona: Persona }) {
       aria-label={`Rankbox for ${persona.nameLower}`}
       title={persona.name}
       className={cn(
-        "group flex min-w-0 items-center gap-1.5 rounded-lg px-2 py-1.5 transition-colors hover:bg-white/10 data-[status=active]:bg-white/10",
+        "group flex min-w-0 items-center gap-1.5 rounded-lg px-2 py-1.5 transition-colors hover:bg-ink/[0.04] data-[status=active]:bg-ink/[0.04]",
         FOCUS_RING,
       )}
     >
-      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-white/10 text-white ring-1 ring-inset ring-white/20 transition-colors group-hover:bg-white group-hover:text-brand-blue group-data-[status=active]:bg-white group-data-[status=active]:text-brand-blue">
+      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-white text-ink/70 ring-1 ring-inset ring-ink/[0.08] transition-colors group-hover:bg-cta-soft group-hover:text-cta group-hover:ring-cta/20 group-data-[status=active]:bg-cta-soft group-data-[status=active]:text-cta">
         <Icon className="h-3 w-3" />
       </span>
-      <span className="truncate text-[0.8rem] font-semibold text-white">{persona.shortName}</span>
+      <span className="truncate text-[0.8rem] font-semibold text-ink">{persona.shortName}</span>
     </NavLink>
   );
 }
@@ -269,7 +272,7 @@ export function FeaturesMenu() {
         </div>
         <div
           className={cn(
-            "flex flex-col gap-0.5 border-t border-white/15 p-3 lg:border-l lg:border-t-0",
+            "flex flex-col gap-0.5 border-t border-ink/[0.07] p-3 lg:border-l lg:border-t-0",
             MENU_RAIL,
           )}
         >
@@ -281,7 +284,7 @@ export function FeaturesMenu() {
           <div className="mb-3 grid grid-cols-2 gap-x-0.5">
             {PERSONA_GROUPS.map((g) => (
               <div key={g.id} className="min-w-0">
-                <p className="px-2 pb-1 pt-1.5 text-[0.6rem] font-medium uppercase tracking-[0.14em] text-white/55">
+                <p className="px-2 pb-1 pt-1.5 text-[0.6rem] font-medium uppercase tracking-[0.14em] text-muted-foreground/75">
                   {g.label}
                 </p>
                 {personasIn(g.id).map((p) => (
@@ -297,7 +300,7 @@ export function FeaturesMenu() {
         <Link
           to="/integrations"
           className={cn(
-            "group flex min-w-0 items-center gap-3 rounded-lg px-2.5 py-1.5 transition-colors hover:bg-white/10",
+            "group flex min-w-0 items-center gap-3 rounded-lg px-2.5 py-1.5 transition-colors hover:bg-ink/[0.04]",
             FOCUS_RING,
           )}
         >
@@ -307,12 +310,12 @@ export function FeaturesMenu() {
                 key={p.id}
                 id={p.id}
                 title={false}
-                className="h-5 w-5 ring-white/25 transition-transform duration-200 group-hover:-translate-y-0.5 motion-reduce:transition-none"
+                className="h-5 w-5 ring-ink/[0.08] transition-transform duration-200 group-hover:-translate-y-0.5 motion-reduce:transition-none"
               />
             ))}
           </span>
-          <span className="shrink-0 text-sm font-semibold text-white">Integrations</span>
-          <span className="hidden truncate text-xs text-white/75 lg:inline">
+          <span className="shrink-0 text-sm font-semibold text-ink">Integrations</span>
+          <span className="hidden truncate text-xs text-muted-foreground lg:inline">
             Publish to {PUBLISH_PLATFORMS.map((p) => p.name).join(", ")}, or any site by API
           </span>
         </Link>
@@ -338,8 +341,8 @@ function MoreEngines() {
         className={cn(
           "flex h-7 items-center truncate",
           named
-            ? "text-xs font-semibold text-white"
-            : "text-[0.65rem] font-semibold uppercase tracking-[0.16em] text-white/70",
+            ? "text-xs font-semibold text-ink"
+            : "text-[0.65rem] font-semibold uppercase tracking-[0.16em] text-muted-foreground/85",
         )}
       >
         {named ? `${named.shortName} SEO · ${named.vendor}` : TIERS.more.label}
@@ -355,9 +358,9 @@ function MoreEngines() {
               onPointerEnter={() => setNamed(e)}
               onFocus={() => setNamed(e)}
               className={cn(
-                "group flex aspect-square items-center justify-center rounded-lg bg-white shadow-sm transition-transform duration-200 hover:-translate-y-0.5 motion-reduce:transition-none",
+                "group flex aspect-square items-center justify-center rounded-lg bg-white shadow-[0_1px_2px_rgba(16,24,40,0.05)] ring-1 ring-inset ring-ink/[0.08] transition-transform duration-200 hover:-translate-y-0.5 motion-reduce:transition-none",
                 FOCUS_RING,
-                "focus-visible:ring-offset-2 focus-visible:ring-offset-brand-blue-deep",
+                "focus-visible:ring-offset-2 focus-visible:ring-offset-white",
               )}
             >
               <Mark className="h-4 w-4" />
@@ -389,15 +392,15 @@ export function ResourcesMenu({ primed }: { primed: boolean }) {
           {COMPARE_LINKS.map((l) => (
             <MenuItem key={l.title} {...l} />
           ))}
-          <div className="mx-2.5 my-1.5 h-px bg-white/15" />
+          <div className="mx-2.5 my-1.5 h-px bg-ink/[0.07]" />
           {NAV_COMPETITORS.map((c) => (
             <CompactItem
               key={c.slug}
               icon={
                 primed ? (
-                  <CompetitorMark competitor={c} onDark className="h-6 w-6 text-[0.6rem]" />
+                  <CompetitorMark competitor={c} className="h-6 w-6 text-[0.6rem]" />
                 ) : (
-                  <span aria-hidden className="h-6 w-6 shrink-0 rounded-[26%] bg-white/15" />
+                  <span aria-hidden className="h-6 w-6 shrink-0 rounded-[26%] bg-ink/[0.06]" />
                 )
               }
               title={`vs ${c.name}`}
@@ -405,7 +408,7 @@ export function ResourcesMenu({ primed }: { primed: boolean }) {
             />
           ))}
         </div>
-        <div className={cn("flex flex-col border-l border-white/15 p-3", MENU_RAIL)}>
+        <div className={cn("flex flex-col border-l border-ink/[0.07] p-3", MENU_RAIL)}>
           <ColumnLabel action={<LabelLink to="/ai-seo">Compare all</LabelLink>}>
             AI SEO guides
           </ColumnLabel>
@@ -415,7 +418,7 @@ export function ResourcesMenu({ primed }: { primed: boolean }) {
               <CompactItem
                 key={e.slug}
                 icon={
-                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-white shadow-sm transition-transform duration-200 group-hover:scale-105 motion-reduce:transition-none">
+                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-white shadow-[0_1px_2px_rgba(16,24,40,0.05)] ring-1 ring-inset ring-ink/[0.08] transition-transform duration-200 group-hover:scale-105 motion-reduce:transition-none">
                     <Mark className="h-3.5 w-3.5" />
                   </span>
                 }
@@ -431,10 +434,10 @@ export function ResourcesMenu({ primed }: { primed: boolean }) {
       <MenuFooter>
         <div className="flex min-w-0 items-center gap-2 px-2.5">
           {/* Below lg the path alone fits, and reads without its heading. */}
-          <span className="hidden shrink-0 text-xs font-semibold text-white lg:inline">
+          <span className="hidden shrink-0 text-xs font-semibold text-ink lg:inline">
             {NAV_TOOLKIT.title}
           </span>
-          <span aria-hidden className="hidden text-white/40 lg:inline">
+          <span aria-hidden className="hidden text-ink/30 lg:inline">
             ·
           </span>
           <ol aria-label={NAV_TOOLKIT.title} className="flex min-w-0 items-center gap-1">
@@ -442,13 +445,13 @@ export function ResourcesMenu({ primed }: { primed: boolean }) {
               const Icon = TOOL_ICONS[t.icon];
               return (
                 <li key={t.slug} className="flex min-w-0 items-center gap-1">
-                  {i > 0 && <ArrowRight aria-hidden className="h-3 w-3 shrink-0 text-white/40" />}
+                  {i > 0 && <ArrowRight aria-hidden className="h-3 w-3 shrink-0 text-ink/30" />}
                   <Link
                     to="/tools/$slug"
                     params={{ slug: t.slug }}
                     title={t.name}
                     className={cn(
-                      "flex min-w-0 items-center gap-1.5 rounded-full bg-white/10 py-1 pl-1.5 pr-2.5 text-xs font-medium text-white ring-1 ring-inset ring-white/15 transition-colors hover:bg-white hover:text-brand-blue",
+                      "flex min-w-0 items-center gap-1.5 rounded-md bg-white py-1 pl-1.5 pr-2.5 text-xs font-medium text-ink ring-1 ring-inset ring-ink/[0.1] transition-colors hover:bg-cta-soft hover:text-cta hover:ring-cta/20",
                       FOCUS_RING,
                     )}
                   >

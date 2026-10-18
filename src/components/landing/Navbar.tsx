@@ -42,9 +42,9 @@ const CLOSE_DELAY = 200;
    behind the menus and the hairline over them share it. */
 const STAGE = "absolute inset-x-0 top-[calc(100%+0.5rem)] mx-auto";
 
-/* The panel's surface: the brand blue taken a step deeper, so white text on it
-   clears AA and the open menu separates from the hero it opens over. */
-const MENU_SURFACE = "bg-[color-mix(in_oklab,var(--brand-blue)_72%,var(--brand-blue-deep))]";
+/* The panel's surface: white, ruled off from the page by a hairline and a
+   soft shadow, like the landing page's cards. */
+const MENU_SURFACE = "bg-white";
 
 const EASE = "ease-[cubic-bezier(0.22,1,0.36,1)]";
 
@@ -71,12 +71,12 @@ const TONES = {
   },
   light: {
     header: "border-b border-ink/[0.07] bg-white",
-    nav: "border-x border-ink/[0.07]",
+    nav: "",
     item: "text-ink/65 hover:text-ink focus-visible:ring-cta/40",
     itemOn: "text-ink",
     dot: "bg-ink",
     pill: "bg-ink/[0.045]",
-    scrim: "bg-ink/[0.08] backdrop-blur-[3px]",
+    scrim: "bg-ink/[0.1] backdrop-blur-[2px]",
     signIn:
       "rounded-lg border border-ink/[0.1] bg-white text-ink shadow-[0_1px_2px_rgba(16,24,40,0.04)] hover:border-ink/[0.16] hover:bg-ink/[0.02]",
     start:
@@ -131,7 +131,13 @@ interface Pill {
   slide: boolean;
 }
 
-export function Navbar({ tone = "blue" }: { tone?: NavTone }) {
+/**
+ * @param tone   White everywhere since 2026-10-18; "blue" is kept for a page
+ *               that ever wants the old bar back.
+ * @param framed Draw the landing page's hairline rails on the bar, so they run
+ *               on into a page laid out in that frame.
+ */
+export function Navbar({ tone = "light", framed = false }: { tone?: NavTone; framed?: boolean }) {
   const t = TONES[tone];
   const topItem = cn(TOP_ITEM_BASE, t.item);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
@@ -311,6 +317,7 @@ export function Navbar({ tone = "blue" }: { tone?: NavTone }) {
           "relative mx-auto flex h-16 max-w-6xl items-center justify-between px-5",
           tone === "light" && "lg:px-6",
           t.nav,
+          framed && "border-x border-ink/[0.07]",
         )}
       >
         {/* The panel's surface, behind both menus: one card that reshapes
@@ -321,7 +328,7 @@ export function Navbar({ tone = "blue" }: { tone?: NavTone }) {
           className={cn(
             STAGE,
             MENU_SURFACE,
-            "pointer-events-none hidden rounded-2xl shadow-[0_28px_70px_-20px_rgba(4,24,72,0.7)] md:block",
+            "pointer-events-none hidden rounded-xl shadow-[0_1px_2px_rgba(16,24,40,0.05),0_24px_56px_-20px_rgba(16,24,40,0.28)] md:block",
             stageMotion,
           )}
         />
@@ -437,7 +444,7 @@ export function Navbar({ tone = "blue" }: { tone?: NavTone }) {
                   className={cn(
                     STAGE,
                     width,
-                    "max-h-[calc(100dvh-5.5rem)] overflow-y-auto overflow-x-hidden rounded-2xl duration-200 ease-out motion-reduce:transition-none",
+                    "max-h-[calc(100dvh-5.5rem)] overflow-y-auto overflow-x-hidden rounded-xl duration-200 ease-out motion-reduce:transition-none",
                     panelState(id),
                   )}
                 >
@@ -469,7 +476,7 @@ export function Navbar({ tone = "blue" }: { tone?: NavTone }) {
           style={stageStyle}
           className={cn(
             STAGE,
-            "pointer-events-none hidden rounded-2xl border border-white/20 shadow-[inset_0_1px_0_rgba(255,255,255,0.14)] md:block",
+            "pointer-events-none hidden rounded-xl border border-ink/[0.08] md:block",
             stageMotion,
           )}
         />
