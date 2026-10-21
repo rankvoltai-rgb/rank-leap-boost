@@ -121,6 +121,23 @@ export function SectionHead({
   );
 }
 
+/**
+ * Hairline cells for any number of items. Each cell (give it CELL) draws its
+ * right and bottom edge, and the grid overhangs by a pixel so the outer edges
+ * fall under the rails and the next band's line, clipped. Unlike a `gap-px`
+ * grid, a short last row stays white instead of showing the grey fill.
+ */
+export function CellGrid({ className, children }: { className?: string; children: ReactNode }) {
+  return (
+    <div className="overflow-hidden">
+      <ul className={cn("-mb-px -mr-px grid", className)}>{children}</ul>
+    </div>
+  );
+}
+
+/** A CellGrid cell's edges. */
+export const CELL = cn("border-b border-r", LINE);
+
 /** A small hairline button, Rankaria's "Learn more". */
 export const GHOST_BUTTON =
   "inline-flex items-center gap-1.5 rounded-lg border border-ink/[0.1] bg-white px-3 py-1.5 text-[0.8rem] font-medium text-ink shadow-[0_1px_2px_rgba(16,24,40,0.04)] transition-[border-color,background-color] hover:border-ink/[0.18] hover:bg-ink/[0.02]";

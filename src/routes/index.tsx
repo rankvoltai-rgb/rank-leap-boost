@@ -21,7 +21,7 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Rankbox is the AI growth engine that researches, writes, and publishes daily articles engineered to get your brand cited by ChatGPT, Perplexity, and Google AI Overviews — and ranked on Google.",
+          "Built for founders: Rankbox researches, writes and publishes daily articles on autopilot to get you cited by ChatGPT, Perplexity and Google AI Overviews.",
       },
       { property: "og:title", content: "Rankbox — Get Found by ChatGPT, Gemini & AI Search" },
       {
@@ -31,6 +31,13 @@ export const Route = createFileRoute("/")({
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      // Without these the homepage inherits the root's older "AI Traffic on Autopilot" card.
+      { name: "twitter:title", content: "Rankbox — Get Found by ChatGPT, Gemini & AI Search" },
+      {
+        name: "twitter:description",
+        content:
+          "Daily AI-written articles engineered for AI search citations and Google rankings, fully on autopilot. Built for growth-minded founders.",
+      },
     ],
     links: [{ rel: "canonical", href: "https://rankbox.xyz/" }],
     scripts: [

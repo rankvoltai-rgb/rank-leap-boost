@@ -8,6 +8,8 @@ import { ArrowRight, Check, ChevronDown, Link2 } from "lucide-react";
 import { PixelField, UrlForm } from "@/components/landing/Hero";
 import { AI_MARKS } from "@/components/landing/ai-logos";
 import { Reveal } from "@/components/landing/shared";
+import { MarkDither } from "@/components/landing/hero-dither";
+import { Band, Spacer } from "@/components/landing/frame";
 import { AuthorMark } from "@/components/blog/PostCards";
 import type { TocEntry } from "@/lib/article-outline";
 import { TRIAL_DAYS } from "@/data/pricing";
@@ -113,7 +115,7 @@ export function TableOfContents({
   if (entries.length < 2) return null;
 
   const list = (
-    <ol className="border-l border-border">
+    <ol className="border-l border-ink/[0.08]">
       {entries.map((entry) => {
         const on = variant === "rail" && active === entry.id;
         return (
@@ -125,7 +127,7 @@ export function TableOfContents({
               className={cn(
                 "-ml-px block border-l-2 py-[0.3rem] pl-4 text-[0.82rem] leading-snug transition-colors",
                 on
-                  ? "border-volt font-semibold text-ink"
+                  ? "border-cta font-medium text-cta"
                   : "border-transparent text-muted-foreground hover:border-ink/20 hover:text-ink",
               )}
             >
@@ -139,7 +141,7 @@ export function TableOfContents({
 
   if (variant === "inline") {
     return (
-      <details className={cn("group rounded-2xl border border-border bg-card shadow-1", className)}>
+      <details className={cn("group rounded-xl border border-ink/[0.08] bg-white", className)}>
         <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-5 py-4 text-sm font-semibold text-ink [&::-webkit-details-marker]:hidden">
           <span>
             On this page
@@ -253,37 +255,34 @@ export function ShareButtons({
 
 export function RailCta() {
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-border bg-card p-5 shadow-2">
-      <div className="pointer-events-none absolute inset-0 volt-glow" aria-hidden />
-      <div className="relative">
-        <div className="flex -space-x-1.5">
-          {AI_MARKS.slice(0, 4).map(({ name, Mark }) => (
-            <span
-              key={name}
-              className="flex h-7 w-7 items-center justify-center rounded-full border border-border bg-card shadow-1"
-            >
-              <Mark className="h-3.5 w-3.5" />
-            </span>
-          ))}
-        </div>
-        <p className="mt-4 font-display text-[1.05rem] font-bold leading-snug tracking-tight text-ink">
-          Get cited by AI, on autopilot
-        </p>
-        <p className="mt-1.5 text-[0.8rem] leading-relaxed text-muted-foreground">
-          Rankbox finds your buyers' questions, publishes answer-first articles daily, and tracks
-          every citation.
-        </p>
-        <a
-          href="/auth"
-          className="group mt-5 flex items-center justify-center gap-2 rounded-xl bg-cta px-4 py-2.5 text-sm font-semibold text-white transition-all hover:-translate-y-0.5 hover:bg-cta-hover"
-        >
-          Start free trial
-          <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
-        </a>
-        <p className="mt-2.5 text-center text-[0.7rem] text-muted-foreground">
-          {TRIAL_DAYS}-day free trial · Cancel anytime
-        </p>
+    <div className="rounded-xl border border-ink/[0.08] bg-white p-5 shadow-[0_1px_2px_rgba(16,24,40,0.04),0_12px_32px_-18px_rgba(16,24,40,0.18)]">
+      <div className="flex -space-x-1">
+        {AI_MARKS.slice(0, 4).map(({ name, Mark }) => (
+          <span
+            key={name}
+            className="flex h-7 w-7 items-center justify-center rounded-md border border-ink/[0.08] bg-white"
+          >
+            <Mark className="h-3.5 w-3.5" />
+          </span>
+        ))}
       </div>
+      <p className="mt-4 font-display text-[1.05rem] font-medium leading-snug tracking-[-0.015em] text-ink">
+        Get cited by AI, on autopilot
+      </p>
+      <p className="mt-1.5 text-[0.8rem] leading-relaxed text-muted-foreground">
+        Rankbox finds your buyers' questions, publishes answer-first articles daily, and tracks
+        every citation.
+      </p>
+      <a
+        href="/auth"
+        className="group mt-5 flex h-10 items-center justify-center gap-2 rounded-lg bg-cta px-4 text-sm font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.16),0_1px_2px_rgba(16,24,40,0.14)] transition-colors hover:bg-cta-hover"
+      >
+        Start free trial
+        <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+      </a>
+      <p className="mt-2.5 text-center text-[0.7rem] text-muted-foreground">
+        {TRIAL_DAYS}-day free trial · Cancel anytime
+      </p>
     </div>
   );
 }
@@ -296,7 +295,7 @@ const TEAM_BIO =
 export function AuthorCard({ author }: { author: string }) {
   const team = isTeamAuthor(author);
   return (
-    <div className="flex gap-4 rounded-2xl border border-border bg-card p-5 shadow-1 sm:p-6">
+    <div className="flex gap-4 rounded-xl border border-ink/[0.08] bg-white p-5 sm:p-6">
       <AuthorMark className="h-12 w-12" />
       <div className="min-w-0">
         <p className="text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
@@ -322,8 +321,59 @@ export function AuthorCard({ author }: { author: string }) {
 
 /* ---------- closing CTA ---------- */
 
-export function BlogCta({ title = "See where AI cites you today" }: { title?: string }) {
+export function BlogCta({
+  title = "See where AI cites you today",
+  framed = false,
+}: {
+  title?: string;
+  /** The landing page's closing band: blue inside the hairline rails. */
+  framed?: boolean;
+}) {
   const [url, setUrl] = useState("");
+  if (framed) {
+    return (
+      <section aria-labelledby="blog-cta-title">
+        <Spacer />
+        <Band inner="overflow-hidden bg-cta">
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 opacity-[0.16] [mask-image:radial-gradient(ellipse_70%_80%_at_50%_45%,#000_40%,transparent_100%)]"
+          >
+            <MarkDither className="text-white" />
+          </div>
+          <Reveal className="relative mx-auto flex max-w-2xl flex-col items-center px-5 py-16 text-center sm:px-8 sm:py-20">
+            <div className="flex -space-x-1.5">
+              {AI_MARKS.map(({ name, Mark }) => (
+                <span
+                  key={name}
+                  className="flex h-9 w-9 items-center justify-center rounded-lg bg-white shadow-[0_1px_2px_rgba(4,24,72,0.2)] ring-2 ring-cta"
+                >
+                  <Mark className="h-4.5 w-4.5" />
+                </span>
+              ))}
+            </div>
+            <h2
+              id="blog-cta-title"
+              className="mt-6 text-balance font-display text-[2rem] font-medium leading-[1.1] tracking-[-0.03em] text-white sm:text-[2.6rem]"
+            >
+              {title}
+            </h2>
+            <p className="mt-4 max-w-xl text-balance text-[1rem] leading-relaxed text-white sm:text-[1.05rem]">
+              Enter your site to see how often ChatGPT, Perplexity, Gemini, and Google cite your
+              brand, and exactly what to publish next.
+            </p>
+            <div className="mt-8 flex w-full flex-col items-center gap-3">
+              <UrlForm url={url} onChange={setUrl} />
+              <p className="text-[0.82rem] text-white">
+                {TRIAL_DAYS}-day free trial · Cancel anytime
+              </p>
+            </div>
+          </Reveal>
+        </Band>
+        <Spacer closing />
+      </section>
+    );
+  }
   return (
     <section aria-labelledby="blog-cta-title" className="px-5 pb-24 pt-16 sm:pb-28 sm:pt-20">
       <Reveal className="mx-auto max-w-6xl">

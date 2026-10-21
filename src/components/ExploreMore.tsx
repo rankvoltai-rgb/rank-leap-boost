@@ -1,7 +1,8 @@
 import { Link } from "@tanstack/react-router";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Compass } from "lucide-react";
 import { crossLinks } from "@/data/link-graph";
 import { cn } from "@/lib/utils";
+import { Band, LINE, Pill, Spacer } from "@/components/landing/frame";
 
 /**
  * "Keep exploring": the links from a page into the other sections of its
@@ -20,14 +21,87 @@ export function ExploreMore({
   path,
   exclude,
   className,
+  framed = false,
 }: {
   path: string;
   exclude?: readonly string[];
   className?: string;
+  /** Drawn in the landing page's frame (hairline rails and bands). */
+  framed?: boolean;
 }) {
   const links = crossLinks(path, exclude);
   if (!links || links.cards.length + links.terms.length === 0) return null;
   const { topic, cards, terms } = links;
+  if (framed) {
+    return (
+      <section aria-labelledby="explore-title" className={className}>
+        <Spacer />
+        <Band inner="px-6 py-10 sm:px-10 lg:px-12">
+          <Pill icon={Compass}>Keep exploring</Pill>
+          <h2
+            id="explore-title"
+            className="mt-4 font-display text-[1.6rem] font-medium leading-tight tracking-[-0.025em] text-ink sm:text-[1.9rem]"
+          >
+            {topic.title}
+          </h2>
+        </Band>
+
+        {cards.length > 0 && (
+          <Band>
+            {/* Hairline cells: each draws its right and bottom edge, and the
+                grid overhangs by a pixel so the outer ones fall under the
+                rails, clipped, whatever the number of cards. */}
+            <div className="overflow-hidden">
+              <ul className="-mb-px -mr-px grid sm:grid-cols-2 lg:grid-cols-3">
+                {cards.map((card) => (
+                  <li key={card.href} className={cn("border-b border-r", LINE)}>
+                    <Link
+                      to={card.href}
+                      className="group flex h-full flex-col p-6 transition-colors duration-300 hover:bg-[color-mix(in_oklab,var(--surface)_35%,white)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-cta/40 sm:p-7"
+                    >
+                      <span className="flex items-center justify-between gap-3 text-[0.75rem] font-medium text-muted-foreground">
+                        {card.label}
+                        <ArrowUpRight
+                          aria-hidden
+                          className="h-4 w-4 shrink-0 text-muted-foreground/60 transition-[transform,color] duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-brand-blue"
+                        />
+                      </span>
+                      <span className="mt-2 text-[1rem] font-semibold leading-snug tracking-tight text-ink">
+                        {card.title}
+                      </span>
+                      {card.blurb && (
+                        <span className="mt-1.5 text-[0.85rem] leading-relaxed text-muted-foreground">
+                          {card.blurb}
+                        </span>
+                      )}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </Band>
+        )}
+
+        {terms.length > 0 && (
+          <Band inner="flex flex-wrap items-center gap-2 px-6 py-6 sm:px-10 lg:px-12">
+            <h3 className="mr-1 text-sm font-medium text-ink">Key terms</h3>
+            <ul className="contents">
+              {terms.map((term) => (
+                <li key={term.href}>
+                  <Link
+                    to={term.href}
+                    className="inline-flex items-center rounded-lg border border-ink/[0.08] bg-white px-3 py-1.5 text-[0.82rem] font-medium text-ink/80 shadow-[0_1px_2px_rgba(16,24,40,0.04)] transition-colors hover:border-brand-blue/40 hover:text-brand-blue focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cta/40"
+                  >
+                    {term.title}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </Band>
+        )}
+      </section>
+    );
+  }
   return (
     <section aria-labelledby="explore-title" className={cn("border-t border-border", className)}>
       <div className="mx-auto max-w-6xl px-5 py-16 sm:py-20">

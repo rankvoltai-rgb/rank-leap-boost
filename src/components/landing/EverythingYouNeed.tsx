@@ -384,7 +384,7 @@ function TagRow({ tags, reverse = false }: { tags: string[]; reverse?: boolean }
 export function EverythingYouNeed() {
   const half = Math.ceil(TAGS.length / 2);
   return (
-    <section>
+    <section id="features" className="scroll-mt-16">
       <Spacer />
       <SectionHead
         icon={Layers}

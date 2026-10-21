@@ -1,19 +1,31 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, type CSSProperties } from "react";
 import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 import {
   ArrowRight,
+  BookOpen,
   Bot,
   Braces,
   MessageSquareText,
   Search,
+  Wrench,
   X,
   type LucideIcon,
 } from "lucide-react";
 import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
-import { PixelField } from "@/components/landing/Hero";
+import { MarkDither } from "@/components/landing/hero-dither";
 import { AI_MARKS } from "@/components/landing/ai-logos";
 import { Reveal } from "@/components/landing/shared";
+import {
+  Accent,
+  Band,
+  CELL,
+  CellGrid,
+  GHOST_BUTTON,
+  LINE,
+  Pill,
+  Spacer,
+} from "@/components/landing/frame";
 import { FeaturedPost, PostCard } from "@/components/blog/PostCards";
 import { BlogCta } from "@/components/blog/ArticleChrome";
 import { postsQuery } from "@/lib/blog";
@@ -80,76 +92,81 @@ export const Route = createFileRoute("/blog/")({
 function BlogError() {
   const router = useRouter();
   return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
-      <main className="mx-auto max-w-3xl px-5 py-32 text-center">
-        <h1 className="font-display text-2xl font-semibold text-ink">Couldn't load the blog</h1>
-        <p className="mt-3 text-muted-foreground">Please try again in a moment.</p>
-        <button
-          onClick={() => router.invalidate()}
-          className="mt-6 rounded-xl bg-ink px-5 py-2.5 text-sm font-semibold text-background"
-        >
-          Retry
-        </button>
+    <div className="min-h-screen bg-white">
+      <Navbar framed />
+      <main>
+        <Band inner="px-5 py-32 text-center">
+          <h1 className="font-display text-2xl font-medium tracking-[-0.02em] text-ink">
+            Couldn't load the blog
+          </h1>
+          <p className="mt-3 text-muted-foreground">Please try again in a moment.</p>
+          <button
+            onClick={() => router.invalidate()}
+            className="mt-6 inline-flex h-10 items-center rounded-lg bg-cta px-5 text-sm font-semibold text-white transition-colors hover:bg-cta-hover"
+          >
+            Retry
+          </button>
+        </Band>
+        <Spacer closing />
       </main>
       <Footer />
     </div>
   );
 }
 
+/* Staggers the CSS entrance (see animate-hero-rise in styles.css). */
+const rise = (delay: number) => ({ "--rise-delay": `${delay}s` }) as CSSProperties;
+
 /* ---------- hero ---------- */
 
-function Hero({ overlap }: { overlap: boolean }) {
+/* The landing hero's frame and dithered mark, holding the blog's promise and
+   the engines its playbooks cover. */
+function Hero() {
   return (
-    <section
-      aria-labelledby="blog-title"
-      className="relative overflow-hidden bg-brand-blue text-white"
-    >
-      <PixelField />
-      <div
-        className={cn(
-          "relative mx-auto flex max-w-4xl flex-col items-center px-5 pt-14 text-center sm:pt-16",
-          overlap ? "pb-40 sm:pb-48" : "pb-20",
-        )}
-      >
-        <Reveal>
-          <span className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-3 py-1.5 text-xs font-semibold text-white backdrop-blur">
-            <span className="h-1.5 w-1.5 rounded-full bg-white" />
-            The Rankbox blog
-          </span>
-        </Reveal>
-        <Reveal delay={0.08}>
+    <section aria-labelledby="blog-title" className="relative bg-white">
+      <div className={cn("relative mx-auto max-w-6xl overflow-hidden border-x", LINE)}>
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 opacity-[0.32] [mask-image:radial-gradient(ellipse_66%_82%_at_50%_50%,#000_50%,transparent_100%)]"
+        >
+          <MarkDither />
+        </div>
+        <div className="relative flex flex-col items-center px-5 pb-14 pt-14 text-center sm:px-8 sm:pb-16 sm:pt-16">
+          <div className="motion-safe:animate-hero-rise" style={rise(0)}>
+            <Pill icon={BookOpen}>The Rankbox blog</Pill>
+          </div>
           <h1
             id="blog-title"
-            className="text-balance font-display text-[2.35rem] font-bold leading-[1.06] tracking-tight sm:text-[3.25rem] xl:text-[3.6rem]"
+            className="mt-6 text-balance font-display text-[2.3rem] font-medium leading-[1.08] tracking-[-0.035em] text-ink motion-safe:animate-hero-rise sm:text-[3.3rem] lg:text-[3.8rem]"
+            style={rise(0.08)}
           >
-            Get your brand into the answer
+            Get your brand <Accent>into the answer</Accent>
           </h1>
-        </Reveal>
-        <Reveal delay={0.14}>
-          <p className="mx-auto mt-5 max-w-2xl text-balance text-[1.05rem] leading-relaxed text-white/80">
+          <p
+            className="mx-auto mt-5 max-w-2xl text-balance text-[1.05rem] leading-relaxed text-muted-foreground motion-safe:animate-hero-rise sm:text-[1.12rem]"
+            style={rise(0.16)}
+          >
             Practical, sourced playbooks for getting cited by ChatGPT, Perplexity, Gemini, and
             Google AI Overviews. Built to be used this week, not bookmarked.
           </p>
-        </Reveal>
-        <Reveal delay={0.2}>
           <ul
             aria-label="Answer engines we cover"
-            className="mt-8 flex flex-wrap items-center justify-center gap-2"
+            className="mt-8 flex flex-wrap items-center justify-center gap-2 motion-safe:animate-hero-rise"
+            style={rise(0.24)}
           >
             {AI_MARKS.map(({ name, Mark }) => (
               <li
                 key={name}
-                className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 py-1 pl-1 pr-3 text-xs font-semibold text-white backdrop-blur"
+                className="inline-flex items-center gap-2 rounded-lg border border-ink/[0.08] bg-white py-1 pl-1 pr-2.5 text-[0.8rem] font-medium text-ink shadow-[0_1px_2px_rgba(16,24,40,0.04)]"
               >
-                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white">
-                  <Mark className="h-3.5 w-3.5" />
+                <span className="flex h-5 w-5 items-center justify-center rounded-md border border-ink/[0.06]">
+                  <Mark className="h-3 w-3" />
                 </span>
                 {name}
               </li>
             ))}
           </ul>
-        </Reveal>
+        </div>
       </div>
     </section>
   );
@@ -176,15 +193,18 @@ function TopicFilter({
 }) {
   const chip = (on: boolean) =>
     cn(
-      "inline-flex h-9 shrink-0 items-center gap-2 whitespace-nowrap rounded-full border px-4 text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-volt",
+      "inline-flex h-8 shrink-0 items-center gap-2 whitespace-nowrap rounded-lg border px-3 text-[0.82rem] font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cta/40",
       on
-        ? "border-ink bg-ink text-background"
-        : "border-border bg-card text-ink/75 hover:border-ink/25 hover:text-ink",
+        ? "border-cta/25 bg-cta-soft text-cta"
+        : "border-ink/[0.08] bg-white text-ink/75 hover:border-ink/[0.16] hover:text-ink",
     );
   const count = (on: boolean) =>
-    cn("text-xs font-medium tabular-nums", on ? "text-background/60" : "text-muted-foreground");
+    cn("text-xs tabular-nums", on ? "text-cta/70" : "text-muted-foreground");
   return (
-    <nav aria-label="Topics" className="-mx-5 overflow-x-auto px-5 [scrollbar-width:none]">
+    <nav
+      aria-label="Topics"
+      className="-mx-6 overflow-x-auto px-6 [scrollbar-width:none] sm:-mx-10 sm:px-10 lg:-mx-12 lg:px-12"
+    >
       <ul className="flex gap-2">
         <li>
           <Link
@@ -228,14 +248,14 @@ function SearchField({ value, onChange }: { value: string; onChange: (v: string)
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder="Search articles"
-        className="h-11 w-full rounded-xl border border-border bg-card pl-10 pr-9 text-sm text-ink shadow-1 outline-none transition-shadow placeholder:text-muted-foreground focus:border-volt/50 focus:ring-4 focus:ring-volt/15 [&::-webkit-search-cancel-button]:hidden"
+        className="h-10 w-full rounded-lg border border-ink/[0.1] bg-white pl-10 pr-9 text-sm text-ink shadow-[0_1px_2px_rgba(16,24,40,0.04)] outline-none transition-[border-color,box-shadow] placeholder:text-muted-foreground hover:border-ink/[0.16] focus:border-cta/50 focus:shadow-[0_0_0_4px_color-mix(in_oklab,var(--cta)_12%,transparent)] [&::-webkit-search-cancel-button]:hidden"
       />
       {value && (
         <button
           type="button"
           onClick={() => onChange("")}
           aria-label="Clear search"
-          className="absolute right-2 top-1/2 flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-md text-muted-foreground hover:bg-secondary hover:text-ink"
+          className="absolute right-2 top-1/2 flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-md text-muted-foreground hover:bg-ink/[0.04] hover:text-ink"
         >
           <X className="h-3.5 w-3.5" />
         </button>
@@ -256,55 +276,55 @@ function ToolsBand() {
   const tools = TOOL_PICKS.map((t) => ({ ...t, tool: getTool(t.slug) })).filter((t) => t.tool);
   if (!tools.length) return null;
   return (
-    <section aria-labelledby="tools-title" className="border-y border-border bg-surface/60">
-      <div className="mx-auto max-w-6xl px-5 py-16 sm:py-20">
-        <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
-          <div>
-            <p className="text-[0.72rem] font-semibold uppercase tracking-[0.16em] text-volt">
-              Free tools
-            </p>
-            <h2
-              id="tools-title"
-              className="mt-2 font-display text-2xl font-bold tracking-tight text-ink sm:text-3xl"
-            >
-              Put the playbooks to work
-            </h2>
-            <p className="mt-2 max-w-xl text-[0.95rem] text-muted-foreground">
-              Free, no-signup tools for the steps these guides walk through.
-            </p>
-          </div>
-          <Link
-            to="/tools"
-            className="group inline-flex items-center gap-1.5 text-sm font-semibold text-ink"
+    <section aria-labelledby="tools-title">
+      <Spacer />
+      <Band inner="flex flex-col gap-5 px-6 py-10 sm:px-10 md:flex-row md:items-end md:justify-between lg:px-12">
+        <div>
+          <Pill icon={Wrench}>Free tools</Pill>
+          <h2
+            id="tools-title"
+            className="mt-4 font-display text-[1.6rem] font-medium leading-tight tracking-[-0.025em] text-ink sm:text-[1.9rem]"
           >
-            All free tools
-            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-          </Link>
+            Put the playbooks <Accent>to work</Accent>
+          </h2>
+          <p className="mt-2 max-w-xl text-[0.95rem] text-muted-foreground">
+            Free, no-signup tools for the steps these guides walk through.
+          </p>
         </div>
-        <div className="mt-8 grid gap-4 md:grid-cols-3">
+        <Link to="/tools" className={cn(GHOST_BUTTON, "group/btn w-fit")}>
+          All free tools
+          <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover/btn:translate-x-0.5" />
+        </Link>
+      </Band>
+      <Band>
+        <CellGrid className="md:grid-cols-3">
           {tools.map(({ slug, icon: Icon, tool }, i) => (
-            <Reveal key={slug} delay={i * 0.06}>
-              <Link
-                to="/tools/$slug"
-                params={{ slug }}
-                className="group flex h-full flex-col rounded-2xl border border-border bg-card p-6 shadow-1 transition-all hover:-translate-y-0.5 hover:shadow-3"
-              >
-                <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-border bg-surface text-ink transition-colors group-hover:border-brand-blue group-hover:bg-brand-blue group-hover:text-white">
-                  <Icon className="h-[1.1rem] w-[1.1rem]" />
-                </span>
-                <p className="mt-5 font-semibold text-ink">{tool!.name}</p>
-                <p className="mt-1.5 flex-1 text-sm leading-relaxed text-muted-foreground">
-                  {tool!.tagline}
-                </p>
-                <span className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-volt">
-                  Open tool
-                  <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
-                </span>
-              </Link>
-            </Reveal>
+            <li key={slug} className={CELL}>
+              <Reveal delay={i * 0.06} className="h-full">
+                <Link
+                  to="/tools/$slug"
+                  params={{ slug }}
+                  className="group flex h-full flex-col p-6 transition-colors duration-300 hover:bg-[color-mix(in_oklab,var(--surface)_35%,white)] sm:p-8"
+                >
+                  <span className="flex h-9 w-9 items-center justify-center rounded-lg border border-ink/[0.08] bg-white text-ink/75 shadow-[0_1px_2px_rgba(16,24,40,0.04)] transition-colors group-hover:border-cta group-hover:bg-cta group-hover:text-white">
+                    <Icon className="h-4 w-4" />
+                  </span>
+                  <p className="mt-5 text-[1.02rem] font-semibold tracking-tight text-ink">
+                    {tool!.name}
+                  </p>
+                  <p className="mt-1.5 flex-1 text-sm leading-relaxed text-muted-foreground">
+                    {tool!.tagline}
+                  </p>
+                  <span className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-cta">
+                    Open tool
+                    <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+                  </span>
+                </Link>
+              </Reveal>
+            </li>
           ))}
-        </div>
-      </div>
+        </CellGrid>
+      </Band>
     </section>
   );
 }
@@ -329,29 +349,28 @@ function BlogIndex() {
   const grid = filtering ? results : results.filter((p) => p !== featured);
 
   return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
+    <div className="min-h-screen bg-white">
+      <Navbar framed />
       <main>
-        <Hero overlap={!!featured} />
+        <Hero />
 
         {featured && (
-          <section aria-label="Featured article" className="relative z-10 -mt-32 px-5 sm:-mt-40">
-            <Reveal y={28} className="mx-auto max-w-6xl">
-              <FeaturedPost post={featured} />
-            </Reveal>
+          <section aria-label="Featured article">
+            <Band>
+              <Reveal y={20}>
+                <FeaturedPost post={featured} />
+              </Reveal>
+            </Band>
           </section>
         )}
 
-        <section
-          id="articles"
-          aria-labelledby="articles-title"
-          className="mx-auto max-w-6xl scroll-mt-20 px-5 pb-20 pt-20 sm:pb-24 sm:pt-24"
-        >
-          <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+        <section id="articles" aria-labelledby="articles-title" className="scroll-mt-16">
+          <Spacer />
+          <Band inner="flex flex-col gap-5 px-6 py-8 sm:px-10 md:flex-row md:items-end md:justify-between lg:px-12">
             <div>
               <h2
                 id="articles-title"
-                className="font-display text-2xl font-bold tracking-tight text-ink sm:text-3xl"
+                className="font-display text-[1.6rem] font-medium leading-tight tracking-[-0.025em] text-ink sm:text-[1.9rem]"
               >
                 {topic ?? (filtering ? "Search results" : "Latest articles")}
               </h2>
@@ -362,53 +381,57 @@ function BlogIndex() {
               </p>
             </div>
             <SearchField value={query} onChange={setQuery} />
-          </div>
+          </Band>
 
           {topics.length > 1 && (
-            <div className="mt-6">
+            <Band inner="px-6 py-3.5 sm:px-10 lg:px-12">
               <TopicFilter topics={topics} total={posts.length} active={topic} />
-            </div>
+            </Band>
           )}
 
-          {grid.length > 0 ? (
-            <div className="mt-10 grid gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
-              {grid.map((p, i) => (
-                <Reveal key={p.id} delay={(i % 3) * 0.06} className="h-full">
-                  <PostCard post={p} />
-                </Reveal>
-              ))}
-            </div>
-          ) : (
-            <div className="mt-10 rounded-2xl border border-dashed border-border bg-surface/50 px-6 py-14 text-center">
-              <p className="font-display text-lg font-semibold text-ink">
-                {posts.length === 0
-                  ? "New articles are on the way"
-                  : filtering
-                    ? "No articles match that yet"
-                    : "More articles are on the way"}
-              </p>
-              <p className="mx-auto mt-2 max-w-sm text-sm text-muted-foreground">
-                {filtering
-                  ? "Try a different word, or browse every topic."
-                  : "We publish new playbooks regularly. Check back soon."}
-              </p>
-              {filtering && (
-                <Link
-                  to="/blog"
-                  search={{}}
-                  resetScroll={false}
-                  onClick={() => setQuery("")}
-                  className="mt-6 inline-flex rounded-xl bg-ink px-5 py-2.5 text-sm font-semibold text-background"
-                >
-                  Clear filters
-                </Link>
-              )}
-            </div>
-          )}
+          <Band>
+            {grid.length > 0 ? (
+              <CellGrid className="sm:grid-cols-2 lg:grid-cols-3">
+                {grid.map((p, i) => (
+                  <li key={p.id} className={CELL}>
+                    <Reveal delay={(i % 3) * 0.05} className="h-full">
+                      <PostCard post={p} />
+                    </Reveal>
+                  </li>
+                ))}
+              </CellGrid>
+            ) : (
+              <div className="px-6 py-16 text-center">
+                <p className="font-display text-lg font-medium text-ink">
+                  {posts.length === 0
+                    ? "New articles are on the way"
+                    : filtering
+                      ? "No articles match that yet"
+                      : "More articles are on the way"}
+                </p>
+                <p className="mx-auto mt-2 max-w-sm text-sm text-muted-foreground">
+                  {filtering
+                    ? "Try a different word, or browse every topic."
+                    : "We publish new playbooks regularly. Check back soon."}
+                </p>
+                {filtering && (
+                  <Link
+                    to="/blog"
+                    search={{}}
+                    resetScroll={false}
+                    onClick={() => setQuery("")}
+                    className="mt-6 inline-flex h-10 items-center rounded-lg bg-cta px-5 text-sm font-semibold text-white transition-colors hover:bg-cta-hover"
+                  >
+                    Clear filters
+                  </Link>
+                )}
+              </div>
+            )}
+          </Band>
         </section>
 
         <ToolsBand />
-        <BlogCta />
+        <BlogCta framed />
       </main>
       <Footer />
     </div>

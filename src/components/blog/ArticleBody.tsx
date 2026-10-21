@@ -37,9 +37,9 @@ function Intro({ blocks, answerFirst }: { blocks: NotionBlock[]; answerFirst: bo
     <>
       <NotionBlocks blocks={before} />
       {answerFirst ? (
-        <div className="relative overflow-hidden rounded-2xl border border-volt/25 bg-volt/[0.05] p-6 sm:p-7">
-          <span className="absolute inset-y-0 left-0 w-1 bg-volt" aria-hidden />
-          <p className="flex items-center gap-2 text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-volt">
+        <div className="relative overflow-hidden rounded-xl border border-cta/20 bg-[color-mix(in_oklab,var(--cta)_4%,white)] p-6 sm:p-7">
+          <span className="absolute inset-y-0 left-0 w-[3px] bg-cta" aria-hidden />
+          <p className="flex items-center gap-2 text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-cta">
             <Zap className="h-3.5 w-3.5 fill-current" />
             The short answer
           </p>
@@ -69,20 +69,19 @@ function Takeaways({ section }: { section: ArticleSection }) {
   return (
     <section
       aria-labelledby={id}
-      className="relative mt-12 overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-2 sm:p-8"
+      className="relative mt-12 overflow-hidden rounded-xl border border-ink/[0.08] bg-[color-mix(in_oklab,var(--surface)_70%,white)] p-6 sm:p-8"
     >
-      <div className="pointer-events-none absolute inset-0 volt-glow" aria-hidden />
       <div className="relative">
         <h2
           id={id}
-          className="scroll-mt-28 font-display text-[1.3rem] font-bold tracking-tight text-ink"
+          className="scroll-mt-28 font-display text-[1.3rem] font-medium tracking-[-0.02em] text-ink"
         >
           <Rich spans={section.heading?.richText} />
         </h2>
         <ul className="mt-5 space-y-3.5">
           {items.map((item) => (
             <li key={item.id} className="flex gap-3">
-              <span className="mt-[0.3rem] flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-volt text-white">
+              <span className="mt-[0.3rem] flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-cta text-white">
                 <Check className="h-3 w-3" strokeWidth={3.5} />
               </span>
               <span className="text-[1.0rem] leading-relaxed text-ink/85 sm:text-[1.05rem]">
@@ -107,7 +106,7 @@ function Faq({ section, share }: { section: ArticleSection; share: Share }) {
       {section.heading && <NotionBlocks blocks={[section.heading]} />}
       <NotionBlocks blocks={lead} />
       {entries.length > 0 && (
-        <div className="mt-7 divide-y divide-border overflow-hidden rounded-2xl border border-border bg-card shadow-1">
+        <div className="mt-7 divide-y divide-ink/[0.07] overflow-hidden rounded-xl border border-ink/[0.08] bg-white">
           {entries.map(({ question, answer }) => (
             <div key={question.id} className="p-5 sm:p-6">
               <h3
@@ -116,7 +115,7 @@ function Faq({ section, share }: { section: ArticleSection; share: Share }) {
               >
                 <span
                   aria-hidden
-                  className="mt-px flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-ink text-[0.7rem] font-bold text-background"
+                  className="mt-px flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-cta-soft text-[0.7rem] font-bold text-cta"
                 >
                   Q
                 </span>
@@ -130,7 +129,7 @@ function Faq({ section, share }: { section: ArticleSection; share: Share }) {
         </div>
       )}
       {outro.length > 0 && (
-        <div className="mt-8 flex flex-col gap-4 rounded-2xl border border-dashed border-volt/40 bg-volt/[0.04] p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
+        <div className="mt-8 flex flex-col gap-4 rounded-xl border border-dashed border-cta/35 bg-[color-mix(in_oklab,var(--cta)_3%,white)] p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
           <div className="[&>p]:mt-0 [&>p]:text-[1.02rem] [&>p]:font-medium [&>p]:leading-relaxed [&>p]:text-ink">
             <NotionBlocks blocks={outro} />
           </div>
@@ -159,7 +158,7 @@ function References({ section }: { section: ArticleSection }) {
   const rest = section.blocks.filter((b) => !items.includes(b));
   const id = section.heading ? anchors.get(section.heading.id) : undefined;
   return (
-    <section aria-labelledby={id} className="mt-16 border-t border-border pt-10">
+    <section aria-labelledby={id} className="mt-16 border-t border-ink/[0.08] pt-10">
       <h2
         id={id}
         className="scroll-mt-28 text-[0.72rem] font-semibold uppercase tracking-[0.16em] text-muted-foreground"

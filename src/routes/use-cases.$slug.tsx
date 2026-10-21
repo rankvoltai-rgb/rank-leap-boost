@@ -2,31 +2,33 @@ import type { ComponentType } from "react";
 import { createFileRoute, notFound, Link } from "@tanstack/react-router";
 import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
-import { Pricing } from "@/components/landing/Pricing";
-import {
-  PersonaHero,
-  PersonaSpecs,
-  PersonaPains,
-  PersonaHandoff,
-  PersonaTopics,
-  PersonaWorkflow,
-  PersonaStack,
-  PersonaPicks,
-  PersonaProof,
-  OtherPersonas,
-  PersonaFAQ,
-  PersonaCTA,
-} from "@/components/personas/PersonaSections";
-import { ExploreMore } from "@/components/ExploreMore";
+import { MarketersPage } from "@/components/personas/marketers/MarketersPage";
+import { SoloFoundersPage } from "@/components/personas/solo-founders/SoloFoundersPage";
+import { SeoAgenciesPage } from "@/components/personas/seo-agencies/SeoAgenciesPage";
+import { EcommercePage } from "@/components/personas/ecommerce/EcommercePage";
+import { SaasPage } from "@/components/personas/saas/SaasPage";
+import { LocalBusinessesPage } from "@/components/personas/local-businesses/LocalBusinessesPage";
 import { getPersona, personaH1, type Persona } from "@/data/personas";
 import { PLAN } from "@/data/pricing";
-import { cn } from "@/lib/utils";
 
 const SITE = "https://rankbox.xyz";
 
+/* Every use case has a layout of its own, drawn in the landing page's frame
+   (white page, hairline rails the navbar starts), so no two pages are one
+   template with the words swapped. The head below stays shared. */
+const LAYOUTS: Record<string, ComponentType<{ persona: Persona }>> = {
+  marketers: MarketersPage,
+  "solo-founders": SoloFoundersPage,
+  "seo-agencies": SeoAgenciesPage,
+  ecommerce: EcommercePage,
+  saas: SaasPage,
+  "local-businesses": LocalBusinessesPage,
+};
+
 export const Route = createFileRoute("/use-cases/$slug")({
   loader: ({ params }) => {
-    if (!getPersona(params.slug)) throw notFound();
+    // A persona without a layout yet 404s rather than rendering blank.
+    if (!getPersona(params.slug) || !LAYOUTS[params.slug]) throw notFound();
   },
   head: ({ params }) => {
     const url = `${SITE}/use-cases/${params.slug}`;
@@ -125,52 +127,15 @@ export const Route = createFileRoute("/use-cases/$slug")({
   errorComponent: PersonaError,
 });
 
-/* The landing's rhythm, rebuilt around one seat: blue hero with this page's
-   own scene, the jobs this reader recognises, who does what, how a week runs,
-   what it replaces, the features that carry it, then the landing's pricing,
-   FAQ, and closing CTA. Business pages add a sample topic map after the
-   ownership split; pages without proof of their own skip it. The body bands
-   alternate from whatever is present, so neither choice leaves two tints
-   touching. Section ids (top,
-   proof, pricing, faq) match the landing so the shared navbar's anchors keep
-   working here. */
-type BodySection = ComponentType<{ persona: Persona; tint?: boolean }>;
-
-function bodyFor(persona: Persona): BodySection[] {
-  return [
-    PersonaPains,
-    PersonaHandoff,
-    ...(persona.topics ? [PersonaTopics] : []),
-    PersonaWorkflow,
-    PersonaStack,
-    PersonaPicks,
-    ...(persona.proof.length > 0 ? [PersonaProof] : []),
-  ];
-}
-
 function PersonaPage() {
   const { slug } = Route.useParams();
   const persona = getPersona(slug)!;
-  const body = bodyFor(persona);
+  const Layout = LAYOUTS[slug];
   return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
+    <div className="min-h-screen bg-white">
+      <Navbar framed />
       <main>
-        <PersonaHero persona={persona} />
-        <PersonaSpecs persona={persona} />
-        {body.map((Section, i) => (
-          <Section key={i} persona={persona} tint={i % 2 === 1} />
-        ))}
-        <div className={cn(body.length % 2 === 1 && "border-t border-border bg-surface/40")}>
-          <Pricing />
-        </div>
-        <OtherPersonas persona={persona} />
-        <PersonaFAQ persona={persona} />
-        <ExploreMore
-          path={`/use-cases/${persona.slug}`}
-          exclude={persona.picks.map((p) => `/features/${p.featureSlug}`)}
-        />
-        <PersonaCTA persona={persona} />
+        <Layout persona={persona} />
       </main>
       <Footer />
     </div>
