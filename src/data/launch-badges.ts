@@ -6,6 +6,12 @@
  * or convert it to JSX: the footer renders the string as-is, and sizing and
  * dimming come from the footer's own CSS. To add one, paste its snippet as a
  * new entry.
+ *
+ * The exception is Authoriflow, which publishes no embed: that badge is ours,
+ * drawn here in their palette. It is markup rather than an image so the link
+ * carries "Authoriflow" as real anchor text, which is the point of a link
+ * exchange; everything else in this list is an image with alt text. Sizing
+ * that the footer's CSS applies through `img` is therefore inline on it.
  */
 
 export interface LaunchBadge {
@@ -65,6 +71,10 @@ export const LAUNCH_BADGES: LaunchBadge[] = [
   {
     name: "Million Dot Homepage",
     html: `<a target="_blank" href="https://milliondothomepage.com/product/rankbox"><img src="https://milliondothomepage.com/assets/images/badge.png" alt="Million Dot Homepage" height="54" loading="lazy"></a>`,
+  },
+  {
+    name: "Authoriflow",
+    html: `<a href="https://authoriflow.com" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:8px;box-sizing:border-box;width:max-content;height:40px;padding:0 12px 0 6px;border:1px solid #8f7cd6;border-radius:10px;background:#f8f7f5;text-decoration:none"><span style="display:flex;align-items:center;justify-content:center;flex:none;width:28px;height:28px;border-radius:8px;background:#8f7cd6"><svg viewBox="6.6 12.55 46.8 34.91" width="18" height="13.4" aria-hidden="true" style="display:block"><path fill="#f8f7f5" fill-rule="evenodd" clip-rule="evenodd" d="M13.952,20.157l20.077,0c1.547,-0.004 3.679,-7.604 6.221,-7.61l5.797,0c4.089,0.916 6.568,3.479 7.352,7.775l0,10.753c-0.53,4.539 -2.93,7.367 -7.069,8.602l-20.36,0c-2.505,0.007 -3.066,7.845 -6.504,7.775l-5.09,0c-3.559,-0.59 -6.745,-2.588 -7.776,-8.602l0,-10.091c0.611,-4.778 3.13,-7.575 7.352,-8.602Zm0.6,16.311c-0.045,1.205 0.481,1.786 1.564,1.759l8.637,0c1.381,0.017 3.432,-6.648 6.094,-6.651l13.372,0c0.713,-0.228 1.167,-0.74 1.384,-1.511l0,-7c-0.179,-0.772 -0.606,-1.271 -1.328,-1.45l-9.099,0c-2.278,0.006 -3.201,6.567 -6.023,6.574l-13.012,0c-0.86,0.217 -1.42,0.762 -1.588,1.733l0,6.545Z"/></svg></span><span style="font:600 15px/1 'Plus Jakarta Sans Variable',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;letter-spacing:-0.01em;color:#0c0c0c;white-space:nowrap">Authoriflow</span></a>`,
   },
   {
     name: "Fazier",
