@@ -66,4 +66,8 @@ export const LAUNCH_BADGES: LaunchBadge[] = [
     name: "Million Dot Homepage",
     html: `<a target="_blank" href="https://milliondothomepage.com/product/rankbox"><img src="https://milliondothomepage.com/assets/images/badge.png" alt="Million Dot Homepage" height="54" loading="lazy"></a>`,
   },
+  {
+    name: "findalternative.to",
+    html: `<a href="https://findalternative.to/rankbox/about?utm_source=badge" title="See Rankbox on findalternative.to"><img src="https://findalternative.to/api/badge/01M5EDDSPDTNBZWT8Q8QAAR5ME.svg?theme=light&amp;variant=hero" alt="See Rankbox on findalternative.to" width="250" height="54" style="border:0" loading="lazy" /></a>`,
+  },
 ];

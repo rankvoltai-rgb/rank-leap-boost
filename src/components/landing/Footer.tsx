@@ -83,8 +83,7 @@ function TrustBox() {
 /* ---------- Sitemap ---------- */
 
 type FooterLink = { label: string; more?: boolean } & (
-  | { to: string; params?: Record<string, string>; hash?: string }
-  | { href: string }
+  { to: string; params?: Record<string, string>; hash?: string } | { href: string }
 );
 
 interface FooterSection {
@@ -396,7 +395,13 @@ function LaunchBadges() {
           slide pads the badge so the clip leaves room for its focus ring;
           the negative margin keeps the badge level with the links above.
           Sized for the widest badge at 40px tall (Smol Launch, 167px), which
-          still fits the narrowest desktop column (171px at 1024px). */}
+          still fits the narrowest desktop column (171px at 1024px); a wider
+          one (findalternative.to) is contained to the box instead, a touch
+          under 40px.
+          Resting opacity stays high on purpose: these badges carry small
+          print, and the earlier 50% + full grayscale dropped the fine lines to
+          about 2.8:1 on the brand blue. At 85% with a light grayscale they
+          read (5:1 and up) and still sit back from the links. */}
       <div
         ref={ref}
         role="group"
@@ -405,7 +410,7 @@ function LaunchBadges() {
         onMouseLeave={() => setHeld(false)}
         onFocus={() => setHeld(true)}
         onBlur={() => setHeld(false)}
-        className="-m-1 w-45 overflow-clip opacity-50 grayscale transition-[opacity,filter] duration-300 focus-within:opacity-100 focus-within:grayscale-0 hover:opacity-100 hover:grayscale-0 motion-reduce:transition-none"
+        className="-m-1 w-45 overflow-clip opacity-85 grayscale-[0.35] transition-[opacity,filter] duration-300 focus-within:opacity-100 focus-within:grayscale-0 hover:opacity-100 hover:grayscale-0 motion-reduce:transition-none"
       >
         <div
           className={cn(
