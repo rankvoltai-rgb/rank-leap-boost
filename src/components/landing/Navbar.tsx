@@ -49,7 +49,7 @@ const MENU_SURFACE = "bg-white";
 const EASE = "ease-[cubic-bezier(0.22,1,0.36,1)]";
 
 const TOP_ITEM_BASE =
-  "relative flex h-9 items-center gap-1 whitespace-nowrap rounded-full px-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 md:px-2 lg:px-3.5";
+  "relative flex h-9 items-center gap-1 whitespace-nowrap rounded-md px-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 md:px-2 lg:px-3.5";
 
 /* `blue` is the bar every public page uses. `light` is the landing page's:
    white, with hairline rails that carry on down through the hero. */
@@ -76,7 +76,7 @@ const TONES = {
     itemOn: "text-ink",
     dot: "bg-ink",
     pill: "bg-ink/[0.045]",
-    scrim: "bg-ink/[0.1] backdrop-blur-[2px]",
+    scrim: "bg-ink/[0.04]",
     signIn:
       "rounded-lg border border-ink/[0.1] bg-white text-ink shadow-[0_1px_2px_rgba(16,24,40,0.04)] hover:border-ink/[0.16] hover:bg-ink/[0.02]",
     start:
@@ -301,8 +301,10 @@ export function Navbar({ tone = "light", framed = false }: { tone?: NavTone; fra
 
   return (
     <header ref={headerRef} className={cn("sticky top-0 z-50", t.header)}>
-      {/* Frosted scrim over the page while a menu is open, lifting the menu
-          off the hero it opens over. Purely visual — never takes the pointer. */}
+      {/* A faint wash over the page while a menu is open, lifting the menu
+          off the hero it opens over without blurring it (on the white bar;
+          the blue bar keeps its frosted one). Purely visual — never takes
+          the pointer. */}
       <div
         aria-hidden
         className={cn(
@@ -328,7 +330,7 @@ export function Navbar({ tone = "light", framed = false }: { tone?: NavTone; fra
           className={cn(
             STAGE,
             MENU_SURFACE,
-            "pointer-events-none hidden rounded-xl shadow-[0_1px_2px_rgba(16,24,40,0.05),0_24px_56px_-20px_rgba(16,24,40,0.28)] md:block",
+            "pointer-events-none hidden rounded-lg shadow-[0_2px_6px_-2px_rgba(16,24,40,0.06),0_16px_40px_-16px_rgba(16,24,40,0.2)] md:block",
             stageMotion,
           )}
         />
@@ -359,7 +361,7 @@ export function Navbar({ tone = "light", framed = false }: { tone?: NavTone; fra
                 : undefined
             }
             className={cn(
-              "pointer-events-none absolute left-0 top-0 rounded-full",
+              "pointer-events-none absolute left-0 top-0 rounded-md",
               t.pill,
               pill?.slide
                 ? cn("transition-[transform,width,opacity] duration-300", EASE)
@@ -444,7 +446,7 @@ export function Navbar({ tone = "light", framed = false }: { tone?: NavTone; fra
                   className={cn(
                     STAGE,
                     width,
-                    "max-h-[calc(100dvh-5.5rem)] overflow-y-auto overflow-x-hidden rounded-xl duration-200 ease-out motion-reduce:transition-none",
+                    "max-h-[calc(100dvh-5.5rem)] overflow-y-auto overflow-x-hidden rounded-lg duration-200 ease-out motion-reduce:transition-none",
                     panelState(id),
                   )}
                 >
@@ -476,7 +478,7 @@ export function Navbar({ tone = "light", framed = false }: { tone?: NavTone; fra
           style={stageStyle}
           className={cn(
             STAGE,
-            "pointer-events-none hidden rounded-xl border border-ink/[0.08] md:block",
+            "pointer-events-none hidden rounded-lg border border-ink/[0.08] md:block",
             stageMotion,
           )}
         />

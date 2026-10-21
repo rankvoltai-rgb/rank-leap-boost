@@ -6,7 +6,8 @@
  * Every menu is two-tone: primary links sit on the white panel, and the
  * secondary zone (a right rail, a footer band) sits on a soft grey, the
  * landing page's panel tone, so the eye lands on the product first and the
- * extras second. Hover and the page you're on pick up the soft blue key.
+ * extras second. Icons sit on flat grey tiles, as on Rankaria's menus; hover
+ * and the page you're on turn them soft blue.
  */
 import { useState, type ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
@@ -65,15 +66,20 @@ export function NavLink({
   );
 }
 
+/* The icon tile: flat grey, no ring, turning soft blue on hover and on the
+   page you're already on. */
+const TILE =
+  "mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-ink/[0.045] text-ink/75 transition-colors group-hover:bg-cta-soft group-hover:text-cta group-focus-visible:bg-cta-soft group-focus-visible:text-cta group-data-[status=active]:bg-cta-soft group-data-[status=active]:text-cta";
+const TILE_SMALL =
+  "flex h-6 w-6 shrink-0 items-center justify-center rounded-md text-ink/70 ring-1 ring-inset ring-ink/[0.07] transition-colors group-hover:bg-cta-soft group-hover:text-cta group-hover:ring-cta/20 group-data-[status=active]:bg-cta-soft group-data-[status=active]:text-cta";
+
 const FOCUS_RING =
   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cta/40 focus-visible:ring-offset-0";
 
 function ColumnLabel({ children, action }: { children: ReactNode; action?: ReactNode }) {
   return (
-    <div className="flex h-7 items-center justify-between px-2.5">
-      <p className="text-[0.65rem] font-semibold uppercase tracking-[0.16em] text-muted-foreground/85">
-        {children}
-      </p>
+    <div className="flex h-8 items-center justify-between px-2.5">
+      <p className="text-[0.75rem] font-medium text-muted-foreground">{children}</p>
       {action}
     </div>
   );
@@ -85,7 +91,7 @@ function LabelLink({ to, children }: { to: string; children: ReactNode }) {
     <Link
       to={to}
       className={cn(
-        "group -mr-1 inline-flex items-center gap-1 rounded-md px-1 text-xs font-semibold text-cta transition-colors hover:text-cta-hover",
+        "group -mr-1 inline-flex items-center gap-1 rounded-md px-1 text-xs font-medium text-cta transition-colors hover:text-cta-hover",
         FOCUS_RING,
       )}
     >
@@ -102,22 +108,22 @@ function MenuItem({ icon: Icon, title, description, target }: NavEntry) {
     <NavLink
       target={target}
       className={cn(
-        "group flex items-start gap-3 rounded-lg p-2.5 transition-colors hover:bg-ink/[0.035] data-[status=active]:bg-ink/[0.035]",
+        "group flex items-start gap-3 rounded-md px-2.5 py-2.5 transition-colors hover:bg-ink/[0.03] data-[status=active]:bg-ink/[0.03]",
         FOCUS_RING,
       )}
     >
-      <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white text-ink/70 shadow-[0_1px_2px_rgba(16,24,40,0.05)] ring-1 ring-inset ring-ink/[0.08] transition-colors group-hover:bg-cta-soft group-hover:text-cta group-hover:ring-cta/20 group-focus-visible:bg-cta-soft group-focus-visible:text-cta group-data-[status=active]:bg-cta-soft group-data-[status=active]:text-cta group-data-[status=active]:ring-cta/20">
+      <span className={TILE}>
         <Icon className="h-4 w-4" />
       </span>
       <span className="min-w-0">
-        <span className="flex items-center gap-1 text-sm font-semibold text-ink">
+        <span className="flex items-center gap-1 text-[0.9rem] font-medium leading-tight text-ink">
           {title}
           <ArrowRight
             aria-hidden
             className="h-3.5 w-3.5 -translate-x-1 opacity-0 transition-all duration-200 group-hover:translate-x-0 group-hover:opacity-100 group-focus-visible:translate-x-0 group-focus-visible:opacity-100 motion-reduce:transition-none"
           />
         </span>
-        <span className="mt-0.5 block text-xs leading-snug text-muted-foreground">
+        <span className="mt-1 block text-pretty text-[0.78rem] leading-snug text-muted-foreground">
           {description}
         </span>
       </span>
@@ -141,12 +147,12 @@ function CompactItem({
     <NavLink
       target={target}
       className={cn(
-        "group flex items-center gap-2.5 rounded-lg px-2.5 py-1.5 transition-colors hover:bg-ink/[0.035] data-[status=active]:bg-ink/[0.035]",
+        "group flex items-center gap-2.5 rounded-md px-2.5 py-1.5 transition-colors hover:bg-ink/[0.03] data-[status=active]:bg-ink/[0.03]",
         FOCUS_RING,
       )}
     >
       {icon}
-      <span className="shrink-0 text-sm font-semibold text-ink">{title}</span>
+      <span className="shrink-0 text-[0.875rem] font-medium text-ink">{title}</span>
       {/* The meta gives way first: the destination's name never truncates. */}
       {meta && (
         <span className="ml-auto min-w-0 truncate pl-2 text-right text-xs text-muted-foreground">
@@ -170,7 +176,7 @@ function MoreLink({
     <Link
       to={to}
       className={cn(
-        "group inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-sm font-semibold text-cta transition-colors hover:bg-cta-soft",
+        "group inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-sm font-medium text-cta transition-colors hover:bg-cta-soft",
         FOCUS_RING,
         className,
       )}
@@ -200,10 +206,10 @@ function MenuFooter({ children }: { children: ReactNode }) {
  *  the pitch, so the card needs no paragraph. */
 function ScoreCard() {
   return (
-    <div className="mt-auto hidden rounded-xl bg-white p-3.5 shadow-[0_1px_2px_rgba(16,24,40,0.05)] ring-1 ring-inset ring-ink/[0.08] lg:block">
+    <div className="mt-auto hidden rounded-lg border border-ink/[0.08] bg-white p-3.5 lg:block">
       <div className="flex items-center justify-between gap-2">
-        <p className="text-sm font-semibold text-ink">Score your site</p>
-        <span className="shrink-0 rounded-md bg-ink/[0.05] px-1.5 py-0.5 text-[0.6rem] font-medium uppercase tracking-[0.14em] text-muted-foreground">
+        <p className="text-[0.875rem] font-medium text-ink">Score your site</p>
+        <span className="shrink-0 rounded-md border border-ink/[0.08] px-1.5 py-0.5 text-[0.6rem] font-medium uppercase tracking-[0.1em] text-muted-foreground">
           Sample
         </span>
       </div>
@@ -217,7 +223,7 @@ function ScoreCard() {
       <a
         href="/auth"
         className={cn(
-          "group mt-3.5 flex items-center justify-center gap-1.5 rounded-lg bg-cta px-3 py-2 text-sm font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.16),0_1px_2px_rgba(16,24,40,0.14)] transition-colors hover:bg-cta-hover",
+          "group mt-3.5 flex items-center justify-center gap-1.5 rounded-md bg-cta px-3 py-2 text-sm font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.16),0_1px_2px_rgba(16,24,40,0.14)] transition-colors hover:bg-cta-hover",
           FOCUS_RING,
         )}
       >
@@ -238,14 +244,14 @@ function PersonaItem({ persona }: { persona: Persona }) {
       aria-label={`Rankbox for ${persona.nameLower}`}
       title={persona.name}
       className={cn(
-        "group flex min-w-0 items-center gap-1.5 rounded-lg px-2 py-1.5 transition-colors hover:bg-ink/[0.04] data-[status=active]:bg-ink/[0.04]",
+        "group flex min-w-0 items-center gap-1.5 rounded-md px-2 py-1.5 transition-colors hover:bg-white data-[status=active]:bg-white",
         FOCUS_RING,
       )}
     >
-      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-white text-ink/70 ring-1 ring-inset ring-ink/[0.08] transition-colors group-hover:bg-cta-soft group-hover:text-cta group-hover:ring-cta/20 group-data-[status=active]:bg-cta-soft group-data-[status=active]:text-cta">
+      <span className={cn(TILE_SMALL, "bg-white")}>
         <Icon className="h-3 w-3" />
       </span>
-      <span className="truncate text-[0.8rem] font-semibold text-ink">{persona.shortName}</span>
+      <span className="truncate text-[0.8rem] font-medium text-ink">{persona.shortName}</span>
     </NavLink>
   );
 }
@@ -284,9 +290,7 @@ export function FeaturesMenu() {
           <div className="mb-3 grid grid-cols-2 gap-x-0.5">
             {PERSONA_GROUPS.map((g) => (
               <div key={g.id} className="min-w-0">
-                <p className="px-2 pb-1 pt-1.5 text-[0.6rem] font-medium uppercase tracking-[0.14em] text-muted-foreground/75">
-                  {g.label}
-                </p>
+                <p className="px-2 pb-1 pt-1.5 text-[0.7rem] text-muted-foreground/80">{g.label}</p>
                 {personasIn(g.id).map((p) => (
                   <PersonaItem key={p.slug} persona={p} />
                 ))}
@@ -300,7 +304,7 @@ export function FeaturesMenu() {
         <Link
           to="/integrations"
           className={cn(
-            "group flex min-w-0 items-center gap-3 rounded-lg px-2.5 py-1.5 transition-colors hover:bg-ink/[0.04]",
+            "group flex min-w-0 items-center gap-3 rounded-md px-2.5 py-1.5 transition-colors hover:bg-white",
             FOCUS_RING,
           )}
         >
@@ -314,7 +318,7 @@ export function FeaturesMenu() {
               />
             ))}
           </span>
-          <span className="shrink-0 text-sm font-semibold text-ink">Integrations</span>
+          <span className="shrink-0 text-[0.875rem] font-medium text-ink">Integrations</span>
           <span className="hidden truncate text-xs text-muted-foreground lg:inline">
             Publish to {PUBLISH_PLATFORMS.map((p) => p.name).join(", ")}, or any site by API
           </span>
@@ -341,8 +345,8 @@ function MoreEngines() {
         className={cn(
           "flex h-7 items-center truncate",
           named
-            ? "text-xs font-semibold text-ink"
-            : "text-[0.65rem] font-semibold uppercase tracking-[0.16em] text-muted-foreground/85",
+            ? "text-xs font-medium text-ink"
+            : "text-[0.75rem] font-medium text-muted-foreground",
         )}
       >
         {named ? `${named.shortName} SEO · ${named.vendor}` : TIERS.more.label}
@@ -358,7 +362,7 @@ function MoreEngines() {
               onPointerEnter={() => setNamed(e)}
               onFocus={() => setNamed(e)}
               className={cn(
-                "group flex aspect-square items-center justify-center rounded-lg bg-white shadow-[0_1px_2px_rgba(16,24,40,0.05)] ring-1 ring-inset ring-ink/[0.08] transition-transform duration-200 hover:-translate-y-0.5 motion-reduce:transition-none",
+                "group flex aspect-square items-center justify-center rounded-md border border-ink/[0.07] bg-white transition-[transform,border-color] duration-200 hover:-translate-y-0.5 hover:border-ink/[0.14] motion-reduce:transition-none",
                 FOCUS_RING,
                 "focus-visible:ring-offset-2 focus-visible:ring-offset-white",
               )}
@@ -418,7 +422,7 @@ export function ResourcesMenu({ primed }: { primed: boolean }) {
               <CompactItem
                 key={e.slug}
                 icon={
-                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-white shadow-[0_1px_2px_rgba(16,24,40,0.05)] ring-1 ring-inset ring-ink/[0.08] transition-transform duration-200 group-hover:scale-105 motion-reduce:transition-none">
+                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md border border-ink/[0.07] bg-white transition-transform duration-200 group-hover:scale-105 motion-reduce:transition-none">
                     <Mark className="h-3.5 w-3.5" />
                   </span>
                 }
@@ -434,7 +438,7 @@ export function ResourcesMenu({ primed }: { primed: boolean }) {
       <MenuFooter>
         <div className="flex min-w-0 items-center gap-2 px-2.5">
           {/* Below lg the path alone fits, and reads without its heading. */}
-          <span className="hidden shrink-0 text-xs font-semibold text-ink lg:inline">
+          <span className="hidden shrink-0 text-xs font-medium text-ink lg:inline">
             {NAV_TOOLKIT.title}
           </span>
           <span aria-hidden className="hidden text-ink/30 lg:inline">
@@ -451,7 +455,7 @@ export function ResourcesMenu({ primed }: { primed: boolean }) {
                     params={{ slug: t.slug }}
                     title={t.name}
                     className={cn(
-                      "flex min-w-0 items-center gap-1.5 rounded-md bg-white py-1 pl-1.5 pr-2.5 text-xs font-medium text-ink ring-1 ring-inset ring-ink/[0.1] transition-colors hover:bg-cta-soft hover:text-cta hover:ring-cta/20",
+                      "flex min-w-0 items-center gap-1.5 rounded-md border border-ink/[0.08] bg-white py-1 pl-1.5 pr-2.5 text-xs font-medium text-ink transition-colors hover:border-cta/25 hover:bg-cta-soft hover:text-cta",
                       FOCUS_RING,
                     )}
                   >

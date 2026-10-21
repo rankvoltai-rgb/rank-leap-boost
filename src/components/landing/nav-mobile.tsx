@@ -31,7 +31,7 @@ const ENGINES_IN_ORDER = [...enginesInTier("frontier"), ...enginesInTier("more")
 
 function GroupLabel({ children }: { children: ReactNode }) {
   return (
-    <p className="px-2 pb-1 pt-4 text-[0.65rem] font-semibold uppercase tracking-[0.16em] text-muted-foreground/85 first:pt-1">
+    <p className="px-2 pb-1 pt-4 text-[0.75rem] font-medium text-muted-foreground first:pt-1">
       {children}
     </p>
   );
@@ -39,7 +39,7 @@ function GroupLabel({ children }: { children: ReactNode }) {
 
 function IconTile({ icon: Icon }: { icon: LucideIcon }) {
   return (
-    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-white text-ink/70 shadow-[0_1px_2px_rgba(16,24,40,0.05)] ring-1 ring-inset ring-ink/[0.08]">
+    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-ink/[0.045] text-ink/75">
       <Icon className="h-4 w-4" />
     </span>
   );
@@ -59,7 +59,7 @@ function Row({
   return (
     <NavLink
       target={target}
-      className="flex min-h-11 items-center gap-3 rounded-lg px-2 py-1.5 text-[0.9375rem] font-medium text-ink transition-colors hover:bg-ink/[0.035] active:bg-ink/[0.06] data-[status=active]:bg-cta-soft data-[status=active]:text-cta"
+      className="flex min-h-11 items-center gap-3 rounded-md px-2 py-1.5 text-[0.9375rem] font-medium text-ink transition-colors hover:bg-ink/[0.03] active:bg-ink/[0.06] data-[status=active]:bg-cta-soft data-[status=active]:text-cta"
     >
       {icon}
       <span className={meta ? "shrink-0" : "min-w-0 truncate"}>{children}</span>
