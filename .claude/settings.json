@@ -6,7 +6,8 @@
       "mcp__claude-in-chrome__tabs_create_mcp",
       "ClaudeInChromeDomain(localhost:5180)",
       "ClaudeInChromeDomain(localhost:5181)",
-      "ClaudeInChromeDomain(vercel.com)"
+      "ClaudeInChromeDomain(vercel.com)",
+      "ClaudeInChromeDomain(porkbun.com)"
     ]
   }
 }
