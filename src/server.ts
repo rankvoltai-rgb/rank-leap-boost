@@ -1,6 +1,7 @@
 import "./lib/error-capture";
 
 import { consumeLastCapturedError } from "./lib/error-capture";
+import { withCdnCache } from "./lib/cdn-cache";
 import { botFromUserAgent } from "./lib/lab/experiments";
 import { renderErrorPage } from "./lib/error-page";
 
@@ -59,7 +60,9 @@ export default {
     try {
       if (mayBeDocsMarkdown(request)) {
         const docs = await import("./lib/docs/agent.server");
-        if (docs.isDocsMarkdownRequest(request)) return docs.docsMarkdownResponse(request);
+        if (docs.isDocsMarkdownRequest(request)) {
+          return withCdnCache(request, await docs.docsMarkdownResponse(request));
+        }
       }
       const handler = await getServerEntry();
       const response = await normalizeCatastrophicSsrResponse(
@@ -69,7 +72,7 @@ export default {
         const { logLabRequest } = await import("./lib/lab/hits.server");
         await logLabRequest(request, response);
       }
-      return response;
+      return withCdnCache(request, response);
     } catch (error) {
       console.error(error);
       return new Response(renderErrorPage(), {
