@@ -158,7 +158,7 @@ export function HreflangGenerator() {
                 {rows.map((r) => {
                   const err = valid(r);
                   return (
-                    <tr key={r.id} className="border-t border-border">
+                    <tr key={r.id} className="border-t border-ink/[0.08]">
                       <td className="py-2 pl-5 pr-2">
                         <input
                           value={r.lang}

@@ -44,8 +44,8 @@ export function DocsToc({ headings }: { headings: DocHeading[] }) {
 
   return (
     <nav aria-label="On this page">
-      <p className="mb-3 text-[0.8rem] font-semibold text-ink">On this page</p>
-      <ol className="border-l border-border">
+      <p className="mb-3 text-[0.8rem] font-medium text-ink">On this page</p>
+      <ol className="border-l border-ink/[0.08]">
         {headings.map((h) => {
           const on = active === h.id;
           return (
@@ -57,7 +57,7 @@ export function DocsToc({ headings }: { headings: DocHeading[] }) {
                   "-ml-px block border-l-2 py-[0.3rem] pr-2 text-[0.8rem] leading-snug transition-colors",
                   h.depth === 3 ? "pl-7" : "pl-4",
                   on
-                    ? "border-cta font-semibold text-ink"
+                    ? "border-cta font-medium text-cta"
                     : "border-transparent text-muted-foreground hover:border-ink/20 hover:text-ink",
                 )}
               >

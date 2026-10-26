@@ -234,9 +234,73 @@ const STUDIO_ROWS: Row[] = [
   { icon: LayoutGrid, title: "Switch between sites", detail: "From the dashboard" },
 ];
 
-export function PricingBand() {
+/**
+ * The plans, side by side: Free tools, Business (featured) and Studio while
+ * it's live. Shared by the landing's pricing band and the /pricing page, so
+ * the two can never show different plans.
+ */
+export function PlanCards() {
   const price = priceFor();
+  return (
+    <div
+      className={cn(
+        "mx-auto grid max-w-[26rem] items-start gap-5 lg:max-w-none",
+        STUDIO.live ? "lg:grid-cols-3" : "lg:max-w-4xl lg:grid-cols-2",
+      )}
+    >
+      <PlanCard
+        icon={<PlanIcon icon={Wrench} />}
+        name="Free tools"
+        subtitle="For Google and AI search"
+        price={<Price amount={0} suffix="no signup" />}
+        priceNote={`${TOOLS.length} tools, free to use.`}
+        action={{ label: `Browse all ${TOOLS.length} tools`, href: "/tools" }}
+        reassurance="No signup, no card."
+        rows={TOOL_ROWS}
+        className="lg:order-none order-2"
+      />
 
+      <PlanCard
+        featured
+        strip={`${TRIAL_DAYS} days free`}
+        icon={<Mark className="mt-0.5 h-8 w-8 shrink-0 text-brand-blue" />}
+        name={PLAN.name}
+        tag={`${PLAN.sites} website`}
+        subtitle="Everything Rankbox does, in one plan."
+        price={<Price amount={price.perMonth} suffix="/month" />}
+        priceNote={
+          <>
+            Works out to{" "}
+            <span className="font-semibold text-ink tabular-nums">
+              {formatUsd(price.perArticle)}
+            </span>{" "}
+            an article, all-in.
+          </>
+        }
+        action={{ label: "Get Started Free", href: "/auth" }}
+        reassurance={`No card to sign up. ${TRIAL_DAYS} days free, then ${formatUsd(PLAN.monthly)}/month. Cancel anytime.`}
+        rows={BUSINESS_ROWS}
+        className="order-1 lg:order-none"
+      />
+
+      {STUDIO.live && (
+        <PlanCard
+          icon={<PlanIcon icon={Layers} />}
+          name={STUDIO.name}
+          subtitle="For agencies and founders running several brands"
+          price={<Price amount={STUDIO.monthlyPerSite} suffix="/extra site a month" />}
+          priceNote={`Your plan covers your first site. Every other site is ${formatUsd(STUDIO.monthlyPerSite)} a month, on the same invoice.`}
+          action={{ label: "Get Started Free", href: "/auth" }}
+          reassurance="Add sites from your dashboard once your plan is active."
+          rows={STUDIO_ROWS}
+          className="order-3 lg:order-none"
+        />
+      )}
+    </div>
+  );
+}
+
+export function PricingBand() {
   return (
     <section id="pricing" className="scroll-mt-16">
       <Spacer />
@@ -252,61 +316,7 @@ export function PricingBand() {
       />
 
       <Band inner="px-5 py-14 sm:px-8 sm:py-16">
-        <div
-          className={cn(
-            "mx-auto grid max-w-[26rem] items-start gap-5 lg:max-w-none",
-            STUDIO.live ? "lg:grid-cols-3" : "lg:max-w-4xl lg:grid-cols-2",
-          )}
-        >
-          <PlanCard
-            icon={<PlanIcon icon={Wrench} />}
-            name="Free tools"
-            subtitle="For Google and AI search"
-            price={<Price amount={0} suffix="no signup" />}
-            priceNote={`${TOOLS.length} tools, free to use.`}
-            action={{ label: `Browse all ${TOOLS.length} tools`, href: "/tools" }}
-            reassurance="No signup, no card."
-            rows={TOOL_ROWS}
-            className="lg:order-none order-2"
-          />
-
-          <PlanCard
-            featured
-            strip={`${TRIAL_DAYS} days free`}
-            icon={<Mark className="mt-0.5 h-8 w-8 shrink-0 text-brand-blue" />}
-            name={PLAN.name}
-            tag={`${PLAN.sites} website`}
-            subtitle="Everything Rankbox does, in one plan."
-            price={<Price amount={price.perMonth} suffix="/month" />}
-            priceNote={
-              <>
-                Works out to{" "}
-                <span className="font-semibold text-ink tabular-nums">
-                  {formatUsd(price.perArticle)}
-                </span>{" "}
-                an article, all-in.
-              </>
-            }
-            action={{ label: "Get Started Free", href: "/auth" }}
-            reassurance={`No card to sign up. ${TRIAL_DAYS} days free, then ${formatUsd(PLAN.monthly)}/month. Cancel anytime.`}
-            rows={BUSINESS_ROWS}
-            className="order-1 lg:order-none"
-          />
-
-          {STUDIO.live && (
-            <PlanCard
-              icon={<PlanIcon icon={Layers} />}
-              name={STUDIO.name}
-              subtitle="For agencies and founders running several brands"
-              price={<Price amount={STUDIO.monthlyPerSite} suffix="/extra site a month" />}
-              priceNote={`Your plan covers your first site. Every other site is ${formatUsd(STUDIO.monthlyPerSite)} a month, on the same invoice.`}
-              action={{ label: "Get Started Free", href: "/auth" }}
-              reassurance="Add sites from your dashboard once your plan is active."
-              rows={STUDIO_ROWS}
-              className="order-3 lg:order-none"
-            />
-          )}
-        </div>
+        <PlanCards />
       </Band>
 
       {/* Proof: where the articles are built to rank, and who's using it. */}

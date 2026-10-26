@@ -147,7 +147,7 @@ export function LlmsTxtGenerator() {
             }
           >
             {sections.map((s, i) => (
-              <div key={s.id} className="rounded-xl border border-border bg-background p-3.5">
+              <div key={s.id} className="rounded-xl border border-ink/[0.08] bg-background p-3.5">
                 <div className="flex items-center gap-2">
                   <TextInput
                     value={s.title}

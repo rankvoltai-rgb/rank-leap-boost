@@ -132,13 +132,13 @@ export function SearchTrigger({ onOpen, className }: { onOpen: () => void; class
       onClick={onOpen}
       aria-label="Search the docs"
       className={cn(
-        "flex h-9 items-center gap-2.5 rounded-lg border border-border bg-card px-3 text-sm text-muted-foreground shadow-1 transition-colors hover:border-ink/20 hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cta",
+        "flex h-9 items-center gap-2.5 rounded-lg border border-ink/[0.1] bg-white px-3 text-sm text-muted-foreground shadow-[0_1px_2px_rgba(16,24,40,0.04)] transition-colors hover:border-ink/[0.18] hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cta/40",
         className,
       )}
     >
       <Search className="h-4 w-4 shrink-0" />
       <span className="flex-1 text-left">Search docs</span>
-      <kbd className="hidden rounded border border-border bg-secondary px-1.5 py-0.5 font-sans text-[0.7rem] font-medium text-muted-foreground sm:inline">
+      <kbd className="hidden rounded border border-ink/[0.1] bg-white px-1.5 py-0.5 font-sans text-[0.7rem] font-medium text-muted-foreground sm:inline">
         {mac ? "⌘K" : "Ctrl K"}
       </kbd>
     </button>

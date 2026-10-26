@@ -32,11 +32,11 @@ export function PageActions({ path, title }: { path: string; title: string }) {
   };
 
   return (
-    <div className="inline-flex shrink-0 items-stretch self-start overflow-hidden rounded-lg border border-border bg-card text-sm shadow-1">
+    <div className="inline-flex shrink-0 items-stretch self-start overflow-hidden rounded-lg border border-ink/[0.1] bg-white text-sm shadow-[0_1px_2px_rgba(16,24,40,0.04)]">
       <button
         type="button"
         onClick={copy}
-        className="flex items-center gap-2 px-3 py-1.5 font-medium text-ink transition-colors hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-cta"
+        className="flex items-center gap-2 px-3 py-1.5 font-medium text-ink transition-colors hover:bg-ink/[0.035] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-cta"
       >
         {state === "copied" ? (
           <Check className="h-3.5 w-3.5 text-success" aria-hidden />
@@ -50,7 +50,7 @@ export function PageActions({ path, title }: { path: string; title: string }) {
       <DropdownMenu>
         <DropdownMenuTrigger
           aria-label="More ways to use this page"
-          className="flex items-center border-l border-border px-2 text-muted-foreground transition-colors hover:bg-secondary hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-cta"
+          className="flex items-center border-l border-ink/[0.1] px-2 text-muted-foreground transition-colors hover:bg-ink/[0.035] hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-cta"
         >
           <ChevronDown className="h-4 w-4" />
         </DropdownMenuTrigger>

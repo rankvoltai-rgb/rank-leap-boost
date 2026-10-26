@@ -14,7 +14,7 @@ function DocsLayout() {
   const { data } = useSuspenseQuery(docsNavQuery);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-white">
       <DocsChrome sections={data.sections} pathname={pathname}>
         <Outlet />
       </DocsChrome>

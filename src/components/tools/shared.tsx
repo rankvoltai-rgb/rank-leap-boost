@@ -69,15 +69,11 @@ export function Pane({
   flush?: boolean;
 }) {
   return (
-    <section className={cn("rounded-2xl border border-border bg-card shadow-1", className)}>
+    <section className={cn("rounded-xl border border-ink/[0.08] bg-white", className)}>
       {(title || actions) && (
-        <header className="flex items-start justify-between gap-4 border-b border-border px-5 py-3.5">
+        <header className="flex items-start justify-between gap-4 border-b border-ink/[0.07] px-5 py-3.5">
           <div className="min-w-0">
-            {title && (
-              <h3 className="text-[0.72rem] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
-                {title}
-              </h3>
-            )}
+            {title && <h3 className="text-[0.85rem] font-medium text-ink">{title}</h3>}
             {description && (
               <p className="mt-1 text-[0.82rem] leading-snug text-muted-foreground">
                 {description}
@@ -112,9 +108,9 @@ export function Field({
   return (
     <label className="block">
       <span className="flex items-baseline justify-between gap-3">
-        <span className="text-[0.85rem] font-semibold text-ink">
+        <span className="text-[0.85rem] font-medium text-ink">
           {label}
-          {required && <span className="ml-1 text-volt">*</span>}
+          {required && <span className="ml-1 text-cta">*</span>}
         </span>
         {hint && <span className="text-xs text-muted-foreground">{hint}</span>}
       </span>
@@ -125,7 +121,7 @@ export function Field({
 }
 
 export const inputBase =
-  "w-full rounded-xl border border-border bg-background px-3.5 py-2.5 text-sm text-ink shadow-1 outline-none transition-[border-color,box-shadow] placeholder:text-muted-foreground/60 focus:border-volt/60 focus:ring-2 focus:ring-volt/20 disabled:opacity-60";
+  "w-full rounded-lg border border-ink/[0.1] bg-white px-3.5 py-2.5 text-sm text-ink shadow-[0_1px_2px_rgba(16,24,40,0.04)] outline-none transition-[border-color,box-shadow] placeholder:text-muted-foreground/60 hover:border-ink/[0.16] focus:border-cta/50 focus:shadow-[0_0_0_4px_color-mix(in_oklab,var(--cta)_12%,transparent)] disabled:opacity-60";
 
 export function TextInput(props: React.InputHTMLAttributes<HTMLInputElement>) {
   return <input {...props} className={cn(inputBase, props.className)} />;
@@ -183,7 +179,7 @@ export function Toggle({
       role="switch"
       aria-checked={checked}
       onClick={() => onChange(!checked)}
-      className="flex w-full items-center justify-between gap-4 rounded-xl border border-border bg-background px-4 py-3 text-left transition-colors hover:border-ink/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-volt"
+      className="flex w-full items-center justify-between gap-4 rounded-lg border border-ink/[0.08] bg-white px-4 py-3 text-left transition-colors hover:border-ink/[0.16] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cta/40"
     >
       <span className="min-w-0">
         <span className="flex items-center gap-2 text-sm font-medium text-ink">
@@ -200,12 +196,12 @@ export function Toggle({
         aria-hidden
         className={cn(
           "relative h-6 w-11 shrink-0 rounded-full transition-colors",
-          checked ? "bg-ink" : "bg-border",
+          checked ? "bg-cta" : "bg-ink/[0.12]",
         )}
       >
         <span
           className={cn(
-            "absolute top-0.5 h-5 w-5 rounded-full bg-background shadow-sm transition-transform",
+            "absolute top-0.5 h-5 w-5 rounded-full bg-white shadow-sm transition-transform",
             checked ? "translate-x-[22px]" : "translate-x-0.5",
           )}
         />
@@ -232,7 +228,7 @@ export function Segmented<T extends string>({
     <div
       role="radiogroup"
       aria-label={label}
-      className="inline-flex max-w-full overflow-x-auto rounded-xl border border-border bg-surface p-1 [scrollbar-width:none]"
+      className="inline-flex max-w-full overflow-x-auto rounded-lg bg-ink/[0.045] p-1 [scrollbar-width:none]"
     >
       {options.map((o) => {
         const on = o.value === value;
@@ -244,9 +240,11 @@ export function Segmented<T extends string>({
             aria-checked={on}
             onClick={() => onChange(o.value)}
             className={cn(
-              "shrink-0 rounded-lg font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-volt",
+              "shrink-0 rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cta/40",
               size === "md" ? "px-3.5 py-1.5 text-[0.82rem]" : "px-2.5 py-1 text-xs",
-              on ? "bg-card text-ink shadow-1" : "text-muted-foreground hover:text-ink",
+              on
+                ? "bg-white text-cta shadow-[0_1px_2px_rgba(16,24,40,0.08)]"
+                : "text-muted-foreground hover:text-ink",
             )}
           >
             {o.label}
@@ -279,10 +277,10 @@ export function Presets<T extends string>({
             title={o.hint}
             onClick={() => onChange(o.value)}
             className={cn(
-              "inline-flex h-8 items-center rounded-full border px-3 text-[0.8rem] font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-volt",
+              "inline-flex h-8 items-center rounded-lg border px-3 text-[0.8rem] font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cta/40",
               on
-                ? "border-ink bg-ink text-background"
-                : "border-border bg-card text-ink/75 hover:border-ink/25 hover:text-ink",
+                ? "border-cta/25 bg-cta-soft text-cta"
+                : "border-ink/[0.08] bg-white text-ink/75 hover:border-ink/[0.16] hover:text-ink",
             )}
           >
             {o.label}
@@ -307,12 +305,12 @@ export function RunButton({
       {...props}
       disabled={props.disabled || loading}
       className={cn(
-        "inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-ink px-5 text-sm font-semibold text-background shadow-sm transition-all hover:-translate-y-px hover:shadow-md disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0 disabled:hover:shadow-sm",
+        "inline-flex h-11 items-center justify-center gap-2 rounded-lg bg-cta px-5 text-sm font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.16),0_1px_2px_rgba(16,24,40,0.14)] transition-[background-color,transform] duration-150 hover:bg-cta-hover active:scale-[0.985] disabled:cursor-not-allowed disabled:opacity-50 disabled:active:scale-100",
         props.className,
       )}
     >
       {loading && (
-        <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-background/40 border-t-background" />
+        <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white/40 border-t-white" />
       )}
       {children}
     </button>
@@ -325,7 +323,7 @@ export function GhostButton({ children, ...props }: React.ButtonHTMLAttributes<H
       type="button"
       {...props}
       className={cn(
-        "inline-flex h-8 items-center gap-1.5 rounded-lg border border-border bg-card px-2.5 text-[0.78rem] font-semibold text-ink/75 transition-colors hover:border-ink/20 hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-volt disabled:opacity-50",
+        "inline-flex h-8 items-center gap-1.5 rounded-md border border-ink/[0.1] bg-white px-2.5 text-[0.78rem] font-medium text-ink/80 transition-colors hover:border-ink/[0.18] hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cta/40 disabled:opacity-50",
         props.className,
       )}
     >
@@ -413,15 +411,15 @@ export function OutputBox({
   const lines = value ? value.split("\n") : [];
   const bytes = new Blob([value]).size;
   return (
-    <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-1">
-      <div className="flex items-center justify-between gap-3 border-b border-border bg-surface/60 px-4 py-2.5">
+    <div className="overflow-hidden rounded-xl border border-ink/[0.08] bg-white">
+      <div className="flex items-center justify-between gap-3 border-b border-ink/[0.07] bg-[color-mix(in_oklab,var(--surface)_55%,white)] px-4 py-2.5">
         <div className="flex min-w-0 items-center gap-2.5">
           <span className="flex gap-1" aria-hidden>
-            <span className="h-2.5 w-2.5 rounded-full bg-border" />
-            <span className="h-2.5 w-2.5 rounded-full bg-border" />
-            <span className="h-2.5 w-2.5 rounded-full bg-border" />
+            <span className="h-2.5 w-2.5 rounded-full bg-ink/[0.1]" />
+            <span className="h-2.5 w-2.5 rounded-full bg-ink/[0.1]" />
+            <span className="h-2.5 w-2.5 rounded-full bg-ink/[0.1]" />
           </span>
-          <span className="truncate font-mono text-[0.72rem] font-semibold text-ink/80">
+          <span className="truncate font-mono text-[0.72rem] font-medium text-ink/80">
             {filename ?? language}
           </span>
           {value && (
@@ -502,20 +500,20 @@ export function CheckList({ items, sort = true }: { items: CheckItem[]; sort?: b
   const order: Record<Status, number> = { fail: 0, warn: 1, info: 2, pass: 3 };
   const rows = sort ? [...items].sort((a, b) => order[a.status] - order[b.status]) : items;
   return (
-    <ul className="divide-y divide-border">
+    <ul className="divide-y divide-ink/[0.07]">
       {rows.map((c) => (
         <li key={c.id} className="flex gap-3 px-5 py-3.5">
           <StatusIcon status={c.status} className="mt-0.5" />
           <div className="min-w-0 flex-1">
-            <p className="text-sm font-semibold text-ink">{c.label}</p>
+            <p className="text-sm font-medium text-ink">{c.label}</p>
             {c.detail && (
               <p className="mt-0.5 text-[0.85rem] leading-relaxed text-muted-foreground">
                 {c.detail}
               </p>
             )}
             {c.fix && c.status !== "pass" && (
-              <p className="mt-1.5 rounded-lg bg-surface px-3 py-2 text-[0.82rem] leading-relaxed text-ink/80">
-                <span className="font-semibold text-ink">Fix: </span>
+              <p className="mt-1.5 rounded-md bg-cta-soft/60 px-3 py-2 text-[0.82rem] leading-relaxed text-ink/80">
+                <span className="font-medium text-cta">Fix: </span>
                 {c.fix}
               </p>
             )}
@@ -557,7 +555,7 @@ export function ScoreRing({
             fill="none"
             stroke="currentColor"
             strokeWidth="8"
-            className="text-border"
+            className="text-ink/[0.07]"
           />
           <circle
             cx="50"
@@ -573,7 +571,7 @@ export function ScoreRing({
           />
         </svg>
         <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <span className="font-display text-[1.75rem] font-bold leading-none tracking-tight text-ink">
+          <span className="font-display text-[1.75rem] font-medium leading-none tracking-[-0.03em] text-ink">
             {clamped}
           </span>
           <span className="mt-1 text-[0.62rem] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
@@ -584,7 +582,7 @@ export function ScoreRing({
       {(label || caption) && (
         <div className="min-w-0">
           {label && (
-            <p className="font-display text-lg font-semibold tracking-tight text-ink">{label}</p>
+            <p className="font-display text-lg font-medium tracking-[-0.015em] text-ink">{label}</p>
           )}
           {caption && (
             <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{caption}</p>
@@ -634,7 +632,7 @@ export function Meter({
   return (
     <div>
       <div className="flex items-center justify-between text-xs">
-        <span className="font-semibold text-ink">{label}</span>
+        <span className="font-medium text-ink">{label}</span>
         <span
           className={cn(
             "font-medium tabular-nums",
@@ -649,7 +647,7 @@ export function Meter({
           {unit} · {note}
         </span>
       </div>
-      <div className="relative mt-1.5 h-1.5 overflow-hidden rounded-full bg-border">
+      <div className="relative mt-1.5 h-1.5 overflow-hidden rounded-full bg-ink/[0.07]">
         <div
           className={cn("h-full rounded-full transition-all", bar)}
           style={{ width: `${pct}%` }}
@@ -669,8 +667,8 @@ export function Meter({
 /** A number with a label. */
 export function Stat({ value, label, hint }: { value: ReactNode; label: string; hint?: string }) {
   return (
-    <div className="rounded-xl border border-border bg-background px-4 py-3">
-      <p className="font-display text-2xl font-bold tracking-tight text-ink tabular-nums">
+    <div className="rounded-lg border border-ink/[0.08] bg-white px-4 py-3">
+      <p className="font-display text-2xl font-medium tracking-[-0.025em] text-ink tabular-nums">
         {value}
       </p>
       <p className="mt-0.5 text-xs font-medium text-muted-foreground">{label}</p>
@@ -705,14 +703,14 @@ export function Chips({ items, onCopy }: { items: string[]; onCopy?: boolean }) 
             key={item}
             type="button"
             onClick={() => copy(item, item)}
-            className="rounded-lg border border-border bg-background px-2.5 py-1 text-xs font-medium text-ink/80 transition-colors hover:border-ink/25 hover:text-ink"
+            className="rounded-md border border-ink/[0.08] bg-white px-2.5 py-1 text-xs font-medium text-ink/80 transition-colors hover:border-cta/25 hover:bg-cta-soft hover:text-cta"
           >
             {copied === item ? "Copied" : item}
           </button>
         ) : (
           <span
             key={item}
-            className="rounded-lg border border-border bg-background px-2.5 py-1 text-xs font-medium text-ink/80"
+            className="rounded-md border border-ink/[0.08] bg-white px-2.5 py-1 text-xs font-medium text-ink/80"
           >
             {item}
           </span>
@@ -758,9 +756,9 @@ export function EmptyState({
   icon?: ReactNode;
 }) {
   return (
-    <div className="flex flex-col items-center rounded-2xl border border-dashed border-border bg-card px-6 py-12 text-center">
+    <div className="flex flex-col items-center rounded-xl border border-dashed border-ink/[0.12] bg-white px-6 py-12 text-center">
       {icon && <div className="mb-3 text-muted-foreground">{icon}</div>}
-      <p className="font-display text-base font-semibold text-ink">{title}</p>
+      <p className="font-display text-base font-medium text-ink">{title}</p>
       {body && (
         <p className="mx-auto mt-1.5 max-w-sm text-sm leading-relaxed text-muted-foreground">
           {body}
@@ -773,11 +771,11 @@ export function EmptyState({
 /** Skeleton shown while an AI tool is generating. */
 export function Thinking({ lines = 4 }: { lines?: number }) {
   return (
-    <div className="space-y-3 rounded-2xl border border-border bg-card p-5" aria-busy>
+    <div className="space-y-3 rounded-xl border border-ink/[0.08] bg-white p-5" aria-busy>
       {Array.from({ length: lines }).map((_, i) => (
         <div
           key={i}
-          className="h-3.5 animate-pulse rounded bg-border/70"
+          className="h-3.5 animate-pulse rounded bg-ink/[0.06]"
           style={{ width: `${[92, 78, 85, 60, 70][i % 5]}%` }}
         />
       ))}
@@ -790,7 +788,7 @@ export function ErrorNote({ message }: { message: string }) {
   return (
     <p
       role="alert"
-      className="flex items-start gap-2.5 rounded-xl border border-destructive/30 bg-destructive/5 px-4 py-3 text-sm text-destructive"
+      className="flex items-start gap-2.5 rounded-lg border border-destructive/30 bg-destructive/5 px-4 py-3 text-sm text-destructive"
     >
       <XCircle className="mt-0.5 h-4 w-4 shrink-0" />
       {message}

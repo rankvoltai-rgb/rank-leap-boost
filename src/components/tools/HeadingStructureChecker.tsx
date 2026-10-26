@@ -16,7 +16,7 @@ const QUESTION = /\?$|^(how|what|why|when|where|which|who|can|should|does|do|is|
 
 const LEVEL_TONE = [
   "",
-  "bg-ink text-background",
+  "bg-cta text-white",
   "bg-volt/15 text-volt",
   "bg-secondary text-ink",
   "bg-secondary text-ink/70",

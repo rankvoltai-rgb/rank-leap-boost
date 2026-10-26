@@ -122,9 +122,9 @@ function DocPage({ page }: { page: DocPageData }) {
           </Link>
         </nav>
 
-        <header className="border-b border-border pb-7">
+        <header className="border-b border-ink/[0.07] pb-7">
           <div className="flex flex-col-reverse gap-4 sm:flex-row sm:items-start sm:justify-between">
-            <h1 className="text-[2rem] font-semibold leading-[1.15] tracking-tight text-ink sm:text-[2.35rem]">
+            <h1 className="font-display text-[2rem] font-medium leading-[1.12] tracking-[-0.03em] text-ink sm:text-[2.4rem]">
               {page.title}
             </h1>
             <PageActions path={page.path} title={page.title} />
@@ -137,8 +137,8 @@ function DocPage({ page }: { page: DocPageData }) {
         </header>
 
         {outline.length > 2 && (
-          <details className="group mt-6 rounded-xl border border-border bg-card xl:hidden">
-            <summary className="flex cursor-pointer list-none items-center justify-between px-4 py-3 text-sm font-semibold text-ink [&::-webkit-details-marker]:hidden">
+          <details className="group mt-6 rounded-xl border border-ink/[0.08] bg-white xl:hidden">
+            <summary className="flex cursor-pointer list-none items-center justify-between px-4 py-3 text-sm font-medium text-ink [&::-webkit-details-marker]:hidden">
               On this page
               <ChevronRight className="h-4 w-4 text-muted-foreground transition-transform group-open:rotate-90" />
             </summary>
@@ -180,7 +180,7 @@ function DocPage({ page }: { page: DocPageData }) {
 function Pager({ prev, next }: { prev: DocLink | null; next: DocLink | null }) {
   if (!prev && !next) return null;
   const card =
-    "group flex min-w-0 flex-1 flex-col gap-1 rounded-xl border border-border bg-card px-4 py-3.5 transition-colors hover:border-cta/40 hover:bg-cta-soft/40";
+    "group flex min-w-0 flex-1 flex-col gap-1 rounded-xl border border-ink/[0.08] bg-white px-4 py-3.5 transition-colors hover:border-cta/30 hover:bg-cta-soft/40";
   return (
     <nav aria-label="Previous and next pages" className="flex flex-col gap-3 sm:flex-row">
       {prev ? (
@@ -189,7 +189,7 @@ function Pager({ prev, next }: { prev: DocLink | null; next: DocLink | null }) {
             <ChevronLeft className="h-3.5 w-3.5" aria-hidden />
             Previous
           </span>
-          <span className="truncate font-semibold text-ink group-hover:text-cta">{prev.title}</span>
+          <span className="truncate font-medium text-ink group-hover:text-cta">{prev.title}</span>
         </Link>
       ) : (
         <span className="hidden flex-1 sm:block" />
@@ -200,7 +200,7 @@ function Pager({ prev, next }: { prev: DocLink | null; next: DocLink | null }) {
             Next
             <ChevronRight className="h-3.5 w-3.5" aria-hidden />
           </span>
-          <span className="truncate font-semibold text-ink group-hover:text-cta">{next.title}</span>
+          <span className="truncate font-medium text-ink group-hover:text-cta">{next.title}</span>
         </Link>
       ) : (
         <span className="hidden flex-1 sm:block" />

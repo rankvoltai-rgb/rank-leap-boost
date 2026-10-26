@@ -48,7 +48,7 @@ export function AiSearchReadinessCheck() {
 
   return (
     <Stack>
-      <form onSubmit={submit} className="rounded-2xl border border-border bg-card p-5 shadow-1">
+      <form onSubmit={submit} className="rounded-xl border border-ink/[0.08] bg-white p-5">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
           <div className="flex-1">
             <Field label="Page URL" hint="Homepage or any page">
@@ -154,7 +154,7 @@ export function AiSearchReadinessCheck() {
       )}
 
       {!report && !loading && !error && (
-        <div className="flex items-center gap-3 rounded-2xl border border-dashed border-border px-5 py-6 text-sm text-muted-foreground">
+        <div className="flex items-center gap-3 rounded-xl border border-dashed border-ink/[0.08] px-5 py-6 text-sm text-muted-foreground">
           <Globe className="h-5 w-5 shrink-0" />
           Twelve checks: crawler access, llms.txt, title, description, H1, schema, canonical, Open
           Graph, language, viewport, visible content and response.

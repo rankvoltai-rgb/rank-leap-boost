@@ -23,7 +23,7 @@ const ANGLE_TONE: Record<string, string> = {
   "How-to": "bg-volt/10 text-volt",
   List: "bg-success/10 text-success",
   Question: "bg-warning/15 text-warning",
-  Contrarian: "bg-ink text-background",
+  Contrarian: "bg-cta text-white",
   "Data-led": "bg-secondary text-ink",
 };
 
@@ -91,7 +91,7 @@ export function BlogTitleGenerator() {
     <Stack>
       <form
         onSubmit={submit}
-        className="space-y-4 rounded-2xl border border-border bg-card p-5 shadow-1"
+        className="space-y-4 rounded-xl border border-ink/[0.08] bg-white p-5"
       >
         <div className="grid gap-4 sm:grid-cols-2">
           <Field label="Topic" required>

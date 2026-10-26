@@ -18,7 +18,7 @@ const INTENT_TONE: Record<string, string> = {
   Informational: "bg-volt/10 text-volt",
   Commercial: "bg-success/10 text-success",
   Comparison: "bg-warning/15 text-warning",
-  Transactional: "bg-ink text-background",
+  Transactional: "bg-cta text-white",
 };
 
 export function AiQuestionGenerator() {
@@ -51,7 +51,7 @@ export function AiQuestionGenerator() {
 
   return (
     <Stack>
-      <form onSubmit={submit} className="rounded-2xl border border-border bg-card p-5 shadow-1">
+      <form onSubmit={submit} className="rounded-xl border border-ink/[0.08] bg-white p-5">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
           <div className="flex-1">
             <Field label="Topic, product or keyword">
@@ -83,7 +83,7 @@ export function AiQuestionGenerator() {
             {groups.map((group) => (
               <section
                 key={group.intent}
-                className="rounded-2xl border border-border bg-card p-5 shadow-1"
+                className="rounded-xl border border-ink/[0.08] bg-white p-5"
               >
                 <span
                   className={cn(

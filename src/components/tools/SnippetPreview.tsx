@@ -122,7 +122,7 @@ export function SnippetPreview() {
             checked={dated}
             onChange={setDated}
           />
-          <div className="space-y-3 border-t border-border pt-4">
+          <div className="space-y-3 border-t border-ink/[0.08] pt-4">
             <Meter
               label="Title width"
               value={Math.round(titlePx)}
@@ -213,9 +213,9 @@ export function SnippetPreview() {
             title="AI Overview citation"
             description="How the same page reads as a cited source"
           >
-            <div className="rounded-xl border border-border bg-background p-4">
+            <div className="rounded-xl border border-ink/[0.08] bg-background p-4">
               <p className="text-[0.95rem] leading-relaxed text-ink">{firstSentence}</p>
-              <div className="mt-3 flex items-center gap-2 rounded-lg border border-border bg-card px-3 py-2">
+              <div className="mt-3 flex items-center gap-2 rounded-lg border border-ink/[0.08] bg-white px-3 py-2">
                 <span className="flex h-5 w-5 items-center justify-center rounded-full bg-secondary text-[10px] font-bold text-ink">
                   {brand[0]?.toUpperCase()}
                 </span>

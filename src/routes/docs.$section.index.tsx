@@ -50,12 +50,12 @@ function SectionPage() {
         <ChevronRight className="h-3.5 w-3.5 text-muted-foreground/60" aria-hidden />
         <span className="font-medium text-ink">{section.title}</span>
       </nav>
-      <header className="flex items-start gap-4 border-b border-border pb-7">
-        <span className="mt-1 flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-cta/25 bg-cta-soft text-cta">
+      <header className="flex items-start gap-4 border-b border-ink/[0.07] pb-7">
+        <span className="mt-1 flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-cta-soft text-cta">
           <DocsIcon name={section.icon} className="h-5 w-5" />
         </span>
         <div>
-          <h1 className="text-[2rem] font-semibold leading-tight tracking-tight text-ink sm:text-[2.35rem]">
+          <h1 className="font-display text-[2rem] font-medium leading-[1.12] tracking-[-0.03em] text-ink sm:text-[2.4rem]">
             {section.title}
           </h1>
           <p className="mt-2 text-[1.075rem] leading-relaxed text-muted-foreground">
@@ -64,18 +64,18 @@ function SectionPage() {
         </div>
       </header>
 
-      <ol className="mt-4 divide-y divide-border">
+      <ol className="mt-4 divide-y divide-ink/[0.07]">
         {section.pages.map((page, i) => (
           <li key={page.slug}>
             <Link
               to={page.path}
-              className="group flex items-start gap-4 rounded-lg px-2 py-5 transition-colors hover:bg-secondary/60"
+              className="group flex items-start gap-4 rounded-lg px-2 py-5 transition-colors hover:bg-[color-mix(in_oklab,var(--surface)_35%,white)]"
             >
-              <span className="mt-0.5 w-6 shrink-0 text-right text-sm font-medium tabular-nums text-muted-foreground">
+              <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-ink/[0.045] text-xs font-medium tabular-nums text-ink/70 transition-colors group-hover:bg-cta-soft group-hover:text-cta">
                 {i + 1}
               </span>
               <span className="min-w-0 flex-1">
-                <span className="block font-semibold text-ink group-hover:text-cta">
+                <span className="block font-medium text-ink group-hover:text-cta">
                   {page.title}
                 </span>
                 <span className="mt-1 block text-[0.95rem] leading-relaxed text-muted-foreground">

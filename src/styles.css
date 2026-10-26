@@ -857,8 +857,9 @@
 .docs-prose .docs-h {
   scroll-margin-top: 5rem;
   color: var(--ink);
-  font-weight: 650;
-  letter-spacing: -0.015em;
+  font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: -0.02em;
 }
 .docs-prose h2 {
   margin: 2.8rem 0 0.9rem;
@@ -932,7 +933,7 @@
 .docs-prose hr {
   margin: 2.5rem 0;
   border: 0;
-  border-top: 1px solid var(--border);
+  border-top: 1px solid color-mix(in oklab, var(--ink) 8%, transparent);
 }
 .docs-prose blockquote {
   margin: 1.4rem 0;
@@ -941,9 +942,9 @@
   color: var(--muted-foreground);
 }
 .docs-prose :not(pre) > code {
-  border: 1px solid var(--border);
+  border: 1px solid color-mix(in oklab, var(--ink) 9%, transparent);
   border-radius: 0.375rem;
-  background: var(--secondary);
+  background: color-mix(in oklab, var(--ink) 3.5%, white);
   padding: 0.1em 0.38em;
   color: var(--ink);
   font-family: var(--font-mono);
@@ -955,9 +956,9 @@
 .docs-prose .docs-table {
   margin: 1.5rem 0;
   overflow-x: auto;
-  border: 1px solid var(--border);
+  border: 1px solid color-mix(in oklab, var(--ink) 8%, transparent);
   border-radius: 0.75rem;
-  background: var(--card);
+  background: #fff;
 }
 .docs-prose table {
   width: 100%;
@@ -966,9 +967,9 @@
   line-height: 1.55;
 }
 .docs-prose th {
-  background: var(--surface);
+  background: color-mix(in oklab, var(--surface) 55%, white);
   color: var(--ink);
-  font-weight: 600;
+  font-weight: 550;
   text-align: left;
   white-space: nowrap;
 }
@@ -979,7 +980,7 @@
 }
 .docs-prose tr + tr td,
 .docs-prose tbody tr:first-child td {
-  border-top: 1px solid var(--border);
+  border-top: 1px solid color-mix(in oklab, var(--ink) 7%, transparent);
 }
 .docs-prose td code {
   font-size: 0.82em;

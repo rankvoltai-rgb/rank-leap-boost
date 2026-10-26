@@ -212,7 +212,7 @@ export function AiVisibilityPromptKit() {
                               "flex h-5 w-5 shrink-0 items-center justify-center rounded-md border transition-colors",
                               on
                                 ? "border-success bg-success text-white"
-                                : "border-border bg-background hover:border-ink/40",
+                                : "border-ink/[0.08] bg-background hover:border-ink/40",
                             )}
                           >
                             {on && <Check className="h-3.5 w-3.5" strokeWidth={3} />}

@@ -1,30 +1,40 @@
 import { createFileRoute, notFound, Link } from "@tanstack/react-router";
 import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
-import {
-  AlternativeHero,
-  ShortAnswer,
-  AlternativeSpecs,
-  Positioning,
-  CostComparison,
-  Battlegrounds,
-  BetterWhen,
-  Migration,
-  Sources,
-  AlternativeFAQ,
-  OtherComparisons,
-  AlternativeCTA,
-} from "@/components/alternatives/AlternativeSections";
-import { ComparisonMatrix } from "@/components/alternatives/ComparisonMatrix";
-import { ExploreMore } from "@/components/ExploreMore";
-import { competitorH1, getCompetitor } from "@/data/alternatives";
+import type { ComponentType } from "react";
+import { SurferSeoAlternativePage } from "@/components/alternatives/surfer-seo/SurferSeoAlternativePage";
+import { BywordAlternativePage } from "@/components/alternatives/byword/BywordAlternativePage";
+import { RankpillAlternativePage } from "@/components/alternatives/rankpill/RankpillAlternativePage";
+import { JasperAlternativePage } from "@/components/alternatives/jasper/JasperAlternativePage";
+import { FraseAlternativePage } from "@/components/alternatives/frase/FraseAlternativePage";
+import { OutrankAlternativePage } from "@/components/alternatives/outrank/OutrankAlternativePage";
+import { WritesonicAlternativePage } from "@/components/alternatives/writesonic/WritesonicAlternativePage";
+import { KoalaAiAlternativePage } from "@/components/alternatives/koala-ai/KoalaAiAlternativePage";
+import { SeobotAlternativePage } from "@/components/alternatives/seobot/SeobotAlternativePage";
+import { competitorH1, getCompetitor, type Competitor } from "@/data/alternatives";
 import { PLAN } from "@/data/pricing";
 
 const SITE = "https://rankbox.xyz";
 
+/* Every comparison has a layout of its own, drawn in the landing page's
+   frame, so no two are one template with the names swapped. The head below
+   stays shared. */
+const LAYOUTS: Record<string, ComponentType<{ competitor: Competitor }>> = {
+  "surfer-seo": SurferSeoAlternativePage,
+  byword: BywordAlternativePage,
+  rankpill: RankpillAlternativePage,
+  jasper: JasperAlternativePage,
+  frase: FraseAlternativePage,
+  outrank: OutrankAlternativePage,
+  writesonic: WritesonicAlternativePage,
+  "koala-ai": KoalaAiAlternativePage,
+  seobot: SeobotAlternativePage,
+};
+
 export const Route = createFileRoute("/alternatives/$slug")({
   loader: ({ params }) => {
-    if (!getCompetitor(params.slug)) throw notFound();
+    // A competitor without a layout yet 404s rather than rendering blank.
+    if (!getCompetitor(params.slug) || !LAYOUTS[params.slug]) throw notFound();
   },
   head: ({ params }) => {
     const url = `${SITE}/alternatives/${params.slug}`;
@@ -144,24 +154,12 @@ export const Route = createFileRoute("/alternatives/$slug")({
 function AlternativePage() {
   const { slug } = Route.useParams();
   const competitor = getCompetitor(slug)!;
+  const Layout = LAYOUTS[slug];
   return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
+    <div className="min-h-screen bg-white">
+      <Navbar framed />
       <main>
-        <AlternativeHero competitor={competitor} />
-        <ShortAnswer competitor={competitor} />
-        <AlternativeSpecs competitor={competitor} />
-        <Positioning competitor={competitor} />
-        <ComparisonMatrix competitor={competitor} />
-        <CostComparison competitor={competitor} />
-        <Battlegrounds competitor={competitor} />
-        <BetterWhen competitor={competitor} />
-        <Migration competitor={competitor} />
-        <AlternativeFAQ competitor={competitor} />
-        <Sources competitor={competitor} />
-        <ExploreMore path={`/alternatives/${competitor.slug}`} />
-        <OtherComparisons competitor={competitor} />
-        <AlternativeCTA competitor={competitor} />
+        <Layout competitor={competitor} />
       </main>
       <Footer />
     </div>
@@ -175,7 +173,7 @@ function AlternativeNotFound() {
       <p className="text-muted-foreground">We haven&rsquo;t written that comparison yet.</p>
       <Link
         to="/alternatives"
-        className="rounded-xl bg-ink px-5 py-3 text-sm font-semibold text-background"
+        className="rounded-lg bg-cta px-5 py-3 text-sm font-semibold text-white hover:bg-cta-hover"
       >
         See all comparisons
       </Link>
@@ -189,7 +187,7 @@ function AlternativeError() {
       <h1 className="font-display text-3xl font-semibold text-ink">Something went wrong</h1>
       <Link
         to="/alternatives"
-        className="rounded-xl bg-ink px-5 py-3 text-sm font-semibold text-background"
+        className="rounded-lg bg-cta px-5 py-3 text-sm font-semibold text-white hover:bg-cta-hover"
       >
         See all comparisons
       </Link>

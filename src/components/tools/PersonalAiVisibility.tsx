@@ -18,7 +18,7 @@ function CopyButton({ value, label = "Copy" }: { value: string; label?: string }
           setTimeout(() => setCopied(false), 1500);
         })
       }
-      className="shrink-0 rounded-lg border border-border px-2.5 py-1 text-xs font-medium text-ink transition-colors hover:bg-secondary"
+      className="shrink-0 rounded-lg border border-ink/[0.08] px-2.5 py-1 text-xs font-medium text-ink transition-colors hover:bg-secondary"
     >
       {copied ? "Copied" : label}
     </button>
@@ -107,7 +107,7 @@ export function PersonalAiVisibility() {
       {/* Form */}
       <form
         onSubmit={submit}
-        className="grid gap-5 rounded-2xl border border-border bg-card p-6 sm:p-7"
+        className="grid gap-5 rounded-xl border border-ink/[0.08] bg-white p-6 sm:p-7"
       >
         <div className="grid gap-5 sm:grid-cols-2">
           <Field label="Your name">
@@ -158,7 +158,7 @@ export function PersonalAiVisibility() {
               {plan.headlines.map((h, i) => (
                 <div
                   key={i}
-                  className="flex items-start justify-between gap-4 rounded-xl border border-border bg-card px-4 py-3"
+                  className="flex items-start justify-between gap-4 rounded-xl border border-ink/[0.08] bg-white px-4 py-3"
                 >
                   <p className="text-sm leading-relaxed text-ink">{h}</p>
                   <CopyButton value={h} />
@@ -169,7 +169,7 @@ export function PersonalAiVisibility() {
 
           {!unlocked ? (
             /* Email gate */
-            <section className="relative overflow-hidden rounded-2xl border border-volt/30 bg-volt/[0.04] p-6 sm:p-8">
+            <section className="relative overflow-hidden rounded-xl border border-volt/30 bg-volt/[0.04] p-6 sm:p-8">
               <div className="mx-auto max-w-md text-center">
                 <span className="inline-flex items-center gap-1.5 rounded-full border border-volt/30 bg-background px-3 py-1 text-xs font-semibold text-volt">
                   Unlock your full plan
@@ -214,7 +214,7 @@ export function PersonalAiVisibility() {
                   </div>
                   <CopyButton value={plan.aboutMe} label="Copy text" />
                 </div>
-                <p className="whitespace-pre-line rounded-xl border border-border bg-card p-5 text-sm leading-relaxed text-ink">
+                <p className="whitespace-pre-line rounded-xl border border-ink/[0.08] bg-white p-5 text-sm leading-relaxed text-ink">
                   {plan.aboutMe}
                 </p>
               </section>
@@ -243,7 +243,7 @@ export function PersonalAiVisibility() {
 
                 <div className="space-y-6">
                   {plan.checklist.map((sec, si) => (
-                    <div key={si} className="rounded-2xl border border-border bg-card p-5">
+                    <div key={si} className="rounded-xl border border-ink/[0.08] bg-white p-5">
                       <h3 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
                         {sec.section}
                       </h3>
@@ -263,7 +263,7 @@ export function PersonalAiVisibility() {
                                     "mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-md border transition-colors " +
                                     (checked
                                       ? "border-volt bg-volt text-background"
-                                      : "border-border bg-background text-transparent")
+                                      : "border-ink/[0.08] bg-background text-transparent")
                                   }
                                 >
                                   <svg
@@ -304,18 +304,18 @@ export function PersonalAiVisibility() {
               </section>
 
               {/* Engagement */}
-              <section className="rounded-2xl border border-border bg-ink px-6 py-8 text-center sm:px-8">
-                <h2 className="font-display text-balance text-2xl font-semibold tracking-tight text-background">
+              <section className="rounded-xl bg-cta px-6 py-8 text-center sm:px-8">
+                <h2 className="font-display text-balance text-2xl font-medium tracking-[-0.025em] text-white">
                   Don't want to do this by hand?
                 </h2>
-                <p className="mx-auto mt-3 max-w-lg text-balance text-sm leading-relaxed text-background/70">
+                <p className="mx-auto mt-3 max-w-lg text-balance text-sm leading-relaxed text-white">
                   Rankbox researches your buyers' questions and publishes citation-ready content
                   daily — so AI engines find, understand, and recommend you on autopilot.
                 </p>
                 <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
                   <Link
                     to="/"
-                    className="rounded-xl bg-background px-5 py-3 text-sm font-semibold text-ink transition-opacity hover:opacity-90"
+                    className="rounded-lg bg-white px-5 py-3 text-sm font-semibold text-cta transition-colors hover:bg-white/95"
                   >
                     See how Rankbox works
                   </Link>

@@ -5,11 +5,10 @@ import { Footer } from "@/components/landing/Footer";
 import {
   IncludedFeatures,
   MobileStickyCTA,
-  PlanCard,
   PricingFAQ,
   PricingFinalCTA,
   PricingHero,
-  PricingProof,
+  PricingPlans,
   TheMath,
   TrialTimeline,
 } from "@/components/pricing/PricingSections";
@@ -93,18 +92,20 @@ export const Route = createFileRoute("/pricing")({
   component: PricingPage,
 });
 
+/* The landing page's frame, around one decision: the plans straight under
+   the promise, then why starting is safe, what the price is worth, what's
+   in it, and the questions people ask before they pay. */
 function PricingPage() {
   return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
+    <div className="min-h-screen bg-white">
+      <Navbar framed />
       <main>
         <PricingHero />
-        <PlanCard />
+        <PricingPlans />
         <TrialTimeline />
         <TheMath />
         <IncludedFeatures />
-        <PricingProof />
-        <ExploreMore path="/pricing" />
+        <ExploreMore path="/pricing" framed />
         <PricingFAQ />
         <PricingFinalCTA />
       </main>

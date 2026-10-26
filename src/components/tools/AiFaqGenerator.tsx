@@ -66,7 +66,7 @@ export function AiFaqGenerator() {
     <Stack>
       <form
         onSubmit={submit}
-        className="space-y-4 rounded-2xl border border-border bg-card p-5 shadow-1"
+        className="space-y-4 rounded-xl border border-ink/[0.08] bg-white p-5"
       >
         <Field
           label="Page or topic"

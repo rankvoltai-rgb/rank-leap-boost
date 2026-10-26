@@ -1,10 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
-import { Eyebrow, Reveal } from "@/components/landing/shared";
 import { BlogCta } from "@/components/blog/ArticleChrome";
-import { FaqList } from "@/components/ai-seo/sections";
-import { ToolExplorer, ToolkitCard, ToolkitsSection, ToolsHero } from "@/components/tools/hub";
+import { Band } from "@/components/landing/frame";
+import {
+  ToolExplorer,
+  ToolFaq,
+  ToolkitCard,
+  ToolkitsSection,
+  ToolsHero,
+} from "@/components/tools/hub";
 import { TOOLS, TOOL_CATEGORIES, type ToolCategoryId } from "@/data/tools";
 
 const SITE = "https://rankbox.xyz";
@@ -107,8 +112,8 @@ function ToolsIndex() {
   const { category } = Route.useSearch();
   const navigate = Route.useNavigate();
   return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
+    <div className="min-h-screen bg-white">
+      <Navbar framed />
       <main>
         <ToolsHero />
         <ToolExplorer
@@ -118,28 +123,17 @@ function ToolsIndex() {
           }
         />
 
-        <section aria-label="Start here" className="px-5 pb-16 lg:hidden">
-          <ToolkitCard id="readable" className="mx-auto max-w-lg shadow-2" />
+        {/* On phones the hero's toolkit has no room beside the copy; it
+            follows the tools instead. */}
+        <section aria-label="Start here" className="lg:hidden">
+          <Band inner="px-5 py-8 sm:px-8">
+            <ToolkitCard id="readable" className="mx-auto max-w-lg" />
+          </Band>
         </section>
 
         <ToolkitsSection />
-
-        <section aria-labelledby="faq-title" className="py-20 sm:py-28">
-          <div className="mx-auto max-w-3xl px-5">
-            <Reveal className="text-center">
-              <Eyebrow className="mb-4">FAQ</Eyebrow>
-              <h2
-                id="faq-title"
-                className="font-display text-balance text-3xl font-semibold tracking-tight text-ink sm:text-4xl"
-              >
-                Questions about the tools
-              </h2>
-            </Reveal>
-            <FaqList faqs={FAQS} />
-          </div>
-        </section>
-
-        <BlogCta title="Put the tools on autopilot" />
+        <ToolFaq title="Questions about the tools" faqs={FAQS} />
+        <BlogCta framed title="Put the tools on autopilot" />
       </main>
       <Footer />
     </div>

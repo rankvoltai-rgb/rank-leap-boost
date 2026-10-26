@@ -154,7 +154,7 @@ export function OpenGraphGenerator() {
             <div className="space-y-5">
               <div>
                 <p className="mb-2 text-xs font-semibold text-muted-foreground">X</p>
-                <div className="overflow-hidden rounded-2xl border border-border bg-background">
+                <div className="overflow-hidden rounded-xl border border-ink/[0.08] bg-background">
                   {card === "summary_large_image" ? (
                     <>
                       <Img src={image} className="aspect-[1.91/1] w-full" />
@@ -178,7 +178,7 @@ export function OpenGraphGenerator() {
               </div>
               <div>
                 <p className="mb-2 text-xs font-semibold text-muted-foreground">LinkedIn</p>
-                <div className="overflow-hidden rounded-lg border border-border bg-background">
+                <div className="overflow-hidden rounded-lg border border-ink/[0.08] bg-background">
                   <Img src={image} className="aspect-[1.91/1] w-full" />
                   <div className="bg-surface px-3 py-2.5">
                     <p className="line-clamp-2 text-sm font-semibold text-ink">{shownTitle}</p>
@@ -188,7 +188,7 @@ export function OpenGraphGenerator() {
               </div>
               <div>
                 <p className="mb-2 text-xs font-semibold text-muted-foreground">Slack</p>
-                <div className="flex gap-3 border-l-4 border-border py-1 pl-3">
+                <div className="flex gap-3 border-l-4 border-ink/[0.08] py-1 pl-3">
                   <div className="min-w-0 flex-1">
                     <p className="text-sm font-bold text-ink">{site || host}</p>
                     <p className="text-sm font-semibold text-volt">{shownTitle}</p>

@@ -1,18 +1,13 @@
 import { createFileRoute, Link, notFound, redirect } from "@tanstack/react-router";
 import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
-import {
-  CompareCta,
-  FeatureMatrix,
-  Finder,
-  MatchupFaq,
-  MatchupHero,
-  PricingFaceOff,
-  RelatedMatchups,
-  Rounds,
-  TaleOfTheTape,
-  ThirdOption,
-} from "@/components/compare/sections";
+import type { ComponentType } from "react";
+import { SurferSeoVsClearscopePage } from "@/components/compare/surfer-seo-vs-clearscope/SurferSeoVsClearscopePage";
+import { SurferSeoVsFrasePage } from "@/components/compare/surfer-seo-vs-frase/SurferSeoVsFrasePage";
+import { JasperVsWritesonicPage } from "@/components/compare/jasper-vs-writesonic/JasperVsWritesonicPage";
+import { KoalaAiVsBywordPage } from "@/components/compare/koala-ai-vs-byword/KoalaAiVsBywordPage";
+import { ProfoundVsPeecAiPage } from "@/components/compare/profound-vs-peec-ai/ProfoundVsPeecAiPage";
+import { SemrushVsAhrefsPage } from "@/components/compare/semrush-vs-ahrefs/SemrushVsAhrefsPage";
 import { hasEntry, loadEntry, tallyOf } from "@/data/compare/entries";
 import {
   canonicalSlug,
@@ -23,11 +18,21 @@ import {
   type Matchup,
 } from "@/data/compare/matchups";
 import type { MatchupEntry } from "@/data/compare/types";
-import { ExploreMore } from "@/components/ExploreMore";
 import { plainText } from "@/lib/inline-md";
 import { AUTHOR_ORG } from "@/data/company";
 
 const SITE = "https://rankbox.xyz";
+
+/* Every matchup has a layout of its own, drawn in the landing page's frame,
+   so no two are one template with the names swapped. The head stays shared. */
+const LAYOUTS: Record<string, ComponentType<{ matchup: Matchup; entry: MatchupEntry }>> = {
+  "surfer-seo-vs-clearscope": SurferSeoVsClearscopePage,
+  "surfer-seo-vs-frase": SurferSeoVsFrasePage,
+  "jasper-vs-writesonic": JasperVsWritesonicPage,
+  "koala-ai-vs-byword": KoalaAiVsBywordPage,
+  "profound-vs-peec-ai": ProfoundVsPeecAiPage,
+  "semrush-vs-ahrefs": SemrushVsAhrefsPage,
+};
 
 export const Route = createFileRoute("/compare/$slug")({
   /* The body is its own chunk, fetched here; the head and the hub only need
@@ -169,22 +174,11 @@ function MatchupPage() {
 }
 
 function MatchupView({ matchup, entry }: { matchup: Matchup; entry: MatchupEntry }) {
+  const Layout = LAYOUTS[matchup.slug];
   return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
-      <main>
-        <MatchupHero matchup={matchup} entry={entry} />
-        <TaleOfTheTape matchup={matchup} entry={entry} />
-        <Rounds matchup={matchup} entry={entry} />
-        <Finder matchup={matchup} entry={entry} />
-        <FeatureMatrix matchup={matchup} entry={entry} />
-        <PricingFaceOff matchup={matchup} entry={entry} />
-        <ThirdOption matchup={matchup} entry={entry} />
-        <MatchupFaq matchup={matchup} entry={entry} />
-        <RelatedMatchups matchup={matchup} />
-        <ExploreMore path={`/compare/${matchup.slug}`} />
-        <CompareCta />
-      </main>
+    <div className="min-h-screen bg-white">
+      <Navbar framed />
+      <main>{Layout && <Layout matchup={matchup} entry={entry} />}</main>
       <Footer />
     </div>
   );

@@ -52,7 +52,7 @@ export function ContentBriefGenerator() {
 
   return (
     <Stack>
-      <form onSubmit={submit} className="rounded-2xl border border-border bg-card p-5 shadow-1">
+      <form onSubmit={submit} className="rounded-xl border border-ink/[0.08] bg-white p-5">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
           <div className="flex-1">
             <Field label="Target keyword or topic">
@@ -74,7 +74,7 @@ export function ContentBriefGenerator() {
 
       {brief && (
         <>
-          <div className="rounded-2xl border border-border bg-card p-6 shadow-1">
+          <div className="rounded-xl border border-ink/[0.08] bg-white p-6">
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div className="min-w-0">
                 <p className="text-[0.7rem] font-semibold uppercase tracking-[0.14em] text-muted-foreground">

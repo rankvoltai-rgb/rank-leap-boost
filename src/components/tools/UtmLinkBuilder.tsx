@@ -200,7 +200,7 @@ export function UtmLinkBuilder() {
       output={
         <>
           {good[0] && (
-            <div className="rounded-2xl border border-border bg-card p-5 shadow-1">
+            <div className="rounded-xl border border-ink/[0.08] bg-white p-5">
               <p className="text-[0.7rem] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
                 Tagged link
               </p>

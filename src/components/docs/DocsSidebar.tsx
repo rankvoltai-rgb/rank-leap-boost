@@ -38,17 +38,15 @@ export function DocsSidebar({
                   onClick={onNavigate}
                   aria-current={pathname === section.path ? "page" : undefined}
                   className={cn(
-                    "flex min-w-0 flex-1 items-center gap-2.5 rounded-lg px-2 py-1.5 font-semibold transition-colors",
-                    here ? "text-ink" : "text-ink/80 hover:bg-secondary hover:text-ink",
+                    "flex min-w-0 flex-1 items-center gap-2.5 rounded-md px-2 py-1.5 font-medium transition-colors",
+                    here ? "text-ink" : "text-ink/80 hover:bg-ink/[0.035] hover:text-ink",
                     pathname === section.path && "bg-cta-soft text-cta",
                   )}
                 >
                   <span
                     className={cn(
-                      "flex h-6 w-6 shrink-0 items-center justify-center rounded-md border",
-                      here
-                        ? "border-cta/30 bg-cta-soft text-cta"
-                        : "border-border bg-card text-muted-foreground",
+                      "flex h-6 w-6 shrink-0 items-center justify-center rounded-md",
+                      here ? "bg-cta-soft text-cta" : "bg-ink/[0.045] text-ink/65",
                     )}
                   >
                     <DocsIcon name={section.icon} className="h-3.5 w-3.5" />
@@ -61,7 +59,7 @@ export function DocsSidebar({
                   aria-expanded={expanded}
                   aria-controls={`docs-nav-${section.slug}`}
                   aria-label={`${expanded ? "Collapse" : "Expand"} ${section.title}`}
-                  className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-secondary hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cta"
+                  className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-ink/[0.035] hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cta/40"
                 >
                   <ChevronRight
                     className={cn(
@@ -74,7 +72,7 @@ export function DocsSidebar({
               <ul
                 id={`docs-nav-${section.slug}`}
                 hidden={!expanded}
-                className="mb-2 ml-[1.15rem] mt-1 border-l border-border"
+                className="mb-2 ml-[1.15rem] mt-1 border-l border-ink/[0.08]"
               >
                 {section.pages.map((page) => {
                   const active = pathname === page.path;
@@ -87,7 +85,7 @@ export function DocsSidebar({
                         className={cn(
                           "-ml-px block border-l-2 py-1.5 pl-3.5 pr-2 leading-snug transition-colors",
                           active
-                            ? "border-cta font-semibold text-cta"
+                            ? "border-cta font-medium text-cta"
                             : "border-transparent text-muted-foreground hover:border-ink/25 hover:text-ink",
                         )}
                       >

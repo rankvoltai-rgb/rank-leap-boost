@@ -94,7 +94,7 @@ export function RobotsTxtTester() {
         <>
           <div
             className={cn(
-              "rounded-2xl border p-5 shadow-1",
+              "rounded-xl border p-5",
               verdict.allowed
                 ? "border-success/30 bg-success/5"
                 : "border-destructive/30 bg-destructive/5",

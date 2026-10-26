@@ -1,7 +1,7 @@
 import { useState, type ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
 import { Menu, Search } from "lucide-react";
-import { Logo } from "@/components/landing/shared";
+import { Mark } from "@/components/brand/Mark";
 import { Sheet, SheetContent, SheetDescription, SheetTitle } from "@/components/ui/sheet";
 import type { DocsNavSection } from "@/lib/docs/content.server";
 import { cn } from "@/lib/utils";
@@ -31,23 +31,25 @@ export function DocsChrome({
 
   return (
     <SearchContext.Provider value={openSearch}>
-      <header className="sticky top-0 z-40 border-b border-border bg-background/90 backdrop-blur supports-[backdrop-filter]:bg-background/75">
+      <header className="sticky top-0 z-40 border-b border-ink/[0.07] bg-white/90 backdrop-blur supports-[backdrop-filter]:bg-white/80">
         <div className="mx-auto flex h-14 max-w-[90rem] items-center gap-3 px-4 sm:px-6">
           <button
             type="button"
             onClick={() => setMenuOpen(true)}
             aria-label="Open the docs menu"
-            className="-ml-1.5 flex h-9 w-9 items-center justify-center rounded-lg text-ink transition-colors hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cta lg:hidden"
+            className="-ml-1.5 flex h-9 w-9 items-center justify-center rounded-lg text-ink transition-colors hover:bg-ink/[0.04] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cta/40 lg:hidden"
           >
             <Menu className="h-5 w-5" />
           </button>
-          <Link to="/" aria-label="Rankbox home" className="shrink-0">
-            <Logo />
+          {/* The bare blue mark, as on the site's white navbar. */}
+          <Link to="/" aria-label="Rankbox home" className="flex shrink-0 items-center gap-2">
+            <Mark className="h-[1.3rem] w-[1.3rem] text-brand-blue" />
+            <span className="text-[1.08rem] font-semibold tracking-tight text-ink">Rankbox</span>
           </Link>
-          <span aria-hidden className="h-5 w-px bg-border" />
+          <span aria-hidden className="h-5 w-px bg-ink/[0.1]" />
           <Link
             to="/docs"
-            className="text-[0.95rem] font-semibold text-ink transition-colors hover:text-cta"
+            className="text-[0.95rem] font-medium text-ink transition-colors hover:text-cta"
           >
             Docs
           </Link>
@@ -62,7 +64,9 @@ export function DocsChrome({
                   aria-current={on ? "page" : undefined}
                   className={cn(
                     "rounded-md px-2.5 py-1.5 text-sm font-medium transition-colors",
-                    on ? "text-cta" : "text-muted-foreground hover:text-ink",
+                    on
+                      ? "bg-cta-soft text-cta"
+                      : "text-muted-foreground hover:bg-ink/[0.04] hover:text-ink",
                   )}
                 >
                   {l.label}
@@ -77,13 +81,13 @@ export function DocsChrome({
               type="button"
               onClick={openSearch}
               aria-label="Search the docs"
-              className="flex h-9 w-9 items-center justify-center rounded-lg text-ink transition-colors hover:bg-secondary sm:hidden"
+              className="flex h-9 w-9 items-center justify-center rounded-lg text-ink transition-colors hover:bg-ink/[0.04] sm:hidden"
             >
               <Search className="h-[1.1rem] w-[1.1rem]" />
             </button>
             <Link
               to="/dashboard"
-              className="hidden h-9 items-center rounded-lg bg-cta px-3.5 text-sm font-semibold text-white transition-colors hover:bg-cta-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cta focus-visible:ring-offset-2 sm:inline-flex"
+              className="hidden h-9 items-center rounded-lg bg-cta px-3.5 text-sm font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.16),0_1px_2px_rgba(16,24,40,0.14)] transition-colors hover:bg-cta-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cta focus-visible:ring-offset-2 sm:inline-flex"
             >
               Open dashboard
             </Link>
@@ -97,7 +101,7 @@ export function DocsChrome({
 
       <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
         <SheetContent side="left" className="w-[19rem] overflow-y-auto p-0">
-          <div className="border-b border-border px-5 py-4">
+          <div className="border-b border-ink/[0.07] px-5 py-4">
             <SheetTitle className="text-base">Rankbox Docs</SheetTitle>
             <SheetDescription className="sr-only">
               Every section and page of the docs.
