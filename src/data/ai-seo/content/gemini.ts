@@ -1,155 +1,136 @@
 import type { EngineGuide } from "../types";
 
+/* Facts verified against Google's own docs and the cited studies on
+   2026-10-26. The sample brand and source domains in `preview` are invented
+   (no live site at any of them on that date). */
 export const gemini: EngineGuide = {
   slug: "gemini",
-  metaTitle: "Gemini SEO: The Technical Guide to Google Gemini Citations",
+  metaTitle: "Gemini SEO: How to Get Cited in the Gemini App (2026 Guide)",
   metaDescription:
-    "How the Gemini app grounds answers in Google Search, what Google-Extended really blocks, why the Search Console AI opt-out doesn't cover Gemini, and how to track Gemini traffic.",
+    "How the Gemini app grounds answers in Google Search, why Google-Extended is its only dedicated opt-out, how it differs from AI Mode, and how to find Gemini traffic in GA4.",
   keywords: [
     "Gemini SEO",
+    "how to get cited by Gemini",
     "Google Gemini optimization",
-    "get cited by Gemini",
-    "Google-Extended Gemini",
-    "Gemini grounding",
+    "Google-Extended",
+    "Gemini grounding with Google Search",
+    "Gemini vs AI Mode",
     "Gemini app citations",
   ],
-  headline: { lead: "Gemini SEO:", accent: "the technical guide to Gemini citations" },
+  headline: { lead: "Gemini SEO:", accent: "get cited when the Gemini app searches Google" },
   subhead:
-    "Gemini grounds its answers in the Google Search index — but it has its own opt-out, its own citation habits and no Search Console report. Here's how the Gemini app finds, cites and sends traffic to your pages.",
+    "The Gemini app answers from the same Google index as Search, but it has its own opt-out, links to fewer sources than the other big assistants, and sends traffic Search Console never sees. Here's how to earn its links, and how to tell when you have.",
 
   shortAnswer:
-    "To get cited by Gemini, your page must be indexed by Google (Gemini grounds its answers in the Google Search index), and your robots.txt must not disallow **Google-Extended**, which Google says controls grounding in the Gemini app as well as training. From there, Gemini favors the same helpful, non-commodity content as Google Search — but cites only about three sources per answer and names brands far more often than it links them.",
+    "To be cited by the Gemini app, a page has to be in Google's Search index and must not be disallowed for **Google-Extended**, the robots.txt token Google says controls grounding in Gemini Apps as well as Gemini training. Search Console's AI opt-out doesn't reach the app. Gemini also links to few sources (a median of 2.4 domains per answer in one 1,200-prompt study, against 3.1 for ChatGPT) and names brands far more often than it links them, so being named on the pages it does cite matters as much as being one of them.",
 
   takeaways: [
-    "Gemini's grounding is retrieval from the Google Search index. Not indexed by Googlebot means not citable by Gemini.",
-    "Disallowing `Google-Extended` opts you out of Gemini-app grounding and training — without affecting Search or AI Overviews.",
-    "The new Search Console AI opt-out covers AI Overviews, AI Mode and Discover — not the Gemini app.",
-    "Gemini cites about 3 sources per response, and mentions brands in text far more often than it links them.",
-    "Ahrefs found only 6–9% of assistant citations rank in Google's top 10 for the prompt: fan-out decides what's retrieved.",
-    "The Gemini app isn't in Search Console. Track it in GA4 — its AI Assistant channel names Gemini — and in logs.",
+    "Gemini has no index of its own. Grounding means \"providing content from the Google Search index to the model at prompt time,\" so a page Google hasn't indexed can't be cited.",
+    "`Google-Extended` is the app's only dedicated opt-out, and it's bundled: disallowing it drops your pages from Gemini grounding **and** future Gemini training. Cloudflare's managed robots.txt, set to disallow training, writes that line for you.",
+    "Search Console's generative AI control lists AI Overviews, AI Mode and Discover; the Gemini app isn't on it, and Gemini clicks never appear in Search Console.",
+    "Gemini cites few domains: a median of 2.4 per answer against ChatGPT's 3.1 and Perplexity's 6.4 in Attrifast's spring 2026 study. One agency panel found any source at all on only 68.4% of Gemini answers.",
+    "It names brands far more than it links them (83.7% vs 21.4% of appearances in Semrush's study), so earning mentions on the pages Gemini already cites is half the job.",
+    "Gemini's most-cited domains overlap only 27% with AI Mode's (BrightEdge). Winning AI Overviews doesn't mean winning Gemini.",
+    "Measure it in GA4's AI Assistant channel (since 13 May 2026) and by `gemini.google.com` referrals. Clicks from the mobile apps often arrive with no referrer at all.",
   ],
 
   facts: [
-    { label: "Gemini app monthly users (Q2 2026)", value: "950M" },
-    { label: "Grounded in", value: "Google's index" },
-    { label: "The token that controls grounding", value: "Google-Extended", mono: true },
-    { label: "Sources cited per answer", value: "~3" },
+    { label: "Gemini app monthly users (Aug 2026)", value: "1B+" },
+    { label: "Answers grounded in", value: "Google's Search index" },
+    { label: "The opt-out that reaches the app", value: "Google-Extended", mono: true },
+    { label: "Median domains cited per answer (Attrifast)", value: "2.4" },
   ],
 
   preview: {
     prompt: "Which project management apps work best with Google Workspace?",
-    status: "Grounded with Google Search",
+    status: "Answer grounded in Google Search",
     answer:
-      "**Plannora** is a strong fit if your team lives in Google Workspace: it syncs tasks with Google Calendar, attaches Drive files natively, and has a free tier for up to five people.",
+      "For a team that lives in Workspace, **Tallowpine** is a strong pick: tasks sync both ways with Google Calendar, Drive files attach natively, and its free tier covers up to five people.",
     sources: [
-      { domain: "plannora.io", title: "Plannora for Google Workspace" },
-      { domain: "stackreview.co", title: "Best Workspace-friendly PM tools" },
-      { domain: "founderforum.net", title: "PM tools that don't fight Google Docs" },
+      { domain: "tallowpine.app", title: "Tallowpine for Google Workspace" },
+      { domain: "toolbenchnotes.com", title: "Workspace-friendly PM tools, tested" },
+      { domain: "opsforumhub.net", title: "Which PM app doesn't fight Google Docs?" },
     ],
   },
 
   profile: {
-    retrieval: "The Google Search index, via Grounding with Google Search",
-    searchCrawler: "Googlebot",
-    trainingCrawler: "Google-Extended — also ends Gemini-app grounding",
-    rendersJs: "Yes — Google renders JavaScript that isn't blocked",
-    referrer: "gemini.google.com (AI Assistant channel)",
-    citationStyle: "A Sources button and inline links; many answers carry none",
-    biggestLever: "Be the indexed, non-commodity answer — and present on YouTube and forums",
+    retrieval: "The Google Search index, fetched at prompt time (Grounding with Google Search)",
+    searchCrawler: "Googlebot (there's no separate Gemini crawler)",
+    trainingCrawler: "Google-Extended token, which also ends Gemini-app grounding",
+    rendersJs: "Via Google's index (Googlebot renders JavaScript)",
+    referrer: "gemini.google.com, in GA4's AI Assistant channel; app clicks often land in Direct",
+    citationStyle: "Inline source chips and a Sources side panel; many answers show none",
+    biggestLever:
+      "Stay indexed with Google-Extended allowed, and get named on the few pages Gemini cites",
   },
 
   sections: [
     {
-      id: "how-gemini-grounds",
-      title: "How Gemini grounds answers in Google Search",
+      id: "prompt-to-source",
+      title: "From prompt to source chip: how Gemini grounds an answer",
       blocks: [
         {
           kind: "p",
-          text: "Google defines grounding as \"providing content from the Google Search index to the model at prompt time to improve factuality and relevancy\" — in the Gemini app and in Grounding with Google Search on Vertex AI ([Google's crawler documentation](https://developers.google.com/crawling/docs/crawlers-fetchers/google-common-crawlers)). There's no separate Gemini index to get into. If Googlebot hasn't indexed a page, Gemini can't ground on it.",
+          text: 'Google defines grounding as "providing content from the Google Search index to the model at prompt time to improve factuality and relevancy," and names the Gemini app as one place it happens ([Google\'s common crawlers](https://developers.google.com/crawling/docs/crawlers-fetchers/google-common-crawlers)). So there is no Gemini index to submit to and no Gemini crawler to court. The candidates are pages Googlebot has already crawled and indexed.',
         },
         {
           kind: "p",
-          text: 'How the consumer app decides when to search isn\'t published. The Gemini API describes the pattern: the model "analyzes the prompt and determines if a Google Search can improve the answer," then generates "one or multiple search queries" — the same fan-out Google uses in AI Mode.',
+          text: "Google doesn't publish how the consumer app decides when to search. Its [developer documentation](https://ai.google.dev/gemini-api/docs/google-search) for the same capability describes the loop, and it matches what users see in the app:",
         },
         {
           kind: "pipeline",
           steps: [
             {
-              title: "Gemini decides whether Search would help",
-              body: 'Time-sensitive, specific and factual questions trigger grounding; many creative or conversational ones don\'t. Google notes that "not all responses include related links or sources."',
-            },
-            {
-              title: "It writes one or more search queries",
-              body: "Like AI Mode, Gemini fans a question out into related searches. Ahrefs found over 80% of assistant citations don't rank at all for the original prompt — they rank for the sub-queries.",
+              title: "Gemini decides whether a search would help",
+              body: 'The model "analyzes the prompt and determines if a Google Search can improve the answer." Fresh, factual and comparison questions usually trigger it; drafting, brainstorming and small talk often don\'t, which is why Google warns that "not all responses include related links or sources."',
               lever:
-                "Cover the sub-questions around your topic with depth, not one thin page per variant.",
+                "Target questions that need current facts: prices, specs, comparisons, how-tos with versions and dates.",
             },
             {
-              title: "Google's ranking systems retrieve pages",
-              body: "Candidates come from the Search index via Google's core ranking systems — the same systems behind AI Overviews. Pages blocked from `Google-Extended` are excluded from Gemini-app grounding.",
+              title: "It writes its own searches",
+              body: 'If needed, the model "automatically generates one or multiple search queries and executes them." They split the prompt into sub-questions, which is why Ahrefs found only 12% of links cited by ChatGPT, Gemini and Copilot ranked in Google\'s top 10 for the original prompt (2025 data).',
               lever:
-                "Be indexed, and leave `Google-Extended` allowed if you want Gemini citations.",
+                "Cover the sub-questions around a topic on pages that each answer one well, rather than one thin page per keyword variant.",
             },
             {
-              title: "Gemini answers and attaches sources",
-              body: 'Sources appear behind a "Sources" button or as inline links, opening a side panel. When Gemini quotes a large amount of text from a page, it always links to that page.',
+              title: "Google's index supplies the pages",
+              body: "Results come from the Search index, with one filter Search itself doesn't apply: pages whose robots.txt disallows `Google-Extended` can't be used for grounding in Gemini Apps.",
               lever:
-                "Write specific, quotable passages — they're the ones that carry a guaranteed link.",
+                "Be indexed (check URL Inspection) and leave `Google-Extended` allowed on anything you want cited.",
             },
             {
-              title: "Deep Research and agents go further",
-              body: "Deep Research \"can automatically browse up to hundreds of websites\" and is powered by Gemini 3. Agents that browse from Google's servers on a user's behalf identify as `Google-Agent`; Gemini in Chrome's auto browse works inside the user's own browser.",
+              title: "The answer is written and its sources attached",
+              body: 'Sources sit "in-line throughout the response" or behind a **Sources** button at the bottom, which opens a side panel of links. If Gemini quotes a large amount of text from a page, that page is always listed. With Workspace connected, the list can include the user\'s own Docs and emails too.',
               lever:
-                "Keep pages agent-friendly: real buttons and links, labeled forms, no overlays.",
-            },
-          ],
-        },
-        {
-          kind: "stats",
-          items: [
-            {
-              value: "950M",
-              label:
-                "monthly active users of the Gemini app, with daily users tripling year on year",
-              source: {
-                name: "Alphabet Q2 2026",
-                href: "https://blog.google/company-news/inside-google/message-ceo/alphabet-earnings-q2-2026/",
-              },
-            },
-            {
-              value: "13.2%",
-              label:
-                "of AI referral traffic came from Gemini in April 2026, up from 4.3% — second only to ChatGPT",
-              source: {
-                name: "BrightEdge, May 2026",
-                href: "https://www.brightedge.com/news/press-releases/brightedge-data-gemini-second-largest-ai-referral-source-q1-2026",
-              },
-            },
-            {
-              value: "21.4%",
-              label: "of Gemini's brand appearances carried a link — 83.7% were text mentions",
-              source: {
-                name: "Semrush × Growth Memo, Jun 2026",
-                href: "https://www.semrush.com/blog/the-ghost-citations-study/",
-              },
+                "Write passages specific enough to quote: a number, a named method, a dated fact. Paraphrased common knowledge rarely earns a chip.",
             },
           ],
         },
         {
           kind: "callout",
-          tone: "note",
-          title: "Gemini reaches well beyond the Gemini app",
-          text: "Gemini runs in Chrome (with auto browse for AI Pro and Ultra), on Android as the default assistant, and in Workspace. Apple's next Foundation Models are \"based on Google's Gemini models,\" powering the new Siri — but they run on Apple's own infrastructure, and there's no documented path from Siri answers to cited web pages. Don't count Siri as a Gemini citation channel yet.",
+          tone: "tip",
+          title: "The API shows the plumbing the app hides",
+          text: "Call Gemini with the `google_search` tool and you get back the searches it actually ran (`google_search_call`) and `url_citation` annotations that tie each span of the answer to a URL. It's the clearest public view of how a grounded Gemini answer is assembled, and a cheap way to see which sub-questions a buyer's prompt turns into.",
+        },
+        {
+          kind: "callout",
+          tone: "warning",
+          title: "The double-check button is no longer documented",
+          text: 'Gemini used to offer **Double-check response**, which re-searched Google and highlighted statements green (similar content found) or orange (different or nothing found). As of October 2026, the help page that explained it covers only the Sources button, and the old "Double-check responses" link lands there. Its links came from a fresh search after the answer was written, so they never showed what Gemini used. Don\'t plan around it.',
         },
       ],
     },
     {
-      id: "controls",
-      title: "Google-Extended and the other controls",
+      id: "google-extended",
+      title: "Google-Extended: the one switch that's Gemini's alone",
       blocks: [
         {
           kind: "p",
-          text: 'This is where Gemini differs most from Google\'s Search features, and where most advice is wrong. `Google-Extended` isn\'t a crawler — "crawling is done with existing Google user agent strings" — it\'s a robots.txt token. Google says it controls training of future Gemini models **and** "grounding in Gemini Apps and Grounding with Google Search on Vertex AI," and that it "does not impact a site\'s inclusion in Google Search nor is it used as a ranking signal."',
+          text: '`Google-Extended` isn\'t a crawler. Google says it "doesn\'t have a separate HTTP request user agent string": Googlebot does the crawling, and the token only tells Google what it may do with what it fetched. Disallow it and your content can\'t be used to train future Gemini models **or** for "grounding … in Gemini Apps and Grounding with Google Search on Vertex AI." It "does not impact a site\'s inclusion in Google Search nor is it used as a ranking signal."',
+        },
+        {
+          kind: "p",
+          text: "That bundling is the decision every Gemini strategy starts with. A publisher who blocks the token to keep content out of training also leaves the Gemini app's citations, and there's no setting that keeps one and drops the other.",
         },
         {
           kind: "crawlers",
@@ -158,7 +139,7 @@ export const gemini: EngineGuide = {
               token: "Googlebot",
               role: "search",
               purpose:
-                "Builds the Search index Gemini grounds on. Blocking it removes you from Search, AI Overviews, AI Mode and Gemini alike.",
+                "Crawls and renders the pages in the Search index that Gemini grounds on. Blocking it removes you from Search, AI Overviews, AI Mode and Gemini alike.",
               robots: "yes",
               advice: "allow",
             },
@@ -166,15 +147,278 @@ export const gemini: EngineGuide = {
               token: "Google-Extended",
               role: "training",
               purpose:
-                "A robots.txt token governing Gemini training and grounding in the Gemini app and Vertex AI. Disallowing it costs you Gemini citations, not Search.",
+                "A robots.txt token you'll never see in logs. Governs Gemini training and grounding in the Gemini app and on Vertex AI; no effect on Search or rankings.",
               robots: "yes",
               advice: "your-call",
             },
+          ],
+        },
+        {
+          kind: "h3",
+          text: "Setting it: all, nothing, or by folder",
+        },
+        {
+          kind: "p",
+          text: "Saying nothing is a choice too: with no `Google-Extended` group, Gemini may ground on, and train on, anything Googlebot can crawl. To leave Gemini entirely while staying in Search:",
+        },
+        {
+          kind: "code",
+          lang: "robots.txt",
+          code: "# Out of Gemini-app citations AND Gemini training.\n# Search, AI Overviews and AI Mode are unaffected.\nUser-agent: Google-Extended\nDisallow: /",
+        },
+        {
+          kind: "p",
+          text: "The token takes path rules like any other group (Google's own example allows one archive page and disallows the rest), so you can keep public guides citable and withhold the content you sell:",
+        },
+        {
+          kind: "code",
+          lang: "robots.txt",
+          code: "User-agent: Google-Extended\nAllow: /guides/\nDisallow: /members/\nDisallow: /reports/",
+        },
+        {
+          kind: "callout",
+          tone: "warning",
+          title: 'A "block AI training" toggle can take you out of Gemini',
+          text: "With Bot Preference Sync on and Training set to Disallow, Cloudflare prepends managed rules to your robots.txt, and its documented example includes `User-agent: Google-Extended` / `Disallow: /`. Meant as a training opt-out, it also ends Gemini-app grounding. Fetch `/robots.txt` on every hostname and read the group that applies to `Google-Extended`.",
+        },
+        {
+          kind: "h3",
+          text: "What each Google control switches off",
+        },
+        {
+          kind: "table",
+          head: ["Control", "Gemini app", "AI Overviews & AI Mode", "Google Search results"],
+          rows: [
+            [
+              "`Google-Extended` disallowed",
+              "**Grounding and training off**",
+              "Unaffected",
+              "Unaffected",
+            ],
+            [
+              "Search Console generative AI control: Exclude",
+              "Not listed",
+              "**Removed** in 1–2 days",
+              "Unaffected",
+            ],
+            [
+              "`nosnippet` / `max-snippet`",
+              "Not documented",
+              "Limits what's shown",
+              "Limits snippet",
+            ],
+            ["`noindex`", "Removed", "Removed", "Removed"],
+            ["Googlebot disallowed", "Removed", "Removed", "Removed"],
+          ],
+        },
+        {
+          kind: "p",
+          text: "The two AI opt-outs are mirror images. The [Search Console control](https://support.google.com/webmasters/answer/16908024), rolled out to every site on 31 August 2026, removes pages from AI Overviews, AI Mode and Discover's generative features and doesn't mention Gemini. `Google-Extended` removes them from Gemini and leaves AI Overviews alone. Google's help page sends you to `Google-Extended` only to limit the training of the models behind Search's AI features, not their answers.",
+        },
+      ],
+    },
+    {
+      id: "three-google-surfaces",
+      title: "Gemini, AI Overviews and AI Mode: one index, three products",
+      blocks: [
+        {
+          kind: "p",
+          text: 'All three are Google products that ground answers in the same index, which is why advice for one gets pasted onto the others. They differ in where they live, which controls reach them and where their clicks land. Google has "brought together AI Overviews and AI Mode into one seamless Search experience"; the Gemini app is a separate product at gemini.google.com, in the mobile apps and in Chrome. For Search\'s AI features, read the [AI Overviews & AI Mode guide](/ai-seo/google-ai-overviews); this one stays with the app.',
+        },
+        {
+          kind: "table",
+          head: ["", "Gemini app", "AI Overviews & AI Mode"],
+          rows: [
+            [
+              "Where it lives",
+              "gemini.google.com, the Gemini apps, Gemini in Chrome",
+              "Google Search results and the AI Mode tab",
+            ],
+            ["Grounded in", "Google Search index", "Google Search index, with query fan-out"],
+            [
+              "Opt-out",
+              "`Google-Extended`",
+              "Search Console generative AI control; snippet controls",
+            ],
+            [
+              "Reporting",
+              "None in Search Console",
+              "Search Console Performance (Web) and the Generative AI performance report",
+            ],
+            [
+              "Clicks in GA4",
+              "**AI Assistant** channel; referral from `gemini.google.com`",
+              "**Organic Search**: Google excludes both from AI Assistant",
+            ],
+            [
+              "Sources shown",
+              "Inline chips or a Sources panel; often none",
+              "Links attached to the answer",
+            ],
+          ],
+        },
+        {
+          kind: "stats",
+          items: [
+            {
+              value: "27%",
+              label:
+                "overlap between the 100 domains Gemini cites most and AI Mode's, below Gemini's 39% overlap with ChatGPT",
+              source: {
+                name: "BrightEdge, Apr 2026",
+                href: "https://www.brightedge.com/resources/weekly-ai-search-insights/ai-search-same-brands-different-sources",
+              },
+            },
+            {
+              value: "1B+",
+              label: "people use the Gemini app every month, up from 950M at the end of July",
+              source: {
+                name: "Google, Aug 2026",
+                href: "https://blog.google/innovation-and-ai/products/gemini-app/one-billion-monthly-users/",
+              },
+            },
+            {
+              value: "13.2%",
+              label:
+                "of AI referral traffic came from Gemini in April 2026, up from 4.3% in late 2025",
+              source: {
+                name: "BrightEdge, May 2026",
+                href: "https://www.brightedge.com/news/press-releases/brightedge-data-gemini-second-largest-ai-referral-source-q1-2026",
+              },
+            },
+          ],
+        },
+        {
+          kind: "myths",
+          items: [
+            {
+              myth: "Blocking Google-Extended takes you out of AI Overviews.",
+              reality:
+                "It doesn't. Search's AI features answer to Googlebot, the Search Console control and snippet controls, and Google says `Google-Extended` isn't a Search ranking signal either.",
+            },
+            {
+              myth: "Excluding your site from Search generative AI keeps you out of Gemini.",
+              reality:
+                "That control lists AI Overviews, AI Mode and Discover. The Gemini app's lever is `Google-Extended`.",
+            },
+            {
+              myth: "Win AI Overviews and Gemini follows.",
+              reality:
+                "BrightEdge found Gemini's top cited domains overlap 27% with AI Mode's and 34% with AI Overviews'. Same index, different picks.",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: "mentions-over-links",
+      title: "Fewer links, more names: what Gemini actually cites",
+      blocks: [
+        {
+          kind: "p",
+          text: "Gemini is the most sparing linker among the big assistants. In [Attrifast's study](https://attrifast.com/blog/ai-search-citations-by-vertical-2026) of 1,200 buyer-intent prompts, each run three times on gemini.google.com (April–May 2026, logged out, mostly Gemini 2.5 Pro), Gemini cited a median of **2.4** unique domains per answer, against 3.1 for ChatGPT search, 3.6 for Claude and 6.4 for Perplexity. An agency panel of 11,028 answers per engine (July–October 2026, from tracked projects mostly in French) found Gemini attached any source to 68.4% of answers, against 96.3% for ChatGPT.",
+        },
+        {
+          kind: "p",
+          text: "Semrush and Growth Memo measured the other side of that. Across 3,981 domain appearances from 115 prompts in 14 countries, Gemini named brands in 83.7% of appearances and linked them in 21.4%. It still recommends companies; it just doesn't always say where it read about them.",
+        },
+        {
+          kind: "stats",
+          items: [
+            {
+              value: "2.4",
+              label:
+                "median unique domains cited per Gemini answer; ChatGPT 3.1, Claude 3.6, Perplexity 6.4",
+              source: {
+                name: "Attrifast, May 2026",
+                href: "https://attrifast.com/blog/ai-search-citations-by-vertical-2026",
+              },
+            },
+            {
+              value: "68.4%",
+              label: "of Gemini answers cited at least one source, against 96.3% for ChatGPT",
+              source: {
+                name: "Archipel, Oct 2026",
+                href: "https://www.archipelmarketing.com/en/observatory/comparisons/chatgpt-vs-gemini",
+              },
+            },
+            {
+              value: "21.4%",
+              label: "of Gemini's brand appearances carried a link; 83.7% named the brand in text",
+              source: {
+                name: "Semrush × Growth Memo, Jun 2026",
+                href: "https://www.semrush.com/blog/the-ghost-citations-study/",
+              },
+            },
+          ],
+        },
+        {
+          kind: "h3",
+          text: "Which sources win depends on the question",
+        },
+        {
+          kind: "p",
+          text: "The studies disagree about Gemini's favourite sources, and the disagreement is useful: each sampled a different kind of question.",
+        },
+        {
+          kind: "signals",
+          items: [
+            {
+              title: "Forums and video, on everyday questions",
+              body: "Across 3M+ US queries on all topics (Ahrefs Brand Radar, September 2026), Reddit held 28.5% of the citation share among Gemini's top 50 domains, YouTube 14.6% and Wikipedia 8.8%.",
+              evidence: "observed",
+            },
+            {
+              title: "Institutions, on industry questions",
+              body: "On BrightEdge's industry prompts (finance, healthcare, B2B tech and more), 26% of Gemini's citations went to government, academic and institutional sources (about 13% to .gov alone) and 0.2% to user-generated content.",
+              evidence: "observed",
+            },
+            {
+              title: "Vendor pages and YouTube, on buying questions",
+              body: "On buyer-intent prompts, Attrifast found vendor sites took 14.1% of Gemini's citations, Wikipedia 12.1%, YouTube 9.7% and Reddit 8.4%. YouTube was cited about 2.5 times as often as on the other three engines.",
+              evidence: "observed",
+            },
+            {
+              title: "A concentrated pool",
+              body: "Gemini's top 100 domains took 58.7% of its citations in the same study. The few links it gives keep going to the same sites, so a mention on one of them travels further than another page of your own.",
+              evidence: "observed",
+            },
+            {
+              title: "Google's quality bar decides who's in the pool",
+              body: "Grounding draws on Google's index, so the candidates are pages Google's systems surface. Google's advice for its AI features, unique non-commodity content with first-hand insight, is written for Search, but nothing suggests the app's pool differs.",
+              evidence: "our-read",
+            },
+            {
+              title: "Why it names more than it links",
+              body: "Unlinked mentions plausibly come from what the model already knows and from third-party pages that discuss you. Google documents neither, but both point the same way: review sites, comparisons and YouTube are where to be named.",
+              evidence: "our-read",
+            },
+          ],
+        },
+        {
+          kind: "callout",
+          tone: "tip",
+          title: "Turning that into work",
+          text: "Find the pages Gemini already cites for your category (review roundups, comparison posts, YouTube reviews, active forum threads) and earn a place on them by being worth including: send review units, publish real benchmarks, answer the questions you're expert in. Never fake mentions.",
+        },
+      ],
+    },
+    {
+      id: "beyond-the-chat",
+      title: "Deep Research, Chrome and agents: when Gemini reads your page itself",
+      blocks: [
+        {
+          kind: "p",
+          text: "Not every Gemini visit is a grounded chat answer. Other paths reach your site, and they identify themselves differently, which matters for robots.txt, your WAF and your logs. Two have user agents of their own:",
+        },
+        {
+          kind: "crawlers",
+          bots: [
             {
               token: "Google-Agent",
               role: "user",
               purpose:
-                "Agents running on Google's infrastructure that act on a user's request. IPs in `user-triggered-agents.json`; Google is testing Web Bot Auth signing.",
+                'Used "by agents hosted on Google infrastructure to navigate the web and perform actions upon user request." IPs are published in `user-triggered-agents.json`, and Google is testing Web Bot Auth with the `agent.bot.goog` identity.',
               robots: "no",
               robotsNote: "User-triggered, so it generally ignores robots.txt.",
               advice: "allow",
@@ -183,67 +427,47 @@ export const gemini: EngineGuide = {
               token: "Google-GeminiNotebook",
               role: "user",
               purpose:
-                "Fetches URLs users add to Gemini Notebook (formerly NotebookLM). The old `Google-NotebookLM` agent was retired in August 2026.",
+                "Fetches URLs a user adds as sources in Gemini Notebook, called NotebookLM until July 2026. The old `Google-NotebookLM` token was supported until August 2026.",
               robots: "no",
-              robotsNote: "User-triggered, so it ignores robots.txt.",
+              robotsNote: "User-triggered, so it generally ignores robots.txt.",
               advice: "allow",
             },
           ],
         },
         {
-          kind: "h3",
-          text: "What each control switches off",
-        },
-        {
-          kind: "table",
-          head: ["Control", "Gemini app", "AI Overviews & AI Mode", "Google Search"],
-          rows: [
-            [
-              "`Google-Extended` disallowed",
-              "**Grounding & training off**",
-              "Unaffected",
-              "Unaffected",
-            ],
-            [
-              "Search Console → Search generative AI: Exclude",
-              "**Not covered**",
-              "Removed",
-              "Unaffected",
-            ],
-            [
-              "`nosnippet` / `max-snippet`",
-              "Not documented",
-              "Input removed / capped",
-              "Snippet removed / capped",
-            ],
-            ["`noindex`", "Removed", "Removed", "Removed"],
-            ["Googlebot disallowed", "Removed", "Removed", "Removed"],
-          ],
-        },
-        {
           kind: "p",
-          text: "So the two AI opt-outs are mirror images: the Search Console control (live worldwide since 31 August 2026) takes you out of AI Overviews and AI Mode but not Gemini; `Google-Extended` takes you out of Gemini but not AI Overviews. To stay in Search and its AI features while leaving Gemini:",
+          text: "The rest arrive without a Gemini label:",
         },
         {
-          kind: "code",
-          lang: "robots.txt",
-          code: "# Search, AI Overviews and AI Mode\nUser-agent: Googlebot\nAllow: /\n\n# Opts out of Gemini-app grounding AND Gemini training.\n# Leave this out if you want to be cited by Gemini.\nUser-agent: Google-Extended\nDisallow: /",
+          kind: "list",
+          items: [
+            '**Deep Research** can "browse up to hundreds of websites" for one report, on Gemini 3, from a research plan the user can edit. Google doesn\'t document its fetcher, so the safest assumption is the same index-plus-`Google-Extended` rule as chat.',
+            "**Gemini in Chrome** sits in a side panel beside whatever tab is open and answers questions about that page. It reads what's already in the user's browser, so robots.txt never comes into it.",
+            "**Auto browse** clicks, fills in forms and shops inside the user's own Chrome, pausing for confirmation before purchases or posts. It launched for AI Pro and Ultra subscribers in the US in January 2026 and began reaching Android in the US at the end of June. Google documents no separate identifier, so expect it to look like that user's browser.",
+            "**Gemini Spark**, Google's always-on personal agent, browsed in a remote browser at launch and since July 2026 can drive the user's desktop Chrome through auto browse.",
+            '**Developers** who pass your URL with the API\'s URL context tool get the page "from an internal index cache" first, with a live fetch only as a fallback.',
+          ],
         },
         {
           kind: "callout",
           tone: "warning",
-          title: "Robots.txt can't stop Gemini's agents",
-          text: "`Google-Agent` and the Gemini Notebook fetcher act for a user and generally ignore robots.txt. To control them, verify and filter at the WAF by Google's published IP ranges — which moved to `developers.google.com/crawling/ipranges/` in March 2026; the old paths redirect for six months, so update allowlists now.",
+          title: "Don't let bot rules break agents",
+          text: "Agents work from the DOM and the accessibility tree. Google's [web.dev guidance](https://web.dev/articles/ai-agent-site-ux): native `<button>` and `<a>` elements, labels tied to their inputs, no transparent overlays on controls, targets bigger than 8 square pixels, and key controls that stay in the same place from page to page. If your WAF challenges automation, verify `Google-Agent` before you block it.",
+        },
+        {
+          kind: "code",
+          lang: "Verify a Google-Agent request",
+          code: "# 1. The user agent contains the token\nGoogle-Agent\n\n# 2. The IP is in Google's published list\nhttps://developers.google.com/static/crawling/ipranges/user-triggered-agents.json\n\n# 3. Or: reverse DNS ends in google.com or googleusercontent.com,\n#    and a forward lookup returns the same IP\nhost <ip-from-your-logs>",
         },
       ],
     },
     {
-      id: "technical",
-      title: "Technical requirements",
+      id: "products-and-places",
+      title: "Products and places: the feeds behind Gemini's shopping and local answers",
       blocks: [
         {
           kind: "p",
-          text: "Because grounding rides on the Search index, Gemini's technical bar is Google's. Google's [AI optimization guide](https://developers.google.com/search/docs/fundamentals/ai-optimization-guide) is written for AI Overviews and AI Mode, but nothing suggests the Gemini app differs on these points.",
+          text: "For shopping and local questions, Gemini can lean on Google's own data stores as much as on web pages, and those are fed directly, not crawled. Here's what helps, what doesn't, and what nobody has confirmed:",
         },
         {
           kind: "requirements",
@@ -251,153 +475,88 @@ export const gemini: EngineGuide = {
             {
               label: "Indexed by Google",
               status: "required",
-              note: "Confirm in Search Console's URL Inspection. There's no other way into Gemini's grounding pool.",
+              note: "The baseline for every grounded citation. Confirm with URL Inspection in Search Console.",
             },
             {
               label: "Google-Extended allowed",
               status: "required",
-              note: 'For Gemini-app grounding specifically. Check robots.txt on every subdomain, and any "block AI" presets your CDN adds.',
-            },
-            {
-              label: "Key content in the first 2 MB",
-              status: "required",
-              note: 'Googlebot fetches the first 2 MB of HTML; anything after is "not fetched… not rendered… not indexed." Put head tags and main content early; avoid huge inline scripts and base64 images.',
-            },
-            {
-              label: "JavaScript rendering",
-              status: "helps",
-              note: "Google's renderer runs JavaScript \"similar to a modern browser,\" but it's stateless and slower than HTML. Server-render critical text, and don't rely on local storage.",
+              note: "For Gemini-app grounding specifically. Check every hostname and any CDN-managed rules.",
             },
             {
               label: "Merchant Center feed",
               status: "helps",
-              note: "Gemini shops from the Shopping Graph with agentic checkout. UCP checkout needs Merchant Center and the `native_commerce` attribute (US, CA, AU; early access).",
+              note: 'Google says Merchant Center and Business Profile "can help your products and services to be visible in both AI responses and other Google Search results." Keep titles, GTINs, prices, availability and images complete.',
+            },
+            {
+              label: "UCP checkout",
+              status: "helps",
+              note: "With the Universal Commerce Protocol, eligible listings can show a Buy button on Gemini and AI Mode, paid through Google Pay while you stay merchant of record. Select merchants in the US, Canada and Australia; only listings with `native_commerce` show it.",
             },
             {
               label: "Google Business Profile",
               status: "helps",
-              note: 'Google says Business Profile and Merchant Center "can help your products and services to be visible in… AI responses."',
-            },
-            {
-              label: "Agent-friendly markup",
-              status: "helps",
-              note: "Real `<button>` and `<a>` elements, labeled fields, stable layouts, no invisible overlays — agents read the DOM and accessibility tree.",
+              note: 'Gemini\'s Maps grounding draws on "places, reviews, photos, addresses, opening hours" across 250M+ places. Keep hours, categories and attributes current, and reply to reviews.',
             },
             {
               label: "Structured data",
               status: "no-effect",
-              note: 'Google: "not required… no special schema.org markup" for AI features. Keep it valid and matching the page for rich results.',
+              note: "Google says no special schema.org markup is needed for its AI features. Keep it valid for rich results; it isn't a Gemini switch.",
             },
             {
               label: "llms.txt",
               status: "no-effect",
-              note: 'Google Search "doesn\'t use them" and says they "neither harm nor help." Nothing suggests the Gemini app differs.',
+              note: 'Google Search "doesn\'t use them," and nothing documents the Gemini app reading one.',
             },
             {
               label: "Snippet controls",
               status: "unconfirmed",
-              note: "`nosnippet` and `max-snippet` are documented for AI Overviews and AI Mode only. Their effect on the Gemini app isn't stated.",
+              note: "`nosnippet` and `max-snippet` are documented for Search features. Whether the Gemini app honours them isn't stated.",
             },
           ],
         },
       ],
     },
     {
-      id: "what-gets-cited",
-      title: "What Gemini cites",
+      id: "measuring-gemini",
+      title: "Finding Gemini in GA4, your logs and a prompt panel",
       blocks: [
         {
           kind: "p",
-          text: "Studies of Gemini's sources disagree more than for any other engine — largely because they use different prompt sets. Read them together and a consistent picture emerges: Google's quality systems pick the candidates, Gemini cites few of them, and the ones it cites lean either towards institutions or towards forums and video depending on the kind of question.",
+          text: "Search Console won't help here: its Generative AI performance report covers Google Search and Discover, and the Gemini app is neither. Gemini is measured where its clicks land.",
         },
         {
-          kind: "signals",
+          kind: "list",
+          ordered: true,
           items: [
-            {
-              title: "Google's core ranking",
-              body: "Grounding retrieves from the Search index via core ranking systems. Helpful, reliable, people-first content and E-E-A-T apply unchanged.",
-              evidence: "official",
-            },
-            {
-              title: "Non-commodity content",
-              body: "Google calls first-hand, unique content the biggest long-run factor for its AI features. Generic answers are what the model already knows.",
-              evidence: "official",
-            },
-            {
-              title: "Forums and video",
-              body: "In Ahrefs' 3M-query study, Reddit took 28.5% of Gemini's top-50-domain citations, YouTube 14.6% and Wikipedia 8.8%.",
-              evidence: "observed",
-            },
-            {
-              title: "Institutions",
-              body: "BrightEdge found the opposite mix on its prompts: authority sources 26% of citations and user-generated content 0.2%. Health, finance and B2B queries lean this way.",
-              evidence: "observed",
-            },
-            {
-              title: "Few links, many mentions",
-              body: "Gemini cites about 3 sources per response against ChatGPT's 15, and names brands in text far more than it links them. Being mentioned is half the game.",
-              evidence: "observed",
-            },
-            {
-              title: "Freshness and entities",
-              body: "Freshness weighting and Knowledge Graph strength plausibly drive Gemini's unlinked brand mentions, but neither is documented or measured directly.",
-              evidence: "our-read",
-            },
+            "**GA4's AI Assistant channel.** Since 13 May 2026, GA4 sets medium `ai-assistant` and campaign `(ai-assistant)` when the referrer matches a recognised assistant, and Google names Gemini among them. For sessions before that date, filter on session source instead.",
+            "**The referrer.** Clicks from the web app arrive as `gemini.google.com / referral` (`bard.google.com` in older data). Google files AI Overviews and AI Mode clicks under Organic Search instead.",
+            "**UTM tags.** Since late September 2026, practitioners have seen `utm_source=gemini` on some outbound links. Google hasn't documented it, so treat it as a bonus signal, and never add Gemini UTMs to your own URLs.",
+            "**Direct traffic.** Clicks from the mobile apps and the Android assistant often lose the referrer; one practitioner put mobile pass-through at around 9%, unverified. Watch for Direct sessions landing deep on the pages Gemini cites.",
+            "**Logs.** Count verified `Google-Agent` and `Google-GeminiNotebook` hits. Googlebot hits tell you nothing Gemini-specific.",
           ],
-        },
-      ],
-    },
-    {
-      id: "measurement",
-      title: "Tracking Gemini traffic",
-      blocks: [
-        {
-          kind: "p",
-          text: "The Gemini app doesn't appear in Search Console at all — the new Generative AI report covers AI Overviews and AI Mode only. Gemini is measured in analytics. Since 13 May 2026, GA4's default **AI Assistant** channel groups Gemini referrals automatically (Google names Gemini in the definition). Before that date, and as a backstop, look for `gemini.google.com / referral` — or `bard.google.com` in older data.",
         },
         {
           kind: "code",
           lang: "GA4 regex",
-          code: "# Session source — Gemini app\n^(gemini\\.google\\.com|bard\\.google\\.com)$\n\n# All major AI assistants\ngemini\\.google\\.com|chatgpt\\.com|perplexity\\.ai|copilot\\.microsoft\\.com|claude\\.ai",
+          code: "# Session source / medium: the Gemini web app\n^(gemini\\.google\\.com|bard\\.google\\.com) / referral$\n\n# Session source: also catches UTM-tagged links\n^(gemini\\.google\\.com|bard\\.google\\.com|gemini)$",
+        },
+        {
+          kind: "h3",
+          text: "A prompt panel for what analytics can't see",
+        },
+        {
+          kind: "p",
+          text: "With links on barely a fifth of brand appearances, most of your Gemini visibility never becomes a click. A small panel you can repeat shows it:",
         },
         {
           kind: "list",
+          ordered: true,
           items: [
-            "**Some Gemini traffic loses its referrer** — practitioners report it when Gemini runs as the Android assistant or inside Google apps — and lands in Direct or Organic.",
-            "**AI Overviews and AI Mode clicks are not in this channel.** They arrive from google.com as Organic Search; see the [AI Overviews guide](/ai-seo/google-ai-overviews) for those.",
-            "**Mentions need their own tracking.** With links on barely a fifth of brand appearances, a prompt panel that records unlinked mentions shows far more of your Gemini visibility than analytics can.",
-            "**In logs**, watch for `Google-Agent` and `Google-GeminiNotebook` and verify them against Google's new IP-range files.",
-          ],
-        },
-      ],
-    },
-    {
-      id: "myths",
-      title: "Myths worth dropping",
-      blocks: [
-        {
-          kind: "myths",
-          items: [
-            {
-              myth: "Blocking Google-Extended hurts rankings or removes you from AI Overviews.",
-              reality:
-                'It does neither. It governs Gemini-app and Vertex grounding plus Gemini training, and Google says it "is not used as a ranking signal."',
-            },
-            {
-              myth: "The Search Console AI opt-out keeps you out of Gemini.",
-              reality:
-                "It covers AI Overviews, AI Mode and generative AI in Discover only. For the Gemini app, the lever is `Google-Extended`.",
-            },
-            {
-              myth: "Gemini just cites the top organic results.",
-              reality:
-                "Ahrefs found only 6–9% of Gemini-, ChatGPT- and Copilot-cited links rank in Google's top 10 for the prompt. Fan-out sub-queries decide it.",
-            },
-            {
-              myth: "Gemini clicks show up in Search Console.",
-              reality:
-                "They don't. Use GA4's AI Assistant channel and a `gemini.google.com` source filter.",
-            },
+            'Write 20–30 prompts a buyer would actually type: comparisons ("Tallowpine vs Asana for Workspace"), recommendations ("best PM app for a five-person team on Google Workspace") and how-tos.',
+            "Run each in a fresh signed-out session, then signed in. With Workspace connected, sources can include the user's own Docs and emails, which changes the answer.",
+            "Record three things separately: whether you're **named**, whether you're **linked** (a chip or a Sources entry), and which domains were cited instead.",
+            "Run the panel at least three times over a week. Attrifast ran every prompt three times, 48 hours apart, because one run proves little.",
+            "Send the same prompts through the API's `google_search` tool to see the searches Gemini wrote, and cover the sub-questions you're missing.",
           ],
         },
       ],
@@ -406,130 +565,120 @@ export const gemini: EngineGuide = {
 
   checklist: [
     {
-      id: "indexed",
-      title: "Confirm Googlebot can crawl and index key URLs",
-      detail: "robots.txt, CDN/WAF bot rules and URL Inspection on your top pages.",
+      id: "index",
+      title: "Confirm Google has indexed the pages you want cited",
+      detail:
+        "URL Inspection on your top pages. There's no other way into Gemini's grounding pool.",
       impact: "high",
     },
     {
-      id: "extended",
-      title: "Decide on Google-Extended deliberately",
+      id: "extended-decision",
+      title: "Decide on Google-Extended on purpose",
       detail:
-        "Disallowing it opts you out of Gemini-app grounding as well as training. Leave it allowed if you want Gemini citations.",
+        "Allowed keeps you citable in the Gemini app; disallowed drops grounding and training together. Use path rules if only some content should be withheld.",
       impact: "high",
     },
     {
-      id: "sc-include",
-      title: "Keep Search Console's Search generative AI setting on Include",
+      id: "robots-audit",
+      title: "Read robots.txt on every hostname",
       detail:
-        "It doesn't affect Gemini, but it does affect AI Overviews and AI Mode — the same content, the same index.",
-      impact: "medium",
-    },
-    {
-      id: "snippets",
-      title: "Remove accidental nosnippet and tiny max-snippet values",
-      detail: "Use `data-nosnippet` surgically, on passages you truly don't want quoted.",
-      impact: "medium",
-    },
-    {
-      id: "2mb",
-      title: "Keep head tags and main content in the first 2 MB",
-      detail: "Server-render critical text; avoid huge inline JS/CSS and base64 images.",
-      impact: "medium",
-    },
-    {
-      id: "non-commodity",
-      title: "Publish first-hand, non-commodity content",
-      detail:
-        "Clear H2/H3 sections that cover the sub-questions naturally — no scaled page variants.",
+        "Look for a `Google-Extended` group a CDN toggle or plugin added. Check the apex, `www` and every subdomain.",
       impact: "high",
     },
     {
-      id: "presence",
-      title: "Build real presence where Gemini draws sources",
+      id: "sub-questions",
+      title: "Map the sub-questions behind your buyers' prompts",
       detail:
-        "Reddit, YouTube, review sites and Wikipedia where you're notable — never fake mentions.",
+        "Run them through the API's `google_search` tool to see the searches Gemini writes, then answer each one well on a page of its own.",
+      impact: "high",
+    },
+    {
+      id: "quotable",
+      title: "Make key passages quotable",
+      detail:
+        "Specific numbers, named methods, dated facts and short definitions near the top of each section.",
       impact: "medium",
+    },
+    {
+      id: "be-named",
+      title: "Earn mentions on the pages Gemini already cites",
+      detail:
+        "Review roundups, comparison posts, YouTube reviews and forum threads in your category. Earn them; never fake them.",
+      impact: "high",
     },
     {
       id: "youtube",
-      title: "Make YouTube videos that stand alone",
-      detail: "Accurate titles, descriptions, chapters and transcripts.",
-      impact: "medium",
-    },
-    {
-      id: "merchant",
-      title: "E-commerce: complete your Merchant Center feed",
-      detail: "Apply for UCP checkout (`native_commerce`) if you're eligible.",
-      impact: "medium",
-    },
-    {
-      id: "gbp",
-      title: "Local: maintain your Google Business Profile",
-      detail: "Hours, categories, attributes and reviews.",
-      impact: "medium",
-    },
-    {
-      id: "schema",
-      title: "Keep structured data valid and matching the page",
+      title: "Publish YouTube videos that answer real questions",
       detail:
-        "Product, Organization, LocalBusiness and Article markup — for rich results, not for AI eligibility.",
-      impact: "low",
+        "Accurate titles, chapters and descriptions. YouTube turns up far more in Gemini's citations than in other assistants'.",
+      impact: "medium",
+    },
+    {
+      id: "feeds",
+      title: "Keep Merchant Center and Business Profile complete",
+      detail:
+        "Products: a full feed, plus UCP checkout if you're eligible. Places: hours, categories, attributes and review replies.",
+      impact: "medium",
     },
     {
       id: "agents",
-      title: "Make pages agent-friendly",
+      title: "Keep pages usable by agents",
       detail:
-        "Semantic controls, labeled forms, no overlays. Don't block verified `Google-Agent` traffic at the WAF.",
-      impact: "low",
-    },
-    {
-      id: "ipranges",
-      title: "Update WAF allowlists to Google's new IP-range paths",
-      detail: "`developers.google.com/crawling/ipranges/` — before the old paths stop redirecting.",
+        "Native buttons and links, labelled inputs, no overlays, stable layouts. Verify `Google-Agent` before your WAF blocks it.",
       impact: "medium",
     },
     {
-      id: "measure",
-      title: "Set up measurement",
+      id: "ga4",
+      title: "Set up Gemini measurement in GA4",
       detail:
-        "GA4's AI Assistant channel plus the `gemini.google.com` regex, log monitoring, and a prompt panel that records mentions separately from citations.",
+        "The AI Assistant channel, a `gemini.google.com` source filter and a check for `utm_source=gemini`.",
       impact: "high",
+    },
+    {
+      id: "panel",
+      title: "Run a monthly Gemini prompt panel",
+      detail:
+        "Signed out and signed in, three runs per prompt. Record named, linked, and who was cited instead.",
+      impact: "medium",
     },
   ],
 
   faqs: [
     {
       q: "Does blocking Google-Extended remove me from Gemini?",
-      a: "Per Google's crawler documentation, disallowing `Google-Extended` stops your content being used for grounding in the Gemini app and for training future Gemini models. It doesn't affect your inclusion or ranking in Google Search.",
+      a: "From its grounded answers, yes. Google says the token controls whether crawled content is used for grounding in Gemini Apps and for training future Gemini models. The app can still mention you from what it already knows or from other sites, but it can't ground on your pages, so they shouldn't appear among its sources.",
     },
     {
-      q: "Does blocking Google-Extended remove me from AI Overviews or AI Mode?",
-      a: "No. Those are governed by Googlebot and by Search Console's Search generative AI setting, plus `nosnippet`, `max-snippet` and `noindex`.",
+      q: "Does blocking Google-Extended affect my rankings or AI Overviews?",
+      a: "No. Google says it \"does not impact a site's inclusion in Google Search nor is it used as a ranking signal.\" AI Overviews and AI Mode answer to Googlebot, Search Console's generative AI control and snippet controls.",
     },
     {
-      q: "Does the Search Console AI opt-out cover the Gemini app?",
-      a: "No. It covers AI Overviews, AI Mode and generative AI features in Discover. For the Gemini app, the control is `Google-Extended`.",
+      q: "Is optimizing for Gemini different from optimizing for AI Mode?",
+      a: "The foundations are shared: the same index and the same quality bar. The controls, reporting and picks differ. Gemini's opt-out is `Google-Extended`, its clicks land in GA4's AI Assistant channel rather than Organic Search, and BrightEdge found only 27% overlap between the domains Gemini and AI Mode cite most.",
     },
     {
-      q: "How do I get my website cited by Gemini?",
-      a: "Be indexed by Google, leave `Google-Extended` allowed, and publish first-hand content that answers the sub-questions around your topic. Because Gemini cites only about three sources and mentions brands more than it links them, presence on YouTube, forums and review sites helps too.",
-    },
-    {
-      q: "Do I need to rank #1 to be cited by Gemini?",
-      a: "No. Ahrefs found only 6–9% of links cited by Gemini, ChatGPT and Copilot rank in Google's top 10 for the prompt — they rank for the related sub-queries Gemini generates instead.",
+      q: "How many sources does Gemini cite?",
+      a: "Fewer than the other major assistants. Attrifast measured a median of 2.4 unique domains per Gemini answer in spring 2026, against 3.1 for ChatGPT and 6.4 for Perplexity, and an agency panel found any source at all on 68.4% of Gemini answers.",
     },
     {
       q: "How do I see traffic from Gemini?",
-      a: "In GA4's AI Assistant channel, added in May 2026, or with a session source filter on `gemini.google.com`. The Gemini app isn't reported in Search Console, and some app traffic arrives without a referrer.",
+      a: "In GA4's AI Assistant channel (added 13 May 2026), as `gemini.google.com / referral`, and since late September 2026 on some links as `utm_source=gemini`. Search Console doesn't report the Gemini app, and clicks from the mobile apps often arrive as Direct.",
     },
     {
-      q: "Can I block Gemini's browsing agents with robots.txt?",
-      a: "No. `Google-Agent` and the Gemini Notebook fetcher are user-triggered and generally ignore robots.txt. Filter them at the WAF using Google's published IP ranges or Web Bot Auth instead.",
+      q: "Does the Gemini app have its own crawler?",
+      a: "No. Grounding uses pages Googlebot has already crawled, and `Google-Extended` is only a robots.txt token. Separate fetchers appear when a user adds your URL to Gemini Notebook (`Google-GeminiNotebook`) or a Google-hosted agent visits (`Google-Agent`); both generally ignore robots.txt.",
     },
     {
-      q: "Does Gemini use llms.txt or schema markup?",
-      a: "Google Search ignores llms.txt and requires no special schema for AI features, and nothing official says the Gemini app differs. Keep structured data for rich results.",
+      q: "What happened to Gemini's double-check button?",
+      a: "As of October 2026, Gemini Apps Help no longer documents it; the page that described its green and orange highlights now covers only the Sources button. If it still appears for you, its links come from a fresh Google search, not from the sources Gemini used.",
+    },
+    {
+      q: "Does Siri now cite Gemini's sources?",
+      a: "Nothing documents that. Apple's next Foundation Models are \"based on Google's Gemini models,\" but they run on Apple devices and Private Cloud Compute. That isn't the Gemini app, and no documented path connects Siri's answers to Gemini grounding or to `Google-Extended`.",
+    },
+    {
+      q: "Does Gemini read llms.txt or need schema markup?",
+      a: "Nothing documents either. Google Search says it doesn't use llms.txt and needs no special schema for its AI features, and Gemini grounds on that same index. Keep structured data valid for rich results.",
     },
   ],
 
@@ -540,24 +689,24 @@ export const gemini: EngineGuide = {
       href: "https://developers.google.com/crawling/docs/crawlers-fetchers/google-common-crawlers",
     },
     {
-      title: "Google user-triggered fetchers (Google-Agent)",
-      publisher: "Google Search Central",
-      href: "https://developers.google.com/search/docs/crawling-indexing/google-user-triggered-fetchers",
+      title: "Google's user-triggered fetchers (Google-Agent, Google-GeminiNotebook)",
+      publisher: "Google Crawling Infrastructure",
+      href: "https://developers.google.com/crawling/docs/crawlers-fetchers/google-user-triggered-fetchers",
     },
     {
-      title: "Optimizing your website for generative AI features",
-      publisher: "Google Search Central",
-      href: "https://developers.google.com/search/docs/fundamentals/ai-optimization-guide",
+      title: "Verifying Google's crawlers and fetchers",
+      publisher: "Google Crawling Infrastructure",
+      href: "https://developers.google.com/crawling/docs/crawlers-fetchers/verify-google-requests",
     },
     {
-      title: "AI features and your website",
-      publisher: "Google Search Central",
-      href: "https://developers.google.com/search/docs/appearance/ai-features",
+      title: "View related sources from Gemini Apps",
+      publisher: "Gemini Apps Help",
+      href: "https://support.google.com/gemini/answer/14143489",
     },
     {
-      title: "Search generative AI control",
-      publisher: "Search Console Help",
-      href: "https://support.google.com/webmasters/answer/16908024",
+      title: "Regenerate or modify responses from Gemini Apps",
+      publisher: "Gemini Apps Help",
+      href: "https://support.google.com/gemini/answer/14262426",
     },
     {
       title: "Grounding with Google Search",
@@ -565,44 +714,29 @@ export const gemini: EngineGuide = {
       href: "https://ai.google.dev/gemini-api/docs/google-search",
     },
     {
-      title: "View related sources in Gemini Apps",
-      publisher: "Gemini Apps Help",
-      href: "https://support.google.com/gemini/answer/14143489",
+      title: "URL context",
+      publisher: "Gemini API",
+      href: "https://ai.google.dev/gemini-api/docs/url-context",
     },
     {
-      title: "Gemini Deep Research",
-      publisher: "Google",
-      href: "https://gemini.google/overview/deep-research/",
+      title: "Grounding with Google Maps",
+      publisher: "Gemini API",
+      href: "https://ai.google.dev/gemini-api/docs/maps-grounding",
     },
     {
-      title: "Googlebot's 2 MB fetch limit and rendering",
-      publisher: "Google Search Central Blog",
-      href: "https://developers.google.com/search/blog/2026/03/crawler-blog-post",
+      title: "Search generative AI control",
+      publisher: "Search Console Help",
+      href: "https://support.google.com/webmasters/answer/16908024",
     },
     {
-      title: "Google crawler IP ranges have moved",
-      publisher: "Google Search Central Blog",
-      href: "https://developers.google.com/search/blog/2026/03/crawler-ip-ranges",
+      title: "AI features and your website",
+      publisher: "Google Search Central",
+      href: "https://developers.google.com/search/docs/appearance/ai-features",
     },
     {
-      title: "Alphabet Q2 2026 earnings remarks",
-      publisher: "Alphabet",
-      href: "https://blog.google/company-news/inside-google/message-ceo/alphabet-earnings-q2-2026/",
-    },
-    {
-      title: "Joint statement from Google and Apple",
-      publisher: "Google",
-      href: "https://blog.google/company-news/inside-google/company-announcements/joint-statement-google-apple/",
-    },
-    {
-      title: "UCP checkout eligibility",
-      publisher: "Merchant Center Help",
-      href: "https://support.google.com/merchants/answer/16837055",
-    },
-    {
-      title: "Building agent-friendly websites",
-      publisher: "web.dev",
-      href: "https://web.dev/articles/ai-agent-site-ux",
+      title: "Optimizing your website for generative AI features",
+      publisher: "Google Search Central",
+      href: "https://developers.google.com/search/docs/fundamentals/ai-optimization-guide",
     },
     {
       title: "Default channel group (AI Assistant)",
@@ -610,9 +744,74 @@ export const gemini: EngineGuide = {
       href: "https://support.google.com/analytics/answer/9756891",
     },
     {
-      title: "AI search overlap with Google's top 10",
-      publisher: "Ahrefs",
-      href: "https://ahrefs.com/blog/ai-search-overlap/",
+      title: "What's new in Google Analytics: AI Assistant traffic (13 May 2026)",
+      publisher: "Google Analytics Help",
+      href: "https://support.google.com/analytics/answer/9164320",
+    },
+    {
+      title: "The Gemini app passes 1 billion monthly users",
+      publisher: "Google",
+      href: "https://blog.google/innovation-and-ai/products/gemini-app/one-billion-monthly-users/",
+    },
+    {
+      title: "Alphabet Q2 2026 earnings remarks",
+      publisher: "Alphabet",
+      href: "https://blog.google/company-news/inside-google/message-ceo/alphabet-earnings-q2-2026/",
+    },
+    {
+      title: "Gemini Deep Research",
+      publisher: "Google",
+      href: "https://gemini.google/overview/deep-research/",
+    },
+    {
+      title: "The new era of browsing: putting Gemini to work in Chrome",
+      publisher: "Google",
+      href: "https://blog.google/products-and-platforms/products/chrome/gemini-3-auto-browse/",
+    },
+    {
+      title: "Gemini in Chrome with auto browse comes to Android",
+      publisher: "Google",
+      href: "https://blog.google/products-and-platforms/products/chrome/bringing-chrome-ai-to-android/",
+    },
+    {
+      title: "NotebookLM is now Gemini Notebook",
+      publisher: "Google Workspace Updates",
+      href: "https://workspaceupdates.googleblog.com/2026/07/notebooklm-now-gemini-notebook.html",
+    },
+    {
+      title: "About the Universal Commerce Protocol and UCP-powered checkout",
+      publisher: "Merchant Center Help",
+      href: "https://support.google.com/merchants/answer/16837055",
+    },
+    {
+      title: "Build agent-friendly websites",
+      publisher: "web.dev",
+      href: "https://web.dev/articles/ai-agent-site-ux",
+    },
+    {
+      title: "Managed robots.txt",
+      publisher: "Cloudflare Docs",
+      href: "https://developers.cloudflare.com/bots/additional-configurations/managed-robots-txt/",
+    },
+    {
+      title: "Joint statement from Google and Apple",
+      publisher: "Google",
+      href: "https://blog.google/company-news/inside-google/company-announcements/joint-statement-google-apple/",
+    },
+    {
+      title: "AI citation rates by industry 2026: a 1,200-prompt study",
+      publisher: "Attrifast",
+      href: "https://attrifast.com/blog/ai-search-citations-by-vertical-2026",
+    },
+    {
+      title: "ChatGPT vs Gemini: sources and citations compared",
+      publisher: "Archipel",
+      href: "https://www.archipelmarketing.com/en/observatory/comparisons/chatgpt-vs-gemini",
+    },
+    {
+      title: "The ghost citations study",
+      publisher: "Semrush",
+      href: "https://www.semrush.com/blog/the-ghost-citations-study/",
     },
     {
       title: "The most-cited domains in Gemini",
@@ -620,9 +819,9 @@ export const gemini: EngineGuide = {
       href: "https://ahrefs.com/blog/most-cited-domains-gemini/",
     },
     {
-      title: "The ghost citations study",
-      publisher: "Semrush",
-      href: "https://www.semrush.com/blog/the-ghost-citations-study/",
+      title: "AI search overlap with Google's top 10",
+      publisher: "Ahrefs",
+      href: "https://ahrefs.com/blog/ai-search-overlap/",
     },
     {
       title: "Same brands, different sources",
@@ -634,6 +833,16 @@ export const gemini: EngineGuide = {
       publisher: "BrightEdge",
       href: "https://www.brightedge.com/news/press-releases/brightedge-data-gemini-second-largest-ai-referral-source-q1-2026",
     },
+    {
+      title: "Gemini Spark can now use Chrome to auto browse",
+      publisher: "9to5Google",
+      href: "https://9to5google.com/2026/07/30/gemini-spark-chrome-auto-browse/",
+    },
+    {
+      title: "Google Gemini adds UTM parameters for referral attribution",
+      publisher: "Search Engine Journal",
+      href: "https://www.searchenginejournal.com/google-gemini-adds-utm-parameters-for-referral-attribution/591754/",
+    },
   ],
 
   sameAs: ["https://en.wikipedia.org/wiki/Google_Gemini", "https://gemini.google.com"],
@@ -643,13 +852,19 @@ export const gemini: EngineGuide = {
       title: "Google AI Overviews & AI Mode SEO guide",
       href: "/ai-seo/google-ai-overviews",
       description:
-        "Same index, different controls: the eligibility switches, snippet rules and Search Console report for Google's AI in Search.",
+        "Same index, different switches: the eligibility controls, snippet rules and Search Console reporting for Google's AI in Search.",
     },
     {
       title: "Free AI robots.txt generator",
       href: "/tools/ai-robots-txt-generator",
       description:
-        "Make a deliberate call on Google-Extended — and every other AI token — without touching Googlebot.",
+        "Make a deliberate call on Google-Extended, and every other AI token, without touching Googlebot.",
+    },
+    {
+      title: "AI crawler log analyzer",
+      href: "/tools/ai-crawler-log-analyzer",
+      description:
+        "See which Google fetchers and agents actually hit your pages, separated from Googlebot.",
     },
   ],
 };

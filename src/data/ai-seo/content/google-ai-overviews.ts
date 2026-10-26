@@ -1,116 +1,127 @@
 import type { EngineGuide } from "../types";
 
+/*
+ * Facts verified against Google's own documentation, the Search Central blog,
+ * Search Console Help and the studies cited below on 2026-10-26.
+ *
+ * The figure at the top of the page reads three things from here: `preview`
+ * (the results page and its AI Overview), and the first list in the
+ * "query-fan-out" section (the sub-queries, in the same order as
+ * `preview.sources`). Keep those two in step if either changes.
+ */
 export const googleAiOverviews: EngineGuide = {
   slug: "google-ai-overviews",
-  metaTitle: "Google AI Overviews & AI Mode SEO: The Technical Guide (2026)",
+  metaTitle: "Google AI Overviews & AI Mode SEO: How Pages Get Cited (2026)",
   metaDescription:
-    "How Google AI Overviews and AI Mode pick sources: query fan-out, eligibility, the new Search Console AI control and report, snippet controls, and what the citation data shows.",
+    "How Google AI Overviews and AI Mode choose sources: query fan-out, the three eligibility switches, every opt-out control, the 2026 citation data and Search Console's AI report.",
   keywords: [
     "AI Overviews SEO",
     "AI Mode SEO",
+    "how to appear in Google AI Overviews",
     "Google AI Overviews optimization",
-    "how to appear in AI Overviews",
-    "Search generative AI control",
     "query fan-out",
+    "Search generative AI control",
   ],
-  headline: { lead: "Google AI Overviews & AI Mode SEO:", accent: "the technical guide" },
+  headline: { lead: "Google AI Overviews & AI Mode SEO:", accent: "how a page earns the link" },
   subhead:
-    "How Google grounds its AI answers in the Search index, the three switches that decide whether you're eligible, what the 2026 citation data shows, and how to measure it now that Search Console reports on it.",
+    "Google grounds both features in its own Search index and fans every question out into related searches. Here is how that decides who gets cited, the switches that make a page eligible, the controls that take it out, and what Search Console now reports.",
 
   shortAnswer:
-    "To be cited in Google AI Overviews and AI Mode, a page must be indexed, eligible to show a snippet, and on a site set to **Include** in Search Console's new Search generative AI setting. Nothing else is required: Google grounds both features in its core ranking systems and uses **query fan-out** to search related subtopics, so you win citations with helpful, non-commodity content that answers those subtopics — not with special files or markup.",
+    "Google AI Overviews and AI Mode cite pages from Google's own Search index, so the bar is ordinary SEO plus three switches: the page is indexed, it is allowed a snippet, and the site is set to **Include** under Search Console → Settings → Search generative AI. `Google-Extended` controls neither feature. Because Google fans each question out into related searches, pages that win a sub-question get cited too: in Ahrefs' March 2026 data only 37.9% of cited pages ranked in the top 10 for the query that was typed.",
 
   takeaways: [
-    'There is no AI-specific markup, file or schema. Google says optimizing for AI features "is still SEO."',
-    "Eligibility has three switches: indexed, snippet-eligible, and **Include** in Search Console → Settings → Search generative AI.",
-    "`Google-Extended` does **not** remove you from AI Overviews. It only governs Gemini training and grounding outside Search.",
-    "Google answers by fanning one query out into several. In Ahrefs' March 2026 data only 37.9% of cited pages ranked top 10 for the typed query.",
-    "Search Console's Generative AI report shows impressions by page — but no clicks, so pair it with a citation tracker.",
-    "Being cited matters: Seer Interactive found cited brands earn about 120% more organic clicks per impression than uncited ones.",
+    'Both features are built on Google Search: no separate AI crawler, no special file, no AI-only schema. Google\'s own guide calls the work "still SEO."',
+    "Eligibility comes down to three switches: indexed, snippet-eligible, and **Include** in Search Console's Search generative AI setting.",
+    "`Google-Extended` governs Gemini training and grounding in the Gemini app and Vertex AI. It does not remove you from AI Overviews or AI Mode.",
+    "Fan-out spreads citations beyond the typed query: Ahrefs found 37.9% of cited pages in its top 10 in March 2026, against 76.1% in July 2025.",
+    "AI Overviews and AI Mode cited the same URL only 13.7% of the time in Ahrefs' 540,000-pair study, so win subtopics rather than chase one slot.",
+    "Search Console's Generative AI report counts impressions only. Clicks stay blended into the Web performance report and GA4's Organic Search.",
   ],
 
   facts: [
-    { label: "Monthly AI Overviews users (May 2026)", value: "2.5B+" },
-    { label: "Monthly AI Mode users (May 2026)", value: "1B+" },
-    { label: "The crawler that governs it", value: "Googlebot", mono: true },
-    { label: "Where to measure it", value: "Search Console AI report" },
+    { label: "AI Overviews monthly users (May 2026)", value: "2.5B+" },
+    { label: "Cited pages in the typed query's top 10 (Ahrefs, Mar 2026)", value: "37.9%" },
+    { label: "Crawler that governs both", value: "Googlebot", mono: true },
+    { label: "Search Console's AI report shows", value: "Impressions only" },
   ],
 
   preview: {
-    prompt: "best project management software for a small startup",
+    prompt: "how to fix a lawn that's full of weeds",
     status: "AI Overview",
     answer:
-      "For small startup teams, **Plannora** is a common pick: simple boards, built-in automations and a free tier for up to five people. Teams that live in spreadsheets often prefer Loopcraft's table view.",
+      "Clear the weeds you have, then fix what let them in: hand-pull or spot-treat, mow higher, water deeply but less often, and overseed thin patches in early autumn so grass crowds weeds out. A step-by-step from **Fescuely** covers clearing clover and dandelions without chemicals.",
     sources: [
-      { domain: "plannora.io", title: "Plannora pricing: free for teams of up to 5" },
-      { domain: "stackreview.co", title: "Best project management tools for startups (2026)" },
-      { domain: "founderforum.net", title: "What PM tool does your 5-person team use?" },
+      { domain: "fescuely.com", title: "How to get rid of lawn weeds without chemicals" },
+      { domain: "sodfolio.org", title: "Selective lawn herbicides compared: what kills what" },
+      { domain: "thatchtalk.net", title: "Overseeded in September, barely a weed by spring" },
     ],
   },
 
   profile: {
-    retrieval: "Google's Search index, through its core ranking systems and query fan-out",
+    retrieval: "Google's Search index via core ranking, widened by query fan-out",
     searchCrawler: "Googlebot",
-    trainingCrawler: "Google-Extended — no effect on AI Overviews",
+    trainingCrawler: "Google-Extended (a token) — no effect on AI Overviews or AI Mode",
     rendersJs: "Yes — Google renders JavaScript that isn't blocked",
-    referrer: "google.com (Organic Search)",
-    citationStyle: "Inline links beside the claim, link cards, a further-exploration list",
-    biggestLever: "Non-commodity content covering the subtopics Google fans out to",
+    referrer: "google.com in Organic Search; GA4's AI Assistant channel excludes it",
+    citationStyle: "Inline links beside claims, link cards, an 'Explore new angles' list",
+    biggestLever: "Be the best page for a sub-question Google fans out to",
   },
 
   sections: [
     {
-      id: "how-it-works",
-      title: "How AI Overviews and AI Mode choose their sources",
+      id: "two-surfaces",
+      title: "AI Overviews and AI Mode: two surfaces, one index",
       blocks: [
         {
           kind: "p",
-          text: 'Both features are built on Search itself. Google\'s [AI optimization guide](https://developers.google.com/search/docs/fundamentals/ai-optimization-guide) says they "are rooted in our core Search ranking and quality systems" and names two techniques: **retrieval-augmented generation**, where core ranking retrieves pages from the Search index and a Gemini model writes an answer linking to them, and **query fan-out**, "a set of concurrent, related queries generated by the model."',
+          text: 'An **AI Overview** is a generated summary at the top of an ordinary results page. Google shows one "only when our systems determine that it is additive to classic Search," so many queries never get one. **AI Mode** is the conversational mode you open on purpose, or reach by asking a follow-up from an Overview: since [27 January 2026](https://blog.google/products-and-platforms/products/search/ai-mode-ai-overviews-updates/) that hand-off works globally on mobile, with the Overview\'s context carried into the chat.',
         },
         {
           kind: "p",
-          text: 'Fan-out is the part that changes how you plan content. Google\'s own example: "how to fix a lawn that\'s full of weeds" becomes "best herbicides for lawns," "remove weeds without chemicals" and "how to prevent weeds in lawn." Each of those is a separate search with its own winners, and each can contribute a link to the final answer.',
+          text: "They share everything a site owner controls — eligibility, the opt-out and the reporting — and differ in almost everything a site owner sees.",
         },
         {
-          kind: "pipeline",
-          steps: [
-            {
-              title: "Google decides whether an AI answer adds anything",
-              body: 'AI Overviews are "only shown when our systems determine that it is additive to classic Search, and as such, often don\'t trigger." Question-shaped and long queries trigger them far more often: Pew saw summaries on 60% of question queries against 8% of one- or two-word ones.',
-            },
-            {
-              title: "The query fans out into subtopics",
-              body: 'The model issues several related searches at once, across subtopics and data sources. AI Mode\'s Deep Search can issue "hundreds of searches" for a single report.',
-              lever:
-                "Cover the sub-questions around your topic in depth — as a strong page or a tight cluster, not one thin page per variant.",
-            },
-            {
-              title: "Core ranking retrieves candidate pages",
-              body: "Each fan-out query is answered from the Search index by the normal ranking and quality systems. Pages that are not indexed, or not allowed a snippet, never enter the pool.",
-              lever: "Be indexed, snippet-eligible and set to Include in Search Console.",
-            },
-            {
-              title: "Gemini writes a grounded answer",
-              body: 'Gemini 3 has been the default model for AI Overviews since January 2026; Gemini 3.5 Flash has powered AI Mode since I/O in May 2026. Google notes the two "may use different models and techniques, so the set of responses and links they show will vary."',
-              lever:
-                "Give it passages worth grounding on: specific, first-hand, clearly structured.",
-            },
-            {
-              title: "Links are attached to the claims they support",
-              body: 'Since May 2026 Google places more inline links next to the generated text, previews site names on hover, labels links from publications the user subscribes to, adds a "further exploration" list of in-depth articles, and surfaces forum and social perspectives with the creator attributed.',
-            },
-            {
-              title: "AI Mode keeps the conversation going",
-              body: "Follow-up questions — including ones started from an AI Overview — continue in AI Mode with context carried over. In Search Console, each follow-up counts as a new query.",
-            },
+          kind: "table",
+          head: ["", "AI Overviews", "AI Mode"],
+          rows: [
+            [
+              "**When it appears**",
+              'Above the classic results, only when judged "additive"',
+              "When the user opens it, or asks a follow-up from an Overview",
+            ],
+            [
+              "**Default model (as last announced)**",
+              "Gemini 3, from January 2026",
+              "Gemini 3.5 Flash, from I/O in May 2026",
+            ],
+            [
+              "**Answer size**",
+              "Short; 1.3 brands or people named on average",
+              "About 4× longer; 3.3 brands or people named",
+            ],
+            ["**Answers with no citation**", "11%", "3%"],
+            [
+              "**Eligibility and opt-out**",
+              "Indexed, snippet-eligible, set to Include",
+              "The same three switches",
+            ],
+            [
+              "**Search Console position**",
+              "The whole Overview takes one position",
+              "Counted like a results page; each follow-up is a new query",
+            ],
           ],
+        },
+        {
+          kind: "p",
+          text: "The answer-size and citation rows come from [Ahrefs' comparison of 540,000 query pairs](https://ahrefs.com/blog/ai-overviews-vs-ai-mode/) (US data, September 2025). Its headline finding is the one that matters for planning: the two features' answers were 86% similar in meaning on average, yet they **cited the same URLs only 13.7% of the time**. Google says as much — the two \"may use different models and techniques, so the set of responses and links they show will vary.\" You can't optimise for one slot in one feature; you win by being a strong source across the subtopics both of them search.",
         },
         {
           kind: "stats",
           items: [
             {
               value: "2.5B+",
-              label: "monthly users of AI Overviews, announced at Google I/O 2026",
+              label: "monthly active users of AI Overviews, announced at Google I/O on 19 May 2026",
               source: {
                 name: "Google, May 2026",
                 href: "https://blog.google/innovation-and-ai/sundar-pichai-io-2026/",
@@ -118,15 +129,16 @@ export const googleAiOverviews: EngineGuide = {
             },
             {
               value: "1B+",
-              label: 'monthly users of AI Mode, where queries "more than doubled every quarter"',
+              label:
+                "monthly users of AI Mode, where queries have more than doubled every quarter since launch",
               source: {
-                name: "Alphabet Q2 2026 earnings",
-                href: "https://blog.google/company-news/inside-google/message-ceo/alphabet-earnings-q2-2026/",
+                name: "Google, May 2026",
+                href: "https://blog.google/products-and-platforms/products/search/search-io-2026/",
               },
             },
             {
               value: "13.7%",
-              label: "of the time, AI Mode and AI Overviews cite the same URL for a query",
+              label: "of query pairs where AI Mode and AI Overviews cited the same URLs",
               source: {
                 name: "Ahrefs, Dec 2025",
                 href: "https://ahrefs.com/blog/ai-overviews-vs-ai-mode/",
@@ -134,21 +146,104 @@ export const googleAiOverviews: EngineGuide = {
             },
           ],
         },
+      ],
+    },
+    {
+      id: "query-fan-out",
+      title: "Query fan-out: the typed query is only the first search",
+      blocks: [
+        {
+          kind: "p",
+          text: 'Google\'s [guide to optimizing for generative AI features](https://developers.google.com/search/docs/fundamentals/ai-optimization-guide), added on 15 May 2026, names the two techniques behind both features. **Retrieval-augmented generation** ("also known as grounding") uses Google\'s "core Search ranking systems to retrieve relevant, up-to-date web pages from our Search index." **Query fan-out** is "a set of concurrent, related queries generated by the model to request more information."',
+        },
+        {
+          kind: "p",
+          text: "Google's own example: for `how to fix a lawn that's full of weeds`, the fan-out queries might include these three. Each is a separate search with its own winners, and any of them can put a link in the answer — which is what the figure at the top of this page shows.",
+        },
+        {
+          kind: "list",
+          items: [
+            "`remove weeds without chemicals`",
+            "`best herbicides for lawns`",
+            "`how to prevent weeds in lawn`",
+          ],
+        },
+        {
+          kind: "pipeline",
+          steps: [
+            {
+              title: "Google decides whether an AI answer is worth showing",
+              body: "Overviews are reserved for queries where Google thinks they add something. Question-shaped and longer queries trigger far more often: in Pew's March 2025 browsing data, 60% of searches starting with who, what, when or why produced a summary, against 8% of one- or two-word searches and 53% of searches of ten words or more.",
+              lever:
+                "Aim at the longer, question-shaped searches your buyers actually make. Short head terms rarely trigger an Overview.",
+            },
+            {
+              title: "The model fans the question out",
+              body: "It issues several related searches at once, across subtopics and data sources. Google says this lets it surface a wider set of links than a classic results page would.",
+              lever:
+                "Cover the sub-questions around your topic in depth — in one strong page or a tight, linked cluster.",
+            },
+            {
+              title: "Core ranking answers each sub-query",
+              body: "Every fan-out search is answered from the Search index by the normal ranking and quality systems. Pages that aren't indexed, or can't show a snippet, never enter the pool.",
+              lever: "Pass the three switches in the next section.",
+            },
+            {
+              title: "Gemini writes an answer grounded in those pages",
+              body: "Google made Gemini 3 the default model for AI Overviews in January 2026, and Gemini 3.5 Flash the default for AI Mode at I/O in May 2026.",
+              lever:
+                "Give it passages worth grounding a claim on: specific, first-hand, and clearly attributable to you.",
+            },
+            {
+              title: "Links attach to the claims they support",
+              body: 'Since May 2026, links sit inline beside the text they back, show the site name or page title on hover (desktop), and many answers end with an "Explore new angles" list of in-depth articles. In October 2026 Google said it was showing inline links higher, adding thumbnails to related-article links, and testing a block of official sites at the top of some answers.',
+            },
+          ],
+        },
+        {
+          kind: "h3",
+          text: "What the citation studies show",
+        },
+        {
+          kind: "table",
+          head: ["Study", "Sample", "Where cited pages ranked for the typed query"],
+          rows: [
+            [
+              "[Ahrefs, Jul 2025](https://ahrefs.com/blog/search-rankings-ai-citations)",
+              "1.9M citations from 1M AI Overviews (the 3 most visible per answer)",
+              "76.1% top 10 · 9.5% positions 11–100 · 14.4% beyond 100",
+            ],
+            [
+              "[BrightEdge, Sep 2025](https://www.brightedge.com/resources/weekly-ai-search-insights/rank-overlap-after-16-months-of-aio)",
+              "9 industries, May 2024 – Sep 2025",
+              "54.5% ranked organically at all; 16.7% in the top 10",
+            ],
+            [
+              "[Ahrefs, Mar 2026](https://ahrefs.com/blog/ai-overview-citations-top-10/)",
+              "863K keyword SERPs, 4M cited URLs",
+              "37.9% top 10 · 31.2% positions 11–100 · 31.0% beyond 100",
+            ],
+          ],
+        },
+        {
+          kind: "p",
+          text: "Read these as a direction, not one true number. The methods differ: Ahrefs' 2025 run counted only the three most visible citations per answer, and Ahrefs says its 2026 parser detects more citations, so the two runs aren't strictly comparable. Ahrefs' explanation, which it hedges, is more aggressive fan-out after Gemini 3 took over AI Overviews; Google hasn't confirmed any change. What every study agrees on is that ranking for the typed query is one way in, not the only one.",
+        },
         {
           kind: "callout",
-          tone: "note",
-          title: "AI Overviews and AI Mode are now one experience",
-          text: 'At I/O 2026 Google merged the two into "one seamless Search experience," live worldwide on desktop and mobile. They still pick sources differently — AI Mode answers run about four times longer and show more domains — but eligibility, controls and reporting are shared, so you optimize for both at once.',
+          tone: "warning",
+          title: "Fan-out is not a licence for doorway pages",
+          text: 'Google\'s guide says content made "primarily to manipulate rankings or generative AI responses" breaks its scaled content abuse policy, and since 15 May 2026 the [spam policies](https://developers.google.com/search/docs/essentials/spam-policies) name "attempting to manipulate generative AI responses in Google Search" outright. One thin page per fan-out variant is exactly what that describes. Build depth instead.',
         },
       ],
     },
     {
-      id: "eligibility",
-      title: "Eligibility: the switches that decide if you can be cited",
+      id: "citable-switches",
+      title: "The three switches that make a page citable",
       blocks: [
         {
           kind: "p",
-          text: 'Google\'s [AI features documentation](https://developers.google.com/search/docs/appearance/ai-features) sets one bar: a page must be "indexed and eligible to be shown in Google Search with a snippet." It adds that "there are no additional technical requirements." The 2026 optimization guide adds one more: "a site must be included in Search generative AI features in Search Console to be eligible." Include is the default — but check it, because anyone with owner access can change it.',
+          text: 'Google\'s [AI features documentation](https://developers.google.com/search/docs/appearance/ai-features) sets the bar: a page must be "indexed and eligible to be shown in Google Search with a snippet," and "there are no additional technical requirements." The 2026 optimization guide adds one more: "a site must be included in Search generative AI features in Search Console." Include is the default, but owners can change it per property, so check rather than assume.',
         },
         {
           kind: "requirements",
@@ -156,254 +251,273 @@ export const googleAiOverviews: EngineGuide = {
             {
               label: "Indexed",
               status: "required",
-              note: "Confirm with Search Console's URL Inspection. A page Google hasn't indexed cannot be retrieved for any fan-out query. Indexing \"isn't guaranteed,\" so internal links and sitemaps still matter.",
+              note: "Confirm with URL Inspection in Search Console. A page Google hasn't indexed can't be retrieved for any fan-out query, and indexing \"isn't guaranteed,\" so internal links and sitemaps still do work here.",
             },
             {
               label: "Snippet-eligible",
               status: "required",
-              note: "No `nosnippet`, and no `max-snippet` value so low it starves the model. Both explicitly limit what AI Overviews and AI Mode may use as input.",
+              note: 'No `nosnippet`, and no `max-snippet` value so small it starves the model. Google\'s robots meta spec says both limit what may be used as "direct input for AI Overviews and AI Mode." Google also honours robots meta tags placed in the body, so a stray tag injected by a plugin counts.',
             },
             {
-              label: "Included in Search generative AI",
+              label: "Search generative AI: Include",
               status: "required",
-              note: 'Search Console → Settings → Search generative AI must read **Include** (or inherit Include from a parent property). Excluded sites "won\'t receive any traffic or impressions from these features."',
+              note: 'Search Console → Settings → Search generative AI. Child properties follow their parent by default but can override it, and owners can switch it. Excluded sites "won\'t receive any traffic or impressions from these features."',
             },
             {
-              label: "Googlebot allowed — everywhere",
+              label: "Crawlable end to end",
               status: "required",
-              note: 'In robots.txt **and** at your CDN, WAF and bot-management layer. Google calls this out: an "AI bot" blocklist that catches Googlebot takes you out of Search and its AI features together.',
+              note: 'Google asks you to make sure crawling is allowed "in robots.txt, and by any CDN or hosting infrastructure." A bot-management rule that challenges Googlebot takes you out of Search and its AI features together.',
             },
+            {
+              label: "Content inside the first 2 MB",
+              status: "required",
+              note: "Googlebot crawls the first 2 MB of each HTML, CSS or JavaScript file (uncompressed) and indexes only what it fetched; PDFs get 64 MB. Keep the main content early and avoid inlining huge scripts or images.",
+            },
+            {
+              label: "JavaScript that renders",
+              status: "helps",
+              note: "Google renders JavaScript that isn't blocked. Check the rendered HTML in URL Inspection; server-rendered text remains the safest choice.",
+            },
+          ],
+        },
+        {
+          kind: "h3",
+          text: "A two-minute eligibility check",
+        },
+        {
+          kind: "list",
+          ordered: true,
+          items: [
+            "Open **Search Console → Settings → Search generative AI** on every property you own, including URL-prefix properties that may override the domain property, and read the value.",
+            "Run **URL Inspection → Test live URL** on a key page. You want indexing allowed and a successful page fetch.",
+            "In the source and the rendered HTML, search for `nosnippet`, `max-snippet`, `data-nosnippet` and `noindex`, and account for each one.",
+            "Check your CDN or firewall logs for challenges or blocks served to verified Googlebot, not just your robots.txt.",
           ],
         },
       ],
     },
     {
-      id: "controls",
-      title: "Crawlers and controls: what each one actually does",
+      id: "opt-out-levers",
+      title: "Every control, and what else it switches off",
       blocks: [
         {
           kind: "p",
-          text: 'There is no separate AI crawler for Search. Google is explicit: "AI is built into Search and integral to how Search functions, which is why robots.txt directives for Googlebot is the control." The token most people reach for, `Google-Extended`, does something else entirely.',
+          text: "There is no separate AI crawler for Google Search. Google's documentation says robots.txt rules for Googlebot are the control for crawling, for Search and its AI features alike. The token most people reach for, `Google-Extended`, does something else: per Google's [crawler documentation](https://developers.google.com/crawling/docs/crawlers-fetchers/google-common-crawlers) it governs training of future Gemini models and grounding in the Gemini app and Vertex AI, it \"does not impact a site's inclusion in Google Search,\" and it has no user agent of its own.",
         },
         {
-          kind: "crawlers",
-          bots: [
-            {
-              token: "Googlebot",
-              role: "search",
-              purpose:
-                "Crawls for Google Search, including AI Overviews and AI Mode. Blocking it removes you from Search altogether.",
-              robots: "yes",
-              advice: "allow",
-            },
-            {
-              token: "Google-Extended",
-              role: "training",
-              purpose:
-                'A robots.txt token (not a separate crawler) for training future Gemini models and for grounding in the Gemini app and Vertex AI. Google: it "does not impact a site\'s inclusion in Google Search nor is it used as a ranking signal."',
-              robots: "yes",
-              advice: "your-call",
-            },
+          kind: "table",
+          head: ["Control", "AI Overviews & AI Mode", "Classic results", "Gemini training"],
+          rows: [
+            [
+              "Search Console → Search generative AI: **Exclude**",
+              "Out within 1–2 days (Discover's AI features too)",
+              "Unaffected",
+              "Not affected — Google points to `Google-Extended`",
+            ],
+            ["`nosnippet`", "Not used as direct input", "No snippet anywhere", "Not its job"],
+            [
+              "`max-snippet:[n]`",
+              "Direct input capped at n characters",
+              "Snippet capped",
+              "Not its job",
+            ],
+            [
+              "`data-nosnippet` on an element",
+              "That passage left out",
+              "That passage left out",
+              "Not its job",
+            ],
+            ["`noindex`", "Gone", "Gone", "Not its job"],
+            ["`Google-Extended` disallowed", "**No effect**", "No effect", "Opted out"],
+            [
+              "`Googlebot` disallowed",
+              "Not eligible: no crawl, no snippet",
+              "Content can't be crawled; at best a bare URL",
+              "Not its job",
+            ],
           ],
         },
         {
           kind: "p",
-          text: "So a robots.txt that opts out of Gemini training while staying fully eligible for AI Overviews looks like this:",
+          text: "So a robots.txt that opts out of Gemini training while staying fully eligible for AI Overviews and AI Mode looks like this:",
         },
         {
           kind: "code",
           lang: "robots.txt",
-          code: "# Search, AI Overviews and AI Mode — never block this\nUser-agent: Googlebot\nAllow: /\n\n# Optional: opt out of Gemini training and Gemini-app grounding.\n# Has no effect on AI Overviews or AI Mode.\nUser-agent: Google-Extended\nDisallow: /",
-        },
-        {
-          kind: "h3",
-          text: "Every control, and what it really switches off",
-        },
-        {
-          kind: "table",
-          head: ["Control", "AI Overviews & AI Mode", "Classic results", "Model training"],
-          rows: [
-            [
-              "Search Console → **Search generative AI: Exclude**",
-              "Removed (also Discover AI)",
-              "Unaffected",
-              "Unaffected",
-            ],
-            ["`nosnippet`", "Not used as input", "No snippet shown", "Unaffected"],
-            ["`max-snippet:[n]`", "Input capped at n characters", "Snippet capped", "Unaffected"],
-            [
-              "`data-nosnippet` on an element",
-              "That passage excluded",
-              "Passage excluded",
-              "Unaffected",
-            ],
-            ["`noindex`", "Removed", "Removed", "Unaffected"],
-            ["`Google-Extended` disallowed", "**Unaffected**", "Unaffected", "Opted out"],
-          ],
+          code: "# Google Search, including AI Overviews and AI Mode. Never block this.\nUser-agent: Googlebot\nAllow: /\n\n# Optional: opt out of Gemini training and Gemini-app / Vertex AI grounding.\n# No effect on AI Overviews or AI Mode.\nUser-agent: Google-Extended\nDisallow: /",
         },
         {
           kind: "p",
-          text: 'The Search Console control, rolled out worldwide on 31 August 2026, is the only one built for this job. It works per property — domain, subdomain or URL-prefix, so a URL-prefix property can scope it to one folder — takes effect in "a few days," and Google says it is "not used as a ranking or inclusion signal affecting other parts of Search." It does not touch training (that\'s `Google-Extended`) or Merchant Center and Ads participation.',
+          text: 'The [Search Console control](https://support.google.com/webmasters/answer/16908024), live for all sites worldwide since 31 August 2026, is the only lever built for this job. It works per property — domain, subdomain or URL-prefix, so a URL-prefix property can carve out a folder — and Google says content is excluded "within 1-2 days," though caching can stretch that. It "isn\'t used as a ranking or inclusion signal affecting other parts of Search," doesn\'t override Merchant Center or Ads participation, and doesn\'t stop Google using your pages to "power Google Search as a whole," such as understanding queries.',
         },
         {
           kind: "p",
-          text: "To keep one passage out of AI answers without losing the page — a price you don't want quoted out of context, say — wrap it in `data-nosnippet`:",
+          text: "To keep a single passage out of AI answers without losing the page — a price you don't want quoted out of context, say — wrap it in `data-nosnippet`:",
         },
         {
           kind: "code",
           lang: "html",
-          code: "<p>Plans start at $29 a month.</p>\n<div data-nosnippet>\n  Enterprise pricing is negotiated per contract.\n</div>",
+          code: "<p>Plans start at $29 a month.</p>\n<div data-nosnippet>\n  Enterprise pricing is agreed per contract.\n</div>",
         },
         {
           kind: "callout",
-          tone: "warning",
-          title: "The UK is getting more controls",
-          text: "In June 2026 the UK's Competition and Markets Authority imposed a conduct requirement on Google covering an opt-out from AI features while staying in Search, an opt-out from fine-tuning, and clearer attribution. Google has until about March 2027 to comply. Page-level mechanics have been reported but aren't documented by Google yet.",
+          tone: "note",
+          title: "In the UK, finer controls are on the way",
+          text: 'On 3 June 2026 the [Competition and Markets Authority](https://www.gov.uk/government/news/cma-secures-fairer-deal-for-publishers-and-improves-google-search-services-in-uk) required Google to give publishers "effective tools to prevent their content being used to power AI features in search," an opt-out from fine-tuning, and clear attribution links, with nine months to comply. Google hasn\'t documented page-level mechanics yet.',
         },
       ],
     },
     {
-      id: "technical",
-      title: "Technical requirements, and the things that don't matter",
+      id: "earning-the-card",
+      title: "What earns the link card once you're eligible",
       blocks: [
         {
           kind: "p",
-          text: "Because AI features sit on Search, the technical bar is Search's bar. The useful work is making sure Google can render, understand and prefer your page — and not wasting weeks on files and markup Google has said it ignores.",
-        },
-        {
-          kind: "requirements",
-          items: [
-            {
-              label: "JavaScript rendering",
-              status: "helps",
-              note: "\"Google is able to process content within JavaScript as long as it isn't blocked.\" Don't block JS or CSS in robots.txt, and check the rendered HTML in URL Inspection. Server-rendered text is still safest — and it's what every other engine needs.",
-            },
-            {
-              label: "Key content in the first 2 MB",
-              status: "required",
-              note: 'Googlebot fetches the first 2 MB of a URL\'s HTML; anything after the cut-off is "not fetched… not rendered… not indexed." Put the title, canonical and main content early, and avoid inlining huge scripts or base64 images.',
-            },
-            {
-              label: "Page experience",
-              status: "helps",
-              note: "Works on every device, loads quickly, and makes the main content clearly distinguishable from navigation and ads.",
-            },
-            {
-              label: "Internal links & duplicates",
-              status: "helps",
-              note: 'Make deep pages "easily findable through internal links," and consolidate duplicates with canonicals so ranking signals aren\'t split.',
-            },
-            {
-              label: "Original images & video",
-              status: "helps",
-              note: "Google's guide recommends high-quality media. YouTube was the single most-cited domain in AI Overviews in Ahrefs' 2026 data, at 5.6% of cited URLs.",
-            },
-            {
-              label: "Structured data",
-              status: "no-effect",
-              note: 'Not required for AI features and there is "no special schema.org structured data." Keep it for rich results — and make sure it matches the visible text.',
-            },
-            {
-              label: "llms.txt & AI text files",
-              status: "no-effect",
-              note: '"You don\'t need to create new machine readable files, AI text files, or markup." Google Search ignores llms.txt; it neither helps nor hurts here.',
-            },
-            {
-              label: "Chunking & rewriting for AI",
-              status: "no-effect",
-              note: 'Google says there is no need to chunk content or rewrite it for AI, and "no ideal page length." Write clear sections for people.',
-            },
-            {
-              label: "Merchant Center feed",
-              status: "helps",
-              note: "For shopping answers. AI Mode shops from the Shopping Graph (60B+ listings), so keep prices, shipping, returns and attributes current. Agentic checkout is live for select US merchants.",
-            },
-            {
-              label: "Google Business Profile",
-              status: "helps",
-              note: "For local answers — hours, categories, reviews. AI Mode's agentic booking for local services launched in the US in summer 2026.",
-            },
-          ],
-        },
-      ],
-    },
-    {
-      id: "what-gets-cited",
-      title: "What gets cited: ranking, fan-out and non-commodity content",
-      blocks: [
-        {
-          kind: "p",
-          text: "Ranking still matters — it's how pages enter the pool — but the typed query is no longer the only race. Fan-out means your page can be cited for a sub-question you rank for even when you're nowhere for the original query. The data shows the share of citations coming from outside the top 10 growing fast.",
-        },
-        {
-          kind: "table",
-          head: ["Study", "Sample", "Cited pages in the top 10"],
-          rows: [
-            [
-              "[Ahrefs, Jul 2025](https://ahrefs.com/blog/ai-overview-citations-top-10/)",
-              "1M AI Overviews, 1.9M citations",
-              "76.1%",
-            ],
-            [
-              "[Ahrefs, Mar 2026](https://ahrefs.com/blog/ai-overview-citations-top-10/)",
-              "863K SERPs, 4M cited URLs",
-              "37.9% (31.0% ranked beyond 100)",
-            ],
-            [
-              "[BrightEdge, Sep 2025](https://www.brightedge.com/resources/weekly-ai-search-insights/rank-overlap-after-16-months-of-aio)",
-              "9 industries, 16 months",
-              "54.5% rank organically (any position)",
-            ],
-          ],
-        },
-        {
-          kind: "p",
-          text: "Ahrefs attributes the fall to more aggressive fan-out after Gemini 3 arrived. What that means in practice: the most reliable way into an answer is to be the best result for one of its sub-questions.",
+          text: "Eligibility gets a page into the pool. Being chosen is ranking and quality — applied not just to the typed query but to every search Google fans out to. These are the signals worth working on, with how sure anyone can be about each.",
         },
         {
           kind: "signals",
           items: [
             {
-              title: "Core ranking and quality",
-              body: "Grounding runs on the same ranking and quality systems as Search. Helpful, reliable, people-first content and E-E-A-T apply unchanged.",
+              title: "Core ranking, applied per sub-query",
+              body: "Grounding runs on the same ranking and quality systems as Search, so helpful, reliable, people-first content and E-E-A-T apply unchanged — once for each fan-out search.",
               evidence: "official",
             },
             {
-              title: "Non-commodity content",
-              body: 'Google contrasts "7 Tips for First-Time Homebuyers" with "Why We Waived the Inspection & Saved Money." First-hand experience and original data are what a generic answer can\'t supply.',
+              title: "Non-commodity, first-hand content",
+              body: 'Google contrasts "7 Tips for First-Time Homebuyers" with "Why We Waived the Inspection & Saved Money: A Look Inside the Sewer Line." Experience and original material are what a generic answer can\'t supply.',
               evidence: "official",
             },
             {
-              title: "Subtopic coverage",
-              body: "Pages that win a fan-out sub-query get cited even when they don't rank for the head term — the likely driver of the 76% → 38% shift.",
+              title: "Owning a sub-question",
+              body: "Most cited pages no longer rank top 10 for the typed query (Ahrefs, March 2026). Being the best result for one sub-question is a route in that doesn't require beating the head-term leaders.",
               evidence: "observed",
             },
             {
-              title: "Video and forums",
-              body: 'YouTube leads cited domains, and since May 2026 Google surfaces forum and social "perspectives" with attribution. Being discussed off-site is a second path in.',
+              title: "Video beside the text",
+              body: "Google's guide recommends supporting text with high-quality images and video. In Ahrefs' March 2026 data YouTube was the most-cited domain in AI Overviews, at 5.6% of cited URLs.",
               evidence: "observed",
             },
             {
-              title: "Clear sections",
-              body: "Google recommends clear headings and sections. It doesn't endorse answer-first formatting specifically — we find direct openings get lifted more, but that's practitioner evidence.",
+              title: "Real discussion, not manufactured mentions",
+              body: 'Answers now preview "Community Perspectives" from forums and social posts, with the creator named. Google also warns that "seeking inauthentic \'mentions\' across the web isn\'t as helpful as it might seem."',
+              evidence: "official",
+            },
+            {
+              title: "Clear paragraphs and sections",
+              body: "Google: people \"appreciate it when web pages are organized by paragraphs and sections,\" and there's no need to chunk text for AI. Opening each section with its direct answer is a practitioner habit Google hasn't endorsed.",
               evidence: "our-read",
             },
+          ],
+        },
+        {
+          kind: "h3",
+          text: "Mapping the sub-questions, step by step",
+        },
+        {
+          kind: "list",
+          ordered: true,
+          items: [
+            "Write down one buyer question you want to be cited for, in the words a buyer would type.",
+            "List the searches Google would plausibly fan it out to. People Also Ask, related searches and AI Mode's own follow-up suggestions are good prompts.",
+            "Search each sub-question in a private window and note who wins it and how strong those pages are.",
+            "Pick the sub-question where the winners are weakest and you hold first-hand material — data, tests, photos, a process only you run.",
+            "Build or improve the page that answers it best, and link to it from the hub page for the main question.",
+          ],
+        },
+      ],
+    },
+    {
+      id: "labels-and-badges",
+      title: "Preferred, Subscribed, Highly Cited: labels you can earn",
+      blocks: [
+        {
+          kind: "p",
+          text: "2026 gave publishers ways to stand out in Google's AI search that don't depend on rank alone. Each label appears only for some users or some links, but each is something you can act on.",
+        },
+        {
+          kind: "table",
+          head: ["Label", "When it shows", "What you can do"],
+          rows: [
+            [
+              "**Preferred**",
+              "The user picked your site in source preferences. Shown in AI Overviews and AI Mode since 27 May 2026",
+              "Ask loyal readers to add you, with Google's button or a deep link. Your site must be set to Include, at domain or subdomain level",
+            ],
+            [
+              "**Subscribed**",
+              "The user linked a news subscription to their Google account (May 2026)",
+              "Join Google's subscription linking through its publisher form",
+            ],
+            [
+              "**Highly Cited**",
+              "Other stories cite your article as original reporting (May 2026)",
+              "Publish reporting and data that others reference",
+            ],
+          ],
+        },
+        {
+          kind: "p",
+          text: "The [preferred sources guide](https://developers.google.com/search/docs/appearance/preferred-sources) documents a JavaScript button and a plain deep link. The link needs no script and works in newsletters and social posts as well as on your site:",
+        },
+        {
+          kind: "code",
+          lang: "html",
+          code: '<a href="https://www.google.com/preferences/source?q=example.com">\n  Add us as a preferred source on Google\n</a>',
+        },
+        {
+          kind: "p",
+          text: "Google says people are \"twice as likely to click through\" to a Preferred Source, that more than 345,000 sources had been selected by May 2026, and in October that use had grown more than 7× since January. Those are Google's own figures. Google doesn't describe preferred sources as a ranking signal: the label shows when your page is already in the answer.",
+        },
+      ],
+    },
+    {
+      id: "skip-list",
+      title: "What Google says you can skip",
+      blocks: [
+        {
+          kind: "p",
+          text: "A lot of 2026 GEO advice is aimed at engines other than Google. For Google's AI features, its own guide has a mythbusting section, and the 15 June 2026 documentation update made the llms.txt answer explicit.",
+        },
+        {
+          kind: "myths",
+          items: [
             {
-              title: "Per-variant pages backfire",
-              body: 'Creating pages for every fan-out variant "primarily to manipulate generative AI responses" is, per Google, scaled content abuse. Build depth, not doorways.',
-              evidence: "official",
+              myth: "You need llms.txt or a Markdown copy of your pages.",
+              reality:
+                'Google: "You don\'t need to create new machine readable files, AI text files, markup, or Markdown to appear in Google Search." Doing so "will neither harm nor help."',
+            },
+            {
+              myth: "Content has to be chunked into short passages for AI.",
+              reality:
+                '"There\'s no requirement to break your content into tiny pieces," and there\'s "no ideal page length." Write sections that read well to people.',
+            },
+            {
+              myth: "FAQ schema gets you into AI answers.",
+              reality:
+                "There's no special schema for AI features, and FAQ markup no longer earns FAQ rich results either: Google stopped showing them on 7 May 2026 and removed the documentation on 15 June. Keep structured data that matches the page for the rich results still supported.",
+            },
+            {
+              myth: "Blocking Google-Extended keeps you out of AI Overviews.",
+              reality:
+                "It doesn't. Use the Search Console control, `nosnippet` or `noindex` — each with the side effects in the table above.",
+            },
+            {
+              myth: "GEO for Google is a separate discipline with its own tricks.",
+              reality:
+                'Google: "optimizing for generative AI search is optimizing for the search experience, and thus still SEO." It tells site owners to prioritise effective SEO over "AEO/GEO hacks."',
             },
           ],
         },
       ],
     },
     {
-      id: "clicks",
-      title: "What AI Overviews do to your clicks",
+      id: "click-math",
+      title: "The click math: cited, uncited and no Overview",
       blocks: [
         {
           kind: "p",
-          text: "The honest framing: for uncited pages, AI Overviews cost clicks. For cited ones, they cost less — and sometimes pay. That makes being cited as much a defensive move as a growth one.",
+          text: "For pages that aren't cited, AI Overviews cost clicks. For pages that are, they cost less. That makes earning the citation a defensive move as much as a growth one.",
         },
         {
           kind: "stats",
@@ -411,7 +525,7 @@ export const googleAiOverviews: EngineGuide = {
             {
               value: "8% vs 15%",
               label:
-                "of visits clicked a classic result with an AI summary present, versus without",
+                "of visits that clicked a classic result with an AI summary on the page, versus without",
               source: {
                 name: "Pew Research, Jul 2025",
                 href: "https://www.pewresearch.org/short-reads/2025/07/22/google-users-are-less-likely-to-click-on-links-when-an-ai-summary-appears-in-the-results/",
@@ -419,7 +533,7 @@ export const googleAiOverviews: EngineGuide = {
             },
             {
               value: "−58%",
-              label: "click-through for the #1 result when an AI Overview is shown",
+              label: "click-through for the top-ranking page when an AI Overview appears",
               source: {
                 name: "Ahrefs, Feb 2026",
                 href: "https://ahrefs.com/blog/ai-overviews-reduce-clicks-update/",
@@ -428,7 +542,7 @@ export const googleAiOverviews: EngineGuide = {
             {
               value: "+120%",
               label:
-                "organic clicks per impression for brands cited in the Overview versus not cited",
+                "organic clicks per impression for brands cited in the Overview, versus not cited",
               source: {
                 name: "Seer Interactive, Apr 2026",
                 href: "https://www.seerinteractive.com/insights/aio-impact-on-google-ctr-2026-update",
@@ -437,87 +551,84 @@ export const googleAiOverviews: EngineGuide = {
           ],
         },
         {
+          kind: "table",
+          head: ["Informational query, 1M impressions", "Organic clicks"],
+          rows: [
+            ["No AI Overview", "≈ 33,500"],
+            ["AI Overview, your brand cited", "≈ 20,700"],
+            ["AI Overview, your brand not cited", "≈ 9,400"],
+          ],
+        },
+        {
           kind: "p",
-          text: "Seer's numbers put it most concretely: per million informational impressions, about 33,500 clicks with no AI Overview, about 20,700 when the brand is cited, and about 9,400 when it isn't. Seer notes this is correlation, not proof. Google's own position is that AI-feature clicks are \"higher quality,\" though it hasn't published data for that.",
+          text: "The table is Seer Interactive's 2026 update: 53 brands, 2.43 billion organic impressions, January 2025 to February 2026. Seer is explicit that it shows correlation, not cause — higher-authority brands are also more likely to be cited — and one account makes up 47% of the uncited impressions. Ahrefs' −58% is modelled from desktop Search Console data. Google, for its part, says clicks from results pages with AI Overviews are \"higher quality,\" without publishing numbers.",
         },
       ],
     },
     {
-      id: "measurement",
-      title: "Measuring AI Overviews and AI Mode",
+      id: "search-console-ga4",
+      title: "Reading it in Search Console and GA4",
       blocks: [
         {
           kind: "p",
-          text: "Measurement changed more in 2026 than anything else. On 3 June Google launched the [Search generative AI performance report](https://developers.google.com/search/blog/2026/06/gen-ai-performance-reports), rolled out worldwide by 31 August. It's the first first-party view of AI visibility — with one big gap.",
+          text: "On 3 June 2026 Google introduced [Search generative AI performance reports](https://developers.google.com/search/blog/2026/06/gen-ai-performance-reports), first for a subset of sites and for all sites worldwide by 31 August. It's the first first-party view of AI visibility, with one large gap: no clicks.",
         },
         {
           kind: "table",
           head: ["Where", "What you get", "What you don't"],
           rows: [
             [
-              "Search Console **Generative AI report**",
-              "Impressions by page, country, device and date — hourly to monthly",
-              "Clicks, position, queries",
+              "Search Console → **Generative AI report**",
+              "Impressions in AI Overviews and AI Mode by page, country, device and date; separate text and multimodal (Lens, Circle to Search) views",
+              "Clicks, CTR, position, queries",
             ],
             [
-              "Search Console **Performance (Web)**",
-              "Clicks and impressions, with AI features blended in",
+              "Search Console → **Performance → Web**",
+              "Clicks and impressions, AI features included",
               "Any split between AI and classic results",
             ],
             [
-              "**GA4**",
-              "Sessions and conversions from google.com in Organic Search",
-              "Which visits came from an AI answer",
+              "Search Console → **Discover's AI report**",
+              "Impressions in Discover's generative AI features",
+              "Anything from Search",
             ],
             [
-              "**Citation tracker**",
-              "Which prompts cite you, and who's cited instead",
-              "Google's own impression counts",
+              "**GA4**",
+              "Sessions and conversions from google / organic, in the Organic Search channel",
+              "Which visits came from an AI answer — the AI Assistant channel excludes AI Overviews and AI Mode",
             ],
           ],
         },
         {
           kind: "list",
           items: [
-            "**Impressions** count when a link to your site is shown in an AI feature — for AI Overviews, only once it's scrolled or expanded into view. Two links in one answer count as one impression in the property chart.",
-            "**Position:** an AI Overview occupies one position, and every link in it is assigned that position. In AI Mode, positions count as in regular Search.",
-            "**Follow-ups** in AI Mode are logged as new queries.",
-            "**GA4:** a new AI Assistant default channel (May 2026) groups assistants such as ChatGPT, Gemini and Copilot. Google's own AI features are excluded — those clicks still land in Organic Search from google.com.",
+            "**AI Overviews** take one position on the page, and every link inside gets that same position. A click on an external link counts as a click.",
+            "**AI Mode** positions follow the normal results-page method, and each follow-up question is logged as a new query.",
+            "**Impressions** in the report's chart are aggregated by property: two of your links in one answer count once. The page table counts by page.",
+            "**Gaps:** Search Labs experiments aren't counted, and the report may not appear at all for sites with too few AI impressions or set to Exclude.",
           ],
         },
         {
           kind: "p",
-          text: "The practical setup: watch the AI report for which pages gain impressions, check those pages' engagement and conversions in GA4, and run a fixed weekly prompt panel for the citations Search Console can't show. Google's own caveat applies to every tool, ours included: \"no third-party tool has access to our internal ranking or AI systems.\"",
+          text: 'A workable routine: each month, list the pages gaining AI impressions and compare their Search clicks and GA4 conversions with the month before. Each week, run a fixed set of 20–30 buyer questions in a private window and note which pages Google cites — by hand, the same questions every time. Google\'s caveat applies to any tool that promises more: "No third-party tool has access to our internal ranking or AI systems."',
         },
       ],
     },
     {
-      id: "myths",
-      title: "Myths worth dropping",
+      id: "products-local-agents",
+      title: "Products, local businesses and agents",
       blocks: [
         {
-          kind: "myths",
+          kind: "p",
+          text: "AI answers on Google also carry product listings, product details and local business information, and those come from Google's own data sources as much as from your pages. Google's guide points to three of them.",
+        },
+        {
+          kind: "list",
           items: [
-            {
-              myth: "You need llms.txt, an AI file or special schema to appear in AI Overviews.",
-              reality:
-                "Google says no new files, AI text files or special structured data are needed, and it ignores llms.txt. The eligibility bar is indexing and a snippet.",
-            },
-            {
-              myth: "Blocking Google-Extended keeps you out of AI Overviews.",
-              reality:
-                "It doesn't. `Google-Extended` covers Gemini training and Gemini-app grounding. To leave AI Overviews use the Search Console control, `nosnippet` or `noindex`.",
-            },
-            {
-              myth: "Only the #1 result gets cited — or ranking #1 guarantees it.",
-              reality:
-                "In Ahrefs' 2026 data 62% of cited pages ranked outside the top 10 for the query. Fan-out spreads citations across sub-questions.",
-            },
-            {
-              myth: "GEO is a separate discipline with its own tricks.",
-              reality:
-                'Google: "optimizing for generative AI search is optimizing for the search experience, and thus still SEO." Inauthentic mentions and per-variant pages don\'t help and can breach spam policy.',
-            },
+            "**Merchant Center:** keep feeds complete — prices, availability, shipping, returns and attributes — so products can appear in AI responses and other results.",
+            "**Google Business Profile:** hours, categories, photos and reviews feed local answers. Agentic booking for local experiences and services was rolling out to everyone in the US from summer 2026.",
+            "**Business Agent:** Google suggests considering its conversational brand agent, depending on your business type and goals.",
+            "**Agents on your site:** browser agents may read pages through screenshots, the DOM and the accessibility tree. Google links to web.dev's agent-friendly website practices and notes the emerging Universal Commerce Protocol.",
           ],
         },
       ],
@@ -527,138 +638,134 @@ export const googleAiOverviews: EngineGuide = {
   checklist: [
     {
       id: "sc-include",
-      title: "Confirm the Search generative AI setting is Include",
+      title: "Read the Search generative AI setting on every property",
       detail:
-        "Search Console → Settings → Search generative AI. Check every property, including inheritance from parent domain properties.",
+        "Search Console → Settings → Search generative AI. Check domain, subdomain and URL-prefix properties, since a child can override its parent.",
       impact: "high",
     },
     {
-      id: "indexed",
-      title: "Verify your key pages are indexed",
-      detail: "Run URL Inspection on your top 20 pages and remove any stray `noindex`.",
-      impact: "high",
-    },
-    {
-      id: "snippets",
-      title: "Audit snippet controls",
+      id: "inspect-live",
+      title: "Run URL Inspection's live test on your top pages",
       detail:
-        "Search templates for `nosnippet`, low `max-snippet` values and `data-nosnippet`. Each one throttles what AI features can use.",
+        "Confirm indexing is allowed and the fetch succeeds, then fix any stray `noindex` before anything else.",
       impact: "high",
     },
     {
-      id: "googlebot-cdn",
-      title: "Allow Googlebot at the CDN and WAF, not just robots.txt",
+      id: "snippet-audit",
+      title: "Account for every snippet control in your templates",
       detail:
-        'Make sure no "block AI bots" rule in Cloudflare or your WAF catches Googlebot. Verify with URL Inspection\'s live test.',
+        "Search source and rendered HTML for `nosnippet`, `max-snippet` and `data-nosnippet`, including tags a plugin injects into the body.",
       impact: "high",
     },
     {
-      id: "rendered-html",
-      title: "Check the rendered HTML contains your main content",
-      detail: "Use URL Inspection → View crawled page. Don't block JS or CSS resources.",
-      impact: "high",
-    },
-    {
-      id: "fan-out-map",
-      title: "Map the fan-out for your top buyer questions",
+      id: "edge-access",
+      title: "Let verified Googlebot through your CDN and firewall",
       detail:
-        "For each question, list the sub-questions Google is likely to search. Find the weakest one you could own outright.",
+        "robots.txt isn't the only gate. Check bot-management rules and logs for challenges served to Googlebot.",
       impact: "high",
     },
     {
-      id: "non-commodity",
-      title: "Add first-hand, non-commodity material to key pages",
+      id: "first-2mb",
+      title: "Keep the main content rendered and inside the first 2 MB",
       detail:
-        "Original data, tests, screenshots and named expertise — the things a generic answer can't supply.",
-      impact: "high",
-    },
-    {
-      id: "clusters",
-      title: "Build depth as clusters, not per-variant pages",
-      detail:
-        "Cover subtopics in a comprehensive page or a linked cluster. Avoid thin pages per fan-out variant — that's scaled content abuse.",
+        "Use URL Inspection → View crawled page. Don't block JS or CSS, and avoid inlining large scripts or images ahead of the content.",
       impact: "medium",
     },
     {
-      id: "internal-links",
-      title: "Strengthen internal links to deep pages",
+      id: "map-subquestions",
+      title: "Map the sub-questions behind your top five buyer questions",
+      detail: "For each, list the searches Google is likely to fan out to and who wins them today.",
+      impact: "high",
+    },
+    {
+      id: "own-one",
+      title: "Pick one sub-question you can win outright, and build that page",
       detail:
-        "Link to your best subtopic pages from hubs and navigation; consolidate duplicates with canonicals.",
+        "Choose where the current winners are weakest and you hold first-hand material. Link it from the hub page.",
+      impact: "high",
+    },
+    {
+      id: "first-hand",
+      title: "Add evidence a generic answer can't supply",
+      detail:
+        "Original data, tests, photos, worked examples and named expertise, on the pages you most want cited.",
+      impact: "high",
+    },
+    {
+      id: "video",
+      title: "Pair key pages with a short original video",
+      detail:
+        "YouTube is the most-cited domain in AI Overviews in Ahrefs' 2026 data; a video can give you a second way into the answer.",
       impact: "medium",
     },
     {
-      id: "media",
-      title: "Publish original images and video",
+      id: "preferred-source",
+      title: "Add a preferred-source link where loyal readers see it",
       detail:
-        "YouTube is the most-cited domain in AI Overviews. A short explainer video can earn a second citation path.",
+        "Use Google's button or the `google.com/preferences/source?q=` deep link in your footer, newsletter and social profiles.",
       impact: "medium",
     },
     {
-      id: "schema-match",
-      title: "Keep structured data valid and matching the page",
+      id: "structured-data",
+      title: "Stop maintaining FAQ markup for rich results",
       detail:
-        "Not required for AI features, but mismatched markup undermines trust and rich results.",
+        "FAQ rich results ended on 7 May 2026. Keep structured data that matches the visible page and still earns a supported rich result.",
       impact: "low",
     },
     {
-      id: "merchant",
-      title: "E-commerce: keep your Merchant Center feed complete",
-      detail: "Prices, shipping, returns and attributes feed shopping answers in AI Mode.",
-      impact: "medium",
-    },
-    {
-      id: "gbp",
-      title: "Local: keep your Google Business Profile current",
-      detail: "Hours, categories, photos and reviews feed local answers and agentic booking.",
+      id: "commerce-local",
+      title: "Commerce or local: keep Merchant Center and Business Profile complete",
+      detail:
+        "Prices, availability, shipping, returns, hours and categories feed AI answers directly.",
       impact: "medium",
     },
     {
       id: "measure",
-      title: "Set up measurement",
+      title: "Set a monthly report read and a weekly question check",
       detail:
-        "Review the Generative AI report monthly, compare those pages in GA4, run a weekly prompt panel, and annotate core updates.",
+        "Monthly: pages gaining AI impressions against their clicks and conversions. Weekly: the same 20–30 buyer questions, checked by hand.",
       impact: "high",
     },
   ],
 
   faqs: [
     {
-      q: "How do I get my website into Google AI Overviews?",
-      a: "Make sure the page is indexed, allowed a snippet, and that your site is set to Include in Search Console's Search generative AI setting. Beyond that it's SEO: Google grounds answers in its core ranking systems and fans the query out into subtopics, so helpful, first-hand content that wins those subtopics gets cited.",
+      q: "Why does my page rank first but not appear in the AI Overview?",
+      a: "Ranking for the typed query is one route in, not a guarantee. The Overview is built from several fan-out searches, so pages that win a sub-question compete for the same few links; in Ahrefs' March 2026 data only 37.9% of cited pages ranked top 10 for the typed query. Also check that the page has no `nosnippet` or tight `max-snippet`, and remember Google shows Overviews only when it judges them useful, and changes the cited links between answers.",
     },
     {
-      q: "Do I need schema markup or llms.txt for AI Overviews?",
-      a: "No. Google says there is no special schema for AI features and it ignores llms.txt. Structured data still earns rich results, and it must match the visible text on the page.",
+      q: "How long does the Search Console opt-out take, and does it hurt my rankings?",
+      a: "Google says content is excluded within 1–2 days of switching to Exclude, though caching can delay some pages. The setting isn't used as a ranking or inclusion signal for the rest of Search, so classic results are unaffected; you simply stop receiving impressions and traffic from AI Overviews, AI Mode and Discover's AI features.",
     },
     {
-      q: "Can I opt out of AI Overviews without leaving Google Search?",
-      a: "Yes. Since 31 August 2026, Search Console → Settings → Search generative AI can exclude a property from AI Overviews, AI Mode and Discover's AI features without affecting regular ranking. `nosnippet` also works, but removes your snippets everywhere.",
+      q: "Does nosnippet remove a page from AI Overviews and AI Mode?",
+      a: "It stops the page being used as direct input for both, according to Google's robots meta specification. The catch is that it also removes your snippet from every other kind of result. To leave AI features while keeping normal snippets, use the Search Console control; to protect one passage, use `data-nosnippet`.",
     },
     {
-      q: "Does blocking Google-Extended remove me from AI Overviews?",
-      a: "No. `Google-Extended` controls Gemini model training and grounding in the Gemini app and Vertex AI. Google states it does not affect inclusion in Google Search.",
+      q: "What does Google-Extended actually control?",
+      a: "Whether content Google crawls may be used to train future Gemini models and to ground answers in the Gemini app and Vertex AI. It's a robots.txt token with no user agent of its own, and Google states it doesn't affect inclusion or ranking in Google Search, which covers AI Overviews and AI Mode.",
     },
     {
-      q: "How do I track AI Overviews traffic?",
-      a: "Search Console's Generative AI report shows impressions by page, country and device, but no clicks. Clicks are blended into the Web performance report and into GA4's Organic Search, so pair the report with a citation tracker.",
+      q: "Can I see which queries triggered my AI Overview impressions?",
+      a: "Not in the Generative AI report: it breaks impressions down by page, country, device and date, with no query dimension and no clicks. Query-level data still exists in the main Performance report, but there AI features are blended with classic results.",
     },
     {
-      q: "Do I need to rank #1 to be cited in AI Overviews?",
-      a: "No. Ahrefs' March 2026 study found only 37.9% of cited pages ranked in the top 10 for the query, because fan-out pulls sources from related sub-queries. Ranking well is still the strongest lever you control.",
+      q: "Is FAQ schema still worth adding for Google's AI answers?",
+      a: "Not for Google. FAQ rich results stopped appearing on 7 May 2026, and Google says no special schema is needed for its AI features. FAQPage is still valid schema.org, so existing markup does no harm. Write questions and answers on the page because they help readers.",
     },
     {
-      q: "Is AI Mode different from AI Overviews for SEO?",
-      a: "The eligibility rules, controls and reporting are shared. But they cite the same URL only 13.7% of the time (Ahrefs), AI Mode answers are longer and show more domains, and AI Mode follow-ups count as new queries in Search Console.",
+      q: "Does GA4 separate AI Mode visits from ordinary Google search?",
+      a: "No. Clicks from AI Overviews and AI Mode arrive as google / organic in the Organic Search channel. GA4's AI Assistant channel covers assistants such as ChatGPT, Gemini, DeepSeek, Copilot and Grok, and explicitly excludes Google's AI Overviews and AI Mode.",
     },
     {
-      q: "Do AI Overviews reduce clicks to my site?",
-      a: "For uncited pages, usually yes: Pew measured an 8% click rate with a summary against 15% without, and Ahrefs a 58% drop for position one. Seer found cited brands get about 120% more clicks per impression than uncited ones.",
+      q: "Should I publish a page for every query Google fans out to?",
+      a: "No. Google's guide calls content created primarily to manipulate generative AI responses scaled content abuse, and its spam policies cover attempts to manipulate those responses. Cover sub-questions in depth, in a strong page or a small linked cluster, and add first-hand material.",
     },
   ],
 
   sources: [
     {
-      title: "Optimizing your website for generative AI features",
+      title: "Google's guide to optimizing for generative AI features on Google Search",
       publisher: "Google Search Central",
       href: "https://developers.google.com/search/docs/fundamentals/ai-optimization-guide",
     },
@@ -668,24 +775,24 @@ export const googleAiOverviews: EngineGuide = {
       href: "https://developers.google.com/search/docs/appearance/ai-features",
     },
     {
-      title: "Introducing Search generative AI performance reports",
-      publisher: "Google Search Central Blog",
-      href: "https://developers.google.com/search/blog/2026/06/gen-ai-performance-reports",
-    },
-    {
       title: "Search generative AI control",
       publisher: "Search Console Help",
       href: "https://support.google.com/webmasters/answer/16908024",
     },
     {
-      title: "Generative AI performance report",
+      title: "Generative AI performance report (Search)",
       publisher: "Search Console Help",
       href: "https://support.google.com/webmasters/answer/16984139",
     },
     {
-      title: "New controls for website owners",
-      publisher: "Google",
-      href: "https://blog.google/products-and-platforms/products/search/new-controls-website-owners/",
+      title: "Introducing Search Generative AI performance reports in Search Console",
+      publisher: "Google Search Central Blog",
+      href: "https://developers.google.com/search/blog/2026/06/gen-ai-performance-reports",
+    },
+    {
+      title: "What are impressions, position, and clicks?",
+      publisher: "Search Console Help",
+      href: "https://support.google.com/webmasters/answer/7042828",
     },
     {
       title: "Robots meta tag, data-nosnippet and X-Robots-Tag specifications",
@@ -693,27 +800,67 @@ export const googleAiOverviews: EngineGuide = {
       href: "https://developers.google.com/search/docs/crawling-indexing/robots-meta-tag",
     },
     {
+      title: "Control the content you share on Search",
+      publisher: "Google Search Central",
+      href: "https://developers.google.com/search/docs/crawling-indexing/control-what-you-share",
+    },
+    {
       title: "Google's common crawlers (Google-Extended)",
       publisher: "Google Crawling Infrastructure",
       href: "https://developers.google.com/crawling/docs/crawlers-fetchers/google-common-crawlers",
     },
     {
-      title: "How Search Console counts position, clicks and impressions",
-      publisher: "Search Console Help",
-      href: "https://support.google.com/webmasters/answer/7042828",
+      title: "What is Googlebot (file size limits)",
+      publisher: "Google Search Central",
+      href: "https://developers.google.com/search/docs/crawling-indexing/googlebot",
     },
     {
-      title: "New ways to explore the web in AI Mode and AI Overviews",
+      title: "Spam policies for Google web search",
+      publisher: "Google Search Central",
+      href: "https://developers.google.com/search/docs/essentials/spam-policies",
+    },
+    {
+      title: "Latest Google Search documentation updates (FAQ rich result deprecation, llms.txt)",
+      publisher: "Google Search Central",
+      href: "https://developers.google.com/search/updates",
+    },
+    {
+      title: "Guide to preferred sources in Google Search for web publishers",
+      publisher: "Google Search Central",
+      href: "https://developers.google.com/search/docs/appearance/preferred-sources",
+    },
+    {
+      title: "Default channel group (AI Assistant channel)",
+      publisher: "Analytics Help",
+      href: "https://support.google.com/analytics/answer/9756891",
+    },
+    {
+      title: "New opportunities, control and insights for website owners",
+      publisher: "Google",
+      href: "https://blog.google/products-and-platforms/products/search/new-opportunities-control-and-insights-for-website-owners/",
+    },
+    {
+      title: "New ways to find your favorite sources and original content in AI Search",
+      publisher: "Google",
+      href: "https://blog.google/products-and-platforms/products/search/original-high-quality-content-search/",
+    },
+    {
+      title: "How AI Mode and AI Overviews help you explore the web",
       publisher: "Google",
       href: "https://blog.google/products-and-platforms/products/search/explore-web-generative-ai-search/",
     },
     {
-      title: "Gemini 3 in AI Overviews and follow-ups in AI Mode",
+      title: "AI Mode and AI Overviews updates to explore the web",
+      publisher: "Google",
+      href: "https://blog.google/products-and-platforms/products/search/updates-ai-mode-overviews-explore-web/",
+    },
+    {
+      title: "AI Mode in Google Search and AI Overviews get Gemini upgrades",
       publisher: "Google",
       href: "https://blog.google/products-and-platforms/products/search/ai-mode-ai-overviews-updates/",
     },
     {
-      title: "Search at I/O 2026",
+      title: "Google Search's I/O 2026 updates",
       publisher: "Google",
       href: "https://blog.google/products-and-platforms/products/search/search-io-2026/",
     },
@@ -723,34 +870,34 @@ export const googleAiOverviews: EngineGuide = {
       href: "https://blog.google/innovation-and-ai/sundar-pichai-io-2026/",
     },
     {
-      title: "Alphabet Q2 2026 earnings remarks",
-      publisher: "Alphabet",
-      href: "https://blog.google/company-news/inside-google/message-ceo/alphabet-earnings-q2-2026/",
-    },
-    {
-      title: "CMA secures fairer deal for publishers in Google Search",
+      title: "CMA secures fairer deal for publishers and improves Google Search services in UK",
       publisher: "UK Competition and Markets Authority",
       href: "https://www.gov.uk/government/news/cma-secures-fairer-deal-for-publishers-and-improves-google-search-services-in-uk",
     },
     {
-      title: "Google users are less likely to click on links when an AI summary appears",
-      publisher: "Pew Research Center",
-      href: "https://www.pewresearch.org/short-reads/2025/07/22/google-users-are-less-likely-to-click-on-links-when-an-ai-summary-appears-in-the-results/",
-    },
-    {
-      title: "AI Overviews reduce clicks by 58%",
-      publisher: "Ahrefs",
-      href: "https://ahrefs.com/blog/ai-overviews-reduce-clicks-update/",
-    },
-    {
-      title: "How many AI Overview citations rank in the top 10?",
+      title: "Update: 38% of AI Overview citations pull from the top 10",
       publisher: "Ahrefs",
       href: "https://ahrefs.com/blog/ai-overview-citations-top-10/",
     },
     {
-      title: "AI Overviews vs AI Mode",
+      title: "76% of AI Overview citations pull from the top 10",
+      publisher: "Ahrefs",
+      href: "https://ahrefs.com/blog/search-rankings-ai-citations",
+    },
+    {
+      title: "Are AI Mode and AI Overviews just different versions of the same answer?",
       publisher: "Ahrefs",
       href: "https://ahrefs.com/blog/ai-overviews-vs-ai-mode/",
+    },
+    {
+      title: "Update: AI Overviews reduce clicks by 58%",
+      publisher: "Ahrefs",
+      href: "https://ahrefs.com/blog/ai-overviews-reduce-clicks-update/",
+    },
+    {
+      title: "AI Overview citations now 54% from organic rankings",
+      publisher: "BrightEdge",
+      href: "https://www.brightedge.com/resources/weekly-ai-search-insights/rank-overlap-after-16-months-of-aio",
     },
     {
       title: "AIO impact on Google CTR: 2026 update",
@@ -758,9 +905,10 @@ export const googleAiOverviews: EngineGuide = {
       href: "https://www.seerinteractive.com/insights/aio-impact-on-google-ctr-2026-update",
     },
     {
-      title: "Rank overlap after 16 months of AI Overviews",
-      publisher: "BrightEdge",
-      href: "https://www.brightedge.com/resources/weekly-ai-search-insights/rank-overlap-after-16-months-of-aio",
+      title:
+        "Google users are less likely to click on links when an AI summary appears in the results",
+      publisher: "Pew Research Center",
+      href: "https://www.pewresearch.org/short-reads/2025/07/22/google-users-are-less-likely-to-click-on-links-when-an-ai-summary-appears-in-the-results/",
     },
   ],
 
@@ -771,13 +919,24 @@ export const googleAiOverviews: EngineGuide = {
       title: "How to show up in Google AI Overviews: the 2026 playbook",
       href: "/blog/how-to-show-up-in-google-ai-overviews",
       description:
-        "The step-by-step content playbook: mapping fan-out, writing liftable passages, and reading the AI report.",
+        "The content side in depth: picking questions, writing passages worth citing, and keeping pages current.",
     },
     {
-      title: "Citation tracking",
-      href: "/features/citation-tracking",
+      title: "Query fan-out, defined",
+      href: "/glossary/query-fan-out",
+      description: "The glossary entry for the mechanism behind most of this guide.",
+    },
+    {
+      title: "The Gemini guide",
+      href: "/ai-seo/gemini",
       description:
-        "Track which prompts cite you in AI Overviews, AI Mode, ChatGPT, Perplexity and Gemini — weekly, automatically.",
+        "Where Google-Extended does apply: getting grounded into answers in the Gemini app.",
+    },
+    {
+      title: "Answer-Space Research",
+      href: "/features/answer-space-research",
+      description:
+        "How Rankbox maps the questions buyers ask Google and AI assistants, before it writes for them.",
     },
   ],
 };

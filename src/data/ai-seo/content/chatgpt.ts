@@ -1,153 +1,206 @@
 import type { EngineGuide } from "../types";
 
+/* Facts re-verified 2026-10-26 against OpenAI's docs and help center, and the
+   studies linked in `sources`. The illustrative brand (Plotbright) and review
+   site (reviewloft.com) are invented; neither domain resolves. */
+
 export const chatgpt: EngineGuide = {
   slug: "chatgpt",
-  metaTitle: "ChatGPT SEO: The Technical Guide to ChatGPT Search (2026)",
+  metaTitle: "ChatGPT SEO (2026): Fan-Out Queries, OAI-SearchBot and Citations",
   metaDescription:
-    "How ChatGPT search finds and cites sources: query fan-out, OAI-SearchBot vs GPTBot vs ChatGPT-User, Bing and IndexNow, the August 2026 site: shift, and how to track ChatGPT traffic.",
+    "How ChatGPT search finds and cites pages after its August 2026 change: fan-out queries, OAI-SearchBot vs GPTBot, shopping feeds, agents, and ChatGPT traffic in GA4.",
   keywords: [
     "ChatGPT SEO",
     "ChatGPT search optimization",
+    "how to get cited by ChatGPT",
     "OAI-SearchBot",
-    "how to rank in ChatGPT",
-    "get cited by ChatGPT",
     "ChatGPT fan-out queries",
+    "ChatGPT referral traffic",
   ],
-  headline: { lead: "ChatGPT SEO:", accent: "the technical guide to ChatGPT search" },
+  headline: { lead: "ChatGPT SEO:", accent: "from fan-out query to citation to click" },
   subhead:
-    "How ChatGPT decides to search, rewrites one question into many, picks which pages to cite, and which OpenAI crawler controls each step — with the robots.txt, analytics and log setup to act on it.",
+    "What happens between a buyer's question and a citation pill in ChatGPT: the searches it writes, the pages it reads but never cites, the OpenAI crawler behind each step, and how the click lands in your analytics.",
 
   shortAnswer:
-    "To rank in ChatGPT search, allow **OAI-SearchBot** in robots.txt and at your CDN, serve your content in the initial HTML, and get indexed by Bing. ChatGPT rewrites each question into several targeted searches — since August 2026 often `site:` searches of official domains — so the pages it cites are the ones whose titles and opening answers match those sub-queries: clear, current, first-party pages on your own site.",
+    "To get cited in ChatGPT search, let **OAI-SearchBot** crawl your site (in robots.txt and at your CDN), put your facts in server-rendered HTML, and publish an official page for every fact a buyer checks: price, plans, specs, policies. Since ChatGPT's 8 August 2026 change it reads about twice as many pages per answer and runs far more `site:` searches of brand domains, but it cites only part of what it reads. Pages whose titles and first lines match its rewritten queries are the ones that get the citation.",
 
   takeaways: [
-    "`OAI-SearchBot` controls ChatGPT search visibility. `GPTBot` is training only — block it and you stay in search.",
-    "ChatGPT searched on about a third of prompts in early 2026, rewriting each into several targeted queries.",
-    "In August 2026 fan-out jumped to about 7.6 searches per prompt, 64% of them `site:` searches aimed at official, brand and .gov domains.",
-    "Only about 8% of ChatGPT's citations rank in Google's or Bing's top 10 for the original prompt. Matching the sub-queries matters more.",
-    "OpenAI documents no JavaScript rendering, and its crawler was observed not running JS. Server-render what you want cited.",
-    "Every ChatGPT link carries `utm_source=chatgpt.com`, and GA4's AI Assistant channel now groups it automatically.",
+    "`OAI-SearchBot` is the only OpenAI crawler that decides search inclusion. `GPTBot` is training-only: block it and you stay in search.",
+    "On 8 August 2026 pages consulted per answer roughly doubled (11.6 to 22.5 in Searchable's 266,182-prompt test), and `site:` searches of brand domains jumped.",
+    "How far it fans out depends on the prompt: 7.61 searches per commercial prompt in Nectiv's API test, but fan-outs in only 14.4% of 66.6M logged-out answers in Ahrefs' data.",
+    "Reading isn't citing. Ahrefs found ChatGPT cites about half the URLs it retrieves, and retrieved Reddit pages just 1.93% of the time.",
+    "Product answers come from feeds: Shopify Catalog, or a direct Agentic Commerce Protocol feed for approved merchants.",
+    "ChatGPT visits land in GA4's AI Assistant channel (since 13 May 2026) with source `chatgpt.com`. The `utm_source=chatgpt.com` tag is still seen on clicks, but OpenAI no longer documents it.",
   ],
 
   facts: [
-    { label: "Weekly ChatGPT users (Feb 2026)", value: "900M" },
-    { label: "The crawler to allow for search", value: "OAI-SearchBot", mono: true },
-    { label: "Searches per prompt after Aug 2026", value: "~7.6" },
-    { label: "Referral source, UTM-tagged", value: "chatgpt.com", mono: true },
+    {
+      label: "The OpenAI crawler that controls search inclusion",
+      value: "OAI-SearchBot",
+      mono: true,
+    },
+    { label: "Pages consulted per answer, before and after 8 Aug 2026", value: "11.6 → 22.5" },
+    { label: "Share of retrieved URLs that end up cited (Ahrefs)", value: "~50%" },
+    { label: "GA4 default channel for ChatGPT visits", value: "AI Assistant" },
   ],
 
   preview: {
-    prompt: "What's the best project management tool for a small startup team?",
-    status: "Searched 24 sites",
+    prompt: "Does Plotbright have a free plan, and what does the Team plan cost?",
+    status: "Searched the web · 22 pages",
     answer:
-      "For lean startup teams, **Plannora** is widely recommended — simple boards, built-in automations and a free tier for up to five people. It's frequently cited as the easiest tool to set up.",
+      "Yes. **Plotbright** is free for up to three people with unlimited projects. The Team plan is $9 per user a month billed annually, or $11 month to month, and adds timelines and guest access.",
     sources: [
-      { domain: "plannora.io", title: "Plannora pricing and plans" },
-      { domain: "stackreview.co", title: "Best project management tools for startups" },
-      { domain: "loopcraft.ai", title: "Loopcraft vs Plannora" },
+      { domain: "plotbright.com", title: "Pricing: Free, Team and Business plans" },
+      { domain: "help.plotbright.com", title: "What's included in the Free plan" },
+      { domain: "reviewloft.com", title: "Plotbright review: two months on Team" },
     ],
   },
 
   profile: {
-    retrieval: "Third-party providers (Microsoft named) plus OpenAI's own crawler and index",
+    retrieval:
+      "Search partners (Microsoft, Shopify named) plus OpenAI's own crawler, OAI-SearchBot",
     searchCrawler: "OAI-SearchBot",
-    trainingCrawler: "GPTBot — search unaffected",
-    rendersJs: "Not documented — tests found no JS execution",
-    referrer: "chatgpt.com + utm_source=chatgpt.com",
-    citationStyle: "Inline source pills, a Sources panel, branded inline links",
-    biggestLever: "Official, answer-first pages on your own domain that match fan-out queries",
+    trainingCrawler: "GPTBot — blocking it doesn't affect search",
+    rendersJs: "Not documented; Vercel saw OpenAI's bots fetch JS files without running them",
+    referrer: "chatgpt.com, GA4 AI Assistant channel; links seen with utm_source=chatgpt.com",
+    citationStyle: "Inline citation pills, a Sources panel, inline brand links",
+    biggestLever:
+      "Official first-party pages for prices, specs and policies that match its site: searches",
   },
 
   sections: [
     {
-      id: "how-chatgpt-searches",
-      title: "How ChatGPT search finds and chooses sources",
+      id: "fan-out",
+      title: "One prompt, many searches: how ChatGPT rewrites the question",
       blocks: [
         {
           kind: "p",
-          text: 'ChatGPT "will choose to search the web based on what you ask," per OpenAI\'s [search help article](https://help.openai.com/en/articles/9237897-chatgpt-search), and users can force a search with the Search tool. Semrush\'s clickstream data puts search at **34.5% of prompts** in February 2026. When it does search, ChatGPT "typically rewrites your query into one or more targeted queries" — OpenAI\'s example turns "CCR8 for cancer" into "CCR8 immunotherapy drug development 2025."',
+          text: 'ChatGPT decides prompt by prompt whether to search the web, and users can force a search from the tools menu. When it searches, OpenAI says it "typically rewrites your query into one or more targeted queries" and, after reviewing the first results, "may send additional, more specific queries" ([OpenAI Help](https://help.openai.com/en/articles/9237897-searching-the-web-with-chatgpt)). OpenAI\'s own example turns a researcher\'s question about drugs that target CCR8 into `CCR8 immunotherapy drug development 2025`, then follows up with `CHS-114 conference 2025`. Saved memories and approximate location can shape the rewrite.',
         },
         {
           kind: "p",
-          text: 'Those queries go to "third-party search providers, as well as content provided directly by our partners." The current help article names **Microsoft** and **Shopify**. Independent reverse-engineering by [Peec AI](https://peec.ai/blog/chatgpt-built-its-own-search-index) describes a blended stack underneath, including an OpenAI-built index it calls "Labrador" with vertical indexes for news, PDFs, video, local and shopping. OpenAI hasn\'t confirmed the details — but its own crawler, `OAI-SearchBot`, exists to feed ChatGPT search, so plan for both Bing and OpenAI\'s index.',
+          text: "Not every prompt searches. Semrush's US clickstream panel put web search at **34.5% of ChatGPT prompts in February 2026**, down from 46% in late 2024. Everything below is about that searched share, which skews toward current, commercial and local questions.",
         },
         {
-          kind: "pipeline",
-          steps: [
-            {
-              title: "ChatGPT decides whether to search",
-              body: "Current, specific or local questions trigger a search; stable knowledge is answered from training. Location is inferred at country, state or city level and memories may shape the rewrite.",
-            },
-            {
-              title: "It fans the question out into targeted queries",
-              body: "Until mid-2026 most prompts produced two or three sub-queries. Around 8 August 2026 that jumped: Nectiv measured **7.61 fan-outs per prompt**, 64% using the `site:` operator to search specific brand, vendor and .gov domains directly.",
-              lever:
-                "Have an official page on your own domain for every fact a buyer checks: pricing, specs, policies, integrations, comparisons.",
-            },
-            {
-              title: "Providers and OpenAI's index return candidates",
-              body: "Peec measured sources retrieved per prompt doubling from about 12 to about 24 after the August change. Ahrefs found roughly as many retrieved URLs go uncited as cited.",
-              lever:
-                "Be indexed by Bing and crawlable by `OAI-SearchBot` — both paths feed the pool.",
-            },
-            {
-              title: "Pages are read, not rendered",
-              body: "Indexed pages come from `OAI-SearchBot`; live fetches for a conversation come from `ChatGPT-User`. OpenAI documents no JavaScript rendering, and Vercel's crawler study saw OpenAI's bot download scripts without running them.",
-              lever: "Put the answer in the server-rendered HTML.",
-            },
-            {
-              title: "The answer cites the passages it used",
-              body: "Citations appear as inline source pills and in a Sources panel. Since May 2026 ChatGPT also adds branded inline links — Profound saw responses with them rise from about 4.5% to over 20%, sending far more clicks to homepages.",
-              lever:
-                "Match your titles and opening sentences to the sub-query, and state the fact early.",
-            },
+          kind: "p",
+          text: 'These rewritten searches are called [query fan-out](/glossary/query-fan-out). For a pricing question about a product, they now tend to name the brand\'s own domain, the current year and the word "official". For the sample prompt at the top of this page, they would look something like this:',
+        },
+        {
+          kind: "code",
+          lang: "fan-out",
+          code: "site:plotbright.com pricing\nPlotbright Team plan price per user 2026\nPlotbright free plan limits official",
+        },
+        { kind: "h3", text: "What changed on 8 August 2026" },
+        {
+          kind: "p",
+          text: "ChatGPT's retrieval changed overnight on 8 August 2026, as GPT-5.6 became the default model for Free and Go users. Four independent datasets agree on the direction and differ on the size:",
+        },
+        {
+          kind: "table",
+          head: ["Study", "Sample", "What it measured"],
+          rows: [
+            [
+              "[Searchable](https://www.searchable.com/blog/chatgpt-research-depth-study), Aug 2026",
+              "266,182 paired prompts, before and after 8 August",
+              "Pages consulted per answer 11.58 → 22.54. Inline citations per answer 0.49 → 0.82. `site:` share of sub-queries 0.2% → 18%.",
+            ],
+            [
+              "[Peec AI](https://docs.peec.ai/research/gpt-56-retrieval-changes), Aug 2026",
+              "GPT-5.5 vs GPT-5.6 (sample size not published)",
+              "Sources retrieved per prompt ~12 → ~24. Prompts needing a single fan-out 94.0% → 43.5%. `site:` in 23% of fan-outs, up from 0.3%.",
+            ],
+            [
+              "[Nectiv](https://nectivdigital.com/blog/chatgpt-tripled-fan-out-queries-data-study), Aug 2026",
+              "About 4,000 commercial prompts via the API, rerun from 2025",
+              '7.61 fan-out queries per prompt, up from 2.17. `site:` in 64% of fan-outs. "Official" the second most common word.',
+            ],
+            [
+              "[Ahrefs](https://ahrefs.com/blog/query-fan-out-chatgpt/), Oct 2026",
+              "66.6M free, logged-out answers, Aug–Sep 2026",
+              "Fan-outs in 14.4% of answers, about 1.6 each. `site:` in 6.8% of fan-outs; 75.9% of the most-searched targets were brand sites.",
+            ],
           ],
         },
         {
-          kind: "stats",
+          kind: "p",
+          text: 'The spread comes from the prompts, not from error. Nectiv used commercial "best X" prompts on a reasoning model, which trigger brand lookups; Ahrefs sampled broad prompts in free, logged-out sessions, which search less. For a buying question in your category, plan for the Nectiv end of the range. For informational questions, expect the Ahrefs end.',
+        },
+        {
+          kind: "callout",
+          tone: "tip",
+          title: "What the rewritten queries ask for",
+          text: 'In Ahrefs\' data, "official" rose from 10.1% to 13.1% of English fan-outs between August and September, "price" from 6.0% to 8.9%, and "2026" appeared in 22.9%. "Specifications" entered the top 50 for the first time. A `site:` search lands on pricing, spec, support and policy pages on your own domain, so those are the pages to make complete and current.',
+        },
+      ],
+    },
+    {
+      id: "read-not-cited",
+      title: "Read isn't cited: why most pages ChatGPT opens never get the pill",
+      blocks: [
+        {
+          kind: "p",
+          text: "Behind every searched answer are two lists: the pages ChatGPT consulted and the few it cites. Ahrefs' study of 1.4 million prompts found it cites only about half of what it retrieves, **16.57 cited URLs against 16.58 uncited per prompt** ([Ahrefs](https://ahrefs.com/blog/why-chatgpt-cites-pages/), Apr 2026). Searchable's August data shows the gap inside the answer text: 22.5 pages consulted, 0.82 inline citations. Getting read is the easy part.",
+        },
+        {
+          kind: "signals",
           items: [
             {
-              value: "900M",
-              label: 'weekly active ChatGPT users, with search usage "nearly tripled" in a year',
-              source: {
-                name: "OpenAI, Feb–Mar 2026",
-                href: "https://openai.com/index/accelerating-the-next-phase-ai/",
-              },
+              title: "Titles that match a rewritten query",
+              body: "Ahrefs compared each cited page's title with every fan-out query and kept the closest match: **0.656** cosine similarity. Against the original prompt, cited titles scored 0.602 and uncited ones 0.484. Title pages for the query ChatGPT writes, not only for the prompt.",
+              evidence: "observed",
             },
             {
-              value: "7.61",
-              label: "fan-out searches per prompt after the August 2026 change, up from 2.17",
-              source: {
-                name: "Nectiv, Aug 2026",
-                href: "https://nectivdigital.com/blog/chatgpt-tripled-fan-out-queries-data-study",
-              },
+              title: "Readable URL slugs",
+              body: "Retrieved URLs with natural-language slugs were cited 89.78% of the time, against 81.11% for those without (Ahrefs, Apr 2026).",
+              evidence: "observed",
             },
             {
-              value: "~8%",
-              label:
-                "of ChatGPT citations rank in Google's or Bing's top 10 for the original prompt",
-              source: {
-                name: "Ahrefs, Aug 2025",
-                href: "https://ahrefs.com/blog/ai-search-overlap/",
-              },
+              title: "The answer in the first third",
+              body: 'Kevin Indig\'s analysis of 1.2 million ChatGPT results found about 44% of citations came from the first third of a page and 24.7% from the last. Definitional "X is…" sentences were about twice as likely to be cited (Growth Memo, Feb 2026).',
+              evidence: "observed",
+            },
+            {
+              title: "Your own domain, since August",
+              body: "After 8 August, brand-owned pages' citation share rose 1.80× while their reading share barely moved (0.95×), and 85.9% of 1,665 brands were cited on their own domain more often (Searchable).",
+              evidence: "observed",
+            },
+            {
+              title: "Sections with substance",
+              body: "SE Ranking's 129,000-domain study found sections under 50 words averaged 2.7 citations, 120–180 words 4.6, and over 180 words 5.7 (Nov 2025).",
+              evidence: "observed",
+            },
+            {
+              title: "Fresh pages",
+              body: "Pages updated in the past three months averaged 6.0 citations against 3.6 (SE Ranking), and ChatGPT's citations averaged 458 days newer than Google's organic results across 17 million citations (Ahrefs, Jul 2025).",
+              evidence: "observed",
+            },
+            {
+              title: "Being talked about",
+              body: "Across 75,000 brands, branded web mentions correlated with ChatGPT visibility at 0.664, domain rating at just 0.266 (Ahrefs, Dec 2025). Mentions beat link metrics.",
+              evidence: "observed",
+            },
+            {
+              title: "Reddit: read often, cited rarely",
+              body: "Reddit has its own retrieval type in ChatGPT, yet retrieved Reddit pages were cited 1.93% of the time (Ahrefs, Apr 2026). Its citation share then fell 86% after 8 August (Promptwatch, via Semrush).",
+              evidence: "observed",
             },
           ],
         },
         {
           kind: "callout",
           tone: "note",
-          title: "What the August 2026 shift means",
-          text: '`site:` fan-outs go straight to domains ChatGPT already considers authoritative for a question — the vendor itself, regulators, standards bodies — and "official" became the second most common word in fan-out queries. Third-party roundups still matter, but the fastest route into an answer about your product is now your own clearly titled page. Reddit felt it first: its share of ChatGPT citations fell about 86% in August, per Promptwatch data reported by Semrush.',
+          title: "Our read on the drop-off",
+          text: 'A `site:` search on your domain is usually after one fact. A page whose title names that fact and states it in the first lines is easy to cite. A page that buries it under an introduction gets read, counted in "pages consulted" and dropped.',
         },
       ],
     },
     {
-      id: "crawlers",
-      title: "OpenAI's crawlers and robots.txt",
+      id: "openai-user-agents",
+      title: "OAI-SearchBot, GPTBot, ChatGPT-User: three switches, not one",
       blocks: [
         {
           kind: "p",
-          text: 'OpenAI\'s [crawler documentation](https://developers.openai.com/api/docs/bots) lists each bot with its own robots.txt token, and the settings are independent. The one that decides search visibility is `OAI-SearchBot`: "Sites that are opted out of OAI-SearchBot will not be shown in ChatGPT search answers, though can still appear as navigational links."',
+          text: 'OpenAI\'s [crawler documentation](https://developers.openai.com/api/docs/bots) is explicit: "Each setting is independent of the others." The one that decides search inclusion is `OAI-SearchBot`. Sites that block it stay out of ChatGPT\'s search answers, though they can still appear as "navigational links". OpenAI\'s help center adds that eligibility also means letting its published IP ranges through your host or CDN, and that "placement is not guaranteed."',
         },
         {
           kind: "crawlers",
@@ -156,7 +209,7 @@ export const chatgpt: EngineGuide = {
               token: "OAI-SearchBot",
               role: "search",
               purpose:
-                "Surfaces websites in ChatGPT search. OpenAI also recommends allowing its published IP ranges at `openai.com/searchbot.json`.",
+                "Crawls pages to surface them in ChatGPT search. The user agent ends `compatible; OAI-SearchBot/1.4; +https://openai.com/searchbot`; IPs are in `openai.com/searchbot.json`. Robots changes take about 24 hours to reach search.",
               robots: "yes",
               advice: "allow",
             },
@@ -164,237 +217,273 @@ export const chatgpt: EngineGuide = {
               token: "ChatGPT-User",
               role: "user",
               purpose:
-                "Fetches pages when a user's conversation, a GPT or a GPT Action needs them. Not used to decide what appears in search.",
+                "Visits a page when a user's question, a custom GPT or a GPT Action needs it. Not used for automatic crawling or to decide search inclusion. IPs are in `openai.com/chatgpt-user.json`.",
               robots: "partial",
-              robotsNote: 'OpenAI: "robots.txt rules may not apply" to user-initiated fetches.',
+              robotsNote:
+                "OpenAI: because users start these actions, robots.txt rules may not apply.",
               advice: "allow",
             },
             {
               token: "GPTBot",
               role: "training",
               purpose:
-                "Collects content that may be used to train OpenAI's models. \"Disallowing GPTBot indicates a site's content should not be used in training.\"",
+                "Crawls content that may be used to train OpenAI's foundation models. Disallowing it signals your content shouldn't be used for training and has no effect on search. IPs are in `openai.com/gptbot.json`.",
               robots: "yes",
+              advice: "your-call",
+            },
+            {
+              token: "OAI-AdsBot",
+              role: "other",
+              purpose:
+                "Visits only landing pages submitted as ChatGPT ads, to check safety and policy compliance and judge relevance. Not used for training. IPs are in `openai.com/adsbot.json`.",
+              robots: "yes",
+              robotsNote: "OpenAI's advertiser guidance says advertisers must allow it.",
               advice: "your-call",
             },
           ],
         },
         {
           kind: "p",
-          text: "A fourth bot, `OAI-AdsBot`, only visits landing pages submitted as ChatGPT ads, to check their safety and relevance. A robots.txt that stays in ChatGPT search while opting out of training:",
+          text: "A robots.txt that stays in ChatGPT search, opts out of training, and lets ad review through if you advertise:",
         },
         {
           kind: "code",
           lang: "robots.txt",
-          code: "# ChatGPT search — required to be cited\nUser-agent: OAI-SearchBot\nAllow: /\n\n# Model training — your call, independent of search\nUser-agent: GPTBot\nDisallow: /",
+          code: "# ChatGPT search: required to be cited\nUser-agent: OAI-SearchBot\nAllow: /\n\n# Model training: your call, independent of search\nUser-agent: GPTBot\nDisallow: /\n\n# Only if you run ChatGPT ads\nUser-agent: OAI-AdsBot\nAllow: /",
         },
         {
           kind: "list",
           items: [
-            "**Changes take about 24 hours** to reach OpenAI's search systems.",
-            '**When both bots are allowed**, OpenAI "may use the results from just one crawl for both use cases" — so allowing both doesn\'t double your crawl load.',
-            "**To keep a page out entirely, use `noindex`, not Disallow.** A disallowed URL can still surface as a link and title found through providers, and the crawler must be allowed in to read the `noindex`.",
-            "**ChatGPT-User needs no rule to work**, and a Disallow for it isn't guaranteed to be honored. Block it at the WAF if you must.",
+            "**One crawl can serve two bots.** If you allow both `OAI-SearchBot` and `GPTBot`, OpenAI says it may use the results of just one crawl for both, to avoid duplicate crawling.",
+            "**Blocking isn't hiding.** A Disallow keeps pages out of answers, not out of navigational links. OpenAI doesn't document whether its crawlers honor `noindex`, so don't rely on it alone.",
+            '**Your WAF outranks robots.txt.** Bot-fight modes and "block AI" toggles stop `OAI-SearchBot` before it reads a single rule. Allowlist the IPs in OpenAI\'s JSON files and serve them no challenges.',
           ],
         },
         {
           kind: "callout",
           tone: "warning",
-          title: "Check your CDN — especially on Cloudflare",
-          text: 'From 15 September 2026, new Cloudflare domains block "Training" and "Agent" bots by default on pages that show ads, while allowing "Search" bots — and Cloudflare\'s own example of an Agent bot is `ChatGPT-User`. Bot-fight modes and "block AI" toggles override robots.txt. Allowlist the IPs in OpenAI\'s JSON files and don\'t serve challenges to them.',
-        },
-        {
-          kind: "p",
-          text: "ChatGPT's agent — now ChatGPT Work's cloud browser — sends a normal Chrome user agent but signs its requests with Web Bot Auth (RFC 9421), so you can verify it rather than block it:",
-        },
-        {
-          kind: "code",
-          lang: "http",
-          code: 'Signature-Agent: "https://chatgpt.com"\nSignature-Input: sig1=(...);keyid="...";tag="web-bot-auth"\nSignature: sig1=:...:\n\n# Public keys: https://chatgpt.com/.well-known/http-message-signatures-directory',
+          title: "Cloudflare's 15 September 2026 default",
+          text: 'Domains newly onboarded to Cloudflare since 15 September 2026 block its "Training" and "Agent" bot categories by default on pages that display ads, while "Search" stays allowed. Cloudflare counts chat fetchers such as `ChatGPT-User` as Agent, so live fetches for a conversation can fail on ad-supported pages even when `OAI-SearchBot` gets through ([Cloudflare](https://blog.cloudflare.com/content-independence-day-ai-options/)). Existing zones aren\'t switched automatically; check the setting after any migration.',
         },
       ],
     },
     {
-      id: "technical",
-      title: "Technical requirements",
+      id: "what-oai-searchbot-gets",
+      title: "What OAI-SearchBot actually receives from your page",
       blocks: [
         {
           kind: "p",
-          text: "OpenAI publishes one hard requirement — don't block `OAI-SearchBot` — and very little else. The rest of this spec sheet comes from Microsoft's documentation (Microsoft is a named search provider) and from large correlation studies, graded accordingly.",
+          text: "Access is the only inclusion rule OpenAI documents. The rest of this spec sheet comes from Microsoft's role as a search partner and from correlation studies, graded by how sure anyone can be.",
         },
         {
           kind: "requirements",
           items: [
             {
-              label: "OAI-SearchBot allowed",
+              label: "OAI-SearchBot allowed, its IPs unchallenged",
               status: "required",
-              note: "In robots.txt and at the CDN/WAF layer, including its published IP ranges. This is the only inclusion rule OpenAI documents.",
+              note: "In robots.txt and at the CDN or WAF, per OpenAI's help center. The one rule OpenAI states.",
             },
             {
-              label: "Content in the initial HTML",
+              label: "Facts in the initial HTML",
               status: "required",
-              note: "OpenAI doesn't document rendering, and the only direct test (Vercel/MERJ) found no JS execution. Treat client-rendered text as invisible.",
+              note: "OpenAI documents no JavaScript rendering, and Vercel's crawler study saw OpenAI's bots (`OAI-SearchBot`, `ChatGPT-User`, `GPTBot`) fetch JavaScript files without executing them (Dec 2024). Treat client-rendered text as missing.",
             },
             {
               label: "Indexed by Bing",
               status: "helps",
-              note: "Verify in Bing Webmaster Tools and submit sitemaps. Its AI Performance report covers Copilot and Bing, not ChatGPT — but Bing's index still feeds ChatGPT's providers.",
+              note: "OpenAI links Microsoft's privacy statement as a search provider. Verify the site in Bing Webmaster Tools and submit sitemaps. Bing's AI Performance report covers Copilot and Bing, not ChatGPT.",
             },
             {
               label: "IndexNow",
               status: "helps",
-              note: "Ping on every publish and update so Bing picks up changes in minutes. Microsoft recommends it for freshness.",
+              note: 'Microsoft recommends it to keep content fresh "across search and AI experiences." Ping on every publish and substantive update.',
             },
             {
-              label: "Speed",
+              label: "Fast first paint",
               status: "helps",
-              note: "SE Ranking found pages with first contentful paint under 0.4s averaged 6.7 citations against 2.1 for pages over 1.13s. Correlation, but consistent with live fetches timing out.",
+              note: "SE Ranking: pages with first contentful paint under 0.4s averaged 6.7 citations, pages over 1.13s just 2.1. Correlation, but live fetches don't wait forever.",
             },
             {
-              label: "Freshness",
+              label: "Visible, honest dates",
               status: "helps",
-              note: "Pages updated within three months averaged 6.0 citations against 3.6 (SE Ranking), and ChatGPT's citations run 458 days newer than Google's organic results (Ahrefs).",
+              note: "Fan-outs carry the year, and recently updated pages earn more citations. Change the content when you change the date.",
             },
             {
-              label: "Product feed (ACP)",
-              status: "helps",
-              note: "For shopping answers. Products come from structured feeds via the Agentic Commerce Protocol and are ranked on availability, price, quality and whether you're the maker or primary seller.",
-            },
-            {
-              label: "Sitemaps & canonicals",
+              label: "Sitemaps and canonicals",
               status: "unconfirmed",
-              note: "OpenAI doesn't say whether `OAI-SearchBot` reads sitemaps or honors `rel=canonical`. Keep both correct for Bing and Google.",
+              note: "OpenAI doesn't say whether `OAI-SearchBot` reads sitemaps or honors `rel=canonical`. Keep both correct for Bing.",
             },
             {
-              label: "FAQ & other schema",
+              label: "noindex",
+              status: "unconfirmed",
+              note: "Not documented for OpenAI's crawlers. Use it, but don't count on it alone to keep a page out of ChatGPT.",
+            },
+            {
+              label: "FAQ schema",
               status: "no-effect",
-              note: "No OpenAI statement for general pages. SE Ranking found pages with FAQ schema averaged 3.6 citations against 4.2 without.",
+              note: "SE Ranking found pages with FAQ schema averaged 3.6 citations against 4.2 without.",
             },
             {
               label: "llms.txt",
               status: "no-effect",
-              note: 'OpenAI has never said ChatGPT uses it; SE Ranking measured a "negligible" effect. Harmless, but not a priority.',
+              note: "OpenAI has never said ChatGPT reads it, and SE Ranking's model got more accurate when the variable was removed.",
             },
           ],
         },
         {
           kind: "p",
-          text: "To check what OpenAI's crawler actually receives, request a page with its user agent and look for your key sentence in the raw HTML:",
+          text: "To check what the crawler gets, request the page with its user agent and count the sentence you want cited in the raw HTML:",
         },
         {
           kind: "code",
           lang: "bash",
-          code: 'curl -s -A "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko); compatible; OAI-SearchBot/1.4; +https://openai.com/searchbot" \\\n  https://yoursite.com/pricing | grep -c "Plans start at"\n\n# 0 = the text is rendered client-side, or your WAF is serving a challenge',
+          code: 'curl -s -A "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko); compatible; OAI-SearchBot/1.4; +https://openai.com/searchbot" \\\n  https://yoursite.com/pricing | grep -c "per user a month"\n\n# 0 = the sentence is rendered client-side, or your WAF served a challenge',
+        },
+        {
+          kind: "p",
+          text: "A WAF that verifies OpenAI's IP ranges may answer your spoofed request differently from the real crawler, so confirm with real `OAI-SearchBot` hits in your logs too.",
         },
       ],
     },
     {
-      id: "what-gets-cited",
-      title: "What ChatGPT cites",
+      id: "pill-to-pageview",
+      title: "From citation pill to pageview: reading ChatGPT in your analytics",
       blocks: [
         {
           kind: "p",
-          text: "OpenAI says it \"doesn't set a fixed level of visibility for individual sites,\" and there's no inclusion form for web pages. What the large studies do show is consistent: ChatGPT rewards pages that match the sub-query, answer early, stay current, and belong to brands the wider web talks about.",
+          text: "In the answer, cited pages appear as inline citations that open the source (on desktop, hovering previews it) and in a **Sources** button that lists cited sources and other relevant links ([OpenAI Help](https://help.openai.com/en/articles/9237897-searching-the-web-with-chatgpt)). Since 7 May 2026 ChatGPT also links brand names inline far more often: Profound saw the share of responses containing a URL jump from about 4.5% to 20–24% in a day, and OpenAI referrals to the brands it monitors rise 60–65%, with homepages taking a much bigger share ([Profound](https://www.tryprofound.com/blog/chatgpt-referrals-branded-links)).",
+        },
+        { kind: "h3", text: "What a ChatGPT click looks like on arrival" },
+        {
+          kind: "code",
+          lang: "text",
+          code: "Landing URL     https://plotbright.com/pricing?utm_source=chatgpt.com\nReferrer        https://chatgpt.com/\nGA4 source      chatgpt.com\nGA4 channel     AI Assistant",
         },
         {
-          kind: "signals",
+          kind: "list",
           items: [
-            {
-              title: "Match the sub-query",
-              body: "Cited pages' titles matched fan-out queries at 0.656 cosine similarity, and natural-language URL slugs had an 89.8% citation rate against 81.1% without (Ahrefs, Apr 2026).",
-              evidence: "observed",
-            },
-            {
-              title: "Official pages on your own domain",
-              body: 'Since August 2026, `site:` fan-outs target brand, vendor and .gov domains, and "official" is the second most common fan-out word.',
-              evidence: "observed",
-            },
-            {
-              title: "Answer in the first third",
-              body: '44.2% of ChatGPT citations came from the first 30% of a page, and definitional "X is…" sentences were about twice as likely to be cited (Growth Memo, 1.2M responses).',
-              evidence: "observed",
-            },
-            {
-              title: "Freshness",
-              body: "Cited URLs skew newer than search results, and recently updated pages earn more citations. Update substantively — never just the date.",
-              evidence: "observed",
-            },
-            {
-              title: "Brand mentions, especially YouTube",
-              body: "Across 75K brands, YouTube mentions correlated most with AI visibility (~0.74), branded web mentions next (0.66–0.71); domain rating was weak (Ahrefs, May 2026).",
-              evidence: "observed",
-            },
-            {
-              title: "Sections with substance",
-              body: "SE Ranking found sections under 50 words averaged 2.7 citations, against 4.6 at 120–180 words and 5.7 above 180. Depth between headings helps; one-line sections don't.",
-              evidence: "observed",
-            },
+            "**The tag is undocumented now.** OpenAI used to state in a publisher FAQ that ChatGPT adds `utm_source=chatgpt.com` to its links. That article has since been rewritten as the [ChatGPT Atlas retirement notice](https://help.openai.com/en/articles/12627856-publishers-and-developers-faq), so treat the tag as observed behaviour that can change, and build reports on the referrer too.",
+            "**GA4 groups it for you.** On 13 May 2026 Google Analytics added an **AI Assistant** default channel: visits with a recognised AI-assistant referrer get the medium `ai-assistant` and the campaign `(ai-assistant)` ([Google](https://support.google.com/analytics/answer/9164320)). It covers ChatGPT, Gemini, DeepSeek, Copilot and Grok, and excludes Google's own AI Overviews and AI Mode.",
+            "**Keep a backstop.** A custom channel on the `chatgpt.com` source catches visits the default rules miss, such as an app that strips the referrer while the tag survives.",
           ],
-        },
-        {
-          kind: "h3",
-          text: "Ads and shopping don't buy citations",
-        },
-        {
-          kind: "p",
-          text: 'ChatGPT has run ads since February 2026 — for Free and Go users in the US, then Canada, Australia, New Zealand, the UK, Mexico, Brazil, Japan and South Korea — and OpenAI says ads "do not influence the answers." Shopping results are "not ads": they come from structured product metadata, and since March 2026 merchants supply it through Agentic Commerce Protocol feeds while using their own checkout.',
-        },
-      ],
-    },
-    {
-      id: "measurement",
-      title: "Tracking ChatGPT traffic",
-      blocks: [
-        {
-          kind: "p",
-          text: "OpenAI's [publisher FAQ](https://help.openai.com/en/articles/12627856-publishers-and-developers-faq) confirms ChatGPT \"automatically includes the UTM parameter utm_source=chatgpt.com in referral URLs,\" and the referrer is `chatgpt.com`. Since 13 May 2026, GA4's default **AI Assistant** channel groups ChatGPT traffic automatically (medium `ai-assistant`). It isn't retroactive, and some app traffic arrives with no referrer, so keep a custom channel as a backstop.",
         },
         {
           kind: "code",
           lang: "GA4 regex",
-          code: '# Custom channel "AI – ChatGPT", placed above Referral\n# Session source matches regex:\n^(chatgpt\\.com|chat\\.openai\\.com|openai\\.com)$\n\n# All major AI assistants\n^(chatgpt\\.com|chat\\.openai\\.com|perplexity\\.ai|claude\\.ai|gemini\\.google\\.com|copilot\\.microsoft\\.com)$',
+          code: '# Custom channel group: "ChatGPT", placed above Referral\n# Condition: Session source matches regex\n^(chatgpt\\.com|chat\\.openai\\.com)$',
         },
         {
           kind: "p",
-          text: "Tag your own ChatGPT ads (`utm_medium=cpc`) and product feeds (`utm_medium=feed`) so paid and feed clicks don't inflate your organic citation numbers. Then add the server-side view — `ChatGPT-User` hits are the closest thing to a live signal that a real prompt pulled your page:",
+          text: "Keep paid and feed clicks out of the organic number: tag ChatGPT ad landing pages with your own `utm_medium` (such as `cpc`), and add `utm_medium=feed` to product-feed URLs, as OpenAI's commerce docs suggest. Then add the server-side view, where `ChatGPT-User` hits are pages being fetched live for a conversation:",
         },
         {
           kind: "code",
           lang: "bash",
-          code: '# OpenAI bot hits by type\ngrep -oE "OAI-SearchBot|ChatGPT-User|GPTBot|OAI-AdsBot" access.log | sort | uniq -c\n\n# Pages fetched live for ChatGPT conversations\ngrep "ChatGPT-User" access.log | awk \'{print $7}\' | sort | uniq -c | sort -rn | head -20',
+          code: '# OpenAI hits by agent\ngrep -oE "OAI-SearchBot|ChatGPT-User|GPTBot|OAI-AdsBot" access.log | sort | uniq -c\n\n# Pages fetched live for ChatGPT conversations, most first\ngrep "ChatGPT-User" access.log | awk \'{print $7}\' | sort | uniq -c | sort -rn | head -20',
         },
         {
           kind: "p",
-          text: "Verify IPs against `searchbot.json`, `chatgpt-user.json` and `gptbot.json` — user agents are easy to spoof. OpenAI offers no publisher analytics dashboard, so citations themselves still need a prompt panel: a fixed set of buyer questions, run weekly, recording who's cited.",
+          text: "User agents are easy to fake, so check hits against OpenAI's IP files. OpenAI offers publishers no citation dashboard, so the citations themselves need a fixed panel of buyer prompts, run on a schedule, recording which domains appear in the Sources list.",
         },
       ],
     },
     {
-      id: "myths",
-      title: "Myths worth dropping",
+      id: "shopping-feeds",
+      title: "Product answers run on feeds, not on your product pages",
+      blocks: [
+        {
+          kind: "p",
+          text: 'When a question is about buying something, ChatGPT can show a product carousel, and selecting a product can list the merchants that sell it. OpenAI says product results "are not ads" and come from structured metadata from first- and third-party providers, and that merchants are ranked on availability, price, quality and whether they\'re the maker or primary seller ([OpenAI Help](https://help.openai.com/en/articles/11128490-shopping-with-chatgpt-search)).',
+        },
+        {
+          kind: "list",
+          ordered: true,
+          items: [
+            "**Shopify stores: nothing to do.** Product data flows in through Shopify Catalog.",
+            '**Everyone else: apply for a direct feed.** OpenAI\'s [commerce docs](https://developers.openai.com/commerce) say product-feed onboarding is "currently available to approved partners". Feeds go in by API or SFTP upload, following the Agentic Commerce Protocol (ACP) specs.',
+            "**Checkout can stay yours.** Since 24 March 2026 merchants can send buyers to their own checkout; Instant Checkout inside ChatGPT remains only for some eligible products ([OpenAI](https://openai.com/index/powering-product-discovery-in-chatgpt/)).",
+            "**Let the crawler see your images.** OpenAI's [advertiser guidance](https://help.openai.com/en/articles/20001243-advertiser-guidance-for-allowing-openai-web-crawlers) asks product-feed merchants to let `OAI-SearchBot` crawl product image URLs.",
+          ],
+        },
+        {
+          kind: "callout",
+          tone: "tip",
+          title: "Our read on the merchant ranking",
+          text: 'Availability and price are feed fields, so a stale feed loses to a competitor\'s fresh one even when your site is current. "Maker or primary seller" favours brands that sell direct, which is one more reason to keep official product pages complete.',
+        },
+      ],
+    },
+    {
+      id: "agents-after-atlas",
+      title: "Agents after Atlas: cloud browser, desktop browser and WebMCP",
+      blocks: [
+        {
+          kind: "p",
+          text: 'OpenAI\'s agent surfaces changed through 2026. ChatGPT Atlas, the browser launched in October 2025, "has since been deprecated" ([OpenAI](https://openai.com/index/introducing-chatgpt-atlas/)). The standalone ChatGPT agent "is no longer available", and OpenAI points users to **ChatGPT Work** and its cloud browser instead ([OpenAI Help](https://help.openai.com/en/articles/11752874-chatgpt-agent)). What reaches your server now:',
+        },
+        {
+          kind: "table",
+          head: ["Surface", "Where it runs", "How your server sees it"],
+          rows: [
+            [
+              "Cloud browser (ChatGPT Work, paid plans except Free and Go)",
+              "A browser on OpenAI's computers",
+              'Requests signed with Web Bot Auth (RFC 9421), header `Signature-Agent: "https://chatgpt.com"`',
+            ],
+            [
+              "Built-in browser (ChatGPT desktop app)",
+              "The user's own Mac or Windows PC",
+              "Not documented by OpenAI",
+            ],
+            [
+              "`ChatGPT-User` fetches",
+              "OpenAI's servers",
+              "Declared user agent, IPs in `chatgpt-user.json`",
+            ],
+          ],
+        },
+        {
+          kind: "code",
+          lang: "http",
+          code: 'Signature-Agent: "https://chatgpt.com"\nSignature-Input: sig1=(...)\nSignature: sig1=:...:\n\n# Public keys: https://chatgpt.com/.well-known/http-message-signatures-directory',
+        },
+        {
+          kind: "p",
+          text: 'Verify the signature rather than blocking the whole agent category. OpenAI\'s [allowlisting guide](https://help.openai.com/en/articles/11845367-chatgpt-works-cloud-browser-allowlisting) notes that Akamai, HUMAN and Vercel already recognise it by name. In the desktop app, websites can also offer **site tools** through WebMCP, which OpenAI describes as "a proposed web standard that lets websites make tools available directly to AI agents" ([OpenAI Help](https://help.openai.com/en/articles/20001423-using-site-tools-in-the-chatgpt-desktop-app)). OpenAI publishes no developer guide for it yet, so a clean, server-rendered sign-up and checkout flow matters more today.',
+        },
+      ],
+    },
+    {
+      id: "beliefs-2026-broke",
+      title: "ChatGPT beliefs the 2026 data broke",
       blocks: [
         {
           kind: "myths",
           items: [
             {
-              myth: "Blocking GPTBot removes you from ChatGPT.",
+              myth: "Blocking GPTBot takes you out of ChatGPT.",
               reality:
-                "`GPTBot` is training only. Search visibility is `OAI-SearchBot`, and the two settings are independent.",
+                "`GPTBot` is training-only. Search inclusion is `OAI-SearchBot`, and OpenAI keeps the two settings independent.",
             },
             {
-              myth: "ChatGPT just shows Bing's top 10.",
+              myth: "ChatGPT just repeats Google's or Bing's top 10.",
               reality:
-                "Only about 8% of its citations rank in the top 10 for the original prompt. Fan-out, `site:` queries and OpenAI's own index decide who's picked.",
+                "In Ahrefs' 15,000-query test about 8% of ChatGPT's citations ranked in either top 10 for the same prompt. An October 2026 paper found Google results and OpenAI's search API together recovered only about a quarter of the URLs ChatGPT cited ([arXiv](https://arxiv.org/abs/2610.15382)).",
             },
             {
-              myth: "Reddit seeding and FAQ schema are shortcuts.",
+              myth: "Reddit threads are the shortcut into answers.",
               reality:
-                "Reddit's citation share fell about 86% in August 2026 and retrieved Reddit pages get cited 1.9% of the time. FAQ schema showed no lift in SE Ranking's data.",
+                "Retrieved Reddit pages were cited 1.93% of the time, and Ahrefs measured an 88% fall in Reddit citations from March to September 2026. Brand-owned pages gained.",
             },
             {
-              myth: "You can buy your way into answers.",
+              myth: "Ads or shopping deals buy recommendations.",
               reality:
-                "Ads are labeled and separate, and OpenAI says they don't influence answers. Product results aren't ads either.",
+                'OpenAI: "Ads do not influence the answers ChatGPT gives you." Ads are labelled sponsored and sit apart from the answer, and product results "are not ads" ([OpenAI](https://openai.com/index/testing-ads-in-chatgpt/)).',
+            },
+            {
+              myth: "llms.txt and FAQ schema get you cited.",
+              reality:
+                "Neither showed a lift in SE Ranking's ChatGPT data, and OpenAI has never said ChatGPT reads llms.txt.",
             },
           ],
         },
@@ -404,132 +493,121 @@ export const chatgpt: EngineGuide = {
 
   checklist: [
     {
-      id: "robots",
-      title: "Allow OAI-SearchBot in robots.txt",
-      detail: "Check for blanket `User-agent: *` blocks, and decide on `GPTBot` separately.",
+      id: "searchbot-robots",
+      title: "Allow OAI-SearchBot, and decide on GPTBot separately",
+      detail: "Look for blanket `User-agent: *` blocks that catch it by accident.",
       impact: "high",
     },
     {
-      id: "cdn",
-      title: "Allowlist OpenAI at your CDN and WAF",
+      id: "waf-ips",
+      title: "Allowlist OpenAI's IP files at the CDN and WAF",
       detail:
-        "Use the IPs in `searchbot.json`; review Cloudflare's AI crawl settings and its September 2026 defaults.",
+        "`searchbot.json` and `chatgpt-user.json`. On Cloudflare, review the AI bot categories, especially on pages with ads.",
       impact: "high",
     },
     {
-      id: "html",
-      title: "Serve key content in the initial HTML",
+      id: "raw-html",
+      title: "Confirm key facts are in the raw HTML",
       detail:
-        "Test with `curl` and the `OAI-SearchBot` user agent. No answers behind JS, cookie walls or interstitials.",
+        "Run the `curl` test on pricing, spec and policy pages, then check logs for real `OAI-SearchBot` hits.",
       impact: "high",
-    },
-    {
-      id: "bing",
-      title: "Verify in Bing Webmaster Tools and submit sitemaps",
-      detail:
-        "Microsoft is a named ChatGPT search provider. Fix anything Bing reports as not indexed.",
-      impact: "high",
-    },
-    {
-      id: "indexnow",
-      title: "Turn on IndexNow",
-      detail: "Ping on every publish and substantive update.",
-      impact: "medium",
     },
     {
       id: "official-pages",
-      title: "Build an official page for every fact buyers check",
+      title: "Publish one official page per fact buyers check",
       detail:
-        "Pricing, specs, integrations, policies, docs and comparisons — the targets of `site:` fan-outs.",
+        "Pricing, plans, specs, integrations, security, returns, support: the pages `site:` fan-outs land on.",
       impact: "high",
     },
     {
-      id: "titles",
-      title: "Match titles, H2s and slugs to sub-questions",
-      detail: "Natural-language titles and slugs that read like the query ChatGPT writes.",
+      id: "titles-slugs",
+      title: "Title and slug each page for the query ChatGPT writes",
+      detail:
+        'Name the product and the fact, like "Plotbright pricing: Free, Team and Business plans", with a readable slug.',
       impact: "high",
     },
     {
-      id: "answer-first",
-      title: "Put the answer in the first third",
+      id: "first-third",
+      title: "State the answer in the first third",
       detail:
-        "Definitional opening sentences, question-shaped headings, and sections long enough to carry context — not one-liners.",
+        "A definitional first sentence, then the numbers. Give sections enough words (120+) to carry their context.",
       impact: "high",
     },
     {
-      id: "freshness",
-      title: "Refresh top pages at least quarterly",
+      id: "current-year",
+      title: "Keep prices, specs and dates current",
       detail:
-        "Substantive updates with visible dates. Never bump a date without changing the page.",
+        "Fan-outs add the year. Update the page and its visible date together, never the date alone.",
       impact: "medium",
     },
     {
-      id: "noindex",
-      title: "Use noindex, not Disallow, for pages that must never surface",
+      id: "bing-indexnow",
+      title: "Verify in Bing Webmaster Tools and turn on IndexNow",
+      detail: "Submit sitemaps, fix unindexed URLs, and ping IndexNow on every publish and update.",
+      impact: "medium",
+    },
+    {
+      id: "product-feed",
+      title: "E-commerce: get your catalog into ChatGPT",
       detail:
-        "A disallowed URL can still show as a link and title. The crawler must be allowed in to read `noindex`.",
-      impact: "low",
+        "Shopify is automatic. Otherwise apply for a direct ACP feed and tag feed URLs `utm_medium=feed`.",
+      impact: "medium",
     },
     {
       id: "mentions",
-      title: "Earn mentions off-site",
+      title: "Earn mentions where buyers research",
       detail:
-        "YouTube, review platforms, trade press, and Wikipedia where you're genuinely notable.",
+        "Trade press, review sites and YouTube. Branded mentions track AI visibility far better than domain rating.",
       impact: "medium",
     },
     {
-      id: "acp",
-      title: "E-commerce: submit an ACP product feed",
-      detail: "Complete variants, prices and availability. Tag URLs with `utm_medium=feed`.",
-      impact: "medium",
-    },
-    {
-      id: "speed",
-      title: "Keep responses fast for bots",
-      detail: "Low TTFB and first contentful paint, no challenges for verified OpenAI IPs.",
-      impact: "medium",
-    },
-    {
-      id: "measure",
-      title: "Set up measurement",
+      id: "cloud-browser",
+      title: "Verify ChatGPT's cloud browser instead of blocking it",
       detail:
-        "GA4 AI Assistant channel plus a custom backstop, log monitoring of the four user agents, and a weekly prompt panel.",
+        "Check Web Bot Auth signatures against chatgpt.com's key directory rather than blanket-blocking agents.",
+      impact: "low",
+    },
+    {
+      id: "analytics",
+      title: "Wire ChatGPT into analytics",
+      detail:
+        "GA4's AI Assistant channel plus a `chatgpt.com` custom channel, log monitoring of all four OpenAI agents, and a scheduled prompt panel.",
       impact: "high",
     },
   ],
 
   faqs: [
     {
-      q: "How do I get my website to show up in ChatGPT?",
-      a: "Allow `OAI-SearchBot` in robots.txt and at your CDN, make sure your content is in the raw HTML, and get indexed by Bing. After that, citations depend on how well your pages match the sub-queries ChatGPT writes, and how authoritative and current they are.",
+      q: "Does ChatGPT use Google or Bing to search?",
+      a: "Neither alone. OpenAI says ChatGPT search partners with other search providers and links Microsoft's and Shopify's privacy policies, and it runs its own crawler, `OAI-SearchBot`. Being indexed by Bing and crawlable by `OAI-SearchBot` covers both paths.",
     },
     {
-      q: "Does ChatGPT use Google or Bing?",
-      a: "OpenAI names Microsoft and Shopify as search providers, alongside partner content. Independent analysis points to a blended system that also includes OpenAI's own crawler and index, so being indexed by Bing and crawlable by `OAI-SearchBot` covers both paths.",
+      q: "Can I stay in ChatGPT search but opt out of AI training?",
+      a: "Yes. Allow `OAI-SearchBot` and disallow `GPTBot` in robots.txt. OpenAI treats the two as independent settings, and changes take about 24 hours to reach search.",
     },
     {
-      q: "Can I appear in ChatGPT search without letting OpenAI train on my content?",
-      a: "Yes. Allow `OAI-SearchBot` and disallow `GPTBot`. OpenAI treats them as independent settings, and changes apply within about 24 hours.",
+      q: "Why does ChatGPT read my page but not cite it?",
+      a: "It reads far more than it cites: Ahrefs found about half of retrieved URLs go uncited. Pages whose titles match the rewritten query and state the fact in their first lines are the ones that make the cut.",
     },
     {
-      q: "Does ChatGPT read JavaScript-heavy sites?",
-      a: "OpenAI doesn't document JavaScript rendering, and the only direct test found its crawler downloading scripts without running them. Server-render the content you want cited.",
+      q: "What changed in ChatGPT search in August 2026?",
+      a: "On 8 August, as GPT-5.6 became the default, ChatGPT began consulting about twice as many pages per answer and running far more `site:` searches of brand and official domains. Brand-owned pages gained citations, and Reddit's share fell about 86%.",
     },
     {
-      q: "How do I track traffic from ChatGPT?",
-      a: "ChatGPT adds `utm_source=chatgpt.com` to its links, and GA4's AI Assistant channel has grouped that traffic automatically since May 2026. Back it up with a custom channel on the `chatgpt.com` source and check server logs for `ChatGPT-User` hits.",
+      q: "How do I see ChatGPT traffic in Google Analytics 4?",
+      a: "Check the AI Assistant default channel, added on 13 May 2026, and the session source `chatgpt.com`. Add a custom channel on `chatgpt.com` as a backstop, and tag your own ads and product feeds so they don't inflate it.",
     },
     {
-      q: "Why did my Reddit strategy stop working in ChatGPT?",
-      a: "In August 2026 ChatGPT shifted toward `site:` searches of official sources, and Reddit's share of its citations fell about 86% in the weeks that followed. Your own domain's pages now carry more weight.",
+      q: "Does ChatGPT render JavaScript?",
+      a: "OpenAI doesn't document rendering, and Vercel's crawler study found OpenAI's bots fetch JavaScript files without running them. Put anything you want cited in the server-rendered HTML.",
     },
     {
-      q: "Can I pay to be recommended by ChatGPT?",
-      a: "You can buy labeled ads, self-serve since May 2026, but OpenAI says ads don't influence answers and shopping results aren't ads. Organic citations can't be bought.",
+      q: "How do products get into ChatGPT shopping results?",
+      a: "Shopify merchants are included through Shopify Catalog. Other merchants apply for a direct product feed under the Agentic Commerce Protocol, which is open to approved partners. Product results aren't ads, and checkout can stay on your own site.",
     },
     {
-      q: "Do I need llms.txt for ChatGPT?",
-      a: "No. OpenAI has never said ChatGPT uses it, and a 129,000-domain study found a negligible effect. It does no harm but shouldn't be a priority.",
+      q: "Is ChatGPT Atlas still worth optimizing for?",
+      a: "No. OpenAI has deprecated Atlas and retired the standalone ChatGPT agent. Agent browsing now runs through ChatGPT Work's cloud browser, which signs its requests with Web Bot Auth, and the built-in browser in the ChatGPT desktop app.",
     },
   ],
 
@@ -540,22 +618,12 @@ export const chatgpt: EngineGuide = {
       href: "https://developers.openai.com/api/docs/bots",
     },
     {
-      title: "Publishers and developers FAQ",
+      title: "Searching the web with ChatGPT",
       publisher: "OpenAI Help Center",
-      href: "https://help.openai.com/en/articles/12627856-publishers-and-developers-faq",
+      href: "https://help.openai.com/en/articles/9237897-searching-the-web-with-chatgpt",
     },
     {
-      title: "ChatGPT search",
-      publisher: "OpenAI Help Center",
-      href: "https://help.openai.com/en/articles/9237897-chatgpt-search",
-    },
-    {
-      title: "Introducing ChatGPT search",
-      publisher: "OpenAI",
-      href: "https://openai.com/index/introducing-chatgpt-search/",
-    },
-    {
-      title: "Shopping with ChatGPT search",
+      title: "Shopping with ChatGPT Search",
       publisher: "OpenAI Help Center",
       href: "https://help.openai.com/en/articles/11128490-shopping-with-chatgpt-search",
     },
@@ -565,19 +633,59 @@ export const chatgpt: EngineGuide = {
       href: "https://openai.com/index/powering-product-discovery-in-chatgpt/",
     },
     {
+      title: "Commerce: Agentic Commerce Protocol and product feeds",
+      publisher: "OpenAI Developers",
+      href: "https://developers.openai.com/commerce",
+    },
+    {
+      title: "Advertiser guidance for allowing OpenAI web crawlers",
+      publisher: "OpenAI Help Center",
+      href: "https://help.openai.com/en/articles/20001243-advertiser-guidance-for-allowing-openai-web-crawlers",
+    },
+    {
       title: "Testing ads in ChatGPT",
       publisher: "OpenAI",
       href: "https://openai.com/index/testing-ads-in-chatgpt/",
     },
     {
-      title: "Accelerating the next phase of AI",
-      publisher: "OpenAI",
-      href: "https://openai.com/index/accelerating-the-next-phase-ai/",
+      title: "ChatGPT Atlas retirement (formerly the publishers and developers FAQ)",
+      publisher: "OpenAI Help Center",
+      href: "https://help.openai.com/en/articles/12627856-publishers-and-developers-faq",
     },
     {
-      title: "ChatGPT agent allowlisting (Web Bot Auth)",
+      title: "Introducing ChatGPT Atlas",
+      publisher: "OpenAI",
+      href: "https://openai.com/index/introducing-chatgpt-atlas/",
+    },
+    {
+      title: "ChatGPT agent",
       publisher: "OpenAI Help Center",
-      href: "https://help.openai.com/en/articles/11845367-chatgpt-agent-allowlisting",
+      href: "https://help.openai.com/en/articles/11752874-chatgpt-agent",
+    },
+    {
+      title: "Using cloud browser in ChatGPT",
+      publisher: "OpenAI Help Center",
+      href: "https://help.openai.com/en/articles/20001280-using-cloud-browser-in-chatgpt",
+    },
+    {
+      title: "ChatGPT Work's cloud browser allowlisting",
+      publisher: "OpenAI Help Center",
+      href: "https://help.openai.com/en/articles/11845367-chatgpt-works-cloud-browser-allowlisting",
+    },
+    {
+      title: "Using site tools in the ChatGPT desktop app",
+      publisher: "OpenAI Help Center",
+      href: "https://help.openai.com/en/articles/20001423-using-site-tools-in-the-chatgpt-desktop-app",
+    },
+    {
+      title: "ChatGPT's research depth doubled",
+      publisher: "Searchable",
+      href: "https://www.searchable.com/blog/chatgpt-research-depth-study",
+    },
+    {
+      title: "GPT-5.6 retrieval changes",
+      publisher: "Peec AI",
+      href: "https://docs.peec.ai/research/gpt-56-retrieval-changes",
     },
     {
       title: "ChatGPT tripled its fan-out queries",
@@ -585,14 +693,9 @@ export const chatgpt: EngineGuide = {
       href: "https://nectivdigital.com/blog/chatgpt-tripled-fan-out-queries-data-study",
     },
     {
-      title: "ChatGPT built its own search index",
-      publisher: "Peec AI",
-      href: "https://peec.ai/blog/chatgpt-built-its-own-search-index",
-    },
-    {
-      title: "AI search overlap with Google and Bing",
+      title: "How ChatGPT does query fan-out (15 million queries studied)",
       publisher: "Ahrefs",
-      href: "https://ahrefs.com/blog/ai-search-overlap/",
+      href: "https://ahrefs.com/blog/query-fan-out-chatgpt/",
     },
     {
       title: "Why ChatGPT cites the pages it does",
@@ -600,14 +703,34 @@ export const chatgpt: EngineGuide = {
       href: "https://ahrefs.com/blog/why-chatgpt-cites-pages/",
     },
     {
-      title: "Do AI assistants prefer to cite fresh content?",
+      title: "AI search overlap with Google and Bing",
       publisher: "Ahrefs",
-      href: "https://ahrefs.com/blog/do-ai-assistants-prefer-to-cite-fresh-content",
+      href: "https://ahrefs.com/blog/ai-search-overlap/",
     },
     {
-      title: "How to optimize for ChatGPT",
+      title: "Do AI assistants prefer to cite fresh content?",
+      publisher: "Ahrefs",
+      href: "https://ahrefs.com/blog/do-ai-assistants-prefer-to-cite-fresh-content/",
+    },
+    {
+      title: "AI brand visibility correlations (75,000 brands)",
+      publisher: "Ahrefs",
+      href: "https://ahrefs.com/blog/ai-brand-visibility-correlations/",
+    },
+    {
+      title: "Understanding ChatGPT citations: evidence from production web search",
+      publisher: "arXiv",
+      href: "https://arxiv.org/abs/2610.15382",
+    },
+    {
+      title: "How to optimize for ChatGPT (129,000-domain study)",
       publisher: "SE Ranking",
       href: "https://seranking.com/blog/how-to-optimize-for-chatgpt/",
+    },
+    {
+      title: "The science of how AI pays attention",
+      publisher: "Growth Memo",
+      href: "https://www.growth-memo.com/p/the-science-of-how-ai-pays-attention",
     },
     {
       title: "Reddit's citations in ChatGPT fall",
@@ -620,7 +743,7 @@ export const chatgpt: EngineGuide = {
       href: "https://www.semrush.com/blog/chatgpt-search-insights/",
     },
     {
-      title: "ChatGPT referrals and branded links",
+      title: "The branded link update",
       publisher: "Profound",
       href: "https://www.tryprofound.com/blog/chatgpt-referrals-branded-links",
     },
@@ -630,14 +753,19 @@ export const chatgpt: EngineGuide = {
       href: "https://vercel.com/blog/the-rise-of-the-ai-crawler",
     },
     {
+      title: "Your site, your rules: new AI traffic options",
+      publisher: "Cloudflare",
+      href: "https://blog.cloudflare.com/content-independence-day-ai-options/",
+    },
+    {
       title: "AI Performance in Bing Webmaster Tools",
       publisher: "Microsoft Bing",
       href: "https://blogs.bing.com/webmaster/February-2026/Introducing-AI-Performance-in-Bing-Webmaster-Tools-Public-Preview",
     },
     {
-      title: "Content Independence Day: AI crawl options",
-      publisher: "Cloudflare",
-      href: "https://blog.cloudflare.com/content-independence-day-ai-options/",
+      title: "What's new in Google Analytics (AI Assistant traffic)",
+      publisher: "Google Analytics Help",
+      href: "https://support.google.com/analytics/answer/9164320",
     },
     {
       title: "Default channel group (AI Assistant)",
@@ -660,6 +788,18 @@ export const chatgpt: EngineGuide = {
       href: "/tools/ai-robots-txt-generator",
       description:
         "Allow OAI-SearchBot, make a deliberate call on GPTBot, and cover every other AI crawler in one file.",
+    },
+    {
+      title: "AI crawler log analyzer",
+      href: "/tools/ai-crawler-log-analyzer",
+      description:
+        "Paste an access log and see which AI crawlers, OpenAI's included, fetched which pages, without writing the grep yourself.",
+    },
+    {
+      title: "Query fan-out, explained",
+      href: "/glossary/query-fan-out",
+      description:
+        "The glossary entry for the rewritten searches behind every AI answer, across engines.",
     },
   ],
 };

@@ -1183,7 +1183,7 @@ export const TOPICS: Topic[] = [
   },
   {
     id: "mistral",
-    title: "Get cited by Le Chat",
+    title: "Get cited by Mistral Vibe",
     pages: [e("mistral"), i("le-chat")],
   },
   {
@@ -1693,6 +1693,8 @@ export const TOPICS: Topic[] = [
         "featured-snippet",
       ),
     ],
+    // The /ai-seo hub has no card of its own (the engine guides do).
+    also: (path) => path === "/ai-seo",
   },
   {
     id: "entities",

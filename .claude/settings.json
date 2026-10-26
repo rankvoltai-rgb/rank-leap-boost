@@ -8,7 +8,13 @@
       "ClaudeInChromeDomain(localhost:5181)",
       "ClaudeInChromeDomain(vercel.com)",
       "ClaudeInChromeDomain(porkbun.com)",
-      "ClaudeInChromeDomain(www.linkedin.com)"
+      "ClaudeInChromeDomain(www.linkedin.com)",
+      "ClaudeInChromeDomain(www.perplexity.ai)",
+      "ClaudeInChromeDomain(radar.cloudflare.com)",
+      "ClaudeInChromeDomain(nicolassitter.com)",
+      "ClaudeInChromeDomain(x.com)",
+      "ClaudeInChromeDomain(manus.im)",
+      "ClaudeInChromeDomain(www.humansecurity.com)"
     ]
   }
 }

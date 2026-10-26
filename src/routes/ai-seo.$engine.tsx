@@ -1,34 +1,41 @@
-import { useMemo, useRef } from "react";
+import type { ComponentType } from "react";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
-import {
-  AuthorCard,
-  BlogCta,
-  RailCta,
-  ReadingProgress,
-  ShareButtons,
-  TableOfContents,
-} from "@/components/blog/ArticleChrome";
-import { GuideBlocks } from "@/components/ai-seo/blocks";
 import { plainText } from "@/lib/inline-md";
-import {
-  Checklist,
-  EngineHero,
-  FactBand,
-  FaqList,
-  GuideHeading,
-  OtherGuides,
-  ShortAnswer,
-  SourceList,
-  Takeaways,
-} from "@/components/ai-seo/sections";
-import { ExploreMore } from "@/components/ExploreMore";
+import { ChatgptGuidePage } from "@/components/ai-seo/chatgpt/ChatgptGuidePage";
+import { GoogleAiOverviewsGuidePage } from "@/components/ai-seo/google-ai-overviews/GoogleAiOverviewsGuidePage";
+import { GeminiGuidePage } from "@/components/ai-seo/gemini/GeminiGuidePage";
+import { ClaudeGuidePage } from "@/components/ai-seo/claude/ClaudeGuidePage";
+import { PerplexityGuidePage } from "@/components/ai-seo/perplexity/PerplexityGuidePage";
+import { CopilotGuidePage } from "@/components/ai-seo/copilot/CopilotGuidePage";
+import { GrokGuidePage } from "@/components/ai-seo/grok/GrokGuidePage";
+import { MetaAiGuidePage } from "@/components/ai-seo/meta-ai/MetaAiGuidePage";
+import { DeepseekGuidePage } from "@/components/ai-seo/deepseek/DeepseekGuidePage";
+import { MistralGuidePage } from "@/components/ai-seo/mistral/MistralGuidePage";
+import { ManusGuidePage } from "@/components/ai-seo/manus/ManusGuidePage";
 import { getEngine } from "@/data/ai-seo/engines";
 import { guideReadingMinutes, guideWordCount, loadGuide } from "@/data/ai-seo/guides";
 import type { EngineGuide } from "@/data/ai-seo/types";
 
 const SITE = "https://rankbox.xyz";
+
+/* Every guide has a layout of its own, drawn in the landing page's frame, so
+   no two are one template with the engine swapped. The head below stays
+   shared. */
+const LAYOUTS: Record<string, ComponentType<{ guide: EngineGuide }>> = {
+  chatgpt: ChatgptGuidePage,
+  "google-ai-overviews": GoogleAiOverviewsGuidePage,
+  gemini: GeminiGuidePage,
+  claude: ClaudeGuidePage,
+  perplexity: PerplexityGuidePage,
+  copilot: CopilotGuidePage,
+  grok: GrokGuidePage,
+  "meta-ai": MetaAiGuidePage,
+  deepseek: DeepseekGuidePage,
+  mistral: MistralGuidePage,
+  manus: ManusGuidePage,
+};
 
 export const Route = createFileRoute("/ai-seo/$engine")({
   /* The guide's text is its own chunk, fetched here rather than imported at
@@ -159,98 +166,12 @@ export const Route = createFileRoute("/ai-seo/$engine")({
 
 function GuidePage() {
   const { guide } = Route.useLoaderData();
+  const Layout = LAYOUTS[guide.slug];
   // Keyed so switching engines starts each guide fresh (scroll-spy, progress, checklist).
-  return <Guide key={guide.slug} guide={guide} />;
-}
-
-function Guide({ guide }: { guide: EngineGuide }) {
-  const engine = getEngine(guide.slug)!;
-  const bodyRef = useRef<HTMLDivElement>(null);
-  const url = `${SITE}/ai-seo/${engine.slug}`;
-  const shareTitle = `${guide.headline.lead} ${guide.headline.accent}`;
-
-  const toc = useMemo(
-    () => [
-      { id: "takeaways", text: "Key takeaways" },
-      ...guide.sections.map((s) => ({ id: s.id, text: s.title })),
-      { id: "checklist", text: "The action checklist" },
-      { id: "faq", text: "FAQ" },
-    ],
-    [guide],
-  );
-
   return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
-      <main>
-        <ReadingProgress target={bodyRef} />
-        <EngineHero engine={engine} guide={guide} readingMinutes={guideReadingMinutes(guide)} />
-        <FactBand engine={engine} guide={guide} />
-
-        <div className="mx-auto grid max-w-6xl gap-12 px-5 py-12 lg:grid-cols-[minmax(0,1fr)_17rem] lg:gap-16 lg:py-16">
-          {/* Long tokens (user agents, IP-list URLs) may break mid-word rather
-              than push a phone-width column sideways; normal words still wrap
-              at spaces. Code blocks keep their own horizontal scroll. */}
-          <article ref={bodyRef} className="min-w-0 max-w-[43rem] [overflow-wrap:anywhere]">
-            <TableOfContents entries={toc} variant="inline" className="mb-10 lg:hidden" />
-            <ShortAnswer text={guide.shortAnswer} />
-            <Takeaways id="takeaways" items={guide.takeaways} />
-
-            {guide.sections.map((s) => (
-              <section key={s.id} aria-labelledby={s.id}>
-                <GuideHeading id={s.id}>{s.title}</GuideHeading>
-                <GuideBlocks blocks={s.blocks} idPrefix={s.id} />
-              </section>
-            ))}
-
-            <section aria-labelledby="checklist">
-              <GuideHeading id="checklist">The action checklist</GuideHeading>
-              <p className="mt-6 text-[1.0625rem] leading-[1.8] text-ink/80 sm:text-[1.125rem]">
-                Everything above, in the order we&rsquo;d do it. Tick items off as you go — your
-                progress is saved in this browser.
-              </p>
-              <Checklist slug={engine.slug} items={guide.checklist} />
-            </section>
-
-            <section aria-labelledby="faq">
-              <GuideHeading id="faq">{`${engine.name} SEO: frequently asked questions`}</GuideHeading>
-              <FaqList faqs={guide.faqs} />
-            </section>
-
-            <SourceList id="sources" sources={guide.sources} />
-
-            <footer className="mt-14 space-y-8 border-t border-border pt-10">
-              <div className="flex flex-wrap items-center justify-between gap-5">
-                <p className="text-sm text-muted-foreground">
-                  Found this useful? Share it with whoever owns your SEO.
-                </p>
-                <ShareButtons url={url} title={shareTitle} />
-              </div>
-              <AuthorCard author="Rankbox Team" />
-            </footer>
-          </article>
-
-          <aside className="hidden lg:block">
-            <div className="sticky top-24 max-h-[calc(100dvh-7rem)] space-y-8 overflow-y-auto pb-6 [scrollbar-width:none]">
-              <TableOfContents entries={toc} variant="rail" />
-              <RailCta />
-            </div>
-          </aside>
-        </div>
-
-        <OtherGuides current={engine} guide={guide} />
-        <ExploreMore
-          path={`/ai-seo/${engine.slug}`}
-          exclude={guide.furtherReading.map((r) => r.href)}
-        />
-        <BlogCta
-          title={
-            engine.tier === "frontier"
-              ? `See if ${engine.shortName} cites you today`
-              : "See where AI answers cite you today"
-          }
-        />
-      </main>
+    <div className="min-h-screen bg-white">
+      <Navbar framed />
+      <main>{Layout && <Layout key={guide.slug} guide={guide} />}</main>
       <Footer />
     </div>
   );
