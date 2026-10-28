@@ -271,7 +271,7 @@ None of this guarantees that Siri will mention Tallyfold. It removes every docum
 
 Rankbox works on the Rank gate, mostly check K1. [Answer-Space Research](/features/answer-space-research) maps the questions buyers ask AI assistants and search engines, with volume, difficulty and intent shown as model estimates. The [Citation-Ready Writer](/features/citation-ready-writer) then researches the live web and drafts source-backed articles of 2,000 to 3,500 words that open with a plain answer, and articles reach your site through Rankbox's API.
 
-The first four gates are yours or your host's. Rankbox doesn't run a CDN, manage robots.txt, change headers or prerender pages, and it doesn't track whether Siri or any other assistant cites you. Signup is free, the Business plan is $49.50 a month, and adding a card starts a 7-day trial; see [pricing](/pricing).
+The first four gates are yours or your host's. Rankbox doesn't run a CDN, manage robots.txt, change headers or prerender pages, and it doesn't track whether Siri or any other assistant cites you. The Business plan is $49.50 a month, charged 7 days after you start the free trial unless you cancel first, and the trial takes a card; see [pricing](/pricing).
 
 ## Frequently Asked Questions
 

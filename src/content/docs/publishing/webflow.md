@@ -3,7 +3,7 @@ title: Publish to Webflow
 nav_title: Webflow
 description: Connect Webflow with Webflow sign-in, choose a CMS collection, map its fields, and let Rankbox write every finished article into it as a live item or a draft.
 order: 2
-updated: 2026-10-02
+updated: 2026-10-28
 ---
 
 The Rankbox app for Webflow writes each finished article into a CMS collection on your Webflow site, from Rankbox's servers, the moment the article is finished. You connect with Webflow's own sign-in, pick the collection your blog uses, match its fields once, and your collection template does the layout.
@@ -25,7 +25,7 @@ Each Rankbox site has at most one Webflow connection. With [Studio](/docs/accoun
 
 You need:
 
-- An active Rankbox trial or plan on the site. Without one, the Webflow setup shows **Start free trial** instead of **Connect Webflow**.
+- An active Rankbox trial or plan on the site, with billing in good standing. While billing blocks the account, the Webflow setup shows "Publishing to your site is paused while billing needs attention. Sort it out to connect Webflow." and the billing fix (**Update card**, **Update billing** or **Restart plan**) instead of **Connect Webflow**.
 - A Webflow site with a CMS collection for your blog posts. If the site has none, add one in Webflow first.
 - At least one **Rich text** field in that collection, for the article body. It is the only field Rankbox requires.
 - For live publishing: a Webflow site that has been published at least once. Publishing it to its `webflow.io` address is enough.
@@ -205,7 +205,7 @@ If you remove Rankbox's access from Webflow's side instead, the next push gets a
 | **Reconnect** on the tile | Webflow access was removed. | Click **Connect Webflow** again. The ledger carries over. |
 | **Not yet** stays above zero | Articles finished before you connected, or pushes that failed. | Click **Publish N articles now**. |
 | An edit made in Rankbox doesn't reach Webflow | The item is counted under **Edited in Webflow**. | Make the change in Webflow, or delete the item there and recreate it by hand. Rankbox won't touch it again. |
-| "Start your free trial to connect your site." | The site has no active trial or plan. | Start the trial or renew the plan under **Dashboard → Plan & Billing**. |
+| "Publishing to your site is paused while billing needs attention." | A failed card check, a failed payment or an ended plan. | Click the button next to it, or the one on the banner at the top of the dashboard. |
 
 ## Related
 

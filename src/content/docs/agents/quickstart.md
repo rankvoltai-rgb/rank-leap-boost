@@ -3,7 +3,7 @@ title: Quickstart for AI agents
 nav_title: Quickstart
 description: Step-by-step instructions an AI agent can execute: create a Rankbox account, start the trial, plan, generate, publish, turn on autopilot and listen for events.
 order: 2
-updated: 2026-10-02
+updated: 2026-10-28
 ---
 
 This page is written for an AI agent to execute from top to bottom. It takes a new project from no Rankbox account to a published article and a running autopilot, with one hand-off to a person (the card for the trial). Every step shows the exact request and the response to expect.
@@ -181,8 +181,9 @@ Send `checkout_url` to the owner with the facts they need to decide. For example
 Rankbox is set up for northwind.example and has a plan of 20 articles.
 To let me start writing, start the 7-day free trial here:
 https://rankbox.xyz/checkout/co_xxxxxxxxxxxx
-You add a card but aren't charged today. The plan is $49.50/month from day 8,
-and you can cancel before then in the billing portal.
+A card is required. A $1 hold checks it and is released at once, so nothing
+is charged today. You're charged $49.50/month 7 days after you start, unless
+you cancel first in the billing portal.
 ```
 
 Don't wait for the answer. Steps 5 and 6 work without a plan.
@@ -270,7 +271,7 @@ curl https://rankbox.xyz/api/agent/v1/billing \
 }
 ```
 
-You can generate when `status` is `trialing` and `card_verified` is not `false`, or when `status` is `active`. Poll every few minutes, not seconds, or listen for the `billing.trial_started` event (step 12). The trial gives the site 7 article credits.
+You can generate when `status` is `trialing` and `card_verified` is not `false`, or when `status` is `active`. A `past_due` or `unpaid` account never generates: a failed payment stops writing at once, whatever `past_due_since` says. If `card_verified` is `false`, ask the owner to click **Update card** on the banner at the top of `https://rankbox.xyz/dashboard`; updating the card reruns the check. Poll every few minutes, not seconds, or listen for the `billing.trial_started` event (step 12). The trial gives the site 7 article credits.
 
 ## Step 8: Generate an article
 
@@ -303,7 +304,7 @@ curl -X POST "https://rankbox.xyz/api/agent/v1/sites/$SITE_ID/articles/$ARTICLE_
 }
 ```
 
-A `402` here means the trial hasn't started (`subscription_required`) or the site has no credits left (`insufficient_credits`). See [Billing, credits and limits](/docs/agents/billing-and-limits#what-a-402-means).
+A `402` here means the account can't write right now (`subscription_required`: no trial yet, a failed card check, a failed payment or an ended plan) or the site has no credits left (`insufficient_credits`). See [Billing, credits and limits](/docs/agents/billing-and-limits#what-a-402-means).
 
 ## Step 9: Poll the job
 
@@ -471,7 +472,7 @@ Waiting on you: nothing right now
 | Response | Meaning | What to do |
 | --- | --- | --- |
 | `401 unauthorized` | Key missing, mistyped or revoked | Check the `Authorization: Bearer` header. If the owner revoked the key, ask for a new one |
-| `402 subscription_required` | No active trial or plan, or the trial's card check failed | Send a fresh `checkout_url` (step 4), or the portal link from `POST /billing/portal` |
+| `402 subscription_required` | No active trial or plan, the trial's card check failed, a payment failed, or the plan ended | No trial yet: send a fresh `checkout_url` (step 4). Failed card check or payment: ask the owner to use **Update card** or **Update billing** on the dashboard banner, which reruns the check or retries the payment |
 | `402 insufficient_credits` | The site used this period's article credits | Wait for the reset in `GET /sites/{site_id}/credits`, or lower the autopilot pace |
 | `409 account_exists` | The owner already has an account | Connect through OAuth or a dashboard key |
 | `422 validation_failed` | A field is wrong | Read `details` and fix the named fields |

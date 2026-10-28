@@ -48,7 +48,7 @@ import { TRIAL_NOTE } from "@/components/features/FeatureSections";
 import { getFeature } from "@/data/features";
 import { getIntegration } from "@/data/integrations";
 import { PERSONAS, PERSONA_GROUPS, withArticle, type Persona } from "@/data/personas";
-import { PLAN, formatUsd } from "@/data/pricing";
+import { PLAN, TRIAL_CTA, formatUsd } from "@/data/pricing";
 import { cn } from "@/lib/utils";
 import {
   ApprovePicture,
@@ -666,13 +666,7 @@ export function SaasFAQ({ persona }: { persona: Persona }) {
 
 /* ---------- Closing ---------- */
 
-/* The persona's closing line ends on "N days free, no card to start." The
-   trial goes through Stripe Checkout and takes a card, so that sentence is
-   left off here and TRIAL_NOTE under the button states the trial instead. */
-const NO_CARD_TAIL = /\s*\d+\s+days? free, no card to start\.?\s*$/i;
-
 export function SaasCTA({ persona }: { persona: Persona }) {
-  const body = persona.ctaBody.replace(NO_CARD_TAIL, "");
   const titles = (persona.topics?.clusters ?? []).slice(0, 3).map((c) => c.questions[0]);
   return (
     <section aria-labelledby="cta-title">
@@ -694,13 +688,13 @@ export function SaasCTA({ persona }: { persona: Persona }) {
               {persona.ctaTitle}
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-balance text-[1rem] leading-relaxed text-white sm:text-[1.05rem]">
-              {body}
+              {persona.ctaBody}
             </p>
             <a
               href="/auth"
               className="group mt-8 inline-flex h-11 items-center justify-center gap-2 rounded-lg bg-white px-5 text-[0.95rem] font-semibold text-cta shadow-[0_1px_2px_rgba(4,24,72,0.2),0_8px_24px_-12px_rgba(4,24,72,0.5)] transition-[transform,background-color] duration-200 hover:-translate-y-0.5 hover:bg-white/95 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-white/40"
             >
-              Get Started Free
+              {TRIAL_CTA}
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
             </a>
             <p className="mt-3 text-[0.82rem] text-white">{TRIAL_NOTE}</p>

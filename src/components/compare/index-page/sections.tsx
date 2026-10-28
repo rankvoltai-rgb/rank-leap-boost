@@ -34,6 +34,7 @@ import {
 } from "@/components/landing/frame";
 import { Mark } from "@/components/brand/Mark";
 import { TRIAL_NOTE } from "@/components/features/FeatureSections";
+import { TRIAL_CTA } from "@/data/pricing";
 import { ProductMark, RankboxTile } from "@/components/compare/kit";
 import {
   CATEGORIES,
@@ -448,7 +449,7 @@ function ClosingForm() {
         type="submit"
         className="inline-flex h-12 shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-lg bg-white px-5 text-[0.95rem] font-semibold text-cta shadow-[0_1px_2px_rgba(4,24,72,0.2),0_8px_24px_-12px_rgba(4,24,72,0.5)] transition-[transform,background-color] duration-200 hover:-translate-y-0.5 hover:bg-white/95 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-white/40"
       >
-        Get Started Free
+        {TRIAL_CTA}
         <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
       </button>
     </form>

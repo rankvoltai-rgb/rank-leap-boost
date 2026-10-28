@@ -201,7 +201,7 @@ This post is the thesis, not the content plan. Four things follow from it, in or
 
 Rankbox is built for the second item on that list. Its [Answer-Space Research](/features/answer-space-research) maps the questions buyers ask ChatGPT, Perplexity and Google in your category, with volumes that are model estimates rather than measured counts. The Citation-Ready Writer then researches the live web and drafts 2,000 to 3,500-word, source-backed articles, which reach your site through Rankbox's API.
 
-Rankbox doesn't track AI citations today, and it doesn't run ads or agents for you. For measurement, pair it with Search Console, Bing Webmaster Tools or a tracker. Signup is free, and the 7-day trial starts when you add a card. [See plans and pricing](/pricing).
+Rankbox doesn't track AI citations today, and it doesn't run ads or agents for you. For measurement, pair it with Search Console, Bing Webmaster Tools or a tracker. Rankbox's 7-day free trial takes a card at signup and includes 7 articles; it's $49.50 a month after that unless you cancel. [See plans and pricing](/pricing).
 
 ## Frequently Asked Questions
 

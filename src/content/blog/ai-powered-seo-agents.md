@@ -121,7 +121,7 @@ The team approved 15 of 22 titles as written, or 68%, and 41 of 64 links, or 64%
 
 ## Where Rankbox Fits Among AI-Powered SEO Agents
 
-Rankbox isn't an autonomous SEO agent, and it doesn't change your site on its own. It researches the live web and writes 2,000 to 3,500-word, source-backed articles, and its [MCP server](/integrations/mcp) gives AI assistants three research tools: AI search questions, content briefs and meta descriptions. Articles reach your site through the Rankbox API, which a developer wires in. Rankbox doesn't track AI citations. Signup is free, the 7-day trial starts when you add a card, and the Business plan is $49.50 a month for 30 articles. [See pricing](/pricing).
+Rankbox isn't an autonomous SEO agent, and it doesn't change your site on its own. It researches the live web and writes 2,000 to 3,500-word, source-backed articles, and its [MCP server](/integrations/mcp) gives AI assistants three research tools: AI search questions, content briefs and meta descriptions. Articles reach your site through the Rankbox API, which a developer wires in. Rankbox doesn't track AI citations. The 7-day free trial is the last step of setup and takes a card, and the Business plan is $49.50 a month for 30 articles once it ends. [See pricing](/pricing).
 
 ## Frequently Asked Questions
 

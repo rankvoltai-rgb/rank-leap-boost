@@ -33,6 +33,8 @@ import {
   useArticleActions,
 } from "@/components/dashboard/useArticleActions";
 import { SITES_QUERY_KEY, useActiveSite, useSiteId } from "@/components/dashboard/site-context";
+import { BillingFixButton } from "@/components/dashboard/billing-context";
+import { isEntitled } from "@/components/dashboard/autopilot-state";
 import { useSignOut } from "@/components/dashboard/use-sign-out";
 import { RemoveSiteDialog } from "@/components/studio/SiteDialogs";
 import { siteName } from "@/components/studio/SiteMark";
@@ -674,9 +676,7 @@ function AutopilotSection() {
   const actions = useArticleActions({ openId: undefined, onOpen: () => undefined });
   const [busy, setBusy] = useState<"toggle" | "pace" | null>(null);
 
-  const entitled =
-    !!actions.subscription &&
-    ["trialing", "active", "past_due"].includes(actions.subscription.status);
+  const entitled = isEntitled(actions.subscription);
   const enabled = settings?.autopilot_enabled !== false;
   const pace = settings?.weekly_cadence ?? 7;
   const scheduled = blogs.filter((b) => b.status === "scheduled").length;
@@ -753,7 +753,7 @@ function AutopilotSection() {
         description={
           entitled
             ? "Pause any time — scheduled articles wait, nothing is lost."
-            : "Autopilot starts writing when your free trial does."
+            : "Autopilot is paused until billing is sorted. Scheduled articles wait, nothing is lost."
         }
       >
         {settings === undefined ? (
@@ -771,9 +771,7 @@ function AutopilotSection() {
             </span>
           </div>
         ) : (
-          <Button variant="brand" onClick={actions.openTrial}>
-            Start free trial
-          </Button>
+          <BillingFixButton />
         )}
       </Row>
       <Row
@@ -836,7 +834,8 @@ function AutopilotSection() {
 function planLabel(status: string | undefined): string {
   if (status === "trialing") return `${PLAN.name} · free trial`;
   if (status === "active") return PLAN.name;
-  if (status === "past_due") return `${PLAN.name} · payment due`;
+  if (status === "past_due" || status === "unpaid") return `${PLAN.name} · payment due`;
+  if (status === "canceled") return `${PLAN.name} · ended`;
   return "No plan yet";
 }
 

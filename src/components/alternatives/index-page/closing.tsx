@@ -78,8 +78,8 @@ export function HubClosing() {
               The fastest comparison is your own site
             </h2>
             <p className="mt-4 max-w-xl text-balance text-[1rem] leading-relaxed text-white sm:text-[1.05rem]">
-              Paste your URL. Rankbox builds your content plan free, then writes your first articles
-              on a {TRIAL_DAYS}-day trial, so you can compare real output side by side.
+              Paste your URL. Rankbox builds your content plan, then writes your first articles on a{" "}
+              {TRIAL_DAYS}-day free trial, so you can compare real output side by side.
             </p>
             <div className="mt-8 flex w-full justify-center">
               <UrlForm url={url} onChange={setUrl} />

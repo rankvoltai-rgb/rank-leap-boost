@@ -46,7 +46,7 @@ import {
   type AiToolPage,
 } from "@/data/ai-integrations";
 import { SAMPLES, SCENARIOS, TOOL_NAMES } from "@/data/ai-integration-samples";
-import { PLAN, TRIAL_DAYS, formatUsd } from "@/data/pricing";
+import { PLAN, TRIAL_CTA, TRIAL_DAYS, formatUsd } from "@/data/pricing";
 import { formatShortDate } from "@/lib/format-date";
 import {
   Breadcrumb,
@@ -137,7 +137,7 @@ export function ToolHero({ tool, page }: { tool: Connector; page: AiToolPage }) 
               <HeroButtons
                 primary={
                   <a href="/auth" className={heroPrimary}>
-                    Get started free <ArrowRight className="h-4 w-4" />
+                    {TRIAL_CTA} <ArrowRight className="h-4 w-4" />
                   </a>
                 }
                 secondary={
@@ -508,7 +508,7 @@ export function ToolSetup({ tool }: { tool: Connector }) {
             href="/auth"
             className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-cta px-6 py-3.5 text-sm font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:bg-cta-hover hover:shadow-md"
           >
-            Get started free <ArrowRight className="h-4 w-4" />
+            {TRIAL_CTA} <ArrowRight className="h-4 w-4" />
           </a>
         </Reveal>
       </div>
@@ -604,7 +604,7 @@ export function ToolBiggerPicture({ tool }: { tool: Connector }) {
                 href="/auth"
                 className="inline-flex items-center gap-2 rounded-xl bg-cta px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-cta-hover"
               >
-                Start free trial <ArrowRight className="h-4 w-4" />
+                {TRIAL_CTA} <ArrowRight className="h-4 w-4" />
               </a>
             </div>
           </div>
@@ -760,7 +760,7 @@ export function ToolCTA({ tool }: { tool: Connector }) {
               </p>
               <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
                 <a href="/auth" className={heroPrimary}>
-                  Get started free <ArrowRight className="h-4 w-4" />
+                  {TRIAL_CTA} <ArrowRight className="h-4 w-4" />
                 </a>
                 <a href="#setup" className={heroSecondary}>
                   <FileText className="h-4 w-4" /> Setup steps

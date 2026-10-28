@@ -223,7 +223,7 @@ The real traffic also showed one fix to make. Apple's iPhone crawler asked for `
 
 ## Where Rankbox Fits
 
-Rankbox doesn't verify bots, read your logs or run firewall rules. Those stay with your host or CDN. What it does is the content that verified crawlers come for: its [Citation-Ready Writer](/features/citation-ready-writer) researches the live web and drafts source-backed articles that open with a plain answer, delivered to your site through Rankbox's API. The Business plan is $49.50 a month with a 7-day trial when you add a card; see [pricing](/pricing). For the other bots in your logs, our [AI crawler directory](/blog/ai-crawler-directory) lists each vendor's tokens and IP files.
+Rankbox doesn't verify bots, read your logs or run firewall rules. Those stay with your host or CDN. What it does is the content that verified crawlers come for: its [Citation-Ready Writer](/features/citation-ready-writer) researches the live web and drafts source-backed articles that open with a plain answer, delivered to your site through Rankbox's API. The Business plan is $49.50 a month with a 7-day free trial (card required); see [pricing](/pricing). For the other bots in your logs, our [AI crawler directory](/blog/ai-crawler-directory) lists each vendor's tokens and IP files.
 
 ## Frequently Asked Questions
 

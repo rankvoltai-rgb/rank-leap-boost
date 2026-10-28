@@ -179,7 +179,6 @@ function RankPage() {
           "Next best moves, ranked by the traffic they add",
           "What AI engines look for, and which articles have it",
         ]}
-        onStartTrial={actions.openTrial}
       >
         {nothingYet ? (
           <EmptyState

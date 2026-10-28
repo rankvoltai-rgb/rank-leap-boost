@@ -20,7 +20,7 @@ import { ChatAnswerCard } from "@/components/landing/chat";
 import { TOOL_ICONS } from "@/components/tools/icons";
 import { KIND_LABEL, getTool } from "@/data/tools";
 import { getFeature } from "@/data/features";
-import { TRIAL_DAYS } from "@/data/pricing";
+import { TRIAL_NOTE } from "@/data/pricing";
 import type { Faq } from "@/data/ai-seo/types";
 import { rollingOut } from "@/data/solutions/gates";
 import { cn } from "@/lib/utils";
@@ -106,13 +106,9 @@ export function SolutionHero({
   );
 }
 
-/** The signup line under every URL form: accurate to the pricing FAQ. */
+/** The signup line under every URL form: the shared trial line. */
 export function StartNote({ className }: { className?: string }) {
-  return (
-    <p className={cn("text-sm text-white/70", className)}>
-      Free to start, no card needed · {TRIAL_DAYS}-day free trial
-    </p>
-  );
+  return <p className={cn("text-sm text-white/70", className)}>{TRIAL_NOTE}</p>;
 }
 
 export function SignupForm() {

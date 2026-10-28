@@ -3,7 +3,7 @@ title: A tour of the dashboard
 nav_title: Dashboard tour
 description: What every page in the Rankbox dashboard is for, the key elements on each, the site switcher for Studio accounts, the phone layout and keyboard shortcuts.
 order: 6
-updated: 2026-10-02
+updated: 2026-10-28
 ---
 
 The Rankbox dashboard lives at `/dashboard`. This page walks through every area in the sidebar, in order, so you know where things are and which deeper page explains each one.
@@ -16,9 +16,11 @@ The sidebar has two groups. The first, the workspace, holds the pages about the 
 
 - **Articles** shows a small number when articles are scheduled or being written: the size of the autopilot queue.
 - **The account corner** at the foot of the sidebar shows the site you're looking at (the site switcher), your name, your plan and a sign-out button.
-- **Your plan** reads "Business · trial", "Business plan", "Business · 3 sites", "Business · payment due" or "No plan yet".
-- **Start free trial** appears above the site switcher until the account has a plan.
+- **Your plan** reads "Business · trial", "Business plan", "Business · 3 sites", "Business · payment due" or "Business · ended".
+- **The billing banner** sits at the top of every page while billing stops the account from writing: after a failed card check, a failed payment or once the plan has ended. Its button fixes it: **Update card**, **Update billing** or **Restart plan**. See [The billing banner](/docs/account/billing#the-billing-banner).
 - **Collapse the sidebar** to an icon rail with the round handle on its edge, or press ⌘\ on a Mac or Ctrl+\ elsewhere. Your browser remembers the choice.
+
+You reach the dashboard once the trial has started at the last step of onboarding. An account without a trial or plan is sent back to that step.
 
 Every page in the workspace group shows one site at a time. If you run several sites with Studio, see [The site switcher](#the-site-switcher).
 
@@ -27,7 +29,7 @@ Every page in the workspace group shows one site at a time. If you run several s
 **Overview** (`/dashboard`) is the home page: whether the engine is running, what to do next, and what's coming up.
 
 - **Greeting and autopilot status.** The top right reads **Autopilot On** or **Off**. Hover for the reason, or click to open **Settings → Autopilot**.
-- **Next step card.** One card tells you the single most useful next action, with a launch checklist: "Start your 7-day free trial", "Connect your site", "Publish your first article". Its button changes with your state: **Start free trial**, **Connect your site**, **Finish setup**, **Generate now**, **Browse ideas**, **Upgrade** or **Turn autopilot on**.
+- **Next step card.** One card tells you the single most useful next action, with a launch checklist: "Start your 7-day free trial" (ticked once the trial has started), "Connect your site", "Publish your first article". Its button changes with your state: **Update card**, **Update billing** or **Restart plan** while billing has paused writing, then **Connect your site**, **Finish setup**, **Generate now**, **Browse ideas**, **Upgrade** or **Turn autopilot on**.
 - **Stats panel.** Four figures: **Projected traffic** (estimated monthly visits from all planned and written articles), **Published** (written articles against a monthly goal of 30), **Your site** (**Live**, **Not syncing**, **Waiting** or **Not connected**) and **Article credits** (left this billing cycle).
 - **Autopilot queue.** The scheduled and in-progress articles, filtered by **All**, **Scheduled** or **Writing**. Each row has **Generate now** to write it immediately and a remove button. Removing deletes the article. **Open Articles** goes to the full list.
 - **Publishing schedule.** A strip of the coming week. Pick a day to see what's scheduled for it, or click **Open calendar**.
@@ -39,7 +41,7 @@ See [Content plan and calendar](/docs/content/content-plan) and [Autopilot and t
 
 **Articles** (`/dashboard/blog-engine`) is every article on the site, "from first idea to published".
 
-- **Autopilot bar.** One line on whether autopilot is running and what it writes next, with the one action that fixes it: **Start free trial**, **Upgrade**, **Resume**, **Pause**, or **Re-plan from tomorrow** when articles are overdue.
+- **Autopilot bar.** One line on whether autopilot is running and what it writes next, with the one action that fixes it: **Update card**, **Update billing** or **Restart plan** while billing has paused it, **Upgrade**, **Resume**, **Pause**, or **Re-plan from tomorrow** when articles are overdue.
 - **Views.** **All**, **Ideas**, **Scheduled** and **Published**, each with a count. Each view shows the columns that matter for it: ideas show **Competition**, **AI signal** and **Est. traffic**; the schedule shows **Writes on**; published articles show **Updated** and **SEO**.
 - **Search.** **Search articles** matches titles and keywords. Press **/** to jump to it.
 - **Quick write.** Unwritten rows carry a lightning button: **Write now**, or **Upgrade to write** when the site is out of credits.
@@ -69,7 +71,7 @@ See [Content plan and calendar](/docs/content/content-plan).
 
 ## Rank
 
-**Rank** (`/dashboard/visibility`) shows "How much of your market you answer, how ready those answers are for Google and AI engines, and the moves that grow both." It opens with a trial or paid plan.
+**Rank** (`/dashboard/visibility`) shows "How much of your market you answer, how ready those answers are for Google and AI engines, and the moves that grow both." It opens with a trial or paid plan, and is blurred behind the billing fix while billing blocks the account.
 
 - **Headline figures.** **Market coverage** (keywords with a published, scheduled or no article), **Est. monthly visits** and **Avg. SEO score**.
 - **Projected monthly visits.** A chart of published and scheduled articles' estimated traffic.
@@ -118,7 +120,7 @@ Creating a key needs a trial or paid plan. See [How publishing works](/docs/publ
 
 - **Summary figures.** **Sites**, **Monthly total**, **Articles this cycle** across every live site, and **Next invoice**.
 - **Site cards.** Each site shows **On your plan** or **Studio**, its articles used this cycle, **Published**, **In the queue** and **Autopilot**. The card's menu has **Open overview**, **Open articles**, **Site settings**, and for Studio sites **Remove from Studio…** or **Keep this site**.
-- **Add a site** runs the same three setup steps as onboarding and opens once your plan is paid.
+- **Add a site** runs the same first three setup steps as onboarding, without the trial step, and opens once your plan is paid.
 
 See [Studio: run several sites](/docs/account/studio).
 
@@ -130,7 +132,7 @@ See [Studio: run several sites](/docs/account/studio).
 - **Next invoice** or **First charge.** The amount and date, with the Studio sites listed.
 - **Sites & usage.** Each site's article credits this cycle and its price: **Included** for your plan's site, $49.50/mo for each Studio site.
 - **Card & invoices** and **Manage in Stripe** open Stripe's billing portal, where you update your card, download invoices and cancel.
-- **Banners** appear when a payment fails ("Your last payment didn't go through"), when the plan is set to end, or when it isn't active.
+- **Banners** appear when the plan is set to end or isn't renewing. A failed payment ("Your last payment didn't go through."), a failed card check or an ended plan shows in the billing banner at the top of every dashboard page instead.
 
 See [Billing, invoices and cancellation](/docs/account/billing).
 

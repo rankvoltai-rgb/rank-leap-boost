@@ -78,7 +78,6 @@ function SiteBacklinks({ siteId }: { siteId: string }) {
           access={overview.access}
           pulse={overview.pulse}
           trialEndsAt={subscription?.current_period_end ?? null}
-          onStartTrial={actions.openTrial}
           onSimulated={refresh}
         />
       </div>

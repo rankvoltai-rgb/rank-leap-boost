@@ -2,7 +2,7 @@
 title: Troubleshooting
 description: Fixes for Rankbox problems by area, from sign-in and onboarding to API errors, Webflow, Shopify, backlinks, Reddit and Studio, quoting exact messages.
 order: 2
-updated: 2026-10-02
+updated: 2026-10-28
 ---
 
 Find your problem by area, match the message you see, and follow the fix. Messages are quoted exactly as Rankbox shows them, so you can search this page for the words on your screen. If nothing here helps, see [Get help](/docs/help/support) for what to send us.
@@ -39,9 +39,9 @@ Find your problem by area, match the message you see, and follow the fix. Messag
 
 ### Signing in takes me to onboarding, not the dashboard
 
-**Why:** The account has no site yet, because onboarding wasn't finished. Rankbox sends every account without a site to `/onboarding`, and every account with one to `/dashboard`.
+**Why:** Onboarding isn't finished. Rankbox sends an account without a site to step 1 of onboarding, an account with a site but no trial or plan to step 4, and every other account to `/dashboard`. Step 4, where you add a card to start the trial, is required, including for accounts created before the card step existed.
 
-**Fix:** Finish onboarding with **Confirm plan** on step 3. If you finished it on another browser, your progress there didn't carry over; see [Onboarding progress is missing](#onboarding-progress-is-missing).
+**Fix:** Finish onboarding: click **Continue** on step 3, then add a card on step 4 to start the trial. If you stopped before step 3 on another browser, your progress there didn't carry over; see [Onboarding progress is missing](#onboarding-progress-is-missing).
 
 ### The dashboard says it couldn't load your sites
 
@@ -105,49 +105,61 @@ Find your problem by area, match the message you see, and follow the fix. Messag
 
 **Fix:** Click **Start over**. Rankbox clears the progress saved in this browser and starts onboarding again.
 
-### Confirm plan shows an error
+### Continue on step 3 shows an error
 
-**What you see:** "Couldn't finish setup." or another message after **Confirm plan**.
+**What you see:** "Couldn't finish setup." or another message after **Continue** on step 3.
 
-**Fix:** Click **Confirm plan** again. Confirming is safe to repeat: it replaces the keywords and unwritten articles it saved before rather than duplicating them.
+**Fix:** Click **Continue** again. Confirming is safe to repeat: it replaces the keywords and unwritten articles it saved before rather than duplicating them.
 
 ### Onboarding progress is missing
 
-**Why:** Progress is saved in the browser you started in, for the account you were signed in as. Another browser or device, a cleared browser, or a different account starts from step 1.
+**Why:** Progress through steps 1 to 3 is saved in the browser you started in, for the account you were signed in as. Another browser or device, a cleared browser, or a different account starts from step 1.
 
-**Fix:** Return to the original browser, or run the steps again. Nothing is saved to your account until **Confirm plan**.
+**Fix:** Return to the original browser, or run the steps again. Nothing is saved to your account until you click **Continue** on step 3. After that, signing in anywhere resumes on step 4.
 
 ## Trial and billing
 
-### Writing asks me to start a trial
+### Rankbox asks me to start a trial
 
-**What you see:** The **Start your 7-day free trial** dialog, or "Start your free trial to generate articles."
+**What you see:** Step 4 of onboarding, "Start your 7-day free trial", when you open the dashboard, or "Start your free trial to generate articles."
 
-**Why:** Rankbox writes only for an account with a trial or paid plan. Onboarding is free; writing is not.
+**Why:** The account has no trial or plan. A card is required: the trial starts at step 4 of onboarding, which has no skip, and the dashboard opens only after it. This applies to accounts created before the card step existed too.
 
-**Fix:** Click **Start free trial** and add a card in the Stripe form. You aren't charged until day 8. See [The free trial](/docs/account/free-trial).
+**Fix:** Add a card on step 4. You're charged $49.50 a month 7 days after you start, unless you cancel first. See [The free trial](/docs/account/free-trial).
 
 ### Your card couldn't be verified
 
-**What you see:** "We couldn't verify your card. Update it in billing to start generating."
+**What you see:** The banner "We couldn't verify your card." at the top of the dashboard, "We couldn't verify your card. Update it to start writing." when you write or use an editor AI action, or "Your trial started, but we couldn't verify your card. Update it from the dashboard to start writing." at the end of onboarding.
 
-**Why:** When a trial starts, Rankbox places a $1 authorization on the card and releases it. This card couldn't hold it, for example because it had no funds or its bank required an extra verification step.
+**Why:** When a trial starts, Rankbox places a $1 authorization on the card and releases it. This card couldn't hold it, for example because it had no funds or its bank required an extra verification step. Until it's fixed, writing, autopilot and the editor's AI actions are paused.
 
-**Fix:** Open **Plan & Billing → Card & invoices** and add a different card in Stripe's portal. Writing unlocks once the card is verified.
+**Fix:**
+
+1. Click **Update card** on the banner at the top of any dashboard page.
+2. Add a different card on Stripe's page and save it. Stripe sends you back to the dashboard.
+3. Rankbox reruns the $1 check on the new card. If your bank asks for 3-D Secure, approve it on the page.
+
+When the check passes, you see "Billing is sorted. Article writing is back on." and the banner clears. Changing the card through **Card & invoices** alone doesn't rerun the check, so use the banner's button. See [Fix a failed card check](/docs/account/free-trial#fix-a-failed-card-check).
 
 ### The trial didn't start after payment
 
-**What you see:** "Your payment went through, but we couldn't start the trial."
+**What you see:** "Your card went through, but the trial hasn't shown up yet. Refresh in a moment." on step 4 of onboarding.
 
-**Fix:** Wait a minute and reload the dashboard; the trial is confirmed from Stripe in the background. If **Plan & Billing** still shows no plan, [contact support](/docs/help/support) with the time of the payment.
+**Fix:** Wait a minute and reload; the trial is confirmed from Stripe in the background. If step 4 still shows after that, [contact support](/docs/help/support) with the time of the payment.
 
 ### A payment failed
 
-**What you see:** "Your last payment didn't go through", and **Business · payment due** in the sidebar.
+**What you see:** The banner "Your last payment didn't go through." at the top of the dashboard, **Business · payment due** in the sidebar, or "Your last payment didn't go through. Update billing to keep writing." when you write.
 
-**Why:** Stripe couldn't charge your card at renewal. Writing, syncing, backlinks and Reddit keep working for 48 hours after the failure, then stop until the invoice is paid.
+**Why:** Stripe couldn't charge your card, either when the trial converted or at a renewal. Writing, autopilot, API syncing, the backlink exchange, Reddit Presence and Studio sites stop at once. There is no grace period.
 
-**Fix:** Click **Update card** on the banner and update your card in Stripe's portal. Your articles and settings are kept in the meantime.
+**Fix:**
+
+1. Click **Update billing** on the banner.
+2. Replace the card on Stripe's page and save it. Stripe sends you back to the dashboard.
+3. Rankbox retries the open invoice with the new card straight away. If your bank asks for 3-D Secure, approve it on the page.
+
+When the invoice is paid, you see "Billing is sorted. Article writing is back on." and everything resumes. Your articles and settings are kept in the meantime. See [Failed payments](/docs/account/billing#failed-payments).
 
 ### Starting the paid plan early is still pending
 
@@ -155,13 +167,13 @@ Find your problem by area, match the message you see, and follow the fix. Messag
 
 **Fix:** Wait a minute and reload **Plan & Billing**. Don't click again in the meantime.
 
-### Your plan isn't active
+### Your plan has ended
 
-**What you see:** "Your plan isn't active" with **Restart plan**, or "Syncing is paused" in **Integrations**.
+**What you see:** The banner "Your plan has ended." with **Restart plan**, "Your plan has ended. Restart it to keep writing." when you write, or "Syncing is paused" in **Integrations**. "Syncing is paused" also shows while a card check or a payment has failed; the banner says which.
 
-**Why:** The subscription ended or was never started. Your articles and settings are saved.
+**Why:** The subscription ended. Your articles and settings are saved.
 
-**Fix:** Click **Restart plan**. Autopilot picks up where it left off.
+**Fix:** Click **Restart plan**. It opens a checkout at $49.50/month, starting today. Each account gets one free trial, so a restarted plan is paid from day one. Autopilot picks up where it left off.
 
 ## Writing articles and credits
 
@@ -202,9 +214,9 @@ See [Plans and credits](/docs/account/plans-and-credits).
 
 ### Editor AI actions don't work
 
-**What you see:** "Select some text first." or "AI edit failed."
+**What you see:** "Select some text first.", "AI edit failed.", or a billing message such as "We couldn't verify your card. Update it to start writing."
 
-**Fix:** Select the passage you want changed before choosing **Improve SEO**, **Rewrite**, **Expand** or **Shorten**. If it fails again, wait a minute; the actions share your account's AI rate limit.
+**Fix:** Select the passage you want changed before choosing **Improve SEO**, **Rewrite**, **Expand** or **Shorten**. If it fails again, wait a minute; the actions share your account's AI rate limit. A billing message means billing has paused writing: use the button on the banner at the top of the dashboard. See [Trial and billing](#trial-and-billing).
 
 ### Edits didn't save
 
@@ -230,7 +242,7 @@ See [Plans and credits](/docs/account/plans-and-credits).
 
 | Reason shown | Fix |
 | --- | --- |
-| "Start your free trial to turn autopilot on." | Start the trial from **Overview** |
+| "Autopilot is paused until billing is sorted." | Click the button on the billing banner: **Update card**, **Update billing** or **Restart plan** |
 | "This month's articles are used up. Autopilot resumes when your plan renews." | Wait for renewal, or during the trial use **Unlock everything now** |
 | "Autopilot is paused. Turn it back on in Settings." | Switch on **Settings → Autopilot → Write automatically**, or click **Resume** on the Articles page |
 
@@ -238,7 +250,7 @@ See [Plans and credits](/docs/account/plans-and-credits).
 
 **What you see:** **Overdue** on scheduled articles, and "N articles are overdue." on the autopilot bar.
 
-**Why:** Their scheduled day has passed and they haven't been written, usually because the site had no trial, no credits, or autopilot was paused.
+**Why:** Their scheduled day has passed and they haven't been written, usually because billing paused writing, the site had no credits, or autopilot was paused.
 
 **Fix:** Fix the cause first, then click **Re-plan from tomorrow** on the autopilot bar. It keeps the articles in order and lays them out from tomorrow at your pace. To get one out today, open it and click **Write now**.
 
@@ -276,9 +288,9 @@ See [Plans and credits](/docs/account/plans-and-credits).
 
 **What you see:** HTTP 402 with `"code": "subscription_required"` and "This site isn't active on a Rankbox plan, so it can't sync articles. Check the plan, and the site in Studio, at https://rankbox.xyz/dashboard/billing."
 
-**Why:** The key is valid, but its site can't sync right now. The account has no trial or plan, the trial card failed its check, a payment failed more than 48 hours ago, the plan has ended, or the key's Studio site was removed or archived.
+**Why:** The key is valid, but its site can't sync right now. The account has no trial or plan, the trial card failed its check, a payment failed, the plan has ended, or the key's Studio site was removed or archived. A failed payment stops syncing at once; there is no grace period.
 
-**Fix:** Check **Plan & Billing** for the account and **Studio** for the site. Syncing resumes as soon as the site is active again; the key doesn't need replacing. See [Errors](/docs/api/errors).
+**Fix:** Check the billing banner and **Plan & Billing** for the account, and **Studio** for the site. For a failed card check or payment, click **Update card** or **Update billing** on the banner; Rankbox reruns the check or retries the payment with the new card. Syncing resumes as soon as the site is active again; the key doesn't need replacing. See [Errors](/docs/api/errors).
 
 ### 429 Rate limit exceeded
 
@@ -331,9 +343,9 @@ A working key returns `{"ok": true, "service": "Rankbox", "brand_name": "…"}`,
 
 ### Creating a key is refused
 
-**What you see:** "Start your free trial to connect your site." or **Start free trial** instead of **Create key**.
+**What you see:** **Update card**, **Update billing** or **Restart plan** instead of **Create key**, or one of the billing messages such as "Your last payment didn't go through. Update billing to keep writing."
 
-**Fix:** Connecting a site comes with your plan. Start the trial, then create the key.
+**Fix:** Connecting a site comes with a working plan. Click the button to fix billing, then create the key.
 
 ### Your site hasn't synced since a date
 
@@ -528,10 +540,10 @@ A link not seen live within 30 days expires and its credits are returned.
 | Message | Fix |
 | --- | --- |
 | "Start your plan first. Studio adds sites to a paid plan." | Start a plan |
-| "Studio opens with your first paid invoice. Your trial covers one site." | Click **Start paid plan now**, or wait for day 8 |
-| "Your last payment didn't go through. Update your card in billing to add sites." | Update your card in **Plan & Billing** |
+| "Studio opens with your first paid invoice. Your trial covers one site." | Click **Start paid plan now**, or wait for the trial to convert, 7 days after it started |
+| "Your last payment didn't go through. Update your card in billing to add sites." | Click **Update billing** on the banner at the top of the dashboard. Rankbox retries the payment with the new card |
 | "Your plan is set to end. Resume it in billing to add sites." | Resume the plan in Stripe's portal |
-| "Your plan isn't active. Restart it in billing to add sites." | Restart the plan |
+| "Your plan isn't active. Restart it in billing to add sites." | Click **Restart plan** on the banner. A restarted plan is paid from day one |
 | "Studio isn't switched on for this account yet. Contact support and we'll set it up." | [Contact support](/docs/help/support) |
 
 ### The new site is paid for but its plan didn't save
@@ -574,7 +586,9 @@ A link not seen live within 30 days expires and its credits are returned.
 
 **What you see:** "See where you rank — and what to do next" over a blurred page.
 
-**Fix:** Rank comes with the trial and the paid plan. Click **Start 7-day free trial**.
+**Why:** Billing blocks the account: a failed card check, a failed payment or an ended plan.
+
+**Fix:** Rank comes with the trial and the paid plan. Click the button on the page, **Update card**, **Update billing** or **Restart plan**; the page unlocks as soon as billing is sorted.
 
 ## Related
 

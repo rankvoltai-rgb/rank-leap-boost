@@ -47,7 +47,7 @@ import {
 import { TRIAL_NOTE } from "@/components/features/FeatureSections";
 import { getFeature } from "@/data/features";
 import { PERSONAS, PERSONA_GROUPS, type Persona } from "@/data/personas";
-import { PLAN, formatUsd } from "@/data/pricing";
+import { PLAN, TRIAL_CTA, formatUsd } from "@/data/pricing";
 import { FounderEditorScene } from "./editor-scene";
 
 type Icon = ComponentType<{ className?: string }>;
@@ -263,13 +263,7 @@ export function FounderDesk({ persona }: { persona: Persona }) {
 
 /* ---------- The short version ---------- */
 
-/* "No card to start" is false: the trial goes through Stripe Checkout and
-   takes a card. Until the entry is corrected, that one fact is held back
-   rather than printed beside a trial note that contradicts it. */
-const FALSE_SPEC = /\bno (credit )?card\b/i;
-
 export function FounderShortVersion({ persona }: { persona: Persona }) {
-  const specs = persona.specs.filter((s) => !FALSE_SPEC.test(`${s.value} ${s.label}`));
   return (
     <section aria-labelledby="short-title">
       <Spacer />
@@ -289,7 +283,7 @@ export function FounderShortVersion({ persona }: { persona: Persona }) {
               aria-label={`Rankbox for ${persona.nameLower} at a glance`}
               className="flex h-full flex-col justify-center divide-y divide-ink/[0.07] px-6 py-4 sm:px-10 lg:px-10"
             >
-              {specs.map((s) => (
+              {persona.specs.map((s) => (
                 <div key={s.label} className="flex flex-col-reverse py-4 sm:py-5">
                   <dt className="mt-1 text-[0.85rem] leading-snug text-muted-foreground">
                     {s.label}
@@ -747,7 +741,7 @@ export function FounderCTA({ persona }: { persona: Persona }) {
               href="/auth"
               className="group mt-8 inline-flex h-11 items-center justify-center gap-2 rounded-lg bg-white px-5 text-[0.95rem] font-semibold text-cta shadow-[0_1px_2px_rgba(4,24,72,0.2),0_8px_24px_-12px_rgba(4,24,72,0.5)] transition-[transform,background-color] duration-200 hover:-translate-y-0.5 hover:bg-white/95 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-white/40"
             >
-              Get Started Free
+              {TRIAL_CTA}
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
             </a>
             <p className="mt-3 text-[0.82rem] text-white">{TRIAL_NOTE}</p>

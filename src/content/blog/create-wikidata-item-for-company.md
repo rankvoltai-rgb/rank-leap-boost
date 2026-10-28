@@ -158,7 +158,7 @@ Two traps don't show up as log reasons but cause the same result. Don't rewrite 
 
 ## Where Rankbox Fits
 
-Rankbox doesn't create, request or edit Wikidata items, and it doesn't track citations. It helps with the part you control. The [Citation-Ready Writer](/features/citation-ready-writer) writes source-backed articles, such as a facts page, that state your founding date, founders and category in plain sentences on your own site. The Business plan is $49.50 a month with a 7-day trial when you add a card. [See pricing](/pricing).
+Rankbox doesn't create, request or edit Wikidata items, and it doesn't track citations. It helps with the part you control. The [Citation-Ready Writer](/features/citation-ready-writer) writes source-backed articles, such as a facts page, that state your founding date, founders and category in plain sentences on your own site. The Business plan is $49.50 a month, and the 7-day free trial before it includes 7 articles and requires a card. [See pricing](/pricing).
 
 ## Frequently Asked Questions
 

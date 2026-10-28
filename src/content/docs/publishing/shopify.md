@@ -3,7 +3,7 @@ title: Publish to Shopify
 nav_title: Shopify
 description: Install the Rankbox app in Shopify, link it to a Rankbox site with an API key, pick a blog, and let every finished article arrive as a native blog post.
 order: 3
-updated: 2026-10-02
+updated: 2026-10-28
 ---
 
 The Rankbox app for Shopify adds each finished article to a blog in your Shopify store as an ordinary blog post, with its URL handle, excerpt, search listing description and tags filled in. You set it up inside your Shopify admin; after that, Rankbox publishes from its own servers with nobody signed in.
@@ -175,7 +175,7 @@ The blog, visibility and author are only changed in the app inside Shopify.
 | "Open Rankbox from your Shopify admin: Apps, then Rankbox. This page only works inside Shopify." | You opened the app's address outside Shopify. | Open it from **Apps → Rankbox** in your admin. |
 | "Your Shopify session expired. Reload the page." | The admin session timed out. | Reload the page. |
 | "This store has no blog yet" | The store has no blog. | Add one in **Online Store → Blog posts**, then reload the app. |
-| **No active Rankbox plan** banner | The linked site has no trial or plan, so nothing new is published. | Start the trial or renew under **Dashboard → Plan & Billing**. |
+| **No active Rankbox plan** banner | The linked site has no working trial or plan (a failed card check, a failed payment or an ended plan), so nothing new is published. | Use the button on the banner at the top of the Rankbox dashboard: **Update card**, **Update billing** or **Restart plan**. |
 | "Shopify needs you to open Rankbox in your Shopify admin once to keep publishing." | The tokens expired or were refused. | Open **Apps → Rankbox** once, then **Publish missing articles now**. |
 | "This Shopify store is frozen or unpaid, so Shopify isn't accepting changes." | Shopify blocked changes to the store. | Resolve it with Shopify, then **Publish missing articles now**. |
 | An edit made in Rankbox doesn't reach the post | The post was changed in Shopify, so Rankbox leaves it alone. | Make the change in Shopify. |

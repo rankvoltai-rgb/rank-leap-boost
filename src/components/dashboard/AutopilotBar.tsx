@@ -6,7 +6,6 @@ import { Loader2 } from "lucide-react";
 import {
   getSettings,
   updateAutopilot,
-  TRIAL_DAYS,
   type Blog,
   type CreditAccount,
   type Subscription,
@@ -15,6 +14,7 @@ import { Button, Panel } from "@/components/dashboard/primitives";
 import { isOverdue } from "@/components/dashboard/article-stages";
 import { engineState, type EngineState } from "@/components/dashboard/autopilot-state";
 import { useSiteId } from "@/components/dashboard/site-context";
+import { BILLING_FIX_LABEL, useBilling } from "@/components/dashboard/billing-context";
 import {
   paceLabel,
   parseDateKey,
@@ -37,7 +37,7 @@ function whenLabel(day: string | null): string {
 const DOT: Record<EngineState, string> = {
   running: "bg-success",
   paused: "bg-muted-foreground/50",
-  "needs-trial": "bg-brand-blue",
+  billing: "bg-destructive",
   "out-of-credits": "bg-destructive",
 };
 
@@ -51,7 +51,6 @@ export function AutopilotBar({
   subscription,
   credits,
   remaining,
-  onStartTrial,
   onUpgrade,
   onCommitQueue,
 }: {
@@ -59,12 +58,12 @@ export function AutopilotBar({
   subscription: Subscription | null | undefined;
   credits: CreditAccount | null | undefined;
   remaining: number;
-  onStartTrial: () => void;
   onUpgrade: () => void;
   onCommitQueue: (patches: QueuePatch[], message: string) => Promise<void>;
 }) {
   const queryClient = useQueryClient();
   const siteId = useSiteId();
+  const billing = useBilling();
   const { data: settings, isLoading } = useQuery({
     queryKey: ["settings", siteId],
     queryFn: () => getSettings(siteId),
@@ -122,9 +121,9 @@ export function AutopilotBar({
 
   const nextLine = next ? ` Next up: “${next.title}”, ${whenLabel(next.scheduled_date)}.` : "";
   const copy: Record<EngineState, { title: string; detail: string }> = {
-    "needs-trial": {
-      title: "Autopilot is ready when you are",
-      detail: `${queue.length} ${queue.length === 1 ? "article is" : "articles are"} planned. Start your ${TRIAL_DAYS}-day free trial and it begins${next ? ` with “${next.title}”` : ""}.`,
+    billing: {
+      title: "Autopilot is paused until billing is fixed",
+      detail: `${queue.length} ${queue.length === 1 ? "article is" : "articles are"} planned and waiting. It picks up again${next ? ` with “${next.title}”` : ""} as soon as billing is sorted.`,
     },
     "out-of-credits": {
       title: "Autopilot has used this month's articles",
@@ -141,7 +140,7 @@ export function AutopilotBar({
   };
 
   // Overdue only needs its own fix once the engine can run; before that, the
-  // fix is the trial or the upgrade.
+  // fix is billing or the upgrade.
   const canCatchUp = overdue > 0 && (state === "running" || state === "paused");
 
   return (
@@ -176,9 +175,9 @@ export function AutopilotBar({
             Re-plan from tomorrow
           </Button>
         )}
-        {state === "needs-trial" && (
-          <Button variant="brand" onClick={onStartTrial}>
-            Start free trial
+        {state === "billing" && (
+          <Button variant="brand" onClick={billing.fix} disabled={billing.busy}>
+            {billing.issue ? BILLING_FIX_LABEL[billing.issue] : "Fix billing"}
           </Button>
         )}
         {state === "out-of-credits" && (

@@ -3,7 +3,7 @@ title: Publish to WordPress
 nav_title: WordPress
 description: Publish finished Rankbox articles as WordPress posts today, with a complete plugin file or a scheduled script that uses the WordPress REST API.
 order: 5
-updated: 2026-10-02
+updated: 2026-10-28
 ---
 
 WordPress sites publish Rankbox articles through the Rankbox REST API: a small piece of code pulls your finished articles on a schedule, creates or updates WordPress posts, and reports each post's address back to Rankbox. This page gives you that code in two complete forms, so you can copy one and be running in a few minutes.
@@ -526,7 +526,7 @@ Rankbox only accepts a URL on your own domain: the **Website** in **Dashboard �
 | What you see | Cause | Fix |
 | --- | --- | --- |
 | `401` from Rankbox: "Invalid or missing API key" | The key is wrong, missing or revoked. | Create a new key and update `wp-config.php` or `.env`. |
-| `402` from Rankbox with `subscription_required` | The site's trial or plan isn't active, or the site was removed from Studio. | Check **Dashboard → Plan & Billing**. The cursor is kept, so the next run catches up. |
+| `402` from Rankbox with `subscription_required` | The site's trial or plan isn't active, its card check or a payment failed, or the site was removed from Studio. | Check the banner at the top of the Rankbox dashboard and **Plan & Billing**. The cursor is kept, so the next run catches up. |
 | `400` on `PATCH`: "published_url must be on your own site" | WordPress serves posts on a different domain from your Rankbox site. | Update **Website** in **Dashboard → Settings**, or serve WordPress from that domain. |
 | `429` from Rankbox | More than 120 requests a minute for your account. | Run less often. The limit resets each minute. |
 | `401` from WordPress (`rest_not_logged_in`) | The application password is wrong, or your host strips the `Authorization` header. | Check the password and username. Ask your host to pass the `Authorization` header to PHP. |

@@ -3,7 +3,7 @@ title: Sync articles to Framer
 nav_title: Framer
 description: Use the Rankbox plugin to sync finished articles into a Framer CMS collection, report live URLs back, and add site-wide article structured data.
 order: 4
-updated: 2026-10-02
+updated: 2026-10-28
 ---
 
 The Rankbox plugin for Framer keeps a CMS collection in your Framer project in step with your finished Rankbox articles. You design the collection page; Rankbox supplies the words. Articles go live when you publish the site, never before.
@@ -144,7 +144,7 @@ To stop the plugin working everywhere, revoke the key in **Dashboard → Integra
 | What you see | Cause | Fix |
 | --- | --- | --- |
 | "That key isn't valid any more" | The key was revoked or replaced. | Create a new key in **Dashboard → Integrations** and paste it in. |
-| "This site isn't on an active plan" | The site's trial or plan lapsed, or the site was removed from Studio. | Check **Dashboard → Plan & Billing**. |
+| "This site isn't on an active plan" | The site's trial or plan lapsed, its card check or a payment failed, or the site was removed from Studio. | Check the banner at the top of the Rankbox dashboard and **Plan & Billing**. |
 | "Your Framer domain doesn't match Rankbox" | The project publishes to a domain that isn't your Rankbox site's domain. | Publish to your custom domain, or update **Website** in **Dashboard → Settings**. |
 | "Rankbox is rate-limiting this key" | Too many requests in the last minute. | Wait a minute, then sync again. |
 | "A field was changed in the CMS" | One of Rankbox's fields had its type changed. | Click **Reset fields**, then sync. |

@@ -175,7 +175,7 @@ export function EngineHero({
                   {engine.tier === "frontier"
                     ? `See if ${engine.shortName} cites you`
                     : "See where AI answers cite you"}{" "}
-                  · Free {TRIAL_DAYS}-day trial
+                  · Free {TRIAL_DAYS}-day trial · Card required
                 </p>
               </div>
             </Reveal>

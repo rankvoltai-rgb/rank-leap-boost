@@ -2,7 +2,7 @@
 title: Plans and credits
 description: What the Rankbox Business plan includes, how article, backlink and Reddit credits are granted, spent and reset, and what happens when one runs out.
 order: 1
-updated: 2026-10-02
+updated: 2026-10-28
 ---
 
 Rankbox sells one plan, Business, and meters its work with three kinds of credit: article credits, backlink credits and Reddit reply credits. This page explains what each credit pays for, when it refills, what never costs a credit, and what you see when a balance reaches zero.
@@ -19,13 +19,13 @@ Every Rankbox account runs on the same plan. There are no tiers, no annual price
 | Backlink credits | 30 a month |
 | Reddit reply credits | 30 a month |
 | Free trial | 7 days, with 7 article credits ([details](/docs/account/free-trial)) |
-| Payment | Card through Stripe; the trial needs a card |
+| Payment | Card through Stripe. A card is required to start the trial, at the last step of onboarding |
 | Cancellation | Any time; access runs to the end of the paid period |
 
 The plan covers one site: the one you set up in onboarding, called your plan's own site. Every allowance in the table belongs to a site, not to the account. If you add sites with Studio, each extra site gets its own 30 articles, 30 backlink credits and 30 Reddit reply credits a month.
 
 > [!NOTE]
-> Signing up and onboarding are free and need no card. You add a card only when you start the free trial, which is also when Rankbox can first write an article for you.
+> A card is required. Adding one is step 4 of onboarding and starts the 7-day free trial. Signing up and the first three onboarding steps come before the card, but the dashboard doesn't open, and nothing is written, until the trial has started.
 
 ## The three credit types
 
@@ -69,11 +69,11 @@ Article credits reset at the start of each billing period. On renewal, the site'
 
 | Moment | Article balance of your plan's own site |
 | --- | --- |
-| Onboarding finished, before the trial starts | 7, but nothing can be written until a trial starts |
+| Step 3 of onboarding confirmed, before the card is added | 7, but nothing can be written until the trial starts at step 4 |
 | Trial starts | Reset to 7 for the trial period |
 | First payment (trial converts, or you start the paid plan early) | Reset to 30 |
 | Each successful renewal | Reset to 30 |
-| A renewal payment fails | No refill until the invoice is paid; then reset to 30 |
+| A payment fails (the trial's first charge or a renewal) | No refill, and writing stops at once, so credits left over can't be used either. Reset to 30 when the invoice is paid |
 
 The refill is tied to a successful payment, not to the calendar. A failed renewal advances the billing period in Stripe but grants nothing until the invoice is paid.
 

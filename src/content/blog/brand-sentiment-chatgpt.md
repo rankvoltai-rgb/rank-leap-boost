@@ -241,7 +241,7 @@ With 92 claims, brand sentiment numbers move a lot from month to month by chance
 
 Rankbox doesn't track brand mentions, citations or brand sentiment in ChatGPT or any other engine, and it won't score your panel. The free [AI Visibility Prompt Kit](/tools/ai-visibility-prompt-generator) gives you 30 prompts across the buying journey to paste into ChatGPT, Perplexity and Gemini, with a scorecard to tick which ones mention you. That's a fair start for the panel above.
 
-Rankbox helps with the fixes. [Answer-Space Research](/features/answer-space-research) maps the questions buyers ask ChatGPT, Perplexity and Google in your category, with volume, difficulty and intent as model estimates. The [Citation-Ready Writer](/features/citation-ready-writer) researches the live web and writes 2,000 to 3,500-word source-backed articles, such as a dated integrations explainer, which reach your site through Rankbox's API. The Business plan is $49.50 a month, and you can start a 7-day trial when you add a card. See [pricing](/pricing).
+Rankbox helps with the fixes. [Answer-Space Research](/features/answer-space-research) maps the questions buyers ask ChatGPT, Perplexity and Google in your category, with volume, difficulty and intent as model estimates. The [Citation-Ready Writer](/features/citation-ready-writer) researches the live web and writes 2,000 to 3,500-word source-backed articles, such as a dated integrations explainer, which reach your site through Rankbox's API. The Business plan is $49.50 a month, and you start on a 7-day free trial that takes a card and includes 7 articles. See [pricing](/pricing).
 
 ## Frequently Asked Questions
 

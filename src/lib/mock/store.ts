@@ -15,6 +15,7 @@
  * Nothing here touches Supabase. Real mode is unaffected.
  */
 import { TrialRequiredError } from "@/lib/errors";
+import { BILLING_ISSUE_MESSAGE, billingIssueOf, rowEntitles } from "@/lib/entitlement";
 import { composeStyleBrief } from "@/lib/style-brief";
 import { DASHBOARD_IDEAS, TRACKED_KEYWORDS } from "@/lib/site-meta";
 import { STUDIO } from "@/data/pricing";
@@ -549,10 +550,42 @@ export function getEntitlement(): Entitlement {
   return load().entitlement;
 }
 
+/** Whether the mock account may write: the same rule the server applies to a real row. */
 export function hasActiveTrial(): boolean {
-  const e = load().entitlement;
-  if (!e.trialEndsAt) return false;
-  return new Date(e.trialEndsAt).getTime() > Date.now();
+  return rowEntitles(load().subscription);
+}
+
+/** The mock's refusal, worded like the server's for the same subscription. */
+function refusal(fallback?: string): TrialRequiredError {
+  const issue = billingIssueOf(load().subscription);
+  return new TrialRequiredError(issue ? BILLING_ISSUE_MESSAGE[issue] : fallback);
+}
+
+/**
+ * Mock-only: what updating the card (or restarting an ended plan) does to a
+ * real account — the card check passes, anything owed is paid, and an ended
+ * plan starts a fresh paid month. Real mode runs `recheckBilling` or the
+ * restart checkout instead.
+ */
+export async function fixMockBilling(): Promise<void> {
+  mutate((s) => {
+    if (!s.subscription) return;
+    const { status } = s.subscription;
+    const owed = ["past_due", "unpaid", "incomplete", "paused"].includes(status);
+    const ended = status === "canceled" || status === "incomplete_expired";
+    s.subscription = {
+      ...s.subscription,
+      status: owed || ended ? "active" : status,
+      card_verified: true,
+      past_due_since: null,
+      ...(ended && {
+        cancel_at_period_end: false,
+        current_period_start: nowIso(),
+        current_period_end: new Date(Date.now() + 30 * 86_400_000).toISOString(),
+      }),
+    };
+  });
+  return delay(undefined, 600);
 }
 
 export async function startTrial(): Promise<Entitlement> {
@@ -804,7 +837,7 @@ function styleContext(site: MockSite): string {
  * is bypassable.
  */
 export async function generateBlogArticle(siteId: string, blog: Blog): Promise<Blog> {
-  if (!hasActiveTrial()) throw new TrialRequiredError();
+  if (!hasActiveTrial()) throw refusal();
 
   const site = slice(load(), siteId);
   if (!site) throw new Error("That site isn't on your account.");
@@ -1060,8 +1093,7 @@ export async function createApiKey(
   siteId: string,
   data: { name?: string } = {},
 ): Promise<{ id: string; raw: string; prefix: string }> {
-  if (!hasActiveTrial())
-    throw new TrialRequiredError("Start your free trial to connect your site.");
+  if (!hasActiveTrial()) throw refusal("Start your free trial to connect your site.");
   const row = await connectIntegration(siteId, data.name?.trim() || "API key");
   return { id: row.id, raw: `${row.key_prefix}_mock_secret_shown_once`, prefix: row.key_prefix };
 }

@@ -7,33 +7,33 @@
  * archived while the rest of the account carries on. Every check reads both,
  * from the database, never from anything the caller sends.
  *
- * The product rule is "nothing generates until a trial is started", enforced
- * here rather than in the UI: `generateBlogContent` and `runAutopilot` would
- * otherwise generate for anyone signed in, whatever the page showed.
+ * The product rule is "nothing generates until a trial is started, and
+ * nothing generates while billing is broken", enforced here rather than in the
+ * UI: `generateBlogContent` and `runAutopilot` would otherwise generate for
+ * anyone signed in, whatever the page showed.
  */
 import type { StripeEnv } from "@/lib/stripe.server";
 import { getServerStripeEnv } from "@/lib/stripe.server";
 import { siteIsLive } from "@/lib/studio";
+import {
+  BILLING_ISSUE_MESSAGE,
+  billingIssueOf,
+  siteIsPaid,
+  siteMayGenerate,
+  subscriptionIsPaid,
+  type SiteGateRow,
+  type SubRow,
+} from "@/lib/entitlement";
+
+// The rules themselves are pure and shared with the dashboard; the server
+// half only reads the rows and refuses.
+export { siteIsPaid, siteMayGenerate, subscriptionIsPaid, type SiteGateRow };
 
 /** Which site a server call acts on, and whose it is. */
 export interface SiteScope {
   userId: string;
   siteId: string;
 }
-
-/** Statuses that entitle a user to generate outright. */
-const ENTITLED = new Set(["trialing", "active"]);
-
-/**
- * How long a failed payment keeps its access.
- *
- * `past_due` used to entitle indefinitely, which handed anyone whose card
- * declined the whole of Stripe's retry schedule — about three weeks — for
- * free. A short window still covers the genuine case of an expired card, and
- * is measured from `past_due_since` because `current_period_end` jumps a month
- * ahead the moment a trial converts, failed payment or not.
- */
-const PAST_DUE_GRACE_MS = 48 * 60 * 60 * 1000;
 
 export class TrialRequiredError extends Error {
   constructor(message = "Start your free trial to generate articles.") {
@@ -52,99 +52,6 @@ export class SiteUnavailableError extends Error {
     super(message);
     this.name = "SiteUnavailableError";
   }
-}
-
-/**
- * Shown when the card check failed. Deliberately says what to do rather than
- * what went wrong: the same failure covers an empty card and a real one whose
- * bank wanted 3-D Secure, and only one of those deserves an accusation.
- */
-const CARD_CHECK_FAILED_MESSAGE =
-  "We couldn't verify your card. Update it in billing to start generating.";
-
-interface SubRow {
-  status: string | null;
-  current_period_end: string | null;
-  past_due_since: string | null;
-  card_verified: boolean | null;
-  /** First time the subscription was seen active — i.e. paid. See subscriptionIsPaid. */
-  activated_at?: string | null;
-}
-
-/** The columns of a site (`profiles` row) the checks read. */
-export interface SiteGateRow {
-  kind: string;
-  status: string;
-  removes_at: string | null;
-}
-
-function rowEntitles(row: SubRow | null | undefined, now = Date.now()): boolean {
-  if (!row?.status) return false;
-  // A trial whose card could not hold a dollar generates nothing. Only an
-  // explicit false blocks: null means the check has not run or found no card,
-  // and a paying subscriber is past the question entirely.
-  if (row.status === "trialing" && row.card_verified === false) return false;
-  if (ENTITLED.has(row.status)) return true;
-  if (row.status === "past_due") {
-    // No stamp means the spell predates this column: treat it as expired
-    // rather than granting open-ended access.
-    if (!row.past_due_since) return false;
-    return now - new Date(row.past_due_since).getTime() < PAST_DUE_GRACE_MS;
-  }
-  // A cancelled plan still entitles until the paid period actually ends.
-  if (row.status === "canceled" && row.current_period_end) {
-    return new Date(row.current_period_end).getTime() > now;
-  }
-  return false;
-}
-
-/**
- * Whether a subscription row is PAID, as opposed to merely entitled.
- *
- * Generation is open to a trial; the backlink exchange is not — a throwaway
- * seven-day trial must not be able to mint link equity out of the network.
- * So `trialing` fails here even with a verified card, and the two statuses
- * that follow a trial as easily as a paid period (`past_due`, `canceled`) only
- * qualify when the subscription was actually seen active at some point
- * (`activated_at`, stamped by the webhook).
- */
-export function subscriptionIsPaid(row: SubRow | null | undefined, now = Date.now()): boolean {
-  if (!row?.status) return false;
-  if (row.status === "active") return true;
-  if (!row.activated_at) return false;
-  if (row.status === "past_due") {
-    if (!row.past_due_since) return false;
-    return now - new Date(row.past_due_since).getTime() < PAST_DUE_GRACE_MS;
-  }
-  // A cancelled plan was paid for through the end of its period.
-  if (row.status === "canceled" && row.current_period_end) {
-    return new Date(row.current_period_end).getTime() > now;
-  }
-  return false;
-}
-
-/**
- * Whether this site may generate. The primary follows the plan, trial
- * included. A Studio site is only ever sold on a paid plan, so it asks the
- * stricter question — a plan that lapses back past paid takes its Studio
- * sites with it, whatever state they were left in.
- */
-export function siteMayGenerate(
-  site: SiteGateRow | null | undefined,
-  row: SubRow | null | undefined,
-  now = Date.now(),
-): boolean {
-  if (!site || !siteIsLive(site, now)) return false;
-  return site.kind === "studio" ? subscriptionIsPaid(row, now) : rowEntitles(row, now);
-}
-
-/** Whether this site takes part in the paid-only features (backlinks, Reddit). */
-export function siteIsPaid(
-  site: SiteGateRow | null | undefined,
-  row: SubRow | null | undefined,
-  now = Date.now(),
-): boolean {
-  return !!site && siteIsLive(site, now) && subscriptionIsPaid(row, now);
 }
 
 /* ── Reads ─────────────────────────────────────────────────────────────── */
@@ -228,11 +135,8 @@ export async function requireGenerationEntitlement(
   const { row, site } = await loadGate(supabase, scope, getServerStripeEnv());
   if (siteMayGenerate(site, row)) return;
   if (!site || !siteIsLive(site)) throw new SiteUnavailableError();
-  throw new TrialRequiredError(
-    row?.status === "trialing" && row.card_verified === false
-      ? CARD_CHECK_FAILED_MESSAGE
-      : undefined,
-  );
+  const issue = billingIssueOf(row);
+  throw new TrialRequiredError(issue ? BILLING_ISSUE_MESSAGE[issue] : undefined);
 }
 
 /* ── Paid-only entitlement (the backlink exchange) ───────────────────────── */
@@ -273,8 +177,8 @@ export async function requireExchangeEntitlement(
  * The reasons differ — the exchange guards link equity; this guards a metered
  * scraping bill and, more to the point, reputational output under a real
  * person's name in threads that outlive any trial — but the rule is identical:
- * `trialing` never qualifies, and `past_due` / `canceled` only do for an
- * account that actually paid once. Sharing `subscriptionIsPaid` rather than
+ * `trialing` and a failed payment never qualify, and `canceled` only does for
+ * an account that actually paid once. Sharing `subscriptionIsPaid` rather than
  * restating it is what keeps the two gates from drifting apart.
  */
 const REDDIT_PAID_MESSAGE =

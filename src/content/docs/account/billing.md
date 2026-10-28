@@ -3,7 +3,7 @@ title: Billing, invoices and cancellation
 nav_title: Billing
 description: How Rankbox billing works: what Plan & Billing shows, the Stripe portal for cards, invoices and cancelling, plus refunds and failed payments.
 order: 3
-updated: 2026-10-02
+updated: 2026-10-28
 ---
 
 Rankbox bills one subscription per account: the Business plan at $49.50 a month, plus $49.50 a month for each extra site you run with Studio, all on one invoice and one card. You see it in **Dashboard → Plan & Billing** and manage your card, invoices and cancellation in Stripe's billing portal.
@@ -22,9 +22,9 @@ The page header reads "One plan, one invoice, every site on it." Once you have a
 | **Next invoice** (or **First charge** during the trial) | The amount of the next charge, its date, and a breakdown: the plan, plus Studio sites × $49.50 |
 | **Sites & usage** | Every live site, its article credits used this cycle, and what it costs: "Included" for your plan's own site, "$49.50/mo" for a Studio site, or "Not renewing" for one being removed |
 | **Billing questions** | Short answers about cancelling, refunds, payment and the trial |
-| Banners | A notice at the top when a payment has failed, the plan is set to end, or the plan isn't active |
+| Banners | A notice at the top when the plan is set to end or isn't renewing. A failed payment, a failed card check or an ended plan shows in the [billing banner](#the-billing-banner) on every dashboard page instead |
 
-Without a subscription, the page shows the offer instead: the 7-day free trial, $0 today, $49.50 a month after the trial, and a **Start 7-day free trial** button.
+Every account that reaches Plan & Billing has a subscription: an account without one is sent to step 4 of onboarding to start the trial before the dashboard opens. See [Step 4: Trial](/docs/get-started/onboarding#step-4-trial).
 
 ### Your plan
 
@@ -37,7 +37,7 @@ The line above the progress bar tells you where the plan stands:
 | "Access until {date}" | You cancelled. Everything works until that date, then stops |
 | "Payment overdue" | The last payment failed |
 
-When the plan has ended, the period line is hidden, the status shows **Canceled**, and a "Your plan isn't active" banner appears at the top.
+When the plan has ended, the period line is hidden, the status shows **Canceled**, and the billing banner at the top of the page reads "Your plan has ended." with a **Restart plan** button.
 
 During the trial, this panel also shows your trial article usage, what waits for the first payment, and the **Unlock everything now** button that starts the paid plan early.
 
@@ -48,7 +48,7 @@ During the trial, this panel also shows your trial article usage, what waits for
 | **Free trial** | trialing | Writing works with 7 article credits. Backlinks, Reddit and Studio are closed |
 | **Active** | active | Everything in the plan works |
 | **Ending** | active or trialing, set to cancel | Everything works until the period's end date, then stops |
-| **Payment due** | past_due | A payment failed. See [Failed payments](#failed-payments) |
+| **Payment due** | past_due | A payment failed. Writing, autopilot and the paid features stop until it's paid. See [Failed payments](#failed-payments) |
 | **Unpaid** | unpaid | Payment failed and retries are over. Writing is stopped |
 | **Incomplete** | incomplete | The first payment didn't complete. Writing is stopped |
 | **Canceled** | canceled | The plan has ended |
@@ -56,6 +56,18 @@ During the trial, this panel also shows your trial article usage, what waits for
 ### Next invoice
 
 The **Next invoice** total is the Business plan plus every Studio site that is billed next period. A Studio site you've scheduled for removal isn't included, because it stops billing from the next invoice. If you cancel, the panel shows "None scheduled".
+
+## The billing banner
+
+While billing stops your account from writing, a red banner sits at the top of every dashboard page. It says what's paused, that nothing is lost, and has the one button that fixes it.
+
+| Banner | Why it shows | Button |
+| --- | --- | --- |
+| "We couldn't verify your card." | The trial's $1.00 card check failed | **Update card** opens Stripe's card-update page. Back on the dashboard, Rankbox reruns the check on the new card. See [Fix a failed card check](/docs/account/free-trial#fix-a-failed-card-check) |
+| "Your last payment didn't go through." | The trial's first charge or a renewal failed (Stripe status `past_due`, `unpaid` or `incomplete`) | **Update billing** opens Stripe's card-update page. Back on the dashboard, Rankbox retries the open invoice with the new card. See [Failed payments](#failed-payments) |
+| "Your plan has ended." | The plan was cancelled and its period is over | **Restart plan** opens a checkout at $49.50/month, starting today. See [Restart after the plan has ended](#restart-after-the-plan-has-ended) |
+
+**Update card** and **Update billing** open in the same tab and bring you back to the page you were on. If your bank asks for 3-D Secure when Rankbox reruns the check or retries the payment, the approval appears on the page. When it goes through, you see "Billing is sorted. Article writing is back on." and the banner clears.
 
 ## The Stripe billing portal
 
@@ -65,7 +77,6 @@ These buttons open the portal:
 
 - **Card & invoices**, in the page header.
 - **Manage in Stripe**, under the next invoice.
-- **Update card**, on the failed-payment banner.
 - **Keep my plan**, on the plan-ending banner.
 
 In the portal you can:
@@ -74,8 +85,10 @@ In the portal you can:
 - See and download past invoices and receipts.
 - Cancel the subscription, or renew one that is set to end.
 
+To fix a failed payment or a failed card check, use the billing banner's button rather than **Card & invoices**. It brings you back to the dashboard, where Rankbox retries the payment or reruns the card check with the new card straight away.
+
 > [!NOTE]
-> The portal belongs to your subscription, so it only opens once you've started the trial or a plan. Before that, Plan & Billing shows the offer instead.
+> The portal belongs to your subscription, so it opens once the trial has started at the end of onboarding.
 
 ## How you're billed
 
@@ -118,7 +131,9 @@ Click **Keep my plan** on the "Your plan ends" banner. It opens the Stripe porta
 
 ### Restart after the plan has ended
 
-When a plan has ended, Plan & Billing shows "Your plan isn't active" with a **Restart plan** button. It opens the same start-trial checkout on the Overview. Your articles and settings are still there, and autopilot picks up where it left off.
+When a plan has ended, the banner at the top of every dashboard page reads "Your plan has ended. Your articles and settings are saved. Restart your plan to keep writing." Click **Restart plan** to open a checkout at $49.50/month, starting today. The free trial is once per account, so a restarted plan is paid from day one, with no second trial. Your articles and settings are still there, and autopilot picks up where it left off once the plan is paid.
+
+If the subscription was cancelled but its paid period hasn't run out, Plan & Billing shows "Your plan isn't renewing" with the same **Restart plan** button.
 
 ## Refunds
 
@@ -132,25 +147,31 @@ Rankbox's [Refund & Cancellation Policy](/legal/refunds) sets these rules:
 To request a billing review, email Rankboxai@gmail.com with the email on your account and the approximate date and amount of the charge.
 
 > [!TIP]
-> The 7-day free trial exists so you can see Rankbox work on your own site before paying. Cancel before the trial's end date and you aren't charged at all.
+> The 7-day free trial exists so you can see Rankbox work on your own site before paying. Cancel before the trial's end date and you aren't charged at all. Each account gets one trial.
 
 ## Failed payments
 
-When a renewal payment fails, the plan shows **Payment due** and the page shows "Your last payment didn't go through" with an **Update card** button.
+When a payment fails, whether it's the trial's first charge or a monthly renewal, the plan shows **Payment due** and the billing banner reads "Your last payment didn't go through. Article writing and autopilot are paused until you update billing. Your articles and settings are safe." There is no grace period: everything below stops from the first failure.
 
-1. Click **Update card** to open the Stripe portal.
-2. Replace the card.
-3. Wait for Stripe to retry the open invoice. Stripe retries failed payments automatically.
-
-What happens while the payment is overdue:
-
-| Time since the payment failed | Effect |
+| Area | While a payment is overdue |
 | --- | --- |
-| First 48 hours | Writing and autopilot keep running on the credits left from the previous period. Backlinks and Reddit stay on if the account had paid before |
-| After 48 hours | Writing, autopilot, the backlink exchange and Reddit Presence stop |
-| The whole time | No credits are refilled. Studio can't add or restore sites |
+| Writing | Stops on every site. **Write now** and the editor's AI actions are refused with "Your last payment didn't go through. Update billing to keep writing." |
+| Autopilot | Stops. Scheduled articles wait in the queue |
+| Backlink exchange and Reddit Presence | Stop |
+| Studio | Studio sites stop writing, and you can't add or restore sites |
+| Credits | Not refilled. Credits left from the previous period can't be used until the invoice is paid |
+| API keys | Syncs return `402` with the code `subscription_required` |
 
-Your articles and settings stay safe throughout. As soon as the invoice is paid, the plan becomes **Active** again and every site's credits refill for the new period. If Stripe's retries all fail, the subscription ends up **Unpaid** or **Canceled**, and you can start again with **Restart plan**.
+The statuses **Payment due** (`past_due`), **Unpaid** (`unpaid`) and **Incomplete** (`incomplete`) all block in the same way.
+
+To fix it:
+
+1. Click **Update billing** on the banner. Stripe's card-update page opens.
+2. Replace the card and save it. Stripe returns you to the dashboard.
+3. Rankbox immediately retries the open invoice with the new card. If your bank asks for 3-D Secure, approve it on the page.
+4. When the invoice is paid, you see "Billing is sorted. Article writing is back on."
+
+Your articles and settings stay safe throughout. As soon as the invoice is paid, the plan becomes **Active** again, every site's credits refill for the new period, and writing, autopilot and the paid features resume. If the payment isn't fixed and the subscription ends up **Canceled**, you can start again with **Restart plan**, paid from day one.
 
 ## Invoices, taxes and your billing email
 
@@ -163,7 +184,8 @@ Your articles and settings stay safe throughout. As soon as the invoice is paid,
 | Problem | What to do |
 | --- | --- |
 | Clicking **Card & invoices** opens nothing | The portal opens in a new tab. Allow pop-ups for rankbox.xyz and try again |
-| "Couldn't open billing portal." or "No subscription found" | The account has no subscription. Start the trial first |
+| "Couldn't open billing portal." or "No subscription found" | The account has no subscription. Finish step 4 of onboarding to start the trial |
+| The banner stays after you updated the card from **Card & invoices** | The portal on its own only changes the card on file. Click **Update card** or **Update billing** on the banner so Rankbox reruns the check or retries the payment |
 | Charged after cancelling | Cancelling stops the next renewal; it doesn't refund the current period. If the charge came after the end date, request a billing review |
 | Charged twice for one period | Email support with the date and amount. Verified billing errors are corrected |
 | The page still shows the old status after a change in the portal | Reload the page. Stripe notifies Rankbox within moments |
@@ -171,7 +193,7 @@ Your articles and settings stay safe throughout. As soon as the invoice is paid,
 ## Related
 
 - [Plans and credits](/docs/account/plans-and-credits): what the plan includes and when credits refill.
-- [The free trial](/docs/account/free-trial): converting, starting early and cancelling during the trial.
+- [The free trial](/docs/account/free-trial): the card check, converting, starting early and cancelling during the trial.
 - [Studio: run several sites](/docs/account/studio): extra sites on the same invoice.
 - [Account and site settings](/docs/account/settings): the Account section and your email.
 - [Errors](/docs/api/errors): what a `402` means for API syncs.

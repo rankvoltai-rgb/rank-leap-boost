@@ -1,8 +1,9 @@
-import { createFileRoute, redirect } from "@tanstack/react-router";
+import { createFileRoute, redirect, type ErrorComponentProps } from "@tanstack/react-router";
 import { Onboarding } from "@/components/onboarding";
 import { getSessionUser } from "@/lib/auth";
-import { clearOnboardingDraft, listSites } from "@/lib/data";
+import { clearOnboardingDraft, getSubscription, listSites } from "@/lib/data";
 import { IS_MOCK } from "@/lib/mock/mode";
+import { TRIAL_DAYS } from "@/data/pricing";
 
 export const Route = createFileRoute("/onboarding")({
   // Client-only: progress is restored from localStorage in a state
@@ -24,19 +25,21 @@ export const Route = createFileRoute("/onboarding")({
     if (IS_MOCK && !user) {
       throw redirect({ to: "/auth", search: { url: search.url } });
     }
-    // OAuth sends returning users here too; anyone who already finished
-    // onboarding — who has at least one site — goes on to the dashboard.
-    if (!IS_MOCK && user && (await listSites()).length > 0) {
-      throw redirect({ to: "/dashboard" });
+    // OAuth sends returning users here too. A site but no subscription means
+    // the plan was saved and the trial never started: resume on the paywall,
+    // the last step. A site and a subscription means onboarding is done.
+    if (user && (await listSites()).length > 0) {
+      if (!(await getSubscription())) return { paywall: true };
+      if (!IS_MOCK) throw redirect({ to: "/dashboard" });
     }
+    return { paywall: false };
   },
   head: () => ({
     meta: [
       { title: "Get Started — Rankbox" },
       {
         name: "description",
-        content:
-          "Add your website, let our AI analyze it, confirm the plan, and see your projected traffic before starting your free Rankbox trial.",
+        content: `Add your website, let our AI analyze it, confirm the plan and see your projected traffic, then start your ${TRIAL_DAYS}-day free Rankbox trial.`,
       },
       { property: "og:title", content: "Get Started — Rankbox" },
       {
@@ -53,14 +56,15 @@ export const Route = createFileRoute("/onboarding")({
 
 function OnboardingRoute() {
   const { url } = Route.useSearch();
-  return <Onboarding searchUrl={url} />;
+  const { paywall } = Route.useRouteContext();
+  return <Onboarding searchUrl={url} paywall={paywall} />;
 }
 
 /**
  * Onboarding's own error screen. Progress lives in this browser, so the one
  * recovery the root screen can't offer is dropping it and starting clean.
  */
-function OnboardingError({ error }: { error: Error }) {
+function OnboardingError({ error }: ErrorComponentProps) {
   console.error(error);
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">

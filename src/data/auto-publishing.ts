@@ -15,7 +15,13 @@
  * structured data, none of which the publishers send.
  */
 import { PUBLISH_PLATFORMS, type PlatformId } from "@/data/platforms";
-import { PLAN, TRIAL_ARTICLE_CREDITS, TRIAL_DAYS } from "@/data/pricing";
+import {
+  CARD_CHECK_NOTE,
+  PLAN,
+  TRIAL_ARTICLE_CREDITS,
+  TRIAL_DAYS,
+  afterTrialCopy,
+} from "@/data/pricing";
 
 /* ---------- Pace ---------- */
 
@@ -258,6 +264,6 @@ export const FAQS: { q: string; a: string }[] = [
   },
   {
     q: "Can I try auto-publishing before I pay?",
-    a: `Yes. The ${TRIAL_DAYS}-day trial includes ${TRIAL_ARTICLE_CREDITS} articles and the publishing API. Checkout asks for a card, and you're charged when the trial ends unless you cancel.`,
+    a: `Yes. The ${TRIAL_DAYS}-day free trial includes ${TRIAL_ARTICLE_CREDITS} articles and the publishing API. A card is required to start it, as the last step of setup. ${CARD_CHECK_NOTE} You're charged ${afterTrialCopy()} ${TRIAL_DAYS} days after you start, unless you cancel first.`,
   },
 ];

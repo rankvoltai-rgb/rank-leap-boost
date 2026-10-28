@@ -96,14 +96,35 @@ export function afterTrialCopy(): string {
   return `${formatUsd(PLAN.monthly)}/month`;
 }
 
+/*
+ * The trial, as every page says it. A card is required: adding one is the
+ * last step of onboarding, and the dashboard can't be reached without it.
+ * Marketing lines say "Card required" and nothing more; the $1 card check is
+ * explained where the card is actually asked for or priced — /pricing, the
+ * FAQ, the docs and the checkout (CARD_CHECK_NOTE).
+ */
+
+/** The short line under a call to action. */
+export const TRIAL_NOTE = `${TRIAL_DAYS}-day free trial · Card required · Cancel anytime`;
+
+/** The call to action itself. */
+export const TRIAL_CTA = "Start free trial";
+
+/** The terms in one sentence, for a closing section or an FAQ. */
+export const TRIAL_TERMS = `Start with a ${TRIAL_DAYS}-day free trial. A card is required, and you're charged ${afterTrialCopy()} ${TRIAL_DAYS} days after you start, unless you cancel first.`;
+
+/** The $1 card check. Pricing, FAQ, docs and checkout only. */
+export const CARD_CHECK_NOTE =
+  "To verify your card we place a $1 hold and release it right away, so nothing is charged when the trial starts.";
+
 export const PRICING_FAQS: { q: string; a: string }[] = [
   {
     q: "Do I need a credit card to get started?",
-    a: `No. Signing up and building your content plan is free, with no card. You add a card only when you start your ${TRIAL_DAYS}-day free trial, and you aren't charged until the trial ends.`,
+    a: `Yes. Adding a card is the last step of setup, and it starts your ${TRIAL_DAYS}-day free trial. ${CARD_CHECK_NOTE} You're charged ${afterTrialCopy()} ${TRIAL_DAYS} days after you start, unless you cancel first.`,
   },
   {
     q: "What happens when my free trial ends?",
-    a: `Your plan continues automatically at ${afterTrialCopy()}. Cancel any time before day ${TRIAL_DAYS} and you won't be charged at all.`,
+    a: `Your plan continues automatically at ${afterTrialCopy()}, ${TRIAL_DAYS} days after you started. Cancel any time before then and you won't be charged at all.`,
   },
   {
     q: "Is everything included in the free trial?",
@@ -119,7 +140,7 @@ export const PRICING_FAQS: { q: string; a: string }[] = [
   },
   {
     q: "Do you offer refunds?",
-    a: "Subscriptions are non-refundable, which is exactly why the free trial exists: you see the engine working on your own site before you pay anything. If you were billed in error, we'll correct it — see our refund policy for details.",
+    a: "Subscriptions are non-refundable, which is exactly why the free trial exists: you see the engine working on your own site before you pay anything. The $1 card check at the start of the trial is a hold, never a charge, and it's released right away. If you were billed in error, we'll correct it — see our refund policy for details.",
   },
   {
     q: "What if I run more than one website?",

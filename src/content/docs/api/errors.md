@@ -2,7 +2,7 @@
 title: Errors
 description: Every error the Rankbox REST API returns: the JSON error format, each status code and its exact message, the causes, and how your integration should respond.
 order: 6
-updated: 2026-10-02
+updated: 2026-10-28
 ---
 
 When a request fails, the Rankbox REST API returns an HTTP status code and a small JSON body that says what went wrong. This page lists every status the API can return, the exact message for each, what causes it, and what your integration should do.
@@ -85,11 +85,11 @@ The key is valid, but the site it belongs to can't sync right now. Any of these 
 
 - The account has no trial or plan.
 - The trial's card check failed.
-- A payment failed more than 48 hours ago and hasn't been fixed.
+- A payment failed and hasn't been fixed. Syncing stops from the moment the payment fails; there is no grace period.
 - The plan was cancelled and its paid period has ended.
 - The site is an extra [Studio](/docs/account/studio) site that was removed or archived, or the account is no longer on a paid plan. Studio sites need a paid plan; a trial covers only the plan's own site.
 
-How to handle it: don't retry on a timer, and don't discard the key. Show the `error` text with a link to **Dashboard → Plan & Billing**. The same key works again the moment the site is active, and your saved cursor is still valid. In the dashboard, the **Integrations** page shows "Syncing is paused" while this lasts. See [Billing, invoices and cancellation](/docs/account/billing).
+How to handle it: don't retry on a timer, and don't discard the key. Show the `error` text with a link to **Dashboard → Plan & Billing**. For a failed card check or a failed payment, the owner clicks **Update card** or **Update billing** on the banner at the top of the dashboard; updating the card reruns the check or retries the payment straight away. The same key works again the moment the site is active, and your saved cursor is still valid. In the dashboard, the **Integrations** page shows "Syncing is paused" while this lasts. See [Billing, invoices and cancellation](/docs/account/billing).
 
 ## 404 Not found
 

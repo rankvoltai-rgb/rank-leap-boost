@@ -92,11 +92,10 @@ async function withToken<T>(
   }
 }
 
+/** Connecting a site is part of the plan; the refusal says what to fix (see entitlement.ts). */
 async function requireEntitled(context: { supabase: unknown; userId: string }, siteId: string) {
-  const { hasGenerationEntitlement } = await import("@/lib/entitlement.server");
-  if (!(await hasGenerationEntitlement(context.supabase, { userId: context.userId, siteId }))) {
-    throw new Error("Start your free trial to connect your site.");
-  }
+  const { requireGenerationEntitlement } = await import("@/lib/entitlement.server");
+  await requireGenerationEntitlement(context.supabase, { userId: context.userId, siteId });
 }
 
 export const getWebflowStatus = createServerFn({ method: "GET" })

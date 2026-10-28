@@ -23,6 +23,7 @@ import * as mockExchange from "@/lib/mock/exchange";
 import * as mockReddit from "@/lib/mock/reddit";
 import { IS_MOCK } from "@/lib/mock/mode";
 import { getSessionUser } from "@/lib/auth";
+import { rowEntitles } from "@/lib/entitlement";
 import type {
   Blog,
   ContentSettings,
@@ -139,13 +140,50 @@ export async function editBlogSection(
   return fn({ data: { siteId, ...data } });
 }
 
-/** Stripe's customer-portal URL. Null in mock mode, which has no portal to open. */
-export async function openBillingPortal(returnUrl: string): Promise<string | null> {
+/**
+ * Stripe's customer-portal URL. Null in mock mode, which has no portal to open.
+ * `flow: "payment_method_update"` opens straight on "update card" and comes
+ * back to `returnUrl` as soon as it's saved.
+ */
+export async function openBillingPortal(
+  returnUrl: string,
+  flow?: "payment_method_update",
+): Promise<string | null> {
   if (IS_MOCK) return null;
   const { createPortalSession } = await import("@/lib/payments.functions");
-  const result = await createPortalSession({ data: { returnUrl } });
+  const result = await createPortalSession({ data: { returnUrl, ...(flow && { flow }) } });
   if ("error" in result) throw new Error(result.error);
   return result.url;
+}
+
+/**
+ * After the card was updated: re-run the $1 card check or pay the failed
+ * invoice, whichever the account needs, including the bank's 3-D Secure step
+ * in the page. Resolves once billing is fixed; throws with the bank's reason
+ * if it isn't. Mock mode just marks the account fixed.
+ */
+export async function recheckBilling(): Promise<void> {
+  if (IS_MOCK) return mock.fixMockBilling();
+  const { recheckBilling: recheck, finishBillingRecheck } =
+    await import("@/lib/payments.functions");
+  let result = await recheck();
+  if (result.outcome === "needs_action") {
+    const { getStripe } = await import("@/lib/stripe");
+    const stripe = await getStripe();
+    if (!stripe) throw new Error("Payments are not configured for this build.");
+    const { error, paymentIntent } = await stripe.handleNextAction({
+      clientSecret: result.clientSecret,
+    });
+    if (error) throw new Error(error.message ?? "Your bank didn't approve it.");
+    result = await finishBillingRecheck({
+      data: {
+        kind: result.kind,
+        ...(paymentIntent?.id && { paymentIntentId: paymentIntent.id }),
+      },
+    });
+  }
+  if (result.outcome === "failed") throw new Error(result.message);
+  if (result.outcome === "needs_action") throw new Error("Your bank needs another approval.");
 }
 
 /* ---------- credits helpers (pure, no backend) ---------- */
@@ -240,8 +278,7 @@ export { TRIAL_DAYS } from "@/data/pricing";
  */
 export async function hasGenerationEntitlement(): Promise<boolean> {
   if (IS_MOCK) return mock.hasActiveTrial();
-  const sub = await real.getSubscription();
-  return !!sub && ["trialing", "active", "past_due"].includes(sub.status);
+  return rowEntitles(await real.getSubscription());
 }
 
 export const getEntitlement: () => Entitlement = IS_MOCK
@@ -251,8 +288,8 @@ export const getEntitlement: () => Entitlement = IS_MOCK
 /**
  * Mock-only, and deliberately so: there is no "start a trial" button to press
  * server-side. In real mode the trial begins with a Stripe checkout carrying a
- * trial period (see StartTrialDialog), and the entitlement follows from the
- * subscription row rather than from a call like this one.
+ * trial period (the onboarding paywall, TrialStep), and the entitlement follows
+ * from the subscription row rather than from a call like this one.
  */
 export const startTrial: () => Promise<Entitlement> = IS_MOCK
   ? mock.startTrial
@@ -261,15 +298,19 @@ export const startTrial: () => Promise<Entitlement> = IS_MOCK
     };
 
 /**
- * Settle a just-completed checkout so the trial is live by the time the dialog
- * closes, instead of whenever Stripe's webhook lands. Idempotent — the webhook
- * writes the same row.
+ * Settle a just-completed checkout so the plan is live by the time the user
+ * lands on the dashboard, instead of whenever Stripe's webhook lands.
+ * Idempotent — the webhook writes the same row. Resolves with whether the
+ * trial's $1 card check passed (null: not run, or not a trial).
  */
-export async function confirmTrialCheckout(sessionId: string): Promise<void> {
-  if (IS_MOCK) return;
+export async function confirmTrialCheckout(
+  sessionId: string,
+): Promise<{ cardVerified: boolean | null }> {
+  if (IS_MOCK) return { cardVerified: true };
   const { confirmCheckout } = await import("@/lib/payments.functions");
   const result = await confirmCheckout({ data: { sessionId } });
   if ("error" in result) throw new Error(result.error);
+  return { cardVerified: result.cardVerified ?? null };
 }
 
 /* ---------- Studio (account-wide billing) ---------- */

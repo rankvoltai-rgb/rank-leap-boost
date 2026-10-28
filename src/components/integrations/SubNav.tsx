@@ -1,5 +1,6 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
+import { TRIAL_CTA } from "@/data/pricing";
 
 export interface SubNavLink {
   id: string;
@@ -18,7 +19,7 @@ export function SubNav({
   title,
   mark,
   links,
-  cta = { href: "/auth", label: "Get started free" },
+  cta = { href: "/auth", label: TRIAL_CTA },
 }: {
   title: string;
   mark: ReactNode;

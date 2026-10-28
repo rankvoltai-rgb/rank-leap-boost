@@ -2,7 +2,7 @@
 title: Reddit Presence
 description: How Reddit Presence finds the threads your buyers read, drafts a disclosed reply you post yourself, checks it, and tracks the thread afterwards.
 order: 2
-updated: 2026-10-02
+updated: 2026-10-28
 ---
 
 Reddit Presence finds Reddit threads where your brand has something useful to say, drafts a reply that discloses who you are, and checks it against the things that get replies removed. You post the reply yourself, from your own Reddit account, and paste the link back so Rankbox can confirm it and keep a dated record of the thread.
@@ -15,12 +15,12 @@ Reddit Presence is part of the paid plan only. It is not part of the free trial,
 
 | Access | When it applies | What **Dashboard → Reddit** shows |
 | --- | --- | --- |
-| Paid | The plan is active, or cancelled or past due after at least one paid period, and the site is live on the plan | The full feature |
+| Paid | The plan is active, or cancelled after at least one paid period and still inside the period you paid for, and the site is live on the plan | The full feature |
 | Trial | Your subscription is still in its free trial | **Part of the paid plan**, with the date it opens and a **See your plan** link, over a blurred static preview |
 | Lapsed | You switched the feature on before and the plan is no longer paid, or the Studio site was removed | Your history, read-only, with a **Your plan has lapsed.** banner |
-| None | No plan has been started | **Reddit presence comes with the plan**, with a **Start 7-day free trial** button |
+| None | Billing blocks the account (a failed payment or an ended plan) and the site never took part | **Reddit presence comes with the plan**, with the billing fix: **Update billing** or **Restart plan** |
 
-A cancelled plan keeps access until the end of the period you already paid for. A failed payment keeps access for a 48-hour grace window, and only for a subscription that was paid at least once.
+A cancelled plan keeps access until the end of the period you already paid for. A failed payment closes Reddit Presence at once; there is no grace period. Click **Update billing** on the banner at the top of the dashboard, and Reddit Presence opens again as soon as the invoice is paid.
 
 Everything in Reddit Presence belongs to one site: its settings, threads, drafts and credits. If you run several sites with [Studio](/docs/account/studio), each has its own.
 

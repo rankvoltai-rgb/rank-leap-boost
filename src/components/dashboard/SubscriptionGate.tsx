@@ -1,13 +1,14 @@
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
-import { TRIAL_DAYS } from "@/lib/data";
 import { Button } from "@/components/dashboard/primitives";
 import { CheckIcon, VoltMark } from "@/components/dashboard/icons";
+import { BILLING_FIX_LABEL, useBilling } from "@/components/dashboard/billing-context";
 
 /**
- * A page that comes with the plan, shown to someone without one: the real page
- * stays in view — blurred and out of reach — under a frosted card that says
- * what it's for and starts the trial. Seeing the value beats reading about it.
+ * A page that comes with the plan, shown while billing stops the account: the
+ * real page stays in view — blurred and out of reach — under a frosted card
+ * that says what it's for and the one fix that unlocks it. Seeing the value
+ * beats reading about it.
  *
  * Pass `locked` only once the subscription is known, so paying users never see
  * the gate flash on load.
@@ -17,7 +18,6 @@ export function SubscriptionGate({
   title,
   description,
   points,
-  onStartTrial,
   className,
   children,
 }: {
@@ -27,9 +27,9 @@ export function SubscriptionGate({
   title: string;
   description: string;
   points: string[];
-  onStartTrial: () => void;
   children: ReactNode;
 }) {
+  const billing = useBilling();
   if (!locked) return <div className={className}>{children}</div>;
 
   return (
@@ -67,10 +67,17 @@ export function SubscriptionGate({
               </li>
             ))}
           </ul>
-          <Button variant="brand" className="mt-6 w-full" onClick={onStartTrial}>
-            Start {TRIAL_DAYS}-day free trial
+          <Button
+            variant="brand"
+            className="mt-6 w-full"
+            onClick={billing.fix}
+            disabled={billing.busy}
+          >
+            {billing.issue ? BILLING_FIX_LABEL[billing.issue] : "Fix billing"}
           </Button>
-          <p className="mt-2.5 text-xs text-muted-foreground">No charge today.</p>
+          <p className="mt-2.5 text-xs text-muted-foreground">
+            Everything here unlocks as soon as billing is sorted.
+          </p>
         </section>
       </div>
     </div>

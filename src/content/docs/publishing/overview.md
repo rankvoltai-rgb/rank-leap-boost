@@ -3,7 +3,7 @@ title: How publishing works
 nav_title: How publishing works
 description: How finished Rankbox articles reach your website, the push and pull models, what each destination receives, and how slugs, edits and deletions behave.
 order: 1
-updated: 2026-10-02
+updated: 2026-10-28
 ---
 
 Rankbox writes articles inside your account, then hands every finished one to your website. This page explains which articles leave Rankbox, the two ways they travel (Rankbox pushing them, or your site pulling them), exactly what arrives, and how each destination handles slugs, edits and deletions. Read it before you pick a destination.
@@ -123,8 +123,8 @@ Each destination has a rule for what happens after the first publish:
 
 Publishing is part of the plan, and works during the free trial too.
 
-- Creating an API key, connecting Webflow and syncing all need an active trial or plan on the site. Without one, the dashboard offers **Start free trial** instead.
-- If the plan lapses, every API request for the site returns `402` with the code `subscription_required`, pushes to Webflow and Shopify stop, and **Dashboard → Integrations** says **Syncing is paused**. Nothing already on your site is removed.
+- Creating an API key, connecting Webflow and syncing all need an active trial or plan on the site, with billing in good standing. While billing blocks the account, the dashboard offers the billing fix (**Update card**, **Update billing** or **Restart plan**) instead.
+- If the plan lapses, the trial's card check fails or a payment fails (from the moment it fails, with no grace period), every API request for the site returns `402` with the code `subscription_required`, pushes to Webflow and Shopify stop, and **Dashboard → Integrations** says **Syncing is paused**. Nothing already on your site is removed.
 - Every Rankbox site publishes on its own. With [Studio](/docs/account/studio), each site has its own API keys, its own Webflow connection and its own Shopify store. An API key only ever sees the articles of the site it was created for.
 
 ## Choose a destination

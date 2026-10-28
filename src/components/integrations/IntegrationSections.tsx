@@ -28,7 +28,7 @@ import {
 import { Reveal, Eyebrow } from "@/components/landing/shared";
 import { PixelField, CARD_PIXELS } from "@/components/landing/Hero";
 import { cn } from "@/lib/utils";
-import { TRIAL_DAYS } from "@/data/pricing";
+import { TRIAL_CTA, TRIAL_NOTE as PLAN_TRIAL_NOTE } from "@/data/pricing";
 import {
   INTEGRATIONS,
   KIND_LABEL,
@@ -80,7 +80,7 @@ export function Heading({
   );
 }
 
-export const TRIAL_NOTE = `Included with every plan · Free ${TRIAL_DAYS}-day trial`;
+export const TRIAL_NOTE = `Included with every plan · ${PLAN_TRIAL_NOTE}`;
 
 export function HeroButtons({ primary, secondary }: { primary: ReactNode; secondary: ReactNode }) {
   return (
@@ -624,7 +624,7 @@ export function IntegrationCTA({ integration }: { integration?: Integration }) {
     ? {
         title: "Connect your site once. Publish every day.",
         body: "Pick your platform, paste one key, and every article autopilot writes lands on your site as a native post.",
-        cta: "Get started free",
+        cta: TRIAL_CTA,
       }
     : integration.kind === "api"
       ? {
@@ -733,7 +733,7 @@ export function HubHero() {
               <HeroButtons
                 primary={
                   <a href="/auth" className={heroPrimary}>
-                    Get started free <ArrowRight className="h-4 w-4" />
+                    {TRIAL_CTA} <ArrowRight className="h-4 w-4" />
                   </a>
                 }
                 secondary={

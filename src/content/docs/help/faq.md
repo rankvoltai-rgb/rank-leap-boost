@@ -3,7 +3,7 @@ title: Frequently asked questions
 nav_title: FAQ
 description: Direct answers to the questions people ask most about Rankbox: setup, articles, publishing, backlinks, Reddit, billing, the API and AI agents.
 order: 1
-updated: 2026-10-02
+updated: 2026-10-28
 ---
 
 Short, direct answers to the questions people ask most about Rankbox. Each answer leads with the answer itself and links to the page that covers it in depth.
@@ -16,7 +16,7 @@ Rankbox is an AI search growth engine that researches the searches your buyers m
 
 ### Do I need a credit card to sign up?
 
-No. Creating an account and building your content plan in onboarding are free and need no card. You add a card when you start the 7-day free trial, which is the first point at which Rankbox can write for you. See [The free trial](/docs/account/free-trial).
+Yes. Adding a card is the last step of onboarding, and it starts your 7-day free trial. You create your account and build your content plan first, but there's no skip: the dashboard opens only once the trial has started. To verify the card, Rankbox places a $1 hold and releases it right away, so nothing is charged when the trial starts. You're charged $49.50 a month 7 days after you start, unless you cancel first. See [The free trial](/docs/account/free-trial).
 
 ### How long does setup take?
 
@@ -102,7 +102,7 @@ They stay on your site. Rankbox never removes articles your site already has. Af
 
 ### Is the backlink exchange included in the free trial?
 
-No. The backlink exchange and Reddit Presence both open with your first paid invoice, so throwaway trial accounts can't mint links or post under someone's name. To open them before day 8, click **Unlock everything now** in **Plan & Billing**. See [Backlink exchange](/docs/growth/backlink-exchange).
+No. The backlink exchange and Reddit Presence both open with your first paid invoice, so throwaway trial accounts can't mint links or post under someone's name. To open them before the trial ends, click **Unlock everything now** in **Plan & Billing**. See [Backlink exchange](/docs/growth/backlink-exchange).
 
 ### How do backlink credits work?
 
@@ -124,11 +124,19 @@ $49.50 a month for the Business plan, which covers one site with 30 articles, 30
 
 ### What happens when my free trial ends?
 
-Your plan continues automatically at $49.50 a month: your card is charged on day 8 and the site's article credits reset to 30. Cancel any time before then and you aren't charged. See [The free trial](/docs/account/free-trial).
+Your plan continues automatically at $49.50 a month: your card is charged 7 days after you started and the site's article credits reset to 30. Cancel any time before then and you aren't charged. See [The free trial](/docs/account/free-trial).
 
 ### Why is there a $1 charge on my card?
 
-When a trial starts, Rankbox places a $1 authorization on the card to check it can hold funds, then releases it straight away. Nothing is captured, but the hold can show as pending on your statement for a day or two.
+When a trial starts, Rankbox places a $1 authorization on the card to check it can hold funds, then releases it straight away. Nothing is captured, but the hold can show as pending on your statement for a day or two. If the check fails, article writing is paused until you click **Update card** on the banner at the top of the dashboard; Rankbox reruns the check on the new card when you're back. See [The card check](/docs/account/free-trial#the-card-check).
+
+### What happens if a payment fails?
+
+Article writing, autopilot and the paid features stop straight away; there's no grace period. A banner at the top of the dashboard reads "Your last payment didn't go through." Click **Update billing**, replace the card, and Rankbox retries the payment with it as soon as you're back. Once it's paid, everything resumes. See [Failed payments](/docs/account/billing#failed-payments).
+
+### Can I start a second free trial?
+
+No. Each account gets one free trial. If your plan has ended, **Restart plan** on the dashboard banner opens a checkout at $49.50 a month, starting today. Your articles and settings are kept. See [Restart after the plan has ended](/docs/account/billing#restart-after-the-plan-has-ended).
 
 ### Can I cancel anytime?
 

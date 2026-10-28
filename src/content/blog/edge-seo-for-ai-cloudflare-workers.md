@@ -395,7 +395,7 @@ Tallyfold is a fictional invoicing and payments app for agencies, made up for th
 
 Rankbox doesn't run a CDN, edge workers, prerendering or bot management, and it won't touch your headers or robots.txt. Its part comes earlier: [Answer-Space Research](/features/answer-space-research) maps the questions buyers ask AI engines, and the [Citation-Ready Writer](/features/citation-ready-writer) writes source-backed articles that reach your site through the [Rankbox API](/integrations/api). A clean Markdown copy only helps if the page underneath says something worth quoting.
 
-Rankbox doesn't track AI citations today. To see what a non-rendering crawler gets from a page, try the free [AI search readiness check](/tools/ai-search-readiness-check). The Business plan is $49.50 a month, with free signup and a 7-day trial when you add a card; see [pricing](/pricing).
+Rankbox doesn't track AI citations today. To see what a non-rendering crawler gets from a page, try the free [AI search readiness check](/tools/ai-search-readiness-check). The Business plan is $49.50 a month, and the last step of setup is a 7-day free trial that takes a card; see [pricing](/pricing).
 
 ## Frequently Asked Questions
 

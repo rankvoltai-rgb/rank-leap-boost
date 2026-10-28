@@ -3,7 +3,7 @@ title: Research: the questions buyers ask AI
 nav_title: Research
 description: How Rankbox reads your site, estimates the searches and questions your buyers ask, and turns them into a keyword set and a plan of article topics.
 order: 1
-updated: 2026-10-02
+updated: 2026-10-28
 ---
 
 Research is the first thing Rankbox does for a site. It reads your website, works out what you sell and who buys it, lists the searches and questions your buyers type into Google and AI assistants, and turns each one into an article topic. Research runs when you set up your first site in onboarding and when you add a site in [Studio](/docs/account/studio), and it never costs an article credit.
@@ -48,7 +48,7 @@ A third model call turns your confirmed keywords into article topics, using your
 
 1. Review **Ready on your dashboard** (the first 4 topics, labeled **Idea**) and **Autopilot queue** (the rest, labeled **Day 1**, **Day 2** and so on).
 2. Go back to step 2 if you want different keywords. Changing the keyword list throws away the plan, and step 3 builds a new one.
-3. Click **Confirm plan**.
+3. Click **Continue**. Step 4 then asks for a card to start the trial.
 
 ## Where the numbers come from
 
@@ -93,14 +93,14 @@ The plan covers at most 30 keywords. If your list is longer, the 30 with the hig
 
 ## Where research results go
 
-When you click **Confirm plan**, Rankbox saves everything to the site and opens the dashboard.
+When you click **Continue** on step 3, Rankbox saves everything to the site and opens step 4, where you add a card to start the trial.
 
 - **The first 4 topics** become ideas. You find them under **Articles → Ideas** and in **Content gaps to win** on the Overview.
 - **The remaining topics** go into the autopilot queue as scheduled articles, one a day, starting the day after you confirm. See [Content plan and calendar](/docs/content/content-plan).
 - **Your keywords** are saved to the site. The first 4 are tracked on the Rank page and the rest are listed as discovered. See [Rank: AI search visibility](/docs/growth/rank).
 - **Your brand context** fills your writing settings: **Brand voice** becomes the **Tone**, **Who you're writing for** becomes the **Audience**, and a line such as "Niche: … Geo: …" is placed in **House rules**. See [Brand voice and writing settings](/docs/content/brand-voice).
 
-Nothing is written or published at this point. Writing starts when you start your [free trial](/docs/account/free-trial).
+Nothing is written or published at this point. Writing starts once you've added a card at step 4 and your [free trial](/docs/account/free-trial) has started.
 
 ## Add your own topics after onboarding
 

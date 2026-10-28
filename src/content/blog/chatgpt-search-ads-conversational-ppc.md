@@ -202,7 +202,7 @@ A ChatGPT ad sits below the answer, so the answer names its shortlist first. If 
 
 Rankbox doesn't sell or manage ads, and it doesn't track AI citations today. It works on the unpaid side: it finds the questions buyers ask ChatGPT, Perplexity and Google, then writes 2,000 to 3,500-word, source-backed articles with its [Citation-Ready Writer](/features/citation-ready-writer). Those are the pages AI answers read when they build a shortlist. Articles reach your site through Rankbox's API.
 
-If you run conversational PPC, Rankbox covers the half your ad budget can't buy: being in the answer itself. Plans start with a free signup, and the Business plan is $49.50 a month for 30 articles. See [pricing](/pricing).
+If you run conversational PPC, Rankbox covers the half your ad budget can't buy: being in the answer itself. Plans start with a 7-day free trial that needs a card, and the Business plan is $49.50 a month for 30 articles. See [pricing](/pricing).
 
 ## Frequently Asked Questions
 

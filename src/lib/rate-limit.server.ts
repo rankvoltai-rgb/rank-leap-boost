@@ -100,6 +100,19 @@ export async function assertFreeAiRateLimit(request: Request | null | undefined)
   }
 }
 
+/**
+ * Per-user guard for the billing fixes (card recheck, paying a failed
+ * invoice). Each attempt can place a hold or charge a card, so a loop here is
+ * a loop of bank declines on someone's statement.
+ */
+export async function assertBillingRateLimit(userId: string): Promise<void> {
+  const count = await hit(`billing:${userId}`);
+  if (count === null) return; // store unavailable — fail open, as above
+  if (count > limitFromEnv("BILLING_USER_RATE_LIMIT", 6)) {
+    throw new Error("Too many billing attempts. Wait a minute and try again.");
+  }
+}
+
 /** Per-user guard (caps one account across all its keys). 429 Response, or null. */
 export async function rateLimitByUser(userId: string): Promise<Response | null> {
   const count = await hit(`user:${userId}`);

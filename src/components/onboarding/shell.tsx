@@ -10,14 +10,14 @@
  * Each step ends in an ActionBar that sticks to the bottom of the viewport, so
  * the primary action stays in reach however long the keyword list or plan is.
  */
-import type { ReactNode } from "react";
+import { createContext, useContext, type ReactNode } from "react";
 import { motion } from "motion/react";
 import { ArrowLeft, Check, CloudCheck } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Mark } from "@/components/brand/Mark";
 import { PARTS, reducedMotion } from "./constants";
 
-export type Step = 1 | 2 | 3;
+export type Step = 1 | 2 | 3 | 4;
 
 /** A short celebratory particle burst anchored to its parent. */
 export function Burst() {
@@ -48,8 +48,10 @@ export function Burst() {
 }
 
 /**
- * Three segments that fill as steps complete. Finished steps are links back;
- * the current and later ones are not, so nobody skips ahead of the analysis.
+ * One segment per step, filling as steps complete. Finished steps are links
+ * back; the current and later ones are not, so nobody skips ahead of the
+ * analysis. On the trial step the site is already saved, so nothing is a link
+ * back — its details are edited in the dashboard from here on.
  */
 function Progress({ active, onStep }: { active: Step; onStep: (step: Step) => void }) {
   return (
@@ -61,28 +63,30 @@ function Progress({ active, onStep }: { active: Step; onStep: (step: Step) => vo
         {PARTS.map((part) => {
           const done = part.n < active;
           const current = part.n === active;
+          const editable = done && active < 4;
           return (
             <li key={part.n} className="flex-1 sm:flex-none">
               <button
                 type="button"
-                disabled={!done}
+                disabled={!editable}
                 onClick={() => onStep(part.n)}
                 aria-current={current ? "step" : undefined}
-                aria-label={`Step ${part.n}: ${part.title}${done ? " (done, edit)" : ""}`}
+                aria-label={`Step ${part.n}: ${part.title}${editable ? " (done, edit)" : done ? " (done)" : ""}`}
                 className="group flex w-full flex-col gap-1.5 py-3 text-left disabled:cursor-default sm:w-24 sm:py-0"
               >
                 <span
                   className={cn(
                     "h-1 w-full rounded-full transition-colors duration-300",
                     done || current ? "bg-brand-blue" : "bg-ink/[0.08]",
-                    done && "group-hover:bg-brand-blue/70",
+                    editable && "group-hover:bg-brand-blue/70",
                   )}
                 />
                 <span
                   className={cn(
                     "hidden items-center gap-1 text-xs transition-colors sm:flex",
                     current && "font-semibold text-ink",
-                    done && "font-medium text-ink group-hover:text-brand-blue",
+                    done && "font-medium text-ink",
+                    editable && "group-hover:text-brand-blue",
                     !done && !current && "text-muted-foreground",
                   )}
                 >
@@ -149,6 +153,13 @@ export function OnboardingShell({
   );
 }
 
+/**
+ * How many steps the flow around a StepHeader has. Onboarding's four by
+ * default; Studio's add-a-site flow reuses the same steps without the trial,
+ * so it provides three.
+ */
+export const StepCountContext = createContext<number>(PARTS.length);
+
 /** The heading every step opens with. */
 export function StepHeader({
   n,
@@ -159,11 +170,12 @@ export function StepHeader({
   title: ReactNode;
   subtitle: ReactNode;
 }) {
+  const total = useContext(StepCountContext);
   return (
     <header className="mb-8">
       <p className="inline-flex items-center gap-2 rounded-lg border border-ink/[0.08] bg-white px-2.5 py-1 text-[0.78rem] font-medium text-ink shadow-[0_1px_2px_rgba(16,24,40,0.04)]">
         <span className="h-1.5 w-1.5 rounded-full bg-brand-blue" />
-        Step {n} of {PARTS.length}
+        Step {n} of {total}
       </p>
       <h1 className="font-display mt-4 text-balance text-[1.85rem] font-medium leading-[1.12] tracking-[-0.03em] text-ink sm:text-[2.35rem]">
         {title}

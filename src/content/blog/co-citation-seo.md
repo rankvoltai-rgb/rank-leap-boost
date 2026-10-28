@@ -243,7 +243,7 @@ Is a 10-point rise real? With 120 answers in each period, the margin of error on
 
 Co-citations go to pages worth naming, and that's the part Rankbox helps with. [Answer-Space Research](/features/answer-space-research) maps the questions buyers ask ChatGPT, Perplexity and Google about your category, with volume, difficulty and intent as model estimates, which gives you the prompts for your panel. The [Citation-Ready Writer](/features/citation-ready-writer) researches the live web and writes 2,000 to 3,500-word source-backed articles, such as a fair comparison page or the write-up of a data study you ran. Articles reach your site through Rankbox's API.
 
-Rankbox doesn't pitch editors, book podcasts, post in communities or track mentions and citations in AI answers. The outreach and the measurement in this playbook stay with you. The Business plan is $49.50 a month, with a 7-day trial when you add a card. [See pricing](/pricing).
+Rankbox doesn't pitch editors, book podcasts, post in communities or track mentions and citations in AI answers. The outreach and the measurement in this playbook stay with you. The Business plan is $49.50 a month, and the 7-day trial asks for a card up front. [See pricing](/pricing).
 
 ## Frequently Asked Questions
 

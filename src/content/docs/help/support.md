@@ -2,7 +2,7 @@
 title: Get help
 description: How to contact Rankbox support, what to include in a request, where to raise billing errors and security issues, and where to follow product changes.
 order: 3
-updated: 2026-10-02
+updated: 2026-10-28
 ---
 
 Rankbox support works by email. This page lists the contact address, the details to include so your request can be answered without a back-and-forth, how to raise billing, privacy and security matters, and where to follow product changes.
@@ -55,6 +55,8 @@ A request that reads "Article on yoursite.com, link attached, failed at 14:05 UT
 Billing runs through Stripe. Most billing tasks don't need support:
 
 - **Update your card, download invoices or cancel:** open **Plan & Billing** and click **Card & invoices** to reach Stripe's billing portal.
+- **Fix a failed card check or a failed payment:** click **Update card** or **Update billing** on the banner at the top of the dashboard. Rankbox reruns the card check or retries the payment with the new card when you're back.
+- **Restart a plan that has ended:** **Restart plan** on the same banner. A restarted plan is paid from day one.
 - **Start the paid plan before the trial ends:** **Plan & Billing → Unlock everything now**.
 - **Add or remove Studio sites:** **Studio**.
 

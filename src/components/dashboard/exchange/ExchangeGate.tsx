@@ -7,15 +7,9 @@
  * seeing them is the honest pitch.
  */
 import { Link } from "@tanstack/react-router";
-import { Button } from "@/components/dashboard/primitives";
 import { CheckIcon, LinkIcon } from "@/components/dashboard/icons";
-import {
-  IS_MOCK,
-  simulatePaidPlan,
-  TRIAL_DAYS,
-  type ExchangeAccess,
-  type NetworkPulse,
-} from "@/lib/data";
+import { BillingFixButton } from "@/components/dashboard/billing-context";
+import { IS_MOCK, simulatePaidPlan, type ExchangeAccess, type NetworkPulse } from "@/lib/data";
 import { formatShortDate } from "@/lib/format-date";
 import { NetworkPulsePanel } from "./NetworkPulsePanel";
 
@@ -30,13 +24,11 @@ export function ExchangeGate({
   access,
   pulse,
   trialEndsAt,
-  onStartTrial,
   onSimulated,
 }: {
   access: Exclude<ExchangeAccess, "paid">;
   pulse: NetworkPulse;
   trialEndsAt: string | null;
-  onStartTrial: () => void;
   onSimulated: () => void;
 }) {
   const trial = access === "trial";
@@ -61,7 +53,7 @@ export function ExchangeGate({
             ? `The exchange opens with your first invoice${trialEndsAt ? `, on ${formatShortDate(trialEndsAt)}` : ""}. It isn't part of the free trial, so nobody can mint links out of a throwaway account.`
             : access === "lapsed"
               ? "Your links stay live and your credits are held, not lost. Resubscribe to start placing again."
-              : `Start the ${TRIAL_DAYS}-day trial to set up your site; the exchange unlocks the day your first invoice is paid.`}
+              : "The exchange is part of the paid plan. It opens as soon as billing is sorted and your plan is paid."}
         </p>
         <ul className="mt-5 space-y-2 text-left">
           {POINTS.map((p) => (
@@ -72,9 +64,7 @@ export function ExchangeGate({
           ))}
         </ul>
         {access === "none" ? (
-          <Button variant="brand" className="mt-6 w-full" onClick={onStartTrial}>
-            Start {TRIAL_DAYS}-day free trial
-          </Button>
+          <BillingFixButton className="mt-6 w-full" />
         ) : (
           <Link
             to="/dashboard/billing"

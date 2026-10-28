@@ -515,6 +515,12 @@ export const editBlogSection = createServerFn({ method: "POST" })
     z.object({ siteId: SiteId, selection: z.string(), action: z.string() }).parse(d),
   )
   .handler(async ({ data, context }) => {
+    // The editor's AI actions write too, so they stop with the rest of
+    // generation while billing is broken.
+    await requireGenerationEntitlement(context.supabase, {
+      userId: context.userId,
+      siteId: data.siteId,
+    });
     await assertAiRateLimit(context.userId);
     const gateway = createAiProvider();
     const style = await loadStyleContext(context.supabase, data.siteId);
@@ -532,6 +538,10 @@ export const discoverKeywords = createServerFn({ method: "POST" })
     z.object({ siteId: SiteId, seed: z.string().optional() }).parse(d),
   )
   .handler(async ({ data, context }) => {
+    await requireGenerationEntitlement(context.supabase, {
+      userId: context.userId,
+      siteId: data.siteId,
+    });
     await assertAiRateLimit(context.userId);
     const gateway = createAiProvider();
     const style = await loadStyleContext(context.supabase, data.siteId);
@@ -585,6 +595,10 @@ export const generateBlogStrategy = createServerFn({ method: "POST" })
     z.object({ siteId: SiteId, existingTitles: z.array(z.string()).optional() }).parse(d),
   )
   .handler(async ({ data, context }) => {
+    await requireGenerationEntitlement(context.supabase, {
+      userId: context.userId,
+      siteId: data.siteId,
+    });
     await assertAiRateLimit(context.userId);
     const gateway = createAiProvider();
     const style = await loadStyleContext(context.supabase, data.siteId);

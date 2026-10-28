@@ -5,7 +5,7 @@
  * Checked against seobotai.com and docs.seobotai.com on 2026-09-21.
  */
 import { Search, PenLine, Send, Link2, MessageSquare, Gauge } from "lucide-react";
-import { PLAN, formatUsd } from "../pricing";
+import { PLAN, TRIAL_DAYS, formatUsd } from "../pricing";
 import {
   RANKBOX_CELLS,
   RANKBOX_COST,
@@ -378,6 +378,5 @@ export const seobot: Competitor = {
     },
   ],
   ctaTitle: "30 articles a month, for less than SEObot's 20",
-  ctaBody:
-    "Paste your URL. Rankbox builds your content plan free, then writes your first articles on a 7-day trial.",
+  ctaBody: `Paste your URL. Rankbox builds your content plan, then writes your first articles on a ${TRIAL_DAYS}-day free trial.`,
 };

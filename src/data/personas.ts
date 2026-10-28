@@ -368,7 +368,7 @@ export const PERSONAS: Persona[] = [
       },
     ],
     ctaTitle: "Hold the whole calendar, on your own",
-    ctaBody: `Point Rankbox at your site and watch the first topic map build. ${TRIAL_DAYS} days free, no card to start.`,
+    ctaBody: "Point Rankbox at your site and watch the first topic map build.",
   },
 
   /* ---------------------------------------------------------------- */
@@ -387,8 +387,7 @@ export const PERSONAS: Persona[] = [
     subhead:
       "No team, no agency, no writer on retainer. Point Rankbox at your site and it finds what your buyers ask AI, writes it in your voice with sources attached, and publishes daily — while you stay in the codebase.",
     metaTitle: "Rankbox for Solo Founders: SEO Without a Team",
-    metaDescription:
-      "Run SEO and AI search as a one-person company. Rankbox researches, writes, and publishes daily in your voice, then tracks which AI answers cite you. Free 7-day trial.",
+    metaDescription: `Run SEO and AI search as a one-person company. Rankbox researches, writes, and publishes daily in your voice, then tracks which AI answers cite you. ${TRIAL_DAYS}-day free trial.`,
 
     shortAnswer:
       "Rankbox is an AI search growth engine for founders with no marketing hire. It maps the questions buyers ask ChatGPT, Perplexity, and Google about your category, writes source-backed articles in your voice, scores them for search and AI citation, and publishes them to your site daily. A founder still approves the queue and signs off on claims; everything between research and publish is automatic.",
@@ -396,7 +395,7 @@ export const PERSONAS: Persona[] = [
     specs: [
       { value: "Minutes", label: "from your URL to a topic map" },
       { value: `${PLAN.articlesPerMonth}/mo`, label: "published articles, hands-free" },
-      { value: "No card", label: `to start — ${TRIAL_DAYS}-day free trial` },
+      { value: `${TRIAL_DAYS} days`, label: "free trial, cancel anytime" },
       { value: "1 site", label: "per plan, research to publishing" },
     ],
 
@@ -545,7 +544,7 @@ export const PERSONAS: Persona[] = [
       },
       {
         q: "What does it cost, really?",
-        a: `One plan, billed monthly, covering ${PLAN.sites} site and ${PLAN.articlesPerMonth} published articles. No setup fee, no add-ons, no contract, and a ${TRIAL_DAYS}-day free trial before the first charge.`,
+        a: `One plan, billed monthly, covering ${PLAN.sites} site and ${PLAN.articlesPerMonth} published articles. No setup fee, no add-ons, no contract. Start with a ${TRIAL_DAYS}-day free trial: a card is required, and the first charge comes ${TRIAL_DAYS} days after you start, unless you cancel first.`,
       },
     ],
     ctaTitle: "Let the blog run itself",
@@ -740,7 +739,7 @@ export const PERSONAS: Persona[] = [
       },
     ],
     ctaTitle: "Put GEO on the retainer",
-    ctaBody: `Run one account through it first. ${TRIAL_DAYS} days free, no card to start, cancel in one click.`,
+    ctaBody: "Run one account through it first, and cancel in one click if it isn't a fit.",
   },
 
   /* ---------------------------------------------------------------- */
@@ -983,7 +982,7 @@ export const PERSONAS: Persona[] = [
       },
     ],
     ctaTitle: "Give your store a blog that keeps up",
-    ctaBody: `Paste your store's URL and see the buying questions it's sitting on. ${TRIAL_DAYS} days free, no card to start.`,
+    ctaBody: "Paste your store's URL and see the buying questions it's sitting on.",
   },
 
   /* ---------------------------------------------------------------- */
@@ -1221,7 +1220,7 @@ export const PERSONAS: Persona[] = [
       },
     ],
     ctaTitle: "Let content ship on its own release train",
-    ctaBody: `Paste your product's URL and see the questions buyers ask AI about your category. ${TRIAL_DAYS} days free, no card to start.`,
+    ctaBody: "Paste your product's URL and see the questions buyers ask AI about your category.",
   },
 
   /* ---------------------------------------------------------------- */
@@ -1250,7 +1249,7 @@ export const PERSONAS: Persona[] = [
       { value: "Native", label: "posts on Square Online, WordPress, or Webflow" },
       { value: "Minutes", label: "from your URL to a list of topics" },
       { value: `${PLAN.articlesPerMonth}/mo`, label: "helpful articles, written and published" },
-      { value: "No card", label: `to start — ${TRIAL_DAYS}-day free trial` },
+      { value: `${TRIAL_DAYS} days`, label: "free trial, cancel anytime" },
     ],
 
     handoff: {
@@ -1457,7 +1456,7 @@ export const PERSONAS: Persona[] = [
       },
     ],
     ctaTitle: "Let the website keep up with you",
-    ctaBody: `Paste your website and see the questions your customers are already asking. ${TRIAL_DAYS} days free, no card to start.`,
+    ctaBody: "Paste your website and see the questions your customers are already asking.",
   },
 ];
 

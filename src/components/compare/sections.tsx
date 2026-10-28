@@ -43,7 +43,7 @@ import { scoreFinder } from "@/data/compare/finder";
 import { entryPrice } from "@/data/compare/starting-price";
 import type { Product } from "@/data/compare/products";
 import type { MatchupEntry, Plan, ProductPricing, Round, Side, Winner } from "@/data/compare/types";
-import { TRIAL_DAYS, formatUsd } from "@/data/pricing";
+import { TRIAL_NOTE, formatUsd } from "@/data/pricing";
 import { formatDate } from "@/lib/format-date";
 import { cn } from "@/lib/utils";
 import {
@@ -1217,7 +1217,7 @@ export function RelatedMatchups({ matchup }: { matchup: Matchup }) {
 /**
  * The closing ask, kept to what happens next: paste a URL and onboarding
  * reads the site and shows its content gaps, competitors and topic clusters.
- * No claim about a card — the trial itself takes one.
+ * The note under the form is TRIAL_NOTE, which says the trial takes a card.
  */
 export function CompareCta() {
   const [url, setUrl] = useState("");
@@ -1239,9 +1239,7 @@ export function CompareCta() {
             </p>
             <div className="mt-8 flex w-full flex-col items-center gap-3">
               <UrlForm url={url} onChange={setUrl} />
-              <p className="text-sm text-white/70">
-                Free to look · {TRIAL_DAYS}-day trial when you&rsquo;re ready
-              </p>
+              <p className="text-sm text-white/70">{TRIAL_NOTE}</p>
             </div>
           </div>
         </div>

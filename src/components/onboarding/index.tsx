@@ -1,10 +1,11 @@
 /**
- * The three-step onboarding: brand, then keywords, then the content plan, one
+ * The four-step onboarding: brand, then keywords, then the content plan, one
  * step on screen at a time, with a rail that keeps the projection and what's
- * been confirmed in view.
+ * been confirmed in view — and then the trial.
  *
- * The trial is not an onboarding step: step 3 confirms straight into the
- * dashboard, and generation is what prompts the trial later.
+ * The trial is the last step and it's mandatory. Step 3 saves the site and
+ * hands over to TrialStep, the paywall; the dashboard sends anyone without a
+ * subscription back there, so no account reaches it without a card on file.
  *
  * Every change is written to a persisted draft — including the current step,
  * which lives in the draft rather than beside it, so a later field save can
@@ -12,7 +13,6 @@
  * trip, or an accidental back button resumes where the user was.
  */
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useNavigate } from "@tanstack/react-router";
 import { AnimatePresence, motion } from "motion/react";
 import { toast } from "sonner";
 import {
@@ -35,15 +35,17 @@ import { Part2Analysis, type Part2Value } from "./Part2Analysis";
 import { Part3Forecast } from "./Part3Forecast";
 import { PlanRail, ProjectionStrip } from "./TrafficProjection";
 import { emptyDraft, normalizeDraft } from "./draft";
+import { TrialStep, type TrialSnapshot } from "./TrialStep";
 
 /** The saved draft, repaired, if it can be resumed (see normalizeDraft). */
 function restorableDraft(): OnboardingDraft | null {
   return normalizeDraft(getOnboardingDraft());
 }
 
-export function Onboarding({ searchUrl }: { searchUrl?: string }) {
-  const navigate = useNavigate();
+export function Onboarding({ searchUrl, paywall }: { searchUrl?: string; paywall?: boolean }) {
   const [confirming, setConfirming] = useState(false);
+  // Set once step 3's plan is saved: the paywall shows the plan just confirmed.
+  const [committed, setCommitted] = useState<TrialSnapshot | null>(null);
 
   // Restore any saved progress; otherwise start from the carried URL.
   const [draft, setDraft] = useState<OnboardingDraft>(() => {
@@ -65,7 +67,13 @@ export function Onboarding({ searchUrl }: { searchUrl?: string }) {
   }, []);
 
   const step: Step = draft.step === "done" ? 1 : draft.step;
-  const goTo = useCallback((s: Step) => patch({ step: s }), [patch]);
+  // Steps 1–3 live in the draft; the trial step is reached only by confirming.
+  const goTo = useCallback(
+    (s: Step) => {
+      if (s !== 4) patch({ step: s });
+    },
+    [patch],
+  );
 
   // Each step opens at the top of the page, not wherever the last one ended.
   const firstRender = useRef(true);
@@ -80,6 +88,8 @@ export function Onboarding({ searchUrl }: { searchUrl?: string }) {
   // The name was given at sign-up, so it isn't asked for again here. A draft
   // left on this browser by a different account is dropped, not resumed.
   useEffect(() => {
+    // The paywall has no draft to claim: the site is already saved.
+    if (paywall) return;
     let active = true;
     void getCurrentUser().then(({ id, fullName }) => {
       if (!active) return;
@@ -91,7 +101,7 @@ export function Onboarding({ searchUrl }: { searchUrl?: string }) {
     return () => {
       active = false;
     };
-  }, [patch, searchUrl]);
+  }, [patch, searchUrl, paywall]);
 
   const part1: Part1Value = useMemo(
     () => ({
@@ -125,15 +135,25 @@ export function Onboarding({ searchUrl }: { searchUrl?: string }) {
     setConfirming(true);
     try {
       await commitOnboarding(draft);
+      // The site is saved; from here a refresh resumes on the paywall, which
+      // reads the plan back from the site, so the browser draft can go.
+      setCommitted({
+        url: draft.url,
+        brandName: draft.brandName,
+        logoUrl: draft.logoUrl,
+        keywords: draft.analyzedUrl === draft.url ? draft.keywords : [],
+        titles: draft.titles,
+      });
       clearPendingSiteUrl();
       clearOnboardingDraft();
-      toast.success("You're set up. Welcome to Rankbox.");
-      navigate({ to: "/dashboard" });
+      window.scrollTo({ top: 0, behavior: reducedMotion() ? "auto" : "smooth" });
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Couldn't finish setup.");
       setConfirming(false);
     }
   }
+
+  if (committed || paywall) return <TrialStep snapshot={committed ?? undefined} />;
 
   const domain = draft.url.trim() ? domainOf(draft.url) : "";
   // Keywords analyzed for a different URL are stale; don't project from them.

@@ -21,10 +21,10 @@ export const PRICE_MONTHLY = `${PRICE} a month`;
 export const TRIAL = `${TRIAL_DAYS}-day free trial`;
 
 /**
- * How the trial starts, in one plain sentence. Signup and the content plan
- * are free; a card is taken when the trial starts.
+ * How the trial starts, in plain sentences. A card is required: adding one is
+ * the last step of setup, and Rankbox can't be used without it.
  */
-export const TRIAL_TERMS = `Sign up and plan for free. Add a card to start the ${TRIAL}; you're charged ${PRICE_MONTHLY} only if you keep it after day ${TRIAL_DAYS}.`;
+export const TRIAL_TERMS = `A card is required to start the ${TRIAL}, as the last step of setup. You're charged ${PRICE_MONTHLY} ${TRIAL_DAYS} days after you start, unless you cancel first.`;
 
 /** Platform add-ons that have actually shipped (empty until an addonLive flips). */
 export const LIVE_ADDONS = PUBLISH_PLATFORMS.filter((p) => p.addonLive).map((p) => p.name);

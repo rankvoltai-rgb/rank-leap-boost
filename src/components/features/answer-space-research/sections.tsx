@@ -41,6 +41,7 @@ import {
   Spacer,
 } from "@/components/landing/frame";
 import { TRIAL_NOTE } from "@/components/features/FeatureSections";
+import { TRIAL_CTA } from "@/data/pricing";
 import { ENGINE_ORDER, getFeature, type Feature } from "@/data/features";
 import { AnswerSpaceWindow, BENEFIT_SCREENS, MapPeek, STEP_PICTURES } from "./visuals";
 
@@ -623,7 +624,7 @@ export function AnswerSpaceCTA({ feature }: { feature: Feature }) {
               href="/auth"
               className="group mt-8 inline-flex h-11 items-center justify-center gap-2 rounded-lg bg-white px-5 text-[0.95rem] font-semibold text-cta shadow-[0_1px_2px_rgba(4,24,72,0.2),0_8px_24px_-12px_rgba(4,24,72,0.5)] transition-[transform,background-color] duration-200 hover:-translate-y-0.5 hover:bg-white/95 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-white/40"
             >
-              Get Started Free
+              {TRIAL_CTA}
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
             </a>
             <p className="mt-3 text-[0.82rem] text-white">{TRIAL_NOTE}</p>

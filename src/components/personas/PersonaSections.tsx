@@ -50,7 +50,7 @@ import { PersonaScene } from "./hero-scenes";
 import { cn } from "@/lib/utils";
 import { getFeature } from "@/data/features";
 import { getIntegration } from "@/data/integrations";
-import { PLAN, TRIAL_DAYS, formatUsd } from "@/data/pricing";
+import { PLAN, TRIAL_NOTE, formatUsd } from "@/data/pricing";
 import { PERSONA_GROUPS, personasIn, withArticle, type Persona } from "@/data/personas";
 
 /* ---------- shared bits ---------- */
@@ -181,9 +181,7 @@ export function PersonaHero({ persona }: { persona: Persona }) {
             <Reveal delay={0.26}>
               <div className="mt-8 flex flex-col items-center gap-3 lg:items-start">
                 <UrlForm url={url} onChange={setUrl} />
-                <p className="text-sm text-white/70">
-                  No credit card required · Free {TRIAL_DAYS}-day trial
-                </p>
+                <p className="text-sm text-white/70">{TRIAL_NOTE}</p>
               </div>
             </Reveal>
 
@@ -531,9 +529,7 @@ export function PersonaWorkflow({ persona, tint = true }: BodyProps) {
           <PrimaryButton>
             Start your free trial <ArrowRight className="h-4 w-4" />
           </PrimaryButton>
-          <p className="text-xs text-muted-foreground">
-            No credit card required · Free {TRIAL_DAYS}-day trial
-          </p>
+          <p className="text-xs text-muted-foreground">{TRIAL_NOTE}</p>
         </Reveal>
       </div>
     </section>
@@ -941,9 +937,7 @@ export function PersonaCTA({ persona }: { persona: Persona }) {
               <div className="mt-8 flex justify-center">
                 <UrlForm url={url} onChange={setUrl} />
               </div>
-              <p className="mt-3 text-sm text-background/60">
-                No credit card required · Free {TRIAL_DAYS}-day trial · Cancel anytime
-              </p>
+              <p className="mt-3 text-sm text-background/60">{TRIAL_NOTE}</p>
             </div>
           </div>
         </Reveal>

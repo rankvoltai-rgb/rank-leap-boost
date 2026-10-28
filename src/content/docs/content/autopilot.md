@@ -3,7 +3,7 @@ title: Autopilot and the publishing schedule
 nav_title: Autopilot
 description: What Rankbox autopilot does on each run, the pace options, what it needs to write, pausing and resuming, and how it sends articles to Webflow and Shopify.
 order: 7
-updated: 2026-10-02
+updated: 2026-10-28
 ---
 
 Autopilot writes your scheduled articles for you. For each site, it takes the next article in the queue, writes it with the same pipeline as **Write now**, marks it **Published**, and sends it to the site's Webflow or Shopify connection if it has one. It runs on Rankbox's servers, so your dashboard doesn't need to be open. You control it with one switch and one pace setting per site.
@@ -15,13 +15,13 @@ Autopilot writes for a site only when all of these are true. A connected website
 | Requirement | Where to check it |
 | --- | --- |
 | Autopilot is switched on for the site (it is by default) | **Settings → Autopilot → Write automatically** |
-| The account has a free trial or paid plan that allows writing | **Plan & Billing** |
+| The account has a free trial or paid plan that allows writing | The billing banner at the top of the dashboard, and **Plan & Billing** |
 | The site is active (a Studio site also needs a paid plan) | **Studio** |
 | The site has at least one article credit left this billing period | **Overview → Article credits** |
 | At least one article is **Scheduled** | **Articles → Scheduled** or **Calendar** |
 | Enough time has passed since autopilot's last article for the site, at your pace | See [Pace and timing](#pace-and-timing) |
 
-A trial whose card couldn't be verified doesn't write. A plan whose payment failed keeps writing for 48 hours. A cancelled plan keeps writing until the end of the period you've paid for. Details are in [Billing, invoices and cancellation](/docs/account/billing).
+A trial whose card couldn't be verified doesn't write. A plan whose payment failed stops writing at once; there is no grace period. A cancelled plan keeps writing until the end of the period you've paid for. In each blocked case, a banner at the top of the dashboard has the button that fixes it, and autopilot picks up again as soon as it's fixed. Details are in [Billing, invoices and cancellation](/docs/account/billing).
 
 ## What happens on each run
 
@@ -66,7 +66,7 @@ Changing the pace re-spaces every scheduled article from tomorrow, in the curren
 
 You can also click **Pause** or **Resume** in the autopilot bar on the Articles and Calendar pages. Pausing from the bar offers **Undo**.
 
-Pausing stops new writing for that site only. Scheduled articles stay in the queue and nothing is lost; as their days pass, they show as **Overdue**. Before you start a trial, the switch is replaced by a **Start free trial** button with the note "Autopilot starts writing when your free trial does."
+Pausing stops new writing for that site only. Scheduled articles stay in the queue and nothing is lost; as their days pass, they show as **Overdue**. While billing blocks the account, the switch is replaced by the billing fix (**Update card**, **Update billing** or **Restart plan**) with the note "Autopilot is paused until billing is sorted. Scheduled articles wait, nothing is lost."
 
 ## Read autopilot's status
 
@@ -78,7 +78,7 @@ The bar sits at the top of **Articles** and **Calendar** whenever something is s
 | --- | --- | --- | --- |
 | On | "Autopilot is on" | Its pace and the next article, for example "Writes every day. Next up: “…”, tomorrow." | **Pause** |
 | Paused | "Autopilot is paused" | "Nothing is written until you resume." and the next article | **Resume** |
-| No trial or plan | "Autopilot is ready when you are" | How many articles are planned and that the trial starts them | **Start free trial** |
+| Billing blocks writing (a failed card check, a failed payment or an ended plan) | "Autopilot is paused until billing is fixed" | How many articles are planned and waiting, and that it picks up again as soon as billing is sorted | **Update card**, **Update billing** or **Restart plan** |
 | No credits left | "Autopilot has used this month's articles" | "It picks up again when your plan renews — or upgrade to keep going now." | **Upgrade** |
 
 When articles are overdue and autopilot is on or paused, the bar adds how many, and a **Re-plan from tomorrow** button.
@@ -93,9 +93,9 @@ The number next to **Articles** in the sidebar is how many articles on the activ
 
 ## Catch up on overdue articles
 
-An article is overdue when its day has passed and it hasn't been written, usually because autopilot was paused, the trial hadn't started, or the site ran out of credits.
+An article is overdue when its day has passed and it hasn't been written, usually because autopilot was paused, billing blocked writing, or the site ran out of credits.
 
-1. Make sure autopilot can run: start the trial, wait for credits to renew, or click **Resume**.
+1. Make sure autopilot can run: fix billing from the banner, wait for credits to renew, or click **Resume**.
 2. Click **Re-plan from tomorrow** in the autopilot bar.
 3. Rankbox keeps the queue's order and spaces every scheduled article from tomorrow at your pace. The toast offers **Undo**.
 
@@ -136,7 +136,7 @@ Each site in [Studio](/docs/account/studio) has its own autopilot switch, pace, 
 
 | What you see | Likely cause | What to do |
 | --- | --- | --- |
-| "Autopilot is ready when you are" | No trial or plan | Click **Start free trial** |
+| "Autopilot is paused until billing is fixed" | A failed card check, a failed payment or an ended plan | Click **Update card**, **Update billing** or **Restart plan** |
 | "Autopilot has used this month's articles" | No credits left | Wait for the renewal |
 | "Autopilot is paused" | The switch is off | Click **Resume** |
 | Articles marked **Overdue** | Autopilot couldn't run on those days | Fix the cause, then **Re-plan from tomorrow** |

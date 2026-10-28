@@ -3,7 +3,7 @@ title: Agent API reference
 nav_title: API reference
 description: Every endpoint of the Rankbox agent API: conventions, objects, parameters and example requests and responses for accounts, sites, articles, billing and more.
 order: 5
-updated: 2026-10-02
+updated: 2026-10-28
 ---
 
 The agent API is the REST API behind agent access. It covers everything the dashboard does, for every site on the account. This page lists every endpoint with its parameters, an example request and an example response. Read [Conventions](#conventions) first; the rest is reference.
@@ -89,7 +89,7 @@ Some errors add fields: `details` (an array of `{ "field", "problem" }` on `vali
 | --- | --- | --- |
 | 400 | `bad_request` | The body isn't valid JSON, or a header is malformed |
 | 401 | `unauthorized` | Missing, unknown, revoked or expired credential |
-| 402 | `subscription_required` | Needs the trial or the plan; or the trial's card check failed; or the site isn't active on the plan |
+| 402 | `subscription_required` | Needs the trial or the plan; or the trial's card check failed; or a payment failed (there is no grace period); or the plan has ended; or the site isn't active on the plan |
 | 402 | `paid_plan_required` | Needs a paid invoice. The trial doesn't count. Applies to the backlink exchange, Reddit Presence and Studio |
 | 402 | `insufficient_credits` | The site used this period's credits of the kind the call spends |
 | 402 | `payment_failed` | A charge (a Studio site, ending the trial early) was declined. Nothing changed |
@@ -860,7 +860,7 @@ Errors: `402 subscription_required`, `402 insufficient_credits`, `409 conflict` 
 POST /sites/{site_id}/articles/{article_id}/rewrite-section
 ```
 
-Rewrites one passage, like the editor's AI actions on selected text. Synchronous, usually 5 to 15 seconds. No credits; counts toward the AI rate limit.
+Rewrites one passage, like the editor's AI actions on selected text. Synchronous, usually 5 to 15 seconds. No credits; counts toward the AI rate limit. Like the editor, it needs a trial or plan that can write: it returns `402 subscription_required` when the account has none, the card check failed, a payment failed or the plan has ended.
 
 | Field | Type | Required | Notes |
 | --- | --- | --- | --- |
@@ -1712,11 +1712,11 @@ Returns `{ "replies": [ … ], "next_cursor": … }`.
 | --- | --- | --- |
 | `status` | string | `none`, `trialing`, `active`, `past_due` or `canceled` |
 | `paid` | boolean | Whether an invoice has been paid and the plan is current. Opens backlinks, Reddit and Studio |
-| `card_verified` | boolean or null | The trial's card check. `false` blocks generation until the card is updated |
+| `card_verified` | boolean or null | The trial's card check. `false` blocks generation until the card is updated; updating it reruns the check |
 | `trial_ends_at` | string or null | End of the trial |
 | `current_period_end` | string or null | When the current period renews or ends |
 | `cancel_at_period_end` | boolean | Cancellation is scheduled |
-| `past_due_since` | string or null | When a payment first failed. Generation keeps working for 48 hours after it |
+| `past_due_since` | string or null | When the current run of failed payments started. It grants no access: generation stops as soon as a payment fails |
 | `plan` | object | `name` (`Business`), `amount` (49.5), `currency`, `interval` |
 | `studio_sites` | integer | Studio sites billed on top of the plan |
 | `monthly_total` | number | The monthly bill, plan plus Studio sites |
@@ -1757,7 +1757,7 @@ Creates a link for the owner to start the plan. The owner enters their card on S
 POST /billing/portal
 ```
 
-Returns `{ "portal": { "portal_url": "https://rankbox.xyz/billing/portal/po_xxxxxxxxxxxx", "expires_at": "…" } }`, valid for 24 hours. Stripe's billing portal is where the owner updates the card, downloads invoices and cancels. Hand it to the owner. Needs an existing subscription (`409 conflict` otherwise).
+Returns `{ "portal": { "portal_url": "https://rankbox.xyz/billing/portal/po_xxxxxxxxxxxx", "expires_at": "…" } }`, valid for 24 hours. Stripe's billing portal is where the owner updates the card, downloads invoices and cancels. Hand it to the owner. Needs an existing subscription (`409 conflict` otherwise). To clear a failed card check or a failed payment, point the owner at the banner at the top of `https://rankbox.xyz/dashboard` instead: its **Update card** or **Update billing** button updates the card, then reruns the check or retries the payment straight away.
 
 ### End the trial now
 

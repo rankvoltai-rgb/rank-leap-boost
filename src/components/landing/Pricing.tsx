@@ -3,7 +3,7 @@ import { Check, ArrowRight } from "lucide-react";
 import { Reveal, Eyebrow, Stars } from "./shared";
 import { BrandTile } from "./used-by";
 import { BRANDS } from "@/data/brands";
-import { PLAN, TRIAL_DAYS, formatUsd, priceFor } from "@/data/pricing";
+import { PLAN, TRIAL_CTA, TRIAL_DAYS, formatUsd, priceFor } from "@/data/pricing";
 import {
   BingMark,
   ChatGPTMark,
@@ -162,12 +162,12 @@ export function Pricing() {
                 href="/auth"
                 className="group mt-7 inline-flex h-14 w-full items-center justify-center gap-2 rounded-xl bg-cta px-6 text-base font-semibold text-white shadow-2 transition-all hover:-translate-y-0.5 hover:bg-cta-hover hover:shadow-3 focus-visible:outline-none focus-visible:ring-focus"
               >
-                Get Started Free
+                {TRIAL_CTA}
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
               </a>
               <p className="mt-3 text-center text-xs text-muted-foreground">
-                No card to sign up. {TRIAL_DAYS} days free, then {formatUsd(PLAN.monthly)}/month.
-                Cancel anytime.
+                Card required. {TRIAL_DAYS} days free, then {formatUsd(PLAN.monthly)}/month. Cancel
+                anytime.
               </p>
 
               <ul className="mt-8 space-y-3 border-t border-border pt-7">

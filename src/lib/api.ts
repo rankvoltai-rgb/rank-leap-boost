@@ -134,6 +134,12 @@ export interface Subscription {
   studio_sites: number;
   environment: string;
   created_at: string;
+  /** The trial's $1 card check: false blocks generation until the card is updated. */
+  card_verified?: boolean | null;
+  /** When the current run of failed payments started. */
+  past_due_since?: string | null;
+  /** First time the plan was seen paid. */
+  activated_at?: string | null;
 }
 
 async function uid(): Promise<string> {

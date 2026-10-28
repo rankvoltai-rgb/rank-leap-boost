@@ -7,6 +7,8 @@ import {
   getStripeErrorMessage,
 } from "@/lib/stripe.server";
 import { PLAN_PRICE_LOOKUP_KEY, TRIAL_DAYS } from "@/data/pricing";
+import { trialDaysFor } from "@/lib/entitlement";
+import { assertBillingRateLimit } from "@/lib/rate-limit.server";
 
 type CheckoutSessionResult = { clientSecret: string; sessionId: string } | { error: string };
 type PortalSessionResult = { url: string } | { error: string };
@@ -84,7 +86,25 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
         productDescription = product.name;
       }
 
-      const trialDays = isRecurring ? ALLOWED_PRICES[data.priceId].trialDays : undefined;
+      // One trial per account: anyone who has had a subscription before —
+      // ours on record, or Stripe's for this customer — restarts paid.
+      let trialDays: number | undefined;
+      if (isRecurring) {
+        const [{ data: priorRow }, priorStripe] = await Promise.all([
+          context.supabase
+            .from("subscriptions")
+            .select("id")
+            .eq("user_id", userId)
+            .eq("environment", environment)
+            .limit(1)
+            .maybeSingle(),
+          stripe.subscriptions.list({ customer: customerId, status: "all", limit: 1 }),
+        ]);
+        trialDays = trialDaysFor(
+          !!priorRow || priorStripe.data.length > 0,
+          ALLOWED_PRICES[data.priceId].trialDays,
+        );
+      }
 
       const session = await stripe.checkout.sessions.create({
         // Always one: the plan covers one site, and every extra site is a
@@ -119,7 +139,8 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
     }
   });
 
-type ConfirmCheckoutResult = { status: string | null } | { error: string };
+type ConfirmCheckoutResult =
+  { status: string | null; cardVerified?: boolean | null } | { error: string };
 
 /**
  * Reconcile a just-completed checkout without waiting for the webhook.
@@ -160,7 +181,16 @@ export const confirmCheckout = createServerFn({ method: "POST" })
 
       const { syncSubscriptionFromCheckout } = await import("@/lib/subscriptions.server");
       await syncSubscriptionFromCheckout(subscription, environment);
-      return { status: subscription.status };
+      // The sync ran the trial's card check; the caller says so if it failed.
+      const { data: row } = await context.supabase
+        .from("subscriptions")
+        .select("card_verified")
+        .eq("stripe_subscription_id", subscription.id)
+        .maybeSingle();
+      return {
+        status: subscription.status,
+        cardVerified: (row as { card_verified?: boolean | null } | null)?.card_verified ?? null,
+      };
     } catch (error) {
       return { error: getStripeErrorMessage(error) };
     }
@@ -168,7 +198,10 @@ export const confirmCheckout = createServerFn({ method: "POST" })
 
 export const createPortalSession = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: { returnUrl?: string }) => data)
+  .inputValidator((data: { returnUrl?: string; flow?: "payment_method_update" }) => {
+    if (data.flow && data.flow !== "payment_method_update") throw new Error("Unknown flow");
+    return data;
+  })
   .handler(async ({ data, context }): Promise<PortalSessionResult> => {
     const { supabase, userId } = context;
 
@@ -187,9 +220,121 @@ export const createPortalSession = createServerFn({ method: "POST" })
       const portal = await stripe.billingPortal.sessions.create({
         customer: sub.stripe_customer_id as string,
         ...(data.returnUrl && { return_url: data.returnUrl }),
+        // Straight to "update card", then straight back — where the return
+        // runs `recheckBilling` and lifts the block.
+        ...(data.flow === "payment_method_update" &&
+          data.returnUrl && {
+            flow_data: {
+              type: "payment_method_update" as const,
+              after_completion: {
+                type: "redirect" as const,
+                redirect: { return_url: data.returnUrl },
+              },
+            },
+          }),
       });
       return { url: portal.url };
     } catch (error) {
       return { error: getStripeErrorMessage(error) };
+    }
+  });
+
+export type BillingRecheckResult =
+  | { outcome: "fixed" }
+  | { outcome: "failed"; message: string }
+  | { outcome: "needs_action"; clientSecret: string; kind: "card_check" | "invoice" };
+
+/**
+ * Lift a billing block after the customer has updated their card.
+ *
+ * The portal only changes which card is on file; it neither re-runs the
+ * trial's $1 check nor retries a failed invoice. This does whichever the
+ * account needs, with the card now on file, and re-syncs the row so the
+ * banner and the generation gate move together. Everything is read from the
+ * caller's own subscription — nothing the client sends picks what is charged.
+ */
+export const recheckBilling = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }): Promise<BillingRecheckResult> => {
+    await assertBillingRateLimit(context.userId);
+    const environment = getServerStripeEnv();
+    const { data: row } = await context.supabase
+      .from("subscriptions")
+      .select("stripe_subscription_id, card_verified")
+      .eq("user_id", context.userId)
+      .eq("environment", environment)
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    const subRow = row as { stripe_subscription_id: string; card_verified: boolean | null } | null;
+    if (!subRow?.stripe_subscription_id) {
+      return { outcome: "failed", message: "There's no plan on this account to fix." };
+    }
+
+    try {
+      const stripe = createStripeClient(environment);
+      const server = await import("@/lib/subscriptions.server");
+      const subscription = await stripe.subscriptions.retrieve(subRow.stripe_subscription_id);
+      const card = await server.currentDefaultCard(stripe, subscription);
+      if (!card) return { outcome: "failed", message: "Add a card first, then try again." };
+
+      let result: Awaited<ReturnType<typeof server.recheckCard>> = { outcome: "fixed" };
+      let kind: "card_check" | "invoice" = "card_check";
+      if (subscription.status === "trialing" && subRow.card_verified === false) {
+        result = await server.recheckCard(subscription, card, environment);
+      } else if (["past_due", "unpaid", "incomplete"].includes(subscription.status)) {
+        kind = "invoice";
+        result = await server.payOpenInvoice(subscription, card, environment);
+      }
+
+      await server.handleSubscriptionUpdated(
+        await stripe.subscriptions.retrieve(subscription.id),
+        environment,
+      );
+      return result.outcome === "needs_action" ? { ...result, kind } : result;
+    } catch (error) {
+      return { outcome: "failed", message: getStripeErrorMessage(error) };
+    }
+  });
+
+/** After the bank's 3-D Secure step: settle what `recheckBilling` started. */
+export const finishBillingRecheck = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: { kind: "card_check" | "invoice"; paymentIntentId?: string }) => {
+    if (data.kind !== "card_check" && data.kind !== "invoice") throw new Error("Unknown kind");
+    if (data.paymentIntentId && !/^pi_[a-zA-Z0-9_]+$/.test(data.paymentIntentId)) {
+      throw new Error("Invalid paymentIntentId");
+    }
+    return data;
+  })
+  .handler(async ({ data, context }): Promise<BillingRecheckResult> => {
+    await assertBillingRateLimit(context.userId);
+    const environment = getServerStripeEnv();
+    try {
+      const server = await import("@/lib/subscriptions.server");
+      const result =
+        data.kind === "card_check" && data.paymentIntentId
+          ? await server.finishCardRecheck(data.paymentIntentId, context.userId, environment)
+          : ({ outcome: "fixed" } as const);
+
+      const { data: row } = await context.supabase
+        .from("subscriptions")
+        .select("stripe_subscription_id")
+        .eq("user_id", context.userId)
+        .eq("environment", environment)
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      const subId = (row as { stripe_subscription_id?: string } | null)?.stripe_subscription_id;
+      if (subId) {
+        const stripe = createStripeClient(environment);
+        await server.handleSubscriptionUpdated(
+          await stripe.subscriptions.retrieve(subId),
+          environment,
+        );
+      }
+      return result.outcome === "needs_action" ? { ...result, kind: data.kind } : result;
+    } catch (error) {
+      return { outcome: "failed", message: getStripeErrorMessage(error) };
     }
   });

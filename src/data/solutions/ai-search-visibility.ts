@@ -95,7 +95,7 @@ export const VISIBILITY = {
     "You don't need a tracker to find out where you stand. Test the prompts, read your logs, and watch AI referrals in analytics.",
 
   ctaTitle: "Become the brand AI search recommends",
-  ctaBody: `Connect your site and Rankbox starts mapping questions and writing answers today. ${TRIAL_DAYS}-day free trial.`,
+  ctaBody: `Connect your site and Rankbox starts mapping questions and writing answers today. ${TRIAL_DAYS}-day free trial, card required.`,
 };
 
 export const VISIBILITY_FAQS: Faq[] = [
@@ -127,6 +127,6 @@ export const VISIBILITY_FAQS: Faq[] = [
   },
   {
     q: "What does Rankbox cost?",
-    a: `${price} a month for one site: ${PLAN.articlesPerMonth} articles, ${PLAN.backlinkCreditsPerMonth} backlink credits and ${PLAN.redditRepliesPerMonth} Reddit reply drafts. The ${TRIAL_DAYS}-day free trial includes ${TRIAL_ARTICLE_CREDITS} articles.`,
+    a: `${price} a month for one site: ${PLAN.articlesPerMonth} articles, ${PLAN.backlinkCreditsPerMonth} backlink credits and ${PLAN.redditRepliesPerMonth} Reddit reply drafts. The ${TRIAL_DAYS}-day free trial takes a card and includes ${TRIAL_ARTICLE_CREDITS} articles; backlinks and Reddit open with the first paid invoice.`,
   },
 ];

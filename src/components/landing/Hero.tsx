@@ -9,6 +9,7 @@ import { BRANDS } from "@/data/brands";
 import { EngineTicker } from "./engine-ticker";
 import { MarkDither } from "./hero-dither";
 import { HeroProofBand } from "./hero-proof-band";
+import { TRIAL_CTA, TRIAL_NOTE } from "@/data/pricing";
 
 /* Scattered white squares drifting over the blue field. Coordinates are fixed
    (not random) so the server and client renders agree. */
@@ -221,7 +222,7 @@ export function UrlForm({
           type="submit"
           className="inline-flex h-12 shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-lg bg-cta px-6 text-[0.95rem] font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.16),0_1px_2px_rgba(16,24,40,0.14)] transition-[background-color,transform] duration-150 hover:bg-cta-hover active:scale-[0.985] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-cta/25 sm:w-[13.5rem]"
         >
-          Get Started Free
+          {TRIAL_CTA}
           <ArrowRight className="h-4 w-4 transition-transform duration-200 group-focus-within:translate-x-0.5 group-hover:translate-x-0.5" />
         </button>
       </form>
@@ -257,8 +258,8 @@ export function UrlForm({
       >
         {/* "Free" and the arrow are dropped on the narrowest phones so the
             button keeps its place on the row and the field keeps room to read. */}
-        <span className="max-[420px]:hidden">Get Started Free</span>
-        <span className="hidden max-[420px]:inline">Get Started</span>
+        <span className="max-[420px]:hidden">{TRIAL_CTA}</span>
+        <span className="hidden max-[420px]:inline">Start trial</span>
         <ArrowRight className="h-4 w-4 transition-transform group-focus-within:translate-x-0.5 max-[420px]:hidden" />
       </button>
     </form>
@@ -342,9 +343,7 @@ export function Hero() {
             style={rise(0.34)}
           >
             <UrlForm url={url} onChange={setUrl} variant="split" />
-            <p className="mt-3.5 text-[0.82rem] text-muted-foreground">
-              No credit card required · Free 7-day trial
-            </p>
+            <p className="mt-3.5 text-[0.82rem] text-muted-foreground">{TRIAL_NOTE}</p>
           </div>
         </div>
       </div>

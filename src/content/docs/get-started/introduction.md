@@ -3,7 +3,7 @@ title: What is Rankbox?
 nav_title: Introduction
 description: What Rankbox does from site scan to published article, who it is for, what it deliberately does not do, the plan in brief, and where to go next.
 order: 1
-updated: 2026-10-02
+updated: 2026-10-28
 ---
 
 Rankbox is an AI search growth engine. It reads your website, finds the searches and questions your buyers type into Google and AI assistants, plans one article for each, writes them, scores them, and publishes them to your site on a schedule you control.
@@ -52,7 +52,7 @@ Knowing the limits up front saves you from expecting something the product doesn
 
 ## The plan in one paragraph
 
-Rankbox has one plan, Business, at $49.50 a month for one site, with 30 articles, 30 backlink credits and 30 Reddit reply drafts a month. Signing up and building your content plan are free and need no card. The 7-day free trial goes through Stripe Checkout and takes a card; you aren't charged until day 8, and you can cancel before then. The trial includes 7 article credits; research, writing, scoring and publishing all work, while the backlink exchange and Reddit Presence open with your first paid invoice. Studio adds more sites at $49.50 a month each, every one with the full allowance of its own. Details are in [Plans and credits](/docs/account/plans-and-credits) and [The free trial](/docs/account/free-trial).
+Rankbox has one plan, Business, at $49.50 a month for one site, with 30 articles, 30 backlink credits and 30 Reddit reply drafts a month. A card is required: you build your content plan in onboarding, then add a card in Stripe Checkout at its last step to start the 7-day free trial. You're charged $49.50 a month 7 days after you start, unless you cancel first, and each account gets one trial. The trial includes 7 article credits; research, writing, scoring and publishing all work, while the backlink exchange and Reddit Presence open with your first paid invoice. Studio adds more sites at $49.50 a month each, every one with the full allowance of its own. Details are in [Plans and credits](/docs/account/plans-and-credits) and [The free trial](/docs/account/free-trial).
 
 ## Key terms
 

@@ -14,7 +14,8 @@
       "ClaudeInChromeDomain(nicolassitter.com)",
       "ClaudeInChromeDomain(x.com)",
       "ClaudeInChromeDomain(manus.im)",
-      "ClaudeInChromeDomain(www.humansecurity.com)"
+      "ClaudeInChromeDomain(www.humansecurity.com)",
+      "ClaudeInChromeDomain(localhost:8093)"
     ]
   }
 }

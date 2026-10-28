@@ -3,7 +3,7 @@ title: How articles are written
 nav_title: Writing
 description: The Rankbox article pipeline stage by stage: live research, drafting, revision passes, sources, video, writer notes, length, credits and failures.
 order: 3
-updated: 2026-10-02
+updated: 2026-10-28
 ---
 
 Every Rankbox article, whether you click **Write now** or autopilot picks it from the queue, goes through the same pipeline: check the plan, research the live web for the keyword, draft the article in your brand voice, revise it against the SEO checks, add a video, and save it as published. This page explains each stage, what the finished article contains, and what happens when something fails.
@@ -17,7 +17,7 @@ Every Rankbox article, whether you click **Write now** or autopilot picks it fro
 | **Overview → Autopilot queue** | **Generate now** | Also on the Overview's **Write your first article** card |
 | Autopilot | None: it runs on its own | See [Autopilot and the publishing schedule](/docs/content/autopilot) |
 
-Writing needs three things: a free trial or paid plan, an active site, and at least one article credit left on that site. The writer works from three fields of the article: the title, the **Target keyword** and the brief in **Meta description**. Edit those first to steer the result. If **Target keyword** is empty, the title is used as the keyword.
+Writing needs three things: a free trial or paid plan with billing in good standing (no failed card check, no failed payment), an active site, and at least one article credit left on that site. The writer works from three fields of the article: the title, the **Target keyword** and the brief in **Meta description**. Edit those first to steer the result. If **Target keyword** is empty, the title is used as the keyword.
 
 ## The pipeline, stage by stage
 
@@ -149,8 +149,10 @@ If any stage fails, Rankbox returns the reserved credit, releases any exchange-l
 
 | Message | Cause | What to do |
 | --- | --- | --- |
-| "Start your free trial to generate articles." | No trial or paid plan | Start the [free trial](/docs/account/free-trial) |
-| "We couldn't verify your card. Update it in billing to start generating." | The trial's card check failed | Update the card in **Plan & Billing** |
+| "Start your free trial to generate articles." | The account has no subscription at all | Add a card at step 4 of onboarding to start the [free trial](/docs/account/free-trial) |
+| "We couldn't verify your card. Update it to start writing." | The trial's $1 card check failed | Click **Update card** on the banner at the top of the dashboard. Updating the card reruns the check |
+| "Your last payment didn't go through. Update billing to keep writing." | A payment failed. Writing stops at once; there is no grace period | Click **Update billing** on the banner. Rankbox retries the payment with the new card |
+| "Your plan has ended. Restart it to keep writing." | The plan was cancelled and its period is over | Click **Restart plan** on the banner. A restarted plan is paid from day one |
 | "This site isn't active on your plan. Restore it from Studio to use it." | A Studio site was removed or archived | Restore it in [Studio](/docs/account/studio) |
 | "You've used all 30 articles this month" (dialog) or "This site has used all its articles for this billing period." | No credits left | Wait for the period to renew |
 | "You're making AI requests too quickly. Wait a minute and try again." | More than 12 AI requests in a minute (the default) | Wait a minute |

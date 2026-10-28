@@ -15,7 +15,7 @@ import { SITES_QUERY_KEY, useActiveSite } from "@/components/dashboard/site-cont
 import { StudioCheckout } from "@/components/studio/StudioCheckout";
 import { StudioGate } from "@/components/studio/StudioGate";
 import { reducedMotion } from "@/components/onboarding/constants";
-import { StepHeader, type Step } from "@/components/onboarding/shell";
+import { StepCountContext, StepHeader, type Step } from "@/components/onboarding/shell";
 import { Part1Profile, type Part1Value } from "@/components/onboarding/Part1Profile";
 import { Part2Analysis, type Part2Value } from "@/components/onboarding/Part2Analysis";
 import { Part3Forecast } from "@/components/onboarding/Part3Forecast";
@@ -113,7 +113,13 @@ function AddSiteFlow() {
   );
 
   const step: Step = draft.step === "done" ? 1 : draft.step;
-  const goTo = useCallback((s: Step) => patch({ step: s }), [patch]);
+  // Studio has no trial step; its flow ends at the plan.
+  const goTo = useCallback(
+    (s: Step) => {
+      if (s !== 4) patch({ step: s });
+    },
+    [patch],
+  );
 
   const firstRender = useRef(true);
   useEffect(() => {
@@ -228,119 +234,123 @@ function AddSiteFlow() {
   const reduced = reducedMotion();
 
   return (
-    <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_20rem] xl:gap-16">
-      <div className="min-w-0 max-w-[42rem]">
-        {draft.paidSiteId && (
-          <p className="mb-6 rounded-card border border-success/25 bg-success/10 px-4 py-3 text-sm text-ink">
-            {domain || "This site"} is paid for and in Studio. Finish its plan to start publishing.
-          </p>
-        )}
-        <ProjectionStrip {...projection} />
-
-        <AnimatePresence mode="wait" initial={false}>
-          <motion.div
-            key={step}
-            initial={reduced ? false : { opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={reduced ? { opacity: 0 } : { opacity: 0, y: -6 }}
-            transition={{ duration: reduced ? 0 : 0.2, ease: "easeOut" }}
-          >
-            {step === 1 && (
-              <>
-                <StepHeader
-                  n={1}
-                  title={domain ? "Is this the brand?" : "Which site are you adding?"}
-                  subtitle={
-                    domain
-                      ? "We read the site and filled this in. Fix anything that's off — it briefs every article we write for it."
-                      : "Enter the site's address and we'll fill in the rest: its brand name, what it does, and its logo."
-                  }
-                />
-                <Part1Profile
-                  value={part1}
-                  onChange={(p) =>
-                    // Once paid for, the site is fixed; its details are edited in Settings.
-                    draft.paidSiteId ? undefined : patch(p)
-                  }
-                  onNext={next1}
-                />
-              </>
-            )}
-
-            {step === 2 && (
-              <Part2Analysis
-                url={draft.url}
-                brandName={draft.brandName}
-                description={draft.description}
-                value={part2}
-                onChange={(p) => patch(p.keywords ? { ...p, titles: [] } : p)}
-                onNext={() => goTo(3)}
-                onBack={() => goTo(1)}
-              />
-            )}
-
-            {step === 3 && (
-              <Part3Forecast
-                plan={{
-                  url: draft.url,
-                  brandName: draft.brandName,
-                  description: draft.description,
-                  niche: draft.niche,
-                  audience: draft.audience,
-                  geo: draft.geo,
-                  competitors: draft.competitors,
-                  semanticClusters: draft.semanticClusters,
-                  missingOpportunities: draft.missingOpportunities,
-                  keywords: draft.keywords,
-                }}
-                titles={draft.titles}
-                onTitles={(titles: DraftTitle[]) => patch({ titles })}
-                onConfirm={confirm}
-                onBack={() => goTo(2)}
-                confirming={finishing}
-                confirmLabel={draft.paidSiteId ? "Finish setup" : "Review & add site"}
-                queueNote="published one a day once the site is added"
-                footnote={
-                  draft.paidSiteId
-                    ? "Already paid for. This only saves the plan."
-                    : "You'll see the price before anything is charged. Edit or remove any article later."
-                }
-              />
-            )}
-          </motion.div>
-        </AnimatePresence>
-      </div>
-
-      <aside className="hidden lg:block">
-        <div className="sticky top-0">
-          <PlanRail
-            {...projection}
-            brandName={draft.brandName}
-            logoUrl={draft.logoUrl}
-            onStep={goTo}
-            proof={false}
-          />
-        </div>
-      </aside>
-
-      <Dialog open={checkoutOpen} onOpenChange={setCheckoutOpen}>
-        <DialogContent className="max-w-lg">
-          <DialogHeader>
-            <DialogTitle>Add {domain || "this site"} to Studio</DialogTitle>
-            <DialogDescription>
-              Check the numbers, then confirm. The site goes live the moment the payment does.
-            </DialogDescription>
-          </DialogHeader>
-          {checkoutOpen && (
-            <StudioCheckout
-              site={{ brand_name: draft.brandName, website_url: draft.url }}
-              payLabel="Add site"
-              onPay={pay}
-              onCancel={() => setCheckoutOpen(false)}
-            />
+    // Three steps: a Studio site is added to a paid plan, so there's no trial step.
+    <StepCountContext.Provider value={3}>
+      <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_20rem] xl:gap-16">
+        <div className="min-w-0 max-w-[42rem]">
+          {draft.paidSiteId && (
+            <p className="mb-6 rounded-card border border-success/25 bg-success/10 px-4 py-3 text-sm text-ink">
+              {domain || "This site"} is paid for and in Studio. Finish its plan to start
+              publishing.
+            </p>
           )}
-        </DialogContent>
-      </Dialog>
-    </div>
+          <ProjectionStrip {...projection} />
+
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.div
+              key={step}
+              initial={reduced ? false : { opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={reduced ? { opacity: 0 } : { opacity: 0, y: -6 }}
+              transition={{ duration: reduced ? 0 : 0.2, ease: "easeOut" }}
+            >
+              {step === 1 && (
+                <>
+                  <StepHeader
+                    n={1}
+                    title={domain ? "Is this the brand?" : "Which site are you adding?"}
+                    subtitle={
+                      domain
+                        ? "We read the site and filled this in. Fix anything that's off — it briefs every article we write for it."
+                        : "Enter the site's address and we'll fill in the rest: its brand name, what it does, and its logo."
+                    }
+                  />
+                  <Part1Profile
+                    value={part1}
+                    onChange={(p) =>
+                      // Once paid for, the site is fixed; its details are edited in Settings.
+                      draft.paidSiteId ? undefined : patch(p)
+                    }
+                    onNext={next1}
+                  />
+                </>
+              )}
+
+              {step === 2 && (
+                <Part2Analysis
+                  url={draft.url}
+                  brandName={draft.brandName}
+                  description={draft.description}
+                  value={part2}
+                  onChange={(p) => patch(p.keywords ? { ...p, titles: [] } : p)}
+                  onNext={() => goTo(3)}
+                  onBack={() => goTo(1)}
+                />
+              )}
+
+              {step === 3 && (
+                <Part3Forecast
+                  plan={{
+                    url: draft.url,
+                    brandName: draft.brandName,
+                    description: draft.description,
+                    niche: draft.niche,
+                    audience: draft.audience,
+                    geo: draft.geo,
+                    competitors: draft.competitors,
+                    semanticClusters: draft.semanticClusters,
+                    missingOpportunities: draft.missingOpportunities,
+                    keywords: draft.keywords,
+                  }}
+                  titles={draft.titles}
+                  onTitles={(titles: DraftTitle[]) => patch({ titles })}
+                  onConfirm={confirm}
+                  onBack={() => goTo(2)}
+                  confirming={finishing}
+                  confirmLabel={draft.paidSiteId ? "Finish setup" : "Review & add site"}
+                  queueNote="published one a day once the site is added"
+                  footnote={
+                    draft.paidSiteId
+                      ? "Already paid for. This only saves the plan."
+                      : "You'll see the price before anything is charged. Edit or remove any article later."
+                  }
+                />
+              )}
+            </motion.div>
+          </AnimatePresence>
+        </div>
+
+        <aside className="hidden lg:block">
+          <div className="sticky top-0">
+            <PlanRail
+              {...projection}
+              brandName={draft.brandName}
+              logoUrl={draft.logoUrl}
+              onStep={goTo}
+              proof={false}
+            />
+          </div>
+        </aside>
+
+        <Dialog open={checkoutOpen} onOpenChange={setCheckoutOpen}>
+          <DialogContent className="max-w-lg">
+            <DialogHeader>
+              <DialogTitle>Add {domain || "this site"} to Studio</DialogTitle>
+              <DialogDescription>
+                Check the numbers, then confirm. The site goes live the moment the payment does.
+              </DialogDescription>
+            </DialogHeader>
+            {checkoutOpen && (
+              <StudioCheckout
+                site={{ brand_name: draft.brandName, website_url: draft.url }}
+                payLabel="Add site"
+                onPay={pay}
+                onCancel={() => setCheckoutOpen(false)}
+              />
+            )}
+          </DialogContent>
+        </Dialog>
+      </div>
+    </StepCountContext.Provider>
   );
 }

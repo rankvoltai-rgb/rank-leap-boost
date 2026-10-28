@@ -55,11 +55,9 @@ export const createApiKey = createServerFn({ method: "POST" })
 
     // Connecting a site is part of the plan. The page gates this too, but only
     // this check can't be skipped.
-    const { hasGenerationEntitlement } = await import("@/lib/entitlement.server");
+    const { requireGenerationEntitlement } = await import("@/lib/entitlement.server");
     const scope = { userId: context.userId, siteId: data.siteId };
-    if (!(await hasGenerationEntitlement(context.supabase, scope))) {
-      throw new Error("Start your free trial to connect your site.");
-    }
+    await requireGenerationEntitlement(context.supabase, scope);
 
     const { generateApiKey } = await import("@/lib/api-keys.server");
     const key = generateApiKey();

@@ -3,7 +3,7 @@ title: Authentication and API keys
 nav_title: Authentication
 description: How Rankbox API keys work: the rv_live_ format, one key per site, creating, replacing and revoking keys, the Authorization header, and storing keys safely.
 order: 2
-updated: 2026-10-02
+updated: 2026-10-28
 ---
 
 Every request to the Rankbox REST API carries an API key. A key belongs to one site in your account: it can read that site's finished articles and record their live URLs, and nothing else. This page covers how keys work, how to create, replace and revoke them, and how to keep them safe.
@@ -46,7 +46,7 @@ You need an active trial or plan, and the site must be active on your account.
 
 The website connectors under **Your website** can lead to the same setup. When a platform's card offers **Connect with the API**, that button opens these steps, and the key it creates is named after the platform (for example **WordPress site**), so the connection shows that platform's logo later.
 
-Without an active trial or plan, step 1 says "Connecting a site comes with your plan. Start your 7-day free trial to create a key." with a **Start free trial** button. The server enforces the same rule: a key request without a plan fails with "Start your free trial to connect your site." See [The free trial](/docs/account/free-trial).
+While billing blocks the account (a failed card check, a failed payment or an ended plan), step 1 says "Connecting a site is paused while billing needs attention. Sort it out to create a key." with the billing fix: **Update card**, **Update billing** or **Restart plan**. The server enforces the same rule: a key request is refused with the billing message, for example "Your last payment didn't go through. Update billing to keep writing." See [The billing banner](/docs/account/billing#the-billing-banner).
 
 ## Send the key with each request
 
@@ -104,7 +104,7 @@ A rejected key gets one of two statuses. They mean different things and call for
 | Status | Meaning | Typical causes | What to do |
 | --- | --- | --- | --- |
 | `401` | Rankbox doesn't accept this key | No key sent, a value that doesn't start with `rv_live_`, a mistyped or truncated key, a revoked key | Ask the user for a new key from **Dashboard → Integrations** |
-| `402` | The key is real, but its site can't sync right now | No trial or plan on the account, a trial whose card check failed, a payment that failed more than 48 hours ago, a cancelled plan past its paid period, a Studio site that was removed or archived | Send the user to **Dashboard → Plan & Billing**. Keep the key: it works again as soon as the site is active |
+| `402` | The key is real, but its site can't sync right now | No trial or plan on the account, a trial whose card check failed, a failed payment (from the moment it fails), a cancelled plan past its paid period, a Studio site that was removed or archived | Send the user to the dashboard. For a failed card check or payment, **Update card** or **Update billing** on the banner at the top fixes it by updating the card, which reruns the check or retries the payment. Keep the key: it works again as soon as the site is active |
 
 The `402` body carries `"code": "subscription_required"`. Branch on the status and the code, never on the message text. Exact bodies are in [Errors](/docs/api/errors).
 
@@ -171,7 +171,7 @@ Follow the same rule if you build a browser-based tool: keep the key in the pers
 | `401` with a key you just copied | The key was cut short or wrapped across lines. Copy it again with **Copy key**, or replace the key if the full value is lost |
 | `401` from code that worked before | The key was revoked, or replaced and then revoked. Create or replace a key and deploy it |
 | `401` while also sending `X-Api-Key` | A `Bearer` header with a wrong value takes precedence over `X-Api-Key`. Send one header, not both |
-| `402` on every request | The site has no active trial or plan, or it was removed from Studio. Check **Dashboard → Plan & Billing**. The hero on **Integrations** reads "Syncing is paused" |
+| `402` on every request | The site has no active trial or plan, its card check or a payment failed, or it was removed from Studio. Check the banner at the top of the dashboard and **Plan & Billing**. The hero on **Integrations** reads "Syncing is paused" |
 | Key stays **Waiting** | No request with that key has been accepted. Check that the deployed code uses the new key and actually ran |
 | A Studio site's key gets `402` while the main site works | The Studio site was removed or archived, or the account isn't on a paid plan: extra Studio sites need one, while a trial covers only the plan's own site. See [Studio](/docs/account/studio) |
 

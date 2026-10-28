@@ -3,13 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
-import {
-  createApiKey,
-  listIntegrationKeys,
-  revokeApiKey,
-  TRIAL_DAYS,
-  type IntegrationKey,
-} from "@/lib/data";
+import { createApiKey, listIntegrationKeys, revokeApiKey, type IntegrationKey } from "@/lib/data";
 import { Button, PageHeader, Panel, Pill } from "@/components/dashboard/primitives";
 import { CheckIcon, ConnectIcon } from "@/components/dashboard/icons";
 import { IntegrationLogo } from "@/components/dashboard/integration-logos";
@@ -17,6 +11,7 @@ import { ConfirmDialog } from "@/components/dashboard/article-parts";
 import { useAllArticles, useArticleActions } from "@/components/dashboard/useArticleActions";
 import { isEntitled } from "@/components/dashboard/autopilot-state";
 import { useSiteId } from "@/components/dashboard/site-context";
+import { BillingFixButton } from "@/components/dashboard/billing-context";
 import {
   ConnectorLibrary,
   ConnectorSheet,
@@ -111,7 +106,7 @@ function SiteIntegrations({ siteId }: { siteId: string }) {
       (q.state.data ?? []).some((k) => !k.revoked_at && !k.last_used_at) ? 5000 : false,
   });
 
-  // Brings the same trial dialog Generate raises; connecting a site needs a plan.
+  // Connecting a site needs a working plan, the same gate Generate has.
   const actions = useArticleActions({ openId: undefined, onOpen: () => undefined });
   // Unknown while the subscription loads, so the page never flashes locked.
   const locked = actions.subscription !== undefined && !isEntitled(actions.subscription);
@@ -144,11 +139,11 @@ function SiteIntegrations({ siteId }: { siteId: string }) {
     });
   }
 
-  // The trial dialog is its own modal; close the overlay first so the two
+  // The restart dialog is its own modal; close the overlay first so the two
   // never fight over focus.
-  function startTrial() {
+  function fixBilling() {
     setOpen(undefined);
-    actions.openTrial();
+    actions.fixBilling();
   }
 
   function goToSites() {
@@ -201,7 +196,7 @@ function SiteIntegrations({ siteId }: { siteId: string }) {
 
   async function createKey(connectorId: string, name: string) {
     if (locked) {
-      startTrial();
+      fixBilling();
       return;
     }
     setBusy("create");
@@ -218,7 +213,7 @@ function SiteIntegrations({ siteId }: { siteId: string }) {
 
   async function replace(key: IntegrationKey) {
     if (locked) {
-      startTrial();
+      fixBilling();
       return;
     }
     setBusy(key.id);
@@ -270,7 +265,7 @@ function SiteIntegrations({ siteId }: { siteId: string }) {
         webflow={webflow}
         shopify={shopify}
         onSetup={goToSites}
-        onStartTrial={startTrial}
+        onFixBilling={fixBilling}
       />
 
       {active.length > 0 && (
@@ -333,7 +328,7 @@ function SiteIntegrations({ siteId }: { siteId: string }) {
             freshKey={freshKey}
             onCreate={(name) => void createKey(open.id, name)}
             onReset={() => setFresh(null)}
-            onStartTrial={startTrial}
+            onFixBilling={fixBilling}
           />
         )}
       </ConnectorSheet>
@@ -403,7 +398,7 @@ function StatusHero({
   webflow,
   shopify,
   onSetup,
-  onStartTrial,
+  onFixBilling,
 }: {
   loading: boolean;
   status: SiteStatus;
@@ -414,7 +409,7 @@ function StatusHero({
   webflow: WebflowStatus | undefined;
   shopify: ShopifyStatus | undefined;
   onSetup: () => void;
-  onStartTrial: () => void;
+  onFixBilling: () => void;
 }) {
   if (loading) return <div className="skeleton h-[118px] rounded-card" />;
 
@@ -464,7 +459,7 @@ function StatusHero({
           sent.waiting
             ? ` — ${plural(sent.waiting, "article is", "articles are")} waiting for it`
             : ""
-        }. Start your free trial to turn syncing back on.`,
+        }. It turns back on as soon as billing is sorted.`,
       }
     : wf
       ? {
@@ -523,13 +518,10 @@ function StatusHero({
           <p className="mt-0.5 text-sm text-muted-foreground">{detail}</p>
         </div>
         {paused ? (
-          <Button
-            variant="brand"
+          <BillingFixButton
             className="ml-[1.625rem] shrink-0 self-center sm:ml-0"
-            onClick={onStartTrial}
-          >
-            Start free trial
-          </Button>
+            onFix={onFixBilling}
+          />
         ) : (
           (status === "none" || status === "stale") && (
             <Button
@@ -722,7 +714,7 @@ function SiteSetup({
   freshKey,
   onCreate,
   onReset,
-  onStartTrial,
+  onFixBilling,
 }: {
   siteId: string;
   /** Show the Webflow app's setup even before it's listed (see below). */
@@ -738,7 +730,7 @@ function SiteSetup({
   freshKey: IntegrationKey | undefined;
   onCreate: (name: string) => void;
   onReset: () => void;
-  onStartTrial: () => void;
+  onFixBilling: () => void;
 }) {
   const platform = PUBLISH_PLATFORMS.find((p) => p.id === connector.platformId);
   // Webflow connects through its own app, no key. Until the Marketplace lists
@@ -763,14 +755,7 @@ function SiteSetup({
   }
 
   if (webflowApp && !useApi) {
-    return (
-      <WebflowSetup
-        siteId={siteId}
-        locked={locked}
-        onStartTrial={onStartTrial}
-        onUseApi={() => setUseApi(true)}
-      />
-    );
+    return <WebflowSetup siteId={siteId} locked={locked} onUseApi={() => setUseApi(true)} />;
   }
 
   if (platform && !useApi) {
@@ -787,7 +772,7 @@ function SiteSetup({
         freshKey={freshKey}
         onCreate={onCreate}
         onReset={onReset}
-        onStartTrial={onStartTrial}
+        onFixBilling={onFixBilling}
       />
       {connector.kind === "api" && <ApiReference />}
     </div>
@@ -879,7 +864,7 @@ function ApiSetup({
   freshKey,
   onCreate,
   onReset,
-  onStartTrial,
+  onFixBilling,
 }: {
   platform?: Platform;
   /** Named after the platform, so the connection shows its logo later. */
@@ -890,7 +875,7 @@ function ApiSetup({
   freshKey: IntegrationKey | undefined;
   onCreate: (name: string) => void;
   onReset: () => void;
-  onStartTrial: () => void;
+  onFixBilling: () => void;
 }) {
   const [name, setName] = useState(defaultName);
   const connected = !!freshKey?.last_used_at;
@@ -914,12 +899,10 @@ function ApiSetup({
           ) : locked ? (
             <div className="flex flex-wrap items-center gap-3">
               <p className="text-sm text-muted-foreground">
-                Connecting a site comes with your plan. Start your {TRIAL_DAYS}-day free trial to
-                create a key.
+                Connecting a site is paused while billing needs attention. Sort it out to create a
+                key.
               </p>
-              <Button variant="brand" onClick={onStartTrial}>
-                Start free trial
-              </Button>
+              <BillingFixButton onFix={onFixBilling} />
             </div>
           ) : (
             <form

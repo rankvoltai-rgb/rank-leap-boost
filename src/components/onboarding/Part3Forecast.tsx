@@ -13,6 +13,7 @@ import { ArrowRight, CalendarClock, LayoutDashboard, Loader2, RefreshCw } from "
 import { motion } from "motion/react";
 import type { LucideIcon } from "lucide-react";
 import { planArticles, type ContentPlanInput, type DraftTitle } from "@/lib/data";
+import { TRIAL_DAYS } from "@/data/pricing";
 import { DASHBOARD_IDEAS } from "@/lib/site-meta";
 import { reducedMotion } from "./constants";
 import { ActionBar, PRIMARY_BUTTON, StepHeader } from "./shell";
@@ -99,9 +100,9 @@ export function Part3Forecast({
   onConfirm,
   onBack,
   confirming,
-  confirmLabel = "Confirm plan",
+  confirmLabel = "Continue",
   queueNote = "published one a day once your trial starts",
-  footnote = "Nothing publishes until you start your trial. Edit or remove any article later.",
+  footnote = `Next: start your ${TRIAL_DAYS}-day free trial. Nothing publishes until it starts, and you can edit or remove any article later.`,
 }: {
   plan: ContentPlanInput;
   titles: DraftTitle[];

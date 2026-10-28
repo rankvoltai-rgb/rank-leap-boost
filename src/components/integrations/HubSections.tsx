@@ -24,6 +24,7 @@ import {
   type ConnectorCategory,
 } from "@/data/connectors";
 import { AI_TOOLS, publicSlug } from "@/data/ai-integrations";
+import { TRIAL_CTA } from "@/data/pricing";
 import { Breadcrumb, Heading, TRIAL_NOTE, heroPrimary, heroSecondary } from "./IntegrationSections";
 import { Orbit } from "./visuals";
 import { ToolCard } from "./ToolPage";
@@ -473,7 +474,7 @@ export function HubCTA() {
               </p>
               <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
                 <a href="/auth" className={heroPrimary}>
-                  Get started free <ArrowRight className="h-4 w-4" />
+                  {TRIAL_CTA} <ArrowRight className="h-4 w-4" />
                 </a>
                 <button type="button" onClick={() => scrollToDirectory()} className={heroSecondary}>
                   Browse integrations

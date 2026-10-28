@@ -36,7 +36,7 @@ import { TOOL_ICONS } from "@/components/tools/icons";
 import { Stars } from "./shared";
 import { BrandTile } from "./used-by";
 import { BRANDS } from "@/data/brands";
-import { PLAN, STUDIO, TRIAL_DAYS, formatUsd, priceFor } from "@/data/pricing";
+import { PLAN, STUDIO, TRIAL_CTA, TRIAL_DAYS, formatUsd, priceFor } from "@/data/pricing";
 import { TOOLS, getTool } from "@/data/tools";
 import { PLATFORMS } from "./Pricing";
 import { Accent, Band, LINE, SectionHead, Spacer } from "./frame";
@@ -277,8 +277,8 @@ export function PlanCards() {
             an article, all-in.
           </>
         }
-        action={{ label: "Get Started Free", href: "/auth" }}
-        reassurance={`No card to sign up. ${TRIAL_DAYS} days free, then ${formatUsd(PLAN.monthly)}/month. Cancel anytime.`}
+        action={{ label: TRIAL_CTA, href: "/auth" }}
+        reassurance={`Card required. ${TRIAL_DAYS} days free, then ${formatUsd(PLAN.monthly)}/month. Cancel anytime.`}
         rows={BUSINESS_ROWS}
         className="order-1 lg:order-none"
       />
@@ -290,7 +290,7 @@ export function PlanCards() {
           subtitle="For agencies and founders running several brands"
           price={<Price amount={STUDIO.monthlyPerSite} suffix="/extra site a month" />}
           priceNote={`Your plan covers your first site. Every other site is ${formatUsd(STUDIO.monthlyPerSite)} a month, on the same invoice.`}
-          action={{ label: "Get Started Free", href: "/auth" }}
+          action={{ label: TRIAL_CTA, href: "/auth" }}
           reassurance="Add sites from your dashboard once your plan is active."
           rows={STUDIO_ROWS}
           className="order-3 lg:order-none"

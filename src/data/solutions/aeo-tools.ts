@@ -50,7 +50,7 @@ export const AEO = {
   autopilotIntro: `The free tools do each job once. For ${price} a month, Rankbox does the three that never finish, every day, for one site.`,
 
   ctaTitle: "Put your AEO on autopilot",
-  ctaBody: `Connect your site and Rankbox starts answering your buyers' questions today. ${TRIAL_DAYS}-day free trial.`,
+  ctaBody: `Connect your site and Rankbox starts answering your buyers' questions today. ${TRIAL_DAYS}-day free trial, card required.`,
 };
 
 /**

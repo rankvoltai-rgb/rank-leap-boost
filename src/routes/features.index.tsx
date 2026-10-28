@@ -8,6 +8,7 @@ import { PixelField, UrlForm, TrustRow } from "@/components/landing/Hero";
 import { FinalCTA } from "@/components/landing/FinalCTA";
 import { Pricing } from "@/components/landing/Pricing";
 import { ENGINE_ORDER, FEATURE_GROUPS, getFeature, type Feature } from "@/data/features";
+import { TRIAL_NOTE } from "@/data/pricing";
 
 const SITE = "https://rankbox.xyz";
 const TITLE = "Features — The AI Search Growth Engine | Rankbox";
@@ -105,7 +106,7 @@ function FeaturesHero() {
         </Reveal>
         <Reveal delay={0.2} className="mt-8 flex w-full flex-col items-center gap-3">
           <UrlForm url={url} onChange={setUrl} />
-          <p className="text-sm text-white/70">No credit card required · Free 7-day trial</p>
+          <p className="text-sm text-white/70">{TRIAL_NOTE}</p>
         </Reveal>
         <Reveal delay={0.26} className="mt-10">
           <TrustRow />

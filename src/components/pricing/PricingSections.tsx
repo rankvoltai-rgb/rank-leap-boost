@@ -58,9 +58,13 @@ import {
 import { LEGAL_CONTACT } from "@/components/legal/legal-ui";
 import { ENGINE_ORDER, getFeature, type Feature } from "@/data/features";
 import {
+  CARD_CHECK_NOTE,
   PLAN,
   PRICING_FAQS,
+  TRIAL_ARTICLE_CREDITS,
+  TRIAL_CTA,
   TRIAL_DAYS,
+  TRIAL_NOTE,
   afterTrialCopy,
   formatUsd,
   priceFor,
@@ -91,7 +95,7 @@ export function PricingHero() {
         </div>
         <div className="relative flex flex-col items-center px-5 pb-14 pt-14 text-center sm:px-8 sm:pb-16 sm:pt-16">
           <div className="motion-safe:animate-hero-rise" style={rise(0)}>
-            <Pill icon={Tag}>{TRIAL_DAYS}-day free trial · Cancel anytime</Pill>
+            <Pill icon={Tag}>{TRIAL_NOTE}</Pill>
           </div>
           <h1
             id="pricing-title"
@@ -144,7 +148,7 @@ const PROMISES: { icon: LucideIcon; title: string; body: string }[] = [
   {
     icon: ShieldCheck,
     title: `Nothing to pay for ${TRIAL_DAYS} days`,
-    body: "Your card is only charged if you're still on the plan when the trial ends.",
+    body: "Cancel before then and you're never charged.",
   },
   {
     icon: MousePointerClick,
@@ -189,29 +193,32 @@ export function PricingPlans() {
 
 /* ---------- Trial timeline ---------- */
 
+/* Setup's first three steps come before the card; the card is the last step
+   and starts the trial. The trial covers TRIAL_ARTICLE_CREDITS articles and
+   no backlinks or Reddit: those open with the first paid invoice. */
 const STEPS: { when: string; title: string; body: string; icon: LucideIcon }[] = [
   {
-    when: "Today",
-    title: "Build your plan, free",
-    body: "Add your site. We map the questions your buyers ask and draft your content plan. No card needed.",
+    when: "Setup",
+    title: "Build your content plan",
+    body: "Add your site. We map the questions your buyers ask and draft your content plan.",
     icon: Sparkles,
   },
   {
-    when: "Day 1",
+    when: "Last step of setup",
     title: "Start your free trial",
-    body: "Switch on autopilot and your first article is researched, written, and scored. No charge today.",
+    body: `Add your card to start the trial. ${CARD_CHECK_NOTE}`,
     icon: Rocket,
   },
   {
-    when: `Days 2–${TRIAL_DAYS - 1}`,
-    title: "Watch it compound",
-    body: "A fresh article every day, backlinks building, and AI citations tracked in your dashboard.",
+    when: `Your ${TRIAL_DAYS} days`,
+    title: "See it write for you",
+    body: `Autopilot researches, writes, and scores up to ${TRIAL_ARTICLE_CREDITS} articles. Backlinks and Reddit presence open with your first paid invoice.`,
     icon: TrendingUp,
   },
   {
-    when: `Day ${TRIAL_DAYS}`,
+    when: `${TRIAL_DAYS} days in`,
     title: "Keep going, or don't",
-    body: `Stay on for ${afterTrialCopy()}. Or cancel before then and pay nothing.`,
+    body: `You're charged ${afterTrialCopy()} ${TRIAL_DAYS} days after you start, unless you cancel first. That first invoice opens the full plan: ${PLAN.articlesPerMonth} articles and ${PLAN.backlinkCreditsPerMonth} backlink credits a month.`,
     icon: CalendarCheck,
   },
 ];
@@ -222,13 +229,13 @@ export function TrialTimeline() {
       <Spacer />
       <SectionHead
         icon={CalendarCheck}
-        eyebrow="Zero-risk trial"
+        eyebrow="How the trial works"
         title={
           <span id="trial-title">
-            Try the whole engine for {TRIAL_DAYS} days, <Accent>free</Accent>
+            Try Rankbox for {TRIAL_DAYS} days, <Accent>free</Accent>
           </span>
         }
-        subtitle="See real articles on your real site before you pay a cent. Here's exactly how it goes."
+        subtitle="See real articles on your real site before your first invoice. Here's exactly how it goes."
       />
       <Band>
         <ol className="grid lg:grid-cols-4">
@@ -718,7 +725,7 @@ export function PricingFAQ() {
 /* ---------- Closing band ---------- */
 
 /* The landing's closing band, with the first invoice rising from its foot:
-   what today costs, and what day seven does. */
+   what today costs, what the trial includes, and what happens when it ends. */
 function FirstInvoice() {
   return (
     <div
@@ -741,12 +748,12 @@ function FirstInvoice() {
         </div>
         <div className="flex items-center justify-between px-3.5 py-2.5 text-[0.82rem]">
           <span className="text-muted-foreground">
-            {PLAN.articlesPerMonth} articles · {PLAN.backlinkCreditsPerMonth} backlink credits
+            Up to {TRIAL_ARTICLE_CREDITS} trial articles
           </span>
           <span className="text-muted-foreground">Included</span>
         </div>
         <div className="flex items-center justify-between bg-cta-soft/60 px-3.5 py-2.5 text-[0.82rem]">
-          <span className="font-medium text-ink">Day {TRIAL_DAYS} · if you stay</span>
+          <span className="font-medium text-ink">{TRIAL_DAYS} days in · if you stay</span>
           <span className="font-semibold text-cta tabular-nums">{afterTrialCopy()}</span>
         </div>
       </div>
@@ -775,14 +782,14 @@ export function PricingFinalCTA() {
               Be the answer AI recommends — starting this week
             </h2>
             <p className="mt-4 max-w-xl text-balance text-[1rem] leading-relaxed text-white sm:text-[1.05rem]">
-              Drop in your URL. In a few minutes you'll have a researched content plan, free, with
-              no card needed.
+              Drop in your URL. In a few minutes you'll have a researched content plan, and your
+              free trial starts writing the articles in it.
             </p>
             <div className="mt-8 flex w-full justify-center">
               <UrlForm url={url} onChange={setUrl} />
             </div>
             <p className="mt-4 text-[0.82rem] text-white">
-              {TRIAL_DAYS} days free, then {afterTrialCopy()} · Cancel anytime
+              {TRIAL_DAYS} days free, then {afterTrialCopy()} · Card required · Cancel anytime
             </p>
           </Reveal>
           {/* The invoice rises from the band's foot and is cut off by it. */}
@@ -856,14 +863,14 @@ export function MobileStickyCTA() {
             <span className="text-sm font-normal text-muted-foreground">/month</span>
           </p>
           <p className="truncate text-xs text-muted-foreground">
-            {TRIAL_DAYS} days free · Cancel anytime
+            {TRIAL_DAYS} days free · Card required
           </p>
         </div>
         <a
           href="/auth"
           className="inline-flex h-11 shrink-0 items-center gap-1.5 rounded-lg bg-cta px-4 text-sm font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.16),0_1px_2px_rgba(16,24,40,0.14)]"
         >
-          Start free trial <ArrowRight className="h-4 w-4" />
+          {TRIAL_CTA} <ArrowRight className="h-4 w-4" />
         </a>
       </div>
     </div>

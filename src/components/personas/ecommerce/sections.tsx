@@ -44,6 +44,7 @@ import {
   Spacer,
 } from "@/components/landing/frame";
 import { TRIAL_NOTE } from "@/components/features/FeatureSections";
+import { TRIAL_CTA } from "@/data/pricing";
 import { IntegrationGlyph } from "@/components/integrations/visuals";
 import { getFeature } from "@/data/features";
 import { getIntegration } from "@/data/integrations";
@@ -509,7 +510,7 @@ export function EcommerceWorkflow({ persona }: { persona: Persona }) {
       </Band>
       <Band inner="flex flex-col items-center gap-3 px-5 py-10 text-center">
         <a href="/auth" className={SOLID_BUTTON}>
-          Get Started Free
+          {TRIAL_CTA}
           <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
         </a>
         <p className="text-[0.82rem] text-muted-foreground">{TRIAL_NOTE}</p>

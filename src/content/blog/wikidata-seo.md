@@ -220,7 +220,7 @@ Say a year later two more independent features have run. Tallyfold now meets the
 
 Rankbox doesn't create or edit Wikidata items, request them for you or earn press coverage. It doesn't track citations or watch what AI engines say about you either. It handles the writing that the ID path depends on.
 
-The [Citation-Ready Writer](/features/citation-ready-writer) researches the live web and writes 2,000 to 3,500-word source-backed articles, such as a facts page or a comparison, that reach your site through Rankbox's API. [Brand Voice](/features/brand-voice) applies the product details and style rules you give it, so every article uses the same name and category line as your markup. The Business plan is $49.50 a month, with a 7-day trial when you add a card. [See pricing](/pricing).
+The [Citation-Ready Writer](/features/citation-ready-writer) researches the live web and writes 2,000 to 3,500-word source-backed articles, such as a facts page or a comparison, that reach your site through Rankbox's API. [Brand Voice](/features/brand-voice) applies the product details and style rules you give it, so every article uses the same name and category line as your markup. The Business plan is $49.50 a month; its 7-day trial is free but takes a card. [See pricing](/pricing).
 
 ## Frequently Asked Questions
 

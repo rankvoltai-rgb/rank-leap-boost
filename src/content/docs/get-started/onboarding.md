@@ -1,12 +1,12 @@
 ---
 title: Onboarding, step by step
 nav_title: Onboarding
-description: Every step and field of Rankbox onboarding, what Rankbox does with each answer, what confirming saves to your site, and where to change it later.
+description: Every step and field of Rankbox onboarding, from your brand to the card that starts the trial: what Rankbox does with each answer, what's saved and where to change it later.
 order: 5
-updated: 2026-10-02
+updated: 2026-10-28
 ---
 
-Onboarding sets up your account's first site in three steps: your brand, your keywords and your content plan. It is free, needs no card, and usually takes a few minutes. This page covers every field, what Rankbox does with it, and how to change it afterwards.
+Onboarding sets up your account's first site in four steps: your brand, your keywords, your content plan and the trial. Step 4 is where you add a card to start the 7-day free trial. It can't be skipped, and the dashboard opens only once the trial has started. Onboarding usually takes a few minutes. This page covers every field, what Rankbox does with it, and how to change it afterwards.
 
 ## How you get to onboarding
 
@@ -17,15 +17,16 @@ Onboarding lives at `/onboarding`. You arrive there in one of these ways:
 - **From a confirmation email.** If Rankbox emails you a confirmation link, it brings you back to onboarding where you left off.
 - **By link.** `/onboarding?url=yoursite.com` starts onboarding with that website filled in.
 
-An account that already has a site is sent to the dashboard instead. Onboarding sets up only the first site; every other site is added with [Studio](/docs/account/studio).
+An account that already has a site and a trial or plan is sent to the dashboard instead. An account with a site but no subscription resumes on step 4, and so does any account that opens the dashboard before starting the trial. Onboarding sets up only the first site; every other site is added with [Studio](/docs/account/studio).
 
 ## How your progress is saved
 
-Rankbox saves every change you make in onboarding, including which step you're on, in your browser as you go. A refresh, the back button or a round trip through a confirmation email resumes exactly where you were, without re-running the site scan or the keyword analysis.
+Through steps 1 to 3, Rankbox saves every change you make, including which step you're on, in your browser as you go. A refresh, the back button or a round trip through a confirmation email resumes exactly where you were, without re-running the site scan or the keyword analysis.
 
-- **Saved per browser.** Progress lives in the browser you started in. Starting again on another device or browser begins from step 1.
+- **Saved per browser.** Progress through steps 1 to 3 lives in the browser you started in. Starting again on another device or browser begins from step 1.
+- **Saved to your account after step 3.** Confirming step 3 saves the site and its plan to your account and clears the browser copy. From then on, signing in on any browser or device resumes on step 4.
 - **Saved per account.** If a different Rankbox account signs in on the same browser, the earlier progress is dropped rather than resumed.
-- **Navigating steps.** The progress bar at the top shows **Brand**, **Keywords** and **Plan**. Finished steps are links back; you can't skip ahead of the analysis.
+- **Navigating steps.** The progress bar at the top shows **Brand**, **Keywords**, **Plan** and **Trial**. On steps 1 to 3, finished steps are links back; you can't skip ahead of the analysis. On step 4 the site is already saved, so no step is a link back; change its details in the dashboard instead.
 - **If saved progress breaks.** You'll see "Setup hit a snag" and "Something in your saved progress didn't load." Click **Start over** to clear it and begin again.
 
 On wide screens a rail on the right shows **Projected visits**, labelled **Modeled**, and a summary of your brand, keywords and content plan, each with a link back to edit it. On smaller screens a compact projection strip sits above the step instead. The projection is calculated from estimated keyword volumes, not measured traffic.
@@ -118,11 +119,25 @@ If planning fails, you'll see "We couldn't build your content plan." Click **Try
 
 ### Confirming
 
-Click **Confirm plan**. The button reads "Setting up…" while Rankbox saves, then you'll see "You're set up. Welcome to Rankbox." and land on the dashboard. The note beside the button says "Nothing publishes until you start your trial. Edit or remove any article later."
+Click **Continue**. The button reads "Setting up…" while Rankbox saves your site and plan, then step 4 opens. The note beside the button says "Next: start your 7-day free trial. Nothing publishes until it starts, and you can edit or remove any article later."
+
+## Step 4: Trial
+
+The last step, headed "Start your 7-day free trial", is where you add a card. It is required: there is no skip, and the dashboard can't be reached until the trial has started. The subheading says how many articles are planned and ready, and the rail keeps your projection on screen.
+
+Above the card form, the terms read "A card is required to start. We place a $1 hold to verify it and release it right away, so nothing is charged today. Your plan starts at $49.50/month 7 days from today unless you cancel first."
+
+1. Enter your card in Stripe's checkout form and complete checkout.
+2. Wait for "Starting your trial…" to finish.
+3. "Your 7-day trial is live. Welcome to Rankbox." confirms it, and the dashboard opens.
+
+If the $1 card check fails, the trial still starts, but you see "Your trial started, but we couldn't verify your card. Update it from the dashboard to start writing." Article writing is paused until you update the card from the banner at the top of the dashboard. See [Fix a failed card check](/docs/account/free-trial#fix-a-failed-card-check).
+
+If you leave at step 4, your site and plan stay saved, and you come back to step 4 the next time you sign in. Signed in to the wrong account? Click **Sign out** under "Not the right account?". For everything the trial includes, see [The free trial](/docs/account/free-trial).
 
 ## What confirming saves
 
-Confirming writes your answers to the site. This is what goes where:
+Confirming step 3 writes your answers to the site. This is what goes where:
 
 | Onboarding answer | Saved as | Where you see it later |
 | --- | --- | --- |
@@ -154,7 +169,7 @@ Settings has no keyword editor; the keyword set comes from onboarding. See [Acco
 
 ## Adding more sites
 
-Every site after the first is added from **Studio → Add a site**, on a paid plan. It runs the same three steps, then shows the price before anything is charged. Its confirm button reads **Review & add site**, and its queue is "published one a day once the site is added". See [Studio: run several sites](/docs/account/studio).
+Every site after the first is added from **Studio → Add a site**, on a paid plan. It runs the same first three steps, without the trial step, then shows the price before anything is charged. Its confirm button reads **Review & add site**, and its queue is "published one a day once the site is added". See [Studio: run several sites](/docs/account/studio).
 
 ## Onboarding errors
 
@@ -167,6 +182,8 @@ Every site after the first is added from **Studio → Add a site**, on a paid pl
 | "We couldn't build your content plan." | Planning didn't return articles | Click **Try again** |
 | "You're making AI requests too quickly. Wait a minute and try again." | Your account hit the per-minute limit on AI requests | Wait a minute, then retry |
 | "Setup hit a snag" | Saved progress in this browser couldn't load | Click **Start over** |
+| "Your card went through, but the trial hasn't shown up yet. Refresh in a moment." | Checkout finished but Rankbox hadn't confirmed the trial yet | Reload the page after a minute |
+| "Your trial started, but we couldn't verify your card. Update it from the dashboard to start writing." | The $1 card check failed | Click **Update card** on the dashboard banner. See [Fix a failed card check](/docs/account/free-trial#fix-a-failed-card-check) |
 
 More fixes are in [Troubleshooting](/docs/help/troubleshooting#onboarding).
 
@@ -176,4 +193,5 @@ More fixes are in [Troubleshooting](/docs/help/troubleshooting#onboarding).
 - [Research: the questions buyers ask AI](/docs/content/research): how the keyword analysis works.
 - [Content plan and calendar](/docs/content/content-plan): managing the plan after onboarding.
 - [Brand voice and writing settings](/docs/content/brand-voice): the settings onboarding fills in.
-- [A tour of the dashboard](/docs/get-started/dashboard-tour): where you land after confirming.
+- [The free trial](/docs/account/free-trial): the card check, conversion and cancelling.
+- [A tour of the dashboard](/docs/get-started/dashboard-tour): where you land once the trial starts.

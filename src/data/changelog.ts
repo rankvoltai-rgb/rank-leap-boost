@@ -13,7 +13,7 @@
  * Prose is inline markup (see src/lib/inline-md): **bold**, `code` and
  * [text](/internal-path).
  */
-import { PLAN, STUDIO, formatUsd } from "@/data/pricing";
+import { PLAN, STUDIO, TRIAL_DAYS, formatUsd } from "@/data/pricing";
 import { PUBLISH_PLATFORMS } from "@/data/platforms";
 
 export type ChangeKind = "feature" | "improvement" | "resources" | "announcement";
@@ -81,6 +81,39 @@ const framer = PUBLISH_PLATFORMS.find((p) => p.id === "framer");
 const studioPrice = formatUsd(STUDIO.monthlyPerSite);
 
 export const CHANGELOG: ChangelogEntry[] = [
+  {
+    slug: "trial-setup-and-billing-banner",
+    date: "2026-10-28",
+    kind: "improvement",
+    status: "live",
+    audience: "Every plan",
+    title: "The trial is part of setup, and billing problems show at the top",
+    summary:
+      "Starting the 7-day free trial is now the last step of setup, and a banner at the top of the dashboard says when billing has paused writing and fixes it in one click.",
+    body: [
+      `Setup now has four steps: your brand, your keywords, your content plan, then the ${TRIAL_DAYS}-day free trial. A card is required, so your first articles start writing as soon as setup ends instead of waiting for you to find the trial later.`,
+      "If a card check or a payment fails, article writing pauses and a banner at the top of every dashboard page says so. Update the card from the banner and Rankbox checks it again, or pays what's owed, the moment you come back.",
+    ],
+    points: [
+      {
+        title: "One step, not a hunt",
+        text: "The trial used to start from the first Generate click. It's now the last step of setup, with your plan and its projected traffic beside the card form.",
+      },
+      {
+        title: "Updating the card lifts the pause",
+        text: "Before, a new card didn't re-run the $1 card check. Now it does, with your bank's approval step in the page if it asks for one.",
+      },
+      {
+        title: "Writing stops when a payment fails",
+        text: "Manual writing, autopilot and the editor's AI actions all pause from the first failed payment, and the banner shows the fix. Nothing you've set up is lost.",
+      },
+      {
+        title: "One free trial per account",
+        text: `Restarting a plan that has ended is ${formatUsd(PLAN.monthly)} a month from the first day.`,
+      },
+    ],
+    links: [{ label: "See pricing", to: "/pricing" }],
+  },
   {
     slug: "connector-library",
     date: "2026-09-23",

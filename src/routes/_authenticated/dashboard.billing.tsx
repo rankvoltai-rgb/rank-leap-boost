@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { CardIcon, CheckIcon } from "@/components/dashboard/icons";
 import { useActiveSite } from "@/components/dashboard/site-context";
+import { useBilling } from "@/components/dashboard/billing-context";
 import { Panel, Pill, Button, PageHeader } from "@/components/dashboard/primitives";
 import { ActivateNow } from "@/components/studio/StudioGate";
 import { SiteMark, siteDomain, siteName } from "@/components/studio/SiteMark";
@@ -107,6 +108,7 @@ function periodElapsed(start: string | null | undefined, end: string | null | un
  */
 function Billing() {
   const openPortal = useServerFn(createPortalSession);
+  const billing = useBilling();
   const [opening, setOpening] = useState(false);
   const { allSites } = useActiveSite();
 
@@ -177,14 +179,8 @@ function Billing() {
         }
       />
 
-      {state === "past_due" && (
-        <Banner
-          tone="danger"
-          title="Your last payment didn't go through"
-          body="Update your card to keep autopilot publishing. Your articles and settings are safe in the meantime."
-          action={portalButton("solid", "Update card")}
-        />
-      )}
+      {/* A failed payment, a failed card check and an ended plan are all in
+          the billing banner at the top of every page, with the fix. */}
       {subscription && state === "canceling" && (
         <Banner
           tone="warning"
@@ -193,12 +189,16 @@ function Billing() {
           action={portalButton("solid", "Keep my plan")}
         />
       )}
-      {state === "lapsed" && (
+      {state === "lapsed" && !billing.issue && (
         <Banner
           tone="warning"
-          title="Your plan isn't active"
+          title="Your plan isn't renewing"
           body="Your articles and settings are saved. Restart your plan and autopilot picks up where it left off."
-          action={<PrimaryLink to="/dashboard" hash="start-trial" label="Restart plan" />}
+          action={
+            <Button variant="solid" onClick={billing.restart}>
+              Restart plan
+            </Button>
+          }
         />
       )}
 
@@ -470,13 +470,8 @@ function OfferCard() {
         <IncludedList className="mt-6 sm:grid-cols-2" />
 
         <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
-          <PrimaryLink
-            to="/dashboard"
-            hash="start-trial"
-            label={`Start ${TRIAL_DAYS}-day free trial`}
-            size="lg"
-          />
-          <p className="text-xs text-muted-foreground">No charge today · Cancel in one click</p>
+          <PrimaryLink to="/onboarding" label={`Start ${TRIAL_DAYS}-day free trial`} size="lg" />
+          <p className="text-xs text-muted-foreground">Card required · Cancel in one click</p>
         </div>
       </div>
     </Panel>
@@ -579,7 +574,8 @@ function TodayCard() {
         </div>
       </dl>
       <p className="mt-4 text-xs text-muted-foreground">
-        Your card is only charged once the trial ends. Cancel before then and you pay nothing.
+        A $1 hold checks your card and is released right away. Your card is only charged once the
+        trial ends. Cancel before then and you pay nothing.
       </p>
     </Panel>
   );
@@ -743,7 +739,7 @@ function PrimaryLink({
   label,
   size = "md",
 }: {
-  to: "/dashboard";
+  to: "/dashboard" | "/onboarding";
   hash?: string;
   label: string;
   size?: "md" | "lg";

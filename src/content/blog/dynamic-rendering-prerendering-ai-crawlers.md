@@ -261,7 +261,7 @@ Prices are now fixed at build time, so a price change needs a rebuild. Tallyfold
 
 Rankbox doesn't host sites, run a CDN or prerender pages, so the fixes in this guide belong to you or your developer. Two parts of Rankbox help around them. The free [AI search readiness check](/tools/ai-search-readiness-check) shows how many words a page offers without JavaScript, which makes it a quick before-and-after test.
 
-Once your pages send real HTML, the paid product works on what goes in them. It researches the questions buyers ask AI assistants and writes source-backed articles with the [Citation-Ready Writer](/features/citation-ready-writer). The articles reach your site through Rankbox's API, which your developer wires into whichever rendering setup you chose. Rankbox doesn't track AI citations today. The Business plan is $49.50 a month with a 7-day trial when you add a card; see [pricing](/pricing).
+Once your pages send real HTML, the paid product works on what goes in them. It researches the questions buyers ask AI assistants and writes source-backed articles with the [Citation-Ready Writer](/features/citation-ready-writer). The articles reach your site through Rankbox's API, which your developer wires into whichever rendering setup you chose. Rankbox doesn't track AI citations today. Access starts with a 7-day free trial that takes a card, and the Business plan is $49.50 a month after it; see [pricing](/pricing).
 
 ## Frequently Asked Questions
 

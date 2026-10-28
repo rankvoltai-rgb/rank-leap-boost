@@ -220,7 +220,7 @@ Five steps get you most of the way, with no new stack.
 
 Rankbox helps with the Find and Understand steps of agentic SEO. Its Citation-Ready Writer researches the live web and writes 2,000 to 3,500-word, source-backed articles, such as comparison pages and answers to buyer questions, which agents read when they build a shortlist. Articles reach your site through the [Rankbox API](/integrations/api), which a developer wires in. Rankbox also runs an [MCP server](/integrations/mcp) at `https://rankbox.xyz/mcp` with three research tools, so AI assistants can call it directly.
 
-Rankbox doesn't fix your forms, publish an OpenAPI or agent manifest, sell through any agentic checkout, or track AI citations. Signup is free. The 7-day trial starts when you add a card and includes up to 7 articles, and the Business plan is $49.50 a month for 30 articles on one site. [See pricing](/pricing).
+Rankbox doesn't fix your forms, publish an OpenAPI or agent manifest, sell through any agentic checkout, or track AI citations. Setup ends with a 7-day free trial that takes a card and includes 7 articles, and after that the Business plan is $49.50 a month for 30 articles on one site, unless you cancel. [See pricing](/pricing).
 
 ## Frequently Asked Questions
 

@@ -3,7 +3,7 @@ title: Billing, credits and limits
 nav_title: Billing and limits
 description: What agents can do before a plan, how the trial and the owner's card work, article, backlink and Reddit credits, Studio, rate limits and each 402.
 order: 8
-updated: 2026-10-02
+updated: 2026-10-28
 ---
 
 Agents run on the account's own plan and credits. Agent access has no price of its own, and an agent can't do more than the plan allows. This page covers what works before anyone pays, how the trial starts, what each action costs, the rate limits, and how to read a `402`.
@@ -29,7 +29,7 @@ Rankbox has one plan. Each site on the account gets the full allowance.
 | Article credits | 30 a month per site |
 | Backlink credits | 30 a month per site |
 | Reddit reply drafts | 30 a month per site |
-| Free trial | 7 days, with 7 article credits. A card is required |
+| Free trial | 7 days, with 7 article credits. A card is required. One per account |
 | More sites | Studio, $49.50 a month per extra site, each with the full allowance |
 
 See [Plans and credits](/docs/account/plans-and-credits) and [/pricing](/pricing).
@@ -44,7 +44,8 @@ An account with no trial or plan, such as a new account an agent just created, c
 | Site scan, research, keywords | Yes, with daily caps | Yes | Yes |
 | Content plan: ideas, scheduling, queue order | Yes | Yes | Yes |
 | Writing settings, autopilot settings | Yes | Yes | Yes |
-| Score, rewrite a section, finish a hand-written article | Yes | Yes | Yes |
+| Score, finish a hand-written article | Yes | Yes | Yes |
+| Rewrite a section (the editor's AI actions) | No | Yes | Yes |
 | Rank | Yes | Yes | Yes |
 | Generate articles (manually or by autopilot) | No | Yes, 7 credits | Yes, 30 a month |
 | Create site keys, connect and sync Webflow or Shopify | No | Yes | Yes |
@@ -54,17 +55,19 @@ An account with no trial or plan, such as a new account an agent just created, c
 
 "Paid plan" means an invoice has actually been paid: the trial converted, or the owner ended it early. A trial never counts as paid.
 
+The owner can't use the dashboard until the trial has started. Signing in before then opens step 4 of onboarding, where they add a card; that starts the same trial as the checkout link. See [Step 4: Trial](/docs/get-started/onboarding#step-4-trial).
+
 ## The trial
 
 The trial is how most agent-created accounts start writing.
 
 1. The agent calls `POST /billing/checkout` and gets a `checkout_url` with `"mode": "trial"`. The link is valid for 7 days.
 2. The owner opens it and adds a card on Stripe's checkout page. Nothing is charged that day.
-3. Rankbox checks the card with a $1.00 authorization that it releases immediately. If the check fails, the trial exists but `card_verified` is `false` and generation stays off until the owner updates the card in the billing portal. The `billing.card_check_failed` event fires.
+3. Rankbox checks the card with a $1.00 authorization that it releases immediately. If the check fails, the trial exists but `card_verified` is `false`, and `generate`, autopilot and `rewrite-section` are refused until the card is fixed. The `billing.card_check_failed` event fires. The owner fixes it with **Update card** on the banner at the top of the dashboard: updating the card reruns the check on the new card, and when it passes `card_verified` becomes `true` and writing resumes.
 4. The trial starts: `billing.status` becomes `trialing`, the primary site gets 7 article credits, `billing.trial_started` fires, and autopilot starts writing on its next run.
-5. On day 8, Stripe charges $49.50. The plan becomes `active`, the site's article balance resets to 30, and the backlink exchange, Reddit Presence and Studio open. `billing.activated` fires.
+5. Seven days after the trial started, Stripe charges $49.50. The plan becomes `active`, the site's article balance resets to 30, and the backlink exchange, Reddit Presence and Studio open. `billing.activated` fires.
 
-The owner can cancel any time before day 8 in the billing portal and pay nothing. An agent can end the trial early with `POST /billing/activate`, which charges $49.50 at once; do that only when the owner has asked, for example because they want backlinks or a second site this week. See [The free trial](/docs/account/free-trial).
+The owner can cancel any time before the trial ends in the billing portal and pay nothing. Each account gets one trial: a checkout for an account that has had a subscription before is `"mode": "plan"`, charged from day one. An agent can end the trial early with `POST /billing/activate`, which charges $49.50 at once; do that only when the owner has asked, for example because they want backlinks or a second site this week. See [The free trial](/docs/account/free-trial).
 
 > [!IMPORTANT]
 > Autopilot is on by default at 7 articles a week. On a trial, that uses all 7 article credits in the first week, leaving none for articles you generate yourself. Set `weekly_cadence` before the trial starts if you plan to generate manually too.
@@ -84,7 +87,7 @@ Rules that matter to agents:
 - **Reserved, then refunded on failure.** An article credit is reserved when writing starts and refunded if it fails. A Reddit draft that is refused or fails refunds its credit.
 - **Deleting doesn't refund.** Deleting a written article doesn't return its credit.
 - **Free actions.** Research, scans, planning, scoring, rewriting a section, finishing your own article, publishing, syncing, recording a live URL, sweeps and recording a Reddit reply spend no credits.
-- **Refills follow payment, not the calendar.** A period whose invoice fails grants nothing until it is paid.
+- **Refills follow payment, not the calendar.** A period whose invoice fails grants nothing until it is paid, and the credits left from the previous period can't be spent while it's unpaid.
 - **No top-ups.** There is no larger plan and no credit pack. A site that runs out waits for the next period, or the owner adds a Studio site for another brand.
 
 ## Plan states
@@ -95,13 +98,13 @@ Rules that matter to agents:
 | --- | --- | --- | --- |
 | `none` | No | No | Send the owner a `checkout_url` |
 | `trialing`, `card_verified` not `false` | Yes, up to 7 articles | No | Work within 7 credits; ask before `POST /billing/activate` |
-| `trialing`, `card_verified: false` | No | No | Send the owner a portal link to update the card |
+| `trialing`, `card_verified: false` | No | No | Send the owner to `https://rankbox.xyz/dashboard`. **Update card** on its banner updates the card and reruns the check |
 | `active` | Yes | Yes | Normal operation |
 | `active`, `cancel_at_period_end: true` | Yes, until `current_period_end` | Yes, until then; no new Studio sites | Tell the owner what stops and when |
-| `past_due` | For 48 hours after `past_due_since` | Yes, during the 48 hours if the account paid before | Send the owner a portal link now |
-| `canceled` | Until `current_period_end`, then no | Same | Send a new `checkout_url` (`mode: "plan"`) if the owner wants to restart |
+| `past_due` | No, from the moment the payment fails | No | Send the owner to `https://rankbox.xyz/dashboard` now. **Update billing** on its banner updates the card and retries the payment at once |
+| `canceled` | Until `current_period_end`, then no | Same | Send a new `checkout_url` (`mode: "plan"`, charged from day one) if the owner wants to restart |
 
-Articles already published stay on the website whatever the plan does.
+There is no grace period for a failed payment, whether it's the trial's first charge or a renewal: `past_due_since` records when the failure started but grants no access. An `unpaid` subscription is blocked the same way. Articles already published stay on the website whatever the plan does.
 
 ## Studio sites
 
@@ -170,10 +173,10 @@ A `402` always means the plan or the credits stand in the way, never a bug in yo
 | `code` | Cause | Fix |
 | --- | --- | --- |
 | `subscription_required` | No trial or plan | `POST /billing/checkout` and send `checkout_url` to the owner |
-| `subscription_required` | The trial's card check failed (`card_verified: false`) | `POST /billing/portal` and ask the owner to update the card |
-| `subscription_required` | The plan lapsed: payment failed more than 48 hours ago, or the subscription ended | Portal link for a failed payment; a new `checkout_url` for an ended plan |
+| `subscription_required` | The trial's card check failed (`card_verified: false`) | Ask the owner to click **Update card** on the dashboard banner. Updating the card reruns the check |
+| `subscription_required` | A payment failed (`past_due`), or the subscription ended | For a failed payment, ask the owner to click **Update billing** on the dashboard banner, which retries the payment with the new card. For an ended plan, a new `checkout_url` (`mode: "plan"`) |
 | `subscription_required` | The site isn't live: a Studio site that is pending, removed or archived | `POST /sites/{site_id}/restore`, or work on another site |
-| `paid_plan_required` | Backlinks, Reddit Presence or Studio during the trial or without a plan | Wait for day 8, or `POST /billing/activate` if the owner agrees |
+| `paid_plan_required` | Backlinks, Reddit Presence or Studio during the trial, without a plan, or while a payment has failed | Wait for the trial to convert, or `POST /billing/activate` if the owner agrees. For a failed payment, the dashboard's **Update billing** |
 | `insufficient_credits` | The site used this period's article or Reddit reply credits | Wait for `period_end` in `GET /sites/{site_id}/credits`; lower the autopilot pace |
 | `payment_failed` | A charge you started (Studio site, ending the trial early) was declined | Send the owner `action_url`. Nothing changed |
 

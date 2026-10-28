@@ -3,7 +3,7 @@ title: Quickstart: from sign-up to your first published article
 nav_title: Quickstart
 description: A step-by-step tutorial to create a Rankbox account, confirm a content plan, start the trial, write a first article, publish it and check autopilot.
 order: 2
-updated: 2026-10-02
+updated: 2026-10-28
 ---
 
 This tutorial takes you from a new Rankbox account to a first article live on your site, with autopilot writing the rest. Most people finish it in about 10 minutes, plus however long your developer needs to add one API call to your site.
@@ -16,11 +16,11 @@ Have these ready. Nothing else is required.
 | --- | --- |
 | Your website address | Rankbox reads it to fill in your brand and find your keywords |
 | A Google account, or an email address and password | To create your Rankbox account |
-| A payment card | The 7-day free trial goes through Stripe Checkout and takes a card. You aren't charged until day 8 |
+| A payment card | Required. The 7-day free trial starts at the last step of onboarding, in Stripe Checkout. You're charged $49.50 a month 7 days after you start, unless you cancel first |
 | Access to your site's code, or a developer | To add the API call that pulls articles into your site. Webflow and Shopify sites can connect without code; see [How publishing works](/docs/publishing/overview) |
 
 > [!NOTE]
-> Steps 1 to 4 are free and need no card. Rankbox asks for a card only in step 5, when you start the trial, because that is the first point at which it can write for you.
+> A card is required. Steps 1 to 4 come before it; step 5 asks for it and starts the trial. There's no skip, and the dashboard opens only once the trial has started.
 
 ## Step 1: Create your account
 
@@ -28,11 +28,11 @@ Have these ready. Nothing else is required.
 2. Click **Google** to sign in with your Google account, or fill in **Full Name**, **Business Email** and **Password**.
 3. Click **Start my traffic engine**.
 
-Rankbox opens onboarding at `/onboarding`. If you already have an account, click **Sign in** under the form instead; an account that has finished onboarding goes straight to the dashboard.
+Rankbox opens onboarding at `/onboarding`. If you already have an account, click **Sign in** under the form instead; an account that has finished onboarding, trial included, goes straight to the dashboard. An account that stopped before adding a card resumes on the trial step.
 
 ## Step 2: Confirm your brand
 
-Onboarding opens on **Step 1 of 3**, "Start with your website".
+Onboarding opens on **Step 1 of 4**, "Start with your website".
 
 1. Type your site into **Website**, for example `yoursite.com`. After you stop typing for about a second, Rankbox reads the site and shows **Reading** in the field.
 2. Check what it filled in under "Is this your brand?": the logo, **Brand name** and **What you do**. Fix anything that's off. **What you do** briefs every article, so one or two plain sentences a stranger would understand work best.
@@ -60,23 +60,22 @@ Rankbox drafts one article title and brief per keyword. The screen reads "Your f
 - **Ready on your dashboard** lists the first 4 articles. They arrive as ideas you can write whenever you like.
 - **Autopilot queue** lists the rest, labelled Day 1, Day 2 and so on. They are scheduled one a day, starting the day after you confirm.
 
-Click **Confirm plan**. Rankbox saves your brand, settings, keywords and articles, shows "You're set up. Welcome to Rankbox." and opens the dashboard.
+Click **Continue**. Rankbox saves your brand, settings, keywords and articles to your account, then opens the last onboarding step, the trial. From here, leaving and signing in again brings you back to that step.
 
 > [!TIP]
 > Nothing is final here. You can edit, reschedule or delete any article later from **Articles** or **Calendar**, and change your brand and voice in **Settings**.
 
 ## Step 5: Start your free trial
 
-The **Overview** page shows a next-step card titled "Put your N ready articles to work", with a short launch checklist: start the trial, connect your site, publish your first article.
+Onboarding's last step, **Step 4 of 4**, is headed "Start your 7-day free trial". It says how many articles are planned and ready, and above the card form it reads "A card is required to start. We place a $1 hold to verify it and release it right away, so nothing is charged today. Your plan starts at $49.50/month 7 days from today unless you cancel first."
 
-1. Click **Start free trial** on the card. The same button sits at the foot of the sidebar until you have a plan.
-2. Read the dialog, then click **Start free trial** again.
-3. Enter your card in the Stripe form that appears inside the dialog and complete it.
+1. Enter your card in Stripe's checkout form and complete it.
+2. Wait for "Starting your trial…" to finish.
 
-When the dialog shows "Starting your trial…" and closes, you'll see "Your 7-day trial is live." Your plan's site now has 7 article credits for the trial.
+When you see "Your 7-day trial is live. Welcome to Rankbox.", the dashboard opens. Your plan's site now has 7 article credits for the trial.
 
 > [!IMPORTANT]
-> To check the card can hold funds, Rankbox places a $1 authorization and releases it straight away. Nothing is captured, but it can appear as a pending charge on your statement for a day or two. If the card fails this check, Rankbox shows "We couldn't verify your card. Update it in billing to start generating."
+> To check the card can hold funds, Rankbox places a $1 authorization and releases it straight away. Nothing is captured, but it can appear as a pending charge on your statement for a day or two. If the card fails this check, you see "Your trial started, but we couldn't verify your card. Update it from the dashboard to start writing." Click **Update card** on the banner at the top of the dashboard and add a card that can hold $1; Rankbox reruns the check when you're back. See [Fix a failed card check](/docs/account/free-trial#fix-a-failed-card-check).
 
 ## Step 6: Write your first article
 
@@ -135,7 +134,8 @@ The line under **Pace** shows about how many articles a month your pace writes a
 | --- | --- |
 | During the 7-day trial | Autopilot and **Write now** can use up to 7 article credits. Research, writing, scoring and publishing all work |
 | If you run out during the trial | Rankbox shows "You've used all 7 articles this month". In **Plan & Billing**, **Unlock everything now** ends the trial early and charges $49.50 today |
-| Day 8 | Your card is charged $49.50 and the plan becomes active. The site's article credits reset to 30 |
+| 7 days after you started | Your card is charged $49.50 and the plan becomes active. The site's article credits reset to 30 |
+| If a payment fails | Writing and autopilot stop at once. Click **Update billing** on the banner at the top of the dashboard; Rankbox retries the payment with the new card |
 | First paid invoice | The [backlink exchange](/docs/growth/backlink-exchange), [Reddit Presence](/docs/growth/reddit-presence) and [Studio](/docs/account/studio) open |
 | Each month after | Article credits reset to 30 at renewal. Unused article credits don't carry over |
 
@@ -144,7 +144,7 @@ To cancel before you're charged, open **Plan & Billing** and click **Card & invo
 ## If something goes wrong
 
 - The site couldn't be read, or analysis failed: see [Onboarding problems](/docs/help/troubleshooting#onboarding).
-- **Generate now** asks you to start a trial, or your card wasn't verified: see [Trial and billing problems](/docs/help/troubleshooting#trial-and-billing).
+- Your card wasn't verified, or a banner says writing is paused: see [Trial and billing problems](/docs/help/troubleshooting#trial-and-billing).
 - The key setup never leaves "Listening for your site's first request…": see [Publishing with the API](/docs/help/troubleshooting#publishing-with-the-api).
 - Autopilot shows Off or Overdue: see [Autopilot problems](/docs/help/troubleshooting#autopilot).
 
@@ -154,4 +154,4 @@ To cancel before you're charged, open **Plan & Billing** and click **Card & invo
 - [A tour of the dashboard](/docs/get-started/dashboard-tour): what each page in the sidebar is for.
 - [Any website, with the REST API](/docs/publishing/custom-sites): the full integration guide.
 - [Autopilot and the publishing schedule](/docs/content/autopilot): pace, queue order and overdue articles.
-- [The free trial](/docs/account/free-trial): exactly what the trial includes and when you are charged.
+- [The free trial](/docs/account/free-trial): exactly what the trial includes, the card check and when you are charged.

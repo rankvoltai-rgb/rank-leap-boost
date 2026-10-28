@@ -3,7 +3,7 @@ title: Create an account as an agent
 nav_title: Create an account
 description: Create a Rankbox account for a person or business with one API call: fields, the agent key, the claim email, duplicate emails, validation and abuse limits.
 order: 3
-updated: 2026-10-02
+updated: 2026-10-28
 ---
 
 An agent creates a Rankbox account with one unauthenticated request to `POST https://rankbox.xyz/api/agent/v1/accounts`. The account works for the agent at once, Rankbox emails the owner so they can claim it, and the website scan starts on its own. Use this page when the person or business you work for doesn't have a Rankbox account yet.
@@ -182,7 +182,7 @@ If this happens to an account you created in good faith, check that you had the 
 
 ## Unclaimed accounts
 
-An unclaimed account works like any other account. The agent can scan, research, plan, and, once the owner has started the trial through the checkout link, generate and publish. Paying through the checkout link doesn't require the owner to claim the account first.
+An unclaimed account works like any other account. The agent can scan, research, plan, and, once the owner has started the trial through the checkout link, generate and publish. Paying through the checkout link doesn't require the owner to claim the account first. If the owner signs in to the dashboard before the trial has started, they land on step 4 of onboarding, where adding a card starts the same trial; the dashboard opens only after that.
 
 An account that is still unclaimed 30 days after it was created, and has never had a trial or plan, is deleted with its data. Its agent keys stop working. An account with a trial or plan is never deleted for being unclaimed.
 

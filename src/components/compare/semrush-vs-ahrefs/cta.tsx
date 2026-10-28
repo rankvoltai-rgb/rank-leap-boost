@@ -1,7 +1,7 @@
 /**
  * The closing band: blue, inside the rails, the ask beside the URL field.
- * Faint white rungs echo the price ladder. The trial takes a card, so the
- * note under the form is TRIAL_NOTE and nothing about cards.
+ * Faint white rungs echo the price ladder. The note under the form is
+ * TRIAL_NOTE, which says the trial takes a card.
  */
 import { useState } from "react";
 import { Band, Spacer } from "@/components/landing/frame";

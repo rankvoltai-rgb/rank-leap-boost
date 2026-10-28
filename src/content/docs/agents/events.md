@@ -3,7 +3,7 @@ title: Events and webhooks
 nav_title: Events and webhooks
 description: Every Rankbox event type with payloads, how to register signed webhooks, verify the HMAC signature in TypeScript or Python, handle retries and poll GET /events.
 order: 7
-updated: 2026-10-02
+updated: 2026-10-28
 ---
 
 Rankbox records an event whenever something happens on an account: a scan finishes, an article is written or published, credits run low, a payment fails. An agent hears about events in two ways: Rankbox posts them to a webhook URL, or the agent polls `GET /events`. Both deliver the same event objects.
@@ -88,9 +88,9 @@ Many agents use both: webhooks for speed, and a daily `GET /events` pass from th
 | `reddit.reply_verified` | A recorded reply was found live on Reddit | `reply` |
 | `reddit.reply_removed` | A recorded reply was removed or couldn't be found | `reply` |
 | `billing.trial_started` | The owner completed checkout and the trial began | `billing` |
-| `billing.card_check_failed` | The trial's $1 card check failed; generation is off until the card is updated | `billing` |
+| `billing.card_check_failed` | The trial's $1 card check failed; generation is off until the card is updated, which reruns the check | `billing` |
 | `billing.activated` | The first invoice was paid. Paid-only features open | `billing` |
-| `billing.payment_failed` | A payment failed. Generation continues for 48 hours | `billing`, `grace_ends_at` |
+| `billing.payment_failed` | A payment failed. Generation, autopilot and paid-only features stop at once | `billing` |
 | `billing.canceled` | Cancellation was scheduled for the end of the period | `billing` |
 | `billing.ended` | The subscription ended. Generation stops | `billing` |
 | `webhook.test` | You called `POST /webhooks/{webhook_id}/test` | `webhook_id` |
@@ -153,7 +153,7 @@ The article went back to `scheduled`. Retry with `POST …/generate`, or let aut
 }
 ```
 
-Fires once per kind per period. During the trial, this is the moment to tell the owner what happens on day 8, or to slow autopilot.
+Fires once per kind per period. During the trial, this is the moment to tell the owner what happens when the trial converts, 7 days after it started, or to slow autopilot.
 
 ### Payment failed
 
@@ -176,13 +176,12 @@ Fires once per kind per period. During the trial, this is the moment to tell the
       "plan": { "name": "Business", "amount": 49.5, "currency": "usd", "interval": "month" },
       "studio_sites": 0,
       "monthly_total": 49.5
-    },
-    "grace_ends_at": "2026-10-11T15:21:00Z"
+    }
   }
 }
 ```
 
-Create a portal link with `POST /billing/portal` and ask the owner to update the card before `grace_ends_at`.
+Writing has already stopped: there is no grace period, and `past_due_since` only records when the failure started. Ask the owner to click **Update billing** on the banner at the top of `https://rankbox.xyz/dashboard`. Updating the card there retries the payment at once. When it's paid, `GET /billing` shows `status` back to `active`.
 
 ### Backlink verified
 

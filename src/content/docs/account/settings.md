@@ -3,7 +3,7 @@ title: Account and site settings
 nav_title: Settings
 description: Every section and field in Rankbox Settings, from brand and writing voice to autopilot pace, Studio and your account, and how autosave works.
 order: 5
-updated: 2026-10-02
+updated: 2026-10-28
 ---
 
 **Dashboard → Settings** is where you teach autopilot your brand, choose how often it writes, and manage your login. Most of the page belongs to the site you're viewing; the **Account** section at the bottom applies to your whole account. Changes save as you go, with no save button.
@@ -93,7 +93,7 @@ A switch that turns autopilot on or off for the site. It's on by default.
 - **On** reads "On — writing every day" (or the pace you chose).
 - **Paused** stops autopilot from writing. Scheduled articles wait in the queue and nothing is lost.
 
-Before you start the free trial, this row shows a **Start free trial** button instead of the switch, with "Autopilot starts writing when your free trial does."
+While billing stops the account from writing (a failed card check, a failed payment or an ended plan), this row shows the billing fix instead of the switch, **Update card**, **Update billing** or **Restart plan**, with "Autopilot is paused until billing is sorted. Scheduled articles wait, nothing is lost." See [The billing banner](/docs/account/billing#the-billing-banner).
 
 ### Pace
 
@@ -133,7 +133,7 @@ Removing a site from here works exactly like removing it from the Studio page. S
 | Row | What it shows | What you can do |
 | --- | --- | --- |
 | **Email** | The email you sign in with. It's where receipts and account emails go | Read only. To change it, [contact support](/docs/help/support) |
-| **Plan** | "Business", "Business · free trial", "Business · payment due" or "No plan yet" | **Manage in Plan & Billing →** opens [billing](/docs/account/billing) |
+| **Plan** | "Business", "Business · free trial", "Business · payment due" or "Business · ended" | **Manage in Plan & Billing →** opens [billing](/docs/account/billing) |
 | **Sign out** | Signs you out | Click **Sign out** |
 
 **Sign out** clears your account's data from the browser tab and returns you to the sign-in page, so the next person to sign in on that computer never sees your data. It ends your Rankbox sessions in other browsers too, which sign out the next time their session refreshes.
@@ -159,7 +159,7 @@ Some account tasks live elsewhere:
 | --- | --- |
 | "Couldn't save" next to a section | Click **Retry**. Your text stays in the form until it saves |
 | A change didn't show up in an article | Writing settings apply to the next article written. Existing articles keep their voice; edit them in the editor |
-| The switch shows **Start free trial** | Autopilot can't run without a trial or plan. Start the [free trial](/docs/account/free-trial) |
+| The switch shows **Update card**, **Update billing** or **Restart plan** | Billing has stopped autopilot. Click the button to fix it. See [The billing banner](/docs/account/billing#the-billing-banner) |
 | You edited the wrong site | Check the site switcher at the foot of the sidebar. Every site section of Settings belongs to the site shown there |
 
 ## Related

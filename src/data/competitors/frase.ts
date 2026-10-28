@@ -6,7 +6,7 @@
  * says plainly. Checked against frase.io and docs.frase.io on 2026-09-21.
  */
 import { Search, PenLine, Send, Link2, MessageSquare, Gauge } from "lucide-react";
-import { PLAN, formatUsd } from "../pricing";
+import { PLAN, TRIAL_DAYS, formatUsd } from "../pricing";
 import {
   RANKBOX_CELLS,
   RANKBOX_COST,
@@ -402,6 +402,5 @@ export const frase: Competitor = {
     { label: "What's new (changelog)", url: "https://docs.frase.io/whats-new" },
   ],
   ctaTitle: "Thirty articles, plus the off-page work",
-  ctaBody:
-    "Paste your URL. Rankbox builds your content plan free, then writes your first articles on a 7-day trial.",
+  ctaBody: `Paste your URL. Rankbox builds your content plan, then writes your first articles on a ${TRIAL_DAYS}-day free trial.`,
 };

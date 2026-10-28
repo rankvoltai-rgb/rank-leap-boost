@@ -197,7 +197,7 @@ export const FAQS: HubFaq[] = [
   },
   {
     q: "Do different solutions come with different plans?",
-    a: `No. Every page describes the same Rankbox on one plan, ${PRICE_MONTHLY} for one site, with a ${TRIAL}. Signing up and building your content plan cost nothing; the card comes in when the trial starts.`,
+    a: `No. Every page describes the same Rankbox on one plan, ${PRICE_MONTHLY} for one site. ${TRIAL_TERMS}`,
     link: { to: "/pricing", label: "See pricing" },
   },
   {

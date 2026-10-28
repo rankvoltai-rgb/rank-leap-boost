@@ -106,7 +106,6 @@ function CalendarPage() {
         subscription={actions.subscription}
         credits={actions.credits}
         remaining={actions.remaining}
-        onStartTrial={actions.openTrial}
         onUpgrade={actions.openPaywall}
         onCommitQueue={actions.commitQueue}
       />

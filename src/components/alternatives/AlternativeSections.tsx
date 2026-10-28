@@ -23,7 +23,7 @@ import { PixelField, CARD_PIXELS, UrlForm } from "@/components/landing/Hero";
 import { SHOWCASES } from "@/components/features/showcase";
 import { LEGAL_CONTACT } from "@/components/legal/legal-ui";
 import { getFeature } from "@/data/features";
-import { PLAN, TRIAL_DAYS, formatUsd } from "@/data/pricing";
+import { PLAN, TRIAL_NOTE, formatUsd } from "@/data/pricing";
 import { cn } from "@/lib/utils";
 import {
   COMPETITORS,
@@ -67,12 +67,8 @@ function Heading({
   );
 }
 
-/**
- * What the trial actually asks for. Building a plan needs no card; the trial
- * itself does, so "no credit card required" beside "free trial" would promise
- * something checkout then contradicts.
- */
-const TRIAL_LINE = `Build your content plan free, no card · ${TRIAL_DAYS}-day trial · Cancel anytime`;
+/** What the trial asks for: the shared line, which says a card is required. */
+const TRIAL_LINE = TRIAL_NOTE;
 
 type GlanceCell = string | Fact;
 

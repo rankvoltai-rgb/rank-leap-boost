@@ -154,7 +154,7 @@ Only for the bots on your list. Published tests, starting with [Vercel and MERJ'
 
 That's the strongest case for the alternatives above. Server-rendered or static HTML reaches every crawler, including ones that don't exist yet, with no list to update. You can check what a page offers without JavaScript in a few seconds with the free [AI search readiness check](/tools/ai-search-readiness-check).
 
-Rankbox doesn't run prerendering, CDNs or bot detection, and it doesn't change how your site renders. Those fixes belong to your developer. What Rankbox does is research the questions buyers ask AI assistants and write source-backed articles that reach your site through its API, so they land in whatever rendering setup you choose. Rankbox doesn't track AI citations today. The Business plan is $49.50 a month, with a 7-day trial when you add a card; see [pricing](/pricing).
+Rankbox doesn't run prerendering, CDNs or bot detection, and it doesn't change how your site renders. Those fixes belong to your developer. What Rankbox does is research the questions buyers ask AI assistants and write source-backed articles that reach your site through its API, so they land in whatever rendering setup you choose. Rankbox doesn't track AI citations today. The Business plan is $49.50 a month, and the 7-day free trial that comes first takes a card during setup; see [pricing](/pricing).
 
 ## Frequently Asked Questions
 

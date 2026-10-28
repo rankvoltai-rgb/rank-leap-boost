@@ -11,11 +11,11 @@
  */
 import { Link } from "@tanstack/react-router";
 import { ArrowBigUp, MessageSquare } from "lucide-react";
-import { Button } from "@/components/dashboard/primitives";
 import { CheckIcon, ThreadIcon } from "@/components/dashboard/icons";
+import { BillingFixButton } from "@/components/dashboard/billing-context";
 import { GoogleMark, PerplexityMark, ChatGPTMark } from "@/components/landing/ai-logos";
 import { BrandMark } from "@/components/landing/shared";
-import { IS_MOCK, simulatePaidPlan, TRIAL_DAYS, type RedditAccess } from "@/lib/data";
+import { IS_MOCK, simulatePaidPlan, type RedditAccess } from "@/lib/data";
 import { formatShortDate } from "@/lib/format-date";
 
 const POINTS = [
@@ -76,12 +76,10 @@ const PREVIEW = [
 export function RedditGate({
   access,
   trialEndsAt,
-  onStartTrial,
   onSimulated,
 }: {
   access: Exclude<RedditAccess, "paid" | "lapsed">;
   trialEndsAt: string | null;
-  onStartTrial: () => void;
   onSimulated: () => void;
 }) {
   const trial = access === "trial";
@@ -152,7 +150,7 @@ export function RedditGate({
           <p className="mt-1.5 text-sm text-muted-foreground">
             {trial
               ? `Reddit presence opens with your first invoice${trialEndsAt ? `, on ${formatShortDate(trialEndsAt)}` : ""}. Replies go out under your own name in threads that outlive a trial, so it isn't something to hand a throwaway account.`
-              : `Start the ${TRIAL_DAYS}-day trial to set up your site; Reddit presence unlocks the day your first invoice is paid.`}
+              : "Reddit presence is part of the paid plan. It opens as soon as billing is sorted and your plan is paid."}
           </p>
           <ul className="mt-5 space-y-2 text-left">
             {POINTS.map((p) => (
@@ -163,9 +161,7 @@ export function RedditGate({
             ))}
           </ul>
           {access === "none" ? (
-            <Button variant="brand" className="mt-6 w-full" onClick={onStartTrial}>
-              Start {TRIAL_DAYS}-day free trial
-            </Button>
+            <BillingFixButton className="mt-6 w-full" />
           ) : (
             <Link
               to="/dashboard/billing"

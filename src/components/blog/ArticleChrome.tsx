@@ -12,7 +12,7 @@ import { MarkDither } from "@/components/landing/hero-dither";
 import { Band, Spacer } from "@/components/landing/frame";
 import { AuthorMark } from "@/components/blog/PostCards";
 import type { TocEntry } from "@/lib/article-outline";
-import { TRIAL_DAYS } from "@/data/pricing";
+import { TRIAL_CTA, TRIAL_NOTE } from "@/data/pricing";
 import { isTeamAuthor } from "@/data/company";
 import { cn } from "@/lib/utils";
 
@@ -277,12 +277,10 @@ export function RailCta() {
         href="/auth"
         className="group mt-5 flex h-10 items-center justify-center gap-2 rounded-lg bg-cta px-4 text-sm font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.16),0_1px_2px_rgba(16,24,40,0.14)] transition-colors hover:bg-cta-hover"
       >
-        Start free trial
+        {TRIAL_CTA}
         <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
       </a>
-      <p className="mt-2.5 text-center text-[0.7rem] text-muted-foreground">
-        {TRIAL_DAYS}-day free trial · Cancel anytime
-      </p>
+      <p className="mt-2.5 text-center text-[0.7rem] text-muted-foreground">{TRIAL_NOTE}</p>
     </div>
   );
 }
@@ -364,9 +362,7 @@ export function BlogCta({
             </p>
             <div className="mt-8 flex w-full flex-col items-center gap-3">
               <UrlForm url={url} onChange={setUrl} />
-              <p className="text-[0.82rem] text-white">
-                {TRIAL_DAYS}-day free trial · Cancel anytime
-              </p>
+              <p className="text-[0.82rem] text-white">{TRIAL_NOTE}</p>
             </div>
           </Reveal>
         </Band>
@@ -402,9 +398,7 @@ export function BlogCta({
             </p>
             <div className="mt-8 flex w-full flex-col items-center gap-3">
               <UrlForm url={url} onChange={setUrl} />
-              <p className="text-sm text-white/70">
-                No credit card required · Free {TRIAL_DAYS}-day trial
-              </p>
+              <p className="text-sm text-white/70">{TRIAL_NOTE}</p>
             </div>
           </div>
         </div>

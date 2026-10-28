@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate, useRouterState } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -27,15 +27,15 @@ import {
   getSettings,
   creditsRemaining,
   CreditsExhaustedError,
-  TrialRequiredError,
   type Blog,
 } from "@/lib/data";
+import { isBillingRefusal } from "@/lib/errors";
 import { Panel, Pill, Button } from "@/components/dashboard/primitives";
 import { DataTable, Tr, Td, TdActions, type Column } from "@/components/dashboard/data-table";
 import { AI_ALGORITHM_MARKS } from "@/components/landing/ai-logos";
 import { Confetti } from "@/components/dashboard/rewards";
 import { CreditPaywallDialog } from "@/components/dashboard/CreditPaywallDialog";
-import { StartTrialDialog } from "@/components/dashboard/StartTrialDialog";
+import { BILLING_FIX_LABEL, useBilling } from "@/components/dashboard/billing-context";
 import { CountUp } from "@/components/ui/count-up";
 import { PlatformLogos } from "@/components/dashboard/platforms";
 import { Meter, NextStepCard, type LaunchStep } from "@/components/dashboard/NextStep";
@@ -45,10 +45,10 @@ import { useWebflowStatus } from "@/components/dashboard/webflow-status";
 import { useShopifyStatus } from "@/components/dashboard/shopify-status";
 import { PublishingSchedule } from "@/components/dashboard/PublishingSchedule";
 import { ContentGaps } from "@/components/dashboard/ContentGaps";
-import { engineState, type EngineState } from "@/components/dashboard/autopilot-state";
+import { engineState, isEntitled, type EngineState } from "@/components/dashboard/autopilot-state";
 import { paceLabel } from "@/components/dashboard/queue-plan";
 import { useSiteId } from "@/components/dashboard/site-context";
-import { allArticlesKey } from "@/components/dashboard/useArticleActions";
+import { allArticlesKey, billingToastAction } from "@/components/dashboard/useArticleActions";
 import { firstNameOf } from "@/lib/auth";
 import { cn } from "@/lib/utils";
 
@@ -189,7 +189,7 @@ function QueueRow({ blog, action }: { blog: Blog; action: React.ReactNode }) {
 }
 
 const OFFLINE_REASON: Record<Exclude<EngineState, "running">, string> = {
-  "needs-trial": "Start your free trial to turn autopilot on.",
+  billing: "Autopilot is paused until billing is sorted.",
   "out-of-credits": "This month's articles are used up. Autopilot resumes when your plan renews.",
   paused: "Autopilot is paused. Turn it back on in Settings.",
 };
@@ -331,22 +331,11 @@ function SystemConsole({ siteId }: { siteId: string }) {
   const connectionLoading = integrationsLoading || webflowLoading || shopifyLoading;
   // The platform's own setup, rather than the key flow, for a site that uses it.
   const setupSearch = via === "webflow" || via === "shopify" ? { connector: via } : {};
-  // Drives the trial banner: it disappears the moment a subscription exists.
-  const hasEntitlement =
-    !!subscription && ["trialing", "active", "past_due"].includes(subscription.status);
+  // Whether anything can write right now. False only while billing is broken:
+  // an account with no plan at all never reaches the dashboard.
+  const hasEntitlement = isEntitled(subscription);
+  const billing = useBilling();
   const [paywallOpen, setPaywallOpen] = useState(false);
-  const [trialOpen, setTrialOpen] = useState(false);
-
-  // Links elsewhere in the dashboard (the rail, Billing) land here with
-  // #start-trial to open the trial straight away. The hash is spent on arrival.
-  const hash = useRouterState({ select: (s) => s.location.hash });
-  useEffect(() => {
-    if (hash !== "start-trial" || subscription === undefined) return;
-    if (!hasEntitlement) setTrialOpen(true);
-    navigate({ to: "/dashboard", hash: "", replace: true });
-  }, [hash, subscription, hasEntitlement, navigate]);
-  // Set when Generate was blocked, so the article runs itself once the trial starts.
-  const [pendingBlog, setPendingBlog] = useState<Blog | null>(null);
 
   const estimatedTraffic = allBlogs.reduce((sum, b) => sum + (b.traffic_estimate ?? 0), 0);
   const queue = [...generating, ...scheduled];
@@ -396,10 +385,10 @@ function SystemConsole({ siteId }: { siteId: string }) {
       queryClient.invalidateQueries({ queryKey: ["credits"] });
       navigate({ to: "/dashboard/blog-engine", search: { article: blog.id } });
     } catch (err) {
-      // No trial yet: this is the moment the trial is sold, not onboarding.
-      if (err instanceof TrialRequiredError) {
-        setPendingBlog(blog);
-        setTrialOpen(true);
+      // Billing stopped it: refetch so the banner shows, and offer the fix.
+      if (isBillingRefusal(err)) {
+        await queryClient.invalidateQueries({ queryKey: ["subscription"] });
+        toast.error(err.message, billingToastAction(billing.fix, queryClient));
         return;
       }
       if (err instanceof CreditsExhaustedError) {
@@ -448,7 +437,8 @@ function SystemConsole({ siteId }: { siteId: string }) {
   // queue is already full of work waiting on it.
   const connected = connection === "live" || connection === "stale";
   const steps: LaunchStep[] = [
-    { id: "trial", label: `Start your ${TRIAL_DAYS}-day free trial`, done: hasEntitlement },
+    // Done during onboarding — the trial is its last step — so this starts ticked.
+    { id: "trial", label: `Start your ${TRIAL_DAYS}-day free trial`, done: !!subscription },
     { id: "connect", label: "Connect your site", done: connected },
     { id: "publish", label: "Publish your first article", done: finished.length > 0 },
   ];
@@ -461,27 +451,27 @@ function SystemConsole({ siteId }: { siteId: string }) {
   const settled = subscription !== undefined && !connectionLoading && finishedQuery.isSuccess;
 
   let nextStep: React.ReactNode = null;
-  if (settled && !hasEntitlement) {
+  if (settled && !hasEntitlement && billing.issue) {
     nextStep = (
       <NextStepCard
-        eyebrow={eyebrow}
+        eyebrow="Writing is paused"
         title={
           readyCount > 0
-            ? `Put your ${readyCount} ready articles to work`
-            : "Turn on autopilot and start ranking"
+            ? `Get your ${readyCount} ready articles writing again`
+            : "Get autopilot writing again"
         }
         body={
           estimatedTraffic > 0
-            ? `They're projected to bring an estimated ${estimatedTraffic.toLocaleString()} visitors a month. Start your trial and autopilot writes and publishes them for you.`
-            : "Start your trial and autopilot researches, writes and publishes for you."
+            ? `They're projected to bring an estimated ${estimatedTraffic.toLocaleString()} visitors a month. Autopilot picks up where it stopped as soon as billing is sorted.`
+            : "Autopilot picks up where it stopped as soon as billing is sorted."
         }
         aside={<AlgorithmLogos />}
         action={
-          <Button className={CTA_BUTTON} onClick={() => setTrialOpen(true)}>
-            <RocketIcon className="h-4 w-4" /> Start free trial
+          <Button className={CTA_BUTTON} onClick={billing.fix} disabled={billing.busy}>
+            {billing.busy && <Loader2 className="h-4 w-4 animate-spin" />}
+            {BILLING_FIX_LABEL[billing.issue]}
           </Button>
         }
-        note="No charge today · cancel in one click"
         steps={steps}
       />
     );
@@ -577,17 +567,6 @@ function SystemConsole({ siteId }: { siteId: string }) {
   return (
     <div className="space-y-6">
       <Confetti fireKey={confettiKey} />
-      <StartTrialDialog
-        open={trialOpen}
-        onOpenChange={setTrialOpen}
-        queuedCount={scheduled.length + opportunities.length}
-        projectedTraffic={estimatedTraffic}
-        onStarted={() => {
-          const b = pendingBlog;
-          setPendingBlog(null);
-          if (b) void generateNow(b);
-        }}
-      />
       <CreditPaywallDialog
         open={paywallOpen}
         onOpenChange={setPaywallOpen}

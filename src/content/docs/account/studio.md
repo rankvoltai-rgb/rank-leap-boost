@@ -3,7 +3,7 @@ title: Studio: run several sites
 nav_title: Studio
 description: How Studio adds extra sites to one Rankbox account at $49.50 a month each, with prorated charges, per-site allowances, switching, removal and restore.
 order: 4
-updated: 2026-10-02
+updated: 2026-10-28
 ---
 
 Studio lets one Rankbox account run more than one site, for agencies and founders with several brands. Each extra site costs $49.50 a month on the same invoice as your plan and gets the full plan of its own: 30 articles, 30 backlink credits and 30 Reddit reply credits a month, with its own research, content plan, autopilot and publishing key.
@@ -43,11 +43,11 @@ Studio adds sites only to a plan that is paid, current and not ending. When it c
 
 | Your plan | What Studio says | Fix |
 | --- | --- | --- |
-| No plan | "Studio adds sites to a paid plan" | Start the trial, then the paid plan |
+| No plan | "Studio adds sites to a paid plan" | Start the trial at step 4 of onboarding, then the paid plan |
 | Free trial | "Studio opens with your first paid invoice" | Click **Start paid plan now** |
-| Payment due | "Your last payment didn't go through" | Update your card in **Plan & Billing** |
+| Payment due | "Your last payment didn't go through" | Click **Update billing** on the banner at the top of the dashboard. Rankbox retries the payment with the new card. Studio sites also stop writing until it's paid |
 | Set to end | "Your plan is set to end" | Resume the plan in **Plan & Billing** |
-| Ended | "Your plan isn't active" | Restart the plan in **Plan & Billing** |
+| Ended | "Your plan isn't active" | Click **Restart plan** on the banner. A restarted plan is paid from day one |
 
 ### Studio during the free trial
 
@@ -62,7 +62,7 @@ If the charge goes through, you get the full Business allowance straight away an
 
 ## Add a site
 
-Adding a site takes the same three steps as onboarding, so a client site starts as well set up as your own. The price appears once, at the end, before anything is charged.
+Adding a site takes the same first three steps as onboarding (there's no trial step), so a client site starts as well set up as your own. The price appears once, at the end, before anything is charged.
 
 1. Open **Dashboard → Studio** and click **Add a site**. You can also open the site switcher and choose **Add another site** (**Add a site** once you run more than one).
 2. Enter the site's address. Rankbox reads the site and fills in its brand name, description and logo. Fix anything that's off, then continue.

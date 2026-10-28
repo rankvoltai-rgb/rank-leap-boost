@@ -143,7 +143,6 @@ function RedditPage() {
         <RedditGate
           access={overview.access}
           trialEndsAt={subscription?.current_period_end ?? null}
-          onStartTrial={actions.openTrial}
           onSimulated={refresh}
         />
       </div>

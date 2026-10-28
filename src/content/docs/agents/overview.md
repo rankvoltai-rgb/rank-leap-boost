@@ -3,7 +3,7 @@ title: Agent access
 nav_title: Overview
 description: How AI agents create Rankbox accounts or connect to existing ones, then run research, writing, publishing and billing through the API or MCP.
 order: 1
-updated: 2026-10-02
+updated: 2026-10-28
 ---
 
 Agent access lets an AI agent use Rankbox the way a person uses the dashboard. An agent can create a Rankbox account for the person or business it works for, or connect to an account that already exists, and then run the whole content engine through the agent API or the MCP server: research, the content plan, writing, scoring, publishing, autopilot, backlinks, Reddit drafts and billing.
@@ -104,7 +104,7 @@ An agent uses the agent API to run Rankbox and creates a site key for the websit
 
 ## Plans and credits for agents
 
-Agents use the account's plan and credits. Account creation, the site scan, research and planning are free and need no card. Generating articles needs the trial or the Business plan ($49.50 a month, 30 articles, 30 backlink credits and 30 Reddit reply drafts per site). The trial lasts 7 days, includes 7 article credits and starts only when the owner adds a card. The backlink exchange, Reddit Presence and Studio open with the first paid invoice. See [Billing, credits and limits](/docs/agents/billing-and-limits).
+Agents use the account's plan and credits. Account creation, the site scan, research and planning work before the trial starts. Generating articles needs the trial or the Business plan ($49.50 a month, 30 articles, 30 backlink credits and 30 Reddit reply drafts per site). A card is required: the trial lasts 7 days, includes 7 article credits and starts only when the owner adds a card, and each account gets one. The owner can't open the dashboard until then. A failed card check or a failed payment stops writing at once, until the owner updates the card from the dashboard banner. The backlink exchange, Reddit Presence and Studio open with the first paid invoice. See [Billing, credits and limits](/docs/agents/billing-and-limits).
 
 ## What Rankbox doesn't do for agents
 

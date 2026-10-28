@@ -1,20 +1,16 @@
 import type { Subscription } from "@/lib/data";
+import { rowEntitles } from "@/lib/entitlement";
 
-export type EngineState = "needs-trial" | "out-of-credits" | "paused" | "running";
+/** `billing`: a card check or payment failed, or the plan ended — see billing-context.tsx. */
+export type EngineState = "billing" | "out-of-credits" | "paused" | "running";
 
 /**
- * Whether the account has a trial or paid plan — required to write and to
- * connect a site. Mirrors the server's rule in entitlement.server.ts.
+ * Whether the account may write and connect a site right now: a trial whose
+ * card passed, or a paid plan whose last payment went through. The same rule
+ * the server enforces (src/lib/entitlement.ts), not a copy of it.
  */
 export function isEntitled(subscription: Subscription | null | undefined): boolean {
-  if (!subscription) return false;
-  if (["trialing", "active", "past_due"].includes(subscription.status)) return true;
-  // A cancelled plan keeps working until the paid period ends.
-  return (
-    subscription.status === "canceled" &&
-    !!subscription.current_period_end &&
-    new Date(subscription.current_period_end).getTime() > Date.now()
-  );
+  return rowEntitles(subscription);
 }
 
 /** Whether autopilot will write, and if not, the first thing stopping it. */
@@ -27,7 +23,7 @@ export function engineState({
   remaining: number;
   enabled: boolean;
 }): EngineState {
-  if (!isEntitled(subscription)) return "needs-trial";
+  if (!isEntitled(subscription)) return "billing";
   if (remaining <= 0) return "out-of-credits";
   return enabled ? "running" : "paused";
 }

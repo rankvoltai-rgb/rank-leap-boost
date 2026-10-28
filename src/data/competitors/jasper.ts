@@ -7,7 +7,7 @@
  * and Business now includes GEO Hub citation tracking.
  */
 import { Search, PenLine, Send, Link2, Quote, Gauge } from "lucide-react";
-import { PLAN, formatUsd } from "../pricing";
+import { PLAN, TRIAL_TERMS, formatUsd } from "../pricing";
 import {
   RANKBOX_CELLS,
   RANKBOX_COST,
@@ -345,7 +345,7 @@ export const jasper: Competitor = {
     },
     {
       q: "Do I need to cancel Jasper to try Rankbox?",
-      a: "No. Building your Rankbox content plan is free, and the trial runs for 7 days. There is nothing to migrate, so you can run both for a couple of weeks and compare what actually reached your site.",
+      a: `No. There is nothing to migrate, so you can run both side by side and compare what actually reached your site. ${TRIAL_TERMS}`,
     },
   ],
 

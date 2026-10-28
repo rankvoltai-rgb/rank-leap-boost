@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "@tanstack/react-router";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { type QueryClient, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import {
   listBlogs,
@@ -12,15 +12,17 @@ import {
   getSubscription,
   creditsRemaining,
   CreditsExhaustedError,
-  TrialRequiredError,
   type Blog,
+  type Subscription,
 } from "@/lib/data";
+import { billingIssueOf } from "@/lib/entitlement";
+import { isBillingRefusal } from "@/lib/errors";
 import { formatShortDate } from "@/lib/format-date";
 import { trafficScale, trafficTier, type TrafficTier } from "@/lib/traffic-tier";
 import { Confetti } from "@/components/dashboard/rewards";
 import { useSiteId } from "@/components/dashboard/site-context";
 import { CreditPaywallDialog } from "@/components/dashboard/CreditPaywallDialog";
-import { StartTrialDialog } from "@/components/dashboard/StartTrialDialog";
+import { BILLING_FIX_LABEL, useBilling } from "@/components/dashboard/billing-context";
 import {
   applyPatches,
   inversePatches,
@@ -106,8 +108,7 @@ export function useArticleActions({
   const [writingIds, setWritingIds] = useState<ReadonlySet<string>>(() => new Set());
   const [confettiKey, setConfettiKey] = useState(0);
   const [paywallOpen, setPaywallOpen] = useState(false);
-  const [trialOpen, setTrialOpen] = useState(false);
-  const [pendingBlog, setPendingBlog] = useState<Blog | null>(null);
+  const billing = useBilling();
   const openRef = useRef(openId);
   openRef.current = openId;
 
@@ -143,10 +144,11 @@ export function useArticleActions({
         });
       }
     } catch (err) {
-      // No trial yet: this is the moment the trial is sold, not onboarding.
-      if (err instanceof TrialRequiredError) {
-        setPendingBlog(blog);
-        setTrialOpen(true);
+      // Billing stopped it. Refetching the subscription raises the banner;
+      // the toast carries the same fix in case the banner is scrolled away.
+      if (isBillingRefusal(err)) {
+        await queryClient.invalidateQueries({ queryKey: ["subscription"] });
+        toast.error(err.message, billingToastAction(billing.fix, queryClient));
         return;
       }
       if (err instanceof CreditsExhaustedError) {
@@ -229,21 +231,6 @@ export function useArticleActions({
   const dialogs = (
     <>
       <Confetti fireKey={confettiKey} />
-      <StartTrialDialog
-        open={trialOpen}
-        onOpenChange={setTrialOpen}
-        queuedCount={
-          all.filter((b) => b.status === "scheduled" || b.status === "opportunity").length
-        }
-        projectedTraffic={all.reduce((s, b) => s + (b.traffic_estimate ?? 0), 0)}
-        onStarted={() => {
-          // Starting the trial switches autopilot on; its status reads from settings.
-          void queryClient.invalidateQueries({ queryKey: ["settings"] });
-          const b = pendingBlog;
-          setPendingBlog(null);
-          if (b) void write(b);
-        }}
-      />
       <CreditPaywallDialog
         open={paywallOpen}
         onOpenChange={setPaywallOpen}
@@ -264,8 +251,18 @@ export function useArticleActions({
     remove,
     reschedule,
     commitQueue,
-    openTrial: () => setTrialOpen(true),
+    /** Fix whatever billing issue is stopping the account (see billing-context.tsx). */
+    fixBilling: billing.fix,
     openPaywall: () => setPaywallOpen(true),
     dialogs,
   };
+}
+
+/**
+ * The billing fix as a toast action, labelled from the subscription the
+ * refusal just refetched (the render that raised the toast predates it).
+ */
+export function billingToastAction(fix: () => void, queryClient: QueryClient) {
+  const issue = billingIssueOf(queryClient.getQueryData<Subscription | null>(["subscription"]));
+  return { action: { label: issue ? BILLING_FIX_LABEL[issue] : "Fix billing", onClick: fix } };
 }

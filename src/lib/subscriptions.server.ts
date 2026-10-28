@@ -371,6 +371,188 @@ async function verifyCardHasFunds(subscription: SubscriptionLike, env: StripeEnv
   }
 }
 
+/* ── Fixing billing from the dashboard ──────────────────────────────────── */
+
+/**
+ * Where a billing fix landed. `needs_action` means the bank wants the
+ * customer to approve it (3-D Secure): the browser finishes that with
+ * Stripe.js and then calls back (see finishCardRecheck).
+ */
+export type BillingFixOutcome =
+  | { outcome: "fixed" }
+  | { outcome: "failed"; message: string }
+  | { outcome: "needs_action"; clientSecret: string };
+
+/** The card to try: the customer's default, which is what the portal's card update sets. */
+export async function currentDefaultCard(
+  stripe: Stripe,
+  subscription: SubscriptionLike,
+): Promise<string | null> {
+  const customer =
+    typeof subscription.customer === "string" ? subscription.customer : subscription.customer?.id;
+  if (customer) {
+    const record = await stripe.customers.retrieve(customer);
+    if (!("deleted" in record && record.deleted)) {
+      const pm = (record as Stripe.Customer).invoice_settings?.default_payment_method;
+      const id = typeof pm === "string" ? pm : pm?.id;
+      if (id) return id;
+    }
+  }
+  const own = subscription.default_payment_method;
+  return (typeof own === "string" ? own : own?.id) ?? null;
+}
+
+async function markCardCheck(subscriptionId: string, fields: Record<string, unknown>) {
+  await getSupabase()
+    .from("subscriptions")
+    .update({ ...fields, card_checked_at: new Date().toISOString() })
+    .eq("stripe_subscription_id", subscriptionId);
+}
+
+/**
+ * Run the $1 card check again, against the card the customer just put on
+ * file, with them present.
+ *
+ * Unlike the first check (verifyCardHasFunds), this one is on-session: the
+ * customer has just clicked "Update card", so a bank that wants 3-D Secure gets
+ * it, in the page, instead of the check failing outright — which is how a
+ * perfectly good card ended up blocked before.
+ *
+ * The idempotency key covers a double click or an SDK retry within the same
+ * minute; a deliberate retry a minute later (say, after topping up a prepaid
+ * card) is a fresh attempt.
+ */
+export async function recheckCard(
+  subscription: SubscriptionLike,
+  paymentMethod: string,
+  env: StripeEnv,
+): Promise<BillingFixOutcome> {
+  const stripe = createStripeClient(env);
+  const customer =
+    typeof subscription.customer === "string" ? subscription.customer : subscription.customer?.id;
+  if (!customer) return { outcome: "failed", message: "No customer on this subscription." };
+
+  try {
+    const authorization = await stripe.paymentIntents.create(
+      {
+        amount: CARD_CHECK_CENTS,
+        currency: "usd",
+        customer,
+        payment_method: paymentMethod,
+        capture_method: "manual",
+        confirm: true,
+        // On-session, and never a redirect: a card either holds the dollar,
+        // asks for 3-D Secure in the page, or declines.
+        automatic_payment_methods: { enabled: true, allow_redirects: "never" },
+        description: "Rankbox card check — released immediately, never charged",
+        metadata: {
+          purpose: "card_check",
+          subscriptionId: subscription.id,
+          userId: subscription.metadata?.userId ?? "",
+        },
+      },
+      {
+        idempotencyKey: `card-recheck-${subscription.id}-${paymentMethod}-${Math.floor(Date.now() / 60_000)}`,
+      },
+    );
+    return await settleCardCheck(stripe, authorization, subscription.id);
+  } catch (error) {
+    const message = stripeMessage(error, "Your bank declined the check.");
+    await markCardCheck(subscription.id, { card_verified: false, card_check_error: message });
+    return { outcome: "failed", message };
+  }
+}
+
+/**
+ * The browser has finished 3-D Secure for a card recheck. Ownership comes
+ * from the PaymentIntent's own metadata, never from the caller's word: the id
+ * is not a secret.
+ */
+export async function finishCardRecheck(
+  paymentIntentId: string,
+  userId: string,
+  env: StripeEnv,
+): Promise<BillingFixOutcome> {
+  const stripe = createStripeClient(env);
+  const authorization = await stripe.paymentIntents.retrieve(paymentIntentId);
+  if (
+    authorization.metadata?.purpose !== "card_check" ||
+    authorization.metadata?.userId !== userId
+  ) {
+    throw new Error("This card check belongs to another account");
+  }
+  return settleCardCheck(stripe, authorization, authorization.metadata.subscriptionId);
+}
+
+async function settleCardCheck(
+  stripe: Stripe,
+  authorization: Stripe.PaymentIntent,
+  subscriptionId: string,
+): Promise<BillingFixOutcome> {
+  if (authorization.status === "requires_capture") {
+    await stripe.paymentIntents.cancel(authorization.id);
+    await markCardCheck(subscriptionId, { card_verified: true, card_check_error: null });
+    return { outcome: "fixed" };
+  }
+  if (authorization.status === "requires_action" && authorization.client_secret) {
+    return { outcome: "needs_action", clientSecret: authorization.client_secret };
+  }
+  const message = authorization.last_payment_error?.message ?? "Your bank declined the check.";
+  await markCardCheck(subscriptionId, {
+    card_verified: false,
+    card_check_error: `Authorization ${authorization.status}: ${message}`,
+  });
+  return { outcome: "failed", message };
+}
+
+/**
+ * Pay what a failed renewal (or trial conversion) left owing, with the card
+ * the customer just put on file. The card also becomes the subscription's own
+ * default, so next month's invoice doesn't reach for the one that failed.
+ */
+export async function payOpenInvoice(
+  subscription: SubscriptionLike,
+  paymentMethod: string,
+  env: StripeEnv,
+): Promise<BillingFixOutcome> {
+  const stripe = createStripeClient(env);
+  const own = subscription.default_payment_method;
+  if ((typeof own === "string" ? own : own?.id) !== paymentMethod) {
+    await stripe.subscriptions.update(subscription.id, { default_payment_method: paymentMethod });
+  }
+
+  const open = await stripe.invoices.list({
+    subscription: subscription.id,
+    status: "open",
+    limit: 1,
+  });
+  const invoice = open.data[0];
+  // Nothing owed any more (Stripe's own retry may have just succeeded).
+  if (!invoice?.id) return { outcome: "fixed" };
+
+  try {
+    await stripe.invoices.pay(invoice.id, { payment_method: paymentMethod });
+    return { outcome: "fixed" };
+  } catch (error) {
+    const code = (error as { code?: string; raw?: { code?: string } }).code;
+    if (code === "invoice_payment_intent_requires_action") {
+      const fresh = await stripe.invoices.retrieve(invoice.id, { expand: ["confirmation_secret"] });
+      const secret = fresh.confirmation_secret?.client_secret;
+      if (secret) return { outcome: "needs_action", clientSecret: secret };
+    }
+    return { outcome: "failed", message: stripeMessage(error, "Your bank declined the payment.") };
+  }
+}
+
+function stripeMessage(error: unknown, fallback: string): string {
+  if (error && typeof error === "object") {
+    const e = error as { message?: unknown; raw?: { message?: unknown } };
+    const message = e.raw?.message ?? e.message;
+    if (typeof message === "string" && message) return message;
+  }
+  return fallback;
+}
+
 export async function handleSubscriptionCreated(subscription: SubscriptionLike, env: StripeEnv) {
   const userId = subscription.metadata?.userId;
   if (!userId) {

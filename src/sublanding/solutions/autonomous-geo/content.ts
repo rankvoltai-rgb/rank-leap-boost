@@ -98,7 +98,7 @@ export const FAQS: { q: string; a: string }[] = [
   },
   {
     q: "What does Rankbox cost, and what's in the trial?",
-    a: `One site costs ${PRICE_MONTHLY} and gets ${PLAN.articlesPerMonth} articles a month. ${TRIAL_TERMS} The trial covers up to ${TRIAL_ARTICLE_CREDITS} articles.`,
+    a: `One site costs ${PRICE_MONTHLY} and gets ${PLAN.articlesPerMonth} articles a month. ${TRIAL_TERMS} The trial covers up to ${TRIAL_ARTICLE_CREDITS} articles; backlink credits and Reddit drafts start with the first paid invoice.`,
   },
 ];
 
@@ -111,7 +111,7 @@ export const HERO = {
   /** Where the H1 breaks onto its second line on wide screens. */
   h1Break: " that ",
   sub: "Most tools in this category end with a to-do list. Rankbox ends with the page written: it works out which questions your buyers put to AI that your site doesn't answer yet, then writes and delivers a cited answer to each, up to one a day.",
-  note: `Signup and your first content plan are free. Add a card when you start the ${TRIAL}.`,
+  note: `The ${TRIAL} takes a card, added as the last step of setup. Cancel anytime.`,
 };
 
 /** The URL form, used in the hero and again at the close. */

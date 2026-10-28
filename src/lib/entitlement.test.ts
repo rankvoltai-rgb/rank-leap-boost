@@ -12,6 +12,7 @@ import {
   subscriptionIsPaid,
   TrialRequiredError,
 } from "./entitlement.server";
+import { billingIssueOf, rowEntitles, trialDaysFor } from "./entitlement";
 
 const NOW = Date.parse("2026-09-21T00:00:00Z");
 const hours = (n: number) => n * 60 * 60 * 1000;
@@ -48,20 +49,11 @@ describe("subscriptionIsPaid", () => {
     // A trial cancelled mid-way also has a future period end: it never paid.
     expect(subscriptionIsPaid(row({ status: "canceled", activated_at: null }), NOW)).toBe(false);
   });
-  it("gives past_due the grace window, and only after a real payment", () => {
+  it("stops a failed payment at once, paid before or not", () => {
     expect(
       subscriptionIsPaid(row({ status: "past_due", past_due_since: iso(-hours(2)) }), NOW),
-    ).toBe(true);
-    expect(
-      subscriptionIsPaid(row({ status: "past_due", past_due_since: iso(-hours(72)) }), NOW),
     ).toBe(false);
     expect(subscriptionIsPaid(row({ status: "past_due", past_due_since: null }), NOW)).toBe(false);
-    expect(
-      subscriptionIsPaid(
-        row({ status: "past_due", past_due_since: iso(-hours(2)), activated_at: null }),
-        NOW,
-      ),
-    ).toBe(false);
   });
   it("is false for every other status", () => {
     for (const status of ["incomplete", "incomplete_expired", "unpaid", "paused"]) {
@@ -119,18 +111,17 @@ describe("Reddit presence — the same paid gate as the exchange", () => {
     ).resolves.toBeUndefined();
   });
 
-  it("admits past_due and canceled only for an account that actually paid", async () => {
-    const lapsing = { status: "past_due", past_due_since: iso(-hours(2)) };
-    expect(await hasRedditEntitlement(fakeClient(row(lapsing)).client, SCOPE, "sandbox")).toBe(
-      true,
-    );
+  it("refuses a failed payment, and admits canceled only for an account that actually paid", async () => {
+    const failing = row({ status: "past_due", past_due_since: iso(-hours(2)) });
+    expect(await hasRedditEntitlement(fakeClient(failing).client, SCOPE, "sandbox")).toBe(false);
     expect(
       await hasRedditEntitlement(
-        fakeClient(row({ ...lapsing, activated_at: null })).client,
+        // The gate reads the real clock, so the paid period must outlast it.
+        fakeClient(row({ status: "canceled", current_period_end: "2099-01-01T00:00:00Z" })).client,
         SCOPE,
         "sandbox",
       ),
-    ).toBe(false);
+    ).toBe(true);
     expect(
       await hasRedditEntitlement(
         fakeClient(row({ status: "canceled", activated_at: null })).client,
@@ -230,5 +221,68 @@ describe("redditAccessFor", () => {
     expect(redditAccessFor(ended, false, NOW)).toBe("none");
     expect(redditAccessFor(null, false, NOW)).toBe("none");
     expect(redditAccessFor(null, true, NOW)).toBe("lapsed");
+  });
+});
+
+describe("generation stops while billing is broken", () => {
+  it("refuses a trial whose card check failed, and says to update the card", async () => {
+    const failed = row({ status: "trialing", card_verified: false, activated_at: null });
+    expect(rowEntitles(failed, NOW)).toBe(false);
+    await expect(requireGenerationEntitlement(fakeClient(failed).client, SCOPE)).rejects.toThrow(
+      /couldn't verify your card/,
+    );
+  });
+
+  it("lets a trial write while its card check is pending or passed", () => {
+    expect(rowEntitles(row({ status: "trialing", card_verified: null }), NOW)).toBe(true);
+    expect(rowEntitles(row({ status: "trialing", card_verified: true }), NOW)).toBe(true);
+  });
+
+  it("refuses every failed-payment status from the first minute, with no grace", async () => {
+    for (const status of ["past_due", "unpaid", "incomplete", "paused"]) {
+      const failing = row({ status, past_due_since: iso(-1000) });
+      expect(rowEntitles(failing, NOW), status).toBe(false);
+      await expect(requireGenerationEntitlement(fakeClient(failing).client, SCOPE)).rejects.toThrow(
+        /payment didn't go through/,
+      );
+    }
+  });
+
+  it("tells an ended plan to restart, not to start a trial", async () => {
+    const ended = row({ status: "canceled", current_period_end: iso(-1) });
+    await expect(requireGenerationEntitlement(fakeClient(ended).client, SCOPE)).rejects.toThrow(
+      /plan has ended/,
+    );
+  });
+});
+
+describe("billingIssueOf", () => {
+  it("is nothing for a healthy plan or trial, and for no subscription at all", () => {
+    expect(billingIssueOf(row({}), NOW)).toBeNull();
+    expect(billingIssueOf(row({ status: "trialing", card_verified: null }), NOW)).toBeNull();
+    expect(billingIssueOf(null, NOW)).toBeNull();
+  });
+
+  it("names each kind of broken billing", () => {
+    expect(billingIssueOf(row({ status: "trialing", card_verified: false }), NOW)).toBe(
+      "card_check_failed",
+    );
+    expect(billingIssueOf(row({ status: "past_due" }), NOW)).toBe("payment_failed");
+    expect(billingIssueOf(row({ status: "unpaid" }), NOW)).toBe("payment_failed");
+    expect(billingIssueOf(row({ status: "incomplete_expired" }), NOW)).toBe("plan_ended");
+  });
+
+  it("waits for a cancelled plan's paid period to run out before calling it ended", () => {
+    expect(billingIssueOf(row({ status: "canceled" }), NOW)).toBeNull();
+    expect(billingIssueOf(row({ status: "canceled", current_period_end: iso(-1) }), NOW)).toBe(
+      "plan_ended",
+    );
+  });
+});
+
+describe("trialDaysFor — one trial per account", () => {
+  it("gives a first subscription the trial and every later one none", () => {
+    expect(trialDaysFor(false, 7)).toBe(7);
+    expect(trialDaysFor(true, 7)).toBeUndefined();
   });
 });

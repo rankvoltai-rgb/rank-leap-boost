@@ -118,7 +118,7 @@ Two rows didn't shrink, on purpose. However SaaS companies use AI, fact-checking
 
 A disclosure first: Rankbox sells an AI article writer, so weigh this section with that in mind. It covers the first three legs of the relay, not the rest. Rankbox's [Answer-Space Research](/features/answer-space-research) maps the questions buyers ask ChatGPT, Perplexity and Google, with volumes that are model estimates. Its [Citation-Ready Writer](/features/citation-ready-writer) researches the live web and drafts 2,000 to 3,500-word, source-backed articles, and [Brand Voice](/features/brand-voice) applies the tone and product details you give it. Articles reach your site through Rankbox's API, which a developer wires in.
 
-It doesn't import your proprietary data, publish directly to a CMS or track AI citations today. So the fact sheet, the edit and the expert review in the relay stay with your team. The Business plan is $49.50 a month for 30 articles, and you can sign up free without a card, then add one to start a 7-day trial with up to 7 articles. See [pricing](/pricing).
+It doesn't import your proprietary data, publish directly to a CMS or track AI citations today. So the fact sheet, the edit and the expert review in the relay stay with your team. The Business plan is $49.50 a month for 30 articles; before that comes a 7-day free trial with 7 articles, card required. See [pricing](/pricing).
 
 ## Frequently Asked Questions
 

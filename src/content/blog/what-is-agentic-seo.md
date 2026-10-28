@@ -121,7 +121,7 @@ For how structured doors such as MCP servers fit in, see [MCP as the new sitemap
 
 ## Where Rankbox Helps
 
-Rankbox helps with the reading half of agentic SEO. It researches the live web and writes 2,000 to 3,500-word, source-backed articles, such as comparison pages and answers to buyer questions, that agents read when they compare options. It doesn't fix forms, run agent tests or track AI citations. Signup is free, the 7-day trial starts when you add a card, and the Business plan is $49.50 a month. [See pricing](/pricing).
+Rankbox helps with the reading half of agentic SEO. It researches the live web and writes 2,000 to 3,500-word, source-backed articles, such as comparison pages and answers to buyer questions, that agents read when they compare options. It doesn't fix forms, run agent tests or track AI citations. You begin with a 7-day free trial, which takes a card, and the Business plan is $49.50 a month after that unless you cancel. [See pricing](/pricing).
 
 ## Frequently Asked Questions
 

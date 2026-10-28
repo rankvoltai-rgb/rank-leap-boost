@@ -3,7 +3,7 @@ title: Editing articles
 nav_title: Editor
 description: Every action in the Rankbox article editor: editing text, AI rewrites, title and meta, saving, publishing changes, scheduling, deleting and shortcuts.
 order: 4
-updated: 2026-10-02
+updated: 2026-10-28
 ---
 
 Every article opens in the same editor: a panel that slides over the page you came from. In it you can steer an article before it's written, edit the text after, rewrite passages with AI, check the score, and publish. This page covers every control in the panel, how saving works for drafts and for published articles, and what "published" means for the REST API.
@@ -88,7 +88,7 @@ URLs you type become links automatically. Links don't open when you click them i
 | **Expand** | Add detail, examples and depth |
 | **Shorten** | Keep only the most important points |
 
-Each action rewrites in your site's voice, using the brief from [Brand voice and writing settings](/docs/content/brand-voice). Actions use no article credits but count toward the AI rate limit of 12 requests a minute per account (the default).
+Each action rewrites in your site's voice, using the brief from [Brand voice and writing settings](/docs/content/brand-voice). Actions use no article credits but count toward the AI rate limit of 12 requests a minute per account (the default). They write, so they stop with the rest of writing while billing blocks the account: after a failed card check, a failed payment or once the plan has ended, an action is refused with the same message as **Write now**, such as "We couldn't verify your card. Update it to start writing." Use the button on the banner at the top of the dashboard to fix it. See [The billing banner](/docs/account/billing#the-billing-banner).
 
 The AI receives your selection as plain text and returns plain text. Formatting inside the selection, such as bold, links or list structure, is replaced. Select within one paragraph for the cleanest result, and use **Undo** if you don't like the change. With nothing selected you see "Select some text first."
 

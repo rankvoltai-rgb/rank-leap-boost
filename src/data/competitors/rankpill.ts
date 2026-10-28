@@ -5,7 +5,7 @@
  * what this page argues. Checked against rankpill.com on 2026-09-21.
  */
 import { Search, PenLine, Send, Link2, Quote, Gauge } from "lucide-react";
-import { PLAN, formatUsd } from "../pricing";
+import { PLAN, TRIAL_DAYS, formatUsd } from "../pricing";
 import {
   RANKBOX_CELLS,
   RANKBOX_COST,
@@ -349,6 +349,5 @@ export const rankpill: Competitor = {
     { label: "Help center: integrations", url: "https://rankpill.com/help" },
   ],
   ctaTitle: "The same autopilot, at half the monthly bill",
-  ctaBody:
-    "Paste your URL. Rankbox builds your content plan free, then writes your first articles on a 7-day trial.",
+  ctaBody: `Paste your URL. Rankbox builds your content plan, then writes your first articles on a ${TRIAL_DAYS}-day free trial.`,
 };

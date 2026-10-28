@@ -1,19 +1,19 @@
 ---
 title: The free trial
 nav_title: Free trial
-description: How the 7-day Rankbox trial works, from adding a card in Stripe Checkout to automatic conversion, early upgrade, cancelling and a failed card.
+description: How the 7-day Rankbox trial works, from adding a card as the last step of onboarding to the $1 card check, automatic conversion, early upgrade, cancelling and failed payments.
 order: 2
-updated: 2026-10-02
+updated: 2026-10-28
 ---
 
-The Rankbox free trial lasts 7 days and lets Rankbox write and publish up to 7 articles for your site before you pay anything. It starts in Stripe Checkout and takes a card. If you don't cancel, it converts automatically to the Business plan at $49.50 a month when the 7 days are up.
+The Rankbox free trial lasts 7 days and lets Rankbox write and publish up to 7 articles for your site before you pay anything. It starts at step 4 of onboarding, where you add a card in Stripe Checkout, and it is required: the dashboard opens only once the trial has started. If you don't cancel, you're charged $49.50 a month for the Business plan 7 days after you start. Each account gets one free trial.
 
 ## The trial at a glance
 
 | Item | During the trial |
 | --- | --- |
 | Length | 7 days from the moment checkout completes |
-| Card | Required, entered in Stripe Checkout inside the dashboard |
+| Card | Required, entered in Stripe Checkout at step 4 of onboarding |
 | Charged when you start | $0. A $1.00 card authorization is placed and released at once (see [The card check](#the-card-check)) |
 | Article credits | 7 for your plan's own site |
 | Sites | 1. Studio opens with the first payment |
@@ -22,28 +22,25 @@ The Rankbox free trial lasts 7 days and lets Rankbox write and publish up to 7 a
 | Publishing (REST API keys and publishing connections) | Included |
 | Backlink exchange | Not included. Opens with the first paid invoice |
 | Reddit Presence | Not included. Opens with the first paid invoice |
-| After 7 days | Converts to the Business plan at $49.50 a month, unless cancelled |
+| After 7 days | Converts to the Business plan: $49.50 a month, charged 7 days after you start, unless you cancel first |
+| Trials per account | One. Restarting a plan that has ended is paid from day one |
 
 ## Before the trial starts
 
-You don't need a card to sign up or to finish onboarding. Without a trial you can:
+Signing up and the first three steps of onboarding (**Brand**, **Keywords** and **Plan**) happen before you add a card. Confirming step 3 saves your site, its keywords and its content plan, then step 4 asks for the card. Step 4 has no skip.
 
-- Set up your site and brand in onboarding.
-- See the keywords, content plan and queued articles Rankbox built for you.
-- Look around every page of the dashboard.
-
-Nothing is written until the trial starts. The check runs on Rankbox's servers, so it applies equally to the dashboard, to autopilot and to API keys. If you try to write an article without a trial, Rankbox refuses with "Start your free trial to generate articles." Autopilot also stays idle, and pages that depend on the plan show a **Start 7-day free trial** button over a preview of the page.
+- **The dashboard waits for the trial.** An account with no subscription that opens the dashboard is sent back to step 4. This includes accounts created before the card step existed.
+- **Leaving is safe.** If you close the tab or sign out at step 4, your site and plan stay saved, and you resume on step 4 the next time you sign in.
+- **Nothing is written before the trial.** The check runs on Rankbox's servers, so it applies equally to the dashboard, to autopilot and to API keys. A request to write an article for an account with no subscription is refused with "Start your free trial to generate articles."
 
 ## Start the trial
 
-You can start the trial from any **Start free trial** or **Start 7-day free trial** button: the Overview's next-step card, the autopilot bar on Articles, **Settings → Autopilot**, the Rank, Backlinks and Reddit pages, and **Plan & Billing**.
+1. On step 3 of onboarding, click **Continue**. Step 4, "Start your 7-day free trial", opens with the number of articles planned and ready.
+2. Read the terms above the card form: "A card is required to start. We place a $1 hold to verify it and release it right away, so nothing is charged today. Your plan starts at $49.50/month 7 days from today unless you cancel first."
+3. Enter your card details in Stripe's checkout form and complete checkout.
+4. Wait for "Starting your trial…" to finish. "Your 7-day trial is live. Welcome to Rankbox." confirms it, and the dashboard opens.
 
-1. Click **Start free trial**. A dialog opens with the number of articles ready to publish and what the trial includes.
-2. Click **Start free trial** in the dialog. Stripe's checkout form appears inside the same dialog. It says "Add a card to begin. You aren't charged today — your plan starts at $49.50/month on day 8, and you can cancel before then in one click."
-3. Enter your card details and complete checkout.
-4. Wait for "Starting your trial…" to finish. A confirmation reads "Your 7-day trial is live."
-
-If you started the trial by clicking **Write now** on an article, Rankbox writes that article as soon as the trial is live.
+If you're signed in to the wrong account, use **Sign out** under "Not the right account?" at the bottom of step 4.
 
 > [!NOTE]
 > Card details go straight to Stripe. Rankbox never receives or stores your full card number.
@@ -52,7 +49,24 @@ If you started the trial by clicking **Write now** on an article, Rankbox writes
 
 When a trial starts, Rankbox asks Stripe to place a $1.00 authorization on the card and then releases it immediately. Nothing is captured or charged. It exists because a card can pass checkout's $0 setup while holding no funds. Your bank may show the $1.00 as a pending authorization for a day or two before it disappears.
 
-If the authorization fails, the trial still exists but can't write articles. Writing an article then shows "We couldn't verify your card. Update it in billing to start generating." This can happen with an empty or prepaid card, and also with a valid card whose bank requires 3-D Secure for the hold. See [Troubleshooting the trial](#troubleshooting-the-trial) for the fix.
+If the authorization fails, the trial still exists, but article writing is paused. Onboarding ends with "Your trial started, but we couldn't verify your card. Update it from the dashboard to start writing." Until the check passes:
+
+- **Write now** is refused with "We couldn't verify your card. Update it to start writing."
+- Autopilot doesn't write.
+- The editor's AI actions (rewrite, expand, shorten and improve SEO) are refused with the same message.
+
+This can happen with an empty or prepaid card, and also with a valid card whose bank requires 3-D Secure for the hold.
+
+### Fix a failed card check
+
+While the check has failed, a red banner at the top of every dashboard page reads "We couldn't verify your card. Article writing is paused until you update it. Everything you've set up is saved."
+
+1. Click **Update card** on the banner. Stripe's card-update page opens.
+2. Enter the new card and save it. Stripe returns you to the dashboard.
+3. Rankbox runs the $1.00 check again on the new card while you're on the page ("Checking your card…"). If your bank asks for 3-D Secure, approve it in the prompt that appears on the page.
+4. When the check passes, you see "Billing is sorted. Article writing is back on." The banner clears and writing and autopilot resume.
+
+If the new card fails the check too, the banner stays and a message says why. Click **Update card** again and try another card.
 
 ## What the trial includes
 
@@ -89,7 +103,7 @@ The Backlinks and Reddit pages say "Part of the paid plan" during the trial, wit
 
 ## When the trial ends
 
-If the trial isn't cancelled, Stripe charges the card $49.50 when the 7 days are up, and the subscription becomes active. At that moment:
+If the trial isn't cancelled, Stripe charges the card $49.50 seven days after you started, and the subscription becomes active. At that moment:
 
 - Your site's article balance resets to 30 for the new period.
 - The backlink exchange opens and the site receives 30 backlink credits.
@@ -114,26 +128,41 @@ If the charge goes through, you get the full allowance immediately: 30 articles,
 2. Click **Card & invoices** (top right) or **Manage in Stripe**. The Stripe billing portal opens in a new tab.
 3. Cancel the subscription in the portal.
 
-After you cancel, the plan's status shows **Ending** and the page says "Your trial ends {date} and won't convert." You keep the trial, including any of the 7 article credits left, until that date, and your card is not charged. The trial's articles stay on your site. If you change your mind before the end date, click **Keep my plan** on the "Your plan ends" banner in **Plan & Billing**, which opens the portal, and renew the subscription there.
+After you cancel, the plan's status shows **Ending** and the page says "Your trial ends {date} and won't convert." You keep the trial, including any of the 7 article credits left, until that date, and your card is not charged. The trial's articles stay on your site. If you change your mind before the end date, click **Keep my plan** on the "Your plan ends" banner in **Plan & Billing**, which opens the portal, and renew the subscription there. Once the end date has passed, the trial can't be restarted; a new plan is paid from day one (see [One trial per account](#one-trial-per-account)).
 
 ## If the card fails at the end of the trial
 
-If Stripe can't take the first $49.50 when the trial ends, the subscription becomes **Payment due**:
+If Stripe can't take the first $49.50 when the trial converts, the subscription becomes **Payment due**, and everything that needs the plan stops at once:
 
-- **Plan & Billing** shows "Your last payment didn't go through" with an **Update card** button that opens the Stripe portal.
-- For the first 48 hours after the failed payment, you can still use whatever trial article credits are left. No new credits are granted.
-- After 48 hours, writing and autopilot stop until the invoice is paid.
+- Article writing and autopilot stop, including any trial article credits left over. There is no grace period.
 - The backlink exchange, Reddit Presence and Studio stay closed, because no invoice has been paid.
+- A red banner at the top of every dashboard page reads "Your last payment didn't go through." with an **Update billing** button.
 
-Once the invoice is paid, the subscription becomes active and the site is refilled to 30 article credits, with backlinks, Reddit Presence and Studio unlocked.
+To fix it:
+
+1. Click **Update billing** on the banner. Stripe's card-update page opens.
+2. Enter a new card and save it. Stripe returns you to the dashboard.
+3. Rankbox immediately retries the open invoice with the new card. If your bank asks for 3-D Secure, approve it in the prompt that appears on the page.
+4. When the invoice is paid, you see "Billing is sorted. Article writing is back on."
+
+The subscription is then active, the site is refilled to 30 article credits, and the backlink exchange, Reddit Presence and Studio open.
+
+## One trial per account
+
+Each account gets one free trial. Once a trial or plan has ended, restarting it is paid from day one:
+
+- The banner at the top of the dashboard reads "Your plan has ended." with a **Restart plan** button.
+- **Restart plan** opens a checkout at $49.50/month, starting today. There's no second trial.
+- Your articles, keywords and settings are kept, and autopilot picks up where it left off once the plan is paid.
 
 ## Troubleshooting the trial
 
 | What you see | What it means and what to do |
 | --- | --- |
-| "We couldn't verify your card. Update it in billing to start generating." | The $1.00 card check failed. Updating the card in the Stripe portal doesn't rerun the check. Either update the card and then start the paid plan with **Unlock everything now**, or [contact support](/docs/help/support) |
-| "Your payment went through, but we couldn't start the trial." | Checkout finished but Rankbox couldn't confirm it straight away. Reload the dashboard after a minute. Stripe's own notification usually completes it |
-| Rankbox asks you to start a trial you just started | The confirmation from Stripe hadn't arrived when the page loaded. Reload the page |
+| "We couldn't verify your card. Update it to start writing." | The $1.00 card check failed. Click **Update card** on the banner and add a card that can hold $1.00. Rankbox reruns the check when you return. See [Fix a failed card check](#fix-a-failed-card-check) |
+| "Your card went through, but the trial hasn't shown up yet. Refresh in a moment." | Checkout finished but Rankbox couldn't confirm it straight away. Reload the page after a minute. Stripe's own notification usually completes it |
+| Step 4 of onboarding opens when you try to open the dashboard | The account has no trial or plan yet. Add a card on step 4 to start the trial. If you just added one, reload the page |
+| "Your last payment didn't go through." | The trial's first charge failed. Click **Update billing**. See [If the card fails at the end of the trial](#if-the-card-fails-at-the-end-of-the-trial) |
 | A pending $1.00 on your statement | The card check. It's released, never captured |
 
 ## Related
@@ -141,5 +170,5 @@ Once the invoice is paid, the subscription becomes active and the site is refill
 - [Plans and credits](/docs/account/plans-and-credits): the full allowance and how each credit resets.
 - [Billing, invoices and cancellation](/docs/account/billing): the Stripe portal, renewals and refunds.
 - [Studio: run several sites](/docs/account/studio): adding sites once the plan is paid.
-- [Onboarding, step by step](/docs/get-started/onboarding): what you set up before the trial.
+- [Onboarding, step by step](/docs/get-started/onboarding): the steps before the card, and step 4 where the trial starts.
 - [Autopilot and the publishing schedule](/docs/content/autopilot): what autopilot does once the trial starts.

@@ -2,7 +2,7 @@
 title: How Rankbox works
 description: The full Rankbox pipeline: site scan, research, content plan, writing, scoring, publishing, live URLs, backlinks, Reddit and Rank, with credit costs.
 order: 3
-updated: 2026-10-02
+updated: 2026-10-28
 ---
 
 Rankbox runs every site through the same pipeline: it reads the site, researches the searches to win, plans one article per search, writes and scores each article, publishes it to the site, and then works on the site's authority. This page explains each stage, where you see it in the dashboard, and what it costs in credits.
@@ -10,7 +10,7 @@ Rankbox runs every site through the same pipeline: it reads the site, researches
 ## The pipeline at a glance
 
 ```text
- ONBOARDING (free, no card)                  WRITING (trial or paid)
+ ONBOARDING (card at step 4)                 WRITING (trial or paid)
  ┌───────────┐   ┌──────────┐   ┌─────────┐   ┌─────────────────────────────┐
  │ Site scan │──▶│ Research │──▶│ Content │──▶│ Write: research → draft →   │
  │ brand,    │   │ keywords │   │ plan    │   │ optimize → video → links    │
@@ -32,7 +32,7 @@ Rankbox runs every site through the same pipeline: it reads the site, researches
  └──────────────────────────────────────────────┘
 ```
 
-Onboarding runs once per site and is free. Writing and publishing need a trial or a paid plan. The backlink exchange and Reddit Presence need a paid plan. Autopilot repeats the writing stage for you, one scheduled article at a time.
+The site scan, research and content plan run once per site: in onboarding for your first site, and in Studio for every other. Onboarding then asks for a card to start the 7-day free trial, and the dashboard opens only once the trial has started. Writing and publishing need a trial or a paid plan. The backlink exchange and Reddit Presence need a paid plan. Autopilot repeats the writing stage for you, one scheduled article at a time.
 
 ## Each stage in one table
 
@@ -133,7 +133,7 @@ The **Rank** page shows how much of your keyword set your articles answer, what 
 
 ## What each stage needs
 
-| Stage | No plan | Free trial | Paid plan |
+| Stage | Before the trial | Free trial | Paid plan |
 | --- | --- | --- | --- |
 | Site scan, research, content plan | Yes | Yes | Yes |
 | Writing and autopilot | No | Yes, up to 7 articles | Yes, 30 articles a month per site |
@@ -142,6 +142,8 @@ The **Rank** page shows how much of your keyword set your articles answer, what 
 | Backlink exchange | No | No | Yes |
 | Reddit Presence | No | No | Yes |
 | Studio sites | No | No | Yes |
+
+"Before the trial" covers only onboarding: an account can't open the dashboard until it has added a card at step 4. While billing blocks an account, after a failed card check, a failed payment or once a plan has ended, writing, autopilot, API syncing and the paid features stop until it's fixed. A failed payment stops them at once, with no grace period. See [The billing banner](/docs/account/billing#the-billing-banner).
 
 ## Related
 

@@ -59,14 +59,8 @@ import { TRIAL_NOTE } from "@/components/features/FeatureSections";
 import { IntegrationGlyph } from "@/components/integrations/visuals";
 import { getFeature } from "@/data/features";
 import { getIntegration } from "@/data/integrations";
-import { PLAN, TRIAL_DAYS, formatUsd } from "@/data/pricing";
-import {
-  PERSONA_GROUPS,
-  personasIn,
-  withArticle,
-  type Persona,
-  type PersonaSpec,
-} from "@/data/personas";
+import { PLAN, TRIAL_CTA, formatUsd } from "@/data/pricing";
+import { PERSONA_GROUPS, personasIn, withArticle, type Persona } from "@/data/personas";
 import { DayScene } from "./day-scene";
 import {
   ConnectSitePicture,
@@ -96,29 +90,6 @@ function accented(text: string, words: number) {
 const SOLID_BUTTON =
   "group inline-flex h-11 items-center justify-center gap-2 rounded-lg bg-cta px-5 text-[0.95rem] font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.16),0_1px_2px_rgba(16,24,40,0.14)] transition-[background-color,transform] duration-150 hover:bg-cta-hover active:scale-[0.985] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-cta/25";
 
-/* ---------- Honest trial copy ---------- */
-
-/* The trial goes through Stripe Checkout and takes a card, so a "no card"
-   line in the data is false. Those lines are swapped for the trial as it is
-   (or dropped from a sentence) until the data is corrected; a corrected entry
-   passes through untouched. */
-const NO_CARD = /\bno (credit )?card\b/i;
-
-function honestSpecs(specs: PersonaSpec[]): PersonaSpec[] {
-  return specs.map((s) =>
-    NO_CARD.test(`${s.value} ${s.label}`)
-      ? { value: `${TRIAL_DAYS} days`, label: "free trial, cancel anytime" }
-      : s,
-  );
-}
-
-function withoutNoCard(text: string): string {
-  return text
-    .split(/(?<=[.!?])\s+/)
-    .filter((sentence) => !NO_CARD.test(sentence))
-    .join(" ");
-}
-
 /* ---------- Sample questions, shared by the hero and the closing band ---------- */
 
 /** The day's questions for the hero, one per day, off the sample topic map. */
@@ -138,7 +109,6 @@ const SPEC_ICONS: Icon[] = [LayoutTemplate, Timer, FileText, CalendarCheck];
 export function LocalHero({ persona }: { persona: Persona }) {
   const [url, setUrl] = useState("");
   const Icon = persona.icon;
-  const specs = honestSpecs(persona.specs);
 
   return (
     <section id="top" aria-labelledby="local-title" className="relative bg-white">
@@ -228,7 +198,7 @@ export function LocalHero({ persona }: { persona: Persona }) {
             LINE_FILL,
           )}
         >
-          {specs.map((s, i) => {
+          {persona.specs.map((s, i) => {
             const SpecIcon = SPEC_ICONS[i % SPEC_ICONS.length];
             return (
               <div
@@ -912,13 +882,13 @@ export function LocalCTA({ persona }: { persona: Persona }) {
               {persona.ctaTitle}
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-balance text-[1rem] leading-relaxed text-white sm:text-[1.05rem]">
-              {withoutNoCard(persona.ctaBody)}
+              {persona.ctaBody}
             </p>
             <a
               href="/auth"
               className="group mt-8 inline-flex h-11 items-center justify-center gap-2 rounded-lg bg-white px-5 text-[0.95rem] font-semibold text-cta shadow-[0_1px_2px_rgba(4,24,72,0.2),0_8px_24px_-12px_rgba(4,24,72,0.5)] transition-[transform,background-color] duration-200 hover:-translate-y-0.5 hover:bg-white/95 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-white/40"
             >
-              Get Started Free
+              {TRIAL_CTA}
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
             </a>
             <p className="mt-3 text-[0.82rem] text-white">{TRIAL_NOTE}</p>

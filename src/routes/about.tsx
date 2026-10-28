@@ -32,7 +32,7 @@ const ABOUT_FAQS = [
   },
   {
     q: "How much does Rankbox cost?",
-    a: `${formatUsd(PLAN.monthly)} a month for one site, with ${PLAN.articlesPerMonth} articles a month and a ${TRIAL_DAYS}-day free trial.`,
+    a: `${formatUsd(PLAN.monthly)} a month for one site, with ${PLAN.articlesPerMonth} articles a month and a ${TRIAL_DAYS}-day free trial. A card is required to start the trial.`,
   },
   {
     q: 'Who is the author when a post is signed "Rankbox"?',

@@ -3,7 +3,7 @@ title: Agent playbooks
 nav_title: Playbooks
 description: End-to-end recipes for agents: launch a content engine, add Rankbox to a Next.js site, run client sites with Studio, a weekly loop and error recovery.
 order: 10
-updated: 2026-10-02
+updated: 2026-10-28
 ---
 
 These playbooks string the agent API together into complete jobs. Each one says what it needs, the calls in order, the decisions along the way and what to tell the owner. They assume you have read the [Quickstart for AI agents](/docs/agents/quickstart); request and response shapes are in the [Agent API reference](/docs/agents/api-reference).
@@ -16,7 +16,7 @@ These playbooks string the agent API together into complete jobs. Each one says 
 
 ### Day 0: set up
 
-1. Tell the owner what you are about to do, including that the plan is $49.50 a month after a 7-day free trial, and get a yes.
+1. Tell the owner what you are about to do, including that the trial needs a card and the plan is $49.50 a month, charged 7 days after the trial starts unless they cancel first, and get a yes.
 2. `POST /accounts` with an `Idempotency-Key`. Store `agent_key.key`.
 3. Send the owner `claim_url` and say that Rankbox has emailed them.
 4. `POST /billing/checkout` and send `checkout_url` with a one-line explanation of the trial.
@@ -29,15 +29,15 @@ These playbooks string the agent API together into complete jobs. Each one says 
 
 ### When the trial starts
 
-1. `billing.trial_started` arrives (or `GET /billing` shows `trialing`). Check `card_verified` isn't `false`.
+1. `billing.trial_started` arrives (or `GET /billing` shows `trialing`). Check `card_verified` isn't `false`. If it is, ask the owner to click **Update card** on the banner at the top of the dashboard; updating the card reruns the check, and writing resumes when it passes.
 2. Generate the 2 or 3 articles with the highest `traffic_estimate` and `ai_signal` that match the owner's priorities.
 3. For each: wait for the job, `GET …/score`, fix `fail` checks with `rewrite-section`, then publish (see the next playbook for a website you build, or connect Webflow or Shopify when `available` is `true`).
 4. Record each live URL with `POST …/publish` and `published_url`.
 5. Register a webhook, or start polling `GET /events`.
 
-### Before day 8
+### Before the trial ends
 
-Tell the owner, in one message, what was published, how many trial credits are left, and that $49.50 is charged on the trial's end date unless they cancel in the portal. After the first payment, `billing.activated` fires: the site has 30 article credits, and the backlink exchange and Reddit Presence are open. Raise `weekly_cadence` to fit 30 a month (7 a week writes about 30).
+Tell the owner, in one message, what was published, how many trial credits are left, and that $49.50 is charged on the trial's end date, 7 days after it started, unless they cancel in the portal. If that payment fails, writing stops at once; there's no grace period. After the first payment, `billing.activated` fires: the site has 30 article credits, and the backlink exchange and Reddit Presence are open. Raise `weekly_cadence` to fit 30 a month (7 a week writes about 30).
 
 ## A coding agent adds Rankbox to a Next.js site
 
@@ -203,7 +203,7 @@ Running clients on your agency's account is what Studio is for. Reselling Rankbo
 
 | Check | Call | Act when | Action |
 | --- | --- | --- | --- |
-| Billing | `GET /billing` | `past_due`, `card_verified: false`, `cancel_at_period_end` | Send the owner a portal link and the date things stop |
+| Billing | `GET /billing` | `past_due`, `card_verified: false`, `cancel_at_period_end` | `past_due` or `card_verified: false`: writing has already stopped; ask the owner to use **Update billing** or **Update card** on the dashboard banner. `cancel_at_period_end`: send the date things stop |
 | Autopilot | `GET /sites/{site_id}/autopilot` | `blocked_reason` isn't `null` | `queue_empty`: plan more. `no_credits`: lower the pace. `no_plan`: billing first |
 | Queue depth | Same response, `queue_length` | Less than 2 weeks of articles at the current pace | `POST …/research` with `save: true`, then schedule the best ideas |
 | Credits | `GET /sites/{site_id}/credits` | Fewer than the queue needs before `period_end` | Lower `weekly_cadence` or tell the owner |
@@ -214,7 +214,7 @@ Running clients on your agency's account is what Studio is for. Reselling Rankbo
 | Reddit (paid) | `GET …/reddit/threads?status=new` | Threads with high `fit` | Draft replies and hand them to a person |
 | Rank | `GET /sites/{site_id}/rank` | `coverage.open` is large | Plan articles for the biggest gaps |
 
-Between runs, react to events instead of polling: `article.generation_failed` (retry once), `autopilot.queue_empty` (plan), `credits.low` (pace), `integration.error` (fix), `billing.payment_failed` (portal link), `reddit.reply_removed` (tell the person who posted).
+Between runs, react to events instead of polling: `article.generation_failed` (retry once), `autopilot.queue_empty` (plan), `credits.low` (pace), `integration.error` (fix), `billing.payment_failed` (ask the owner to use **Update billing** on the dashboard banner), `reddit.reply_removed` (tell the person who posted).
 
 Close each week with a short report to the owner: articles published with their links, scores, credits left and the reset date, anything waiting on them. Don't report rankings or AI citations: Rankbox doesn't measure them, and Rank's numbers are estimates of coverage.
 
@@ -226,7 +226,7 @@ Close each week with a short report to the owner: articles published with their 
 | --- | --- | --- |
 | `401 unauthorized` on every call | The key was revoked, the OAuth app disconnected, or the account deleted | Stop. Ask the owner; don't create a new account for the same email |
 | `401` after about an hour, OAuth only | The access token expired | Refresh it; if refresh fails with `invalid_grant`, run the OAuth flow again |
-| `402 subscription_required` | No trial or plan, a failed card check, a lapsed plan or an inactive Studio site | See [What a 402 means](/docs/agents/billing-and-limits#what-a-402-means) |
+| `402 subscription_required` | No trial or plan, a failed card check, a failed payment, an ended plan or an inactive Studio site | See [What a 402 means](/docs/agents/billing-and-limits#what-a-402-means) |
 | `402 insufficient_credits` | The period's credits are used | Wait for `period_end`; lower the pace |
 | `409 conflict` on `generate` | The article is already `finished` or `generating` | `GET` the article; if `generating`, find its job with `GET /jobs?status=running` |
 | `409 conflict` on a Studio call | Another site change is in progress | Retry after 5 seconds with the same `Idempotency-Key` |

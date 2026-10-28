@@ -2,7 +2,7 @@
 title: Core concepts
 description: Precise definitions of Rankbox's building blocks: account, site, content plan, article statuses, credits, autopilot, score, API key, live URL and trial.
 order: 4
-updated: 2026-10-02
+updated: 2026-10-28
 ---
 
 This page defines the objects and rules the rest of the docs build on. Each section stands on its own, so you, or an AI agent, can quote it without the surrounding context.
@@ -89,10 +89,10 @@ Autopilot is the engine that writes a site's scheduled articles for you. It is s
 - **Pace** is the number of articles a week, from 1 to 7. Autopilot waits 7 ÷ pace days between articles for a site: one day at 7 a week, a week at 1 a week.
 - **The queue** is the site's scheduled articles in order. Order is set by queue position, which the calendar keeps in step with the scheduled dates; moving an article on the calendar reorders the queue to match.
 - **What it writes:** when a site is due, autopilot writes the scheduled article with the lowest queue position, which is the earliest one on the calendar. It writes one article per site each time it runs.
-- **When it skips a site:** the site has no trial or paid plan, the site isn't live (for example a Studio site past its removal date), the site has no article credits left, or nothing is scheduled.
+- **When it skips a site:** the account has no trial or paid plan, billing is blocking it (a failed card check, a failed payment or an ended plan), the site isn't live (for example a Studio site past its removal date), the site has no article credits left, or nothing is scheduled.
 - **Pausing:** switching **Write automatically** off in **Settings → Autopilot** stops new writing. Scheduled articles wait; nothing is lost.
 
-The engine's state appears on **Overview** (**Autopilot On** or **Off**) and above the article list as one of: "Autopilot is on", "Autopilot is paused", "Autopilot is ready when you are" (no trial yet) or "Autopilot has used this month's articles". See [Autopilot and the publishing schedule](/docs/content/autopilot).
+The engine's state appears on **Overview** (**Autopilot On** or **Off**) and above the article list as one of: "Autopilot is on", "Autopilot is paused", "Autopilot is paused until billing is fixed" (a failed card check, a failed payment or an ended plan) or "Autopilot has used this month's articles". See [Autopilot and the publishing schedule](/docs/content/autopilot).
 
 ## SEO and GEO score
 
@@ -147,14 +147,15 @@ The free trial and the paid plan unlock different things. Rankbox decides from y
 
 | Subscription state | Writing and syncing | Backlinks, Reddit, Studio |
 | --- | --- | --- |
-| No plan | No | No |
+| No plan (onboarding's card step not done) | No | No |
 | Trial (7 days, card on file) | Yes, up to 7 articles | No |
-| Trial whose card failed the $1 check | No, until the card is updated | No |
+| Trial whose card failed the $1 check | No, until the card is updated from the dashboard banner and the check passes | No |
 | Active (paid) | Yes, 30 articles a month per site | Yes |
-| Payment failed | For 48 hours after the failure, then no | For 48 hours, if the plan was paid before |
+| Payment failed (`past_due`, `unpaid` or `incomplete`) | No, from the first failure until the invoice is paid | No |
 | Cancelled | Until the end of the current period | Until the end of the current period, if the plan was paid |
+| Ended | No. Restarting is paid from day one | No |
 
-The trial converts to the paid plan automatically on day 8 unless you cancel. **Unlock everything now** in **Plan & Billing** ends the trial early and takes the first payment straight away. See [The free trial](/docs/account/free-trial).
+Every account starts the trial at the last step of onboarding, with a card; the dashboard can't be reached without it. The trial converts to the paid plan automatically, with $49.50 charged 7 days after it started, unless you cancel first. Each account gets one trial. **Unlock everything now** in **Plan & Billing** ends the trial early and takes the first payment straight away. See [The free trial](/docs/account/free-trial).
 
 ## Estimates and measured data
 

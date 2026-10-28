@@ -3,14 +3,14 @@ title: Content plan and calendar
 nav_title: Content plan
 description: How topics become scheduled articles: ideas, the autopilot queue, article statuses, the Calendar, moving dates, and what happens when credits run out.
 order: 2
-updated: 2026-10-02
+updated: 2026-10-28
 ---
 
 Your content plan is every article Rankbox has lined up for a site: ideas you haven't committed to, articles scheduled for autopilot, articles being written and articles that are done. You manage it on three pages: **Articles** (the full list), **Calendar** (the same articles by day) and the **Overview** (the queue at a glance). This page explains how the plan is built, what each status means, and how to change it.
 
 ## How the plan is built
 
-The plan starts in onboarding. [Research](/docs/content/research) proposes one article per keyword, up to 30, in publishing order. When you click **Confirm plan**:
+The plan starts in onboarding. [Research](/docs/content/research) proposes one article per keyword, up to 30, in publishing order. When you click **Continue** on step 3:
 
 - The first 4 topics become **ideas**. They have no date and nothing writes them until you decide.
 - The rest become **scheduled** articles in the autopilot queue, one a day, starting the day after you confirm.

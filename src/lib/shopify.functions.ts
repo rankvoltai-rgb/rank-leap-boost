@@ -75,15 +75,11 @@ export const publishFinishedArticleToShopify = createServerFn({ method: "POST" }
   .handler(async ({ data, context }): Promise<PublishOutcome> => {
     const { requireLiveSite } = await import("@/lib/sites.server");
     await requireLiveSite(context.userId, data.siteId);
-    const { hasGenerationEntitlement } = await import("@/lib/entitlement.server");
-    if (
-      !(await hasGenerationEntitlement(context.supabase, {
-        userId: context.userId,
-        siteId: data.siteId,
-      }))
-    ) {
-      throw new Error("Start your free trial to connect your site.");
-    }
+    const { requireGenerationEntitlement } = await import("@/lib/entitlement.server");
+    await requireGenerationEntitlement(context.supabase, {
+      userId: context.userId,
+      siteId: data.siteId,
+    });
     const { publishArticle } = await import("@/lib/shopify/publish.server");
     const scope = { userId: context.userId, siteId: data.siteId };
     // Two quick saves overlap: the second finds the first still writing. Wait

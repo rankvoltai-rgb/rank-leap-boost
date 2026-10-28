@@ -4,7 +4,7 @@
  * in the category. Checked against outrank.so on 2026-09-21.
  */
 import { Search, PenLine, Send, Link2, Quote, Gauge, MessageSquare } from "lucide-react";
-import { PLAN, formatUsd } from "../pricing";
+import { PLAN, TRIAL_DAYS, formatUsd } from "../pricing";
 import {
   RANKBOX_CELLS,
   RANKBOX_COST,
@@ -380,6 +380,5 @@ export const outrank: Competitor = {
     { label: "Shopify", url: "https://www.outrank.so/shopify" },
   ],
   ctaTitle: "An article a day, at half the monthly price",
-  ctaBody:
-    "Paste your URL. Rankbox builds your content plan free, then writes your first articles on a 7-day trial.",
+  ctaBody: `Paste your URL. Rankbox builds your content plan, then writes your first articles on a ${TRIAL_DAYS}-day free trial.`,
 };

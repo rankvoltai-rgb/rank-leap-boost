@@ -3,7 +3,7 @@ title: The backlink exchange
 nav_title: Backlink exchange
 description: How the Rankbox backlink exchange works for paid members, from credits and matching to verification, placement statuses, clawbacks and Studio rules.
 order: 1
-updated: 2026-10-02
+updated: 2026-10-28
 ---
 
 The backlink exchange is a credit network between paying Rankbox members. Your site earns credits by carrying one relevant link to another member's page inside an article Rankbox writes for you, and spends credits to have its own pages linked from other members' articles. Credits move only when a link is verified live on the host's real page.
@@ -20,12 +20,12 @@ What you see on **Dashboard → Backlinks** depends on where your site stands:
 
 | Access | When it applies | What the page shows |
 | --- | --- | --- |
-| Paid | The plan is active, or cancelled or past due after at least one paid period, and the site is live on the plan | The full exchange, once the domain is verified |
+| Paid | The plan is active, or cancelled after at least one paid period and still inside the period you paid for, and the site is live on the plan | The full exchange, once the domain is verified |
 | Trial | Your subscription is still in its free trial | **Part of the paid plan**, with the date the exchange opens and a **See your plan** link |
 | Lapsed | The site took part before and the plan is no longer paid | The exchange read-only, with a **Your plan has lapsed.** banner |
-| None | No plan has been started | **Backlinks come with the plan**, with a **Start 7-day free trial** button |
+| None | Billing blocks the account (a failed payment or an ended plan) and the site never took part | **Backlinks come with the plan**, with the billing fix: **Update billing** or **Restart plan** |
 
-A cancelled plan stays "paid" until the end of the period you already paid for. A failed payment keeps access for a 48-hour grace window, and only for a subscription that was paid at least once. See [Plans and credits](/docs/account/plans-and-credits) for the plan itself.
+A cancelled plan stays "paid" until the end of the period you already paid for. A failed payment closes the exchange at once; there is no grace period. Click **Update billing** on the banner at the top of the dashboard, and the exchange opens again as soon as the invoice is paid. See [Plans and credits](/docs/account/plans-and-credits) for the plan itself.
 
 ## How exchange credits work
 

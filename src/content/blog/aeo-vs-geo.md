@@ -190,7 +190,7 @@ Is the GEO change real? With two samples of 120 answers, the margin of error on 
 
 Rankbox helps with the answer layer and part of the proof layer. [Answer-Space Research](/features/answer-space-research) maps the questions buyers ask ChatGPT, Perplexity and Google, with volume, difficulty and intent as model estimates, which covers step 2 of the plan. The [Citation-Ready Writer](/features/citation-ready-writer) researches the live web and writes 2,000 to 3,500-word source-backed articles with answer-first sections, which reach your site through Rankbox's API.
 
-Rankbox doesn't track mentions, citations or Share of Model, and it can't place you in other sites' roundups. Pair it with a prompt panel or a tracker for measurement. The Business plan is $49.50 a month, with a 7-day trial when you add a card. [See pricing](/pricing).
+Rankbox doesn't track mentions, citations or Share of Model, and it can't place you in other sites' roundups. Pair it with a prompt panel or a tracker for measurement. The Business plan is $49.50 a month after a 7-day free trial, which takes a card at signup. [See pricing](/pricing).
 
 ## Frequently Asked Questions
 

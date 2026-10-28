@@ -29,7 +29,7 @@ export interface ProjectionInput {
 }
 
 function useProjection({ step, keywords, titles }: ProjectionInput) {
-  const planned = step === 3 && titles.length > 0;
+  const planned = step >= 3 && titles.length > 0;
   const previewed = step >= 2 && keywords.length > 0;
   const traffic = planned
     ? titles.reduce((sum, t) => sum + t.traffic_estimate, 0)
@@ -199,7 +199,7 @@ export function PlanRail({
           title={brandName.trim() || "Your brand"}
           sub={domain || "Add your website"}
           state={stateOf(1)}
-          onEdit={() => onStep(1)}
+          onEdit={step < 4 ? () => onStep(1) : undefined}
         />
         <SummaryItem
           icon={<Search className="h-4 w-4" />}
@@ -210,7 +210,7 @@ export function PlanRail({
               : "Found from your site"
           }
           state={stateOf(2)}
-          onEdit={() => onStep(2)}
+          onEdit={step < 4 ? () => onStep(2) : undefined}
         />
         <SummaryItem
           icon={<CalendarClock className="h-4 w-4" />}

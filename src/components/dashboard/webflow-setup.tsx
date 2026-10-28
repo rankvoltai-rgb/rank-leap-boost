@@ -19,7 +19,6 @@ import {
   saveWebflowSetup,
   startWebflowConnect,
   syncWebflowNow,
-  TRIAL_DAYS,
   type WebflowFieldMap,
   type WebflowStatus,
 } from "@/lib/data";
@@ -28,6 +27,7 @@ import { Button, Pill } from "@/components/dashboard/primitives";
 import { CheckIcon } from "@/components/dashboard/icons";
 import { ConfirmDialog } from "@/components/dashboard/article-parts";
 import { timeAgo } from "@/components/dashboard/connection-model";
+import { BillingFixButton } from "@/components/dashboard/billing-context";
 import { cn } from "@/lib/utils";
 
 function plural(n: number, one: string, many = `${one}s`) {
@@ -46,12 +46,10 @@ const INPUT =
 export function WebflowSetup({
   siteId,
   locked,
-  onStartTrial,
   onUseApi,
 }: {
   siteId: string;
   locked: boolean;
-  onStartTrial: () => void;
   onUseApi: () => void;
 }) {
   const { data: status, isLoading, error } = useWebflowStatus(siteId);
@@ -99,7 +97,7 @@ export function WebflowSetup({
           {connected ? (
             <ConnectedLine siteId={siteId} status={status} />
           ) : (
-            <ConnectButton siteId={siteId} locked={locked} onStartTrial={onStartTrial} />
+            <ConnectButton siteId={siteId} locked={locked} />
           )}
         </Step>
 
@@ -149,27 +147,17 @@ export function WebflowSetup({
 
 /* ── Connect ────────────────────────────────────────────────────── */
 
-function ConnectButton({
-  siteId,
-  locked,
-  onStartTrial,
-}: {
-  siteId: string;
-  locked: boolean;
-  onStartTrial: () => void;
-}) {
+function ConnectButton({ siteId, locked }: { siteId: string; locked: boolean }) {
   const [busy, setBusy] = useState(false);
 
   if (locked) {
     return (
       <div className="flex flex-wrap items-center gap-3">
         <p className="text-sm text-muted-foreground">
-          Publishing to your site comes with your plan. Start your {TRIAL_DAYS}-day free trial to
-          connect Webflow.
+          Publishing to your site is paused while billing needs attention. Sort it out to connect
+          Webflow.
         </p>
-        <Button variant="brand" onClick={onStartTrial}>
-          Start free trial
-        </Button>
+        <BillingFixButton />
       </div>
     );
   }

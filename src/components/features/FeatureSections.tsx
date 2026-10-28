@@ -21,7 +21,7 @@ import { ChatAnswerCard } from "@/components/landing/chat";
 import { TESTIMONIALS } from "@/components/landing/Testimonials";
 import { cn } from "@/lib/utils";
 import { ENGINE_ORDER, getFeature, type Feature } from "@/data/features";
-import { TRIAL_DAYS } from "@/data/pricing";
+import { TRIAL_NOTE } from "@/data/pricing";
 import { SHOWCASES } from "./showcase";
 
 /* ---------- shared bits ---------- */
@@ -83,9 +83,9 @@ function IconTile({
 
 /* ---------- 1. Hero ---------- */
 
-/* Under every CTA. The trial runs through Stripe Checkout, which takes a card,
-   so this never says "no credit card required". */
-export const TRIAL_NOTE = `${TRIAL_DAYS}-day free trial · Cancel anytime`;
+/* Under every CTA. The shared line from data/pricing.ts ("Card required"),
+   re-exported because the per-feature pages import it from here. */
+export { TRIAL_NOTE };
 
 /* The hero field starts in the navbar's brand blue so the two meet without a
    seam, then settles on --cta within 3rem, above any text. White on brand
