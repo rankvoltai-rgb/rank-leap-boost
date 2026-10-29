@@ -3,6 +3,7 @@ import { Onboarding } from "@/components/onboarding";
 import { getSessionUser } from "@/lib/auth";
 import { clearOnboardingDraft, getSubscription, listSites } from "@/lib/data";
 import { IS_MOCK } from "@/lib/mock/mode";
+import { landingAfterOnboarding } from "@/lib/pending-intent";
 import { TRIAL_DAYS } from "@/data/pricing";
 
 export const Route = createFileRoute("/onboarding")({
@@ -30,7 +31,7 @@ export const Route = createFileRoute("/onboarding")({
     // the last step. A site and a subscription means onboarding is done.
     if (user && (await listSites()).length > 0) {
       if (!(await getSubscription())) return { paywall: true };
-      if (!IS_MOCK) throw redirect({ to: "/dashboard" });
+      if (!IS_MOCK) throw redirect({ to: landingAfterOnboarding() });
     }
     return { paywall: false };
   },

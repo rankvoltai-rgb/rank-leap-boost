@@ -16,6 +16,7 @@ import { COMPETITORS, SHIPPED } from "@/data/alternatives";
 import { MATCHUPS, matchupTitle, relatedMatchups } from "@/data/compare/matchups";
 import { PUBLISH_PLATFORMS } from "@/data/platforms";
 import { SOLUTION_SLUGS } from "@/data/solutions";
+import { SUBLANDING_WHITE_LABEL } from "@/sublanding/registry";
 import { parseFrontmatter } from "@/lib/markdown-blocks";
 import {
   CARD_LIMIT,
@@ -43,6 +44,7 @@ const PAGES = [
   "/pricing",
   ...FEATURE_SLUGS.map((s) => `/features/${s}`),
   ...SOLUTION_SLUGS.map((s) => `/solutions/${s}`),
+  ...SUBLANDING_WHITE_LABEL.map((p) => p.path),
   ...PERSONA_SLUGS.map((s) => `/use-cases/${s}`),
   ...INTEGRATION_SLUGS.map((s) => `/integrations/${s}`),
   ...AI_TOOL_SLUGS.map((s) => `/integrations/${s}`),

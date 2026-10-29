@@ -8,6 +8,7 @@ import { PLAN, STUDIO, TRIAL_DAYS, TRIAL_ARTICLE_CREDITS, formatUsd } from "@/da
 import { RANKBOX_PUBLISHING, SHIPPED } from "@/data/competitors/shared";
 import { PUBLISH_PLATFORMS } from "@/data/platforms";
 import { setPendingSiteUrl } from "@/lib/pending-site";
+import { setPendingIntent } from "@/lib/pending-intent";
 
 export { PLAN, STUDIO, TRIAL_DAYS, TRIAL_ARTICLE_CREDITS, SHIPPED, RANKBOX_PUBLISHING, formatUsd };
 
@@ -44,4 +45,21 @@ export function startSignup(siteUrl?: string) {
   if (trimmed) setPendingSiteUrl(trimmed);
   const q = trimmed ? `?url=${encodeURIComponent(trimmed)}` : "";
   window.location.href = `/auth${q}`;
+}
+
+/** The href of an agency sign-up that lands on Studio after onboarding. */
+export const STUDIO_SIGNUP_HREF = "/auth?intent=studio";
+
+/**
+ * Send an agency to signup, ending on Studio (where client sites are added)
+ * instead of the dashboard once onboarding and the trial step are done. The
+ * agency's own site URL, if given, is carried through like startSignup's.
+ * See src/lib/pending-intent.ts.
+ */
+export function startStudioSignup(siteUrl?: string) {
+  const trimmed = siteUrl?.trim() ?? "";
+  if (trimmed) setPendingSiteUrl(trimmed);
+  setPendingIntent("studio");
+  const url = trimmed ? `&url=${encodeURIComponent(trimmed)}` : "";
+  window.location.href = `${STUDIO_SIGNUP_HREF}${url}`;
 }

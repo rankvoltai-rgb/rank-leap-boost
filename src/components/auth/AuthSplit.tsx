@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ArrowRight, Loader2 } from "lucide-react";
 import { Link, useNavigate, useSearch } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { signInWithPassword, signUpWithPassword } from "@/lib/auth";
 import { listSites } from "@/lib/data";
+import { landingAfterOnboarding, setPendingIntent } from "@/lib/pending-intent";
 import { IS_MOCK } from "@/lib/mock/mode";
 import { DEMO_EMAIL, DEMO_PASSWORD } from "@/lib/mock/auth";
 import { Reveal } from "@/components/landing/shared";
@@ -43,7 +44,11 @@ function Field({
 
 export function AuthSplit() {
   const navigate = useNavigate();
-  const { redirect } = useSearch({ from: "/auth" });
+  const { redirect, intent } = useSearch({ from: "/auth" });
+  // Stored, not just read, so it survives OAuth and email confirmation.
+  useEffect(() => {
+    if (intent) setPendingIntent(intent);
+  }, [intent]);
   const [loading, setLoading] = useState(false);
   const [mode, setMode] = useState<"signup" | "login">("signup");
   const [name, setName] = useState("");
@@ -65,8 +70,10 @@ export function AuthSplit() {
         window.location.assign(redirect);
         return;
       }
+      // An account that's set up goes where it was headed; one that isn't
+      // finishes onboarding first, and the intent waits for the trial step.
       const sites = await listSites();
-      navigate({ to: sites.length > 0 ? "/dashboard" : "/onboarding" });
+      navigate({ to: sites.length > 0 ? landingAfterOnboarding() : "/onboarding" });
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Authentication failed.");
       setLoading(false);

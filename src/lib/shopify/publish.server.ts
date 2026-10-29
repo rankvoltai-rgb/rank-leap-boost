@@ -237,7 +237,9 @@ async function createOrAdopt(
         toCreateInput(article, {
           blogId,
           handle,
-          author: conn.author ?? "",
+          // The store's own name before Rankbox's: agencies resell this work,
+          // so a client's posts shouldn't be credited to us.
+          author: conn.author || conn.shop_name || "",
           visible: conn.publish_visible,
         }),
       );

@@ -1,14 +1,20 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { AuthSplit } from "@/components/auth/AuthSplit";
 import { safeRedirectPath } from "@/lib/safe-redirect";
+import { parseIntent, type PendingIntent } from "@/lib/pending-intent";
 
 export const Route = createFileRoute("/auth")({
   // url: forwarded from the landing hero so it survives into onboarding.
   // redirect: where to go after signing in instead of onboarding — used by
   // /oauth/consent, which needs its authorization_id back.
-  validateSearch: (search: Record<string, unknown>): { url?: string; redirect?: string } => ({
+  // intent: where to land once onboarding is done (see pending-intent.ts) —
+  // "studio" from the white-label page.
+  validateSearch: (
+    search: Record<string, unknown>,
+  ): { url?: string; redirect?: string; intent?: PendingIntent } => ({
     url: typeof search.url === "string" ? search.url : undefined,
     redirect: safeRedirectPath(search.redirect),
+    intent: parseIntent(search.intent),
   }),
   head: () => ({
     meta: [

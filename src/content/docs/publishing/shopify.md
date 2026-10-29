@@ -83,7 +83,7 @@ A failed push never undoes the article in Rankbox. The error is saved on the con
 | Search listing description | The meta description, saved in Shopify's `global.description_tag` metafield, which is what the search engine listing preview shows | Create and every update, when the article has a description |
 | Tags | The article's tags, with duplicates removed (case-insensitive) and each tag cut to 255 characters | Create and every update |
 | URL handle | Made from the title: lowercase letters, digits and hyphens, up to 100 characters. If another post has it, `-2`, `-3` and so on are added, up to five attempts. | Create only |
-| Author | The **Author** setting ("Rankbox" if it is blank) | Create only |
+| Author | The **Author** setting (your store name if it is blank, then "Rankbox") | Create only |
 | Visibility | The **New articles** setting | Create only |
 
 The handle, author and visibility are set once and then belong to you: change them in Shopify whenever you like (but see the next section). Rankbox doesn't send images; add a featured image in Shopify if your theme uses one.

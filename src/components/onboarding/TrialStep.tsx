@@ -32,6 +32,7 @@ import {
 } from "@/lib/data";
 import { PLAN_PRICE_LOOKUP_KEY, TRIAL_DAYS, afterTrialCopy } from "@/data/pricing";
 import { domainOf } from "@/lib/site-meta";
+import { landingAfterOnboarding } from "@/lib/pending-intent";
 import { OnboardingShell, PRIMARY_BUTTON, StepHeader } from "./shell";
 import { PlanRail, ProjectionStrip } from "./TrafficProjection";
 
@@ -113,7 +114,8 @@ export function TrialStep({ snapshot }: { snapshot?: TrialSnapshot }) {
       } else {
         toast.success(`Your ${TRIAL_DAYS}-day trial is live. Welcome to Rankbox.`);
       }
-      navigate({ to: "/dashboard" });
+      // Agencies from the white-label page go on to Studio to add client sites.
+      navigate({ to: landingAfterOnboarding() });
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Couldn't start the trial.");
       setBusy(false);

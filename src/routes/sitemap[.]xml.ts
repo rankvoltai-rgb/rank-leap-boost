@@ -12,6 +12,7 @@ import { SOLUTION_SLUGS, SOLUTIONS_UPDATED } from "@/data/solutions";
 import { ENGINES } from "@/data/ai-seo/engines";
 import { GLOSSARY_UPDATED, TERMS } from "@/data/glossary/terms";
 import { ABOUT_UPDATED } from "@/data/company";
+import { SUBLANDING_WHITE_LABEL } from "@/sublanding/registry";
 import { CHANGELOG, CHANGELOG_UPDATED } from "@/data/changelog";
 
 const BASE_URL = "https://rankbox.xyz";
@@ -67,6 +68,12 @@ export const Route = createFileRoute("/sitemap.xml")({
           { path: "/", changefreq: "weekly", priority: "1.0" },
           { path: "/pricing", changefreq: "monthly", priority: "0.9" },
           { path: "/about", lastmod: ABOUT_UPDATED, changefreq: "monthly", priority: "0.7" },
+          ...SUBLANDING_WHITE_LABEL.map((p) => ({
+            path: p.path,
+            lastmod: p.updated,
+            changefreq: "monthly" as const,
+            priority: p.group === "hub" ? "0.8" : "0.7",
+          })),
           { path: "/features", changefreq: "weekly", priority: "0.8" },
           ...FEATURE_SLUGS.map((slug) => ({
             path: `/features/${slug}`,

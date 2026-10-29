@@ -25,11 +25,13 @@ import { PERSONAS } from "@/data/personas";
 import { COMPETITORS, SHIPPED } from "@/data/alternatives";
 import { PUBLISH_PLATFORMS } from "@/data/platforms";
 import { SOLUTIONS } from "@/data/solutions";
+import { SUBLANDING_WHITE_LABEL } from "@/sublanding/registry";
 import { isBlogPathLive } from "@/lib/blog-release";
 
 export type Section =
   | "features"
   | "solutions"
+  | "white-label"
   | "use-cases"
   | "pricing"
   | "integrations"
@@ -45,6 +47,7 @@ export type Section =
 export const SECTION_ORDER: Section[] = [
   "features",
   "solutions",
+  "white-label",
   "use-cases",
   "pricing",
   "integrations",
@@ -61,6 +64,7 @@ export const SECTION_ORDER: Section[] = [
 export const SECTION_LABEL: Record<Section, string> = {
   features: "Feature",
   solutions: "Solution",
+  "white-label": "White-label",
   "use-cases": "Use case",
   pricing: "Pricing",
   integrations: "Integration",
@@ -1040,6 +1044,10 @@ export function cardFor(href: string): LinkCard | undefined {
           sol && { title: sol.name.charAt(0).toUpperCase() + sol.name.slice(1), blurb: sol.tagline }
         );
       }
+      case "white-label": {
+        const page = SUBLANDING_WHITE_LABEL.find((x) => x.path === href);
+        return page && { title: page.name, blurb: page.tagline };
+      }
       case "use-cases": {
         const p = PERSONAS.find((x) => x.slug === slug);
         return p && { title: `Rankbox for ${p.nameLower}`, blurb: p.tagline };
@@ -1683,6 +1691,7 @@ export const TOPICS: Topic[] = [
       b("answer-engine-optimization-vs-seo"),
       s("ai-search-visibility"),
       s("aeo-tools"),
+      "/white-label/ai-seo",
       t("ai-search-readiness-check"),
       t("ai-visibility-prompt-generator"),
       f("answer-space-research"),
@@ -1736,6 +1745,25 @@ export const TOPICS: Topic[] = [
     also: (path) => sectionOf(path) === "connectors",
   },
 
+  /* Agencies running client sites from one Studio account. */
+  {
+    id: "white-label",
+    title: "Run client content under your agency's name",
+    pages: [
+      "/white-label",
+      "/white-label/content-writing",
+      "/white-label/ai-seo",
+      "/white-label/pricing",
+      "/pricing",
+      f("brand-voice"),
+      f("seo-geo-score"),
+      f("citation-ready-writer"),
+      f("answer-space-research"),
+      t("ai-search-readiness-check"),
+      t("ai-visibility-prompt-generator"),
+      ...g("generative-engine-optimization", "answer-engine-optimization"),
+    ],
+  },
   /* The pages a buyer reads last. */
   {
     id: "choosing",
@@ -1744,6 +1772,7 @@ export const TOPICS: Topic[] = [
       b("how-to-compare-generative-engine-optimization-software"),
       b("what-is-generative-engine-optimization"),
       "/pricing",
+      "/white-label/pricing",
       s("autonomous-geo"),
       s("aeo-tools"),
       s("ai-search-visibility"),
@@ -1805,7 +1834,7 @@ export const TERM_LIMIT = 6;
  * SHIPPED), so they never link to a feature or add-on that hasn't. Each link
  * appears the day its flag flips.
  */
-const CLAIM_CHECKED: Section[] = ["alternatives", "compare", "solutions"];
+const CLAIM_CHECKED: Section[] = ["alternatives", "compare", "solutions", "white-label"];
 const UNSHIPPED = new Set<string>([
   ...(SHIPPED.citationTracking ? [] : [f("citation-tracking")]),
   ...(PUBLISH_PLATFORMS.some((p) => p.addonLive) ? [] : [f("auto-publishing")]),

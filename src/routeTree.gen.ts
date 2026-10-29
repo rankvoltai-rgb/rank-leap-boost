@@ -61,6 +61,10 @@ import { Route as ToolsIndexRouteImport } from './routes/tools.index'
 import { Route as ToolsSlugRouteImport } from './routes/tools.$slug'
 import { Route as UseCasesIndexRouteImport } from './routes/use-cases.index'
 import { Route as UseCasesSlugRouteImport } from './routes/use-cases.$slug'
+import { Route as WhiteLabelIndexRouteImport } from './routes/white-label.index'
+import { Route as WhiteLabelAiSeoRouteImport } from './routes/white-label.ai-seo'
+import { Route as WhiteLabelContentWritingRouteImport } from './routes/white-label.content-writing'
+import { Route as WhiteLabelPricingRouteImport } from './routes/white-label.pricing'
 import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
 import { Route as AuthenticatedDashboardIndexRouteImport } from './routes/_authenticated/dashboard.index'
 import { Route as AuthenticatedDashboardBacklinksRouteImport } from './routes/_authenticated/dashboard.backlinks'
@@ -353,6 +357,27 @@ const UseCasesSlugRoute = UseCasesSlugRouteImport.update({
   path: '/use-cases/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const WhiteLabelIndexRoute = WhiteLabelIndexRouteImport.update({
+  id: '/white-label/',
+  path: '/white-label/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WhiteLabelAiSeoRoute = WhiteLabelAiSeoRouteImport.update({
+  id: '/white-label/ai-seo',
+  path: '/white-label/ai-seo',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WhiteLabelContentWritingRoute =
+  WhiteLabelContentWritingRouteImport.update({
+    id: '/white-label/content-writing',
+    path: '/white-label/content-writing',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const WhiteLabelPricingRoute = WhiteLabelPricingRouteImport.update({
+  id: '/white-label/pricing',
+  path: '/white-label/pricing',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const Char91DotmcpChar93InvokeToolToolRoute =
   Char91DotmcpChar93InvokeToolToolRouteImport.update({
     id: '/.mcp/invoke-tool/$tool',
@@ -559,6 +584,9 @@ export interface FileRoutesByFullPath {
   '/solutions/autonomous-geo': typeof SolutionsAutonomousGeoRoute
   '/tools/$slug': typeof ToolsSlugRoute
   '/use-cases/$slug': typeof UseCasesSlugRoute
+  '/white-label/ai-seo': typeof WhiteLabelAiSeoRoute
+  '/white-label/content-writing': typeof WhiteLabelContentWritingRoute
+  '/white-label/pricing': typeof WhiteLabelPricingRoute
   '/ai-seo/': typeof AiSeoIndexRoute
   '/alternatives/': typeof AlternativesIndexRoute
   '/blog/': typeof BlogIndexRoute
@@ -571,6 +599,7 @@ export interface FileRoutesByFullPath {
   '/solutions/': typeof SolutionsIndexRoute
   '/tools/': typeof ToolsIndexRoute
   '/use-cases/': typeof UseCasesIndexRoute
+  '/white-label/': typeof WhiteLabelIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/dashboard/backlinks': typeof AuthenticatedDashboardBacklinksRoute
   '/dashboard/billing': typeof AuthenticatedDashboardBillingRoute
@@ -638,6 +667,9 @@ export interface FileRoutesByTo {
   '/solutions/autonomous-geo': typeof SolutionsAutonomousGeoRoute
   '/tools/$slug': typeof ToolsSlugRoute
   '/use-cases/$slug': typeof UseCasesSlugRoute
+  '/white-label/ai-seo': typeof WhiteLabelAiSeoRoute
+  '/white-label/content-writing': typeof WhiteLabelContentWritingRoute
+  '/white-label/pricing': typeof WhiteLabelPricingRoute
   '/ai-seo': typeof AiSeoIndexRoute
   '/alternatives': typeof AlternativesIndexRoute
   '/blog': typeof BlogIndexRoute
@@ -650,6 +682,7 @@ export interface FileRoutesByTo {
   '/solutions': typeof SolutionsIndexRoute
   '/tools': typeof ToolsIndexRoute
   '/use-cases': typeof UseCasesIndexRoute
+  '/white-label': typeof WhiteLabelIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/dashboard/backlinks': typeof AuthenticatedDashboardBacklinksRoute
   '/dashboard/billing': typeof AuthenticatedDashboardBillingRoute
@@ -722,6 +755,9 @@ export interface FileRoutesById {
   '/solutions/autonomous-geo': typeof SolutionsAutonomousGeoRoute
   '/tools/$slug': typeof ToolsSlugRoute
   '/use-cases/$slug': typeof UseCasesSlugRoute
+  '/white-label/ai-seo': typeof WhiteLabelAiSeoRoute
+  '/white-label/content-writing': typeof WhiteLabelContentWritingRoute
+  '/white-label/pricing': typeof WhiteLabelPricingRoute
   '/ai-seo/': typeof AiSeoIndexRoute
   '/alternatives/': typeof AlternativesIndexRoute
   '/blog/': typeof BlogIndexRoute
@@ -734,6 +770,7 @@ export interface FileRoutesById {
   '/solutions/': typeof SolutionsIndexRoute
   '/tools/': typeof ToolsIndexRoute
   '/use-cases/': typeof UseCasesIndexRoute
+  '/white-label/': typeof WhiteLabelIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/_authenticated/dashboard/backlinks': typeof AuthenticatedDashboardBacklinksRoute
   '/_authenticated/dashboard/billing': typeof AuthenticatedDashboardBillingRoute
@@ -806,6 +843,9 @@ export interface FileRouteTypes {
     | '/solutions/autonomous-geo'
     | '/tools/$slug'
     | '/use-cases/$slug'
+    | '/white-label/ai-seo'
+    | '/white-label/content-writing'
+    | '/white-label/pricing'
     | '/ai-seo/'
     | '/alternatives/'
     | '/blog/'
@@ -818,6 +858,7 @@ export interface FileRouteTypes {
     | '/solutions/'
     | '/tools/'
     | '/use-cases/'
+    | '/white-label/'
     | '/.mcp/invoke-tool/$tool'
     | '/dashboard/backlinks'
     | '/dashboard/billing'
@@ -885,6 +926,9 @@ export interface FileRouteTypes {
     | '/solutions/autonomous-geo'
     | '/tools/$slug'
     | '/use-cases/$slug'
+    | '/white-label/ai-seo'
+    | '/white-label/content-writing'
+    | '/white-label/pricing'
     | '/ai-seo'
     | '/alternatives'
     | '/blog'
@@ -897,6 +941,7 @@ export interface FileRouteTypes {
     | '/solutions'
     | '/tools'
     | '/use-cases'
+    | '/white-label'
     | '/.mcp/invoke-tool/$tool'
     | '/dashboard/backlinks'
     | '/dashboard/billing'
@@ -968,6 +1013,9 @@ export interface FileRouteTypes {
     | '/solutions/autonomous-geo'
     | '/tools/$slug'
     | '/use-cases/$slug'
+    | '/white-label/ai-seo'
+    | '/white-label/content-writing'
+    | '/white-label/pricing'
     | '/ai-seo/'
     | '/alternatives/'
     | '/blog/'
@@ -980,6 +1028,7 @@ export interface FileRouteTypes {
     | '/solutions/'
     | '/tools/'
     | '/use-cases/'
+    | '/white-label/'
     | '/.mcp/invoke-tool/$tool'
     | '/_authenticated/dashboard/backlinks'
     | '/_authenticated/dashboard/billing'
@@ -1044,6 +1093,9 @@ export interface RootRouteChildren {
   SolutionsAutonomousGeoRoute: typeof SolutionsAutonomousGeoRoute
   ToolsSlugRoute: typeof ToolsSlugRoute
   UseCasesSlugRoute: typeof UseCasesSlugRoute
+  WhiteLabelAiSeoRoute: typeof WhiteLabelAiSeoRoute
+  WhiteLabelContentWritingRoute: typeof WhiteLabelContentWritingRoute
+  WhiteLabelPricingRoute: typeof WhiteLabelPricingRoute
   AiSeoIndexRoute: typeof AiSeoIndexRoute
   AlternativesIndexRoute: typeof AlternativesIndexRoute
   BlogIndexRoute: typeof BlogIndexRoute
@@ -1055,6 +1107,7 @@ export interface RootRouteChildren {
   SolutionsIndexRoute: typeof SolutionsIndexRoute
   ToolsIndexRoute: typeof ToolsIndexRoute
   UseCasesIndexRoute: typeof UseCasesIndexRoute
+  WhiteLabelIndexRoute: typeof WhiteLabelIndexRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
   ApiPublicHooksAutopilotRunRoute: typeof ApiPublicHooksAutopilotRunRoute
   ApiPublicHooksExchangeRunRoute: typeof ApiPublicHooksExchangeRunRoute
@@ -1437,6 +1490,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UseCasesSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/white-label/': {
+      id: '/white-label/'
+      path: '/white-label'
+      fullPath: '/white-label/'
+      preLoaderRoute: typeof WhiteLabelIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/white-label/ai-seo': {
+      id: '/white-label/ai-seo'
+      path: '/white-label/ai-seo'
+      fullPath: '/white-label/ai-seo'
+      preLoaderRoute: typeof WhiteLabelAiSeoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/white-label/content-writing': {
+      id: '/white-label/content-writing'
+      path: '/white-label/content-writing'
+      fullPath: '/white-label/content-writing'
+      preLoaderRoute: typeof WhiteLabelContentWritingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/white-label/pricing': {
+      id: '/white-label/pricing'
+      path: '/white-label/pricing'
+      fullPath: '/white-label/pricing'
+      preLoaderRoute: typeof WhiteLabelPricingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/.mcp/invoke-tool/$tool': {
       id: '/.mcp/invoke-tool/$tool'
       path: '/.mcp/invoke-tool/$tool'
@@ -1786,6 +1867,9 @@ const rootRouteChildren: RootRouteChildren = {
   SolutionsAutonomousGeoRoute: SolutionsAutonomousGeoRoute,
   ToolsSlugRoute: ToolsSlugRoute,
   UseCasesSlugRoute: UseCasesSlugRoute,
+  WhiteLabelAiSeoRoute: WhiteLabelAiSeoRoute,
+  WhiteLabelContentWritingRoute: WhiteLabelContentWritingRoute,
+  WhiteLabelPricingRoute: WhiteLabelPricingRoute,
   AiSeoIndexRoute: AiSeoIndexRoute,
   AlternativesIndexRoute: AlternativesIndexRoute,
   BlogIndexRoute: BlogIndexRoute,
@@ -1797,6 +1881,7 @@ const rootRouteChildren: RootRouteChildren = {
   SolutionsIndexRoute: SolutionsIndexRoute,
   ToolsIndexRoute: ToolsIndexRoute,
   UseCasesIndexRoute: UseCasesIndexRoute,
+  WhiteLabelIndexRoute: WhiteLabelIndexRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
   ApiPublicHooksAutopilotRunRoute: ApiPublicHooksAutopilotRunRoute,
   ApiPublicHooksExchangeRunRoute: ApiPublicHooksExchangeRunRoute,

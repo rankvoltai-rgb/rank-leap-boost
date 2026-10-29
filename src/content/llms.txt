@@ -21,6 +21,13 @@
 - [AI search optimization tool that does the work](https://rankbox.xyz/solutions/autonomous-geo): Autonomous GEO. Rankbox finds the questions buyers ask AI that a site doesn't answer, writes cited answers and delivers up to one a day. It doesn't track AI visibility.
 - [Solutions](https://rankbox.xyz/solutions): every Rankbox solutions page in one index, grouped by the job, platform or industry it starts from.
 
+## White-label for agencies
+
+- [White-label SEO platform for agencies](https://rankbox.xyz/white-label): How agencies run every client's research, articles and publishing from one Studio account under the client's name, what clients see, what isn't white-label yet (no client logins or branded reports), and billing per site.
+- [White label content writing](https://rankbox.xyz/white-label/content-writing): How Rankbox researches, drafts, scores and delivers articles for agency client sites in each client's voice, with the editor's pass and client sign-off points.
+- [White label AI SEO](https://rankbox.xyz/white-label/ai-seo): How an agency sells AI search (GEO) under its own name on Rankbox Studio: a sample scope, a live prospect-site check, and reporting from Search Console, Bing Webmaster Tools, GA4 and manual prompt checks (Rankbox doesn't track citations).
+- [White-label SEO pricing](https://rankbox.xyz/white-label/pricing): Cost per client site in Studio, a margin calculator on your own numbers, packaging options and billing rules for adding or removing clients.
+
 ## Integrations
 
 - [Integrations](https://rankbox.xyz/integrations): Every way to connect Rankbox: WordPress, Shopify, Webflow, Framer and Square Online for publishing, the REST API, and 49 AI tools through the MCP server.

@@ -37,6 +37,7 @@ const PUBLIC_SECTIONS = new Set([
   "tools",
   "trust",
   "use-cases",
+  "white-label",
 ]);
 
 const DAY_MS = 86_400_000;

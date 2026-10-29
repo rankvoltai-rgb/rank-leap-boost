@@ -19,6 +19,7 @@ const SECTION_CRUMB: Record<string, { name: string; path: string }> = {
   solutions: { name: "Solutions", path: "/solutions" },
   tools: { name: "Free tools", path: "/tools" },
   alternatives: { name: "Alternatives", path: "/alternatives" },
+  "white-label": { name: "White-label", path: "/white-label" },
 };
 
 export function sublandingHead({
