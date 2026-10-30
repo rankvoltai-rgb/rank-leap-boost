@@ -140,7 +140,7 @@ function YouTubeVideo({
           >
             <img
               src={`https://i.ytimg.com/vi/${id}/hqdefault.jpg`}
-              alt=""
+              alt={`Video thumbnail: ${title}`}
               loading="lazy"
               className="h-full w-full object-cover opacity-90 transition-opacity group-hover:opacity-100"
             />

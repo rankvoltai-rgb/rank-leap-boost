@@ -89,7 +89,7 @@ export function CompetitorMark({
       <img
         ref={catchAlreadyFailed}
         src={src}
-        alt=""
+        alt={`${competitor.name} logo`}
         loading="lazy"
         onError={() => setFailed(true)}
         // object-contain, not cover: square marks fill the tile edge to edge,

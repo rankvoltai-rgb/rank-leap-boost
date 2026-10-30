@@ -33,7 +33,12 @@ export function ClaudeMark({ className }: { className?: string }) {
 
 export function GeminiMark({ className }: { className?: string }) {
   return (
-    <img src={GEMINI_SRC} alt="" aria-hidden className={cn("object-contain", className)} />
+    <img
+      src={GEMINI_SRC}
+      alt="Google Gemini logo"
+      aria-hidden
+      className={cn("object-contain", className)}
+    />
   );
 }
 
@@ -97,7 +102,12 @@ export function RedditMark({ className }: { className?: string }) {
 
 export function BoundlessMark({ className }: { className?: string }) {
   return (
-    <img src={boundlessAsset.url} alt="" aria-hidden className={cn("object-contain", className)} />
+    <img
+      src={boundlessAsset.url}
+      alt="Boundless logo"
+      aria-hidden
+      className={cn("object-contain", className)}
+    />
   );
 }
 

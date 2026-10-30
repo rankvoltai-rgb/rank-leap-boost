@@ -163,7 +163,7 @@ function SiteIcon({ url }: { url: string }) {
   return (
     <img
       src={src}
-      alt=""
+      alt={`${host} site icon`}
       aria-hidden
       width={16}
       height={16}

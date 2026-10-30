@@ -109,7 +109,7 @@ function Favicon({ domain, tone }: { domain: string; tone: "neutral" | "lost" | 
     <span className={box}>
       <img
         src={src}
-        alt=""
+        alt={`${domain} site icon`}
         aria-hidden
         loading="lazy"
         onError={() => setFailed(true)}

@@ -96,7 +96,7 @@ export function ConnectorLogo({
     >
       <img
         src={src}
-        alt=""
+        alt={`${connector.name} logo`}
         width={96}
         height={96}
         loading="lazy"

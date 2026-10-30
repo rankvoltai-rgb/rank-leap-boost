@@ -154,7 +154,7 @@ export function PlanRail({
         {/* The landing showcase's painted sky, toned down under the figure. */}
         <img
           src="/assets/painting-sky.webp"
-          alt=""
+          alt="Painted blue sky with soft white clouds"
           aria-hidden
           decoding="async"
           draggable={false}
@@ -189,7 +189,12 @@ export function PlanRail({
         <SummaryItem
           icon={
             logoUrl ? (
-              <img src={logoUrl} alt="" className="h-full w-full object-contain p-1" />
+              <img
+                src={logoUrl}
+                alt={`${brandName} logo`}
+                aria-hidden
+                className="h-full w-full object-contain p-1"
+              />
             ) : (
               <span className="text-sm font-semibold">
                 {(brandName.trim()[0] || "?").toUpperCase()}

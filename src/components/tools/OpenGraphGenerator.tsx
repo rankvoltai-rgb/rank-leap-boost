@@ -28,7 +28,7 @@ function Img({ src, className }: { src: string; className?: string }) {
   return (
     <img
       src={src}
-      alt=""
+      alt="Preview of your Open Graph share image"
       onError={() => setBroken(true)}
       className={cn("object-cover", className)}
     />

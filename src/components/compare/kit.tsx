@@ -81,7 +81,7 @@ export function ProductMark({
       <img
         ref={catchAlreadyFailed}
         src={src}
-        alt=""
+        alt={`${product.name} logo`}
         loading="lazy"
         onError={() => setFailed(true)}
         className="h-full w-full object-contain"

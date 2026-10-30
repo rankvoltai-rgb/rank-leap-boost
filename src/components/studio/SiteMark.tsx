@@ -80,7 +80,8 @@ function Mark({
     >
       <img
         src={favicon}
-        alt=""
+        alt={`${name} logo`}
+        aria-hidden
         onError={() => setFailed(true)}
         className={cn("rounded-sm object-contain", s.icon)}
       />

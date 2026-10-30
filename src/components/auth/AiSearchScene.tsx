@@ -181,7 +181,7 @@ function PixelField({ busy }: { busy: boolean }) {
           continues the picture the visitor just scrolled past. */}
       <img
         src="/assets/painting-sky.webp"
-        alt=""
+        alt="Painted blue sky with soft white clouds"
         width={2200}
         height={1400}
         decoding="async"

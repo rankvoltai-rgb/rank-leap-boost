@@ -200,7 +200,7 @@ export function AnswerSpaceShowcase({ feature }: { feature: Feature }) {
         >
           <motion.img
             src="/assets/painting-sky.webp"
-            alt=""
+            alt="Painted blue sky with soft white clouds"
             aria-hidden
             width={2200}
             height={1400}

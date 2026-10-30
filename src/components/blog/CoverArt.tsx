@@ -80,7 +80,7 @@ export function CoverArt({
       <div className={cn("relative overflow-hidden bg-secondary", className)}>
         <img
           src={post.cover}
-          alt=""
+          alt={`Cover image for ${post.title}`}
           loading="lazy"
           className="absolute inset-0 h-full w-full object-cover"
         />
