@@ -27,14 +27,7 @@ export type ChangeStatus = "live" | "rolling-out" | "coming-soon";
 
 /** The illustration drawn for an entry, in src/components/changelog/visuals. */
 export type ChangeVisual =
-  | "connectors"
-  | "studio"
-  | "framer"
-  | "reddit"
-  | "exchange"
-  | "guides"
-  | "tools"
-  | "rename";
+  "connectors" | "studio" | "framer" | "reddit" | "exchange" | "guides" | "tools" | "rename";
 
 export interface ChangePoint {
   title: string;
@@ -186,7 +179,7 @@ export const CHANGELOG: ChangelogEntry[] = [
     visual: "studio",
     links: [
       { label: "See pricing", to: "/pricing" },
-      { label: "Rankbox for agencies", to: "/use-cases/seo-agencies" },
+      { label: "White-label for agencies", to: "/white-label" },
     ],
   },
   {

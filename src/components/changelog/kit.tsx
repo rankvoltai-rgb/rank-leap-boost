@@ -1,11 +1,18 @@
 /**
  * The pieces of a changelog entry, shared by the hub and each entry's own
- * page: its labels, the note that says why it isn't live yet, and its body.
+ * page: its labels, the note that says why it isn't live yet, its body, and
+ * the blue band that closes both pages. Drawn in the landing's frame:
+ * hairline cells, soft-blue marks, CTAs in blue.
  */
 import { useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { ArrowRight, Check, Link2 } from "lucide-react";
 import { Md } from "@/components/ai-seo/kit";
+import { Band, CELL, CellGrid, Spacer } from "@/components/landing/frame";
+import { MarkDither } from "@/components/landing/hero-dither";
+import { UrlForm } from "@/components/landing/Hero";
+import { Reveal } from "@/components/landing/shared";
+import { TRIAL_NOTE } from "@/data/pricing";
 import { cn } from "@/lib/utils";
 import {
   KINDS,
@@ -37,8 +44,8 @@ export function weekday(iso: string) {
 const KIND_STYLE: Record<ChangeKind, string> = {
   feature: "bg-cta text-white",
   improvement: "bg-cta-soft text-cta",
-  resources: "bg-secondary text-ink",
-  announcement: "bg-ink/[0.06] text-ink",
+  resources: "border border-ink/[0.08] bg-white text-ink",
+  announcement: "bg-ink/[0.05] text-ink",
 };
 
 export function KindLabel({ kind, className }: { kind: ChangeKind; className?: string }) {
@@ -46,7 +53,7 @@ export function KindLabel({ kind, className }: { kind: ChangeKind; className?: s
   return (
     <span
       className={cn(
-        "inline-flex h-6 items-center rounded-md px-2 text-[0.7rem] font-semibold uppercase tracking-[0.08em]",
+        "inline-flex h-6 items-center rounded-md px-2 text-[0.68rem] font-semibold uppercase tracking-[0.08em]",
         KIND_STYLE[kind],
         className,
       )}
@@ -79,7 +86,7 @@ export function StatusBadge({ status }: { status: ChangeStatus }) {
   return (
     <span
       title={STATUSES[status].meaning}
-      className="inline-flex h-6 items-center gap-1.5 rounded-md border border-border bg-card px-2 text-xs font-medium text-ink"
+      className="inline-flex h-6 items-center gap-1.5 rounded-md border border-ink/[0.08] bg-white px-2 text-xs font-medium text-ink shadow-[0_1px_2px_rgba(16,24,40,0.04)]"
     >
       <StatusDot status={status} />
       {STATUSES[status].label}
@@ -105,7 +112,7 @@ export function StatusNote({ entry, className }: { entry: ChangelogEntry; classN
   return (
     <p
       className={cn(
-        "flex gap-3 rounded-xl border border-border bg-surface px-4 py-3 text-sm leading-relaxed text-muted-foreground",
+        "flex gap-3 rounded-xl border border-ink/[0.07] bg-[color-mix(in_oklab,var(--surface)_70%,white)] px-4 py-3 text-sm leading-relaxed text-muted-foreground",
         className,
       )}
     >
@@ -120,34 +127,55 @@ export function StatusNote({ entry, className }: { entry: ChangelogEntry; classN
 
 /* ---------- Body ---------- */
 
+const PROSE =
+  "space-y-4 text-[1rem] leading-[1.75] text-ink/75 [&_a]:font-medium [&_a]:text-cta [&_a]:underline [&_a]:decoration-cta/30 [&_a]:underline-offset-4 hover:[&_a]:decoration-cta [&_code]:rounded [&_code]:bg-ink/[0.05] [&_code]:px-1 [&_code]:py-0.5 [&_code]:text-[0.88em]";
+
+/** The release's paragraphs. */
+export function EntryProse({ entry, className }: { entry: ChangelogEntry; className?: string }) {
+  return (
+    <div className={cn(PROSE, className)}>
+      {entry.body.map((p, i) => (
+        <p key={i}>
+          <Md text={p} />
+        </p>
+      ))}
+    </div>
+  );
+}
+
+/**
+ * The release's points, as hairline cells. Each cell carries its own edges,
+ * so an odd count leaves the last row white rather than a grey gap.
+ */
+export function EntryPoints({ entry, className }: { entry: ChangelogEntry; className?: string }) {
+  if (!entry.points?.length) return null;
+  return (
+    <div className={cn("overflow-hidden rounded-xl border border-ink/[0.07] bg-white", className)}>
+      <CellGrid className="sm:grid-cols-2">
+        {entry.points.map((pt) => (
+          <li key={pt.title} className={cn(CELL, "min-w-0 px-5 py-5")}>
+            <p className="flex items-center gap-2 text-[0.93rem] font-semibold text-ink">
+              <span className="grid h-5 w-5 shrink-0 place-items-center rounded-md bg-cta-soft text-cta">
+                <Check className="h-3 w-3" strokeWidth={3} />
+              </span>
+              {pt.title}
+            </p>
+            <p className="mt-1.5 pl-7 text-sm leading-relaxed text-muted-foreground [&_a]:font-medium [&_a]:text-cta hover:[&_a]:underline [&_code]:rounded [&_code]:bg-ink/[0.05] [&_code]:px-1">
+              <Md text={pt.text} />
+            </p>
+          </li>
+        ))}
+      </CellGrid>
+    </div>
+  );
+}
+
+/** Paragraphs, then points: the whole release. */
 export function EntryBody({ entry }: { entry: ChangelogEntry }) {
   return (
     <>
-      <div className="space-y-4 text-[0.99rem] leading-[1.75] text-foreground/80 [&_a]:font-medium [&_a]:text-cta [&_a]:underline [&_a]:decoration-cta/30 [&_a]:underline-offset-4 hover:[&_a]:decoration-cta">
-        {entry.body.map((p, i) => (
-          <p key={i}>
-            <Md text={p} />
-          </p>
-        ))}
-      </div>
-
-      {entry.points && (
-        <dl className="mt-8 grid gap-x-10 gap-y-6 border-t border-border pt-7 sm:grid-cols-2">
-          {entry.points.map((pt) => (
-            <div key={pt.title} className="min-w-0">
-              <dt className="flex items-center gap-2 text-[0.95rem] font-semibold text-ink">
-                <span className="grid h-5 w-5 shrink-0 place-items-center rounded-full bg-cta-soft text-cta">
-                  <Check className="h-3 w-3" strokeWidth={3} />
-                </span>
-                {pt.title}
-              </dt>
-              <dd className="mt-1.5 pl-7 text-sm leading-relaxed text-muted-foreground [&_a]:font-medium [&_a]:text-cta hover:[&_a]:underline">
-                <Md text={pt.text} />
-              </dd>
-            </div>
-          ))}
-        </dl>
-      )}
+      <EntryProse entry={entry} />
+      <EntryPoints entry={entry} className="mt-8" />
     </>
   );
 }
@@ -192,12 +220,53 @@ export function CopyLink({ slug, className }: { slug: string; className?: string
       type="button"
       onClick={copy}
       className={cn(
-        "inline-flex h-8 items-center gap-1.5 rounded-lg px-2.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-ink",
+        "inline-flex h-8 items-center gap-1.5 rounded-lg border border-ink/[0.08] bg-white px-2.5 text-xs font-medium text-ink shadow-[0_1px_2px_rgba(16,24,40,0.04)] transition-colors hover:border-ink/[0.16] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cta/40",
         className,
       )}
     >
       {copied ? <Check className="h-3.5 w-3.5 text-success" /> : <Link2 className="h-3.5 w-3.5" />}
       <span aria-live="polite">{copied ? "Copied" : "Copy link"}</span>
     </button>
+  );
+}
+
+/* ---------- Closing ---------- */
+
+/**
+ * The blue band that ends both changelog pages: the landing's closing motif
+ * (white mark dithered behind), with the URL field on a white card so the
+ * next step is the product, not another page.
+ */
+export function ChangelogClosing() {
+  const [url, setUrl] = useState("");
+  return (
+    <section aria-labelledby="changelog-cta-title">
+      <Spacer />
+      <Band inner="overflow-hidden bg-cta">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 opacity-[0.14] [mask-image:radial-gradient(ellipse_70%_90%_at_50%_50%,#000_35%,transparent_100%)]"
+        >
+          <MarkDither className="text-white" />
+        </div>
+        <Reveal className="relative mx-auto max-w-2xl px-6 py-14 text-center sm:px-10 sm:py-16">
+          <h2
+            id="changelog-cta-title"
+            className="text-balance font-display text-[2rem] font-medium leading-[1.1] tracking-[-0.03em] text-white sm:text-[2.6rem]"
+          >
+            See what Rankbox would publish for your site
+          </h2>
+          <p className="mx-auto mt-4 max-w-xl text-balance text-[1rem] leading-relaxed text-white">
+            Enter your site. Rankbox reads it, finds the questions your buyers ask AI, and plans the
+            articles that answer them.
+          </p>
+          <div className="mx-auto mt-8 max-w-[34rem] rounded-xl bg-white p-2 text-left shadow-[0_1px_2px_rgba(4,24,72,0.2),0_16px_40px_-16px_rgba(4,24,72,0.55)]">
+            <UrlForm url={url} onChange={setUrl} variant="split" />
+          </div>
+          <p className="mt-3.5 text-[0.82rem] text-white">{TRIAL_NOTE}</p>
+        </Reveal>
+      </Band>
+      <Spacer closing />
+    </section>
   );
 }

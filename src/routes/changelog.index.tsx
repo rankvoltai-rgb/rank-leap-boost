@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
-import { BlogCta } from "@/components/blog/ArticleChrome";
-import { ChangelogHero, FilterBar, Timeline } from "@/components/changelog/hub";
-import { SITE, entryUrl } from "@/components/changelog/kit";
+import { Spacer } from "@/components/landing/frame";
+import { ChangelogHero, FilterBar, ShipStats, Timeline } from "@/components/changelog/hub";
+import { ChangelogClosing, SITE, entryUrl } from "@/components/changelog/kit";
 import {
   CHANGELOG,
   CHANGELOG_FEED_PATH,
@@ -87,10 +87,12 @@ function ChangelogIndex() {
   const { type } = Route.useSearch();
   const navigate = Route.useNavigate();
   return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
+    <div className="min-h-screen bg-white">
+      <Navbar framed />
       <main>
         <ChangelogHero />
+        <ShipStats />
+        <Spacer />
         <FilterBar
           kind={type}
           onKind={(k) => {
@@ -104,7 +106,7 @@ function ChangelogIndex() {
           }}
         />
         <Timeline kind={type} />
-        <BlogCta title="See what Rankbox would publish for your site" />
+        <ChangelogClosing />
       </main>
       <Footer />
     </div>

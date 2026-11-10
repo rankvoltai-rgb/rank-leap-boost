@@ -20,6 +20,7 @@ import { MATCHUPS } from "@/data/compare/matchups";
 import { COMPETITORS } from "@/data/alternatives";
 import { PERSONA_SLUGS } from "@/data/personas";
 import { FEATURE_SLUGS } from "@/data/features";
+import { SUBLANDING } from "@/sublanding/registry";
 import { CHANGELOG, getEntry, groupByDate, neighbours, type ChangelogEntry } from "./changelog";
 
 function allText(e: ChangelogEntry): string[] {
@@ -63,6 +64,8 @@ function isKnownPath(href: string): boolean {
       return has(CHANGELOG.map((e) => e.slug));
     case "pricing":
       return slug === undefined;
+    case "white-label":
+      return SUBLANDING.some((p) => p.path === path);
     default:
       return false;
   }

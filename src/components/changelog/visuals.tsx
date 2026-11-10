@@ -58,7 +58,7 @@ function Stage({ label, children }: { label: string; children: ReactNode }) {
     <div
       role="img"
       aria-label={label}
-      className="relative isolate overflow-hidden rounded-2xl border border-border bg-surface px-4 py-9 sm:px-10 sm:py-12"
+      className="relative isolate overflow-hidden rounded-xl border border-ink/[0.07] bg-[color-mix(in_oklab,var(--surface)_70%,white)] px-4 py-9 sm:px-10 sm:py-12"
     >
       <div aria-hidden className="absolute inset-0 -z-10" style={GLOW} />
       <div aria-hidden className="absolute inset-0 -z-10" style={DOTS} />
