@@ -12,7 +12,7 @@ import { ArrowRight, ChevronDown, type LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { FEATURES, FEATURE_GROUPS } from "@/data/features";
 import { NAV_COMPETITORS } from "@/data/alternatives";
-import { PERSONA_GROUPS, personasIn } from "@/data/personas";
+import { NAV_PERSONA_GROUPS, navPersonasIn } from "@/data/personas";
 import { PUBLISH_PLATFORMS } from "@/data/platforms";
 import { enginesInTier } from "@/data/ai-seo/engines";
 import { IntegrationLogo } from "@/components/dashboard/integration-logos";
@@ -184,10 +184,10 @@ export function MobileNav({ links, onClose }: { links: readonly TopLink[]; onClo
           ))}
           {/* Fragments, not wrappers: GroupLabel's first:pt-1 would read a
               wrapper as its parent and drop the gap above each group. */}
-          {PERSONA_GROUPS.map((g) => (
+          {NAV_PERSONA_GROUPS.map((g) => (
             <Fragment key={g.id}>
               <GroupLabel>Who it&rsquo;s for · {g.label.toLowerCase()}</GroupLabel>
-              {personasIn(g.id).map((p) => (
+              {navPersonasIn(g.id).map((p) => (
                 <Row
                   key={p.slug}
                   target={{ to: "/use-cases/$slug", params: { slug: p.slug } }}

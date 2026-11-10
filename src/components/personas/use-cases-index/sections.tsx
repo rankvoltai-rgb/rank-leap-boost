@@ -18,6 +18,7 @@ import {
   LayoutGrid,
   NotebookPen,
   Quote,
+  Signpost,
   Store,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -61,7 +62,7 @@ const PILLARS = [
 ];
 const PILLAR_PICTURES = [OneEngineDiagram, SplitDiagram, QuoteDiagram];
 
-const GROUP_ICONS = { role: Briefcase, business: Store } as const;
+const GROUP_ICONS = { role: Briefcase, business: Store, situation: Signpost } as const;
 
 /* ---------- Hero ---------- */
 

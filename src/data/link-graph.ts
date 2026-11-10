@@ -1160,6 +1160,7 @@ export const TOPICS: Topic[] = [
       b("will-llms-txt-help-your-seo"),
       t("serp-snippet-preview"),
       ...g("ai-overviews", "ai-mode", "featured-snippet", "snippet-controls"),
+      u("losing-traffic-to-ai-overviews"),
     ],
   },
   {
@@ -1303,6 +1304,7 @@ export const TOPICS: Topic[] = [
         "entity-seo",
         "click-through-rate",
       ),
+      u("professional-services"),
     ],
   },
   {
@@ -1421,6 +1423,8 @@ export const TOPICS: Topic[] = [
         "crawl-budget",
         "knowledge-cutoff",
       ),
+      u("web-design-studios"),
+      u("ai-built-websites"),
     ],
   },
   {
@@ -1481,6 +1485,8 @@ export const TOPICS: Topic[] = [
         "domain-authority",
         "ai-overviews",
       ),
+      u("professional-services"),
+      u("losing-traffic-to-ai-overviews"),
     ],
   },
   {
@@ -1599,6 +1605,7 @@ export const TOPICS: Topic[] = [
       t("robots-txt-tester"),
       t("llms-txt-generator"),
       ...g("server-side-rendering", "canonical-tag", "crawl-budget", "indexing", "robots-txt"),
+      u("ai-built-websites"),
     ],
   },
   {
@@ -1679,6 +1686,7 @@ export const TOPICS: Topic[] = [
         "internal-linking",
         "llm-training-data",
       ),
+      u("new-websites"),
     ],
   },
   {
@@ -1745,6 +1753,18 @@ export const TOPICS: Topic[] = [
     also: (path) => sectionOf(path) === "connectors",
   },
 
+  /* Companies running several brands or sites of their own from one account. */
+  {
+    id: "multi-site",
+    title: "Run several brands from one account",
+    pages: [
+      u("multi-brand-companies"),
+      "/pricing",
+      f("brand-voice"),
+      f("answer-space-research"),
+      t("ai-search-readiness-check"),
+    ],
+  },
   /* Agencies running client sites from one Studio account. */
   {
     id: "white-label",
@@ -1762,6 +1782,7 @@ export const TOPICS: Topic[] = [
       t("ai-search-readiness-check"),
       t("ai-visibility-prompt-generator"),
       ...g("generative-engine-optimization", "answer-engine-optimization"),
+      u("web-design-studios"),
     ],
   },
   /* The pages a buyer reads last. */
@@ -1815,6 +1836,8 @@ export const TOPICS: Topic[] = [
       c("koala-ai-vs-byword"),
       c("profound-vs-peec-ai"),
       c("semrush-vs-ahrefs"),
+      u("multi-brand-companies"),
+      u("new-websites"),
     ],
   },
 ];
@@ -1834,7 +1857,13 @@ export const TERM_LIMIT = 6;
  * SHIPPED), so they never link to a feature or add-on that hasn't. Each link
  * appears the day its flag flips.
  */
-const CLAIM_CHECKED: Section[] = ["alternatives", "compare", "solutions", "white-label"];
+const CLAIM_CHECKED: Section[] = [
+  "alternatives",
+  "compare",
+  "solutions",
+  "white-label",
+  "use-cases",
+];
 const UNSHIPPED = new Set<string>([
   ...(SHIPPED.citationTracking ? [] : [f("citation-tracking")]),
   ...(PUBLISH_PLATFORMS.some((p) => p.addonLive) ? [] : [f("auto-publishing")]),

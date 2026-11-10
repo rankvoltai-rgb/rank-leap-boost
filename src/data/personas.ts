@@ -30,6 +30,12 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { PLAN, STUDIO, TRIAL_DAYS, formatUsd } from "./pricing";
+import { persona as professionalServices } from "./persona-pages/professional-services";
+import { persona as webDesignStudios } from "./persona-pages/web-design-studios";
+import { persona as multiBrandCompanies } from "./persona-pages/multi-brand-companies";
+import { persona as losingTrafficToAiOverviews } from "./persona-pages/losing-traffic-to-ai-overviews";
+import { persona as aiBuiltWebsites } from "./persona-pages/ai-built-websites";
+import { persona as newWebsites } from "./persona-pages/new-websites";
 
 /** A product fact in the band under the hero. Facts, never results. */
 export interface PersonaSpec {
@@ -73,12 +79,16 @@ export interface PersonaFAQ {
   a: string;
 }
 
-/** Which way a page slices the audience: by the reader's seat, or their business. */
-export type PersonaGroup = "role" | "business";
+/**
+ * Which way a page slices the audience: by the reader's seat, their business,
+ * or what's happening to their site right now.
+ */
+export type PersonaGroup = "role" | "business" | "situation";
 
 export const PERSONA_GROUPS: { id: PersonaGroup; label: string; blurb: string }[] = [
   { id: "role", label: "By role", blurb: "Written to the seat you sit in." },
   { id: "business", label: "By business", blurb: "Written to what you sell, and where." },
+  { id: "situation", label: "By situation", blurb: "Written to what's happening to your site." },
 ];
 
 /** One intent on the sample topic map, with the questions that sit under it. */
@@ -191,9 +201,19 @@ export interface Persona {
   faqs: PersonaFAQ[];
   ctaTitle: string;
   ctaBody: string;
+
+  /**
+   * Left out of the navbar's Use cases menu, which keeps its original six
+   * (the user's call, 2026-11-10). The page still lists everywhere else:
+   * /use-cases, the footer, the sitemap and the link graph.
+   */
+  hideFromNav?: boolean;
 }
 
-export const PERSONAS: Persona[] = [
+/* The first six pages, written here. Later pages each keep their words in a
+   file of their own under src/data/persona-pages/, so the agents writing them
+   in parallel never edit one file. */
+const CORE: Persona[] = [
   /* ---------------------------------------------------------------- */
   {
     slug: "marketers",
@@ -1460,12 +1480,31 @@ export const PERSONAS: Persona[] = [
   },
 ];
 
+export const PERSONAS: Persona[] = [
+  ...CORE,
+  professionalServices,
+  webDesignStudios,
+  multiBrandCompanies,
+  losingTrafficToAiOverviews,
+  aiBuiltWebsites,
+  newWebsites,
+];
+
 export function getPersona(slug: string): Persona | undefined {
   return PERSONAS.find((p) => p.slug === slug);
 }
 
 export function personasIn(group: PersonaGroup): Persona[] {
   return PERSONAS.filter((p) => p.group === group);
+}
+
+/** The groups the navbar's Use cases menu shows, and the pages in each. */
+export const NAV_PERSONA_GROUPS = PERSONA_GROUPS.filter((g) =>
+  PERSONAS.some((p) => p.group === g.id && !p.hideFromNav),
+);
+
+export function navPersonasIn(group: PersonaGroup): Persona[] {
+  return personasIn(group).filter((p) => !p.hideFromNav);
 }
 
 /** "a marketer", "an agency". */

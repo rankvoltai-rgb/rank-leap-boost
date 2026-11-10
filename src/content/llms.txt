@@ -21,6 +21,22 @@
 - [AI search optimization tool that does the work](https://rankbox.xyz/solutions/autonomous-geo): Autonomous GEO. Rankbox finds the questions buyers ask AI that a site doesn't answer, writes cited answers and delivers up to one a day. It doesn't track AI visibility.
 - [Solutions](https://rankbox.xyz/solutions): every Rankbox solutions page in one index, grouped by the job, platform or industry it starts from.
 
+## Use cases
+
+- [Rankbox for marketers](https://rankbox.xyz/use-cases/marketers): Own the content number without owning a content team.
+- [Rankbox for solo founders](https://rankbox.xyz/use-cases/solo-founders): Content marketing that runs while you build the product.
+- [Rankbox for SEO agencies](https://rankbox.xyz/use-cases/seo-agencies): Add GEO to every retainer without adding writers.
+- [Rankbox for e-commerce stores](https://rankbox.xyz/use-cases/ecommerce): Answer the buying questions your product pages can't.
+- [Rankbox for SaaS companies](https://rankbox.xyz/use-cases/saas): Content for buyers who ask AI which tool to use.
+- [Rankbox for local businesses](https://rankbox.xyz/use-cases/local-businesses): A blog that answers customers' questions while you work.
+- [Rankbox for professional services firms](https://rankbox.xyz/use-cases/professional-services): Specific, sourced answers to client questions, signed off by your own people.
+- [Rankbox for web design studios](https://rankbox.xyz/use-cases/web-design-studios): Turn the sites you launch into monthly content retainers.
+- [Rankbox for multi-brand companies](https://rankbox.xyz/use-cases/multi-brand-companies): Every brand its own research and voice, on one invoice.
+- [Rankbox for sites losing traffic to AI Overviews](https://rankbox.xyz/use-cases/losing-traffic-to-ai-overviews): Still ranking, fewer clicks. Write to be the source the overview quotes.
+- [Rankbox for sites built with AI](https://rankbox.xyz/use-cases/ai-built-websites): Long-form articles for the site your AI builder made, sent by API.
+- [Rankbox for new websites](https://rankbox.xyz/use-cases/new-websites): Launch with answers already written, not an empty blog.
+- [All use cases](https://rankbox.xyz/use-cases): every use-case page, by role, by business and by situation.
+
 ## White-label for agencies
 
 - [White-label SEO platform for agencies](https://rankbox.xyz/white-label): How agencies run every client's research, articles and publishing from one Studio account under the client's name, what clients see, what isn't white-label yet (no client logins or branded reports), and billing per site.

@@ -19,7 +19,7 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Mark } from "@/components/brand/Mark";
-import { PERSONA_GROUPS, personasIn, type Persona } from "@/data/personas";
+import { NAV_PERSONA_GROUPS, navPersonasIn, type Persona } from "@/data/personas";
 
 /* The board is drawn on a 520 × 420 grid; HTML pieces sit on it by
    percentage, so the SVG lines meet them at any width. */
@@ -49,8 +49,10 @@ interface Seat {
   groupLabel: string;
 }
 
-const SEATS: Seat[] = PERSONA_GROUPS.flatMap((g, gi) =>
-  personasIn(g.id)
+/* The six seats the navbar shows too, three a side: the hub is drawn for two
+   sides of three, and the full list of every page sits right under it. */
+const SEATS: Seat[] = NAV_PERSONA_GROUPS.slice(0, 2).flatMap((g, gi) =>
+  navPersonasIn(g.id)
     .slice(0, ROWS.length)
     .map((persona, i) => ({
       persona,
@@ -153,7 +155,7 @@ export function SeatHub({ className }: { className?: string }) {
         </svg>
 
         {/* Group captions over each column. */}
-        {PERSONA_GROUPS.map((g, gi) => (
+        {NAV_PERSONA_GROUPS.slice(0, 2).map((g, gi) => (
           <span
             key={g.id}
             aria-hidden

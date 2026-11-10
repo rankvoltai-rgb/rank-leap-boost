@@ -252,10 +252,10 @@ export const RANKBOX_PUBLISHING: { cell: Cell; fact: Fact; sentence: string } =
     ? {
         cell: {
           state: "partial",
-          note: `Any site can pull finished articles through the Rankbox publishing API, which a developer sets up once. One-click plugins for ${listNames(PLUGIN_NAMES)} are in development.`,
+          note: `Any site can pull finished articles through the Rankbox publishing API, which a developer sets up once. Plugins for ${listNames(PLUGIN_NAMES)} are in development.`,
         },
         fact: { state: "partial", short: "Publishing API; plugins coming" },
-        sentence: `Today articles reach your site through the Rankbox publishing API, which a developer sets up once, and one-click plugins for ${listNames(PLUGIN_NAMES)} are in development`,
+        sentence: `Today articles reach your site through the Rankbox publishing API, which a developer sets up once, and plugins for ${listNames(PLUGIN_NAMES)} are in development`,
       }
     : {
         cell: {

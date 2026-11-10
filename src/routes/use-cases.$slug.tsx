@@ -8,6 +8,12 @@ import { SeoAgenciesPage } from "@/components/personas/seo-agencies/SeoAgenciesP
 import { EcommercePage } from "@/components/personas/ecommerce/EcommercePage";
 import { SaasPage } from "@/components/personas/saas/SaasPage";
 import { LocalBusinessesPage } from "@/components/personas/local-businesses/LocalBusinessesPage";
+import { ProfessionalServicesPage } from "@/components/personas/professional-services/ProfessionalServicesPage";
+import { WebDesignStudiosPage } from "@/components/personas/web-design-studios/WebDesignStudiosPage";
+import { MultiBrandCompaniesPage } from "@/components/personas/multi-brand-companies/MultiBrandCompaniesPage";
+import { LosingTrafficPage } from "@/components/personas/losing-traffic-to-ai-overviews/LosingTrafficPage";
+import { AiBuiltWebsitesPage } from "@/components/personas/ai-built-websites/AiBuiltWebsitesPage";
+import { NewWebsitesPage } from "@/components/personas/new-websites/NewWebsitesPage";
 import { getPersona, personaH1, type Persona } from "@/data/personas";
 import { PLAN } from "@/data/pricing";
 
@@ -23,6 +29,12 @@ const LAYOUTS: Record<string, ComponentType<{ persona: Persona }>> = {
   ecommerce: EcommercePage,
   saas: SaasPage,
   "local-businesses": LocalBusinessesPage,
+  "professional-services": ProfessionalServicesPage,
+  "web-design-studios": WebDesignStudiosPage,
+  "multi-brand-companies": MultiBrandCompaniesPage,
+  "losing-traffic-to-ai-overviews": LosingTrafficPage,
+  "ai-built-websites": AiBuiltWebsitesPage,
+  "new-websites": NewWebsitesPage,
 };
 
 export const Route = createFileRoute("/use-cases/$slug")({

@@ -54,18 +54,22 @@ export function HandoffPreview({ persona, className }: { persona: Persona; class
 
 /* ---------- How we write these ---------- */
 
-/* 01: six seats, one engine, one plan. The lines meet at the mark. */
+/* 01: every seat, one engine, one plan. The lines meet at the mark. */
 export function OneEngineDiagram() {
+  const step = 120 / PERSONAS.length;
   return (
     <div aria-hidden className="flex flex-col items-center">
-      <div className="grid w-full grid-cols-6 gap-1.5">
+      <div
+        className="grid w-full gap-1"
+        style={{ gridTemplateColumns: `repeat(${PERSONAS.length}, minmax(0, 1fr))` }}
+      >
         {PERSONAS.map((p) => {
           const Icon = p.icon;
           const tint = tintFor(p);
           return (
             <span
               key={p.slug}
-              className="mx-auto flex h-8 w-8 items-center justify-center rounded-lg border border-ink/[0.07] bg-white shadow-[0_1px_2px_rgba(16,24,40,0.04)]"
+              className="mx-auto flex aspect-square w-full max-w-8 items-center justify-center rounded-lg border border-ink/[0.07] bg-white shadow-[0_1px_2px_rgba(16,24,40,0.04)]"
               style={{ color: tint.ink }}
             >
               <Icon className="h-3.5 w-3.5" />
@@ -77,7 +81,7 @@ export function OneEngineDiagram() {
         {PERSONAS.map((p, i) => (
           <line
             key={p.slug}
-            x1={(i + 0.5) * 20}
+            x1={(i + 0.5) * step}
             y1={0}
             x2={60}
             y2={28}

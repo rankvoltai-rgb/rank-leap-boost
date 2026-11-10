@@ -3,9 +3,11 @@ import { PERSONA_SLUGS } from "@/data/personas";
 import { HERO_SCENES } from "./hero-scenes";
 
 describe("use-case hero scenes", () => {
-  it("gives every use-case page a scene of its own", () => {
-    for (const slug of PERSONA_SLUGS) expect(HERO_SCENES[slug], slug).toBeDefined();
-    const scenes = PERSONA_SLUGS.map((slug) => HERO_SCENES[slug]);
+  // The first six pages kept their scenes here. Pages added since build
+  // their hero in their own directory (src/components/personas/<slug>/), so
+  // only the scenes that exist are held to being unique.
+  it("gives each page with a scene a scene of its own", () => {
+    const scenes = Object.values(HERO_SCENES);
     expect(new Set(scenes).size, "two pages share a scene").toBe(scenes.length);
   });
 

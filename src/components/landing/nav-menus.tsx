@@ -15,7 +15,7 @@ import { ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { FEATURES, FEATURE_GROUPS } from "@/data/features";
 import { NAV_COMPETITORS } from "@/data/alternatives";
-import { PERSONA_GROUPS, personasIn, type Persona } from "@/data/personas";
+import { NAV_PERSONA_GROUPS, navPersonasIn, type Persona } from "@/data/personas";
 import { PUBLISH_PLATFORMS } from "@/data/platforms";
 import { TOOLS } from "@/data/tools";
 import { TIERS, enginesInTier, type Engine } from "@/data/ai-seo/engines";
@@ -288,10 +288,10 @@ export function FeaturesMenu() {
           {/* Two short columns, one per group, so six pages stay as tall as
               three did and the rail never outgrows the feature columns. */}
           <div className="mb-3 grid grid-cols-2 gap-x-0.5">
-            {PERSONA_GROUPS.map((g) => (
+            {NAV_PERSONA_GROUPS.map((g) => (
               <div key={g.id} className="min-w-0">
                 <p className="px-2 pb-1 pt-1.5 text-[0.7rem] text-muted-foreground/80">{g.label}</p>
-                {personasIn(g.id).map((p) => (
+                {navPersonasIn(g.id).map((p) => (
                   <PersonaItem key={p.slug} persona={p} />
                 ))}
               </div>
