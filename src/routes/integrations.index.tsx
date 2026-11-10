@@ -2,18 +2,16 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
 import { useState } from "react";
+import { HubHero } from "@/components/integrations/hub/HubHero";
 import {
-  IntegrationFAQ,
-  IntegrationSpecs,
-  KeySecurity,
-  PublishingLoop,
-} from "@/components/integrations/IntegrationSections";
-import {
+  AfterConnect,
   Directory,
-  HubCTA,
-  HubSearchHero,
+  HubClosing,
+  HubFaq,
+  HubStats,
+  TwoWays,
   type DirectoryFilter,
-} from "@/components/integrations/HubSections";
+} from "@/components/integrations/hub/HubSections";
 import { INTEGRATIONS, isAddon } from "@/data/integrations";
 import { AI_TOOLS, publicSlug } from "@/data/ai-integrations";
 import { CONNECTORS } from "@/data/connectors";
@@ -146,26 +144,23 @@ export const Route = createFileRoute("/integrations/")({
   component: IntegrationsIndex,
 });
 
-/* Search first, then everything, then how publishing works and why it's
-   safe, before the FAQ and the close. */
+/* Search first, then the two ways Rankbox connects, then everything, then
+   what happens after you connect and why the key is safe, before the FAQ
+   and the close. */
 function IntegrationsIndex() {
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState<DirectoryFilter>("all");
   return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
+    <div className="min-h-screen bg-white">
+      <Navbar framed />
       <main>
-        <HubSearchHero query={query} onQuery={setQuery} />
-        <IntegrationSpecs specs={HUB_SPECS} label="Integrations at a glance" />
+        <HubHero query={query} onQuery={setQuery} />
+        <HubStats specs={HUB_SPECS} />
+        <TwoWays />
         <Directory query={query} onQuery={setQuery} filter={filter} onFilter={setFilter} />
-        <PublishingLoop />
-        <KeySecurity />
-        <IntegrationFAQ
-          title="Integration questions"
-          intro="How connecting works, what it costs, and what Rankbox can touch."
-          faqs={HUB_FAQS}
-        />
-        <HubCTA />
+        <AfterConnect />
+        <HubFaq faqs={HUB_FAQS} />
+        <HubClosing />
       </main>
       <Footer />
     </div>
