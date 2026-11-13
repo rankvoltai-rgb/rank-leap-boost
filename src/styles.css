@@ -527,6 +527,43 @@
   }
 }
 
+/* The landing workspace (components/landing/workspace). */
+
+/* "Working Ns": a light sweeping across muted text. */
+@keyframes workspace-shimmer {
+  from {
+    background-position: 110% 0;
+  }
+  to {
+    background-position: -110% 0;
+  }
+}
+
+/* A run's request settling in. */
+@keyframes workspace-rise {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* The glow over the status bar breathing while a run works. */
+@keyframes workspace-glow {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scaleX(0.92);
+  }
+  50% {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+}
+
 @utility animate-hero-rise {
   animation: hero-rise 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
   animation-delay: var(--rise-delay, 0s);
