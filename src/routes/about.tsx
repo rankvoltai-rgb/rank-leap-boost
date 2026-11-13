@@ -6,7 +6,6 @@ import { BlogCta } from "@/components/blog/ArticleChrome";
 import { AboutHero, Contact, Library, Standards, Story } from "@/components/about/sections";
 import { ABOUT_UPDATED, COMPANY, ORG_ID, SITE, organizationNode } from "@/data/company";
 import { PLAN, TRIAL_DAYS, formatUsd } from "@/data/pricing";
-import { formatDate } from "@/lib/format-date";
 
 const URL = `${SITE}/about`;
 const TITLE = "About Rankbox: Who We Are and How We Work";
@@ -19,12 +18,8 @@ const ABOUT_FAQS = [
     a: `Rankbox is made and operated by ${COMPANY.legalName}. You can reach the company at ${COMPANY.email}.`,
   },
   {
-    q: `Is Rankbox the same as ${COMPANY.formerName}?`,
-    a: `Yes. The product was called ${COMPANY.formerName} until ${formatDate(COMPANY.renamedOn)}, when it was renamed Rankbox and moved to ${COMPANY.domain}. Same product, same company.`,
-  },
-  {
     q: "When did Rankbox start?",
-    a: `Work on Rankbox began in ${COMPANY.foundingYear}, under the name ${COMPANY.formerName}.`,
+    a: `Work on Rankbox began in ${COMPANY.foundingYear}.`,
   },
   {
     q: "What does Rankbox do?",

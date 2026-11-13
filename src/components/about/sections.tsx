@@ -53,15 +53,6 @@ function mailto(subject?: string) {
   return `mailto:${COMPANY.email}${subject ? `?subject=${encodeURIComponent(`${subject}: `)}` : ""}`;
 }
 
-/** "September 2026" */
-function monthYear(iso: string) {
-  return new Intl.DateTimeFormat("en-US", {
-    month: "long",
-    year: "numeric",
-    timeZone: "UTC",
-  }).format(new Date(iso));
-}
-
 const LINK = "font-semibold text-cta transition-colors hover:text-cta-hover";
 
 /* ---------- hero ---------- */
@@ -258,10 +249,6 @@ function FactList() {
   const facts: { term: string; value: ReactNode }[] = [
     { term: "Made by", value: COMPANY.legalName },
     ...(COMPANY.foundingYear ? [{ term: "Founded", value: COMPANY.foundingYear }] : []),
-    {
-      term: "Formerly",
-      value: `${COMPANY.formerName}, until ${monthYear(COMPANY.renamedOn)}`,
-    },
     {
       term: "Website",
       value: (

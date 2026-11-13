@@ -21,6 +21,7 @@ import { TOOLS } from "@/data/tools";
 import { enginesInTier } from "@/data/ai-seo/engines";
 import { LAUNCH_BADGES } from "@/data/launch-badges";
 import { LEGAL_CONTACT } from "@/components/legal/legal-ui";
+import { PROFILES } from "@/data/company";
 
 /*
  * The footer is shared by every public page and sits on the brand blue, like
@@ -712,10 +713,32 @@ export function Footer() {
         </nav>
 
         <div className="flex flex-col-reverse gap-4 py-6 md:flex-row md:items-center md:justify-between md:border-t md:border-white/15">
-          <p className="text-xs text-white/75">
-            © <span suppressHydrationWarning>{new Date().getFullYear()}</span> Rankbox. All rights
-            reserved.
-          </p>
+          <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-5">
+            <p className="text-xs text-white/75">
+              © <span suppressHydrationWarning>{new Date().getFullYear()}</span> Rankbox. All rights
+              reserved.
+            </p>
+            {/* The same pages as `sameAs` in the Organization markup. */}
+            <ul aria-label="Rankbox elsewhere" className="flex flex-wrap gap-x-5 gap-y-2 text-xs">
+              {PROFILES.map((p) => (
+                <li key={p.name}>
+                  <a
+                    href={p.url}
+                    target="_blank"
+                    rel="noopener"
+                    aria-label={`Rankbox on ${p.name} (opens in a new tab)`}
+                    className={cn(
+                      "inline-flex items-center gap-0.5 text-xs text-white/75 transition-colors hover:text-white",
+                      FOCUS_RING,
+                    )}
+                  >
+                    {p.name}
+                    <ArrowUpRight aria-hidden className="h-3 w-3" />
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
           <ul className="flex flex-wrap gap-x-5 gap-y-2 text-xs">
             {LEGAL_LINKS.map((l) => (
               <li key={l.label}>
