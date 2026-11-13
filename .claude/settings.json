@@ -15,7 +15,11 @@
       "ClaudeInChromeDomain(x.com)",
       "ClaudeInChromeDomain(manus.im)",
       "ClaudeInChromeDomain(www.humansecurity.com)",
-      "ClaudeInChromeDomain(localhost:8093)"
+      "ClaudeInChromeDomain(localhost:8093)",
+      "ClaudeInChromeDomain(search.google.com)",
+      "ClaudeInChromeDomain(www.google.com)",
+      "ClaudeInChromeDomain(rankvolt.top)",
+      "ClaudeInChromeDomain(localhost:5191)"
     ]
   }
 }
